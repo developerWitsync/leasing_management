@@ -1,0 +1,7 @@
+.dataTable tr td{
+    vertical-align: middle !important;
+    padding: 8px;
+}
+.alert p{
+    margin-bottom: 0 !important;
+}

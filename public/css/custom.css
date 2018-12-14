@@ -1,0 +1,37 @@
+.form-group.required .control-label:after {
+    color:red;
+    font-family: 'FontAwesome';
+    font-weight: normal;
+    font-size: 10px;
+    content: "\f069";
+    position: relative;
+    bottom: 9px;
+    left: 1px;
+}
+
+.list-group {
+    padding-left: 15px !important;
+}
+
+.lead {
+    margin:auto;
+    left:0;
+    right:0;
+    padding-top:10%;
+}
+.nav-tabs { border-bottom: 2px solid #DDD; }
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover { border-width: 0; }
+.nav-tabs > li > a { border: none; color: #666; }
+.nav-tabs > li.active > a, .nav-tabs > li > a:hover { border: none; color: #3097D1 !important; background: transparent; }
+.nav-tabs > li > a::after { content: ""; background: #3097D1; height: 2px; position: absolute; width: 100%; left: 0px; bottom: -1px; transition: all 250ms ease 0s; transform: scale(0); }
+.nav-tabs > li.active > a::after, .nav-tabs > li:hover > a::after { transform: scale(1); }
+.tab-nav > li > a::after { background: #21527d none repeat scroll 0% 0%; color: #fff; }
+.tab-pane { padding: 15px 0; }
+.tab-content{padding:20px}
+.breadcrumb {
+    padding: 8px 4px;
+    margin-bottom: 3px;
+    list-style: none;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+}
