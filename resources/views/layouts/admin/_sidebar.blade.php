@@ -28,6 +28,9 @@
                         <li class="@if(request()->segment('3') == 'create') active @endif"><a href="{{ route('admin.countries.create') }}">Add Country</a></li>
                     </ul>
                 </li>
+                 <li class="submenu">
+                    <a class="@if(request()->segment('2') == 'contact-us' || request()->segment('2') == 'contact-us-view') active @endif" href="{{ route('admin.contactus.index') }}"><i class="fa fa-fw fa-envelope"></i><span>Contact Us</span> </a>
+                </li>
 
                 {{--<li class="submenu">--}}
                     {{--<a href="#"><i class="fa fa-fw fa-tv"></i> <span> User Interface </span> <span class="menu-arrow"></span></a>--}}
