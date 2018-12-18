@@ -6,10 +6,13 @@
  * Time: 10:35 AM
  */
 namespace App\Observers;
+use App\LeasePaymentsNumber;
 use App\User;
 use App\LeasePaymentsBasis;
 use App\Mail\RegistrationConfirmation;
 use Mail;
+use App\LeaseAssetsNumberSettings;
+use App\LeaseAssetSimilarCharacteristicSettings;
 
 class UserObserver
 {
@@ -43,6 +46,33 @@ class UserObserver
                     'status'    => '1'
                 ]);
             }
+
+            $number_of_underlying_assets_settings = config('settings.lease_assets_number');
+            foreach ($number_of_underlying_assets_settings as $number){
+                LeaseAssetsNumberSettings::create([
+                    'business_account_id' => $user->id,
+                    'number' => $number,
+                    'status'    => '1'
+                ]);
+            }
+
+            $number_of_la_similar_charac_number = config('settings.la_similar_charac_number');
+            foreach ($number_of_la_similar_charac_number as $number){
+                LeaseAssetSimilarCharacteristicSettings::create([
+                    'business_account_id' => $user->id,
+                    'number' => $number,
+                    'status'    => '1'
+                ]);
+            }
+
+            $number_of_lease_payments = config('settings.no_of_lease_payments');
+            foreach ($number_of_lease_payments as $number){
+                LeasePaymentsNumber::create([
+                    'business_account_id' => $user->id,
+                    'number' => $number
+                ]);
+            }
+
             return true;
         } catch (\Exception $e){
             return false;

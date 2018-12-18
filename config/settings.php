@@ -12,5 +12,14 @@ return [
     'lease_payments_basis' => [
         'Turnover Lease',
         'Actual Usage Basis'
+    ],
+    'lease_assets_number' => [
+        1
+    ],
+    'la_similar_charac_number' => [
+        1
+    ],
+    'no_of_lease_payments' => [
+        1
     ]
 ];

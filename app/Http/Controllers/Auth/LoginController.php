@@ -78,6 +78,38 @@ class LoginController extends Controller
         return [
             $field => $request->get($this->username()),
             'password' => $request->password,
+            'is_verified' => '1'
         ];
+    }
+
+
+    /**
+     * Get the failed login response instance.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    protected function sendFailedLoginResponse(Request $request)
+    {
+        $errors = [$this->username() => trans('auth.failed')];
+
+        $field = filter_var($request->get($this->username()), FILTER_VALIDATE_EMAIL)
+            ? $this->username()
+            : 'username';
+
+        // Load user from database
+        $user = \App\User::where($field, $request->{$this->username()})->first();
+        // Check if user was successfully loaded, that the password matches
+        // and active is not 1. If so, override the default error message.
+        if ($user && \Hash::check($request->password, $user->password) && $user->active != 1) {
+            $errors = [$this->username() => 'Your account is not active. Please check your email and proceed further.'];
+        }
+
+        if ($request->expectsJson()) {
+            return response()->json($errors, 422);
+        }
+        return redirect()->back()
+            ->withInput($request->only($this->username(), 'remember'))
+            ->withErrors($errors);
     }
 }

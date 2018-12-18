@@ -18,27 +18,60 @@ $(function(){
 
     $(document.body).on('submit', '#edit_settings', function (e) {
         e.preventDefault();
-        alert($(this).serialize());
         $.ajax({
             url : $(this).attr('action'),
             data : {
-                lease_basis_title : $('#title').val()
+                title : $('#title').val()
             },
             dataType : 'json',
             type : 'post',
             success : function (response) {
                 if(response['status']){
                     $('.alert-success').html(response['message']).show();
-                    $('.status_sucess').show()
+                    $('.status_sucess').show();
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 200);
                 } else {
                     $('.form-group').addClass('has-error');
                     var html = '<span class="help-block">\n' +
-                        '                        <strong>'+response['errors']['lease_basis_title'][0]+'</strong>\n' +
+                        '                        <strong>'+response['errors']['title'][0]+'</strong>\n' +
                         '                    </span>';
 
                     $('#error_section').html(html);
                 }
             }
         });
-    })
+    });
+
+    $(document.body).on("click", ".delete_settings", function () {
+        var href = $(this).data('href');
+        bootbox.confirm({
+            message: "Are you sure that you want to delete this setting? These changes cannot be reverted.",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn btn-danger'
+                }
+            },
+            callback: function (result) {
+                if(result) {
+                    $.ajax({
+                        url : href,
+                        type : 'delete',
+                        dataType : 'json',
+                        success : function (response) {
+                            if(response['status']) {
+                                window.location.reload();
+                            }
+                        }
+                    })
+                }
+            }
+        });
+    });
 });

@@ -29,9 +29,36 @@ Route::middleware('auth')->group(function(){
         });
 
         Route::prefix('lease-classification')->group(function (){
+
             Route::get('/', ['as' => 'settings.leaseclassification', 'uses' => 'LeaseClassificationController@index']);
+
+            /**
+             * Routes for the lease payment Basics Settings for the authenticated user
+             */
             Route::post('add-more-lease-payment-basis', ['as' => 'settings.leaseclassification.addleasepaymentbasis', 'uses' => 'LeaseClassificationController@leasePaymentBasis']);
-            Route::match(['get', 'post'], '/edit-lease-payment-basis/{id}', ['as' => 'settings.leaseclassification.editeasepaymentbasis', 'uses' => 'LeaseClassificationController@editLeasePaymentBasis']);
+            Route::match(['get', 'post'], '/edit-lease-payment-basis/{id}', ['as' => 'settings.leaseclassification.editleasepaymentbasis', 'uses' => 'LeaseClassificationController@editLeasePaymentBasis']);
+            Route::delete('lease-classification-delete/{id}', ['as' => 'settings.leaseclassification.deleteleasepaymentbasis', 'uses' => 'LeaseClassificationController@deleteLeasePaymentsBasis']);
+
+            /**
+             * Routes for the number of underlying lease asset Settings for the authenticated user
+             */
+            Route::post('add-more-lease-asset-number', ['as' => 'settings.leaseclassification.addleaseassetnumber', 'uses' => 'LeaseClassificationController@addLeaseAssetNumber']);
+            Route::match(['get', 'post'], '/edit-lease-asset-number/{id}', ['as' => 'settings.leaseclassification.editleaseassetnumber', 'uses' => 'LeaseClassificationController@editLeaseAssetNumber']);
+            Route::delete('lease-asset-number-delete/{id}', ['as' => 'settings.leaseclassification.deleteleaseassetnumber', 'uses' => 'LeaseClassificationController@deleteLeaseAssetNumber']);
+
+            /**
+             * Number of Lease Assets of Similar Characteristics
+             */
+            Route::post('add-lease-asset-similar-charac', ['as' => 'settings.leaseclassification.addleasesimilarcharac', 'uses' => 'LeaseClassificationController@addLeaseAssetSimilarCharac']);
+            Route::match(['get', 'post'], '/edit-lease-asset-similar-charac/{id}', ['as' => 'settings.leaseclassification.editleasesimilarcharac', 'uses' => 'LeaseClassificationController@editLeaseAssetSimilarCharac']);
+            Route::delete('lease-asset-similar-charac-delete/{id}', ['as' => 'settings.leaseclassification.deleteleasesimilarcharac', 'uses' => 'LeaseClassificationController@deleteLeaseAssetSimilarCharac']);
+
+            /**
+             * Number of Lease Payments
+             */
+            Route::post('add-lease-payments-number', ['as' => 'settings.leaseclassification.addleasepaymentsnumber', 'uses' => 'LeaseClassificationController@addLeasePaymentsNumber']);
+            Route::match(['get', 'post'], '/edit-lease-payments-number/{id}', ['as' => 'settings.leaseclassification.editleasepaymentsnumber', 'uses' => 'LeaseClassificationController@editLeasePaymentsNumber']);
+            Route::delete('delete-lease-payments-number/{id}', ['as' => 'settings.leaseclassification.deleteleasepaymentsnumber', 'uses' => 'LeaseClassificationController@deleteLeasePaymentsNumber']);
         });
 
         Route::prefix('currencies')->group(function (){

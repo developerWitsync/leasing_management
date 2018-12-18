@@ -161,11 +161,11 @@
                                             </td>
                                             <td>
 
-                                                <a data-href="{{ route('settings.leaseclassification.editeasepaymentbasis', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-success edit_table_setting">
+                                                <a data-href="{{ route('settings.leaseclassification.editleasepaymentbasis', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-success edit_table_setting">
                                                     <i class="fa fa-pencil-square-o"></i>
                                                 </a>
 
-                                                <a href="javascript:;" class="btn btn-sm btn-danger"><i class="fa fa-trash-o"></i></a>
+                                                <a data-href="{{ route('settings.leaseclassification.deleteleasepaymentbasis', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-danger delete_settings"><i class="fa fa-trash-o"></i></a>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -193,6 +193,370 @@
                             </div>
                         </div>
 
+
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                Number of Underlying Lease Assets
+                                <span>
+                                    <a href="javascript:void(0);" class="btn btn-sm btn-primary pull-right add_more" data-form="add_more_no_of_underlying_asset">Add More</a>
+                                </span>
+                            </div>
+                            <div class="panel-body">
+                                <table class="table table-condensed lease_payment_basis_table">
+                                    <thead>
+                                    <tr>
+                                        <th>Sr No.</th>
+                                        <th>Number</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($number_of_underlying_assets_settings as $key => $value)
+                                        <tr>
+                                            <td>{{ $key + 1 }}</td>
+                                            <td class="title">
+                                                {{ $value->number }}
+                                            </td>
+                                            <td>
+
+                                                <a data-href="{{ route('settings.leaseclassification.editleaseassetnumber', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-success edit_table_setting">
+                                                    <i class="fa fa-pencil-square-o"></i>
+                                                </a>
+
+                                                <a data-href="{{ route('settings.leaseclassification.deleteleaseassetnumber', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-danger delete_settings"><i class="fa fa-trash-o"></i></a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    <tr style=" {{ $errors->has('lease_asset_number') ? ' has-error' : 'display: none' }}" class="add_more_no_of_underlying_asset">
+                                        <td>{{ count($number_of_underlying_assets_settings) + 1 }}</td>
+                                        <td>
+                                            <form action="{{ route('settings.leaseclassification.addleaseassetnumber') }}" method="POST" class="add_more_no_of_underlying_asset_form">
+                                                {{ csrf_field() }}
+                                                <div class="form-group{{ $errors->has('lease_asset_number') ? ' has-error' : '' }}">
+                                                    <input type="text" value="{{ old('lease_asset_number') }}" name="lease_asset_number" placeholder="Number" class="form-control {{ $errors->has('lease_asset_number') ? ' has-error' : '' }}"/>
+                                                    @if ($errors->has('lease_asset_number'))
+                                                        <span class="help-block">
+                                                            <strong>{{ $errors->first('lease_asset_number') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <button type="button" onclick="javascript:$('.add_more_no_of_underlying_asset_form').submit();" class="btn btn-sm btn-success">Save</button>
+                                            <a href="javascript:;" class="btn btn-sm btn-danger add_more" data-form="add_more_no_of_underlying_asset">Cancel</a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                Number of Lease Assets of Similar Characteristics
+                                <span>
+                                    <a href="javascript:void(0);" class="btn btn-sm btn-primary pull-right add_more" data-form="add_more_no_of_lease_asset_similar_charac">Add More</a>
+                                </span>
+                            </div>
+                            <div class="panel-body">
+                                <table class="table table-condensed">
+                                    <thead>
+                                    <tr>
+                                        <th>Sr No.</th>
+                                        <th>Number</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($la_similar_charac_number as $key => $value)
+                                        <tr>
+                                            <td>{{ $key + 1 }}</td>
+                                            <td class="title">
+                                                {{ $value->number }}
+                                            </td>
+                                            <td>
+
+                                                <a data-href="{{ route('settings.leaseclassification.editleasesimilarcharac', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-success edit_table_setting">
+                                                    <i class="fa fa-pencil-square-o"></i>
+                                                </a>
+
+                                                <a data-href="{{ route('settings.leaseclassification.deleteleasesimilarcharac', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-danger delete_settings"><i class="fa fa-trash-o"></i></a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    <tr style=" {{ $errors->has('lease_similar_charac_number') ? ' has-error' : 'display: none' }}" class="add_more_no_of_lease_asset_similar_charac">
+                                        <td>{{ count($la_similar_charac_number) + 1 }}</td>
+                                        <td>
+                                            <form action="{{ route('settings.leaseclassification.addleasesimilarcharac') }}" method="POST" class="add_more_no_of_lease_asset_similar_charac_form">
+                                                {{ csrf_field() }}
+                                                <div class="form-group{{ $errors->has('lease_similar_charac_number') ? ' has-error' : '' }}">
+                                                    <input type="text" value="{{ old('lease_similar_charac_number') }}" name="lease_similar_charac_number" placeholder="Number" class="form-control {{ $errors->has('lease_similar_charac_number') ? ' has-error' : '' }}"/>
+                                                    @if ($errors->has('lease_similar_charac_number'))
+                                                        <span class="help-block">
+                                                            <strong>{{ $errors->first('lease_similar_charac_number') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <button type="button" onclick="javascript:$('.add_more_no_of_lease_asset_similar_charac_form').submit();" class="btn btn-sm btn-success">Save</button>
+                                            <a href="javascript:;" class="btn btn-sm btn-danger add_more" data-form="add_more_no_of_lease_asset_similar_charac">Cancel</a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-info">
+                            <div class="panel-heading">Contract Escalation Basis</div>
+                            <div class="panel-body">
+                                <table class="table table-condensed">
+                                    <thead>
+                                    <tr>
+                                        <th>Sr No.</th>
+                                        <th>Title</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($contract_escalation_basis as $key =>$value)
+                                        <tr>
+                                            <td>{{ $key + 1 }}</td>
+                                            <td>{{ $value->title }}</td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-info">
+                            <div class="panel-heading">Lease Contract Duration</div>
+                            <div class="panel-body">
+                                <table class="table table-condensed">
+                                    <thead>
+                                    <tr>
+                                        <th>Sr No.</th>
+                                        <th>Time Range</th>
+                                        <th>Title</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($lease_contract as $key =>$value)
+                                        <tr>
+                                            <td>{{ $key + 1 }}</td>
+                                            <td>{{ $value->month_range_description }}</td>
+                                            <td>{{ $value->title }}</td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-info">
+                            <div class="panel-heading">Leases Excluded from Transitional Valuation</div>
+                            <div class="panel-body">
+                                <table class="table table-condensed">
+                                    <thead>
+                                    <tr>
+                                        <th>Sr No.</th>
+                                        <th>Purpose</th>
+                                        <th>Title</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($lease_excluded_from_transitional_valuation  as $key =>$value)
+                                        <tr>
+                                            <td>{{ $key + 1 }}</td>
+                                            <td>
+                                                @if($value->value_for == 'lease_asset_level')
+                                                    Underlying Lease Asset Level
+                                                @else
+                                                    Lease Payments
+                                                @endif
+                                            </td>
+                                            <td>{{ $value->title }}</td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        @foreach($lease_accounting_treatment as $year=>$treatments)
+                            <div class="panel panel-info">
+                                <div class="panel-heading">Lease Accounting Treatment Upto {{ $year }}</div>
+                                <div class="panel-body">
+                                    <table class="table table-condensed">
+                                        <thead>
+                                        <tr>
+                                            <th>Sr No.</th>
+                                            <th>Title</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @foreach($treatments  as $key => $value)
+                                            <tr>
+                                                <td>{{ $key + 1 }}</td>
+                                                <td>{{ $value['title']}}</td>
+                                            </tr>
+                                        @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        @endforeach
+
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                Number of Lease Payments
+                                <span>
+                                    <a href="javascript:void(0);" class="btn btn-sm btn-primary pull-right add_more" data-form="add_more_no_of_lease_payments">Add More</a>
+                                </span>
+                            </div>
+                            <div class="panel-body">
+                                <table class="table table-condensed">
+                                    <thead>
+                                    <tr>
+                                        <th>Sr No.</th>
+                                        <th>Number</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($number_of_lease_payments as $key => $value)
+                                        <tr>
+                                            <td>{{ $key + 1 }}</td>
+                                            <td class="title">
+                                                {{ $value->number }}
+                                            </td>
+                                            <td>
+
+                                                <a data-href="{{ route('settings.leaseclassification.editleasepaymentsnumber', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-success edit_table_setting">
+                                                    <i class="fa fa-pencil-square-o"></i>
+                                                </a>
+
+                                                <a data-href="{{ route('settings.leaseclassification.deleteleasepaymentsnumber', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-danger delete_settings"><i class="fa fa-trash-o"></i></a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    <tr style=" {{ $errors->has('lease_payments_no') ? ' has-error' : 'display: none' }}" class="add_more_no_of_lease_payments">
+                                        <td>{{ count($number_of_lease_payments) + 1 }}</td>
+                                        <td>
+                                            <form action="{{ route('settings.leaseclassification.addleasepaymentsnumber') }}" method="POST" class="add_more_no_of_lease_payments_form">
+                                                {{ csrf_field() }}
+                                                <div class="form-group{{ $errors->has('lease_payments_no') ? ' has-error' : '' }}">
+                                                    <input type="text" value="{{ old('lease_payments_no') }}" name="lease_payments_no" placeholder="Number" class="form-control {{ $errors->has('lease_payments_no') ? ' has-error' : '' }}"/>
+                                                    @if ($errors->has('lease_payments_no'))
+                                                        <span class="help-block">
+                                                            <strong>{{ $errors->first('lease_payments_no') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <button type="button" onclick="javascript:$('.add_more_no_of_lease_payments_form').submit();" class="btn btn-sm btn-success">Save</button>
+                                            <a href="javascript:;" class="btn btn-sm btn-danger add_more" data-form="add_more_no_of_lease_payments">Cancel</a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-info">
+                            <div class="panel-heading">Lease Payment Interval</div>
+                            <div class="panel-body">
+                                <table class="table table-condensed">
+                                    <thead>
+                                    <tr>
+                                        <th>Sr No.</th>
+                                        <th>Title</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($lease_payment_interval  as $key => $value)
+                                        <tr>
+                                            <td>{{ $key + 1 }}</td>
+                                            <td>{{ $value->title}}</td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+
+
+                        <div class="panel panel-info">
+                            <div class="panel-heading">Lease Payments Frequency</div>
+                            <div class="panel-body">
+                                <table class="table table-condensed">
+                                    <thead>
+                                    <tr>
+                                        <th>Sr No.</th>
+                                        <th>Title</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($lease_payments_frequency  as $key => $value)
+                                        <tr>
+                                            <td>{{ $key + 1 }}</td>
+                                            <td>{{ $value->title}}</td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        Escalation Percentages
+
+                        <div class="panel panel-info">
+                            <div class="panel-heading">Escalation Clause Applicable on Lease Payments</div>
+                            <div class="panel-body">
+                                <table class="table table-condensed">
+                                    <thead>
+                                    <tr>
+                                        <th>Sr No.</th>
+                                        <th>Title</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($lease_payment_escalation_clause  as $key => $value)
+                                        <tr>
+                                            <td>{{ $key + 1 }}</td>
+                                            <td>{{ $value->title}}</td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-info">
+                            <div class="panel-heading">Escalation Amount Calculated On</div>
+                            <div class="panel-body">
+                                <table class="table table-condensed">
+                                    <thead>
+                                    <tr>
+                                        <th>Sr No.</th>
+                                        <th>Title</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($lease_payment_escalation_clause  as $key => $value)
+                                        <tr>
+                                            <td>{{ $key + 1 }}</td>
+                                            <td>{{ $value->title}}</td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -210,5 +574,5 @@
 
 @endsection
 @section('footer-script')
-
+    <script src="{{ asset('assets/plugins/bootbox/bootbox.min.js') }}"></script>
 @endsection

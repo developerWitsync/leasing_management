@@ -1,6 +1,6 @@
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal">&times;</button>
-    <h4 class="modal-title">Update Basis of Variable Lease Payment</h4>
+    <h4 class="modal-title">Update Number of Underlying Lease Assets</h4>
 </div>
 <div class="modal-body">
 
@@ -10,12 +10,12 @@
         </div>
     </div>
 
-    <form id="edit_settings" class="form-horizontal" method="POST" action="{{ route('settings.leaseclassification.editleasepaymentbasis', ['id' => $lease_payment_basis->id]) }}">
+    <form id="edit_settings" class="form-horizontal" method="POST" action="{{ route('settings.leaseclassification.editleasepaymentsnumber', ['id' => $lease_payments_no->id]) }}">
         <div class="form-group{{ $errors->has('title') ? ' has-error' : '' }}">
-            <label for="title" class="col-md-4 control-label">Title</label>
+            <label for="title" class="col-md-4 control-label">Number</label>
 
             <div class="col-md-6">
-                <input id="title" type="text" placeholder="Title" class="form-control" name="title" value="{{ old('title', $lease_payment_basis->title) }}" autofocus>
+                <input id="title" type="text" placeholder="Number" class="form-control" name="title" value="{{ old('title', $lease_payments_no->number) }}" autofocus>
 
                 <div id="error_section">
                     @if ($errors->has('title'))
@@ -38,5 +38,5 @@
     </form>
 </div>
 <div class="modal-footer">
-    &nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;
 </div>
