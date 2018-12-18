@@ -1,0 +1,269 @@
+ <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+
+<meta http-equiv="Content-type" content="text/html; charset=UTF-8">
+<title>Dynamic Bootstrap Table</title>
+
+<base href="/">
+
+<link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="http://www.datatables.net/rss.xml">
+
+<link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="bower_components/datatables-tabletools/css/dataTables.tableTools.css">
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.css">
+<!--<link rel="stylesheet" type="text/css" href="bower_components/datatables/media/css/jquery.dataTables.min.css">
+<link rel="stylesheet" type="text/css" href="bower_components/jquery-ui/themes/base/all.css">-->
+
+<script src="bower_components/jquery/dist/jquery.min.js" type="text/javascript"></script>
+<script src="bower_components/datatables/media/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="bower_components/datatables-tabletools/js/dataTables.tableTools.js" type="text/javascript"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
+<!--<script src="bower_components/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>-->
+<script src="//cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.js" type="text/javascript"></script>
+<script src="bower_components/datatables/media/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="bower_components/jeditable/jquery.jeditable.js" type="text/javascript"></script>
+<script src="jquery.dataTables.editable.min.js" type="text/javascript"></script>
+<script src="bower_components/jquery-validation/dist/jquery.validate.min.js" type="text/javascript"></script>
+
+<style type="text/css">
+.dataTables_length, .DTTT, .dataTables_filter {
+	display: inline-block;
+}
+.DTTT {
+	float: right;
+	margin-left: 5px;
+	top: -2px;
+}
+.dataTables_filter {
+  float: right;
+  vertical-align: middle;
+}
+</style>
+
+<script type="text/javascript" charset="utf-8">
+
+	$(document).ready( function () { "use strict";
+
+		var getGithubIssueData = function getGithubIssueData(username, reponame, done) {
+			$.getJSON("http://api.github.com/repos/" + username + "/" + reponame + "/issues")
+				.done(done)
+			;
+		};
+
+		var getGithubIssueHeaders = function getGithubIssueHeaders() {
+			return [
+				"username",
+				"title",
+				"state",
+				"number"
+			];
+		};
+
+		var clearDataTable = function clearDataTable(headerNames, tableData) {
+
+			var i;
+			var max;
+
+			/*
+	        *   HTML for the table headers, can be built dynamically if needed
+	        */
+			if (typeof headerNames !== "undefined") {
+				var tableHTML = "<thead><tr>";
+				for (i = 0; i < headerNames.length; i++) {
+					tableHTML += "<th>" + headerNames[i] + "</th>";
+				}
+				tableHTML += "</tr></thead><tbody></tbody>";
+				$("#example").dataTable().fnDestroy();
+				$("#example").html(tableHTML);
+			}/* else {
+				tableHTML += "<th></th><th></th><th></th><th></th>";
+			}*/
+
+			var columnDefs = [
+				{ "sClass": "admList_" + headerNames[0], "bSortable": false, "aTargets": [0] },
+				{ "sClass": "admList_" + headerNames[1], "aTargets": [1] },
+				{ "sClass": "admList_" + headerNames[2], "aTargets": [2] }
+			];
+
+			for (i = 3, max = headerNames.length; i < max; i++) {
+				columnDefs.push({ "sClass": "admList_" + headerNames[i], "aTargets": [i - max] });
+			}
+
+			// (Re)initialize the table
+			$("#example").dataTable({
+				"sPaginationType": "full_numbers",
+				"sDom": "T<\"clear\">lfrtip",
+				"data": tableData,
+				"oTableTools": {
+					"sSwfPath": "swf/copy_csv_xls_pdf.swf"
+				}
+			});
+			$("#example").dataTable().api({
+				responsive: true
+			});
+			$("#example").dataTable().makeEditable({
+				sUpdateURL: function(value, settings) {
+					return value; //Simulation of server-side response using a callback function
+				},
+				sAddURL: "api/AddData.txt",
+				sAddHttpMethod: "GET",
+				sDeleteHttpMethod: "GET",
+				sDeleteURL: "api/DeleteData.txt",
+				/*"aoColumns": [
+					{
+						cssclass: "required"
+					},
+					{ },
+					{
+						indicator: "Saving platforms...",
+						tooltip: "Click to edit platforms",
+						type: "textarea",
+						submit: "Save changes"
+					},
+					{
+						indicator: "Saving Engine Version...",
+						tooltip: "Click to select engine version",
+						loadtext: "loading...",
+						type: "select",
+						onblur: "cancel",
+						submit: "Ok",
+						loadurl: "api/EngineVersionList.json",
+						loadtype: "GET"
+					},
+					{
+						indicator: "Saving CSS Grade...",
+						tooltip: "Click to select CSS Grade",
+						loadtext: "loading...",
+						type: "select",
+						onblur: "submit",
+						data: "{'':'Please select...', 'A':'A','B':'B','C':'C'}"
+					}
+				],*/
+				oAddNewRowButtonOptions: { label: "Add...",
+					icons: {primary: "btn-default glyphicon glyphicon-plus btn-md"}
+				},
+				oDeleteRowButtonOptions: { label: "Remove",
+					icons: {primary: "btn-default glyphicon glyphicon-remove btn-md"}
+				},
+
+				oAddNewRowFormOptions: {
+					title: "Add a new browser",
+					show: "blind",
+					hide: "explode",
+					modal: true
+				},
+				sAddDeleteToolbarSelector: ".dataTables_length"
+
+			});
+		};
+
+		var getData = function getData(username, reponame) {
+			getGithubIssueData(username, reponame, function(issues) {
+				var _issues = [];
+				for(var i = 0; i < issues.length; i++) {
+					_issues.push([]);
+					_issues[i].push(issues[i].user.login);
+					_issues[i].push(issues[i].title);
+					_issues[i].push(issues[i].state);
+					_issues[i].push(issues[i].number);
+				}
+				clearDataTable(getGithubIssueHeaders(), _issues);
+			});
+		};
+
+		getData(document.getElementById("username").value, document.getElementById("reponame").value);
+
+		$("#reloadTable").on("click", function() {
+			getData(document.getElementById("username").value, document.getElementById("reponame").value);
+		});
+	});
+</script>
+</head>
+
+<body id="index" class="">
+	<div id="fw_container">
+	<div class="container" style="position: relative">
+		<a href="https://github.com/ansballard/jquery-datatables-editable" target="_blank"><img style="position: absolute; top: 0; right: 15px; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+		<div class="jumbotron">
+			<h1>jquery.datatable.editable</h1>
+			<p>This is an example using Bootstrap</p>
+		</div>
+
+		<div class="form-inline" style="margin-bottom:10px">
+			<button type="submit" id="reloadTable" class="btn btn-info"><span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Reload Data</button>
+			<div class="input-group">
+				<div class="input-group-addon">http://api.github.com/repos/</div>
+				<input type="text" id="username" class="form-control" value="facebook"/>
+				<div class="input-group-addon">/</div>
+				<input type="text" id="reponame" class="form-control" value="react"/>
+				<div class="input-group-addon">/issues</div>
+			</div>
+		</div>
+
+		<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" id="addModalLabel">Add Row</h4>
+					</div>
+					<!-- THIS FORM IS NECESSARY, EDITABLE DEPENDS ON THIS ID -->
+					<form id="formAddNewRow" action="#" title="Add a new browser">
+						<div class="modal-body">
+							<div class="form-group">
+								<label for="recipient-name" class="control-label">Rendering engine</label>
+								<input type="text" class="form-control" id="recipient-name" rel="0">
+							</div>
+							<div class="form-group">
+								<label for="message-text" class="control-label">Browser</label>
+								<input type="text" class="form-control" id="recipient-name" rel="1">
+							</div>
+							<div class="form-group">
+								<label for="message-text" class="control-label">Platform(s)</label>
+								<input type="text" class="form-control" id="recipient-name" rel="2">
+							</div>
+							<div class="form-group">
+								<label for="message-text" class="control-label">Engine version</label>
+								<select name="version" id="version" rel="3" class="form-control">
+									<option>1.5</option>
+									<option>1.7</option>
+									<option>1.8</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<label for="message-text" class="control-label">CSS grade</label><br />
+								<input type="radio" name="grade" value="A" rel="4"> First<br />
+								<input type="radio" name="grade" value="B" rel="4"> Second<br />
+								<input type="radio" name="grade" value="C" checked rel="4"> Third
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							<button type="submit" class="btn btn-primary">Save changes</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<table class="display table table-hover" id="example">
+			<thead>
+				<tr>
+					<th>Rendering engine</th>
+					<th>Browser</th>
+					<th>Platform(s)</th>
+					<th>Engine version</th>
+					<th>CSS grade</th>
+				</tr>
+			</thead>
+			<tbody>
+				
+			</tbody>
+		</table>
+	</div>
+	</div>
+		
+</body>
+
+</html>

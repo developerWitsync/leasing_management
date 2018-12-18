@@ -30,6 +30,8 @@ Route::middleware('auth')->group(function(){
 
         Route::prefix('lease-classification')->group(function (){
             Route::get('/', ['as' => 'settings.leaseclassification', 'uses' => 'LeaseClassificationController@index']);
+            Route::post('add-more-lease-payment-basis', ['as' => 'settings.leaseclassification.addleasepaymentbasis', 'uses' => 'LeaseClassificationController@leasePaymentBasis']);
+            Route::match(['get', 'post'], '/edit-lease-payment-basis/{id}', ['as' => 'settings.leaseclassification.editeasepaymentbasis', 'uses' => 'LeaseClassificationController@editLeasePaymentBasis']);
         });
 
         Route::prefix('currencies')->group(function (){

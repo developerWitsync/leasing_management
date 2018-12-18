@@ -10,9 +10,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
-use Illuminate\Auth\Events\Registered;
-use App\Mail\RegistrationConfirmation;
-use Mail;
 
 class RegisterController extends Controller
 {
@@ -116,8 +113,6 @@ class RegisterController extends Controller
         $this->validator($request->all())->validate();
         $user = $this->create($request->all());
         if($user) {
-            //send the confirm acount email to the user from here
-            Mail::to($user)->queue(new RegistrationConfirmation($user));
             return redirect('/login')->with('success', 'Your account has been registered. Please check your email inbox to proceed furhter.');
         }
     }

@@ -103,6 +103,7 @@
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('assets/js/moment.min.js') }}"></script>
+    <script src="{{ asset('js/custom.js') }}"></script>
 
     <script>
         $(document).ready(function() {
