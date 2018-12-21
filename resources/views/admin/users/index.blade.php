@@ -1,7 +1,7 @@
 @extends('layouts.admin.master')
 
 @section('title')
-    @lang('_page_titles.Admin') | Manage Users
+    @lang('_page_titles.Admin') | Manage Business Account
 @endsection
 
 @section('header-styles')
@@ -15,10 +15,10 @@
         <div class="row">
             <div class="col-xl-12">
                 <div class="breadcrumb-holder">
-                    <h1 class="main-title float-left">Manage Users</h1>
+                    <h1 class="main-title float-left">Manage Business Account</h1>
                     <ol class="breadcrumb float-right">
                         <li class="breadcrumb-item">@lang('_sidebar.Dashboard')</li>
-                        <li class="breadcrumb-item active">Manage Users</li>
+                        <li class="breadcrumb-item active">Manage Business Account</li>
                     </ol>
                     <div class="clearfix"></div>
                 </div>
@@ -37,7 +37,7 @@
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <div class="card mb-3">
                     <div class="card-header">
-                        <h3><i class="fa fa-file-o"></i> Manage Users </h3>
+                        <h3><i class="fa fa-file-o"></i> Manage Business Account </h3>
                         Admin can manage the users and can reset the password for any user, can activate/de-activate any account, can delete the user and can also make the changes to the user profile as well.
                     </div>
 
@@ -46,10 +46,9 @@
                             <thead>
                             <tr>
                                 <th></th>
-                                <th>Profile Pic</th>
+                                <th>Legal Entity Name</th>
                                 <th>Name</th>
                                 <th>Email</th>
-                                <th>Mobile</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -75,25 +74,15 @@
                             return meta.row + meta.settings._iDisplayStart + 1;
                         }
                     },
-                    { "data": "profile_pic"},
-                    { "data": "full_name" },
-                    { "data": "email" },
-                    { "data": "mobile"},
+                    { "data": "legal_entity_name" },
+                    { "data": "authorised_person_name" },
+                    { "data": "email"},
                     { "data": "is_verified"},
                     { "data": "id" }
                 ],
                 "columnDefs": [
                     {
-                        "targets" : 1,
-                        "data" : "profile_pic",
-                        "render" : function (data, type, full, meta) {
-                            var html = "";
-                            html = "<img src='"+full['profile_pic']+"'/>"
-                            return html;
-                        }
-                    },
-                    {
-                        "targets" : 5,
+                        "targets" : 4,
                         "data" : "is_verified",
                         "render" : function(data, type, full, meta){
                             var html = "";
@@ -105,7 +94,7 @@
                         }
                     },
                     {
-                        "targets" : 6,
+                        "targets" : 5,
                         "data" : null,
                         "orderable": false,
                         "className" : "text-center",
