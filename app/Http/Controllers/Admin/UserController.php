@@ -13,6 +13,9 @@ use App\Http\Controllers\Controller;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Countries;
+use App\Currencies;
+use App\IndustryTypes;
 use Validator;
 use Image;
 use File;
@@ -81,6 +84,24 @@ class UserController extends Controller
                 return redirect()->back();
             }
         } catch (\Exception $e) {
+            abort('404');
+        }
+    }
+    /**
+     * if the request method is get than in that case renders the form for the create user profile.
+     * if the request method is post than in that case create the user profile and save the changes to the database as well.
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
+    public function add( Request $request){
+        try{
+            $countries = Countries::query()->where('status','=', '1')->where('trash', '=', '0')->get();
+            $industry_types = IndustryTypes::query()->where('status', '=', '1')->get();
+            $currencies = Currencies::query()->where('status', '=', '1')->get();
+             return view('admin.users.add-user',compact('countries', 'industry_types', 'currencies'));
+        } catch (\Exception $e) {
+            dd($e);
             abort('404');
         }
     }

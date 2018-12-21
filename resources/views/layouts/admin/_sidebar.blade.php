@@ -15,10 +15,12 @@
                     <a class="@if(request()->segment('2') == 'email-templates' || request()->segment('2') == 'email-template-edit') active @endif" href="{{ route('admin.emailtemplates.index') }}"><i class="fa fa-fw fa-envelope"></i><span>@lang('_sidebar.Email Templates')</span> </a>
                 </li>
 
-                <li class="submenu">
-                    <a class="@if(request()->segment('2') == 'manage-users' || request()->segment('2') == 'manage-user-edit') active @endif" href="{{ route('admin.users.index') }}">
-                        <i class="fa fa fa-user bigfonts"></i>
-                        <span>Manage Business Account</span> </a>
+                 <li class="submenu">
+                    <a href="#" class="@if(request()->segment('2') == 'manage-users') active @endif"><i class="fa fa fa-user bigfonts"></i> <span>Business Account </span> <span class="menu-arrow"></span></a>
+                    <ul class="list-unstyled">
+                        <li class="@if(request()->segment('3') == '') active @endif"><a href="{{ route('admin.users.index') }}">Manage Business Account</a></li>
+                        <li class="@if(request()->segment('3') == 'create') active @endif"><a href="{{route('admin.user.add')}}">Add Business Account</a></li>
+                    </ul>
                 </li>
 
                 <li class="submenu">

@@ -147,6 +147,8 @@ Route::namespace('Admin')->prefix('admin')->group(function () {
 
         Route::delete('manage-user-delete/{id}', ['as' => 'admin.manage.user.delete', 'uses' => 'UserController@delete']);
 
+         Route::match(['get', 'post'],'manage-user-add', ['as' => 'admin.user.add', 'uses' => 'UserController@add']);
+
         Route::match(['get', 'post'],'manage-user-edit/{id}', ['as' => 'admin.manage.user.edit', 'uses' => 'UserController@edit']);
 
         Route::post('manage-user-status-update', ['as' => 'admin.users.updatestatus', 'uses' => 'UserController@changeStatus']);
