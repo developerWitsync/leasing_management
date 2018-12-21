@@ -14,7 +14,8 @@
         "laravel/tinker": "~1.0",
         "swooletw/laravel-swoole": "^2.5",
         "tymon/jwt-auth": "1.0.0-rc.2",
-        "yajra/laravel-datatables-oracle": "^8.0"
+        "yajra/laravel-datatables-oracle": "^8.0",
+        "zizaco/entrust": "5.2.x-dev"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.2",

@@ -181,6 +181,7 @@ return [
         Barryvdh\Cors\ServiceProvider::class,
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
+        Zizaco\Entrust\EntrustServiceProvider::class,
     ],
 
     /*
@@ -232,6 +233,7 @@ return [
         'Datatables' => Yajra\Datatables\Facades\Datatables::class,
         'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
         'Image' => Intervention\Image\Facades\Image::class,
+        'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
     ],
 
 ];

@@ -10,7 +10,6 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Http\Controllers\Controller;
-use App\SecurityQuestions;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -147,8 +146,8 @@ class UserController extends Controller
                     return redirect(route("admin.users.index"))->with('success', 'User details has been updated successfully.');
                 }
 
-                $questions = SecurityQuestions::query()->where("status", '=', '1')->get();
-                return view('admin.users.update', compact('user', 'questions'));
+
+                return view('admin.users.update', compact('user'));
             } else {
                 abort('404');
             }

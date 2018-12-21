@@ -18,7 +18,7 @@
                 <li class="submenu">
                     <a class="@if(request()->segment('2') == 'manage-users' || request()->segment('2') == 'manage-user-edit') active @endif" href="{{ route('admin.users.index') }}">
                         <i class="fa fa fa-user bigfonts"></i>
-                        <span>Manage Users</span> </a>
+                        <span>Manage Business Account</span> </a>
                 </li>
 
                 <li class="submenu">
@@ -29,7 +29,7 @@
                     </ul>
                 </li>
                  <li class="submenu">
-                    <a class="@if(request()->segment('2') == 'contact-us' || request()->segment('2') == 'contact-us-view') active @endif" href="{{ route('admin.contactus.index') }}"><i class="fa fa-fw fa-envelope"></i><span>Contact Us</span> </a>
+                    <a class="@if(request()->segment('2') == 'contactus' || request()->segment('2') == 'contact-us-view') active @endif" href="{{ route('admin.contactus.index') }}"><i class="fa fa-fw fa-envelope"></i><span>Contact Us</span> </a>
                 </li>
 
                 {{--<li class="submenu">--}}

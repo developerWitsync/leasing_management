@@ -99,9 +99,38 @@ Route::middleware('auth')->group(function(){
             Route::delete('delete-lease-asset-category-setting/{id}', ['as' => 'settings.leaseassets.editcategorysetting', 'uses' => 'LeaseAssetsController@deleteCategorySetting']);
         });
 
-        Route::prefix('user-access')->group(function (){
+    Route::prefix('user-access')->namespace('UserAccess')->group(function (){
             Route::get('/', ['as' => 'settings.useraccess', 'uses' => 'UserAccessController@index']);
+
+            Route::get('listing', ['as' => 'settings.user', 'uses' => 'UserAccessController@listing']);
+
+            Route::get('fetch', ['as' => 'settings.user.fetch', 'uses' => 'UserAccessController@fetch']);
+
+            Route::match(['get', 'post'], 'create', ['as' => 'settings.user.create', 'uses' => 'UserAccessController@create']);
+
+            Route::match(['get', 'post'], '/update/{id}', ['as' => 'settings.user.update', 'uses' => 'UserAccessController@update']);
+            
+            Route::delete('delete/{id}', ['as' => 'settings.user.delete', 'uses' => 'UserAccessController@delete']);
+  
+            Route::match(['get', 'post'], 'assigned-permission-role/{id}', ['as' => 'settings.user.assigned-permission-role', 'uses' => 'UserAccessController@assignPermissionToRole']);
+
+            Route::match(['get', 'post'], 'assigned-role-user/{id}', ['as' => 'settings.user.assigned-role-User', 'uses' => 'UserAccessController@assignRoleToUser']);
+
+
+
+         Route::prefix('role')->group(function (){
+            Route::get('/', ['as' => 'settings.role', 'uses' => 'RoleController@index']);
+
+            Route::get('fetch', ['as' => 'settings.role.fetch', 'uses' => 'RoleController@fetch']);
+
+            Route::match(['get', 'post'], 'create', ['as' => 'settings.role.create', 'uses' => 'RoleController@create']);
+
+            Route::match(['get', 'post'], '/update/{id}', ['as' => 'settings.role.update', 'uses' => 'RoleController@update']);
+            
+            Route::delete('delete/{id}', ['as' => 'settings.role.delete', 'uses' => 'RoleController@delete']);
         });
+
+    });
 
         Route::prefix('codification')->group(function (){
             Route::get('/', ['as' => 'settings.codification', 'uses' => 'CodificationController@index']);

@@ -177,34 +177,6 @@
 
                                     <div class="form-row">
                                         <div class="form-group col-md-6">
-                                            <label for="security_question">Security Question (required)</label>
-                                            <select name="security_question" id="security_question" class="form-control @if($errors->has('security_question')) is-invalid @endif">
-                                                <option value="">Select Security Question</option>
-                                                @foreach($questions as $question)
-                                                    <option value="{{ $question->id }}" @if(old('security_question', $user->security_question) == $question->id) selected="selected" @endif>{{ $question->question }}</option>
-                                                @endforeach
-
-                                            </select>
-                                            @if($errors->has('security_question'))
-                                                <div class="invalid-feedback">
-                                                    {{ $errors->first('security_question') }}
-                                                </div>
-                                            @endif
-                                        </div>
-
-                                        <div class="form-group col-md-6">
-                                            <label for="security_answer">Security Answer(required)</label>
-                                            <input type="text" class="form-control @if($errors->has('security_answer')) is-invalid @endif" value="{{ old('security_answer', $user->security_answer) }}" name="security_answer" id="security_answer" placeholder="Answer for the selected question" autocomplete="off">
-                                            @if($errors->has('security_answer'))
-                                                <div class="invalid-feedback">
-                                                    {{ $errors->first('security_answer') }}
-                                                </div>
-                                            @endif
-                                        </div>
-                                    </div>
-
-                                    <div class="form-row">
-                                        <div class="form-group col-md-6">
                                             <label for="status">Is Verified (required)</label>
                                             <select name="is_verified" id="is_verified" class="form-control @if($errors->has('is_verified')) is-invalid @endif">
                                                 <option value="">Select Status</option>
@@ -243,28 +215,9 @@
 
                                     <div class="m-b-10"></div>
 
-                                    <div id="avatar_image">
-                                        @if($user->profile_pic)
-                                            <img alt="image" style="max-width:100px; height:auto;" src="{{ asset("user/{$user->id}/profile_pic/thumbnail/{$user->profile_pic}") }}" />
-                                        @else
-                                            <img alt="image" style="max-width:100px; height:auto;" src="{{ asset('assets/images/avatars/avatar1.png') }}" />
-                                        @endif
-                                        <br />
-                                        @if($user->profile_pic)
-                                                {{--<i class="fa fa-trash-o fa-fw"></i>--}}
-                                                {{--<a class="delete_image" href="#">Remove avatar</a>--}}
-                                        @endif
-                                    </div>
-
-                                    <div id="image_deleted_text"></div>
-
 
                                     <div class="m-b-10"></div>
 
-                                    <div class="form-group">
-                                        <label>Change avatar</label>
-                                        <input type="file" name="profile_pic" class="form-control">
-                                    </div>
                                 </div>
 
                             </div>
@@ -290,81 +243,6 @@
                 }
             });
         });
-    </script>
-
-    <script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_AUTOCOMPLETE_KEY') }}&libraries=places&callback=initAutocomplete"
-            async defer></script>
-    <script>
-        // This example displays an address form, using the autocomplete feature
-        // of the Google Places API to help users fill in the information.
-
-        // This example requires the Places library. Include the libraries=places
-        // parameter when you first load the API. For example:
-        // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
-
-        var placeSearch, autocomplete;
-        var componentForm = {
-            street_number: 'short_name',
-            route: 'long_name',
-            locality: 'long_name',
-            administrative_area_level_1: 'short_name',
-            country: 'long_name',
-            postal_code: 'short_name'
-        };
-
-        var elementsMapping = {
-            street_number: 'address',
-            route: 'address',
-            locality: 'city',
-            administrative_area_level_1: 'state',
-            country: 'country',
-            postal_code: 'postal_code'
-        };
-
-        function initAutocomplete() {
-            // Create the autocomplete object, restricting the search to geographical
-            // location types.
-            autocomplete = new google.maps.places.Autocomplete(
-                /** @type {!HTMLInputElement} */(document.getElementById('address')),
-                {types: ['geocode']});
-
-            // When the user selects an address from the dropdown, populate the address
-            // fields in the form.
-            autocomplete.addListener('place_changed', fillInAddress);
-        }
-
-        function fillInAddress() {
-            // Get the place details from the autocomplete object.
-            var place = autocomplete.getPlace();
-
-            // Get each component of the address from the place details
-            // and fill the corresponding field on the form.
-            for (var i = 0; i < place.address_components.length; i++) {
-                var addressType = place.address_components[i].types[0];
-                if (componentForm[addressType]) {
-                    var val = place.address_components[i][componentForm[addressType]];
-                    document.getElementById(elementsMapping[addressType]).value = val;
-                }
-            }
-        }
-
-        // Bias the autocomplete object to the user's geographical location,
-        // as supplied by the browser's 'navigator.geolocation' object.
-        function geolocate() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    var geolocation = {
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude
-                    };
-                    var circle = new google.maps.Circle({
-                        center: geolocation,
-                        radius: position.coords.accuracy
-                    });
-                    autocomplete.setBounds(circle.getBounds());
-                });
-            }
-        }
     </script>
 
 @endsection
