@@ -511,7 +511,62 @@
                             </div>
                         </div>
 
-                        Escalation Percentages
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                Escalation Percentages
+                                <span>
+                                    <a href="javascript:void(0);" class="btn btn-sm btn-primary pull-right add_more" data-form="add_more_escalation_percentage">Add More</a>
+                                </span>
+                            </div>
+                            <div class="panel-body">
+                                <table class="table table-condensed">
+                                    <thead>
+                                    <tr>
+                                        <th>Sr No.</th>
+                                        <th>Number</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($escalation_percentage_settings as $key => $value)
+                                        <tr>
+                                            <td>{{ $key + 1 }}</td>
+                                            <td class="title">
+                                                {{ $value->number }}
+                                            </td>
+                                            <td>
+
+                                                <a data-href="{{ route('settings.leaseclassification.editescalationpercentagenumber', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-success edit_table_setting">
+                                                    <i class="fa fa-pencil-square-o"></i>
+                                                </a>
+
+                                                <a data-href="{{ route('settings.leaseclassification.deleteescalationpercentagenumber', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-danger delete_settings"><i class="fa fa-trash-o"></i></a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    <tr style=" {{ $errors->has('escalation_percentage_number') ? ' has-error' : 'display: none' }}" class="add_more_escalation_percentage">
+                                        <td>{{ count($escalation_percentage_settings) + 1 }}</td>
+                                        <td>
+                                            <form action="{{ route('settings.leaseclassification.addescalationpercentagenumber') }}" method="POST" class="add_more_escalation_percentage_form">
+                                                {{ csrf_field() }}
+                                                <div class="form-group{{ $errors->has('escalation_percentage_number') ? ' has-error' : '' }}">
+                                                    <input type="text" value="{{ old('escalation_percentage_number') }}" name="escalation_percentage_number" placeholder="Number" class="form-control {{ $errors->has('escalation_percentage_number') ? ' has-error' : '' }}"/>
+                                                    @if ($errors->has('escalation_percentage_number'))
+                                                        <span class="help-block">
+                                                            <strong>{{ $errors->first('escalation_percentage_number') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <button type="button" onclick="javascript:$('.add_more_escalation_percentage_form').submit();" class="btn btn-sm btn-success">Save</button>
+                                            <a href="javascript:;" class="btn btn-sm btn-danger add_more" data-form="add_more_escalation_percentage">Cancel</a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
 
                         <div class="panel panel-info">
                             <div class="panel-heading">Escalation Clause Applicable on Lease Payments</div>
@@ -546,7 +601,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach($lease_payment_escalation_clause  as $key => $value)
+                                    @foreach($escalation_amount_calculated_on  as $key => $value)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $value->title}}</td>

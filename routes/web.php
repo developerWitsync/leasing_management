@@ -59,14 +59,44 @@ Route::middleware('auth')->group(function(){
             Route::post('add-lease-payments-number', ['as' => 'settings.leaseclassification.addleasepaymentsnumber', 'uses' => 'LeaseClassificationController@addLeasePaymentsNumber']);
             Route::match(['get', 'post'], '/edit-lease-payments-number/{id}', ['as' => 'settings.leaseclassification.editleasepaymentsnumber', 'uses' => 'LeaseClassificationController@editLeasePaymentsNumber']);
             Route::delete('delete-lease-payments-number/{id}', ['as' => 'settings.leaseclassification.deleteleasepaymentsnumber', 'uses' => 'LeaseClassificationController@deleteLeasePaymentsNumber']);
+
+            /**
+             * Escalation Percentages
+             */
+            Route::post('add-escalation-percentage-number', ['as' => 'settings.leaseclassification.addescalationpercentagenumber', 'uses' => 'LeaseClassificationController@addEscalationPercentageNumber']);
+            Route::match(['get', 'post'], '/edit-escalation-percentage-number/{id}', ['as' => 'settings.leaseclassification.editescalationpercentagenumber', 'uses' => 'LeaseClassificationController@editEscalationPercentageNumber']);
+            Route::delete('delete-escalation-percentage-number/{id}', ['as' => 'settings.leaseclassification.deleteescalationpercentagenumber', 'uses' => 'LeaseClassificationController@deleteEscalationPercentageNumber']);
         });
 
         Route::prefix('currencies')->group(function (){
             Route::get('/', ['as' => 'settings.currencies', 'uses' => 'CurrenciesController@index']);
+            Route::post('save', ['as' => 'settings.currencies.save', 'uses' => 'CurrenciesController@save']);
+            Route::post('update-is-foreign-transaction-involved', ['as' => 'settings.currencies.updateisforeigninvolved', 'uses' => 'CurrenciesController@udpateIsForeignTransactionCurrencyInvolved']);
+            /**
+             * Foreign Transaction Currency Settings Routes
+             */
+            Route::match(['get', 'post'], 'add-foreign-exchange-currency', ['as' => 'settings.currencies.addforeigntransactioncurrency', 'uses' => 'CurrenciesController@addForeignTransactionCurrency']);
+            Route::get('fetch-foreign-transaction-currencies', ['as' => 'settings.currencies.fetchforeigntransactioncurrencies', 'uses' => 'CurrenciesController@fetchForeignTransactionCurrency']);
+            Route::match(['get', 'post'], 'edit-foreign-transaction-currencies/{id}', ['as' => 'settings.currencies.editforeigntransactioncurrency', 'uses' => 'CurrenciesController@editForeignTransactionCurrency']);
+            Route::delete('delete-foreign-transaction-currencies/{id}', ['as' => 'settings.currencies.deleteforeigntransactioncurrencies', 'uses' => 'CurrenciesController@deleteForeignTransactionCurrency']);
         });
 
         Route::prefix('lease-assets')->group(function (){
             Route::get('/', ['as' => 'settings.leaseassets', 'uses' => 'LeaseAssetsController@index']);
+            /**
+             * Expected useful life of assets Routes
+             */
+            Route::post('add-life-of-asset', ['as' => 'settings.leaseassets.addlife', 'uses' => 'LeaseAssetsController@addLife']);
+            Route::match(['get', 'post'], '/edit-life-of-asset/{id}', ['as' => 'settings.leaseassets.editlife', 'uses' => 'LeaseAssetsController@editLife']);
+            Route::delete('delete-life-of-asset/{id}', ['as' => 'settings.leaseassets.deletelife', 'uses' => 'LeaseAssetsController@deleteLife']);
+
+            /**
+             * Lease Assets Categories Settings Routes
+             */
+            Route::get('fetch-lease-asset-category/{id}', ['as' => 'settings.leaseassets.fetchassetcategorysettings', 'uses' => 'LeaseAssetsController@fetchCategorySettings']);
+            Route::match(['get', 'post'], 'add-lease-asset-category-setting/{id}', ['as' => 'settings.leaseassets.addcategorysetting', 'uses' => 'LeaseAssetsController@addCategorySettings']);
+            Route::match(['get', 'post'], 'edit-lease-asset-category-setting/{id}', ['as' => 'settings.leaseassets.editcategorysetting', 'uses' => 'LeaseAssetsController@editCategorySetting']);
+            Route::delete('delete-lease-asset-category-setting/{id}', ['as' => 'settings.leaseassets.editcategorysetting', 'uses' => 'LeaseAssetsController@deleteCategorySetting']);
         });
 
         Route::prefix('user-access')->group(function (){
