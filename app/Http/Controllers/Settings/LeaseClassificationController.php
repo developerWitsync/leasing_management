@@ -11,6 +11,8 @@ namespace App\Http\Controllers\Settings;
 
 use App\ContractClassifications;
 use App\ContractEscalationBasis;
+use App\EscalationAmountCalculated;
+use App\EscalationPercentageSettings;
 use App\Http\Controllers\Controller;
 use App\LeaseAccountingTreatment;
 use App\LeaseAssetPaymentsNature;
@@ -66,6 +68,9 @@ class LeaseClassificationController extends Controller
         $lease_payments_frequency = LeasePaymentsFrequency::query()->select('id', 'title')->where('status', '=', '1')->get();
         $lease_payment_interval = LeasePaymentsInterval::query()->select('id', 'title')->where('status', '=', '1')->get();
         $lease_payment_escalation_clause = LeasePaymentsEscalationClause::query()->select('id', 'title')->where('status', '=', '1')->get();
+        $escalation_amount_calculated_on = EscalationAmountCalculated::query()->select('id', 'title')->where('status', '=', '1')->get();
+        $escalation_percentage_settings = EscalationPercentageSettings::query()->select('id', 'number')->where('business_account_id', '=', auth()->user()->id)->orderBy('number','asc')->get();
+
         return view('settings.classification.index', compact('breadcrumbs',
             'rates',
             'contract_classifications',
@@ -82,7 +87,9 @@ class LeaseClassificationController extends Controller
             'number_of_lease_payments',
             'lease_payments_frequency',
             'lease_payment_interval',
-            'lease_payment_escalation_clause'
+            'lease_payment_escalation_clause',
+            'escalation_amount_calculated_on',
+            'escalation_percentage_settings'
         ));
     }
 
@@ -530,6 +537,121 @@ class LeaseClassificationController extends Controller
                 $lease_payments_no = LeasePaymentsNumber::query()->where('id', $id)->where('business_account_id', '=', auth()->user()->id);
                 if($lease_payments_no) {
                     $lease_payments_no->delete();
+                    Session::flash('status', 'Setting has been deleted successfully.');
+                    return response()->json(['status' => true], 200);
+                } else {
+                    return response()->json(['status' => false, "message" => "Invalid request!"], 200);
+                }
+            } else {
+                return redirect()->back();
+            }
+        } catch (\Exception $e){
+            abort(404);
+        }
+    }
+
+    /**
+     * Add Escalation Percentages Number for the current authenticated user
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function addEscalationPercentageNumber(Request $request){
+        try{
+            if($request->isMethod('post')) {
+                $validator = Validator::make($request->except("_token"), [
+                    'escalation_percentage_number' => [
+                        'required',
+                        'numeric',
+                        Rule::unique('escalation_percentage_settings', 'number')->where(function ($query) use ($request) {
+                            return $query->where('business_account_id', '=', auth()->user()->id);
+                        })
+                    ]
+                ], [
+                    'escalation_percentage_number.numeric' => 'The number should be numeric.',
+                    'escalation_percentage_number.unique' => 'This number has already been added.'
+                ]);
+
+                if($validator->fails()){
+                    return redirect()->back()->withErrors($validator->errors())->withInput($request->except("_token"));
+                }
+
+                $model = EscalationPercentageSettings::create([
+                    'number' => $request->escalation_percentage_number,
+                    'business_account_id' => auth()->user()->id,
+                    'status'    => '1'
+                ]);
+
+                if($model){
+                    return redirect()->back()->with('status', 'Escalation Percentages Number been added successfully.');
+                }
+            } else {
+                return redirect()->back();
+            }
+        } catch (\Exception $e) {
+            abort(404);
+        }
+    }
+
+    /**
+     * update an Escalation Percentages Number for the current authenticated user
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
+     */
+    public function editEscalationPercentageNumber($id, Request $request){
+        try{
+            if($request->ajax()){
+                $escalation_percentage_number = EscalationPercentageSettings::query()->where('id', $id)->where('business_account_id', '=', auth()->user()->id)->first();
+                if($request->isMethod('post')) {
+                    $validator = Validator::make($request->except("_token"), [
+                        'title' => [
+                            'required',
+                            'numeric',
+                            Rule::unique('escalation_percentage_settings', 'number')->where(function ($query) use ($request) {
+                                return $query->where('business_account_id', '=', auth()->user()->id);
+                            })->ignore($id,'id')
+                        ]
+                    ], [
+                        'title.numeric' => 'The number should be numeric.',
+                        'title.required' => 'The number field is required.',
+                        'title.unique' => 'This number has already been taken.'
+                    ]);
+
+                    if($validator->fails()){
+                        return response()->json([
+                            'status' => false,
+                            'errors' => $validator->errors()
+                        ]);
+                    }
+
+                    $escalation_percentage_number->number = $request->title;
+                    $escalation_percentage_number->save();
+                    return response()->json([
+                        'status' =>true,
+                        'message' => 'Settings has been saved successfully.'
+                    ]);
+                }
+
+                return view('settings.classification._edit_escalation_percentage_number', compact('escalation_percentage_number'));
+            }
+        } catch (\Exception $e){
+            dd($e);
+            abort(404);
+        }
+    }
+
+    /**
+     * Delete aan Number of Lease Payments for the current authenticated user
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     */
+    public function deleteEscalationPercentageNumber($id, Request $request){
+        try{
+            if($request->ajax()) {
+                $escalation_percentage_number = EscalationPercentageSettings::query()->where('id', $id)->where('business_account_id', '=', auth()->user()->id);
+                if($escalation_percentage_number) {
+                    $escalation_percentage_number->delete();
                     Session::flash('status', 'Setting has been deleted successfully.');
                     return response()->json(['status' => true], 200);
                 } else {

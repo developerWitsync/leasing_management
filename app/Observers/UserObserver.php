@@ -6,6 +6,8 @@
  * Time: 10:35 AM
  */
 namespace App\Observers;
+use App\EscalationPercentageSettings;
+use App\ExpectedLifeOfAsset;
 use App\LeasePaymentsNumber;
 use App\User;
 use App\LeasePaymentsBasis;
@@ -70,6 +72,24 @@ class UserObserver
                 LeasePaymentsNumber::create([
                     'business_account_id' => $user->id,
                     'number' => $number
+                ]);
+            }
+
+
+            $escalation_percentage_settings = config('settings.escalation_percentage_settings');
+            foreach ($escalation_percentage_settings as $number){
+                EscalationPercentageSettings::create([
+                    'business_account_id' => $user->id,
+                    'number' => $number,
+                    'status'    => '1'
+                ]);
+            }
+
+            $expected_useful_life_of_asset = config('settings.expected_useful_life_of_asset');
+            foreach ($expected_useful_life_of_asset as $year){
+                ExpectedLifeOfAsset::create([
+                    'business_account_id' => $user->id,
+                    'years' => $yea
                 ]);
             }
 

@@ -21,5 +21,16 @@ return [
     ],
     'no_of_lease_payments' => [
         1
-    ]
+    ],
+    'escalation_percentage_settings' => [
+        0,
+        1
+    ],
+    'expected_useful_life_of_asset' => [
+        -1,
+        1,
+        5,
+        10,
+        25
+    ],
 ];
