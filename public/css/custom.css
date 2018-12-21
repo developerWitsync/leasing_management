@@ -35,3 +35,6 @@
     background-color: #f5f5f5;
     border-radius: 4px;
 }
+.dataTables_wrapper.container-fluid{
+    padding: 0px;
+}
