@@ -79,7 +79,8 @@ class RegisterController extends Controller
             'password' => 'required|string|min:6|confirmed',
             'phone' => 'required',
             'annual_reporting_period'   => 'required',
-            'currency'  => 'required'
+            'currency'  => 'required',
+            'parent_id' => 0
         ]);
     }
 
