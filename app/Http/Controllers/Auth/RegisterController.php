@@ -79,8 +79,7 @@ class RegisterController extends Controller
             'password' => 'required|string|min:6|confirmed',
             'phone' => 'required',
             'annual_reporting_period'   => 'required',
-            'currency'  => 'required',
-            'parent_id' => 0
+            'currency'  => 'required'
         ]);
     }
 
@@ -97,6 +96,7 @@ class RegisterController extends Controller
         $data['authorised_person_dob'] = date('Y-m-d', strtotime($data['authorised_person_dob']));
         $data['email_verification_code'] = md5(time());
         $data['is_verified'] = '0';
+        $data['parent_id'] = 0;
 
         unset($data['password_confirmation']);
         unset($data['_token']);
