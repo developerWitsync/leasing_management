@@ -89,7 +89,7 @@ class UserObserver
             foreach ($expected_useful_life_of_asset as $year){
                 ExpectedLifeOfAsset::create([
                     'business_account_id' => $user->id,
-                    'years' => $yea
+                    'years' => $year
                 ]);
             }
 
