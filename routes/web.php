@@ -23,11 +23,14 @@ Route::middleware('auth')->group(function(){
     Route::get('/home', 'HomeController@index')->name('home');
 
 
-    Route::namespace('Addnewlease')->middleware(['permission:add_lease'])->prefix('add-new-lease')->group(function(){
+    Route::namespace('Lease')->middleware(['permission:add_lease'])->prefix('lease')->group(function(){
+
         Route::prefix('lessor-details')->group(function(){
-            Route::get('/', ['as' => 'add-new-lease.index', 'uses' => 'IndexController@index']);
-            Route::post('save', ['as' => 'add-new-lease.index.save', 'uses' => 'IndexController@save']);
+            Route::get('create', ['as' => 'add-new-lease.index', 'uses' => 'LessorDetailsController@index']);
+            Route::post('save', ['as' => 'add-new-lease.index.save', 'uses' => 'LessorDetailsController@save']);
         });
+
+
     });
 
 

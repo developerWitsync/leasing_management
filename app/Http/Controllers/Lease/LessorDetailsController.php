@@ -6,7 +6,7 @@
  * Time: 11:39 AM
  */
 
-namespace App\Http\Controllers\Addnewlease;
+namespace App\Http\Controllers\Lease;
 
 use App\ContractClassifications;
 use App\Currencies;
@@ -18,7 +18,7 @@ use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Http\Request;
 use Validator;
 
-class IndexController extends Controller
+class LessorDetailsController extends Controller
 {
 
     public function index(){
@@ -34,12 +34,10 @@ class IndexController extends Controller
         $reporting_currency_settings = ReportingCurrencySettings::query()->where('business_account_id', '=', auth()->user()->id)->first();
         $reporting_foreign_currency_transaction_settings = ForeignCurrencyTransactionSettings::query()->where('business_account_id', '=', auth()->user()->id)->get();
 
-        
-
         if(collect($reporting_currency_settings)->isEmpty()) {
             $reporting_currency_settings = new ReportingCurrencySettings();
         }
-        return view('add-new-lease.lessor-details.index', compact('breadcrumbs','contract_classifications','currencies','reporting_currency_settings','reporting_foreign_currency_transaction_settings'));
+        return view('lease.lessor-details.index', compact('breadcrumbs','contract_classifications','currencies','reporting_currency_settings','reporting_foreign_currency_transaction_settings'));
     }
 
     /**
@@ -63,21 +61,28 @@ class IndexController extends Controller
                 return redirect()->back()->withErrors($validator->errors())->withInput($request->except("_token"));
             }
 
-                if($request->hasFile('file'))
-               { 
-                 $file = $request->file('file');
-                 $uniqueFileName = uniqid() . $file->getClientOriginalName();
-                 $data['file'] = $request->file('file')->move(storage_path() . '/uploads', $uniqueFileName);
-               }
-                $data=$request->request->add(['business_account_id' => auth()->user()->id]);
-                $data = $request->except('_token');
-                $data['lease_code'] = time().'-'.mt_rand();
-                //dd($data);
-                
-                $lease = Lease::create($data);
-            if($lease) {
-                return redirect()->back()->with('status','Lease has been created successfully.');
+            $uniqueFileName = '';
+
+            if($request->hasFile('file')){
+                $file = $request->file('file');
+                $uniqueFileName = uniqid() . $file->getClientOriginalName();
+                $request->file('file')->move(storage_path() . '/uploads', $uniqueFileName);
             }
+
+            $request->request->add(['business_account_id' => auth()->user()->id]);
+
+            $data = $request->except('_token');
+
+            $data['lease_code'] = time().'-'.mt_rand();
+
+            $data['file'] = $uniqueFileName;
+
+            $lease = Lease::create($data);
+
+            if($lease) {
+                return redirect()->back()->with('status','Lessor Details have been saved successfully.');
+            }
+
          } catch (\Exception $e){
             abort(404);
         }
