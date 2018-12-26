@@ -8,7 +8,14 @@ use Illuminate\Support\Facades\Config;
 class Role extends EntrustRole
 {
 	protected $table = 'roles';
-    protected $fillable = ['name','business_account_id', 'display_name', 'description', 'created_at', 'updated_at'];
+    protected $fillable = [
+        'name',
+        'business_account_id',
+        'display_name',
+        'description',
+        'created_at',
+        'updated_at'
+    ];
 
     public function users()
 	{

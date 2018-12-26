@@ -22,7 +22,7 @@ Route::middleware('auth')->group(function(){
 
     Route::get('/home', 'HomeController@index')->name('home');
 
-    Route::namespace('Settings')->prefix('settings')->group(function(){
+    Route::namespace('Settings')->middleware(['permission:settings'])->prefix('settings')->group(function(){
         Route::prefix('general')->group(function(){
             Route::get('/', ['as' => 'settings.index', 'uses' => 'IndexController@index']);
             Route::post('save', ['as' => 'settings.index.save', 'uses' => 'IndexController@save']);

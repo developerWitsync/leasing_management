@@ -9,6 +9,8 @@ namespace App\Observers;
 use App\EscalationPercentageSettings;
 use App\ExpectedLifeOfAsset;
 use App\LeasePaymentsNumber;
+use App\Permission;
+use App\Role;
 use App\User;
 use App\LeasePaymentsBasis;
 use App\Mail\RegistrationConfirmation;
@@ -29,8 +31,10 @@ class UserObserver
         //send the confirm acount email to the user from here
         Mail::to($user)->queue(new RegistrationConfirmation($user));
 
-        //generate the default settings for the registered user
-        $this->generateSettings($user);
+        if($user->parent_id == '0') {
+            //generate the default settings for the registered user
+            $this->generateSettings($user);
+        }
     }
 
     /**
@@ -92,6 +96,22 @@ class UserObserver
                     'years' => $year
                 ]);
             }
+
+            //have to create a super admin role for the business account and will have to assign the role to the created user if the user is a parent user
+            $role = Role::create([
+                'name' => 'super_admin',
+                'business_account_id'   => $user->id,
+                'display_name' => 'Super Admin',
+                'description'   => 'Super Admin is the main business account and the super admin will be assigned with all the permissions.'
+            ]);
+
+            //assign role to the user
+            $user->attachRole($role);
+
+            //assign permissions to the role
+            //fetch all the permissions and assign all the permissions to the super admin role created for the current user
+            $permissions = Permission::query()->select('id')->get()->pluck('id')->toArray();
+            $role->perms()->sync($permissions);
 
             return true;
         } catch (\Exception $e){

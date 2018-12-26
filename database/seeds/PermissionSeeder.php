@@ -11,25 +11,15 @@ class PermissionSeeder extends Seeder
      */
     protected $permission = [
         [
-            'name' => 'Create',
-            'display_name' => 'Create Posts',
-            'description'   => 'Create new blog posts'
+            'name' => 'add_lease',
+            'display_name' => 'Add New Lease',
+            'description'   => 'The user can create a new lease. If the user is not a parent user than the settings will be used from his parent account.'
         ],
         [
-            'name' => 'Edit',
-            'display_name' => 'Edit Users',
-            'description'   => 'Edit existing users'
-        ],
-         [
-            'name' => 'Select',
-            'display_name' => 'Select Posts',
-            'description'   => 'Select blog posts'
-        ],
-        [
-            'name' => 'Delete',
-            'display_name' => 'Delete Users',
-            'description'   => 'Delete existing users'
-        ],
+            'name' => 'settings',
+            'display_name' => 'Settings',
+            'description'   => 'User who has been provided the access will be responsible for managing the settings on behalf of the main business account.'
+        ]
         
     ];
     /**
