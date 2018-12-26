@@ -104,7 +104,7 @@ class RoleController extends Controller
                     return redirect()->back()->withInput($request->all())->withErrors($validator->errors());
                 }
 
-				$role->setRawAttributes($request->except('_token'));
+				        $role->setRawAttributes($request->except('_token'));
 
                 $role->save();
 

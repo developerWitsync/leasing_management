@@ -99,7 +99,37 @@ class UserController extends Controller
             $countries = Countries::query()->where('status','=', '1')->where('trash', '=', '0')->get();
             $industry_types = IndustryTypes::query()->where('status', '=', '1')->get();
             $currencies = Currencies::query()->where('status', '=', '1')->get();
-             return view('admin.users.add-user',compact('countries', 'industry_types', 'currencies'));
+            if($request->isMethod('post')) {
+                $validator = Validator::make($request->all(), [
+                        'country' => 'required|exists:countries,id',
+                        'legal_status' => 'required',
+                        'applicable_gaap' => 'required',
+                        'industry_type' => 'required|exists:industry_type,id',
+                        'legal_entity_name' => 'required',
+                        'authorised_person_name' => 'required|string|max:255',
+                        'authorised_person_dob'     => 'required|date',
+                        'gender'    => 'required',
+                        'authorised_person_designation' => 'required',
+                        'username' => 'required|string|max:255',
+                        'email' => 'required|string|email|max:255|unique:users',
+                        'password' => 'required|string|min:6|confirmed',
+                        'phone' => 'required',
+                        'annual_reporting_period'   => 'required',
+                        'currency'  => 'required'
+                    ]);
+                if($validator->fails()) {
+                        return redirect()->back()->withErrors($validator->errors())->withInput($request->except("_token"));
+                }
+                $data = $request->except('_token');
+                $data['password']   = bcrypt($request->password); 
+                $data['authorised_person_dob'] = date('Y-m-d', strtotime($request->authorised_person_dob));
+                $user = User::create($data);
+                
+                if($user){
+                 return redirect(route("admin.users.index"))->with('success', 'User has been added successfully.');
+        }
+
+            }return view('admin.users.add-user',compact('countries', 'industry_types', 'currencies'));
         } catch (\Exception $e) {
             dd($e);
             abort('404');
@@ -114,68 +144,46 @@ class UserController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
     public function edit($id, Request $request){
-        try{
-            $user = User::query()->find($id);
+       
+            $countries = Countries::query()->where('status','=', '1')->where('trash', '=', '0')->get();
+            $industry_types = IndustryTypes::query()->where('status', '=', '1')->get();
+            $currencies = Currencies::query()->where('status', '=', '1')->get();
+            $user = User::query()->findOrFail($id);
+            //dd($user);
             if($user) {
                 if($request->isMethod('post')) {
 
-                    $file_name = '';
 
-                    $request->request->add(['password' => ($request->has('password') && trim($request->password)!= "")?bcrypt($request->password):$user->password]);
-
-                    $validator = Validator::make($request->all(), [
-                        'first_name'        => 'required',
-                        'last_name'         => 'required',
-                        'email'             =>  "required|unique:users,email,{$id},id",
-                        'mobile'            => "required|unique:users,mobile,{$id},id",
-                        'address'           => 'required',
-                        'city'              => 'required',
-                        'country'           => 'required',
-                        'dob'               => 'required|date',
-                        'state'             => 'required',
-                        'security_question' => 'required',
-                        'security_answer'   => 'required',
-                        'profile_pic'       => 'image'
+                     $validator = Validator::make($request->all(), [
+                        'country' => 'required|exists:countries,id',
+                        'legal_status' => 'required',
+                        'applicable_gaap' => 'required',
+                        'industry_type' => 'required|exists:industry_type,id',
+                        'legal_entity_name' => 'required',
+                        'authorised_person_name' => 'required|string|max:255',
+                        'authorised_person_dob'     => 'required|date',
+                        'gender'    => 'required',
+                        'authorised_person_designation' => 'required',
+                        'username' => 'required|string|max:255',
+                        'email' => 'required|string|email|max:255',
+                        'password' => 'string|min:6|confirmed',
+                        'phone' => 'required',
+                        'annual_reporting_period'   => 'required',
+                        'currency'  => 'required'
                     ]);
-
+                    
                     if($validator->fails()) {
                         return redirect()->back()->withErrors($validator->errors())->withInput($request->except("_token"));
                     }
 
-                    $dob = Carbon::parse($request->dob)->format('Y-m-d');
+                    $request->request->add(['password' => ($request->has('password') && trim($request->password)!= "")?bcrypt($request->password):$user->password , 'authorised_person_dob' =>  date('Y-m-d', strtotime($request->authorised_person_dob))]);
 
-                    $request->request->add(['dob' => $dob]);
-
-                    $originalImage= $request->file('profile_pic');
-
-                    if($originalImage) {
-
-                        $originalPath   = public_path()."/user/{$id}/profile_pic/";
-
-                        $file_name = uploadImage($originalImage, $originalPath, true, true);
-
-                    }
-
-                    $user->setRawAttributes($request->except("_token"));
-
-                    if($file_name) {
-                        $user->setAttribute('profile_pic', $file_name);
-                    }
-
+                    $user->setRawAttributes($request->except(['_token', 'password_confirmation']));
                     $user->save();
-
                     return redirect(route("admin.users.index"))->with('success', 'User details has been updated successfully.');
-                }
-
-
-                return view('admin.users.update', compact('user'));
-            } else {
-                abort('404');
+                    }
+                 return view('admin.users.update', compact('user','countries', 'industry_types', 'currencies'));
             }
-        } catch (\Exception $e) {
-            dd($e);
-            abort('404');
-        }
     }
 
     /**

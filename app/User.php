@@ -22,7 +22,7 @@ class User extends Authenticatable
         'type','email','phone','username', 'password', 'remember_token','created_at', 'updated_at',
         'authorised_person_name', 'authorised_person_designation','authorised_person_dob','legal_entity_name',
         'industry_type','applicable_gaap','legal_status','country','currency','gender','annual_reporting_period',
-        'email_verification_code','is_verified'
+        'email_verification_code','is_verified','parent_id'
     ];
 
     /**

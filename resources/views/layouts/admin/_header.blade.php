@@ -3,8 +3,8 @@
     <!-- LOGO -->
     <div class="headerbar-left">
         <a href="{{ route('admin.dashboard.index') }}" class="logo">
-            <img alt="Logo" src="{{ asset('assets/images/logo.png') }}" />
-            <span>@lang('_sidebar.Admin')</span>
+            <!-- <img alt="Logo" src="{{ asset('assets/images/logo.png') }}" /> -->
+            <span>Witsync Lease @lang('_sidebar.Admin')</span>
         </a>
     </div>
 

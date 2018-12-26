@@ -1,5 +1,5 @@
 <a href="/home" class="list-group-item @if(request()->segment('1') == 'home') active @endif"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
-<a href="#" class="list-group-item"><i class="fa fa-plus-square"></i> <span>Add New Lease</span></a>
+<a href="{{ route('add-new-lease.index') }}" class="list-group-item @if(request()->segment('1') == 'add-new-lease') active @endif"><i class="fa fa-plus-square"></i> <span>Add New Lease</span></a>
 <a href="#" class="list-group-item"><i class="fa fa-envelope-square"></i> <span>Drafts Saved</span></a>
 <a href="#" class="list-group-item"><i class="fa fa-pencil-square"></i> <span>Modify Lease</span></a>
 <a href="#" class="list-group-item"><i class="fa fa-dollar"></i> <span>Lease Valuation</span></a>

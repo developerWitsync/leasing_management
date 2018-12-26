@@ -7,6 +7,9 @@
 @section('header-styles')
     <!-- BEGIN CSS for this page -->
     <link href="{{ asset('assets/plugins/datetimepicker/css/daterangepicker.css') }}" rel="stylesheet" />
+      <!-- BEGIN CSS for this page -->
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui.css') }}">
+    <!-- END CSS for this page -->
     <!-- END CSS for this page -->
 @endsection
 @section('content')
@@ -48,10 +51,8 @@
 
                     <div class="card-header">
                         <h3><i class="fa fa-user-o"></i> Update User</h3>
-                        User details can be modified from here.
+                        User can be Modifeid from here.
                     </div>
-
-
                     <div class="card-body">
 
                         <form method="post" action="{{ route('admin.manage.user.edit', ['id' => $user->id]) }}" enctype="multipart/form-data">
@@ -63,162 +64,221 @@
                                     <div class="form-row">
 
                                         <div class="form-group col-md-6">
-                                            <label for="first_name">First Name (required)</label>
-                                            <input type="text" class="form-control @if($errors->has('first_name')) is-invalid @endif" value="{{ old('first_name', $user->first_name) }}" name="first_name" id="first_name" placeholder="First Name" autocomplete="off">
-                                            @if($errors->has('first_name'))
-                                                <div class="invalid-feedback">
-                                                    {{ $errors->first('first_name') }}
-                                                </div>
-                                            @endif
-                                        </div>
-
-                                        <div class="form-group col-md-6">
-                                            <label for="last_name">Last Name (required)</label>
-                                            <input type="text" class="form-control @if($errors->has('last_name')) is-invalid @endif" value="{{ old('last_name', $user->last_name) }}" name="last_name" id="last_name" placeholder="Last Name" autocomplete="off">
-                                            @if($errors->has('last_name'))
-                                                <div class="invalid-feedback">
-                                                    {{ $errors->first('last_name') }}
-                                                </div>
-                                            @endif
-                                        </div>
-
-                                    </div>
-
-                                    <div class="form-row">
-
-                                        <div class="form-group col-md-6">
-                                            <label for="email">Email (required)</label>
-                                            <input type="email" class="form-control @if($errors->has('email')) is-invalid @endif" value="{{ old('email', $user->email) }}" name="email" id="email" placeholder="Email" autocomplete="off">
-                                            @if($errors->has('email'))
-                                                <div class="invalid-feedback">
-                                                    {{ $errors->first('email') }}
-                                                </div>
-                                            @endif
-                                        </div>
-
-
-                                        <div class="form-group col-md-6">
-                                            <label for="mobile">Mobile (required)</label>
-                                            <input type="text" class="form-control @if($errors->has('mobile')) is-invalid @endif" value="{{ old('mobile', $user->mobile) }}" name="mobile" id="mobile" placeholder="Mobile" autocomplete="off">
-                                            @if($errors->has('mobile'))
-                                                <div class="invalid-feedback">
-                                                    {{ $errors->first('mobile') }}
-                                                </div>
-                                            @endif
-                                        </div>
-
-                                    </div>
-
-                                    <div class="form-row">
-                                        <div class="form-group col-md-6">
-                                            <label for="address">Address (required)</label>
-                                            <input type="text" class="form-control @if($errors->has('address')) is-invalid @endif" value="{{ old('address', $user->address) }}" name="address" id="address" placeholder="Address" autocomplete="off" onFocus="geolocate()">
-                                            @if($errors->has('address'))
-                                                <div class="invalid-feedback">
-                                                    {{ $errors->first('address') }}
-                                                </div>
-                                            @endif
-                                        </div>
-
-                                        <div class="form-group col-md-6">
-                                            <label for="state">State (required)</label>
-                                            <input type="text" class="form-control @if($errors->has('state')) is-invalid @endif" value="{{ old('state', $user->state) }}" name="state" id="state" placeholder="State" autocomplete="off">
-                                            @if($errors->has('state'))
-                                                <div class="invalid-feedback">
-                                                    {{ $errors->first('state') }}
-                                                </div>
-                                            @endif
-                                        </div>
-                                    </div>
-
-                                    <div class="form-row">
-                                        <div class="form-group col-md-6">
-                                            <label for="city">City (required)</label>
-                                            <input type="text" class="form-control @if($errors->has('city')) is-invalid @endif" value="{{ old('city', $user->city) }}" name="city" id="city" placeholder="City" autocomplete="off">
-                                            @if($errors->has('city'))
-                                                <div class="invalid-feedback">
-                                                    {{ $errors->first('city') }}
-                                                </div>
-                                            @endif
-                                        </div>
-
-                                        <div class="form-group col-md-6">
-                                            <label for="state">Postal Code (required)</label>
-                                            <input type="text" class="form-control @if($errors->has('postal_code')) is-invalid @endif" value="{{ old('postal_code', $user->postal_code) }}" name="postal_code" id="postal_code" placeholder="Postal Code" autocomplete="off">
-                                            @if($errors->has('postal_code'))
-                                                <div class="invalid-feedback">
-                                                    {{ $errors->first('postal_code') }}
-                                                </div>
-                                            @endif
-                                        </div>
-                                    </div>
-
-                                    <div class="form-row">
-                                        <div class="form-group col-md-6">
                                             <label for="country">Country (required)</label>
-                                            <input type="text" class="form-control @if($errors->has('country')) is-invalid @endif" value="{{ old('country', $user->country) }}" name="country" id="country" placeholder="Country" autocomplete="off">
-                                            @if($errors->has('country'))
-                                                <div class="invalid-feedback">
-                                                    {{ $errors->first('country') }}
-                                                </div>
+                                            <select id="country" class="form-control @if($errors->has('country')) is-invalid @endif" name="country" autocomplete="off">
+                                            <option value="">--Select Country--</option>
+                                            @foreach($countries as $country)
+                                            <option value="{{ $country->id }}" @if(old('country', $user->country) == $country->id) selected="selected" @endif>{{ $country->name }}</option>
+                                            @endforeach
+                                            </select>
+
+                                            @if ($errors->has('country'))
+                                            <span class="help-block">
+                                            <strong>{{ $errors->first('country') }}</strong>
+                                            </span>
                                             @endif
                                         </div>
 
+                                 <div class="form-group col-md-6">
+                                     <label for="legal_status">Legal Status (required)</label>
+                                           <select id="legal_status" class="form-control @if($errors->has('legal_status')) is-invalid @endif" name="legal_status" autocomplete="off">
+                                    <option value="">--Select Legal Status--</option>
+                                    <option value="1" @if(old('legal_status',$user->legal_status) == '1') selected="selected" @endif>Legal</option>
+                                    <option value="0" @if(old('legal_status',$user->legal_status) == '0') selected="selected" @endif>Illegal</option>
+                                </select>
+
+                                @if ($errors->has('legal_status'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('legal_status') }}</strong>
+                                    </span>
+                                @endif
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-row">
+
                                         <div class="form-group col-md-6">
-                                            <label for="password">Password (leave empty not to change)</label>
-                                            <input type="password" class="form-control @if($errors->has('password')) is-invalid @endif" value="" name="password" id="password" placeholder="Password" autocomplete="off">
-                                            @if($errors->has('password'))
-                                                <div class="invalid-feedback">
-                                                    {{ $errors->first('password') }}
-                                                </div>
-                                            @endif
+                                            <label for="applicable_gaap">Primary Applicable GAAPs (required)</label>
+                                           <select id="applicable_gaap" class="form-control @if($errors->has('applicable_gaap')) is-invalid @endif" name="applicable_gaap" autocomplete="off">
+                                    <option value="">--Select Primary Applicable GAAP--</option>
+                                    <option value="Ministry Of Corporate Affairs (MCA)" @if(old('applicable_gaap',$user->applicable_gaap == "Ministry Of Corporate Affairs (MCA)")) selected="selected" @endif>Ministry Of Corporate Affairs (MCA)</option>
+                                </select>
+
+                                @if ($errors->has('applicable_gaap'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('applicable_gaap') }}</strong>
+                                    </span>
+                                @endif
+                                        </div>
+
+
+                                        <div class="form-group col-md-6">
+                                            <label for="industry_type">Industry Type (required)</label>
+                                           <select id="industry_type" class="form-control @if($errors->has('industry_type')) is-invalid @endif" name="industry_type" autocomplete="off">
+                                    <option value="">--Select Industry Type--</option>
+                                    @foreach($industry_types as $type)
+                                        <option value="{{ $type->id }}" @if(old('industry_type',$user->industry_type) == $type->id) selected="selected" @endif>{{ $type->title }}</option>
+                                    @endforeach
+                                </select>
+
+                                @if ($errors->has('industry_type'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('industry_type') }}</strong>
+                                    </span>
+                                @endif
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="legal_entity_name">legal_entity_name (required)</label>
+                                            <input id="legal_entity_name" type="text" class="form-control @if($errors->has('legal_entity_name')) is-invalid @endif" name="legal_entity_name" value="{{ old('legal_entity_name',$user->legal_entity_name) }}" autocomplete="off">
+
+                                @if ($errors->has('legal_entity_name'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('legal_entity_name') }}</strong>
+                                    </span>
+                                @endif
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <label for="authorised_person_name">Authorised Person Name (required)</label>
+                                           <input id="authorised_person_name" type="text" class="form-control @if($errors->has('authorised_person_name')) is-invalid @endif" name="authorised_person_name" value="{{ old('authorised_person_name',$user->authorised_person_name) }}" autocomplete="off">
+
+                                @if ($errors->has('authorised_person_name'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('authorised_person_name') }}</strong>
+                                    </span>
+                                @endif
                                         </div>
                                     </div>
 
                                     <div class="form-row">
                                         <div class="form-group col-md-6">
-                                            <label for="status">Is Verified (required)</label>
-                                            <select name="is_verified" id="is_verified" class="form-control @if($errors->has('is_verified')) is-invalid @endif">
-                                                <option value="">Select Status</option>
-                                                <option value="1" @if(old('status', $user->is_verified) == "1") selected="selected" @endif>Activated</option>
-                                                <option value="0" @if(old('status', $user->is_verified) == "0") selected="selected" @endif>Not Activated</option>
-                                            </select>
-                                            @if($errors->has('is_verified'))
-                                                <div class="invalid-feedback">
-                                                    {{ $errors->first('is_verified') }}
-                                                </div>
-                                            @endif
+                                            <label for="authorised_person_dob">Authorised Person Date Of Birth (required)</label>
+                                            <input id="authorised_person_dob" type="text" class="form-control @if($errors->has('authorised_person_dob')) is-invalid @endif" name="authorised_person_dob" value="{{ old('authorised_person_dob',date('Y-m-d', strtotime($user->dob))) }}" autocomplete="off">
+
+                                @if ($errors->has('authorised_person_dob'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('authorised_person_dob') }}</strong>
+                                    </span>
+                                @endif
                                         </div>
 
                                         <div class="form-group col-md-6">
-                                            <label for="dob">Date of Birth(required)</label>
-                                            <input type="text" class="form-control @if($errors->has('dob')) is-invalid @endif" value="{{ old('dob', date('m/d/Y', strtotime($user->dob))) }}" name="dob" id="dob" placeholder="Date Of Birth" autocomplete="off" readonly="readonly">
-                                            @if($errors->has('dob'))
-                                                <div class="invalid-feedback">
-                                                    {{ $errors->first('dob') }}
-                                                </div>
-                                            @endif
+                                            <label for="gender">Gender (required)</label>
+                                            <select name="gender" class="form-control @if($errors->has('gender')) is-invalid @endif" autocomplete="off">
+                                    <option value="">--Select Gender--</option>
+                                    <option value="1" @if(old('gender',$user->gender) == '1') selected="selected" @endif>Male</option>
+                                    <option value="2" @if(old('gender',$user->gender) == '2') selected="selected" @endif >Female</option>
+                                </select>
+
+                                @if ($errors->has('gender'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('gender') }}</strong>
+                                    </span>
+                                @endif
                                         </div>
                                     </div>
 
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="authorised_person_designation">Authorised Person Designation (required)</label>
+                                            <input id="authorised_person_designation" type="text" class="form-control @if($errors->has('authorised_person_designation')) is-invalid @endif" name="authorised_person_designation" value="{{ old('authorised_person_designation',$user->authorised_person_designation) }}" autocomplete="off">
 
+                                @if ($errors->has('authorised_person_designation'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('authorised_person_designation') }}</strong>
+                                    </span>
+                                @endif
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                            <label for="email" >
+                           E-Mail Address (required)</label>
+                                            <input id="email" type="email" class="form-control @if($errors->has('email')) is-invalid @endif" name="email" value="{{ old('email',$user->email) }}" autocomplete="off">
+
+                                @if ($errors->has('email'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('email') }}</strong>
+                                    </span>
+                                @endif
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="username">Login ID (required)</label>
+                                            <input id="username" type="text" class="form-control @if($errors->has('username')) is-invalid @endif" name="username" value="{{ old('username',$user->username) }}" autocomplete="off">
+
+                                @if ($errors->has('username'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('username') }}</strong>
+                                    </span>
+                                @endif
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <label for="password">Password (required)</label>
+                                           <input id="password" type="password" class="form-control" name="password" autocomplete="off">
+
+                                            @if ($errors->has('password'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('password') }}</strong>
+                                    </span>
+                                @endif
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="password-confirm">Confirm Password (required)</label>
+                                              <input id="password-confirm" type="password" class="form-control" name="password_confirmation" autocomplete="off">
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <label for="phone">Mobile Number (required)</label>
+                                             <input id="phone" type="text" class="form-control @if($errors->has('phone')) is-invalid @endif" value="{{ old('phone',$user->phone) }}" name="phone" autocomplete="off">
+
+                                @if ($errors->has('phone'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('phone') }}</strong>
+                                    </span>
+                                @endif
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="annual_reporting_period">Annual Reporting Period (required)</label>
+                                           <input id="annual_reporting_period" type="text" class="form-control @if($errors->has('annual_reporting_period')) is-invalid @endif" name="annual_reporting_period" value="{{ old('annual_reporting_period',$user->annual_reporting_period) }}"autocomplete="off">
+
+                                @if ($errors->has('annual_reporting_period'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('annual_reporting_period') }}</strong>
+                                    </span>
+                                @endif
+                                        </div>
+
+                                <div class="form-group col-md-6">
+                                    <label for="currency">Reporting Currency(required)</label>
+                                   <select id="currency" class="form-control @if($errors->has('currency')) is-invalid @endif" name="currency" autocomplete="off">
+                                    <option value="">--Select Reporting Currency--</option>
+                                    @foreach($currencies as $currency)
+                                        <option value="{{ $currency->id }}" @if(old('currency',$user->currency == $currency->id )) selected="selected" @endif>{{ $currency->code }}  {{ $currency->symbol }}</option>
+                                    @endforeach
+                                </select>
+                                 @if ($errors->has('currency'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('currency') }}</strong>
+                                    </span>
+                                @endif
+                                </div>
+                                    </div>
                                     <button class="btn btn-primary" type="submit">Submit</button>
                                     <a href="{{ route('admin.users.index') }}" class="btn btn-danger">Cancel</a>
 
                                 </div>
 
-                                <div class="col-lg-3 col-xl-3 border-left">
-                                    <b>Last Updated date</b>: {{ date('F j, Y H:i a', strtotime($user->updated_at)) }}
-                                    <br />
-                                    <b>Register date </b>: {{ date('F j, Y H:i a', strtotime($user->created_at)) }}
-                                    <br />
-
-                                    <div class="m-b-10"></div>
-
-
-                                    <div class="m-b-10"></div>
-
-                                </div>
 
                             </div>
 
@@ -232,15 +292,20 @@
     </div>
 @endsection
 @section('footer-script')
-    <script src="{{ asset('assets/plugins/datetimepicker/js/daterangepicker.js') }}"></script>
+    <script src="{{ asset('js/jquery-ui.js') }}"></script>
     <script>
         $(function() {
-            $('input[name="dob"]').daterangepicker({
-                singleDatePicker: true,
-                showDropdowns: true,
-                locale: {
-                    format: 'MM/DD/YYYY'
-                }
+            $('input[name="authorised_person_dob"]').datepicker({
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-100:-18",
+                dateFormat: "yy-mm-dd"
+            });
+        });
+
+        $(document).ready(function () {
+            $("#country").on('change', function () {
+
             });
         });
     </script>

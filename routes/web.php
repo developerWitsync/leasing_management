@@ -22,6 +22,13 @@ Route::middleware('auth')->group(function(){
 
     Route::get('/home', 'HomeController@index')->name('home');
 
+    Route::namespace('Addnewlease')->prefix('add-new-lease')->group(function(){
+        Route::prefix('lessor-details')->group(function(){
+            Route::get('/', ['as' => 'add-new-lease.index', 'uses' => 'IndexController@index']);
+            Route::post('save', ['as' => 'add-new-lease.index.save', 'uses' => 'IndexController@save']);
+        });
+    });
+
     Route::namespace('Settings')->prefix('settings')->group(function(){
         Route::prefix('general')->group(function(){
             Route::get('/', ['as' => 'settings.index', 'uses' => 'IndexController@index']);

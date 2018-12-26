@@ -101,13 +101,13 @@ class UserAccessController extends Controller
                 return redirect()->back()->withInput($request->all())->withErrors($validator->errors());
             }
 
-            $request->request->add(['parent_id' => auth()->user()->id]);
             $data = $request->except('_token');
+            $data['type'] = '0';
             $data['password']   = bcrypt($request->password); 
             $data['authorised_person_dob'] = date('Y-m-d', strtotime($request->authorised_person_dob));
+            $data['email_verification_code'] = md5(time());
+            $data['is_verified'] = '0';
             $user = User::create($data);
-
-
             if($user){
               \Mail::to($user)->queue(new UserCreateConfirmation($user));
               return redirect(route('settings.user'))->with('status', 'User has been added successfully.');
