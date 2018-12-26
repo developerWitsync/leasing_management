@@ -89,10 +89,17 @@
                         "orderable": false,
                         "className" : "text-center",
                         "render" : function(data, type, full, meta) {
-                            var html = "<button  data-toggle='tooltip' data-placement='top' title='Edit Role' type=\"button\" data-role='"+full['id']+"' class=\"btn btn-sm btn-success edit_role\"><i class=\"fa fa-pencil-square-o fa-lg\"></i> </button>";
-                            html += "&nbsp;<button  data-toggle='tooltip' data-placement='top' title='Delete Role' type=\"button\" data-role='"+full['id']+"' class=\"btn btn-sm btn-danger delete_role\">  <i class=\"fa fa-trash-o fa-lg\"></i> </button>"
-                             html += "&nbsp;<button  data-toggle='tooltip' data-placement='top' title='Assigned Permission' type=\"button\" data-role='"+full['id']+"' class=\"btn btn-sm btn-success permission_role\">  <i class=\"fa fa-address-book\"></i> </button>"
-                            return html;
+                            if(full['name'] != 'super_admin') {
+                                var html = "<button  data-toggle='tooltip' data-placement='top' title='Edit Role' type=\"button\" data-role='"+full['id']+"' class=\"btn btn-sm btn-success edit_role\"><i class=\"fa fa-pencil-square-o fa-lg\"></i> </button>";
+                                html += "&nbsp;<button  data-toggle='tooltip' data-placement='top' title='Delete Role' type=\"button\" data-role='"+full['id']+"' class=\"btn btn-sm btn-danger delete_role\">  <i class=\"fa fa-trash-o fa-lg\"></i> </button>"
+                                html += "&nbsp;<button  data-toggle='tooltip' data-placement='top' title='Assigned Permission' type=\"button\" data-role='"+full['id']+"' class=\"btn btn-sm btn-success permission_role\">  <i class=\"fa fa-address-book\"></i> </button>"
+                                return html;
+                            } else {
+                                var html = "<button  disabled='disabled' data-toggle='tooltip' data-placement='top' title='Edit Role' type=\"button\" data-role='"+full['id']+"' class=\"btn btn-sm btn-success\"><i class=\"fa fa-pencil-square-o fa-lg\"></i></button>";
+                                html += "&nbsp;<button disabled='disabled' data-toggle='tooltip' data-placement='top' title='Delete Role' type=\"button\" data-role='"+full['id']+"' class=\"btn btn-sm btn-danger\"><i class=\"fa fa-trash-o fa-lg\"></i></button>"
+                                html += "&nbsp;<button disabled='disabled' data-toggle='tooltip' data-placement='top' title='Assigned Permission' type=\"button\" data-role='"+full['id']+"' class=\"btn btn-sm btn-success\"><i class=\"fa fa-address-book\"></i></button>"
+                                return html;
+                            }
                         }
                     }
                 ],

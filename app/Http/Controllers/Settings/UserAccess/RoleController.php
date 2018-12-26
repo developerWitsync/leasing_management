@@ -50,7 +50,7 @@ class RoleController extends Controller
                         }
                     })
                     ->addColumn('permissions', function($data){
-                      return implode(' | ', $data->perms->pluck('name')->toArray());
+                      return implode(' | ', $data->perms->pluck('display_name')->toArray());
                     })
                     ->addColumn('created_at', function($data){
                         return date('jS F Y h:i a', strtotime($data->created_at));

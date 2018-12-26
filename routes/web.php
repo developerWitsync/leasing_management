@@ -22,14 +22,17 @@ Route::middleware('auth')->group(function(){
 
     Route::get('/home', 'HomeController@index')->name('home');
 
-    Route::namespace('Addnewlease')->prefix('add-new-lease')->group(function(){
+
+    Route::namespace('Addnewlease')->middleware(['permission:add_lease'])->prefix('add-new-lease')->group(function(){
         Route::prefix('lessor-details')->group(function(){
             Route::get('/', ['as' => 'add-new-lease.index', 'uses' => 'IndexController@index']);
             Route::post('save', ['as' => 'add-new-lease.index.save', 'uses' => 'IndexController@save']);
         });
     });
 
-    Route::namespace('Settings')->prefix('settings')->group(function(){
+
+    Route::namespace('Settings')->middleware(['permission:settings'])->prefix('settings')->group(function(){
+
         Route::prefix('general')->group(function(){
             Route::get('/', ['as' => 'settings.index', 'uses' => 'IndexController@index']);
             Route::post('save', ['as' => 'settings.index.save', 'uses' => 'IndexController@save']);
@@ -106,7 +109,7 @@ Route::middleware('auth')->group(function(){
             Route::delete('delete-lease-asset-category-setting/{id}', ['as' => 'settings.leaseassets.editcategorysetting', 'uses' => 'LeaseAssetsController@deleteCategorySetting']);
         });
 
-    Route::prefix('user-access')->namespace('UserAccess')->group(function (){
+        Route::prefix('user-access')->namespace('UserAccess')->group(function (){
             Route::get('/', ['as' => 'settings.useraccess', 'uses' => 'UserAccessController@index']);
 
             Route::get('listing', ['as' => 'settings.user', 'uses' => 'UserAccessController@listing']);

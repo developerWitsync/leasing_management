@@ -62,7 +62,7 @@
                                     @endforeach
 
                                     <tr style=" {{ $errors->has('expected_life_number') ? ' has-error' : 'display: none' }}" class="add_more_expected_life_of_assets">
-                                        <td>{{ count($life_of_asset) + 1 }}</td>
+                                        <td>{{ count($expected_life_of_assets) + 1 }}</td>
                                         <td>
                                             <form action="{{ route('settings.leaseassets.addlife') }}" method="POST" class="add_more_expected_life_of_assets_form">
                                                 {{ csrf_field() }}
