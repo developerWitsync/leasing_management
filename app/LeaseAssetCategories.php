@@ -14,4 +14,8 @@ class LeaseAssetCategories extends Model
         'created_at',
         'updated_at'
     ];
+
+    public function subcategories(){
+        return $this->hasMany('App\LeaseAssetSubCategorySetting', 'category_id', 'id');
+    }
 }

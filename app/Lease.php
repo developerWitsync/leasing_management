@@ -8,5 +8,20 @@ class Lease extends Model
 {
     protected $table = 'lease';
 
-    protected $fillable = ['id','business_account_id', 'lessor_name', 'lease_type_id', 'lease_contract_id', 'lease_code', 'file','status','created_at', 'updated_at'];
+    protected $fillable = [
+        'id',
+        'business_account_id',
+        'lessor_name',
+        'lease_type_id',
+        'lease_contract_id',
+        'lease_code',
+        'file',
+        'status',
+        'created_at',
+        'updated_at'
+    ];
+
+    public function leaseType(){
+        return $this->belongsTo('App\ContractClassifications', 'lease_type_id');
+    }
 }

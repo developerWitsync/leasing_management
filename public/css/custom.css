@@ -38,3 +38,7 @@
 .dataTables_wrapper.container-fluid{
     padding: 0px;
 }
+
+.container {
+    width: 100% !important;
+}

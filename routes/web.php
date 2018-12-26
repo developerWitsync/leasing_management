@@ -30,9 +30,12 @@ Route::middleware('auth')->group(function(){
             Route::post('save', ['as' => 'add-new-lease.index.save', 'uses' => 'LessorDetailsController@save']);
         });
 
+        Route::prefix('underlying-lease-assets')->group(function(){
+            Route::match(['post', 'get'],'create/{id}', ['as' => 'addlease.leaseasset.index', 'uses' => 'UnderlyingLeaseAssetController@index']);
+            Route::get('fetch-sub-categories/{id}', ['as'=> 'addlease.leaseasset.fetchsubcategories', 'uses' => 'UnderlyingLeaseAssetController@fetchSubCategories']);
+        });
 
     });
-
 
     Route::namespace('Settings')->middleware(['permission:settings'])->prefix('settings')->group(function(){
 
@@ -44,7 +47,6 @@ Route::middleware('auth')->group(function(){
         Route::prefix('lease-classification')->group(function (){
 
             Route::get('/', ['as' => 'settings.leaseclassification', 'uses' => 'LeaseClassificationController@index']);
-
             /**
              * Routes for the lease payment Basics Settings for the authenticated user
              */
