@@ -14,18 +14,19 @@
                         {{ session('status') }}
                     </div>
                 @endif
-
+               
+                @if($reporting_currency_settings->is_foreign_transaction_involved == 'yes' || $reporting_currency_settings->is_foreign_transaction_involved == 'no' )
+               
                 {{--@include('lease._menubar')--}}
-
-                <div class="tab-content" style="padding: 0px;">
+               <div class="tab-content" style="padding: 0px;">
                     <div role="tabpanel" class="tab-pane active">
-                        <form class="form-horizontal" method="POST" action="{{ route('add-new-lease.index.save') }}" enctype="multipart/form-data">
+                        <form id="add-new-lease-form" class="form-horizontal" method="POST" action="{{ route('add-new-lease.index.save') }}" enctype="multipart/form-data">
                             {{ csrf_field() }}
 
                             <div class="form-group{{ $errors->has('lessor_name') ? ' has-error' : '' }} required">
                                 <label for="lessor_name" class="col-md-4 control-label">Lessor Name</label>
                                 <div class="col-md-6">
-                                        <input id="lessor_name" type="text" placeholder="Lessor Name" class="form-control" name="lessor_name" value="{{ old('lessor_name', isset($settings->lessor_name)? $settings->lessor_name:"") }}" >
+                                        <input id="lessor_name" type="text" placeholder="Lessor Name" class="form-control" name="lessor_name" value="{{ old('lessor_name',$lease->lessor_name) }}" >
                                     @if ($errors->has('lessor_name'))
                                         <span class="help-block">
                                             <strong>{{ $errors->first('lessor_name') }}</strong>
@@ -41,7 +42,7 @@
                                         <option value="">Please Type Classification</option>
                                          @php $i =1 @endphp
                                          @foreach($contract_classifications as $classification)
-                                         <option class="cla-{{$i}}" value="{{ $classification->id }}">
+                                         <option class="cla-{{$i}}" value="{{ $classification->id }}" @if(old('lease_type_id',$lease->lease_type_id) == $classification->id) selected="selected" @endif>
                                             {{ $classification->title }} </option>
                                            @php $i++ @endphp
                                         @endforeach
@@ -62,7 +63,7 @@
                                                 <option value="">Please Type Lease Contract</option>
 
                                                 @foreach($reporting_foreign_currency_transaction_settings as $currencies)
-                                                 <option value="{{ $currencies->foreign_exchange_currency }}">
+                                                 <option value="{{ $currencies->foreign_exchange_currency }}" @if(old('lease_contract_id', $lease->lease_contract_id) == $currencies->foreign_exchange_currency) selected="selected" @endif>
                                                     {{ $currencies->foreign_exchange_currency }}{{ '('.$currencies->base_currency.')' }}</option>
                                                      @endforeach
                                             </select>
@@ -75,13 +76,13 @@
                                   </div>
                             @endif
 
-                            @if($reporting_currency_settings->is_foreign_transaction_involved == "no")
+                            @if($reporting_currency_settings->is_foreign_transaction_involved == "no") 
                                     <div class="form-group{{ $errors->has('lease_contract_id') ? ' has-error' : '' }} required">
                                             <label for="lease_contract_id" class="col-md-4 control-label">Lease Contract Currency</label>
                                             <div class="col-md-6">
                                                    <select name="lease_contract_id" class="form-control">
                                                     <option value="">Please Type Lease Contract</option>
-                                                     <option value="{{ $reporting_currency_settings->currency_for_lease_reports }}">
+                                                     <option value="{{ $reporting_currency_settings->currency_for_lease_reports }}" @if(old('lease_contract_id', $lease->lease_contract_id) == $reporting_currency_settings->currency_for_lease_reports) selected="selected" @endif >
                                                         {{ $reporting_currency_settings->currency_for_lease_reports }}</option>
                                                        
                                                 </select>
@@ -104,16 +105,24 @@
                                         </span>
                                     @endif
                                 </div>
+                               @if($lease->file !='')
+                                  <a href="{{asset('uploads/'.$lease->file)}}">download</a>
+                                  @endif
                             </div>
 
                             <div class="form-group">
                                 <div class="col-md-6 col-md-offset-4">
                                    <a href="/home" class="btn btn-danger">Cancel</a>
                                     </button>
+
                                     <button type="submit" class="btn btn-success">
-                                        Submit
+                                        Save As Draft
                                     </button>
-                                    <a href="#" class="btn btn-success">Next</a>
+                                    
+                                    <button type="submit" class="btn btn-primary next_submit">
+                                        Next
+                                    </button>
+
                                 </div>
 
                             </div>
@@ -121,22 +130,22 @@
                         </form>
                     </div>
                 </div>
+                 @else
+
+                 <a href="{{route('settings.currencies')}}"><div class="alert alert-danger">Please change the foreign currency settings</div></a>
+
+               @endif
             </div>
         </div>
 
-          <div class="form-content" style="display:none;">
-             <span>Any Non lease component also exist</span>
-         </div>
-          <div class="form-content1" style="display:none;">
-             <span>if Non lease component exist,Please Select single lease and non lease contract</span>
-         </div>
+         
 @endsection
 
 @section('footer-script')
     <script src="{{ asset('assets/plugins/bootbox/bootbox.min.js') }}"></script>
     <script type="text/javascript">
     $(document).ready(function() {
-        $("#lease_type_id").on('change', function(){
+         $("#lease_type_id").on('change', function(){
             var value = $(this).val();
             if(value == '1')
             {
@@ -188,6 +197,15 @@
 
             modal.modal("show");
         }
+
+        $('.next_submit').on('click', function(e) {
+            e.preventDefault();
+            var next_url = $('#add-new-lease-form').attr('action')+"?action=next";
+
+            $('#add-new-lease-form').attr('action', next_url);
+            alert(next_url);
+            // $('#add-new-lease-form').submit();
+        });
 });
 </script>
 @endsection
