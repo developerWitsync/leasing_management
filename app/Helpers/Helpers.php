@@ -75,3 +75,14 @@ function getUserProfileImageSrc($user_id = null, $profile_pic = null, $return_th
         return false;
     }
 }
+
+/**
+ * returns the ids for the dependent childrens as well
+ * since the super_admin can also make the changes to the leases added by his/her sub-users
+ * @return array
+ */
+
+function getDependentUserIds(){
+    $userIdsWithChildrens = Auth::user()->childrens->pluck('id')->toArray();
+    return array_merge($userIdsWithChildrens, [auth()->user()->id]);
+}

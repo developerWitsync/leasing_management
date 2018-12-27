@@ -1,0 +1,34 @@
+<?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class LeaseAssets extends Model
+{
+    protected $table = 'lease_assets';
+
+    protected $fillable = [
+        'lease_id',
+        'uuid',
+        'category_id',
+        'sub_category_id',
+        'name',
+        'other_details',
+        'country_id',
+        'location',
+        'specific_use',
+        'use_of_asset',
+        'expected_life',
+        'lease_start_date',
+        'lease_free_period',
+        'accural_period',
+        'lease_end_date',
+        'lease_term',
+        'accounting_treatment',
+        'similar_asset_items',
+        'is_details_completed',
+        'created_at',
+        'updated_at'
+    ];
+}

@@ -15,9 +15,9 @@
                     </div>
                 @endif
 
-                @include('lease._menubar')
+                {{--@include('lease._menubar')--}}
 
-                <div class="tab-content">
+                <div class="tab-content" style="padding: 0px;">
                     <div role="tabpanel" class="tab-pane active">
                         <form class="form-horizontal" method="POST" action="{{ route('add-new-lease.index.save') }}" enctype="multipart/form-data">
                             {{ csrf_field() }}
