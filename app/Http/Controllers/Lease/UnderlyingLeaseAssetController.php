@@ -9,13 +9,17 @@
 namespace App\Http\Controllers\Lease;
 
 
+use App\Countries;
+use App\ExpectedLifeOfAsset;
 use App\Http\Controllers\Controller;
 use App\Lease;
+use App\LeaseAccountingTreatment;
 use App\LeaseAssetCategories;
 use App\LeaseAssets;
 use App\LeaseAssetSimilarCharacteristicSettings;
 use App\LeaseAssetsNumberSettings;
 use App\LeaseAssetSubCategorySetting;
+use App\UseOfLeaseAsset;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -29,7 +33,7 @@ class UnderlyingLeaseAssetController extends Controller
      */
     public function index($id, Request $request){
         $total_number_of_assets = $request->has('total_assets')?$request->total_assets:1;
-        $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->with('leaseType')->first();
+        $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->with('leaseType')->with('assets')->first();
         if($lease) {
 
             $lease_assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->get()->toArray();
@@ -108,6 +112,104 @@ class UnderlyingLeaseAssetController extends Controller
             ));
         } else {
             abort(404);
+        }
+    }
+
+    /**
+     * Render form so that the user can complete the details for the lease asset one by one
+     * @param $lease_id
+     * @param $asset_id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function assetDetails($lease_id,$asset_id, Request $request){
+        try{
+            $lease = Lease::query()
+                ->whereIn('business_account_id', getDependentUserIds())
+                ->where('id', '=', $lease_id)
+                ->with('leaseType')
+                ->with('assets')
+                ->first();
+
+            $asset = LeaseAssets::query()->where('lease_id', '=', $lease_id)->where('id', '=', $asset_id)->first();
+
+            if($lease && $asset) {
+
+                if($request->isMethod('post')) {
+
+                    Validator::extend('required_if_prior_to_date', function ($attribute, $value, $parameters, $validator) {
+                        if(date('Y-m-d',strtotime($parameters['0'])) < date('Y-m-d', strtotime('2019-01-01'))){
+                            if(is_null($value)) {
+                                return false;
+                            } else {
+                                return true;
+                            }
+                        } else {
+                            return true;
+                        }
+                    });
+
+                    $validator = Validator::make($request->except('_token'),[
+                        'other_details' => 'required',
+                        'country_id'   => 'required|exists:countries,id',
+                        'location'  => 'required',
+                        'specific_use'  => 'required|exists:lease_asset_use_master,id',
+                        'use_of_asset'  => 'required_if:specific_use,1',
+                        'expected_life' => 'required|exists:expected_useful_life_of_asset,id',
+                        'lease_start_date' => 'required|date',
+                        'lease_free_period' => 'numeric',
+                        'accural_period'    => 'required|date',
+                        'lease_end_date'    => 'required|date|after:accural_period',
+                        'lease_term'        => 'required',
+                        'accounting_treatment' => 'required_if_prior_to_date:'.$request->accural_period
+                    ],[
+                        'country_id.required'          => 'The country field is required.',
+                        'other_details.required'       =>   'The Other Details field is required.',
+                        'specific_use.required'        =>   'The Specific use of asset field is required.',
+                        'use_of_asset.required_if'     =>   'The Use of Asset is required if specific use of the Lease Asset is Own Use.',
+                        'expected_life.required'       =>   'The expected life of asset field is required.',
+                        'lease_start_date.required'    =>   'The Lease start date field is required.',
+                        'lease_start_date.date'        =>   'The Lease start date field must be a valid date.',
+                        'lease_free_period.numeric'    =>   'The Initial Lease Free Period field must be a numeric.',
+                        'accural_period.required'      =>   'The Start Date of Lease Payment / Accrual Period field is required.',
+                        'lease_end_date.required'      =>   'The Lease End Date field is required.',
+                        'lease_end_date.date'          =>   'The Lease End Date field must be a valid date.',
+                        'accounting_treatment.required_if_prior_to_date'   => 'The accounting period is required when Start Date of Lease Payment / Accrual Period is prior to Jan 01, 2019.'
+                    ]);
+
+                    if($validator->fails()) {
+                        return redirect()->back()->withErrors($validator->errors())->withInput($request->except('_token'));
+                    }
+
+                    $data = $request->except('_token');
+                    $data['lease_start_date'] = date('Y-m-d', strtotime($request->lease_start_date));
+                    $data['accural_period'] = date('Y-m-d', strtotime($request->accural_period));
+                    $data['lease_end_date'] = date('Y-m-d', strtotime($request->lease_end_date));
+                    $data['is_details_completed']  = '1';
+                    $asset->setRawAttributes($data);
+                    $asset->save();
+                    return redirect(
+                        route('addlease.leaseasset.index', ['id' => $lease->id,'total_assets' => count($lease->assets)])
+                    )->with('status', "Asset Details has been updated successfully.");
+
+                }
+
+                $countries  = Countries::query()->where('status', '=', '1')->get();
+                $use_of_lease_asset = UseOfLeaseAsset::query()->where('status', '=', '1')->get();
+                $expected_life_of_assets = ExpectedLifeOfAsset::query()->whereIn('business_account_id', getDependentUserIds())->get();
+                $accounting_terms  = LeaseAccountingTreatment::query()->where('upto_year', '=', '2018')->get();
+                return view('lease.lease-assets.completedetails', compact(
+                    'lease',
+                    'asset',
+                    'countries',
+                    'use_of_lease_asset',
+                    'expected_life_of_assets',
+                    'accounting_terms'
+                ));
+            } else {
+                abort(404);
+            }
+        } catch (\Exception $e) {
+            dd($e);
         }
     }
 

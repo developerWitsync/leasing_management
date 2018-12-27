@@ -77,10 +77,10 @@
         @if(auth()->check())
             <div class="container">
                 <div class="row">
-                    <div class="col-md-2 col-xs-12 list-group">
+                    <div class="col-md-3 col-xs-12 list-group">
                         @include('layouts._sidebar')
                     </div>
-                    <div class="col-md-10 col-xs-12">
+                    <div class="col-md-9 col-xs-12">
                         @if(isset($breadcrumbs ))
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">

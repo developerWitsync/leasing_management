@@ -33,6 +33,7 @@ Route::middleware('auth')->group(function(){
         Route::prefix('underlying-lease-assets')->group(function(){
             Route::match(['post', 'get'],'create/{id}', ['as' => 'addlease.leaseasset.index', 'uses' => 'UnderlyingLeaseAssetController@index']);
             Route::get('fetch-sub-categories/{id}', ['as'=> 'addlease.leaseasset.fetchsubcategories', 'uses' => 'UnderlyingLeaseAssetController@fetchSubCategories']);
+            Route::match(['post', 'get'],'complete-asset-details/{lease}/{asset}', ['as' => 'addlease.leaseasset.completedetails', 'uses' => 'UnderlyingLeaseAssetController@assetDetails']);
         });
 
     });

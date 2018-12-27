@@ -24,4 +24,8 @@ class Lease extends Model
     public function leaseType(){
         return $this->belongsTo('App\ContractClassifications', 'lease_type_id');
     }
+
+    public function assets(){
+        return $this->hasMany('App\LeaseAssets','lease_id', 'id');
+    }
 }

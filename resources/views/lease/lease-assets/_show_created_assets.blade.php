@@ -110,7 +110,7 @@
                 </td>
                 <td>
                     @if(isset($lease_assets[$i]))
-                        <a href="javascript:void(0)" class="btn btn-sm btn-primary">Complete Details</a>
+                        <a href="{{ route('addlease.leaseasset.completedetails', ['lease' => $lease->id, 'asset' => $lease_assets[$i]['id']]) }}" class="btn btn-sm btn-primary">Complete Details</a>
                     @endif
                 </td>
             </tr>
