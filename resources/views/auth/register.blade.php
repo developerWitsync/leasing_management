@@ -240,27 +240,7 @@
                                 @endif
                             </div>
                         </div>
-
-                        <div class="form-group{{ $errors->has('currency') ? ' has-error' : '' }} required">
-                            <label for="currency" class="col-md-4 control-label">Reporting Currency</label>
-
-                            <div class="col-md-6">
-                                <select id="currency" class="form-control" name="currency">
-                                    <option value="">--Select Reporting Currency--</option>
-                                    @foreach($currencies as $currency)
-                                        <option value="{{ $currency->id }}" @if($currency->id == old('currency')) selected="selected" @endif>{{ $currency->code }}  {{ $currency->symbol }}</option>
-                                    @endforeach
-                                </select>
-
-                                @if ($errors->has('currency'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('currency') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group">
+                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
                                 <button type="submit" class="btn btn-primary">
                                     Register

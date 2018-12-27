@@ -10,9 +10,13 @@ namespace App\Http\Controllers\Settings;
 
 
 use App\GeneralSettings;
+use App\LeaseLockYear;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Validator;
+use Session;
+
+
 
 class IndexController extends Controller
 {
@@ -26,7 +30,9 @@ class IndexController extends Controller
             ]
         ];
         $settings = GeneralSettings::query()->where('business_account_id', '=', auth()->user()->id)->first();
-        return view('settings.general.index', compact('breadcrumbs', 'settings'));
+        $lease_lock_year = LeaseLockYear::query()->where('business_account_id', '=', auth()->user()->id)->get();
+        
+        return view('settings.general.index', compact('breadcrumbs', 'settings','lease_lock_year'));
     }
 
     /**
@@ -51,21 +57,21 @@ class IndexController extends Controller
 
             $request->request->add(['business_account_id' => auth()->user()->id]);
             $settings = GeneralSettings::query()->where('business_account_id', '=', auth()->user()->id)->first();
+
             $data = $request->except('_token');
             $data['annual_year_end_on'] = date('Y-m-d', strtotime($request->annual_year_end_on));
-            if(isset($settings)) {
+           if(isset($settings)) {
                 $settings->setRawAttributes($data);
                 $settings->save();
                 $status = 'General Settings has been updated successfully.';
             } else {
-                GeneralSettings::create($data);
+               GeneralSettings::create($data);
                 $status = 'General Settings has been created successfully.';
             }
-
             return redirect()->back()->with('status', $status);
-
         } catch (\Exception $e){
-            abort(404);
+           abort(404);
         }
     }
+    
 }

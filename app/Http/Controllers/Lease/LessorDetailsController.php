@@ -54,6 +54,7 @@ class LessorDetailsController extends Controller
             $validator = Validator::make($request->except("_token"), [
                 'lessor_name' => 'required',
                 'lease_type_id' => 'required',
+                'lease_contract_id' => 'required',
                 'file'   => 'required|mimes:doc,pdf,docx,zip'
             ]);
 
@@ -76,6 +77,8 @@ class LessorDetailsController extends Controller
             $data['lease_code'] = time().'-'.mt_rand();
 
             $data['file'] = $uniqueFileName;
+
+            $data['status'] = '0';
 
             $lease = Lease::create($data);
 

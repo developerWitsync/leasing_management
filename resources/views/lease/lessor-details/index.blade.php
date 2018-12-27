@@ -58,16 +58,14 @@
                                   <div class="form-group{{ $errors->has('lease_contract_id') ? ' has-error' : '' }} required">
                                         <label for="lease_contract_id" class="col-md-4 control-label">Lease Contract Currency</label>
                                         <div class="col-md-6">
-                                            <div class="input-group">
-                                               <select name="lease_contract_id" class="form-control">
+                                              <select name="lease_contract_id" class="form-control">
                                                 <option value="">Please Type Lease Contract</option>
 
                                                 @foreach($reporting_foreign_currency_transaction_settings as $currencies)
-                                                 <option value="{{ $currencies->id }}">
+                                                 <option value="{{ $currencies->foreign_exchange_currency }}">
                                                     {{ $currencies->foreign_exchange_currency }}{{ '('.$currencies->base_currency.')' }}</option>
                                                      @endforeach
                                             </select>
-                                             </div>
                                             @if ($errors->has('lease_contract_id'))
                                                 <span class="help-block">
                                                     <strong>{{ $errors->first('lease_contract_id') }}</strong>
@@ -83,11 +81,9 @@
                                             <div class="col-md-6">
                                                    <select name="lease_contract_id" class="form-control">
                                                     <option value="">Please Type Lease Contract</option>
-
-                                                    @foreach($currencies as $currencies)
-                                                     <option value="{{ $currencies->id }}">
-                                                        {{ $currencies->code }}{{ '('.$currencies->symbol.')' }}</option>
-                                                         @endforeach
+                                                     <option value="{{ $reporting_currency_settings->currency_for_lease_reports }}">
+                                                        {{ $reporting_currency_settings->currency_for_lease_reports }}</option>
+                                                       
                                                 </select>
                                                 @if ($errors->has('lease_contract_id'))
                                                     <span class="help-block">
@@ -112,10 +108,14 @@
 
                             <div class="form-group">
                                 <div class="col-md-6 col-md-offset-4">
+                                   <a href="/home" class="btn btn-danger">Cancel</a>
+                                    </button>
                                     <button type="submit" class="btn btn-success">
                                         Submit
                                     </button>
+                                    <a href="#" class="btn btn-success">Next</a>
                                 </div>
+
                             </div>
 
                         </form>

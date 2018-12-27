@@ -39,6 +39,11 @@ Route::middleware('auth')->group(function(){
         Route::prefix('general')->group(function(){
             Route::get('/', ['as' => 'settings.index', 'uses' => 'IndexController@index']);
             Route::post('save', ['as' => 'settings.index.save', 'uses' => 'IndexController@save']);
+            Route::post('add-lease-lock-year', ['as' => 'settings.leaselockyear.addleaselockyear', 'uses' => 'LeaseLockYearController@addLeaseLockYear']);
+            Route::match(['get', 'post'], '/edit-lease-lock-year/{id}', ['as' => 'settings.leaselockyear.editleaselockyear', 'uses' => 'LeaseLockYearController@editLeaseLockYear']);
+            Route::delete('delete-lease-lock-nyear/{id}', ['as' => 'settings.leaselockyear.deleteleaselockyear', 'uses' => 'LeaseLockYearController@deleteLeaseLockYear']);
+
+
         });
 
         Route::prefix('lease-classification')->group(function (){

@@ -258,32 +258,12 @@
                                     </span>
                                 @endif
                                         </div>
-
-                                <div class="form-group col-md-6">
-                                    <label for="currency">Reporting Currency(required)</label>
-                                   <select id="currency" class="form-control @if($errors->has('currency')) is-invalid @endif" name="currency" autocomplete="off">
-                                    <option value="">--Select Reporting Currency--</option>
-                                    @foreach($currencies as $currency)
-                                        <option value="{{ $currency->id }}" @if(old('currency',$user->currency == $currency->id )) selected="selected" @endif>{{ $currency->code }}  {{ $currency->symbol }}</option>
-                                    @endforeach
-                                </select>
-                                 @if ($errors->has('currency'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('currency') }}</strong>
-                                    </span>
-                                @endif
-                                </div>
                                     </div>
                                     <button class="btn btn-primary" type="submit">Submit</button>
                                     <a href="{{ route('admin.users.index') }}" class="btn btn-danger">Cancel</a>
-
                                 </div>
-
-
-                            </div>
-
-                        </form>
-
+                             </div>
+                      </form>
                     </div>
                 </div><!-- end card-->
             </div>

@@ -3,6 +3,10 @@
     <!-- BEGIN CSS for this page -->
     <link rel="stylesheet" href="{{ asset('css/jquery-ui.css') }}">
     <!-- END CSS for this page -->
+    <style type='text/css'>
+  /* Style to hide Dates / Months */
+ /* .ui-datepicker-calendar,.ui-datepicker-month { display: none; }​*/
+</style>
 @endsection
 @section('content')
         <div class="panel panel-default">
@@ -81,20 +85,118 @@
                                 </div>
                             </div>
 
-                            <div class="form-group">
+                             <div class="form-group{{ $errors->has('max_previous_lease_start_year') ? ' has-error' : '' }}">
+                                <label for="max_previous_lease_start_year" class="col-md-4 control-label">Maximum Previous First Lease Start Year</label>
+                                <div class="col-md-6">
+                                    <div class="from-group">
+
+                                        <select name="max_previous_lease_start_year" id="max_previous_lease_start_year" type="text" placeholder="Select Year" class="form-control max_previous_lease_start_year">
+                                        <option value="">Please select Year</option>
+                                         {{ $earliest_year = 1990 }}
+                                         @foreach (range(date('Y'), $earliest_year) as $x)
+                                         <option value="{{ $x }}" @if(old('max_previous_lease_start_year', $settings->max_previous_lease_start_year) == $x) selected="selected" @endif>{{ $x }}</option>
+                                        @endforeach
+                                        </select>
+                                      </div>
+                                    @if ($errors->has('max_previous_lease_start_year'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('max_previous_lease_start_year') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+                             <div class="form-group">
                                 <div class="col-md-6 col-md-offset-4">
                                     <button type="submit" class="btn btn-success">
                                         Submit
                                     </button>
                                 </div>
                             </div>
-                        </form>
+                            </form>
+                            </div>
+                            <div class="panel panel-info">
+                            <div class="panel-heading">
+                                Lock Your Lease Valuations with Complete Audit Year
+                                <span>
+                                    <a href="javascript:void(0);" class="btn btn-sm btn-primary pull-right add_more" data-form="add_lease_lock_year">Add More</a>
+                                </span>
+                            </div>
+                            <div class="panel-body">
+                                 <table class="table table-condensed">
+                                    <thead>
+                                    <tr>
+                                        <th>Sr No.</th>
+                                        <th>Audit Year 1 Ended On</th>
+                                         <th>Audit Year 2 Ended On</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                   @foreach($lease_lock_year as $key => $value)
+                                        <tr>
+                                            <td>{{ $key + 1 }}</td>
+                                            <td>{{ $value->audit_year1_ended_on }}</td>
+                                            <td>{{ $value->audit_year2_ended_on }}</td>
+                                            
+                                            <td>
+
+                                                <a data-href="{{ route('settings.leaselockyear.editleaselockyear', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-success edit_table_setting">
+                                                    <i class="fa fa-pencil-square-o"></i>
+                                                </a>
+
+                                                <a data-href="{{ route('settings.leaselockyear.deleteleaselockyear', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-danger delete_settings"><i class="fa fa-trash-o"></i></a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    <tr style=" {{ $errors->has('audit_year1_ended_on') ? ' has-error' : 'display: none' }}" class="add_lease_lock_year">
+                                        <td></td>
+                                        <td>
+                                        <form action="{{ route('settings.leaselockyear.addleaselockyear') }}" method="POST" class="add_lease_lock_year_form">
+                                                        {{ csrf_field() }}
+                                            <div class="form-group{{ $errors->has('audit_year1_ended_on') ? ' has-error' : '' }}">
+                                             <input type="text" value="{{ old('audit_year1_ended_on') }}" name="audit_year1_ended_on" placeholder="Audit Year 1 Ended On" id="audit_year1_ended_on" class="form-control {{ $errors->has('audit_year1_ended_on') ? ' has-error' : '' }}"/>
+                                            @if ($errors->has('audit_year1_ended_on'))
+                                                <span class="help-block">
+                                                    <strong>{{ $errors->first('audit_year1_ended_on') }}</strong>
+                                                </span>
+                                            @endif
+                                            </div>
+                                            <div class="form-group{{ $errors->has('audit_year2_ended_on') ? ' has-error' : '' }}">
+                                             <input type="text" value="{{ old('audit_year2_ended_on') }}" name="audit_year2_ended_on" placeholder="Audit Year 2 Ended On" id="audit_year2_ended_on" class="form-control {{ $errors->has('audit_year2_ended_on') ? ' has-error' : '' }}"/>
+                                            @if ($errors->has('audit_year2_ended_on'))
+                                                <span class="help-block">
+                                                    <strong>{{ $errors->first('audit_year2_ended_on') }}</strong>
+                                                </span>
+                                            @endif
+                                            </div>
+                                             </form>
+                                        </td>
+                                        <td>
+                                            <button type="button" onclick="javascript:$('.add_lease_lock_year_form').submit();" class="btn btn-sm btn-success">Save</button>
+                                            <a href="javascript:;" class="btn btn-sm btn-danger add_more" data-form="add_lease_lock_year">Cancel</a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        
+
+                           
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="myModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+
                 </div>
             </div>
         </div>
 @endsection
 @section('footer-script')
+    <script src="{{ asset('assets/plugins/bootbox/bootbox.min.js') }}"></script>
     <script src="{{ asset('js/jquery-ui.js') }}"></script>
     <script>
         $(function() {
@@ -107,6 +209,29 @@
                 changeMonth: true,
                 changeYear: true,
                 maxDate : '12/31/2018'
+            });
+             $('.max_previous_lease_start_year').datepicker({
+                    changeYear: true,
+                    showButtonPanel: true,
+                    yearRange: "-28:-00",
+                    dateFormat: 'yy',
+                    onClose: function(dateText, inst) { 
+                var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+                  $(this).datepicker('setDate', new Date(year, 1));
+            }
+        });
+            $(".max_previous_lease_start_year").focus(function () {
+               $(".ui-datepicker-month").hide();
+            });
+
+            $("#audit_year1_ended_on").datepicker({
+                changeMonth: true,
+                changeYear: true
+            });
+
+            $("#audit_year2_ended_on").datepicker({
+                changeMonth: true,
+                changeYear: true
             });
         });
 

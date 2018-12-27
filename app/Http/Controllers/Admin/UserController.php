@@ -114,8 +114,7 @@ class UserController extends Controller
                         'email' => 'required|string|email|max:255|unique:users',
                         'password' => 'required|string|min:6|confirmed',
                         'phone' => 'required',
-                        'annual_reporting_period'   => 'required',
-                        'currency'  => 'required'
+                        'annual_reporting_period'   => 'required'
                     ]);
                 if($validator->fails()) {
                         return redirect()->back()->withErrors($validator->errors())->withInput($request->except("_token"));
@@ -168,8 +167,7 @@ class UserController extends Controller
                         'email' => 'required|string|email|max:255',
                         'password' => 'string|min:6|confirmed',
                         'phone' => 'required',
-                        'annual_reporting_period'   => 'required',
-                        'currency'  => 'required'
+                        'annual_reporting_period'   => 'required'
                     ]);
                     
                     if($validator->fails()) {
