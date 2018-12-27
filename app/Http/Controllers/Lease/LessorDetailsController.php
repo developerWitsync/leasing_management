@@ -18,12 +18,19 @@ use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Http\Request;
 use Validator;
 
+
 class LessorDetailsController extends Controller
 {
 
-    public function index(){
-
-        $breadcrumbs = [
+    public function index(Request $request ){
+       
+        if($request->has('id')) {
+            $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $request->id)->first();
+        } else {
+            $lease = new Lease();
+        }
+    
+       $breadcrumbs = [
             [
                 'link' => route('add-new-lease.index'),
                 'title' => 'Lessor Details'
@@ -33,11 +40,10 @@ class LessorDetailsController extends Controller
         $currencies = Currencies::query()->where('status', '=', '1')->get();
         $reporting_currency_settings = ReportingCurrencySettings::query()->where('business_account_id', '=', auth()->user()->id)->first();
         $reporting_foreign_currency_transaction_settings = ForeignCurrencyTransactionSettings::query()->where('business_account_id', '=', auth()->user()->id)->get();
-
-        if(collect($reporting_currency_settings)->isEmpty()) {
+         if(collect($reporting_currency_settings)->isEmpty()) {
             $reporting_currency_settings = new ReportingCurrencySettings();
         }
-        return view('lease.lessor-details.index', compact('breadcrumbs','contract_classifications','currencies','reporting_currency_settings','reporting_foreign_currency_transaction_settings'));
+        return view('lease.lessor-details.index', compact('breadcrumbs','contract_classifications','currencies','reporting_currency_settings','reporting_foreign_currency_transaction_settings','lease'));
     }
 
     /**
@@ -51,14 +57,20 @@ class LessorDetailsController extends Controller
     public function save(Request $request){
         try{
 
-            $validator = Validator::make($request->except("_token"), [
+            $rules = [
                 'lessor_name' => 'required',
                 'lease_type_id' => 'required',
-                'lease_contract_id' => 'required',
-                'file'   => 'required|mimes:doc,pdf,docx,zip'
-            ]);
+                'lease_contract_id' => 'required'
+            ];
+
+            if(!$request->has('action')){
+                $rules['file']   = 'required|mimes:doc,pdf,docx,zip';
+            }
+
+            $validator = Validator::make($request->except("_token"), $rules);
 
             if($validator->fails()){
+                
                 return redirect()->back()->withErrors($validator->errors())->withInput($request->except("_token"));
             }
 
@@ -67,23 +79,27 @@ class LessorDetailsController extends Controller
             if($request->hasFile('file')){
                 $file = $request->file('file');
                 $uniqueFileName = uniqid() . $file->getClientOriginalName();
-                $request->file('file')->move(storage_path() . '/uploads', $uniqueFileName);
+                $request->file('file')->move('uploads', $uniqueFileName);
             }
 
             $request->request->add(['business_account_id' => auth()->user()->id]);
 
             $data = $request->except('_token');
-
             $data['lease_code'] = time().'-'.mt_rand();
-
             $data['file'] = $uniqueFileName;
-
             $data['status'] = '0';
-
             $lease = Lease::create($data);
-
+           
             if($lease) {
-                return redirect()->back()->with('status','Lessor Details have been saved successfully.');
+                if($request->has('action') && $request->action == "next") {
+
+                    return redirect(route('addlease.leaseasset.index', ['id'=>$lease->id]))->with('status', 'Lessor Details has been updated successfully.');
+
+                } else {
+                    return redirect(
+                        route('add-new-lease.index', ['id' => $lease->id])
+                    )->with('status', "Lessor Details has been updated successfully.");
+                }
             }
 
          } catch (\Exception $e){

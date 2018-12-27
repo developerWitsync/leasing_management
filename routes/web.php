@@ -29,7 +29,8 @@ Route::middleware('auth')->group(function(){
          * Lessor Details Routes
          */
         Route::prefix('lessor-details')->group(function(){
-            Route::get('create', ['as' => 'add-new-lease.index', 'uses' => 'LessorDetailsController@index']);
+            Route::match(['post','get'],'create', ['as' => 'add-new-lease.index', 'uses' => 'LessorDetailsController@index']);
+            
             Route::post('save', ['as' => 'add-new-lease.index.save', 'uses' => 'LessorDetailsController@save']);
         });
 

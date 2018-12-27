@@ -30,6 +30,9 @@ class IndexController extends Controller
             ]
         ];
         $settings = GeneralSettings::query()->where('business_account_id', '=', auth()->user()->id)->first();
+        if(is_null($settings)) {
+            $settings = new GeneralSettings();
+        }
         $lease_lock_year = LeaseLockYear::query()->where('business_account_id', '=', auth()->user()->id)->get();
         
         return view('settings.general.index', compact('breadcrumbs', 'settings','lease_lock_year'));
