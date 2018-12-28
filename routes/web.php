@@ -36,6 +36,11 @@ Route::middleware('auth')->group(function(){
             Route::match(['post', 'get'],'complete-asset-details/{lease}/{asset}', ['as' => 'addlease.leaseasset.completedetails', 'uses' => 'UnderlyingLeaseAssetController@assetDetails']);
         });
 
+        Route::prefix('fair-market-value')->group(function(){
+            Route::get('index/{id}', ['as' => 'addlease.fairmarketvalue.index', 'uses' => 'FairMarketValueController@index']);          
+
+        });
+
     });
 
     Route::namespace('Settings')->middleware(['permission:settings'])->prefix('settings')->group(function(){
