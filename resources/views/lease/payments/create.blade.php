@@ -89,9 +89,9 @@
                                     <label for="type" class="col-md-4 control-label">Nature of Lease Payment</label>
                                     <div class="col-md-6">
                                         <select name="nature" class="form-control">
-                                            <option value="">--Select Lease Payment Type--</option>
-                                            @foreach($lease_payments_types as $lease_payments_type)
-                                                <option value="{{ $lease_payments_type->id}}">{{ $lease_payments_type->title }}</option>
+                                            <option value="">--Select Lease Payment Nature--</option>
+                                            @foreach($lease_payments_nature as $nature)
+                                                <option value="{{ $nature->id}}">{{ $nature->title }}</option>
                                             @endforeach
                                         </select>
                                         @if ($errors->has('nature'))
@@ -102,7 +102,67 @@
                                     </div>
                                 </div>
 
+                                <div class="form-group{{ $errors->has('variable_basis') ? ' has-error' : '' }} required variable_basis" style="display: none">
+                                    <label for="variable_basis" class="col-md-4 control-label">Variable Basis</label>
+                                    <div class="col-md-6">
+                                        <input id="variable_basis" type="text" placeholder="Name" class="form-control" name="variable_basis">
+                                        @if ($errors->has('variable_basis'))
+                                            <span class="help-block">
+                                                <strong>{{ $errors->first('variable_basis') }}</strong>
+                                            </span>
+                                        @endif
+                                    </div>
+                                </div>
 
+                                <div class="form-group{{ $errors->has('variable_amount_determinable') ? ' has-error' : '' }} required variable_basis" style="display: none">
+                                    <label for="variable_amount_determinable" class="col-md-4 control-label">Variable Amount Determinable</label>
+                                    <div class="col-md-6">
+
+                                        <div class="col-md-6 form-check form-check-inline">
+                                            <input class="form-check-input" name="variable_amount_determinable" type="checkbox" id="yes" value="yes">
+                                            <label class="form-check-label" for="yes" style="vertical-align: 4px">Yes</label>
+                                        </div>
+
+                                        <div class=" col-md-6 form-check form-check-inline">
+                                            <input class="form-check-input" name="variable_amount_determinable" type="checkbox" id="no" value="no">
+                                            <label class="form-check-label" for="no" style="vertical-align: 4px">No</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
+                                    <label for="description" class="col-md-4 control-label">Any Other Description</label>
+                                    <div class="col-md-6">
+                                        <input id="description" type="text" placeholder="Description" class="form-control" name="description">
+                                        @if ($errors->has('description'))
+                                            <span class="help-block">
+                                                <strong>{{ $errors->first('description') }}</strong>
+                                            </span>
+                                        @endif
+                                    </div>
+                                </div>
+
+                            </fieldset>
+
+                            <fieldset class="scheduler-border">
+                                <legend class="scheduler-border">Lease Payment Periods</legend>
+                                <div class="form-group{{ $errors->has('payment_interval') ? ' has-error' : '' }} required">
+                                    <label for="payment_interval" class="col-md-4 control-label">Lease Payment Interval</label>
+                                    <div class="col-md-6">
+                                        <select name="payment_interval" class="form-control">
+                                            <option value="">--Select Payment Interval--</option>
+                                            @foreach($payments_frequencies as $frequency)
+                                                <option value="{{ $frequency->id }}">{{ $frequency->title }}</option>
+                                            @endforeach
+                                        </select>
+                                        @if ($errors->has('payment_interval'))
+                                            <span class="help-block">
+                                                <strong>{{ $errors->first('payment_interval') }}</strong>
+                                            </span>
+                                        @endif
+                                    </div>
+                                </div>
                             </fieldset>
 
                         </form>
@@ -120,6 +180,15 @@
     <script>
         $('select[name="no_of_lease_payments"]').on('change', function(){
             window.location.href = '{{ route("lease.payments.add", ['lease_id' => $lease->id, 'asset_id' => $asset->id]) }}?total_payments='+$(this).val();
+        });
+
+
+        $('select[name="nature"]').on('change', function(){
+            if($(this).val() == '2') {
+                $('.variable_basis').show();
+            } else {
+                $('.variable_basis').hide();
+            }
         });
     </script>
 @endsection

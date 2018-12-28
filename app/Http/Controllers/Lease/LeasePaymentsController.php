@@ -11,7 +11,9 @@ namespace App\Http\Controllers\Lease;
 
 use App\Http\Controllers\Controller;
 use App\Lease;
+use App\LeaseAssetPaymentsNature;
 use App\LeaseAssets;
+use App\LeasePaymentsFrequency;
 use App\LeasePaymentsNumber;
 use App\LeasePaymentComponents;
 use Illuminate\Http\Request;
@@ -52,13 +54,17 @@ class LeasePaymentsController extends Controller
                 if($asset) {
                     $lease_asset_number_of_payments = LeasePaymentsNumber::query()->select('id','number')->whereIn('business_account_id', getDependentUserIds())->get()->toArray();
                     $lease_payments_types = LeasePaymentComponents::query()->get();
+                    $lease_payments_nature = LeaseAssetPaymentsNature::query()->get();
+                    $payments_frequencies =   LeasePaymentsFrequency::query()->get();
                     $total_payments = $request->has('total_payments')?$request->total_payments:0;
                     return view('lease.payments.create', compact(
                         'lease',
                         'asset',
                         'lease_asset_number_of_payments',
                         'total_payments',
-                        'lease_payments_types'
+                        'lease_payments_types',
+                        'lease_payments_nature',
+                        'payments_frequencies'
                     ));
                 } else {
                     abort(404);

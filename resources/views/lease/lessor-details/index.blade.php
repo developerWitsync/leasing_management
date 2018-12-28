@@ -201,10 +201,8 @@
         $('.next_submit').on('click', function(e) {
             e.preventDefault();
             var next_url = $('#add-new-lease-form').attr('action')+"?action=next";
-
             $('#add-new-lease-form').attr('action', next_url);
-            alert(next_url);
-            // $('#add-new-lease-form').submit();
+            $('#add-new-lease-form').submit();
         });
 });
 </script>
