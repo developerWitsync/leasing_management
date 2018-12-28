@@ -28,4 +28,8 @@ class Lease extends Model
     public function assets(){
         return $this->hasMany('App\LeaseAssets','lease_id', 'id');
     }
+
+    public function contractCurrency(){
+        return $this->belongsTo('App\Currencies', 'lease_contract_id', 'id');
+    }
 }

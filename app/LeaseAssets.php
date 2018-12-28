@@ -39,4 +39,12 @@ class LeaseAssets extends Model
     public function subcategory(){
         return $this->belongsTo('App\LeaseAssetSubCategorySetting', 'sub_category_id', 'id');
     }
+
+    public function lease(){
+        return $this->belongsTo('App\Lease', 'lease_id', 'id');
+    }
+
+    public function payments(){
+        return $this->hasMany('App\LeaseAssetPayments', 'asset_id', 'id');
+    }
 }

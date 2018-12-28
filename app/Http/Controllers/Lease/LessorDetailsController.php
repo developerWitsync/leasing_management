@@ -14,7 +14,6 @@ use App\Lease;
 use App\ReportingCurrencySettings;
 use App\ForeignCurrencyTransactionSettings;
 use App\Http\Controllers\Controller;
-use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Http\Request;
 use Validator;
 

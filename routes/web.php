@@ -49,8 +49,8 @@ Route::middleware('auth')->group(function(){
 
         Route::prefix('payments')->group(function(){
             Route::get('index/{id}', ['as' => 'addlease.payments.index', 'uses' => 'LeasePaymentsController@index']);
-            Route::get('create/{lease_id}/{asset_id}', ['as' => 'lease.payments.add', 'uses' => 'LeasePaymentsController@create']);
-
+            Route::get('create/{lease_id}/{asset_id}/{payment_id?}', ['as' => 'lease.payments.add', 'uses' => 'LeasePaymentsController@create']);
+            Route::post('save-asset-payments/{id}', ['as' => 'lease.payments.saveassetpayment', 'uses' => 'LeasePaymentsController@saveAssetPayments']);
         });
 
     });
