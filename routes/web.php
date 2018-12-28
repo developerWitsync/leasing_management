@@ -25,16 +25,32 @@ Route::middleware('auth')->group(function(){
 
     Route::namespace('Lease')->middleware(['permission:add_lease'])->prefix('lease')->group(function(){
 
+        /**
+         * Lessor Details Routes
+         */
         Route::prefix('lessor-details')->group(function(){
             Route::match(['post','get'],'create', ['as' => 'add-new-lease.index', 'uses' => 'LessorDetailsController@index']);
             
             Route::post('save', ['as' => 'add-new-lease.index.save', 'uses' => 'LessorDetailsController@save']);
         });
 
+        /**
+         * Underlying Lease Assets Routes
+         */
         Route::prefix('underlying-lease-assets')->group(function(){
             Route::match(['post', 'get'],'create/{id}', ['as' => 'addlease.leaseasset.index', 'uses' => 'UnderlyingLeaseAssetController@index']);
             Route::get('fetch-sub-categories/{id}', ['as'=> 'addlease.leaseasset.fetchsubcategories', 'uses' => 'UnderlyingLeaseAssetController@fetchSubCategories']);
             Route::match(['post', 'get'],'complete-asset-details/{lease}/{asset}', ['as' => 'addlease.leaseasset.completedetails', 'uses' => 'UnderlyingLeaseAssetController@assetDetails']);
+        });
+
+        /**
+         * Lease Payments Routes
+         */
+
+        Route::prefix('payments')->group(function(){
+            Route::get('index/{id}', ['as' => 'addlease.payments.index', 'uses' => 'LeasePaymentsController@index']);
+            Route::get('create/{lease_id}/{asset_id}', ['as' => 'lease.payments.add', 'uses' => 'LeasePaymentsController@create']);
+
         });
 
     });
