@@ -106,7 +106,7 @@
                                     @endif
                                 </div>
                                @if($lease->file !='')
-                                  <a href="{{asset('uploads/'.$lease->file)}}">download</a>
+                                  <a href="{{asset('uploads/'.$lease->file)}}" target="_blank">download</a>
                                   @endif
                             </div>
 
@@ -131,16 +131,11 @@
                     </div>
                 </div>
                  @else
-
-                 <a href="{{route('settings.currencies')}}"><div class="alert alert-danger">Please change the foreign currency settings</div></a>
-
-               @endif
+                <a href="{{route('settings.currencies')}}"><div class="alert alert-danger">Please change the foreign currency settings</div></a>
+             @endif
             </div>
         </div>
-
-         
 @endsection
-
 @section('footer-script')
     <script src="{{ asset('assets/plugins/bootbox/bootbox.min.js') }}"></script>
     <script type="text/javascript">
@@ -201,10 +196,10 @@
         $('.next_submit').on('click', function(e) {
             e.preventDefault();
             var next_url = $('#add-new-lease-form').attr('action')+"?action=next";
-
+ //alert(next_url);
             $('#add-new-lease-form').attr('action', next_url);
-            alert(next_url);
-            // $('#add-new-lease-form').submit();
+            //alert(next_url);
+             $('#add-new-lease-form').submit();
         });
 });
 </script>
