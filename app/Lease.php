@@ -17,6 +17,7 @@ class Lease extends Model
         'lease_code',
         'file',
         'status',
+        'total_assets',
         'created_at',
         'updated_at'
     ];
@@ -29,7 +30,4 @@ class Lease extends Model
         return $this->hasMany('App\LeaseAssets','lease_id', 'id');
     }
 
-    public function contractCurrency(){
-        return $this->belongsTo('App\Currencies', 'lease_contract_id', 'id');
-    }
 }

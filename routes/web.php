@@ -29,9 +29,11 @@ Route::middleware('auth')->group(function(){
          * Lessor Details Routes
          */
         Route::prefix('lessor-details')->group(function(){
-            Route::match(['post','get'],'create', ['as' => 'add-new-lease.index', 'uses' => 'LessorDetailsController@index']);
-            
+            Route::match(['post','get'],'create/{id?}', ['as' => 'add-new-lease.index', 'uses' => 'LessorDetailsController@index']);
             Route::post('save', ['as' => 'add-new-lease.index.save', 'uses' => 'LessorDetailsController@save']);
+            Route::post('udpate/{id}', ['as' => 'add-new-lease.index.update', 'uses' => 'LessorDetailsController@udpate']);
+
+            Route::post('udpate-total-assets/{id}', ['as' => 'add-new-lease.index.updatetotalassets', 'uses' => 'LessorDetailsController@udpateTotalAssets']);
         });
 
         /**

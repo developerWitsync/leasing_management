@@ -158,7 +158,7 @@
         <div class="form-group{{ $errors->has('payment_currency') ? ' has-error' : '' }} required">
             <label for="payment_currency" class="col-md-4 control-label">Lease Payment Currency</label>
             <div class="col-md-6">
-                <input id="payment_currency" type="text" placeholder="Lease Payment Currency" class="form-control" name="payment_currency" value="{{ $lease->contractCurrency->code }}" readonly="readonly">
+                <input id="payment_currency" type="text" placeholder="Lease Payment Currency" class="form-control" name="payment_currency" value="{{ $lease->lease_contract_id }}" readonly="readonly">
                 @if ($errors->has('payment_currency'))
                     <span class="help-block">
                         <strong>{{ $errors->first('payment_currency') }}</strong>

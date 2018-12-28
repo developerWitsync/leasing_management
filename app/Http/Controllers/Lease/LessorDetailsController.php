@@ -21,10 +21,27 @@ use Validator;
 class LessorDetailsController extends Controller
 {
 
-    public function index(Request $request ){
+    protected function validationRules(){
+        return [
+            'lessor_name' => 'required',
+            'lease_type_id' => 'required',
+            'lease_contract_id' => 'required',
+            'file' => 'mimes:doc,pdf,docx,zip'
+        ];
+    }
+
+    /**
+     * Renders the index form to create a new Lease
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function index($id = null, Request $request ){
        
-        if($request->has('id')) {
+        if($id) {
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $request->id)->first();
+            if(is_null($lease)) {
+                abort(404);
+            }
         } else {
             $lease = new Lease();
         }
@@ -56,17 +73,7 @@ class LessorDetailsController extends Controller
     public function save(Request $request){
         try{
 
-            $rules = [
-                'lessor_name' => 'required',
-                'lease_type_id' => 'required',
-                'lease_contract_id' => 'required'
-            ];
-
-            if(!$request->has('action')){
-                $rules['file']   = 'required|mimes:doc,pdf,docx,zip';
-            }
-
-            $validator = Validator::make($request->except("_token"), $rules);
+            $validator = Validator::make($request->except("_token"), $this->validationRules());
 
             if($validator->fails()){
                 
@@ -82,7 +89,6 @@ class LessorDetailsController extends Controller
             }
 
             $request->request->add(['business_account_id' => auth()->user()->id]);
-
             $data = $request->except('_token');
             $data['lease_code'] = time().'-'.mt_rand();
             $data['file'] = $uniqueFileName;
@@ -91,18 +97,91 @@ class LessorDetailsController extends Controller
            
             if($lease) {
                 if($request->has('action') && $request->action == "next") {
-
                     return redirect(route('addlease.leaseasset.index', ['id'=>$lease->id]))->with('status', 'Lessor Details has been updated successfully.');
-
                 } else {
-                    return redirect(
-                        route('add-new-lease.index', ['id' => $lease->id])
-                    )->with('status', "Lessor Details has been updated successfully.");
+                    return redirect(route('add-new-lease.index', ['id' => $lease->id]))->with('status', "Lessor Details has been updated successfully.");
                 }
             }
 
          } catch (\Exception $e){
             abort(404);
+        }
+    }
+
+
+    /**
+     * validates the input from the form
+     * if the validation returns true saves the settings to the database and redirects the user with a success message
+     * if the general settings already exists for the logged in user than updates the existing settings
+     * @todo need to implement the functionality for the disabled option on the general settings tab
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function udpate($id, Request $request){
+        try{
+            $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
+
+            if($lease) {
+                $validator = Validator::make($request->except("_token"), $this->validationRules());
+
+                if($validator->fails()){
+
+                    return redirect()->back()->withErrors($validator->errors())->withInput($request->except("_token"));
+                }
+
+                $uniqueFileName = '';
+
+                if($request->hasFile('file')){
+                    $file = $request->file('file');
+                    $uniqueFileName = uniqid() . $file->getClientOriginalName();
+                    $request->file('file')->move('uploads', $uniqueFileName);
+                }
+
+                $request->request->add(['business_account_id' => auth()->user()->id]);
+                $data = $request->except('_token', 'action');
+                $data['lease_code'] = time().'-'.mt_rand();
+                $data['file'] = $uniqueFileName;
+                $data['status'] = '0';
+                $lease->setRawAttributes($data);
+                if($lease->save()) {
+                    if($request->has('action') && $request->action == "next") {
+                        return redirect(route('addlease.leaseasset.index', ['id'=>$id]))->with('status', 'Lessor Details has been updated successfully.');
+                    } else {
+                        return redirect(route('add-new-lease.index', ['id' => $id]))->with('status', "Lessor Details has been updated successfully.");
+                    }
+                }
+            } else {
+                abort(404);
+            }
+
+        } catch (\Exception $e){
+            abort(404);
+        }
+    }
+
+    /**
+     * update the total assets number for a particular lease
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function udpateTotalAssets($id, Request $request){
+        try{
+            if($request->isMethod('post')){
+                $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
+                if($lease) {
+                    $lease->total_assets = $request->total_lease_assets;
+                    if($lease->save()) {
+                        return redirect()->back();
+                    }
+                } else {
+                    abort(404);
+                }
+            } else {
+                abort(404);
+            }
+        } catch (\Exception $e){
+            dd($e);
         }
     }
 }
