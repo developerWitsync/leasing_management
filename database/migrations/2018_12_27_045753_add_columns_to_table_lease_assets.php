@@ -29,7 +29,7 @@ class AddColumnsToTableLeaseAssets extends Migration
 
             $table->date('lease_start_date')->nullable()->after('expected_life');
 
-            $table->unsignedInteger('lease_free_period')->comment('holds the number of days only.')->after('lease_start_date');
+            $table->unsignedInteger('lease_free_period')->comment('holds the number of days only.')->nullable()->after('lease_start_date');
 
             $table->date('accural_period')->nullable()->comment('should be lease_start_date + lease_free_period')->after('lease_free_period');
             $table->date('lease_end_date')->nullable()->after('accural_period');

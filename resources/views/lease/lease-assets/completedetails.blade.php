@@ -127,7 +127,7 @@
                         </fieldset>
 
 
-                        <fieldset class="scheduler-border">
+                        <fieldset class="scheduler-border" id="leaseterm">
                             <legend class="scheduler-border">Lease Term of the Underlying Lease Asset</legend>
                             <div class="form-group{{ $errors->has('lease_start_date') ? ' has-error' : '' }} required">
                                 <label for="lease_start_date" class="col-md-4 control-label">Lease Start Date</label>
@@ -191,12 +191,12 @@
 
                         </fieldset>
 
-                        <fieldset class="scheduler-border">
-                            <legend class="scheduler-border">Lease Asset Accounting Adopted Prior to 2019</legend>
+                        <fieldset class="scheduler-border" id="prior_accounting" >
+                            <legend class="scheduler-border" >Lease Asset Accounting Adopted Prior to 2019</legend>
                             <div class="form-group{{ $errors->has('accounting_treatment') ? ' has-error' : '' }} required">
                                 <label for="accounting_treatment" class="col-md-4 control-label">Lease Asset Accounting Treatment Followed Upto 2018</label>
                                 <div class="col-md-6">
-                                    <select name="accounting_treatment" class="form-control">
+                                    <select name="accounting_treatment" class="form-control" id="accounting_treatment">
                                         <option value="">--Lease Accounting Treatment--</option>
                                             @foreach($accounting_terms as $accounting_term)
                                                 <option value="{{ $accounting_term['id']}}" @if(old('accounting_treatment', $asset->accounting_treatment) == $accounting_term['id']) selected="selected" @endif>{{ $accounting_term['title'] }}</option>
@@ -231,6 +231,7 @@
 @endsection
 @section('footer-script')
     <script src="{{ asset('js/jquery-ui.js') }}"></script>
+    <script src="{{ asset('assets/plugins/bootbox/bootbox.min.js') }}"></script>
     <script>
         $(document).ready(function () {
             $('select[name="specific_use"]').on('change', function () {
@@ -303,18 +304,43 @@
                     $('#accural_period').datepicker('setDate', newdate);
                     //set the minimum date for the lease end date as well
 
-                    //@todo check for the accural_period if that is prior to jan 01, 2019 than show the accounting period fields
-
-
-
                     var dt2 = $('#lease_end_date');
                     dt2.datepicker('option', 'minDate', newdate);
 
+                    //@todo check for the accural_period if that is prior to jan 01, 2019 than show the accounting period fields
+                    var jan_1_date = new Date('January 1, 2019');
+                    var start_prior_date = $('#accural_period').val();
+                    var prior_date = new Date(start_prior_date);
+                    if(prior_date > jan_1_date){
+                     $('#prior_accounting').hide();
+                    }
                     $('#lease_term').val('');
                     $('#lease_end_date').val('');
                 });
             });
+            $('select[name="accounting_treatment"]').on('change', function () {
+                 var lease_asset_accounting = $("#accounting_treatment").find('option:selected').text();
+                 if(lease_asset_accounting == 'Finance Lease Accounting'){
+                var modal = bootbox.dialog({
+                    message: "Finance Lease will be revalued at present value as on Jan 01, 2019",
+                    buttons: [
+                      {
+                        label: "OK",
+                        className: "btn btn-success pull-left",
+                        callback: function() {
+                        }
+                      },
+                     
+                    ],
+                    show: false,
+                    onEscape: function() {
+                      modal.modal("hide");
+                    }
+                });
 
+               modal.modal("show");
+             }
+            });
         });
     </script>
 @endsection

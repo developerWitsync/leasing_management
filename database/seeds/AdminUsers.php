@@ -12,10 +12,11 @@ class AdminUsers extends Seeder
     public function run()
     {
         DB::table('users')->insert([
-            'name' => str_random(10),
+            'authorised_person_name' => str_random(10),
             'email' => 'admin@yopmail.com',
             'password' => bcrypt('123456'),
-            'type' => '1'
+            'type' => '1',
+            'parent_id' => '0'
         ]);
     }
 }
