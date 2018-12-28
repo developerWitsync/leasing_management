@@ -14,6 +14,7 @@ use App\Lease;
 use App\LeaseAssetPaymentsNature;
 use App\LeaseAssets;
 use App\LeasePaymentsFrequency;
+use App\LeasePaymentsInterval;
 use App\LeasePaymentsNumber;
 use App\LeasePaymentComponents;
 use Illuminate\Http\Request;
@@ -56,6 +57,7 @@ class LeasePaymentsController extends Controller
                     $lease_payments_types = LeasePaymentComponents::query()->get();
                     $lease_payments_nature = LeaseAssetPaymentsNature::query()->get();
                     $payments_frequencies =   LeasePaymentsFrequency::query()->get();
+                    $payments_payout_times = LeasePaymentsInterval::query()->get();
                     $total_payments = $request->has('total_payments')?$request->total_payments:0;
                     return view('lease.payments.create', compact(
                         'lease',
@@ -64,7 +66,8 @@ class LeasePaymentsController extends Controller
                         'total_payments',
                         'lease_payments_types',
                         'lease_payments_nature',
-                        'payments_frequencies'
+                        'payments_frequencies',
+                        'payments_payout_times'
                     ));
                 } else {
                     abort(404);
