@@ -31,4 +31,12 @@ class LeaseAssets extends Model
         'created_at',
         'updated_at'
     ];
+
+    public function category(){
+        return $this->belongsTo('App\LeaseAssetCategories', 'category_id', 'id');
+    }
+
+    public function subcategory(){
+        return $this->belongsTo('App\LeaseAssetSubCategorySetting', 'sub_category_id', 'id');
+    }
 }
