@@ -25,8 +25,6 @@
                 </div>
             @endif
 
-            {{--@include('lease._menubar')--}}
-
             <div class="tab-content" style="padding: 0px;">
                 <div role="tabpanel" class="tab-pane active">
                     <table class="table table-bordered table-responsive">
@@ -57,7 +55,8 @@
                                     {{ $asset->similar_asset_items }}
                                 </td>
                                 <td>
-                                    &nbsp;<a class="btn btn-sm btn-info" href="{{ route('lease.payments.add', ['lease_id' => $lease->id, 'asset_id'=> $asset->id]) }}">Add Lease Payments</a>
+                                    &nbsp;
+                                    <a class="btn btn-sm btn-info" href="{{ route('lease.payments.add', ['lease_id' => $lease->id, 'asset_id'=> $asset->id]) }}">Add/Modify Lease Payments</a>
 
                                     <span class="badge badge-warning">
                                         Existing Payments
@@ -69,6 +68,21 @@
                         @endforeach
                         </tbody>
                     </table>
+
+                    <div class="form-group">
+
+                        <div class="col-md-6 col-md-offset-4">
+
+                            <a href="{{ route('addlease.leaseasset.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
+
+                            @if($show_next)
+                                <a href="" class="btn btn-primary">Next</a>
+                            @endif
+
+                        </div>
+
+                    </div>
+
                 </div>
             </div>
 
