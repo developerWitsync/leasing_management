@@ -27,7 +27,7 @@ class CreateTableLeaseAssetsPayments extends Migration
             $table->unsignedInteger('nature');
             $table->foreign('nature')->references('id')->on('lease_asset_payments_nature')->onDelete('cascade');
 
-            $table->string('variable_basis');
+            $table->string('variable_basis')->nullable();
 
             $table->enum('variable_amount_determinable', ['yes', 'no'])->default('no');
 
