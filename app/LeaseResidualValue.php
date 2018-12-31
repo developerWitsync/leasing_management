@@ -6,15 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class LeaseResidualValue extends Model
 {
-    protected $table = ' lease_residual_value_gurantee';
+    protected $table = 'lease_residual_value_gurantee';
 
     protected $fillable = [
         'asset_id',
+        'lease_id',
         'any_residual_value_gurantee',
         'lease_payemnt_nature_id',
         'amount_determinable',
         'foreign_currency_id',
-        'no_of_unit_lease_asset',
+        'similar_asset_items',
         'residual_gurantee_value',
         'total_residual_gurantee_value',
         'other_desc',

@@ -64,11 +64,14 @@ Route::middleware('auth')->group(function(){
          * Residual Value Guarantee Routes
          */
 
-        Route::prefix('residual')->group(function(){
-            Route::get('index/{id}', ['as' => 'addresidualvalue.residual.index', 'uses' => 'LeaseResidualController@index']);
-            Route::match(['post', 'get'],'create/{id}', ['as' => 'addresidualvalue.residual.completedetails', 'uses' => 'LeaseResidualController@create']);
-            Route::post('save', ['as' => 'addresidualvalue.residual.save', 'uses' => 'LeaseResidualController@save']);
-          });
+        Route::prefix('residual-value-gurantee')->group(function(){
+            
+            Route::get('index/{id}', ['as' => 'addlease.residual.index', 'uses' => 'LeaseResidualController@index']);
+            Route::post('save', ['as' => 'addlease.residual.save', 'uses' => 'LeaseResidualController@store']);
+            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.residual.create', 'uses' => 'LeaseResidualController@create']);
+            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.residual.update', 'uses' => 'LeaseResidualController@update']);
+        });       
+        
         /*
          * Fair Market Value Routes
          */
