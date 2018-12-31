@@ -51,8 +51,13 @@ Route::middleware('auth')->group(function(){
 
         Route::prefix('payments')->group(function(){
             Route::get('index/{id}', ['as' => 'addlease.payments.index', 'uses' => 'LeasePaymentsController@index']);
+
             Route::get('create/{lease_id}/{asset_id}/{payment_id?}', ['as' => 'lease.payments.add', 'uses' => 'LeasePaymentsController@create']);
-            Route::post('save-asset-payments/{id}', ['as' => 'lease.payments.saveassetpayment', 'uses' => 'LeasePaymentsController@saveAssetPayments']);
+            Route::post('save-total-payments/{id}', ['as' => 'lease.payments.savetotalpayments', 'uses' => 'LeasePaymentsController@saveTotalPayments']);
+
+            Route::get('fetch-asset-payments/{id}', ['as' => 'lease.payments.fetchassetpayments', 'uses' => 'LeasePaymentsController@fetchAssetPayments']);
+            Route::match(['post', 'get'],'create-asset-payment/{id}', ['as' => 'lease.payments.createassetpayment', 'uses' => 'LeasePaymentsController@createAssetPayments']);
+            Route::match(['post', 'get'],'update-asset-payment/{id}/{payment_id}', ['as' => 'lease.payments.updateassetpayment', 'uses' => 'LeasePaymentsController@updateAssetPayments']);
         });
 
         /**
@@ -60,10 +65,19 @@ Route::middleware('auth')->group(function(){
          */
 
         Route::prefix('residual')->group(function(){
-            Route::get('index/{id}', ['as' => 'addlease.residual.index', 'uses' => 'LeaseResidualController@index']);
-            Route::match(['post', 'get'],'create/{lease_id}/{asset_id}', ['as' => 'addresidualvalue.residual.completedetails', 'uses' => 'LeaseResidualController@create']);
+            Route::get('index/{id}', ['as' => 'addresidualvalue.residual.index', 'uses' => 'LeaseResidualController@index']);
+            Route::match(['post', 'get'],'create/{id}', ['as' => 'addresidualvalue.residual.completedetails', 'uses' => 'LeaseResidualController@create']);
+            Route::post('save', ['as' => 'addresidualvalue.residual.save', 'uses' => 'LeaseResidualController@save']);
           });
+        /*
+         * Fair Market Value Routes
+         */
 
+        Route::prefix('fair-market-value')->group(function(){
+            Route::get('index/{id}', ['as' => 'addlease.fairmarketvalue.index', 'uses' => 'FairMarketValueController@index']);
+            Route::post('save', ['as' => 'addlease.fairmarketvalue.save', 'uses' => 'FairMarketValueController@store']);
+            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.fairmarketvalue.create', 'uses' => 'FairMarketValueController@create']);
+        });       
     });
 
     Route::namespace('Settings')->middleware(['permission:settings'])->prefix('settings')->group(function(){

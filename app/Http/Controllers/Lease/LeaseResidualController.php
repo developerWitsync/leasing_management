@@ -72,7 +72,7 @@ class LeaseResidualController extends Controller
      */
      public function create($lease_id, $asset_id, Request $request){
         if($request->isMethod('post')) {
-        	dd($request->isMethod('post'));
+
             $validator = Validator::make($request->except('_token'), [
 				'lease_payemnt_nature_id' => 'required',
 				'amount_determinable_yes' => 'required',
@@ -120,4 +120,33 @@ class LeaseResidualController extends Controller
                         'foreign_currency_if_yes','lease_payments_nature'));
 
     }
+    
+    public function store(Request $request) {
+        try{
+         $assets = new LeaseResidualValue;
+          $rules = [
+                'is_market_value_available'  => 'required',
+            ];
+         $validator = Validator::make($request->except('_token'), $rules);
+
+            if($validator->fails()){
+                return redirect()->back()->withErrors($validator->errors())->withInput($request->except('_token'));
+            }
+
+
+
+
+        
+        $assets->lease_id = $request->input('lease_id');
+        $assets->asset_id = $request->input('asset_id');
+        $assets->is_market_value_present = $request->input('is_market_value_available');
+        $assets->unit = $request->input('unit');
+        $assets->total_units = 3*($assets->unit);
+        $assets->source = $request->input('source');
+        $assets->save();
+        return redirect('lease/fair-market-value/index/'.$assets->lease_id.'#step2');
+    } catch (\Exception $e) {
+            dd($e);
+        }
+}
 }

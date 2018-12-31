@@ -1,4 +1,4 @@
-<form role="form" class="form-horizontal" method="post" enctype="multipart/form-data" action="{{ route('lease.payments.saveassetpayment', ['id' => $asset->id, 'total_payments'=>$total_payments]) }}">
+<form role="form" class="form-horizontal" method="post" enctype="multipart/form-data">
     {{ csrf_field() }}
     <fieldset class="scheduler-border">
         <legend class="scheduler-border">Type of Lease Payments</legend>
@@ -239,12 +239,8 @@
         <div class="col-md-6 col-md-offset-4">
             <a href="{{ route('addlease.payments.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
 
-            <button type="submit" class="btn btn-success">
-                Save As Draft
-            </button>
-
-            <button type="submit" class="btn btn-primary next_submit">
-                Save & Next
+            <button type="submit" class="btn btn-success" name="submit" value="save">
+                Save
             </button>
 
         </div>
@@ -253,3 +249,175 @@
 
 
 </form>
+@section('footer-script')
+    <script src="{{ asset('assets/plugins/bootbox/bootbox.min.js') }}"></script>
+    <script src="{{ asset('js/jquery-ui.js') }}"></script>
+    <script>
+
+        $("#first_payment_start_date").datepicker({
+            dateFormat: "dd-M-yy",
+        });
+
+        $("#last_payment_end_date").datepicker({
+            dateFormat: "dd-M-yy",
+        });
+
+
+        //If Variable Basis selected
+        $('select[name="nature"]').on('change', function(){
+            if($(this).val() == '2') {
+                $('.variable_basis').show();
+            } else {
+                $('.variable_basis').hide();
+
+                //change the values to null as well
+                $('#variable_basis').val('');
+                $('input[name="variable_amount_determinable"]').prop("checked",false);
+            }
+        });
+
+        //function to calculate the last lease payment end date
+        function calculateLastPaymentEndDate(that, firstPaymentStartDate){
+            var _calculated_last_payment_date = new Date();
+            var _selected_payment_interval = parseInt($(that).val());
+            var _payout_value = parseInt($('select[name="payout_time"]').val());
+            if(_payout_value == 2) {
+                @php
+                    $calculated_date = \Carbon\Carbon::parse($asset->lease_end_date);
+                @endphp
+                    _calculated_last_payment_date = new Date("{{ $calculated_date }}");
+            } else {
+                switch (_selected_payment_interval) {
+                    case 1:
+                        _calculated_last_payment_date = firstPaymentStartDate;
+                        break;
+                    case 2:
+                        //means selected option is monthly
+                        @php
+                            $lease_end_date = \Carbon\Carbon::parse($asset->lease_end_date);
+                            $calculated_date = $lease_end_date->subMonth(1)->format('D M d Y');
+                        @endphp
+                            _calculated_last_payment_date = new Date("{{ $calculated_date }}");
+                        break;
+                    case 3:
+                        //means selected option is Quarterly
+                        @php
+                            $lease_end_date = \Carbon\Carbon::parse($asset->lease_end_date);
+                            $calculated_date = $lease_end_date->subMonth(3)->format('D M d Y');
+                        @endphp
+                            _calculated_last_payment_date = new Date("{{ $calculated_date }}");
+                        break;
+                    case 4:
+                        //means selected option is Semi-Annually
+                        @php
+                            $lease_end_date = \Carbon\Carbon::parse($asset->lease_end_date);
+                            $calculated_date = $lease_end_date->subMonth(6)->format('D M d Y');
+                        @endphp
+                            _calculated_last_payment_date = new Date("{{ $calculated_date }}");
+                        break;
+                    case 5:
+                        //means selected option is Annually
+                        @php
+                            $lease_end_date = \Carbon\Carbon::parse($asset->lease_end_date);
+                            $calculated_date = $lease_end_date->subMonth(12)->format('D M d Y');
+                        @endphp
+                            _calculated_last_payment_date = new Date("{{ $calculated_date }}");
+                        break;
+                    default:
+                        break;
+                }
+            }
+            $("#last_payment_end_date").datepicker("setDate", new Date(_calculated_last_payment_date));
+        }
+
+        //calculate the First Lease Payment Start Date and Last Lease Payment End Date here
+        $('select[name="payout_time"] , select[name="payment_interval"]').on('change', function(){
+
+            var _value = parseInt($('select[name="payout_time"]').val());
+            var _selected_payment_interval = parseInt($('select[name="payment_interval"]').val());
+            var _start_date = new Date("{{ date('D M d Y', strtotime($asset->accural_period)) }}");
+            var _end_date   = new Date("{{ date('D M d Y', strtotime($asset->lease_end_date)) }}");
+
+            if(_value == "" || _selected_payment_interval == "") {
+                return false;
+            }
+
+            var _calculated_first_payment_date = new Date();
+            if(_value == 1) {
+                //means At Lease Interval Start
+                _calculated_first_payment_date = _start_date;
+            } else {
+                //means At Lease Interval End
+                switch (_selected_payment_interval) {
+                    case 1:
+                        _calculated_first_payment_date = _end_date;
+                        break;
+                    case 2:
+                        //means selected option is monthly
+                        @php
+                            $accural_date = \Carbon\Carbon::parse($asset->accural_period);
+                            $calculated_date = $accural_date->addMonth(1)->format('D M d Y');
+                        @endphp
+                            _calculated_first_payment_date = new Date("{{ $calculated_date }}");
+                        break;
+                    case 3:
+                        //means selected option is Quarterly
+                        @php
+                            $accural_date = \Carbon\Carbon::parse($asset->accural_period);
+                            $calculated_date = $accural_date->addMonth(3)->format('D M d Y');
+                        @endphp
+                            _calculated_first_payment_date = new Date("{{ $calculated_date }}");
+                        break;
+                    case 4:
+                        //means selected option is Semi-Annually
+                        @php
+                            $accural_date = \Carbon\Carbon::parse($asset->accural_period);
+                            $calculated_date = $accural_date->addMonth(6)->format('D M d Y');
+                        @endphp
+                            _calculated_first_payment_date = new Date("{{ $calculated_date }}");
+                        break;
+                    case 5:
+                        //means selected option is Annually
+                        @php
+                            $accural_date = \Carbon\Carbon::parse($asset->accural_period);
+                            $calculated_date = $accural_date->addMonth(12)->format('D M d Y');
+                        @endphp
+                            _calculated_first_payment_date = new Date("{{ $calculated_date }}");
+                        break;
+                    default:
+                        break;
+                }
+            }
+            //populate the value to the First Payment Date datepicker
+            $("#first_payment_start_date").datepicker("setDate", new Date(_calculated_first_payment_date));
+            //calculate the Lease payment End Date here
+            calculateLastPaymentEndDate($('select[name="payment_interval"]'), new Date(_calculated_first_payment_date));
+
+        });
+
+        $(document).ready(function () {
+            $("input[type='checkbox']").on('click', function(){
+                var group = "input[name='"+$(this).attr("name")+"']";
+                $(group).prop("checked",false);
+                $(this).prop("checked",true);
+            });
+
+            var _start_date = new Date("{{ date('D M d Y', strtotime($asset->accural_period)) }}");
+            if(_start_date < new Date('January 01 2019')){
+                $('.using_lease_payment').show();
+            } else {
+                $('.using_lease_payment').hide();
+            }
+
+            $('input[name="using_lease_payment"]').on('click', function(){
+                if($(this).is(":checked") && $(this).val() == '1'){
+                    var message = "You are required to place escalation rates if applicable, effective from 2019.";
+                } else {
+                    var message = "You are required to place escalation rates if applicable, effective from the Lease Start Date.";
+                }
+
+                bootbox.alert(message);
+            });
+        });
+    </script>
+@endsection

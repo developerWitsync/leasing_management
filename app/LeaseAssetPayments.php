@@ -28,4 +28,8 @@ class LeaseAssetPayments extends Model
         'created_at',
         'updated_at'
     ];
+
+    public function category(){
+        return $this->belongsTo('App\LeasePaymentComponents', 'type', 'id');
+    }
 }
