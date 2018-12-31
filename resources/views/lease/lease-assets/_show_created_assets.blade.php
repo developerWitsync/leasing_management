@@ -109,9 +109,12 @@
                     @endif
                 </td>
                 <td>
-                    @if(isset($lease_assets[$i]))
+                    @if($lease_assets[$i]['is_details_completed'] =='0')
                         <a href="{{ route('addlease.leaseasset.completedetails', ['lease' => $lease->id, 'asset' => $lease_assets[$i]['id']]) }}" class="btn btn-sm btn-primary">Complete Details</a>
-                    @endif
+                    
+                    @else
+                     <a href="{{ route('addlease.leaseasset.completedetails', ['lease' => $lease->id, 'asset' => $lease_assets[$i]['id']]) }}" class="btn btn-sm btn-success">Completed</a>
+                     @endif
                 </td>
             </tr>
         @endfor
@@ -122,6 +125,14 @@
             <button type="submit" class="btn btn-success">
                 Submit
             </button>
+            @for($i = 0; $i < $total_number_of_assets; $i++)
+       <!--  <?php $next = $lease_assets[$i]['is_details_completed']; ?> -->
+      <button type="submit" class="btn btn-primary">
+                    Next
+     </button>
+       @endfor
         </div>
+        
     </div>
+   
 </form>

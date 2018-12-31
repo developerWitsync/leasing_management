@@ -53,6 +53,15 @@ Route::middleware('auth')->group(function(){
 
         });
 
+        /**
+         * Residual Value Guarantee Routes
+         */
+
+        Route::prefix('residual')->group(function(){
+            Route::get('index/{id}', ['as' => 'addlease.residual.index', 'uses' => 'LeaseResidualController@index']);
+            Route::get('create/{lease_id}/{asset_id}', ['as' => 'lease.residual.add', 'uses' => 'LeaseResidualController@create']);
+        });
+
     });
 
     Route::namespace('Settings')->middleware(['permission:settings'])->prefix('settings')->group(function(){

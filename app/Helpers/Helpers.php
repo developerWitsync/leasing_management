@@ -86,3 +86,4 @@ function getDependentUserIds(){
     $userIdsWithChildrens = Auth::user()->childrens->pluck('id')->toArray();
     return array_merge($userIdsWithChildrens, [auth()->user()->id]);
 }
+
