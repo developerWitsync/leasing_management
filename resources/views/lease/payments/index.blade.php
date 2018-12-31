@@ -58,6 +58,12 @@
                                 </td>
                                 <td>
                                     &nbsp;<a class="btn btn-sm btn-info" href="{{ route('lease.payments.add', ['lease_id' => $lease->id, 'asset_id'=> $asset->id]) }}">Add Lease Payments</a>
+
+                                    <span class="badge badge-warning">
+                                        Existing Payments
+                                        {{ count($asset->payments) }}
+                                    </span>
+
                                 </td>
                             </tr>
                         @endforeach
@@ -68,7 +74,4 @@
 
         </div>
     </div>
-@endsection
-@section('footer-script')
-
 @endsection

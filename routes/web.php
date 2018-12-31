@@ -29,9 +29,11 @@ Route::middleware('auth')->group(function(){
          * Lessor Details Routes
          */
         Route::prefix('lessor-details')->group(function(){
-            Route::match(['post','get'],'create', ['as' => 'add-new-lease.index', 'uses' => 'LessorDetailsController@index']);
-            
+            Route::match(['post','get'],'create/{id?}', ['as' => 'add-new-lease.index', 'uses' => 'LessorDetailsController@index']);
             Route::post('save', ['as' => 'add-new-lease.index.save', 'uses' => 'LessorDetailsController@save']);
+            Route::post('udpate/{id}', ['as' => 'add-new-lease.index.update', 'uses' => 'LessorDetailsController@udpate']);
+
+            Route::post('udpate-total-assets/{id}', ['as' => 'add-new-lease.index.updatetotalassets', 'uses' => 'LessorDetailsController@udpateTotalAssets']);
         });
 
         /**
@@ -49,7 +51,9 @@ Route::middleware('auth')->group(function(){
 
         Route::prefix('payments')->group(function(){
             Route::get('index/{id}', ['as' => 'addlease.payments.index', 'uses' => 'LeasePaymentsController@index']);
-            Route::get('create/{lease_id}/{asset_id}', ['as' => 'lease.payments.add', 'uses' => 'LeasePaymentsController@create']);
+
+            Route::get('create/{lease_id}/{asset_id}/{payment_id?}', ['as' => 'lease.payments.add', 'uses' => 'LeasePaymentsController@create']);
+            Route::post('save-asset-payments/{id}', ['as' => 'lease.payments.saveassetpayment', 'uses' => 'LeasePaymentsController@saveAssetPayments']);
         });
 
         /**

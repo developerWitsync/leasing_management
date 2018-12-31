@@ -20,7 +20,11 @@
                 {{--@include('lease._menubar')--}}
                <div class="tab-content" style="padding: 0px;">
                     <div role="tabpanel" class="tab-pane active">
-                        <form id="add-new-lease-form" class="form-horizontal" method="POST" action="{{ route('add-new-lease.index.save') }}" enctype="multipart/form-data">
+                        @if($lease->id)
+                            <form id="add-new-lease-form" class="form-horizontal" method="POST" action="{{ route('add-new-lease.index.update', ['id' => $lease->id]) }}" enctype="multipart/form-data">
+                        @else
+                            <form id="add-new-lease-form" class="form-horizontal" method="POST" action="{{ route('add-new-lease.index.save') }}" enctype="multipart/form-data">
+                        @endif
                             {{ csrf_field() }}
 
                             <div class="form-group{{ $errors->has('lessor_name') ? ' has-error' : '' }} required">
@@ -106,19 +110,18 @@
                                     @endif
                                 </div>
                                @if($lease->file !='')
-                                  <a href="{{asset('uploads/'.$lease->file)}}">download</a>
+                                  <a href="{{asset('uploads/'.$lease->file)}}" target="_blank">download</a>
                                   @endif
                             </div>
 
                             <div class="form-group">
                                 <div class="col-md-6 col-md-offset-4">
                                    <a href="/home" class="btn btn-danger">Cancel</a>
-                                    </button>
 
                                     <button type="submit" class="btn btn-success">
                                         Save As Draft
                                     </button>
-                                    
+
                                     <button type="submit" class="btn btn-primary next_submit">
                                         Next
                                     </button>
@@ -131,16 +134,11 @@
                     </div>
                 </div>
                  @else
-
-                 <a href="{{route('settings.currencies')}}"><div class="alert alert-danger">Please change the foreign currency settings</div></a>
-
-               @endif
+                <a href="{{route('settings.currencies')}}"><div class="alert alert-danger">Please change the foreign currency settings</div></a>
+             @endif
             </div>
         </div>
-
-         
 @endsection
-
 @section('footer-script')
     <script src="{{ asset('assets/plugins/bootbox/bootbox.min.js') }}"></script>
     <script type="text/javascript">
@@ -202,6 +200,7 @@
             e.preventDefault();
             var next_url = $('#add-new-lease-form').attr('action')+"?action=next";
             $('#add-new-lease-form').attr('action', next_url);
+            // alert(next_url);
             $('#add-new-lease-form').submit();
         });
 });

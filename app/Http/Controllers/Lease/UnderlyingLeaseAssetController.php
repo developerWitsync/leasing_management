@@ -32,7 +32,6 @@ class UnderlyingLeaseAssetController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id, Request $request){
-        $total_number_of_assets = $request->has('total_assets')?$request->total_assets:1;
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->with('leaseType')->with('assets')->first();
         if($lease) {
 
@@ -64,9 +63,10 @@ class UnderlyingLeaseAssetController extends Controller
 
                 $created_lease_asset_ids = [];
 
-                for($i = 0 ; $i < $request->total_lease_assets; $i++) {
+                for($i = 0 ; $i < $lease->total_assets; $i++) {
                     $lease_asset = LeaseAssets::query()->where('uuid', '=', $request->ula_code[$i])->first();
                     if($lease_asset) {
+                        $created_lease_asset_ids[$lease_asset->id] = $lease_asset->id;
                         $lease_asset->setRawAttributes([
                             'lease_id'      => $lease->id,
                             'uuid'          => $request->ula_code[$i],
@@ -77,17 +77,17 @@ class UnderlyingLeaseAssetController extends Controller
                         ]);
                         $lease_asset->save();
                     } else {
+
                         $lease_asset = LeaseAssets::create([
-                            'lease_id'      => $lease->id,
-                            'uuid'          => $request->ula_code[$i],
-                            'category_id'   => $request->asset_category[$i],
+                            'lease_id'          => $lease->id,
+                            'uuid'              => $request->ula_code[$i],
+                            'category_id'       => $request->asset_category[$i],
                             'sub_category_id'   => $request->asset_sub_category[$i],
                             'name'              => $request->name[$i],
                             'similar_asset_items'   => $request->similar_characteristic_items[$i]
                         ]);
+                        $created_lease_asset_ids[$lease_asset->id] = $lease_asset->id;
                     }
-
-                    $created_lease_asset_ids[] = $lease_asset->id;
                 }
 
                 //delete other lease_assets if exists for the current logged in business account
@@ -105,7 +105,6 @@ class UnderlyingLeaseAssetController extends Controller
             return view('lease.lease-assets.index', compact(
                 'lease',
                 'numbers_of_lease_assets',
-                'total_number_of_assets',
                 'lease_assets_categories',
                 'la_similar_charac_number',
                 'lease_assets'
