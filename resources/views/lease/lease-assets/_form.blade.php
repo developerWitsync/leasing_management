@@ -1,22 +1,7 @@
+
+
 <form class="form-horizontal" method="post">
     {{ csrf_field() }}
-    <div class="form-group required">
-        <label for="no_of_lease_assets" class="col-md-4 control-label">Number of Underlying Lease Assets Involved</label>
-        <div class="col-md-6">
-            @if($lease->lease_type_id == 1)
-                <select name="total_lease_assets" id="no_of_lease_assets" class="form-control">
-                    <option value="1" selected="selected">1</option>
-                </select>
-            @else
-                <select name="total_lease_assets" id="no_of_lease_assets" class="form-control">
-                    @foreach($numbers_of_lease_assets as $numbers_of_lease_asset)
-                        <option value="{{ $numbers_of_lease_asset->number }}" @if($numbers_of_lease_asset->number == $total_number_of_assets) selected="selected" @endif>{{ $numbers_of_lease_asset->number }}</option>
-                    @endforeach
-                </select>
-            @endif
-        </div>
-    </div>
-
     <table class="table table-bordered table-responsive">
         <thead>
         <tr>
@@ -30,11 +15,21 @@
         </tr>
         </thead>
         <tbody>
-        @for($i = 0; $i < $total_number_of_assets; $i++)
+
+        @php
+            $completed_asset_details = 0;
+        @endphp
+
+        @for($i = 0; $i < $lease->total_assets; $i++)
             <tr>
                 <td>{{ $i + 1 }}</td>
 
                 @if(isset($lease_assets[$i]))
+                    @php
+                        if($lease_assets[$i]['is_details_completed'] == '1') {
+                            $completed_asset_details++;
+                        }
+                    @endphp
                     <td style="width: 10%">
                         <input type="hidden" name="ula_code[{{$i}}]" value="{{ $lease_assets[$i]['uuid'] }}">
                         {{ $lease_assets[$i]['uuid'] }}
@@ -109,30 +104,34 @@
                     @endif
                 </td>
                 <td>
-                    @if($lease_assets[$i]['is_details_completed'] =='0')
-                        <a href="{{ route('addlease.leaseasset.completedetails', ['lease' => $lease->id, 'asset' => $lease_assets[$i]['id']]) }}" class="btn btn-sm btn-primary">Complete Details</a>
-                    
-                    @else
-                     <a href="{{ route('addlease.leaseasset.completedetails', ['lease' => $lease->id, 'asset' => $lease_assets[$i]['id']]) }}" class="btn btn-sm btn-success">Completed</a>
-                     @endif
+
+
+                    @if(isset($lease_assets[$i]))
+                        @if($lease_assets[$i]['is_details_completed'] == '1')
+                            <a href="{{ route('addlease.leaseasset.completedetails', ['lease' => $lease->id, 'asset' => $lease_assets[$i]['id']]) }}" class="btn btn-sm btn-primary">Modify Details</a>
+                        @else
+                            <a href="{{ route('addlease.leaseasset.completedetails', ['lease' => $lease->id, 'asset' => $lease_assets[$i]['id']]) }}" class="btn btn-sm btn-primary">Complete Details</a>
+                        @endif
+                    @endif
                 </td>
+
             </tr>
         @endfor
         </tbody>
     </table>
     <div class="form-group">
         <div class="col-md-6 col-md-offset-4">
+
+            <a href="{{ route('add-new-lease.index',['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
+
             <button type="submit" class="btn btn-success">
                 Submit
             </button>
-            @for($i = 0; $i < $total_number_of_assets; $i++)
-       <!--  <?php $next = $lease_assets[$i]['is_details_completed']; ?> -->
-      <button type="submit" class="btn btn-primary">
-                    Next
-     </button>
-       @endfor
+
+            @if($lease->total_assets == $completed_asset_details)
+                <a href="{{ route('addlease.payments.index',['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
+            @endif
         </div>
-        
     </div>
-   
 </form>
+

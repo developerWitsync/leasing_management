@@ -17,6 +17,7 @@ class Lease extends Model
         'lease_code',
         'file',
         'status',
+        'total_assets',
         'created_at',
         'updated_at'
     ];
@@ -28,4 +29,5 @@ class Lease extends Model
     public function assets(){
         return $this->hasMany('App\LeaseAssets','lease_id', 'id');
     }
+
 }

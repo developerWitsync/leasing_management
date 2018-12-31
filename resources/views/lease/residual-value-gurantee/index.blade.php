@@ -36,45 +36,31 @@
                             <th>Unique ULA Code</th>
                              <th>Name of the Underlying Lease Asset</th>
                             <th>Underlying Leased Asset Classification</th>
-                            <th>Any Residual Guarantee Value</th>
-                           <!--  <th>Nature Of Lease Payement</th>
-                            <th>Action</th> -->
+                            <th>Action</th> 
                         </tr>
                         </thead>
                         <tbody>
+                    @php
+                    $completed_asset_details = 0;
+                    @endphp
                         @foreach($lease->assets as $key=>$asset)
+                      
                             <tr>
                                 <td>{{ $key + 1 }}</td>
                                 <td style="width: 10%">
                                     {{ $asset->uuid}}
                                 </td>
                                  <td>
-                                    {{ $asset->name }}
+                                    {{ $asset->name.$asset->id}}
                                 </td>
                                 <td>
                                     {{ $asset->subcategory->title }}
                                 </td>
-                                <td>
-                                    <input class="form-check-input" name="residual_gurantee" type="checkbox" id="residual_gurantee_yes" value="yes"><label clas="form-check-label" for="residual_gurantee_yes" style="vertical-align: 4px">Yes</label>
-                        
-                                    <input class="form-check-input" name="residual_gurantee" type="checkbox" id="residual_gurantee_no" value="no">
-                                    <label class="form-check-label" for="residual_gurantee_no" style="vertical-align: 4px">No</label>
-                 
-                                </td>
-                               <!--  <td>
-                                
-                        <select name="nature_of_lease" class="form-control asset_category" data-number="">
-                            <option value="">--Select--</option>
-                            @foreach($lease_payments_nature as $lease_payement)
-                                <option value="{{ $lease_payement->id }}">{{ $lease_payement->title }}</option>
-                           @endforeach
-                        </select>
-                   
-                                </td> 
-                                <td>
-                                    &nbsp;<a class="btn btn-sm btn-info" href="">Upload</a>
-                                </td>-->
-                            </tr>
+                                 <td>
+                                     <a href="{{ route('addresidualvalue.residual.completedetails', ['lease' => $lease->id, 'asset' => $asset->id]) }}" class="btn btn-sm btn-primary">Add Residual Details</a> 
+                               
+                                 </td>
+                               </tr>
                         @endforeach
                         </tbody>
                     </table>
@@ -82,7 +68,7 @@
             </div>
             <!---start the for when checkbox is checked---------->
             <div id="residualclass" style="display:none;">
-                  <form role="form" class="form-horizontal">
+                  <form role="form" class="form-horizontal" enctype="multipart/form-data">
 
                             <fieldset class="scheduler-border">
                                 <legend class="scheduler-border">If Yes</legend>
@@ -90,7 +76,7 @@
                                 <div class="form-group{{ $errors->has('nature') ? ' has-error' : '' }} required">
                                     <label for="type" class="col-md-4 control-label">Nature of Lease Payment</label>
                                     <div class="col-md-6">
-                                        <select name="nature" id="nature" class="form-control">
+                                        <select name="lease_payemnt_nature_id" id="lease_payemnt_nature_id" class="form-control">
                                             <option value="">--Select Lease Payment Nature--</option>
                                             @foreach($lease_payments_nature as $nature)
                                                 <option value="{{ $nature->id}}">{{ $nature->title }}</option>
@@ -150,7 +136,12 @@
                                        <textarea name="other_desc" class="form-control"> </textarea>
                                     </div>
                                 </div>
-
+                                <div class="form-group{{ $errors->has('nature') ? ' has-error' : '' }} required">
+                                    <label for="type" class="col-md-4 control-label">Upload</label>
+                                    <div class="col-md-6">
+                                       <input type="file" name="residual_file" class="form-control">
+                                    </div>
+                                </div>
                                
 
                             </fieldset>
@@ -161,10 +152,10 @@
     </div>
 @endsection
 @section('footer-script')
-    <script src="{{ asset('assets/plugins/bootbox/bootbox.min.js') }}"></script>
+   
 <script>
         $(function(){
-             $("input[name='residual_gurantee']").on('change', function(){
+             /*$("input[name='residual_gurantee']").on('change', function(){
                 if($('#residual_gurantee_yes:checked').val() == 'yes'){
                     $("#residual_gurantee_no").prop('checked', false);
                     $('#residualclass').show();
@@ -174,7 +165,7 @@
                 }else {
                     $('#residualclass').hide();
                 }
-              });
+              });*/
               $("#nature").on('change', function(){
                 var value = $(this).val();
                 if(value == '2')

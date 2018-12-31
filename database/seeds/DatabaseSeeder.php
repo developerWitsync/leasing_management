@@ -17,18 +17,14 @@ class DatabaseSeeder extends Seeder
         $tables = DB::select('SHOW TABLES');
         foreach ($tables as $table) {
             if ($table->{'Tables_in_'.env('DB_DATABASE')} !== 'migrations'){
-
 				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 				DB::table($table->{'Tables_in_'.env('DB_DATABASE')})->truncate();
 				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-
 				$this->command->info($table->{'Tables_in_'.env('DB_DATABASE')}.' table truncated!');
             }
 		}
 
     	//import currency and countries tables
-
-
 		$path = 'database/sqls/countries.sql';
         DB::unprepared(file_get_contents($path));
         $this->command->info('Country table seeded!');

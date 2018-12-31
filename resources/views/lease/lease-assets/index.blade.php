@@ -29,11 +29,7 @@
 
             <div class="tab-content" style="padding: 0px;">
                 <div role="tabpanel" class="tab-pane active">
-                    @if(count($lease_assets) > 0)
-                        @include('lease.lease-assets._show_created_assets')
-                    @else
-                        @include('lease.lease-assets._create_assets')
-                    @endif
+                    @include('lease.lease-assets._create_assets')
                 </div>
             </div>
 
@@ -45,7 +41,8 @@
     <script>
         $(document).ready(function () {
             $('#no_of_lease_assets').on('change', function () {
-                window.location.href = '{{ route("addlease.leaseasset.index", ["id" => $lease->id]) }}?total_assets='+$(this).val();
+                //make a post request to a lease controller function to update the lease assets number
+                $('.update_total_lease_assets').submit();
             });
 
             $('.asset_category').on('change', function () {
