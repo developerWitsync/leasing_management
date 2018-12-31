@@ -1,22 +1,22 @@
 <form role="form" class="form-horizontal" method="post" enctype="multipart/form-data">
     {{ csrf_field() }}
 
-    <div class="form-group{{ $errors->has('is_market_value_available') ? ' has-error' : '' }} required">
+    <div class="form-group{{ $errors->has('is_market_value_present') ? ' has-error' : '' }} required">
         <label for="name" class="col-md-4 control-label">Is Market Value Available</label>
         <div class="col-md-6 form-check form-check-inline" required>
-            <input class="form-check-input" name="is_market_value_available" id="yes" type="checkbox"  value="yes">
+            <input class="form-check-input" name="is_market_value_present" id="yes" type="checkbox" value="yes" @if(old('is_market_value_present', $model->is_market_value_present) == "yes") checked="checked" @endif>
             <label class="form-check-label" for="yes" id="yes" style="vertical-align: 4px">Yes</label><br>
-            <input class="form-check-input" name="is_market_value_available" id="no" type="checkbox" value="no">
+            <input class="form-check-input" name="is_market_value_present" id="no" type="checkbox" value="no" @if(old('is_market_value_present', $model->is_market_value_present)  == "no") checked="checked" @endif>
             <label class="form-check-label" for="no" id="no" style="vertical-align: 4px">No</label>
-            @if ($errors->has('is_market_value_available'))
+            @if ($errors->has('is_market_value_present'))
                 <span class="help-block">
-                        <strong>{{ $errors->first('is_market_value_available') }}</strong>
+                        <strong>{{ $errors->first('is_market_value_present') }}</strong>
                     </span>
             @endif
         </div>
     </div>
 
-    <div class="hidden-group" id="hidden-fields" style="display:none;">
+    <div class="hidden-group" id="hidden-fields" @if($model->is_market_value_present == "yes") style="display:block;" @else  style="display:none;" @endif>
         <div class="form-group{{ $errors->has('currency') ? ' has-error' : '' }} required">
             <label for="currency" class="col-md-4 control-label">Currency</label>
             <div class="col-md-6 form-check form-check-inline">
@@ -58,7 +58,7 @@
         <div class="form-group{{ $errors->has('total_units') ? ' has-error' : '' }} required">
             <label for="total_units" class="col-md-4 control-label">Total FMV</label>
             <div class="col-md-6">
-                <input type="text" name="total_units" for="type" class="form-control" id="total_units">
+                <input type="text" name="total_units" for="type" class="form-control" id="total_units" value="{{ old('total_units', $model->total_units) }}">
                 @if ($errors->has('total_units'))
                     <span class="help-block">
                         <strong>{{ $errors->first('total_units') }}</strong>
@@ -71,7 +71,7 @@
     <div class="form-group{{ $errors->has('source') ? ' has-error' : '' }}">
         <label for="source" class="col-md-4 control-label">Enter SOURCE OF FMV</label>
         <div class="col-md-6">
-            <input id="source" type="text" placeholder="Source" class="form-control" name="source">
+            <input id="source" type="text" placeholder="Source" class="form-control" name="source" value="{{ old('source', $model->source) }}">
             @if ($errors->has('source'))
                 <span class="help-block">
                     <strong>{{ $errors->first('source') }}</strong>
@@ -95,6 +95,7 @@
     <div class="form-group">
         <div class="col-md-6 col-md-offset-4">
 
+            <a href="{{ route('addlease.fairmarketvalue.index', ['id' => $lease->id]) }}" class="btn btn-danger">Cancel</a>
             <button type="submit" class="btn btn-success">
                 Submit
             </button>
