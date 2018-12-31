@@ -76,7 +76,7 @@
                             <a href="{{ route('addlease.leaseasset.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
 
                             @if($show_next)
-                                <a href="" class="btn btn-primary">Next</a>
+                                <a href="{{ route('addlease.fairmarketvalue.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
                             @endif
 
                         </div>
