@@ -29,6 +29,16 @@ use Validator;
 
 class FairMarketValueController extends Controller
 {
+    protected function validationRules(){
+        return [
+            'is_market_value_present'   => 'required',
+            'currency' => 'required_if:is_market_value_present,yes',
+            'similar_asset_items'   => 'required_if:is_market_value_present,yes',
+            'unit'  => 'required_if:is_market_value_present,yes',
+            'total_units'  => 'required_if:is_market_value_present,yes',
+            'attachment'                  => 'file|mimes:jpeg,pdf,doc'
+        ];
+    }
     /**
      * renders the table to list all the lease assets.
      * @param $id Primary key for the lease
@@ -47,6 +57,7 @@ class FairMarketValueController extends Controller
     }
 
     /**
+     * add fair market value details for an asset
      * @param $id
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -60,7 +71,28 @@ class FairMarketValueController extends Controller
                 $model = new FairMarketValue();
 
                 if($request->isMethod('post')) {
-                    dd($request->all());
+                    $validator = Validator::make($request->except('_token'), $this->validationRules());
+
+                    if($validator->fails()){
+                        return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
+                    }
+
+                    $data = $request->except('_token');
+                    $data['attachment'] = "";
+                    $data['lease_id']   = $asset->lease->id;
+                    $data['asset_id']   = $asset->id;
+                    if($request->hasFile('attachment')){
+                        $file = $request->file('attachment');
+                        $uniqueFileName = uniqid() . $file->getClientOriginalName();
+                        $request->file('attachment')->move('uploads', $uniqueFileName);
+                        $data['attachment'] = $uniqueFileName;
+                    }
+
+                    $market_value = FairMarketValue::create($data);
+
+                    if($market_value){
+                        return redirect(route('addlease.fairmarketvalue.index',['id' => $lease->id]))->with('status', 'Fair Market has been added successfully.');
+                    }
                 }
 
                 $currencies = Currencies::query()->where('status', '=', '1')->get();
@@ -85,32 +117,65 @@ class FairMarketValueController extends Controller
         }
     }
 
-     public function store(Request $request) {
+
+    /**
+     * edit existing fair market value details for an asset
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function update($id, Request $request){
         try{
-         $assets = new FairMarketValue;
-          $rules = [
-                'is_market_value_available'  => 'required',
-            ];
-         $validator = Validator::make($request->except('_token'), $rules);
+            $asset = LeaseAssets::query()->findOrFail($id);
+            $lease = $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
+            if($lease) {
 
-            if($validator->fails()){
-                return redirect()->back()->withErrors($validator->errors())->withInput($request->except('_token'));
+                $model = FairMarketValue::query()->where('asset_id', '=', $id)->first();
+
+                if($request->isMethod('post')) {
+                    $validator = Validator::make($request->except('_token'), $this->validationRules());
+
+                    if($validator->fails()){
+                        return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
+                    }
+
+                    $data = $request->except('_token');
+                    $data['attachment'] = "";
+                    $data['lease_id']   = $asset->lease->id;
+                    $data['asset_id']   = $asset->id;
+                    if($request->hasFile('attachment')){
+                        $file = $request->file('attachment');
+                        $uniqueFileName = uniqid() . $file->getClientOriginalName();
+                        $request->file('attachment')->move('uploads', $uniqueFileName);
+                        $data['attachment'] = $uniqueFileName;
+                    }
+
+                    $model->setRawAttributes($data);
+
+                    if($model->save()){
+                        return redirect(route('addlease.fairmarketvalue.index',['id' => $lease->id]))->with('status', 'Fair Market has been updated successfully.');
+                    }
+                }
+
+                $currencies = Currencies::query()->where('status', '=', '1')->get();
+                $reporting_currency_settings = ReportingCurrencySettings::query()->where('business_account_id', '=', auth()->user()->id)->first();
+                $reporting_foreign_currency_transaction_settings = ForeignCurrencyTransactionSettings::query()->where('business_account_id', '=', auth()->user()->id)->get();
+                if(collect($reporting_currency_settings)->isEmpty()) {
+                    $reporting_currency_settings = new ReportingCurrencySettings();
+                }
+                return view('lease.fair-market-value.update', compact(
+                    'model',
+                    'lease',
+                    'asset',
+                    'currencies',
+                    'reporting_foreign_currency_transaction_settings',
+                    'reporting_currency_settings'
+                ));
+            } else {
+                abort(404);
             }
-
-
-
-
-        
-        $assets->lease_id = $request->input('lease_id');
-        $assets->asset_id = $request->input('asset_id');
-        $assets->is_market_value_present = $request->input('is_market_value_available');
-        $assets->unit = $request->input('unit');
-        $assets->total_units = 3*($assets->unit);
-        $assets->source = $request->input('source');
-        $assets->save();
-        return redirect('lease/fair-market-value/index/'.$assets->lease_id.'#step2');
-    } catch (\Exception $e) {
+        } catch (\Exception $e) {
             dd($e);
         }
-}
+    }
 }

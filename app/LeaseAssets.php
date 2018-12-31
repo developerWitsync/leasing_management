@@ -48,4 +48,8 @@ class LeaseAssets extends Model
     public function payments(){
         return $this->hasMany('App\LeaseAssetPayments', 'asset_id', 'id');
     }
+
+    public function fairMarketValue(){
+        return $this->hasOne('App\FairMarketValue', 'asset_id','id');
+    }
 }

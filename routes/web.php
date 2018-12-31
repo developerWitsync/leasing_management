@@ -77,6 +77,7 @@ Route::middleware('auth')->group(function(){
             Route::get('index/{id}', ['as' => 'addlease.fairmarketvalue.index', 'uses' => 'FairMarketValueController@index']);
             Route::post('save', ['as' => 'addlease.fairmarketvalue.save', 'uses' => 'FairMarketValueController@store']);
             Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.fairmarketvalue.create', 'uses' => 'FairMarketValueController@create']);
+            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.fairmarketvalue.update', 'uses' => 'FairMarketValueController@update']);
         });       
     });
 
