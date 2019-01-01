@@ -1,3 +1,5 @@
+
+
 <form class="form-horizontal" method="post">
     {{ csrf_field() }}
     <table class="table table-bordered table-responsive">
@@ -132,3 +134,4 @@
         </div>
     </div>
 </form>
+

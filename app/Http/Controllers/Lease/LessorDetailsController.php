@@ -54,11 +54,12 @@ class LessorDetailsController extends Controller
         ];
         $contract_classifications = ContractClassifications::query()->select('id', 'title')->where('status', '=', '1')->get();
         $currencies = Currencies::query()->where('status', '=', '1')->get();
-        $reporting_currency_settings = ReportingCurrencySettings::query()->where('business_account_id', '=', auth()->user()->id)->first();
-        $reporting_foreign_currency_transaction_settings = ForeignCurrencyTransactionSettings::query()->where('business_account_id', '=', auth()->user()->id)->get();
-         if(collect($reporting_currency_settings)->isEmpty()) {
+        $reporting_currency_settings = ReportingCurrencySettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
+        $reporting_foreign_currency_transaction_settings = ForeignCurrencyTransactionSettings::query()->whereIn('business_account_id', getDependentUserIds())->get();
+        if(collect($reporting_currency_settings)->isEmpty()) {
             $reporting_currency_settings = new ReportingCurrencySettings();
         }
+
         return view('lease.lessor-details.index', compact('breadcrumbs','contract_classifications','currencies','reporting_currency_settings','reporting_foreign_currency_transaction_settings','lease'));
     }
 

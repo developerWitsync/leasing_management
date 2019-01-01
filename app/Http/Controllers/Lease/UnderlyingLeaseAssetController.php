@@ -186,6 +186,7 @@ class UnderlyingLeaseAssetController extends Controller
                     $data['is_details_completed']  = '1';
                     $asset->setRawAttributes($data);
                     $asset->save();
+                    
                     return redirect(
                         route('addlease.leaseasset.index', ['id' => $lease->id,'total_assets' => count($lease->assets)])
                     )->with('status', "Asset Details has been updated successfully.");

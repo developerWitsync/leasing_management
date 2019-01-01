@@ -84,5 +84,8 @@ function getUserProfileImageSrc($user_id = null, $profile_pic = null, $return_th
 
 function getDependentUserIds(){
     $userIdsWithChildrens = Auth::user()->childrens->pluck('id')->toArray();
+    if(auth()->user()->parent_id != 0){
+        $userIdsWithChildrens = array_merge($userIdsWithChildrens, [auth()->user()->parent_id]);
+    }
     return array_merge($userIdsWithChildrens, [auth()->user()->id]);
 }

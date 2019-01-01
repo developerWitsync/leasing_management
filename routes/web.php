@@ -51,16 +51,26 @@ Route::middleware('auth')->group(function(){
 
         Route::prefix('payments')->group(function(){
             Route::get('index/{id}', ['as' => 'addlease.payments.index', 'uses' => 'LeasePaymentsController@index']);
-
             Route::get('create/{lease_id}/{asset_id}/{payment_id?}', ['as' => 'lease.payments.add', 'uses' => 'LeasePaymentsController@create']);
             Route::post('save-total-payments/{id}', ['as' => 'lease.payments.savetotalpayments', 'uses' => 'LeasePaymentsController@saveTotalPayments']);
-
             Route::get('fetch-asset-payments/{id}', ['as' => 'lease.payments.fetchassetpayments', 'uses' => 'LeasePaymentsController@fetchAssetPayments']);
             Route::match(['post', 'get'],'create-asset-payment/{id}', ['as' => 'lease.payments.createassetpayment', 'uses' => 'LeasePaymentsController@createAssetPayments']);
             Route::match(['post', 'get'],'update-asset-payment/{id}/{payment_id}', ['as' => 'lease.payments.updateassetpayment', 'uses' => 'LeasePaymentsController@updateAssetPayments']);
         });
 
         /**
+         * Residual Value Guarantee Routes
+         */
+
+        Route::prefix('residual-value-gurantee')->group(function(){
+            
+            Route::get('index/{id}', ['as' => 'addlease.residual.index', 'uses' => 'LeaseResidualController@index']);
+            Route::post('save', ['as' => 'addlease.residual.save', 'uses' => 'LeaseResidualController@store']);
+            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.residual.create', 'uses' => 'LeaseResidualController@create']);
+            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.residual.update', 'uses' => 'LeaseResidualController@update']);
+        });       
+        
+        /*
          * Fair Market Value Routes
          */
 
@@ -78,6 +88,7 @@ Route::middleware('auth')->group(function(){
             Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.leaseterminationoption.update', 'uses' => 'LeaseTerminationOptionController@update']);
         });        
 
+        });       
     });
 
     Route::namespace('Settings')->middleware(['permission:settings'])->prefix('settings')->group(function(){

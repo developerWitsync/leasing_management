@@ -29,12 +29,12 @@
                             
                              </div>
                               <div class="panel-body">
-                             <form class="form-horizontal" method="POST" action="{{ route('settings.user.assigned-permission-role', ['id' => $role[0]->id])}}">
+                             <form class="form-horizontal" method="POST" action="{{ route('settings.user.assigned-permission-role', ['id' => $role->id])}}">
                             {{ csrf_field() }}
                             <div class="form-group{{ $errors->has('role') ? ' has-error' : '' }} ">
                             <label for="role" class="col-md-4 control-label">Role </label>
-                            <input type="hidden" name="role" value="{{$role[0]->id}}">
-                            {{$role[0]->name}}
+                            <input type="hidden" name="role" value="{{$role->id}}">
+                            {{$role->name}}
                             
                              </div>
                             

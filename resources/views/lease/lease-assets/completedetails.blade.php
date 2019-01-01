@@ -132,7 +132,7 @@
                             <div class="form-group{{ $errors->has('lease_start_date') ? ' has-error' : '' }} required">
                                 <label for="lease_start_date" class="col-md-4 control-label">Lease Start Date</label>
                                 <div class="col-md-6">
-                                    <input id="lease_start_date" type="text" placeholder="Lease Start Date" class="form-control" name="lease_start_date" value="{{ old('lease_start_date', $asset->lease_start_date) }}" >
+                                    <input id="lease_start_date" type="text" placeholder="Lease Start Date" class="form-control" name="lease_start_date" value="{{ old('lease_start_date', $asset->lease_start_date) }}" autocomplete="off">
                                     @if ($errors->has('lease_start_date'))
                                         <span class="help-block">
                                             <strong>{{ $errors->first('lease_start_date') }}</strong>
@@ -168,7 +168,7 @@
                             <div class="form-group{{ $errors->has('lease_end_date') ? ' has-error' : '' }} required">
                                 <label for="lease_end_date" class="col-md-4 control-label">Lease End Date, Non-Cancellable Period</label>
                                 <div class="col-md-6">
-                                    <input id="lease_end_date" type="text" placeholder="Lease End Date, Non-Cancellable Period" class="form-control" name="lease_end_date" value="{{ old('lease_end_date', $asset->lease_end_date) }}" >
+                                    <input id="lease_end_date" type="text" placeholder="Lease End Date, Non-Cancellable Period" class="form-control" name="lease_end_date" value="{{ old('lease_end_date', $asset->lease_end_date) }}" autocomplete="off">
                                     @if ($errors->has('lease_end_date'))
                                         <span class="help-block">
                                             <strong>{{ $errors->first('lease_end_date') }}</strong>
@@ -313,6 +313,7 @@
                     var prior_date = new Date(start_prior_date);
                     if(prior_date > jan_1_date){
                      $('#prior_accounting').hide();
+                     $('#accounting_treatment').val('');
                     }
                     $('#lease_term').val('');
                     $('#lease_end_date').val('');
