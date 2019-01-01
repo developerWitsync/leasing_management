@@ -16,7 +16,7 @@
         </div>
     </div>
 
-    <div class="hidden-group" id="hidden-fields" @if($model->is_market_value_present == "yes") style="display:block;" @else  style="display:none;" @endif>
+    <div class="hidden-group" id="hidden-fields" @if(old('is_market_value_present',$model->is_market_value_present ) == "yes") style="display:block;" @else  style="display:none;" @endif>
         <div class="form-group{{ $errors->has('currency') ? ' has-error' : '' }} required">
             <label for="currency" class="col-md-4 control-label">Currency</label>
             <div class="col-md-6 form-check form-check-inline">

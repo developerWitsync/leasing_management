@@ -15,7 +15,7 @@
             @endif
         </div>
     </div>
-    <div class="hidden-group gg {{$model->any_residual_value_gurantee}}" id="hidden-fields" @if($model->any_residual_value_gurantee == "yes") style="display:block;" @else  style="display:none;" @endif>
+    <div class="hidden-group gg {{$model->any_residual_value_gurantee}}" id="hidden-fields" @if(old('any_residual_value_gurantee',$model->any_residual_value_gurantee ) == "yes") style="display:block;" @else  style="display:none;" @endif>
         <div class="form-group{{ $errors->has('lease_payemnt_nature_id') ? ' has-error' : '' }} required">
             <label for="lease_payemnt_nature_id" class="col-md-4 control-label">Nature of Lease Payment</label>
             <div class="col-md-6 form-check form-check-inline">
@@ -39,15 +39,20 @@
                         
             <input class="form-check-input" name="amount_determinable" type="checkbox" id="amount_determinable_no" value="no" @if(old('amount_determinable', $model->amount_determinable)  == "no") checked="checked" @endif>
             <label class="form-check-label" for="amount_determinable_no" style="vertical-align: 4px">No</label>
-                                    </div>
-          </div>
-        <div class="form-group{{ $errors->has('foreign_currency_id') ? ' has-error' : '' }} required">
-            <label for="foreign_currency_id" class="col-md-4 control-label">Currency</label>
-            <div class="col-md-6 form-check form-check-inline">
-                <input type="text" value="{{ $lease->lease_contract_id }}" class="form-control" id="foreign_currency_id" name="foreign_currency_id" readonly="readonly">
-                @if ($errors->has('foreign_currency_id'))
+            @if ($errors->has('amount_determinable'))
                     <span class="help-block">
-                        <strong>{{ $errors->first('foreign_currency_id') }}</strong>
+                        <strong>{{ $errors->first('amount_determinable') }}</strong>
+                    </span>
+                @endif
+            </div>
+          </div>
+        <div class="form-group{{ $errors->has('currency') ? ' has-error' : '' }} required">
+            <label for="currency" class="col-md-4 control-label">Currency</label>
+            <div class="col-md-6 form-check form-check-inline">
+                <input type="text" value="{{ $lease->lease_contract_id }}" class="form-control" id="currency" name="currency" readonly="readonly">
+                @if ($errors->has('currency'))
+                    <span class="help-block">
+                        <strong>{{ $errors->first('currency') }}</strong>
                     </span>
                 @endif
             </div>
@@ -116,7 +121,7 @@
     <div class="form-group">
         <div class="col-md-6 col-md-offset-4">
 
-            <a href="{{ route('addlease.fairmarketvalue.index', ['id' => $lease->id]) }}" class="btn btn-danger">Cancel</a>
+            <a href="{{ route('addlease.residual.index', ['id' => $lease->id]) }}" class="btn btn-danger">Cancel</a>
             <button type="submit" class="btn btn-success">
                 Submit
             </button>
@@ -164,13 +169,18 @@
                 $('#hidden-fields').hide();
             }
 
-            /*$('input[name="amount_determinable"]').not(this).prop('checked', false);
+            
+        });
+         $(document).on('click', 'input[name="amount_determinable"]', function() {
+            $('input[name="amount_determinable"]').not(this).prop('checked', false);
 
             if($(this).is(':checked') && $(this).val() == 'yes') {
-                $('#hidden-fields').show();
+                $("#amount_determinable_no").prop('checked', false);
             } else {
-                $('#hidden-fields').hide();
-            }*/
+              $("#amount_determinable_yes").prop('checked', false);
+            }
+
+            
         });
 
         jQuery(document).ready(function($) {

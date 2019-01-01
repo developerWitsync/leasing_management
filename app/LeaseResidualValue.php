@@ -14,12 +14,12 @@ class LeaseResidualValue extends Model
         'any_residual_value_gurantee',
         'lease_payemnt_nature_id',
         'amount_determinable',
-        'foreign_currency_id',
+        'currency',
         'similar_asset_items',
         'residual_gurantee_value',
         'total_residual_gurantee_value',
         'other_desc',
-        'residual_file',
+        'attachment',
         'created_at',
         'updated_at'
     ];
