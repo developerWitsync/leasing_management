@@ -69,7 +69,14 @@ Route::middleware('auth')->group(function(){
             Route::post('save', ['as' => 'addlease.fairmarketvalue.save', 'uses' => 'FairMarketValueController@store']);
             Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.fairmarketvalue.create', 'uses' => 'FairMarketValueController@create']);
             Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.fairmarketvalue.update', 'uses' => 'FairMarketValueController@update']);
-        });       
+        });
+
+        Route::prefix('lease-termination-option')->group(function(){
+            Route::get('index/{id}', ['as' => 'addlease.leaseterminationoption.index', 'uses' => 'LeaseTerminationOptionController@index']);
+            Route::post('save', ['as' => 'addlease.leaseterminationoption.save', 'uses' => 'LeaseTerminationOptionController@store']);
+            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.leaseterminationoption.create', 'uses' => 'LeaseTerminationOptionController@create']);
+            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.leaseterminationoption.update', 'uses' => 'LeaseTerminationOptionController@update']);
+        });        
 
     });
 

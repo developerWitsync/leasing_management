@@ -52,4 +52,7 @@ class LeaseAssets extends Model
     public function fairMarketValue(){
         return $this->hasOne('App\FairMarketValue', 'asset_id','id');
     }
+    public function leaseTerminationOption(){
+        return $this->hasOne('App\LeaseTerminationOption', 'asset_id','id');
+    }
 }
