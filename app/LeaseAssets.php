@@ -59,4 +59,8 @@ class LeaseAssets extends Model
     public function residualGuranteeValue(){
         return $this->hasOne('App\LeaseResidualValue', 'asset_id','id');
     }
+
+    public function purchaseOption(){
+        return $this->hasOne('App\PurchaseOption', 'asset_id','id');
+    }
 }
