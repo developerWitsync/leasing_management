@@ -3,7 +3,7 @@
  * Created by Sublime.
  * User: Jyoti Gupta
  * Date: 01/01/19
- * Time: 11:24 PM
+ * Time: 12:24 AM
  */
 
 namespace App\Http\Controllers\Lease;
@@ -42,7 +42,7 @@ class LeaseRenewableOptionController extends Controller
     }
 
     /**
-     * add fair market value details for an asset
+     * add renewable option value details for an asset
      * @param $id
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -89,7 +89,7 @@ class LeaseRenewableOptionController extends Controller
 
 
     /**
-     * edit existing fair market value details for an asset
+     * edit existing renewable option value details for an asset
      * @param $id
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View

@@ -16,7 +16,7 @@
 
             <div class="tab-content" style="padding: 0px;">
                 <div role="tabpanel" class="tab-pane active">
-                    @include('lease.fair-market-value._form')
+                    @include('lease.lease-termination-option._form')
                 </div>
             </div>
 

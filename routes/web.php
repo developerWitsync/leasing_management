@@ -48,7 +48,6 @@ Route::middleware('auth')->group(function(){
         /**
          * Lease Payments Routes
          */
-
         Route::prefix('payments')->group(function(){
             Route::get('index/{id}', ['as' => 'addlease.payments.index', 'uses' => 'LeasePaymentsController@index']);
             Route::get('create/{lease_id}/{asset_id}/{payment_id?}', ['as' => 'lease.payments.add', 'uses' => 'LeasePaymentsController@create']);
@@ -61,7 +60,6 @@ Route::middleware('auth')->group(function(){
         /**
          * Residual Value Guarantee Routes
          */
-
         Route::prefix('residual-value-gurantee')->group(function(){
             
             Route::get('index/{id}', ['as' => 'addlease.residual.index', 'uses' => 'LeaseResidualController@index']);
@@ -73,17 +71,16 @@ Route::middleware('auth')->group(function(){
         /*
          * Fair Market Value Routes
          */
-
         Route::prefix('fair-market-value')->group(function(){
             Route::get('index/{id}', ['as' => 'addlease.fairmarketvalue.index', 'uses' => 'FairMarketValueController@index']);
             Route::post('save', ['as' => 'addlease.fairmarketvalue.save', 'uses' => 'FairMarketValueController@store']);
             Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.fairmarketvalue.create', 'uses' => 'FairMarketValueController@create']);
             Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.fairmarketvalue.update', 'uses' => 'FairMarketValueController@update']);
+
         }); 
          /**
          * Renewable Value
          */
-
         Route::prefix('lease-renewable-option')->group(function(){
             
             Route::get('index/{id}', ['as' => 'addlease.renewable.index', 'uses' => 'LeaseRenewableOptionController@index']);
@@ -91,6 +88,16 @@ Route::middleware('auth')->group(function(){
             Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.renewable.create', 'uses' => 'LeaseRenewableOptionController@create']);
             Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.renewable.update', 'uses' => 'LeaseRenewableOptionController@update']);
         });      
+        /*
+         * Lease Termination Options Routes
+         */
+
+        Route::prefix('lease-termination-option')->group(function(){
+            Route::get('index/{id}', ['as' => 'addlease.leaseterminationoption.index', 'uses' => 'LeaseTerminationOptionController@index']);
+            Route::post('save', ['as' => 'addlease.leaseterminationoption.save', 'uses' => 'LeaseTerminationOptionController@store']);
+            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.leaseterminationoption.create', 'uses' => 'LeaseTerminationOptionController@create']);
+            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.leaseterminationoption.update', 'uses' => 'LeaseTerminationOptionController@update']);
+        }); 
     });
 
     Route::namespace('Settings')->middleware(['permission:settings'])->prefix('settings')->group(function(){
