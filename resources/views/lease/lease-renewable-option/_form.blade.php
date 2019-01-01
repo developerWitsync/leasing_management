@@ -124,8 +124,7 @@
                     
                 });
 
- 
-$("#confirm").on("click", function(e) {
+ $("#confirm").on("click", function(e) {
   e.preventDefault();
     var modal = bootbox.dialog({
                     message: "The lease payments till the end of the renewable period will be considered for valuation. If you would like to not consider renewal period under lease valuation, please select no to exercise renewal option",
