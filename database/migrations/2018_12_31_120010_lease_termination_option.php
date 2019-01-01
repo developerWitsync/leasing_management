@@ -23,7 +23,7 @@ class LeaseTerminationOption extends Migration
             $table->enum('exercise_termination_option_available', ['yes', 'no'])->nullable();
              $table->enum('termination_penalty_applicable', ['yes', 'no'])->nullable();
             $table->date('lease_end_date')->nullable();
-             $table->unsignedInteger('currency')->nullable();
+             $table->string('currency')->nullable();
             $table->unsignedInteger('termination_penalty')->nullable();
             $table->timestamps();
         });

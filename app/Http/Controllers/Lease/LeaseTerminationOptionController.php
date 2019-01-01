@@ -140,7 +140,7 @@ class LeaseTerminationOptionController extends Controller
                     $model->setRawAttributes($data);
 
                     if($model->save()){
-                        return redirect(route('addlease.lease-termination-option.index',['id' => $lease->id]))->with('status', 'Lease Termination Option Details has been updated successfully.');
+                        return redirect(route('addlease.leaseterminationoption.index',['id' => $lease->id]))->with('status', 'Lease Termination Option Details has been updated successfully.');
                     }
                 }
 

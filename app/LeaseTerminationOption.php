@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class LeaseTerminationOption extends Model
 {
-     protected $table = 'fair_market_value';
+     protected $table = 'lease_termination_option';
 
     protected $fillable = [
     	'lease_id',

@@ -16,7 +16,7 @@
         </div>
     </div>
 
-    <div class="hidden-group" id="hidden-fields" @if($model->lease_termination_option_available == "yes") style="display:block;" @else  style="display:none;" @endif>
+    <div class="hidden-group" id="hidden-field" @if($model->lease_termination_option_available == "yes") style="display:block;" @else  style="display:none;" @endif>
     <div class="form-group{{ $errors->has('exercise_termination_option_available') ? ' has-error' : '' }} required">
         <label for="name" class="col-md-4 control-label">Reasonable Certainity to Exercise Termination Option as of today</label>
         <div class="col-md-6 form-check form-check-inline" required>
@@ -33,7 +33,7 @@
     </div>
     </div>
 
-     <div class="hidden-group" id="hidden-fields" @if($model->exercise_termination_option_available == "yes") style="display:block;" @else  style="display:none;" @endif>
+     <div class="hidden-group" id="hidden-elements" @if($model->exercise_termination_option_available == "yes" && $model->lease_termination_option_available == "yes") style="display:block;" @else  style="display:none;" @endif>
         <div class="form-group{{ $errors->has('lease_end_date') ? ' has-error' : '' }} required">
             <label for="lease_end_date" class="col-md-4 control-label">Expected Lease End Date</label>
             <div class="col-md-6">
@@ -61,7 +61,7 @@
         </div>
     </div>
 </div>
-    <div class="hidden-group" id="hidden-fields" @if($model->termination_penalty_applicable == "yes") style="display:block;" @else  style="display:none;" @endif>
+    <div class="hidden-group" id="hidden-fields" @if($model->termination_penalty_applicable == "yes" && $model->exercise_termination_option_available == "yes" && $model->lease_termination_option_available == "yes") style="display:block;" @else  style="display:none;" @endif>
     <div class="form-group{{ $errors->has('currency') ? ' has-error' : '' }} required">
             <label for="currency" class="col-md-4 control-label">Currency</label>
             <div class="col-md-6 form-check form-check-inline">
@@ -77,7 +77,7 @@
      <div class="form-group{{ $errors->has('termination_penalty') ? ' has-error' : '' }} required">
             <label for="termination_penalty" class="col-md-4 control-label">Termination Penalty</label>
             <div class="col-md-6 form-check form-check-inline">
-                <input type="text" class="form-control" id="termination_penalty" name="termination_penalty">
+                <input type="text" class="form-control" id="termination_penalty" name="termination_penalty" value="{{ old('termination_penalty', $model->termination_penalty) }}">
                 @if ($errors->has('termination_penalty'))
                     <span class="help-block">
                         <strong>{{ $errors->first('termination_penalty') }}</strong>
@@ -101,13 +101,34 @@
 
 @section('footer-script')
     <script type="text/javascript">
-        $(document).on('click', 'input[type="checkbox"]', function() {
-            $('input[type="checkbox"]').not(this).prop('checked', false);
+        $(document).on('click', 'input[name="lease_termination_option_available"]', function() {
+            $('input[name="lease_termination_option_available"]').not(this).prop('checked', false);
+            if($(this).is(':checked') && $(this).val() == 'yes') {
+                $('#hidden-field').show();
+                
+            } else {
+                $('#hidden-field').hide();
+                 $('#hidden-fields').hide();
+                 $('#hidden-elements').hide();
+            }
+        });
+        $(document).on('click', 'input[name="exercise_termination_option_available"]', function() {
+            $('input[name="exercise_termination_option_available"]').not(this).prop('checked', false);
+            if($(this).is(':checked') && $(this).val() == 'yes') {
+                $('#hidden-elements').show();
+            } else {
+                $('#hidden-elements').hide();
+                $('#hidden-fields').hide();
+            }
+        });
+        $(document).on('click', 'input[name="termination_penalty_applicable"]', function() {
+            $('input[name="termination_penalty_applicable"]').not(this).prop('checked', false);
             if($(this).is(':checked') && $(this).val() == 'yes') {
                 $('#hidden-fields').show();
             } else {
                 $('#hidden-fields').hide();
             }
         });
+
     </script>
 @endsection
