@@ -15,6 +15,10 @@ class CreateResidualValueGuranteeTable extends Migration
     {
         Schema::create('lease_residual_value_gurantee', function (Blueprint $table) {
             $table->increments('id');
+
+            $table->unsignedInteger('lease_id');
+            $table->foreign('lease_id')->references('id')->on('lease')->onDelete('cascade');
+
             $table->unsignedInteger('asset_id');
             $table->foreign('asset_id')->references('id')->on('lease_assets')->onDelete('cascade');
             $table->string('any_residual_value_gurantee');
@@ -22,8 +26,11 @@ class CreateResidualValueGuranteeTable extends Migration
             $table->foreign('lease_payemnt_nature_id')->references('id')->on('lease_asset_payments_nature')->onDelete('cascade');
             $table->string('amount_determinable');
             $table->string('currency');
-            $table->string('no_of_unit_lease_asset');
+
+            $table->unsignedInteger('similar_asset_items');
+
             $table->string('residual_gurantee_value');
+            
             $table->string('total_residual_gurantee_value');
             $table->string('other_desc');
             $table->string('attachment');
