@@ -21,7 +21,7 @@ class CreateLeaseRenewalOptionTable extends Migration
             $table->foreign('asset_id')->references('id')->on('lease_assets')->onDelete('cascade');
             $table->enum('is_renewal_option_under_contract', ['yes', 'no'])->nullable();
             $table->enum('is_reasonable_certainity_option', ['yes', 'no'])->nullable();
-            $table->date('expected_lease_end_Date');
+            $table->date('expected_lease_end_Date')->nullable();
             $table->timestamps();
         });
     }

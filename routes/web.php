@@ -79,7 +79,18 @@ Route::middleware('auth')->group(function(){
             Route::post('save', ['as' => 'addlease.fairmarketvalue.save', 'uses' => 'FairMarketValueController@store']);
             Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.fairmarketvalue.create', 'uses' => 'FairMarketValueController@create']);
             Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.fairmarketvalue.update', 'uses' => 'FairMarketValueController@update']);
-        });       
+        }); 
+         /**
+         * Renewable Value
+         */
+
+        Route::prefix('lease-renewable-option')->group(function(){
+            
+            Route::get('index/{id}', ['as' => 'addlease.renewable.index', 'uses' => 'LeaseRenewableOptionController@index']);
+             Route::post('save', ['as' => 'addlease.renewable.save', 'uses' => 'LeaseRenewableOptionController@store']);
+            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.renewable.create', 'uses' => 'LeaseRenewableOptionController@create']);
+            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.renewable.update', 'uses' => 'LeaseRenewableOptionController@update']);
+        });      
     });
 
     Route::namespace('Settings')->middleware(['permission:settings'])->prefix('settings')->group(function(){
