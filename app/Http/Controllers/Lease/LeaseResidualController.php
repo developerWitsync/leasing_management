@@ -37,7 +37,7 @@ class LeaseResidualController extends Controller
             'similar_asset_items'   => 'required_if:any_residual_value_gurantee,yes',
             'residual_gurantee_value'  => 'required_if:any_residual_value_gurantee,yes',
             'total_residual_gurantee_value'  => 'required_if:any_residual_value_gurantee,yes',
-            'residual_file' => 'file|mimes:jpeg,pdf,doc'
+            'attachment' => 'file|mimes:jpeg,pdf,doc'
         ];
     }
     /**
@@ -71,30 +71,34 @@ class LeaseResidualController extends Controller
              if($lease) {
 
                 $model = new LeaseResidualValue();
-                $model->any_residual_value_gurantee=$request->any_residual_value_gurantee;
+                //$model->any_residual_value_gurantee=$request->any_residual_value_gurantee;
 
                 if($request->isMethod('post')) {
 
                    $validator = Validator::make($request->except('_token'), $this->validationRules());
 
-                    if($validator->fails()){
+                    /*if($validator->fails()){
                         return redirect()->back()->with(['class'=>'active','model' => $model])->withInput($request->except('_token'))->withErrors($validator->errors());
+                    }*/
+                    
+                     if($validator->fails()){
+                        return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
                     }
 
                     $data = $request->except('_token');
-                    $data['residual_file'] = "";
+                    $data['attachment'] = "";
                     $data['lease_id']   = $asset->lease->id;
                     $data['asset_id']   = $asset->id;
-                    if($request->hasFile('residual_file')){
-                        $file = $request->file('residual_file');
+                    if($request->hasFile('attachment')){
+                        $file = $request->file('attachment');
                         $uniqueFileName = uniqid() . $file->getClientOriginalName();
-                        $request->file('residual_file')->move('uploads', $uniqueFileName);
-                        $data['residual_file'] = $uniqueFileName;
+                        $request->file('attachment')->move('uploads', $uniqueFileName);
+                        $data['attachment'] = $uniqueFileName;
                     }
-                        //dd($data);
-                    $market_value = LeaseResidualValue::create($data);
+                      
+                    $residual_value = LeaseResidualValue::create($data);
 
-                    if($market_value){
+                    if($residual_value){
                         return redirect(route('addlease.residual.index',['id' => $lease->id]))->with('status', 'Residual value Gurantee has been added successfully.');
                     }
                 }
@@ -147,14 +151,14 @@ class LeaseResidualController extends Controller
                     }
 
                     $data = $request->except('_token');
-                    $data['residual_file'] = "";
+                    $data['attachment'] = "";
                     $data['lease_id']   = $asset->lease->id;
                     $data['asset_id']   = $asset->id;
-                    if($request->hasFile('residual_file')){
-                        $file = $request->file('residual_file');
+                    if($request->hasFile('attachment')){
+                        $file = $request->file('attachment');
                         $uniqueFileName = uniqid() . $file->getClientOriginalName();
-                        $request->file('residual_file')->move('uploads', $uniqueFileName);
-                        $data['residual_file'] = $uniqueFileName;
+                        $request->file('attachment')->move('uploads', $uniqueFileName);
+                        $data['attachment'] = $uniqueFileName;
                     }
 
                     $model->setRawAttributes($data);

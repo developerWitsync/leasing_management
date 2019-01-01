@@ -32,6 +32,7 @@ class FairMarketValueController extends Controller
     protected function validationRules(){
         return [
             'is_market_value_present'   => 'required',
+            'lease_payemnt_nature_id'   => 'required',
             'currency' => 'required_if:is_market_value_present,yes',
             'similar_asset_items'   => 'required_if:is_market_value_present,yes',
             'unit'  => 'required_if:is_market_value_present,yes',
