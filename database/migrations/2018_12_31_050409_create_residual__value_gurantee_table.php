@@ -24,15 +24,15 @@ class CreateResidualValueGuranteeTable extends Migration
             $table->string('any_residual_value_gurantee');
             $table->unsignedInteger('lease_payemnt_nature_id');
             $table->foreign('lease_payemnt_nature_id')->references('id')->on('lease_asset_payments_nature')->onDelete('cascade');
-            $table->string('amount_determinable');
+            $table->string('amount_determinable')->nullable();
             $table->string('currency');
 
             $table->unsignedInteger('similar_asset_items');
 
-            $table->string('residual_gurantee_value');
+            $table->string('residual_gurantee_value')->nullable();
             
-            $table->string('total_residual_gurantee_value');
-            $table->string('other_desc');
+            $table->string('total_residual_gurantee_value')->nullable();
+            $table->string('other_desc')->nullable();
             $table->string('attachment');
             $table->timestamps();
         });

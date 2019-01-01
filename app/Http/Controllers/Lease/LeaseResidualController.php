@@ -32,8 +32,9 @@ class LeaseResidualController extends Controller
 {
     protected function validationRules(){
         return [
-            'lease_payemnt_nature_id'   => 'required',
-            'amount_determinable'   => 'required',
+            'any_residual_value_gurantee'   => 'required',
+            'lease_payemnt_nature_id'   => 'required_if:any_residual_value_gurantee,yes',
+            'amount_determinable'   => 'required_if:any_residual_value_gurantee,yes',
             'similar_asset_items'   => 'required_if:any_residual_value_gurantee,yes',
             'residual_gurantee_value'  => 'required_if:any_residual_value_gurantee,yes',
             'total_residual_gurantee_value'  => 'required_if:any_residual_value_gurantee,yes',
