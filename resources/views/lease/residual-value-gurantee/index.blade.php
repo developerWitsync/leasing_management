@@ -6,7 +6,7 @@
 @endsection
 @section('content')
     <div class="panel panel-default">
-        <div class="panel-heading">Add New Lease | Fair Market Value of Underlying Lease Asset</div>
+        <div class="panel-heading">Add New Lease | Residual Value Gurantee</div>
 
         <div class="panel-body">
             @if (session('status'))
@@ -42,7 +42,7 @@
                                 $show_next = [];
                             @endphp
                             @foreach($lease->assets as $key=>$asset)
-                                <tr>
+                          <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td style="width: 10%">
                                         {{ $asset->uuid}}
@@ -54,16 +54,16 @@
                                         {{ $asset->subcategory->title }}
                                     </td>
                                     <td>
-                                        @if($asset->fairMarketValue)
+                                        @if($asset->residualGuranteeValue)
                                             @php
                                                 $show_next[] = true;
                                             @endphp
-                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.fairmarketvalue.update', ['id'=> $asset->id]) }}">Update Fair Market Value Details</a>
+                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.residual.update', ['id'=> $asset->id]) }}">Update Residual Value Gurantee</a>
                                         @else
                                             @php
                                                 $show_next[] = false;
                                             @endphp
-                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.fairmarketvalue.create', ['id'=> $asset->id]) }}">Add Fair Market Value Details</a>
+                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.residual.create', ['id'=> $asset->id]) }}">Add Residual Value Gurantee</a>
                                         @endif
                                     </td>
                                 </tr>
@@ -75,11 +75,11 @@
 
                         <div class="col-md-6 col-md-offset-4">
 
-                            <a href="{{ route('addlease.payments.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
+                            <a href="{{ route('addlease.fairmarketvalue.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
 
-                            @if(!in_array(false, $show_next))
-                                <a href="{{ route('addlease.residual.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
-                            @endif
+                          @if(!in_array(false, $show_next))
+                                <a href="{{ route('addlease.fairmarketvalue.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
+                            @endif 
                         </div>
 
                     </div>
