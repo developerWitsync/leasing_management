@@ -107,6 +107,7 @@ class UserAccessController extends Controller
             $data['authorised_person_dob'] = date('Y-m-d', strtotime($request->authorised_person_dob));
             $data['email_verification_code'] = md5(time());
             $data['is_verified'] = '0';
+            $data['parent_id']  = auth()->user()->id;
             $user = User::create($data);
             if($user){
               \Mail::to($user)->queue(new UserCreateConfirmation($user));
@@ -134,24 +135,25 @@ class UserAccessController extends Controller
                     'password' => 'required|string|min:6|confirmed',
                     'phone' => 'required'
                 ]);
+
                 if($validator->fails()){
                     return redirect()->back()->withInput($request->all())->withErrors($validator->errors());
                 }
+
                 $userdata = User::findOrFail($id);
                 $userdata->authorised_person_name = $request->authorised_person_name;
                 $userdata->authorised_person_designation = $request->authorised_person_designation;
                 $userdata->username = $request->username;
                 $userdata->phone = $request->phone;
                 $userdata->email = $request->email;
-                $userdata->type -'0';
-                $userdata->password =bcrypt($request->password);
-                $userdata->authorised_person_dob=date('Y-m-d', strtotime($request->authorised_person_dob));
-                $userdata->parent_id=auth()->user()->id;
-                $userdata->save($request->except('_token'));
-
+                $userdata->type = '0';
+                $userdata->password = bcrypt($request->password);
+                $userdata->authorised_person_dob = date('Y-m-d', strtotime($request->authorised_person_dob));
+                $userdata->parent_id = auth()->user()->id;
+                $userdata->save();
                 if($userdata){
-                \Mail::to($userdata)->queue(new UserCreateConfirmation($userdata));
-                return redirect(route('settings.user'))->with('status', 'User has been updated successfully.');
+                    \Mail::to($userdata)->queue(new UserCreateConfirmation($userdata));
+                    return redirect(route('settings.user'))->with('status', 'User has been updated successfully.');
                 }
 
          }
@@ -189,11 +191,10 @@ class UserAccessController extends Controller
      */
     public function assignPermissionToRole($id,Request $request)
     {
-      $role=Role::where('id',$id)->get();
+      $role = Role::query()->findOrFail($id);
       $PermissionRole= PermissionRole::where('role_id',$id)->get();
       $permission = Permission::all();
       $PermissionRoleId = $PermissionRole->pluck('permission_id')->toArray();
-      $role =Role::all();
       if($request->isMethod('post')) {
              $validator = Validator::make($request->except('_token'), [
                 'permission'  =>  'required',
@@ -201,9 +202,11 @@ class UserAccessController extends Controller
                 ], [
                 'permission.required'  =>  'Please select at least one Permission',
             ]);
+
             if($validator->fails()){
                 return redirect()->back()->withInput($request->all())->withErrors($validator->errors());
             }
+
             $role = Role::query()->find($request->role);
             $role->perms()->sync([]);
             foreach ($request->permission as $key => $permission) {
@@ -213,6 +216,7 @@ class UserAccessController extends Controller
             }
             return redirect('settings/user-access/role')->with('status', 'Selected permissions have been assigned to the role.');
       }
+
       return view('settings.useraccess.user.permission_to_role', ['breadcrumbs'=> $this->breadcrumbs,'role'=>$role,'permission'=>$permission,'PermissionRoleId'=>$PermissionRoleId]);
     }
     /**
