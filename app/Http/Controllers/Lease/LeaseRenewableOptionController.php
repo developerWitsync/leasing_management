@@ -1,29 +1,17 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: himanshu
- * Date: 26/12/18
- * Time: 12:33 PM
+ * Created by Sublime.
+ * User: Jyoti Gupta
+ * Date: 01/01/19
+ * Time: 12:24 AM
  */
 
 namespace App\Http\Controllers\Lease;
 
-
-use App\Countries;
-use App\ExpectedLifeOfAsset;
 use App\Http\Controllers\Controller;
 use App\Lease;
-use App\Currencies;
-use App\LeaseAccountingTreatment;
-use App\LeaseAssetCategories;
+use App\LeaseRenewableOption;
 use App\LeaseAssets;
-use App\LeaseAssetSimilarCharacteristicSettings;
-use App\LeaseAssetsNumberSettings;
-use App\LeaseAssetSubCategorySetting;
-use App\UseOfLeaseAsset;
-use App\FairMarketValue;
-use App\ReportingCurrencySettings;
-use App\ForeignCurrencyTransactionSettings;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -31,12 +19,9 @@ class LeaseRenewableOptionController extends Controller
 {
     protected function validationRules(){
         return [
-            'is_market_value_present'   => 'required',
-            'currency' => 'required_if:is_market_value_present,yes',
-            'similar_asset_items'   => 'required_if:is_market_value_present,yes',
-            'unit'  => 'required_if:is_market_value_present,yes',
-            'total_units'  => 'required_if:is_market_value_present,yes',
-            'attachment'                  => 'file|mimes:jpeg,pdf,doc'
+            'is_renewal_option_under_contract'   => 'required',
+            'is_reasonable_certainity_option' => 'required_if:is_renewal_option_under_contract,yes',
+            'expected_lease_end_Date'   => 'required_if:is_reasonable_certainity_option,yes'
         ];
     }
     /**
@@ -48,7 +33,7 @@ class LeaseRenewableOptionController extends Controller
     public function index($id, Request $request){
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->with('leaseType')->with('assets')->first();
         if($lease) {
-            return view('lease.renewable-option.index', compact(
+            return view('lease.lease-renewable-option.index', compact(
                 'lease'
             ));
         } else {
@@ -57,7 +42,7 @@ class LeaseRenewableOptionController extends Controller
     }
 
     /**
-     * add fair market value details for an asset
+     * add renewable option value details for an asset
      * @param $id
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -68,7 +53,7 @@ class LeaseRenewableOptionController extends Controller
             $lease = $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
             if($lease) {
 
-                $model = new FairMarketValue();
+                $model = new LeaseRenewableOption();
 
                 if($request->isMethod('post')) {
                     $validator = Validator::make($request->except('_token'), $this->validationRules());
@@ -78,36 +63,21 @@ class LeaseRenewableOptionController extends Controller
                     }
 
                     $data = $request->except('_token');
-                    $data['attachment'] = "";
                     $data['lease_id']   = $asset->lease->id;
                     $data['asset_id']   = $asset->id;
-                    if($request->hasFile('attachment')){
-                        $file = $request->file('attachment');
-                        $uniqueFileName = uniqid() . $file->getClientOriginalName();
-                        $request->file('attachment')->move('uploads', $uniqueFileName);
-                        $data['attachment'] = $uniqueFileName;
-                    }
+                    $data['expected_lease_end_Date'] = date('Y-m-d', strtotime($request->expected_lease_end_Date));
+                    
 
-                    $market_value = FairMarketValue::create($data);
+                    $renewable_value = LeaseRenewableOption::create($data);
 
-                    if($market_value){
-                        return redirect(route('addlease.fairmarketvalue.index',['id' => $lease->id]))->with('status', 'Fair Market has been added successfully.');
+                    if($renewable_value){
+                        return redirect(route('addlease.renewable.index',['id' => $lease->id]))->with('status', 'Renewable Option has been added successfully.');
                     }
                 }
-
-                $currencies = Currencies::query()->where('status', '=', '1')->get();
-                $reporting_currency_settings = ReportingCurrencySettings::query()->where('business_account_id', '=', auth()->user()->id)->first();
-                $reporting_foreign_currency_transaction_settings = ForeignCurrencyTransactionSettings::query()->where('business_account_id', '=', auth()->user()->id)->get();
-                if(collect($reporting_currency_settings)->isEmpty()) {
-                    $reporting_currency_settings = new ReportingCurrencySettings();
-                }
-                return view('lease.fair-market-value.create', compact(
+                return view('lease.lease-renewable-option.create', compact(
                     'model',
                     'lease',
-                    'asset',
-                    'currencies',
-                    'reporting_foreign_currency_transaction_settings',
-                    'reporting_currency_settings'
+                    'asset'
                 ));
             } else {
                 abort(404);
@@ -119,7 +89,7 @@ class LeaseRenewableOptionController extends Controller
 
 
     /**
-     * edit existing fair market value details for an asset
+     * edit existing renewable option value details for an asset
      * @param $id
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -130,7 +100,7 @@ class LeaseRenewableOptionController extends Controller
             $lease = $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
             if($lease) {
 
-                $model = FairMarketValue::query()->where('asset_id', '=', $id)->first();
+                $model = LeaseRenewableOption::query()->where('asset_id', '=', $id)->first();
 
                 if($request->isMethod('post')) {
                     $validator = Validator::make($request->except('_token'), $this->validationRules());
@@ -140,36 +110,22 @@ class LeaseRenewableOptionController extends Controller
                     }
 
                     $data = $request->except('_token');
-                    $data['attachment'] = "";
                     $data['lease_id']   = $asset->lease->id;
                     $data['asset_id']   = $asset->id;
-                    if($request->hasFile('attachment')){
-                        $file = $request->file('attachment');
-                        $uniqueFileName = uniqid() . $file->getClientOriginalName();
-                        $request->file('attachment')->move('uploads', $uniqueFileName);
-                        $data['attachment'] = $uniqueFileName;
-                    }
+                    $data['expected_lease_end_Date'] = date('Y-m-d', strtotime($request->expected_lease_end_Date));
 
                     $model->setRawAttributes($data);
 
                     if($model->save()){
-                        return redirect(route('addlease.fairmarketvalue.index',['id' => $lease->id]))->with('status', 'Fair Market has been updated successfully.');
+                        return redirect(route('addlease.renewable.index',['id' => $lease->id]))->with('status', 'Renewable Option Value has been updated successfully.');
                     }
                 }
 
-                $currencies = Currencies::query()->where('status', '=', '1')->get();
-                $reporting_currency_settings = ReportingCurrencySettings::query()->where('business_account_id', '=', auth()->user()->id)->first();
-                $reporting_foreign_currency_transaction_settings = ForeignCurrencyTransactionSettings::query()->where('business_account_id', '=', auth()->user()->id)->get();
-                if(collect($reporting_currency_settings)->isEmpty()) {
-                    $reporting_currency_settings = new ReportingCurrencySettings();
-                }
-                return view('lease.fair-market-value.update', compact(
+              
+                return view('lease.lease-renewable-option.update', compact(
                     'model',
                     'lease',
-                    'asset',
-                    'currencies',
-                    'reporting_foreign_currency_transaction_settings',
-                    'reporting_currency_settings'
+                    'asset'
                 ));
             } else {
                 abort(404);

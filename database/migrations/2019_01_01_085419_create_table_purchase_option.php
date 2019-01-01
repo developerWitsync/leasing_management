@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateLeaseRenewalOptionTable extends Migration
+class CreateTablePurchaseOption extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,18 @@ class CreateLeaseRenewalOptionTable extends Migration
      */
     public function up()
     {
-        Schema::create('lease_renewal_option', function (Blueprint $table) {
+        Schema::create('purchase_option', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('lease_id');
             $table->foreign('lease_id')->references('id')->on('lease')->onDelete('cascade');
             $table->unsignedInteger('asset_id');
             $table->foreign('asset_id')->references('id')->on('lease_assets')->onDelete('cascade');
-            $table->enum('is_renewal_option_under_contract', ['yes', 'no'])->nullable();
-            $table->enum('is_reasonable_certainity_option', ['yes', 'no'])->nullable();
-            $table->date('expected_lease_end_Date')->nullable();
+            $table->enum('purchase_option_clause', ['yes', 'no'])->nullable();
+            $table->enum('purchase_option_exerecisable', ['yes', 'no'])->nullable();
+            $table->date('expected_purchase_date')->nullable();
+            $table->date('expected_lease_end_date')->nullable();
+            $table->string('currency')->nullable();
+            $table->unsignedInteger('purchase_price')->nullable();
             $table->timestamps();
         });
     }
@@ -33,6 +36,6 @@ class CreateLeaseRenewalOptionTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lease_renewal_option');
+        Schema::dropIfExists('purchase_option');
     }
 }
