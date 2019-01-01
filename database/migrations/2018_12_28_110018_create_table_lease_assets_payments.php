@@ -31,7 +31,7 @@ class CreateTableLeaseAssetsPayments extends Migration
 
             $table->enum('variable_amount_determinable', ['yes', 'no'])->default('no');
 
-            $table->text('description');
+            $table->text('description')->nullable();
 
             $table->unsignedInteger('payment_interval');
             $table->foreign('payment_interval')->references('id')->on('lease_payments_frequency')->onDelete('cascade');

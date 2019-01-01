@@ -27,11 +27,16 @@ class RoleController extends Controller
             ],
         ];
 	}
-   public function index(){
-        
+
+    /**
+     * Renders the view to list all the roles for the logged in
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function index(){
         $role = Role::all();
         return view('settings.useraccess.role.index', ['breadcrumbs'=> $this->breadcrumbs,'role'=>$role]);
     }
+
     /**
      * Fetches and returns the json to be rendered on the datatable
      * @param Request $request
@@ -64,6 +69,7 @@ class RoleController extends Controller
             return redirect()->back();
         }
     }
+
      /**
      * add a new Role to the database
      * @param Request $request
