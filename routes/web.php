@@ -26,7 +26,7 @@ Route::middleware('auth')->group(function(){
     Route::namespace('Lease')->middleware(['permission:add_lease'])->prefix('lease')->group(function(){
 
         /**
-         * Lessor Details Routes
+         * Lessor Details Routes NL1
          */
         Route::prefix('lessor-details')->group(function(){
             Route::match(['post','get'],'create/{id?}', ['as' => 'add-new-lease.index', 'uses' => 'LessorDetailsController@index']);
@@ -37,7 +37,7 @@ Route::middleware('auth')->group(function(){
         });
 
         /**
-         * Underlying Lease Assets Routes
+         * Underlying Lease Assets Routes NL2
          */
         Route::prefix('underlying-lease-assets')->group(function(){
             Route::match(['post', 'get'],'create/{id}', ['as' => 'addlease.leaseasset.index', 'uses' => 'UnderlyingLeaseAssetController@index']);
@@ -46,7 +46,7 @@ Route::middleware('auth')->group(function(){
         });
 
         /**
-         * Lease Payments Routes
+         * Lease Payments Routes NL3
          */
         Route::prefix('payments')->group(function(){
             Route::get('index/{id}', ['as' => 'addlease.payments.index', 'uses' => 'LeasePaymentsController@index']);
@@ -60,7 +60,7 @@ Route::middleware('auth')->group(function(){
 
 
         /*
-         * Fair Market Value Routes
+         * Fair Market Value Routes NL4
          */
         Route::prefix('fair-market-value')->group(function(){
             Route::get('index/{id}', ['as' => 'addlease.fairmarketvalue.index', 'uses' => 'FairMarketValueController@index']);
@@ -99,7 +99,6 @@ Route::middleware('auth')->group(function(){
         });
 
         /*
-         * @todo Need to check and confirm
          * Purchase Option Routes NL8
          */
         Route::prefix('purchase-option')->group(function(){
@@ -107,7 +106,10 @@ Route::middleware('auth')->group(function(){
             Route::post('save', ['as' => 'addlease.purchaseoption.save', 'uses' => 'PurchaseOptionController@store']);
             Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.purchaseoption.create', 'uses' => 'PurchaseOptionController@create']);
             Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.purchaseoption.update', 'uses' => 'PurchaseOptionController@update']);
-        }); 
+        });
+
+
+
 
     });
 
