@@ -68,4 +68,9 @@ class LeaseAssets extends Model
     public function purchaseOption(){
         return $this->hasOne('App\PurchaseOption', 'asset_id','id');
     }
+
+     public function leaseDurationClassified(){
+        return $this->hasOne('App\LeaseDurationClassified', 'asset_id','id');
+
+    }
 }

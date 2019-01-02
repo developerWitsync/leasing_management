@@ -108,8 +108,15 @@ Route::middleware('auth')->group(function(){
             Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.purchaseoption.update', 'uses' => 'PurchaseOptionController@update']);
         });
 
-
-
+        /**
+         * Lease Duration Classified Value NL8.1
+         */
+        Route::prefix('lease-duration-classified')->group(function(){
+            
+            Route::get('index/{id}', ['as' => 'addlease.durationclassified.index', 'uses' => 'LeaseDurationClassifiedController@index']);
+            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.durationclassified.create', 'uses' => 'LeaseDurationClassifiedController@create']);
+            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.durationclassified.update', 'uses' => 'LeaseDurationClassifiedController@update']);
+        });
 
     });
 

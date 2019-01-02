@@ -121,9 +121,8 @@
     </table>
     <div class="form-group">
         <div class="col-md-6 col-md-offset-4">
-
             <a href="{{ route('add-new-lease.index',['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
-
+  
             <button type="submit" class="btn btn-success">
                 Submit
             </button>

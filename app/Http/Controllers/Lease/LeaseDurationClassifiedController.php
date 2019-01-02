@@ -3,27 +3,29 @@
  * Created by Sublime.
  * User: Jyoti Gupta
  * Date: 01/01/19
- * Time: 12:24 AM
+ * Time: 4:24 PM
  */
 
 namespace App\Http\Controllers\Lease;
 
 use App\Http\Controllers\Controller;
 use App\Lease;
+use App\LeaseContractDuration;
+use App\LeaseDurationClassified;
 use App\LeaseRenewableOption;
+use App\LeaseTerminationOption;
+use App\PurchaseOption;
 use App\LeaseAssets;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Validator;
 
-class LeaseRenewableOptionController extends Controller
+class LeaseDurationClassifiedController extends Controller
 {
     protected function validationRules(){
         return [
-            'is_renewal_option_under_contract'   => 'required',
-            'renewal_option_not_available_reason'   => 'required_if:is_renewal_option_under_contract,no',
-            'is_reasonable_certainity_option' => 'required_if:is_renewal_option_under_contract,yes',
-            'expected_lease_end_Date'   => 'required_if:is_reasonable_certainity_option,yes'
+            'lease_start_date'   => 'required',
+            'lease_end_date'   => 'required'
+            
         ];
     }
     /**
@@ -32,21 +34,21 @@ class LeaseRenewableOptionController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index($id){
-        $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
+    public function index($id, Request $request){
+        $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->with('leaseType')->with('assets')->first();
         if($lease) {
-            //Load the assets only for the assets where no selected at `exercise_termination_option_available` on lease termination
+            $back_button = route('addlease.purchaseoption.index', ['id' => $lease->id]);
+
             $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->whereHas('terminationOption',  function($query){
                 $query->where('exercise_termination_option_available', '=', 'no');
             })->get();
 
             if(count($assets) == 0) {
-                return redirect(route('addlease.durationclassified.index', ['id' => $id]));
+                $back_button = route('addlease.leaseterminationoption.index', ['id' => $lease->id]);
             }
-
-            return view('lease.lease-renewable-option.index', compact(
+            return view('lease.lease-duration-classified.index', compact(
                 'lease',
-                'assets'
+                'back_button'
             ));
         } else {
             abort(404);
@@ -54,7 +56,7 @@ class LeaseRenewableOptionController extends Controller
     }
 
     /**
-     * add renewable option value details for an asset
+     * add lease duration classifed value details for an asset
      * @param $id
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -63,9 +65,10 @@ class LeaseRenewableOptionController extends Controller
         try{
             $asset = LeaseAssets::query()->findOrFail($id);
             $lease = $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
+
             if($lease) {
 
-                $model = new LeaseRenewableOption();
+                $model = new LeaseDurationClassified();
 
                 if($request->isMethod('post')) {
                     $validator = Validator::make($request->except('_token'), $this->validationRules());
@@ -74,25 +77,31 @@ class LeaseRenewableOptionController extends Controller
                         return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
                     }
 
-                    $data = $request->except('_token', 'submit');
+                    $data = $request->except('_token');
                     $data['lease_id']   = $asset->lease->id;
                     $data['asset_id']   = $asset->id;
-                    if($request->is_reasonable_certainity_option == "yes") {
-                        $data['expected_lease_end_Date'] = Carbon::parse($request->expected_lease_end_Date)->format('Y-m-d');
-                    } else {
-                        $data['expected_lease_end_Date']  = null;
-                    }
+                    $data['expected_lease_end_Date'] = date('Y-m-d', strtotime($request->expected_lease_end_Date));
+                    
 
-                    $renewable_value = LeaseRenewableOption::create($data);
+                    $duration_classified_value = LeaseDurationClassified::create($data);
 
-                    if($renewable_value){
-                        return redirect(route('addlease.renewable.index',['id' => $lease->id]))->with('status', 'Renewable Option has been added successfully.');
+                    if($duration_classified_value){
+                        return redirect(route('addlease.durationclassified.index',['id' => $lease->id]))->with('status', 'Lease Duration Classified Value has been added successfully.');
                     }
                 }
-                return view('lease.lease-renewable-option.create', compact(
+
+                //find the expected values for the end date, lease classification
+                $model->lease_end_date                 = $model->getExpectedLeaseEndDate($asset);
+                $model->lease_contract_duration_id               = $model->getLeaseAssetClassification($asset);
+
+                $lease_contract_duration = LeaseContractDuration::query()->get();
+
+                return view('lease.lease-duration-classified.create', compact(
                     'model',
                     'lease',
-                    'asset'
+                    'asset',
+                    'expected_lease_classification',
+                    'lease_contract_duration'
                 ));
             } else {
                 abort(404);
@@ -102,8 +111,9 @@ class LeaseRenewableOptionController extends Controller
         }
     }
 
+
     /**
-     * edit existing renewable option value details for an asset
+     * edit existing lease duration classified option value details for an asset
      * @param $id
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -111,10 +121,10 @@ class LeaseRenewableOptionController extends Controller
     public function update($id, Request $request){
         try{
             $asset = LeaseAssets::query()->findOrFail($id);
-            $lease = $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
+            $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
             if($lease) {
 
-                $model = LeaseRenewableOption::query()->where('asset_id', '=', $id)->first();
+                $model = LeaseDurationClassified::query()->where('asset_id', '=', $id)->first();
 
                 if($request->isMethod('post')) {
                     $validator = Validator::make($request->except('_token'), $this->validationRules());
@@ -123,33 +133,31 @@ class LeaseRenewableOptionController extends Controller
                         return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
                     }
 
-                    $data = $request->except('_token', 'submit');
+                    $data = $request->except('_token');
                     $data['lease_id']   = $asset->lease->id;
                     $data['asset_id']   = $asset->id;
-                    if($request->is_reasonable_certainity_option == "yes") {
-                        $data['expected_lease_end_Date'] = Carbon::parse($request->expected_lease_end_Date)->format('Y-m-d');
-                    } else {
-                        $data['expected_lease_end_Date']  = null;
-                    }
+                    $data['lease_start_date'] = date('Y-m-d', strtotime($request->lease_start_date));
+                    $data['lease_end_date'] = date('Y-m-d', strtotime($request->lease_end_date));
 
                     $model->setRawAttributes($data);
-
                     if($model->save()){
-                        return redirect(route('addlease.renewable.index',['id' => $lease->id]))->with('status', 'Renewable Option Value has been updated successfully.');
+                        return redirect(route('addlease.durationclassified.index',['id' => $lease->id]))->with('status', 'Lease Duration Classified Value has been updated successfully.');
                     }
                 }
 
+                $lease_contract_duration = LeaseContractDuration::query()->get();
               
-                return view('lease.lease-renewable-option.update', compact(
+                return view('lease.lease-duration-classified.update', compact(
                     'model',
                     'lease',
-                    'asset'
+                    'asset',
+                    'lease_contract_duration'
                 ));
             } else {
                 abort(404);
             }
         } catch (\Exception $e) {
-            dd($e);
+            dd($e->getMessage());
         }
     }
 }

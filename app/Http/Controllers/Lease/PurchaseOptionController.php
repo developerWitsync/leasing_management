@@ -47,7 +47,7 @@ class PurchaseOptionController extends Controller
             })->get();
 
             if(count($assets) == 0) {
-                dd("need to redirect to the Lease Duration Classified");
+                return redirect(route('addlease.durationclassified.index', ['id' => $id]));
             }
 
             return view('lease.purchase-option.index', compact(
