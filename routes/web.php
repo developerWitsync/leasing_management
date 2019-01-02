@@ -116,6 +116,10 @@ Route::middleware('auth')->group(function(){
 
     });
 
+    Route::namespace('Drafts')->prefix('drafts')->group(function(){
+        Route::get('/', ['as' => 'drafts.index', 'uses' => 'IndexController@index']);
+    });
+
     Route::namespace('Settings')->middleware(['permission:settings'])->prefix('settings')->group(function(){
 
         Route::prefix('general')->group(function(){
