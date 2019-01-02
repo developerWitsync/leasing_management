@@ -33,24 +33,54 @@
           </div>
     </div>
     <div class="hidden-group gg {{$model->is_reasonable_certainity_option}}" id="hidden-fields_date" @if(old('is_reasonable_certainity_option',$model->is_reasonable_certainity_option ) == "yes") style="display:block;" @else  style="display:none;" @endif>
-        <div class="form-group{{ $errors->has('expected_lease_end_Date') ? ' has-error' : '' }} required">
-            <label for="expected_lease_end_Date" class="col-md-4 control-label">Expected Lease End Date</label>
+
+       <div class="form-group{{ $errors->has('expected_purchase_date') ? ' has-error' : '' }} required">
+            <label for="expected_purchase_date" class="col-md-4 control-label">Expected Purchase Date</label>
             <div class="col-md-6 form-check form-check-inline">
-               <input type="text" class="form-control" id="expected_lease_end_Date" name="expected_lease_end_Date"  value="{{old('expected_lease_end_Date', $model->expected_lease_end_Date)}}">
-                @if ($errors->has('expected_lease_end_Date'))
+               <input type="text" class="form-control" id="expected_purchase_date" name="expected_purchase_date"  value="{{old('expected_purchase_date', $model->expected_purchase_date)}}">
+                @if ($errors->has('expected_purchase_date'))
                     <span class="help-block">
-                        <strong>{{ $errors->first('expected_lease_end_Date') }}</strong>
+                        <strong>{{ $errors->first('expected_purchase_date') }}</strong>
                     </span>
                 @endif
             </div>
         </div>
-        <div class="form-group">
-            <label for="confirm" class="col-md-4 control-label"></label>
+        <div class="form-group{{ $errors->has('expected_lease_end_Date') ? ' has-error' : '' }} required">
+            <label for="expected_lease_end_Date" class="col-md-4 control-label">Expected Lease End Date</label>
             <div class="col-md-6 form-check form-check-inline">
-               <span id="confirm" name="confirm" class="btn btn-primary">Confirm
-           </span>
+               <input type="text" class="form-control" id="expected_lease_end_date" name="expected_lease_end_date"  value="{{old('expected_lease_end_date', $model->expected_lease_end_date)}}">
+                @if ($errors->has('expected_lease_end_date'))
+                    <span class="help-block">
+                        <strong>{{ $errors->first('expected_lease_end_date') }}</strong>
+                    </span>
+                @endif
             </div>
         </div>
+
+        <div class="form-group{{ $errors->has('currency') ? ' has-error' : '' }} required">
+            <label for="currency" class="col-md-4 control-label">Purchase Currency</label>
+            <div class="col-md-6 form-check form-check-inline">
+                <input type="text" value="{{ $lease->lease_contract_id }}" class="form-control" id="currency" name="currency" readonly="readonly">
+                @if ($errors->has('currency'))
+                    <span class="help-block">
+                        <strong>{{ $errors->first('currency') }}</strong>
+                    </span>
+                @endif
+            </div>
+        </div>
+
+     <div class="form-group{{ $errors->has('purchase_price') ? ' has-error' : '' }} required">
+            <label for="purchase_price" class="col-md-4 control-label">Anticipated Purchase Price</label>
+            <div class="col-md-6 form-check form-check-inline">
+                <input type="text" class="form-control" id="purchase_price" name="purchase_price" value="{{ old('purchase_price', $model->purchase_price) }}">
+                @if ($errors->has('purchase_price'))
+                    <span class="help-block">
+                        <strong>{{ $errors->first('purchase_price') }}</strong>
+                    </span>
+                @endif
+            </div>
+        </div>
+      
 
  </div>
   <div class="form-group">
