@@ -41,7 +41,7 @@
                             @php
                                 $show_next = [];
                             @endphp
-                            @foreach($lease->assets as $key=>$asset)
+                            @foreach($assets as $key=>$asset)
                           <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td style="width: 10%">
@@ -74,12 +74,10 @@
                     <div class="form-group">
 
                         <div class="col-md-6 col-md-offset-4">
-                           <a href="" class="btn btn-danger">Back</a>
-                           <!--  <a href="{{ route('addlease.fairmarketvalue.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a> -->
-
-                          @if(!in_array(false, $show_next))
-                                <a href="#" class="btn btn-primary">Next</a>
-                            @endif  
+                              <a href="{{ route('addlease.leaseterminationoption.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
+                              @if(!in_array(false, $show_next))
+                                    <a href="{{ route('addlease.purchaseoption.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
+                              @endif
                         </div>
 
                     </div>

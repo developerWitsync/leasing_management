@@ -58,7 +58,7 @@ class LeaseTerminationOptionController extends Controller
     }
 
     /**
-     * add fair market value details for an asset
+     * add Lease Termination Options details for an asset
      * @param $id
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View

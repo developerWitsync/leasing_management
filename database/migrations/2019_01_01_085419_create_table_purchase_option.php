@@ -24,7 +24,7 @@ class CreateTablePurchaseOption extends Migration
             $table->date('expected_purchase_date')->nullable();
             $table->date('expected_lease_end_date')->nullable();
             $table->string('currency')->nullable();
-            $table->unsignedInteger('purchase_price')->nullable();
+            $table->decimal('purchase_price',12,2)->nullable();
             $table->timestamps();
         });
     }
