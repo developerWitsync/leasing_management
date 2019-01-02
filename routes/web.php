@@ -109,6 +109,16 @@ Route::middleware('auth')->group(function(){
             Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.purchaseoption.create', 'uses' => 'PurchaseOptionController@create']);
             Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.purchaseoption.update', 'uses' => 'PurchaseOptionController@update']);
         }); 
+        /**
+         * Lease Duration Classified Value
+         */
+        Route::prefix('lease-duration-classified')->group(function(){
+            
+            Route::get('index/{id}', ['as' => 'addlease.durationclassified.index', 'uses' => 'LeaseDurationClassifiedController@index']);
+             Route::post('save', ['as' => 'addlease.durationclassified.save', 'uses' => 'LeaseDurationClassifiedController@store']);
+            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.durationclassified.create', 'uses' => 'LeaseDurationClassifiedController@create']);
+            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.durationclassified.update', 'uses' => 'LeaseDurationClassifiedController@update']);
+        });     
 
     });
 
