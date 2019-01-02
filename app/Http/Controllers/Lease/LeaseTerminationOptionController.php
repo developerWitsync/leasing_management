@@ -25,6 +25,7 @@ use App\LeaseTerminationOption;
 use App\FairMarketValue;
 use App\ReportingCurrencySettings;
 use App\ForeignCurrencyTransactionSettings;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -34,19 +35,18 @@ class LeaseTerminationOptionController extends Controller
         return [
             'lease_termination_option_available'   => 'required',
             'exercise_termination_option_available'   => 'required_if:lease_termination_option_available,yes',
-            'lease_end_date'  => 'required_if:exercise_termination_option_available,yes|date',
+            'lease_end_date'  => 'required_if:exercise_termination_option_available,yes|nullable|date',
             'termination_penalty_applicable'  => 'required_if:exercise_termination_option_available,yes',
             'currency' => 'required_if:termination_penalty_applicable,yes',
-            'termination_penalty'  => 'required_if:termination_penalty_applicable,yes',
+            'termination_penalty'  => 'required_if:termination_penalty_applicable,yes|nullable|numeric',
         ];
     }
     /**
      * renders the table to list all the lease assets.
      * @param $id Primary key for the lease
-     * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index($id, Request $request){
+    public function index($id){
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->with('leaseType')->with('assets')->first();
         if($lease) {
             return view('lease.lease-termination-option.index', compact(
@@ -58,7 +58,7 @@ class LeaseTerminationOptionController extends Controller
     }
 
     /**
-     * add fair market value details for an asset
+     * add Lease Termination Options details for an asset
      * @param $id
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -79,6 +79,9 @@ class LeaseTerminationOptionController extends Controller
                     }
 
                     $data = $request->except('_token');
+                    if($request->lease_end_date!=""){
+                        $data['lease_end_date']  = Carbon::parse($request->lease_end_date)->format('Y-m-d');
+                    }
                     $data['lease_id']   = $asset->lease->id;
                     $data['asset_id']   = $asset->id;
 
@@ -89,19 +92,10 @@ class LeaseTerminationOptionController extends Controller
                     }
                 }
 
-                $currencies = Currencies::query()->where('status', '=', '1')->get();
-                $reporting_currency_settings = ReportingCurrencySettings::query()->where('business_account_id', '=', auth()->user()->id)->first();
-                $reporting_foreign_currency_transaction_settings = ForeignCurrencyTransactionSettings::query()->where('business_account_id', '=', auth()->user()->id)->get();
-                if(collect($reporting_currency_settings)->isEmpty()) {
-                    $reporting_currency_settings = new ReportingCurrencySettings();
-                }
                 return view('lease.lease-termination-option.create', compact(
                     'model',
                     'lease',
-                    'asset',
-                    'currencies',
-                    'reporting_foreign_currency_transaction_settings',
-                    'reporting_currency_settings'
+                    'asset'
                 ));
             } else {
                 abort(404);
@@ -113,7 +107,7 @@ class LeaseTerminationOptionController extends Controller
 
 
     /**
-     * edit existing fair market value details for an asset
+     * edit existing Lease Termination option details for an asset
      * @param $id
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -134,6 +128,9 @@ class LeaseTerminationOptionController extends Controller
                     }
 
                     $data = $request->except('_token');
+                    if($request->lease_end_date!=""){
+                        $data['lease_end_date']  = Carbon::parse($request->lease_end_date)->format('Y-m-d');
+                    }
                     $data['lease_id']   = $asset->lease->id;
                     $data['asset_id']   = $asset->id;
 
@@ -143,20 +140,10 @@ class LeaseTerminationOptionController extends Controller
                         return redirect(route('addlease.leaseterminationoption.index',['id' => $lease->id]))->with('status', 'Lease Termination Option Details has been updated successfully.');
                     }
                 }
-
-                $currencies = Currencies::query()->where('status', '=', '1')->get();
-                $reporting_currency_settings = ReportingCurrencySettings::query()->where('business_account_id', '=', auth()->user()->id)->first();
-                $reporting_foreign_currency_transaction_settings = ForeignCurrencyTransactionSettings::query()->where('business_account_id', '=', auth()->user()->id)->get();
-                if(collect($reporting_currency_settings)->isEmpty()) {
-                    $reporting_currency_settings = new ReportingCurrencySettings();
-                }
                 return view('lease.lease-termination-option.update', compact(
                     'model',
                     'lease',
-                    'asset',
-                    'currencies',
-                    'reporting_foreign_currency_transaction_settings',
-                    'reporting_currency_settings'
+                    'asset'
                 ));
             } else {
                 abort(404);
