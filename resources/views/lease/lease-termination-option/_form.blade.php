@@ -10,13 +10,13 @@
             <label class="form-check-label" for="no" id="no" style="vertical-align: 4px">No</label>
             @if ($errors->has('lease_termination_option_available'))
                 <span class="help-block">
-                        <strong>{{ $errors->first('lease_termination_option_available') }}</strong>
-                    </span>
+                    <strong>{{ $errors->first('lease_termination_option_available') }}</strong>
+                </span>
             @endif
         </div>
     </div>
 
-    <div class="hidden-group" id="hidden-field" @if($model->lease_termination_option_available == "yes") style="display:block;" @else  style="display:none;" @endif>
+    <div class="hidden-group" id="hidden-field" @if(old('lease_termination_option_available', $model->lease_termination_option_available) == "yes") style="display:block;" @else  style="display:none;" @endif>
     <div class="form-group{{ $errors->has('exercise_termination_option_available') ? ' has-error' : '' }} required">
         <label for="name" class="col-md-4 control-label">Reasonable Certainity to Exercise Termination Option as of today</label>
         <div class="col-md-6 form-check form-check-inline" required>
@@ -33,11 +33,11 @@
     </div>
     </div>
 
-     <div class="hidden-group" id="hidden-elements" @if($model->exercise_termination_option_available == "yes" && $model->lease_termination_option_available == "yes") style="display:block;" @else  style="display:none;" @endif>
+     <div class="hidden-group" id="hidden-elements" @if(old('exercise_termination_option_available',$model->exercise_termination_option_available) == "yes" && old('lease_termination_option_available', $model->lease_termination_option_available) == "yes") style="display:block;" @else  style="display:none;" @endif>
         <div class="form-group{{ $errors->has('lease_end_date') ? ' has-error' : '' }} required">
             <label for="lease_end_date" class="col-md-4 control-label">Expected Lease End Date</label>
             <div class="col-md-6">
-                <input type="date" placeholder="Units" class="form-control" id="lease_end_date" name="lease_end_date" value="{{ old('lease_end_date', $model->lease_end_date) }}">
+                <input type="text" placeholder="Expected Lease End Date" class="form-control" id="lease_end_date" name="lease_end_date" value="{{ old('lease_end_date', $model->lease_end_date) }}">
                 @if ($errors->has('lease_end_date'))
                     <span class="help-block">
                         <strong>{{ $errors->first('lease_end_date') }}</strong>
@@ -61,7 +61,7 @@
         </div>
     </div>
 </div>
-    <div class="hidden-group" id="hidden-fields" @if($model->termination_penalty_applicable == "yes" && $model->exercise_termination_option_available == "yes" && $model->lease_termination_option_available == "yes") style="display:block;" @else  style="display:none;" @endif>
+    <div class="hidden-group" id="hidden-fields" @if(old('termination_penalty_applicable',$model->termination_penalty_applicable) == "yes" && old('exercise_termination_option_available',$model->exercise_termination_option_available ) == "yes" && old('lease_termination_option_available', $model->lease_termination_option_available) == "yes") style="display:block;" @else  style="display:none;" @endif>
     <div class="form-group{{ $errors->has('currency') ? ' has-error' : '' }} required">
             <label for="currency" class="col-md-4 control-label">Currency</label>
             <div class="col-md-6 form-check form-check-inline">
@@ -100,7 +100,15 @@
 </form>
 
 @section('footer-script')
+    <script src="{{ asset('js/jquery-ui.js') }}"></script>
     <script type="text/javascript">
+
+        $(document).ready(function(){
+            $("#lease_end_date").datepicker({
+                dateFormat: "dd-M-yy",
+            });
+        });
+
         $(document).on('click', 'input[name="lease_termination_option_available"]', function() {
             $('input[name="lease_termination_option_available"]').not(this).prop('checked', false);
             if($(this).is(':checked') && $(this).val() == 'yes') {
@@ -108,8 +116,8 @@
                 
             } else {
                 $('#hidden-field').hide();
-                 $('#hidden-fields').hide();
-                 $('#hidden-elements').hide();
+                $('#hidden-fields').hide();
+                $('#hidden-elements').hide();
             }
         });
         $(document).on('click', 'input[name="exercise_termination_option_available"]', function() {
