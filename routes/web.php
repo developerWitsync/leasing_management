@@ -118,6 +118,17 @@ Route::middleware('auth')->group(function(){
             Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.durationclassified.update', 'uses' => 'LeaseDurationClassifiedController@update']);
         });
 
+        /**
+         * Select Low Value Value NL10
+         */
+        Route::prefix('select-low-value')->group(function(){
+            
+            Route::get('index/{id}', ['as' => 'addlease.lowvalue.index', 'uses' => 'SelectLowValueController@index']);
+            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.lowvalue.create', 'uses' => 'SelectLowValueController@create']);
+            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.lowvalue.update', 'uses' => 'SelectLowValueController@update']);
+
+        });
+
     });
 
     Route::namespace('Drafts')->prefix('drafts')->group(function(){
