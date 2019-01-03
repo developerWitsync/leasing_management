@@ -56,6 +56,17 @@ class LeasePaymentsController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id, Request $request){
+        $breadcrumbs = [
+            [
+                'link' => route('add-new-lease.index'),
+                'title' => 'Add New Lease'
+            ],
+            [
+                'link' => route('addlease.payments.index',['id' => $id]),
+                'title' => 'Lease Payments'
+            ],
+        ];
+
         try{
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())
                 ->with('assets.category')
@@ -80,7 +91,7 @@ class LeasePaymentsController extends Controller
 
                 $show_next = $required_payments == $completed_payments;
 
-                return view('lease.payments.index', compact(
+                return view('lease.payments.index', compact('breadcrumbs',
                     'lease',
                     'show_next'
                 ));

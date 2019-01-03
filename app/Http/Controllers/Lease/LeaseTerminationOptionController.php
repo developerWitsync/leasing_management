@@ -46,9 +46,19 @@ class LeaseTerminationOptionController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id){
+         $breadcrumbs = [
+            [
+                'link' => route('add-new-lease.index'),
+                'title' => 'Add New Lease'
+            ],
+            [
+                'link' => route('addlease.leaseterminationoption.index',['id' => $id]),
+                'title' => 'Termination Option'
+            ],
+        ];
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->with('leaseType')->with('assets')->first();
         if($lease) {
-            return view('lease.lease-termination-option.index', compact(
+            return view('lease.lease-termination-option.index', compact('breadcrumbs',
                 'lease'
             ));
         } else {

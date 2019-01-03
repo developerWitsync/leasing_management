@@ -41,7 +41,7 @@ class LeaseRenewableOptionController extends Controller
             })->get();
 
             if(count($assets) == 0) {
-                dd("need to redirect to the Lease Duration Classified");
+                return redirect(route('addlease.durationclassified.index', ['id' => $id]));
             }
 
             return view('lease.lease-renewable-option.index', compact(

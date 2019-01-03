@@ -24,7 +24,7 @@
                     </ul>
                 </div>
             @endif
-
+            
             {{--@include('lease._menubar')--}}
 
             <div class="tab-content" style="padding: 0px;">

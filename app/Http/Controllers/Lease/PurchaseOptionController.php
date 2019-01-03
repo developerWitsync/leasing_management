@@ -39,6 +39,16 @@ class PurchaseOptionController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id, Request $request){
+         $breadcrumbs = [
+            [
+                'link' => route('add-new-lease.index'),
+                'title' => 'Add New Lease'
+            ],
+            [
+                'link' => route('addlease.purchaseoption.index',['id' => $id]),
+                'title' => 'Purchase Option'
+            ],
+        ];
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->with('leaseType')->with('assets')->first();
         if($lease) {
             //Load the assets only for the assets where no selected at `exercise_termination_option_available` on lease termination
@@ -47,10 +57,10 @@ class PurchaseOptionController extends Controller
             })->get();
 
             if(count($assets) == 0) {
-                dd("need to redirect to the Lease Duration Classified");
+                return redirect(route('addlease.durationclassified.index', ['id' => $id]));
             }
 
-            return view('lease.purchase-option.index', compact(
+            return view('lease.purchase-option.index', compact('breadcrumbs',
                 'lease',
                 'assets'
             ));

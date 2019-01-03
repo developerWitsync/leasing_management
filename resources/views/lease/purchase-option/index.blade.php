@@ -24,7 +24,7 @@
                     </ul>
                 </div>
             @endif
-
+              {{--@include('lease._menubar')--}}
             <div class="tab-content" style="padding: 0px;">
                 <div role="tabpanel" class="tab-pane active">
                     <table class="table table-bordered table-responsive">
@@ -78,7 +78,7 @@
                             <a href="{{ route('addlease.renewable.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
 
                             @if(!in_array(false, $show_next))
-                                <a href="{{ route('addlease.purchaseoption.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
+                                <a href="{{ route('addlease.durationclassified.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
                             @endif
                         </div>
 
