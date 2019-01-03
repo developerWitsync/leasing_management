@@ -129,6 +129,27 @@ Route::middleware('auth')->group(function(){
 
         });
 
+        /**
+         * Select Discount Rate  NL11
+         */
+        Route::prefix('select-discount-rate')->group(function(){
+            
+            Route::get('index/{id}', ['as' => 'addlease.discountrate.index', 'uses' => 'SelectDiscountRateController@index']);
+            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.discountrate.create', 'uses' => 'SelectDiscountRateController@create']);
+            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.discountrate.update', 'uses' => 'SelectDiscountRateController@update']);
+        });
+
+        /**
+         * Lease Balances as on Dec 31, 2018  NL12
+         */
+        Route::prefix('lease-balnce-as-on-dec')->group(function(){
+            
+            Route::get('index/{id}', ['as' => 'addlease.balanceasondec.index', 'uses' => 'LeaseBalanceAsOnDecController@index']);
+            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.balanceasondec.create', 'uses' => 'LeaseBalanceAsOnDecController@create']);
+            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.balanceasondec.update', 'uses' => 'LeaseBalanceAsOnDecController@update']);
+        });
+
+
     });
 
     /*

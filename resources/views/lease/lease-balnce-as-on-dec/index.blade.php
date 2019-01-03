@@ -6,7 +6,7 @@
 @endsection
 @section('content')
     <div class="panel panel-default">
-        <div class="panel-heading">Add New Lease | Select Low Value </div>
+        <div class="panel-heading">Add New Lease | Lease Balance As On 31 Dec 2018 </div>
 
         <div class="panel-body">
             @if (session('status'))
@@ -27,6 +27,7 @@
               {{--@include('lease._menubar')--}}
             <div class="tab-content" style="padding: 0px;">
                 <div role="tabpanel" class="tab-pane active">
+                 
                     <table class="table table-bordered table-responsive">
                         <thead>
                         <tr>
@@ -34,7 +35,6 @@
                             <th>Unique ULA Code</th>
                             <th>Name of the Underlying Lease Asset</th>
                             <th>Underlying Lease Asset Classification</th>
-                            <th>Fair Market Value as on date of Lease Start</th>
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -54,33 +54,29 @@
                                     <td>
                                         {{ $asset->subcategory->title }}
                                     </td>
-                                    <td>
-                                        {{ $asset->fairMarketValue->total_units }}
-                                    </td>
-                                    <td>
-                                        @if($asset->leaseSelectLowValue)
+                                   <td>
+                                        @if($asset->leaseBalanceAsOnDec)
                                             @php
                                                 $show_next[] = true;
                                             @endphp
-                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.lowvalue.update', ['id'=> $asset->id]) }}">Update Select Low Value </a>
+                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.balanceasondec.update', ['id'=> $asset->id]) }}">Update Lease Balance </a>
                                         @else
                                             @php
                                                 $show_next[] = false;
                                             @endphp
-                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.lowvalue.create', ['id'=> $asset->id]) }}">Add Select Low Value</a>
+                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.balanceasondec.create', ['id'=> $asset->id]) }}">Add Lease Balance</a>
                                         @endif
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
-
                     <div class="form-group">
 
                         <div class="col-md-6 col-md-offset-4">
-                              <a href="{{ route('addlease.lowvalue.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
+                              <a href="{{ route('addlease.discountrate.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
                               @if(!in_array(false, $show_next))
-                                    <a href="{{ route('addlease.discountrate.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
+                                    <a href="#" class="btn btn-primary">Next</a>
                               @endif
                         </div>
 
