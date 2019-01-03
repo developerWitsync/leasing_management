@@ -248,6 +248,10 @@ Route::middleware('auth')->group(function(){
         Route::prefix('codification')->group(function (){
             Route::get('/', ['as' => 'settings.codification', 'uses' => 'CodificationController@index']);
         });
+
+        Route::prefix('companyprofile')->group(function (){
+            Route::match(['get', 'post'], 'index/{id}', ['as' => 'settings.companyprofile.index', 'uses' => 'CompanyProfileController@index']);
+        });
     });
       
 });
