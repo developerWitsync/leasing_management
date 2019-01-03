@@ -13,7 +13,6 @@ use App\Countries;
 use App\ExpectedLifeOfAsset;
 use App\Http\Controllers\Controller;
 use App\Lease;
-use App\Currencies;
 use App\LeaseAccountingTreatment;
 use App\LeaseAssetCategories;
 use App\LeaseAssets;
@@ -101,7 +100,6 @@ class LeaseTerminationOptionController extends Controller
                         return redirect(route('addlease.leaseterminationoption.index',['id' => $lease->id]))->with('status', 'Lease Termination Option Details has been added successfully.');
                     }
                 }
-
                 return view('lease.lease-termination-option.create', compact(
                     'model',
                     'lease',
