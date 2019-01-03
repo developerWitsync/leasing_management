@@ -10,18 +10,30 @@
             <label class="form-check-label" for="no" id="no" style="vertical-align: 4px">No</label>
             @if ($errors->has('is_renewal_option_under_contract'))
                 <span class="help-block">
-                        <strong>{{ $errors->first('is_renewal_option_under_contract') }}</strong>
-                    </span>
+                    <strong>{{ $errors->first('is_renewal_option_under_contract') }}</strong>
+                </span>
             @endif
         </div>
     </div>
+
+    <div class="form-group{{ $errors->has('renewal_option_not_available_reason') ? ' has-error' : '' }} required renewal_option_not_available_reason" @if(old('is_renewal_option_under_contract', $model->is_renewal_option_under_contract) == 'no') style="display: block;" @else style="display: none" @endif>
+        <label for="renewal_option_not_available_reason" class="col-md-4 control-label">Reason for Renewal Option not Present</label>
+        <div class="col-md-6">
+            <input type="text" id="renewal_option_not_available_reason" placeholder="Reasons" name="renewal_option_not_available_reason" class="form-control" value="{{ old('renewal_option_not_available_reason', $model->renewal_option_not_available_reason) }}">
+            @if ($errors->has('renewal_option_not_available_reason'))
+                <span class="help-block">
+                    <strong>{{ $errors->first('renewal_option_not_available_reason') }}</strong>
+                </span>
+            @endif
+        </div>
+    </div>
+
     <div class="hidden-group gg {{$model->is_renewal_option_under_contract}}" id="hidden-fields" @if(old('is_renewal_option_under_contract',$model->is_renewal_option_under_contract ) == "yes") style="display:block;" @else  style="display:none;" @endif>
-       
-         <div class="form-group{{ $errors->has('is_reasonable_certainity_option') ? ' has-error' : '' }} required">
+        <div class="form-group{{ $errors->has('is_reasonable_certainity_option') ? ' has-error' : '' }} required">
         <label for="type" class="col-md-4 control-label">Reasonable Certainity to Exercise Renewal Option as of today</label>
             <div class="col-md-6">
-            <input class="form-check-input" name="is_reasonable_certainity_option" type="checkbox" id="is_reasonable_certainity_option_yes" value="yes" @if(old('is_reasonable_certainity_option', $model->is_reasonable_certainity_option)  == "yes") checked="checked" @endif ><label clas="form-check-label" for="is_reasonable_certainity_option_yes" style="vertical-align: 4px">Yes</label>
-                        
+            <input class="form-check-input" name="is_reasonable_certainity_option" type="checkbox" id="is_reasonable_certainity_option_yes" value="yes" @if(old('is_reasonable_certainity_option', $model->is_reasonable_certainity_option)  == "yes") checked="checked" @endif >
+            <label clas="form-check-label" for="is_reasonable_certainity_option_yes" style="vertical-align: 4px">Yes</label><br>
             <input class="form-check-input" name="is_reasonable_certainity_option" type="checkbox" id="is_reasonable_certainity_option_no" value="no" @if(old('is_reasonable_certainity_option', $model->is_reasonable_certainity_option)  == "no") checked="checked" @endif>
             <label class="form-check-label" for="is_reasonable_certainity_option_no" style="vertical-align: 4px">No</label>
             @if ($errors->has('is_reasonable_certainity_option'))
@@ -32,66 +44,29 @@
             </div>
           </div>
     </div>
-    <div class="hidden-group gg {{$model->is_reasonable_certainity_option}}" id="hidden-fields_date" @if(old('is_reasonable_certainity_option',$model->is_reasonable_certainity_option ) == "yes") style="display:block;" @else  style="display:none;" @endif>
 
-       <div class="form-group{{ $errors->has('expected_purchase_date') ? ' has-error' : '' }} required">
-            <label for="expected_purchase_date" class="col-md-4 control-label">Expected Purchase Date</label>
-            <div class="col-md-6 form-check form-check-inline">
-               <input type="text" class="form-control" id="expected_purchase_date" name="expected_purchase_date"  value="{{old('expected_purchase_date', $model->expected_purchase_date)}}">
-                @if ($errors->has('expected_purchase_date'))
-                    <span class="help-block">
-                        <strong>{{ $errors->first('expected_purchase_date') }}</strong>
-                    </span>
-                @endif
-            </div>
-        </div>
+    <div class="hidden-group gg" id="hidden-fields_date" @if(old('is_reasonable_certainity_option',$model->is_reasonable_certainity_option ) == "yes" && old('is_renewal_option_under_contract', $model->is_renewal_option_under_contract) == 'yes') style="display:block;" @else  style="display:none;" @endif>
         <div class="form-group{{ $errors->has('expected_lease_end_Date') ? ' has-error' : '' }} required">
             <label for="expected_lease_end_Date" class="col-md-4 control-label">Expected Lease End Date</label>
             <div class="col-md-6 form-check form-check-inline">
-               <input type="text" class="form-control" id="expected_lease_end_date" name="expected_lease_end_date"  value="{{old('expected_lease_end_date', $model->expected_lease_end_date)}}">
-                @if ($errors->has('expected_lease_end_date'))
+               <input type="text" class="form-control" placeholder="Expected Lease End Date" id="expected_lease_end_Date" name="expected_lease_end_Date"  value="{{old('expected_lease_end_Date', $model->expected_lease_end_Date)}}">
+                @if ($errors->has('expected_lease_end_Date'))
                     <span class="help-block">
-                        <strong>{{ $errors->first('expected_lease_end_date') }}</strong>
+                        <strong>{{ $errors->first('expected_lease_end_Date') }}</strong>
                     </span>
                 @endif
             </div>
         </div>
+    </div>
 
-        <div class="form-group{{ $errors->has('currency') ? ' has-error' : '' }} required">
-            <label for="currency" class="col-md-4 control-label">Purchase Currency</label>
-            <div class="col-md-6 form-check form-check-inline">
-                <input type="text" value="{{ $lease->lease_contract_id }}" class="form-control" id="currency" name="currency" readonly="readonly">
-                @if ($errors->has('currency'))
-                    <span class="help-block">
-                        <strong>{{ $errors->first('currency') }}</strong>
-                    </span>
-                @endif
-            </div>
-        </div>
-
-     <div class="form-group{{ $errors->has('purchase_price') ? ' has-error' : '' }} required">
-            <label for="purchase_price" class="col-md-4 control-label">Anticipated Purchase Price</label>
-            <div class="col-md-6 form-check form-check-inline">
-                <input type="text" class="form-control" id="purchase_price" name="purchase_price" value="{{ old('purchase_price', $model->purchase_price) }}">
-                @if ($errors->has('purchase_price'))
-                    <span class="help-block">
-                        <strong>{{ $errors->first('purchase_price') }}</strong>
-                    </span>
-                @endif
-            </div>
-        </div>
-      
-
- </div>
   <div class="form-group">
         <div class="col-md-6 col-md-offset-4">
-
             <a href="{{ route('addlease.renewable.index', ['id' => $lease->id]) }}" class="btn btn-danger">Cancel</a>
             <button type="submit" name="submit" class="btn btn-success">
                 Submit
             </button>
         </div>
-    </div>
+  </div>
 
 </form>
 
@@ -104,75 +79,82 @@
 
             if($(this).is(':checked') && $(this).val() == 'yes') {
                 $('#hidden-fields').show();
-            }
-            else if($(this).is(':checked') && $(this).val() == 'no') 
-            {
-                var modal = bootbox.dialog({
-                    message: "Are you sure that extension option not available under the contract",
-                    buttons: [
-                      {
-                        label: "Ok",
-                        className: "btn btn-success pull-left",
-                        callback: function() {
-                         }
-                      },
-                    ],
-                    show: false,
-                    onEscape: function() {
-                      modal.modal("hide");
+                $('#renewal_option_not_available_reason').val('');
+                $('.renewal_option_not_available_reason').hide();
+            }else if($(this).is(':checked') && $(this).val() == 'no'){
+                $('#hidden-fields').hide();
+                $('#hidden-fields_date').hide();
+                $('input[name="is_reasonable_certainity_option"]').prop('checked', false);
+                $('input[name="is_reasonable_certainity_option"][value="no"]').prop('checked', true);
+                $('#expected_lease_end_Date').val('');
+                bootbox.confirm({
+                    message: "Are you sure that the extension option is not available under the contract?",
+                    buttons: {
+                        confirm: {
+                            label: 'Yes',
+                            className: 'btn-success'
+                        },
+                        cancel: {
+                            label: 'No',
+                            className: 'btn-danger'
+                        }
+                    },
+                    callback: function (result) {
+                        if(result) {
+                            //ask for the reason for the no and save to the database as well...
+                            $('.renewal_option_not_available_reason').show();
+                        } else {
+                            $('.renewal_option_not_available_reason').hide();
+                            $('input[name="is_renewal_option_under_contract"]').prop('checked', false);
+                        }
                     }
                 });
-                modal.modal("show");
-            }
-            else {
 
-                 $('#hidden-fields').hide();
             }
         });
-         $(document).on('click', 'input[name="is_reasonable_certainity_option"]', function() {
+
+        $(document).on('click', 'input[name="is_reasonable_certainity_option"]', function() {
             $('input[name="is_reasonable_certainity_option"]').not(this).prop('checked', false);
 
             if($(this).is(':checked') && $(this).val() == 'yes') {
-                 $('#hidden-fields_date').show();
+                $('#hidden-fields_date').show();
                 $("#is_reasonable_certainity_option_no").prop('checked', false);
             } else {
                  $('#hidden-fields_date').hide();
-              $("#is_reasonable_certainity_option_yes").prop('checked', false);
+                $("#is_reasonable_certainity_option_yes").prop('checked', false);
             }
 
             
         });
-         var date = new Date('<?php echo $asset->lease_end_date;?>');
-          // add a day
-         date.setDate(date.getDate() + 1);
-         $('#expected_lease_end_Date').datepicker({
 
-                    dateFormat: "dd-M-yy",
-                    startDate: date,
-                    minDate: date,
+        var date = new Date('{{ $asset->lease_end_date }}');
+        // add a day
+        date.setDate(date.getDate() + 1);
+        $('#expected_lease_end_Date').datepicker({
+            dateFormat: "dd-M-yy",
+            startDate: date,
+            minDate: date,
+        });
 
-                    
-                });
-
- $("#confirm").on("click", function(e) {
-  e.preventDefault();
-    var modal = bootbox.dialog({
-                    message: "The lease payments till the end of the renewable period will be considered for valuation. If you would like to not consider renewal period under lease valuation, please select no to exercise renewal option",
-                    buttons: [
-                      {
-                        label: "Ok",
-                        className: "btn btn-success pull-left",
-                        callback: function() {
-                         }
-                      },
-                    ],
-                    show: false,
-                    onEscape: function() {
-                      modal.modal("hide");
-                    }
-                });
-                modal.modal("show");
-  });
+        $("#confirm").on("click", function(e) {
+            e.preventDefault();
+            var modal = bootbox.dialog({
+                message: "The lease payments till the end of the renewable period will be considered for valuation. If you would like to not consider renewal period under lease valuation, please select no to exercise renewal option",
+                buttons: [
+                  {
+                    label: "Ok",
+                    className: "btn btn-success pull-left",
+                    callback: function() {
+                     }
+                  },
+                ],
+                show: false,
+                onEscape: function() {
+                  modal.modal("hide");
+                }
+            });
+            modal.modal("show");
+        });
         
     </script>
 

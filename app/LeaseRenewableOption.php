@@ -12,6 +12,7 @@ class LeaseRenewableOption extends Model
         'asset_id',
         'lease_id',
         'is_renewal_option_under_contract',
+        'renewal_option_not_available_reason',
         'is_reasonable_certainity_option',
         'expected_lease_end_Date',
         'created_at',

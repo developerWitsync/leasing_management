@@ -21,13 +21,10 @@ use App\LeaseAssetsNumberSettings;
 use App\LeaseAssetSubCategorySetting;
 use App\UseOfLeaseAsset;
 use App\LeaseTerminationOption;
-<<<<<<< HEAD
-=======
 use App\FairMarketValue;
 use App\ReportingCurrencySettings;
 use App\ForeignCurrencyTransactionSettings;
 use Carbon\Carbon;
->>>>>>> 117156fb276d693bb398d36bd22a9c3c8ab83d67
 use Illuminate\Http\Request;
 use Validator;
 
@@ -60,7 +57,7 @@ class LeaseTerminationOptionController extends Controller
     }
 
     /**
-     * add fair market value details for an asset
+     * add Lease Termination Options details for an asset
      * @param $id
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -93,10 +90,6 @@ class LeaseTerminationOptionController extends Controller
                         return redirect(route('addlease.leaseterminationoption.index',['id' => $lease->id]))->with('status', 'Lease Termination Option Details has been added successfully.');
                     }
                 }
-<<<<<<< HEAD
-=======
-
->>>>>>> 117156fb276d693bb398d36bd22a9c3c8ab83d67
                 return view('lease.lease-termination-option.create', compact(
                     'model',
                     'lease',

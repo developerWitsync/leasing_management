@@ -41,12 +41,15 @@
                             </div>
                             <div class="panel-body">
                                 <div class="panel-body">
-                                    <table class="table table-condensed asset_payments_table">
+                                    <table class="table table-condensed drafts_table">
                                         <thead>
                                         <tr>
                                             <th>Sr No.</th>
-                                            <th>Payment Name</th>
-                                            <th>Payment Type</th>
+                                            <th>Business Account Id</th>
+                                            <th>Lessor Name</th>
+                                            <th>Lessor Code</th>
+                                            <th>Lessor Currency</th>
+                                            <th>Total Assets</th>
                                             <th>Action</th>
                                         </tr>
                                         </thead>
@@ -75,11 +78,7 @@
     <script>
         $(document).ready(function () {
 
-            // $('select[name="no_of_lease_payments"]').on('change', function(){
-            //     $('#total_asset_payments').submit();
-            // });
-
-            var asset_payments_table = $('.asset_payments_table').DataTable({
+            var drafts_table = $('.drafts_table').DataTable({
                 responsive: true,
                 "columns": [
                     {
@@ -88,18 +87,21 @@
                             return meta.row + meta.settings._iDisplayStart + 1;
                         }
                     },
-                    { "data": "name"},
-                    { "data": "category.title", 'sortable': false},
+                    { "data": "business_account_id"},
+                    { "data": "lessor_name"},
+                    { "data": "lease_code"},
+                    { "data": "lease_contract_id"},
+                    { "data": "total_assets"},
                     { "data": "id"}
                 ],
                 "columnDefs": [
                     {
-                        "targets" : 3,
+                        "targets" : 6,
                         "data" : null,
                         "orderable": false,
                         "className" : "text-center",
                         "render" : function(data, type, full, meta) {
-                            var html = "<button  data-toggle='tooltip' data-placement='top' title='Edit Asset Payment' type=\"button\" data-payment_id='"+full['id']+"' class=\"btn btn-sm  btn-success edit_asset_payment\"><i class=\"fa fa-pencil-square-o fa-lg\"></i></button>";
+                            var html = "<button  data-toggle='tooltip' data-placement='top' title='Edit Lease Details' type=\"button\" data-lease_id='"+full['id']+"' class=\"btn btn-sm  btn-success edit_lease_detail\"><i class=\"fa fa-pencil-square-o fa-lg\"></i></button><a href=\"javascript:;\"<button  data-toggle='tooltip' data-placement='top' title='Delete Lease Details' type=\"button\" data-lease_id='"+full['id']+"' class=\"btn btn-sm btn-danger delete_lease_detail\"><i class=\"far fa-trash-o\"></i></button></a>";
                             return html;
                         }
                     }
@@ -110,7 +112,41 @@
 
             });
 
+            $(document.body).on('click', '.edit_lease_detail', function(){
+                var lease_id = $(this).data('lease_id');
+                window.location.href = '/lease/lessor-details/create/'+lease_id;
+            });
 
+             $(document.body).on('click', '.delete_lease_detail', function(){
+            var category_id = $(this).data('lease_id');
+            bootbox.confirm({
+                message: "Are you sure that you want to delete this? These changes cannot be reverted.",
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn btn-danger'
+                    }
+                },
+                callback: function (result) {
+                    if(result) {
+                        $.ajax({
+                            url : "/drafts/delete-lease-details/"+category_id,
+                            type : 'delete',
+                            dataType : 'json',
+                            success : function (response) {
+                                if(response['status']) {
+                                    window.location.reload();
+                                }
+                            }
+                        })
+                    }
+                }
+            });
+        });
             
         });
 

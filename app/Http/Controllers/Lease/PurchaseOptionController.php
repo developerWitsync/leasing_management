@@ -11,11 +11,14 @@ namespace App\Http\Controllers\Lease;
 
 use App\Http\Controllers\Controller;
 use App\Lease;
-use App\PurchaseOption;
+use App\Currencies;
 use App\LeaseAssets;
+use App\PurchaseOption;
+use App\ReportingCurrencySettings;
+use App\ForeignCurrencyTransactionSettings;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Validator;
-
 
 class PurchaseOptionController extends Controller
 {
@@ -23,10 +26,10 @@ class PurchaseOptionController extends Controller
         return [
             'purchase_option_clause'   => 'required',
             'purchase_option_exerecisable'   => 'required_if:purchase_option_clause,yes',
-            'expected_purchase_date'  => 'required_if:purchase_option_exerecisable,yes|date',
-            'expected_lease_end_date'  => 'required_if:purchase_option_exerecisable,yes|date',
+            'expected_purchase_date'  => 'required_if:purchase_option_exerecisable,yes|nullable|date',
+            'expected_lease_end_date'  => 'required_if:purchase_option_exerecisable,yes|nullable|date',
             'currency' => 'required_if:purchase_option_exerecisable,yes',
-            'purchase_price'  => 'required_if:purchase_option_exerecisable,yes'
+            'purchase_price'  => 'required_if:purchase_option_exerecisable,yes|nullable|numeric',
         ];
     }
     /**
@@ -38,8 +41,18 @@ class PurchaseOptionController extends Controller
     public function index($id, Request $request){
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->with('leaseType')->with('assets')->first();
         if($lease) {
+            //Load the assets only for the assets where no selected at `exercise_termination_option_available` on lease termination
+            $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->whereHas('terminationOption',  function($query){
+                $query->where('exercise_termination_option_available', '=', 'no');
+            })->get();
+
+            if(count($assets) == 0) {
+                dd("need to redirect to the Lease Duration Classified");
+            }
+
             return view('lease.purchase-option.index', compact(
-                'lease'
+                'lease',
+                'assets'
             ));
         } else {
             abort(404);
@@ -47,7 +60,7 @@ class PurchaseOptionController extends Controller
     }
 
     /**
-     * add fair market value details for an asset
+     * create lease asset purchase options for the lease asset
      * @param $id
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -55,7 +68,7 @@ class PurchaseOptionController extends Controller
     public function create($id, Request $request){
         try{
             $asset = LeaseAssets::query()->findOrFail($id);
-            $lease = $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
+            $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
             if($lease) {
 
                 $model = new PurchaseOption();
@@ -70,6 +83,20 @@ class PurchaseOptionController extends Controller
                     $data = $request->except('_token');
                     $data['lease_id']   = $asset->lease->id;
                     $data['asset_id']   = $asset->id;
+                    if($data['expected_purchase_date'] != "") {
+                        $data['expected_purchase_date'] = Carbon::parse($data['expected_purchase_date'])->format('Y-m-d');
+                    }
+
+                    if($data['expected_lease_end_date'] != "") {
+                        $data['expected_lease_end_date'] = Carbon::parse($data['expected_lease_end_date'])->format('Y-m-d');
+                    }
+
+                    if($data['purchase_option_exerecisable'] == 'no'){
+                        $data['expected_purchase_date'] = null;
+                        $data['expected_lease_end_date'] = null;
+                        $data['currency'] = null;
+                        $data['purchase_price'] = null;
+                    }
 
                     $purchase_option = PurchaseOption::create($data);
 
@@ -77,6 +104,7 @@ class PurchaseOptionController extends Controller
                         return redirect(route('addlease.purchaseoption.index',['id' => $lease->id]))->with('status', 'Lease Termination Option Details has been added successfully.');
                     }
                 }
+
                 return view('lease.purchase-option.create', compact(
                     'model',
                     'lease',
@@ -92,7 +120,7 @@ class PurchaseOptionController extends Controller
 
 
     /**
-     * edit existing fair market value details for an asset
+     * edit existing purchase options for the lease asset
      * @param $id
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -115,6 +143,21 @@ class PurchaseOptionController extends Controller
                     $data = $request->except('_token');
                     $data['lease_id']   = $asset->lease->id;
                     $data['asset_id']   = $asset->id;
+
+                    if($data['expected_purchase_date'] != "") {
+                        $data['expected_purchase_date'] = Carbon::parse($data['expected_purchase_date'])->format('Y-m-d');
+                    }
+
+                    if($data['expected_lease_end_date'] != "") {
+                        $data['expected_lease_end_date'] = Carbon::parse($data['expected_lease_end_date'])->format('Y-m-d');
+                    }
+
+                    if($data['purchase_option_exerecisable'] == 'no'){
+                        $data['expected_purchase_date'] = null;
+                        $data['expected_lease_end_date'] = null;
+                        $data['currency'] = null;
+                        $data['purchase_price'] = null;
+                    }
 
                     $model->setRawAttributes($data);
 
