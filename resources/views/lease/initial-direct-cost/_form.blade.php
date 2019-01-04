@@ -44,7 +44,7 @@
     <div class="form-group{{ $errors->has('details') ? ' has-error' : '' }}">
         <label for="details" class="col-md-4 control-label"></label>
         <div class="col-md-6">
-            <a data-toggle="modal" data-target="#myModal" href="javascript:void(0);" class="btn btn-primary">Enter Details</a>
+            <a data-toggle="modal" href="javascript:void(0);" class="btn btn-primary enter_supplier_details">Enter Details</a>
         </div>
     </div>
      </div>
@@ -58,61 +58,16 @@
             </button>
         </div>
     </div>
-
 </form>
 
-
+<!-- Modal -->
 <div id="myModal" class="modal fade" role="dialog">
-          <div class="modal-dialog">
-
-            <!-- Modal content-->
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Modal Header</h4>
-              </div>
-              <div class="modal-body">
-                    <form action="{{ route('addlease.initialdirectcost.createsupplier') }}" method="post" id="supplier_details">
-                        {{ csrf_field()}}
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Supplier Name</th>
-                                    <th>Initial Direct Cost Description</th>
-                                    <th>Date of Expense</th>
-                                    <th>Currency</th>
-                                    <th>Amount </th>
-                                    <th>Exchange Rate</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    @if(empty($supplierData))
-                                        <td><input type="text" class="form-control" name="supplier_name[]">  </td>
-                                        <td><input type="text" class="form-control" name="direct_cost[]">  </td>
-                                        <td><input type="text" class="form-control" name="expense_date[]">  </td>
-                                        <td><input type="text" class="form-control" name="currency[]">  </td>
-                                        <td><input type="text" class="form-control" name="amount[]">  </td>
-                                        <td><input type="text" class="form-control" name="rate[]">  </td>
-                                        <td>
-                                            <button type="button" class="btn btn-success" data-dismiss="modal">Save</button>
-                                        </td>
-                                    @else
-
-                                    @endif
-                                </tr>
-                            </tbody>
-                        </table>
-                    </form>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              </div>
-            </div>
-
-          </div>
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content _form_supplier_details">
         </div>
+    </div>
+</div>
 
 @section('footer-script')
     <script type="text/javascript">
@@ -124,6 +79,42 @@
             } else {
                 $('#hidden-fields').hide();
             }
+        });
+
+        $('.enter_supplier_details').on('click', function () {
+            $.ajax({
+                url : '{{ route("addlease.initialdirectcost.addsupplier") }}',
+                type : 'get',
+                success : function(response){
+                    $('._form_supplier_details').html(response);
+                    // $('.table_supplier_details').dataTable();
+                    $("#myModal").modal('show');
+                }
+            });
+        });
+
+        $(document.body).on('submit', '#supplier_details_form', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url : '{{ route("addlease.initialdirectcost.addsupplier") }}',
+                type : 'post',
+                data : $(this).serialize(),
+                success : function(response){
+                    if(typeof(response['status'])!='undefined' && !response['status']) {
+                        var errors = response['errors'];
+                        $('.error_via_ajax').remove();
+                        $.each(errors, function(i, e){
+                            if($('input[name="'+i+'"]').length ){
+                                $('input[name="'+i+'"]').after('<span class="help-block error_via_ajax" style="color:red">\n' +
+                                    '                        <strong>'+e+'</strong>\n' +
+                                    '                    </span>');
+                            }
+                        });
+                    } else {
+                        $('._form_supplier_details').html(response);
+                    }
+                }
+            });
         });
     </script>
 @endsection

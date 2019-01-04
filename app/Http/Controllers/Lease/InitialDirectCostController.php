@@ -9,26 +9,17 @@
 namespace App\Http\Controllers\Lease;
 
 
-use App\Countries;
-use App\ExpectedLifeOfAsset;
 use App\Http\Controllers\Controller;
 use App\Lease;
-use App\LeaseAccountingTreatment;
-use App\LeaseAssetCategories;
 use App\LeaseAssets;
-use App\LeaseAssetSimilarCharacteristicSettings;
-use App\LeaseAssetsNumberSettings;
-use App\LeaseAssetSubCategorySetting;
-use App\UseOfLeaseAsset;
 use App\InitialDirectCost;
 use App\SupplierDetails;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Validator;
 
 class InitialDirectCostController extends Controller
 {
-
-    protected $supplierData = [];
 
     protected function validationRules(){
         return [
@@ -79,7 +70,10 @@ class InitialDirectCostController extends Controller
 
                 $model = new InitialDirectCost();
 
+                $supplier_model = new SupplierDetails();
+
                 if($request->isMethod('post')) {
+
                     $validator = Validator::make($request->except('_token'), $this->validationRules());
 
                     if($validator->fails()){
@@ -92,17 +86,21 @@ class InitialDirectCostController extends Controller
                     $initial_direct_cost = InitialDirectCost::create($data);
 
                     if($initial_direct_cost){
+
                         return redirect(route('addlease.initialdirectcost.index',['id' => $lease->id]))->with('status', 'Initial Direct Cost has been added successfully.');
                     }
                 }
-                $supplier_model = new SupplierDetails();
-                $supplierData = $this->supplierData;
+
+                $supplier_details = [];
+
+                Session::put('supplier_details', $supplier_details);
+
                 return view('lease.initial-direct-cost.create', compact(
                     'model',
                     'lease',
                     'asset',
-                    'supplierData',
-                    'supplier_model'
+                    'supplier_model',
+                    'supplier_details'
                 ));
             } else {
                 abort(404);
@@ -157,7 +155,45 @@ class InitialDirectCostController extends Controller
         }
     }
 
-    public function createSupplier(){
-        
+    public function addSupplier(Request $request){
+        try{
+            $supplier_details = Session::get('supplier_details');
+            if($request->ajax()) {
+                if($request->isMethod('post')) {
+                    $validator = Validator::make($request->all(), [
+                        'supplier_name' => 'required',
+                        'direct_cost' => 'required',
+                        'expense_date'  => 'required|date',
+                        'currency'  => 'required',
+                        'amount'    => 'required|numeric',
+                        'rate'  => 'required|numeric'
+                    ]);
+
+                    if($validator->fails()){
+                        return response()->json([
+                            'status' => false,
+                            'errors' => $validator->errors()
+                        ], 200);
+                    }
+
+                    //save to the session variable
+                    $supplier_details = Session::get('supplier_details');
+
+                    array_push($supplier_details, $request->except('_token'));
+
+                    Session::put('supplier_details', $supplier_details);
+
+                    return view('lease.initial-direct-cost._supplier_details_form', compact(
+                        'supplier_details'
+                    ));
+
+                }
+                return view('lease.initial-direct-cost._supplier_details_form',compact(
+                    'supplier_details'
+                ));
+            }
+        } catch (\Exception $e){
+            dd($e);
+        }
     }
 }
