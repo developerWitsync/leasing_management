@@ -8,8 +8,6 @@
 
 namespace App\Http\Controllers\Lease;
 
-
-use App\Countries;
 use App\ExpectedLifeOfAsset;
 use App\Http\Controllers\Controller;
 use App\Lease;
@@ -21,21 +19,14 @@ use App\LeaseAssetsNumberSettings;
 use App\LeaseAssetSubCategorySetting;
 use App\UseOfLeaseAsset;
 use App\InitialDirectCost;
-use App\SupplierDetails;
 use Illuminate\Http\Request;
 use Validator;
 
-class InitialDirectCostController extends Controller
+class LeaseInvoiceController extends Controller
 {
-
-    protected $supplierData = [];
-
     protected function validationRules(){
         return [
-            'initial_direct_cost_involved'   => 'required',
-            'currency' => 'required_if:initial_direct_cost_involved,yes',
-            'similar_asset_items'   => 'required_if:initial_direct_cost_involved,yes',
-            'total_initial_direct_cost'  => 'required_if:is_market_value_present,yes'
+            'lease_payment_invoice_received'   => 'required'
         ];
     }
     /**
@@ -51,13 +42,13 @@ class InitialDirectCostController extends Controller
                 'title' => 'Add New Lease'
             ],
             [
-                'link' => route('addlease.initialdirectcost.index',['id' => $id]),
-                'title' => 'Initial Direct Cost'
+                'link' => route('addlease.leasepaymentinvoice.index',['id' => $id]),
+                'title' => 'Lease Payment Invoice from Lessor'
             ],
         ];
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->with('leaseType')->with('assets')->first();
         if($lease) {
-            return view('lease.initial-direct-cost.index', compact('breadcrumbs',
+            return view('lease.lease-payment-invoice.index', compact('breadcrumbs',
                 'lease'
             ));
         } else {
@@ -95,14 +86,10 @@ class InitialDirectCostController extends Controller
                         return redirect(route('addlease.initialdirectcost.index',['id' => $lease->id]))->with('status', 'Initial Direct Cost has been added successfully.');
                     }
                 }
-                $supplier_model = new SupplierDetails();
-                $supplierData = $this->supplierData;
                 return view('lease.initial-direct-cost.create', compact(
                     'model',
                     'lease',
-                    'asset',
-                    'supplierData',
-                    'supplier_model'
+                    'asset'
                 ));
             } else {
                 abort(404);
@@ -155,9 +142,5 @@ class InitialDirectCostController extends Controller
         } catch (\Exception $e) {
             dd($e);
         }
-    }
-
-    public function createSupplier(){
-        
     }
 }
