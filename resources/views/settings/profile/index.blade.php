@@ -30,7 +30,7 @@
                             
                              </div>
                               <div class="panel-body">
-                             <form class="form-horizontal" method="POST" action="{{ route('settings.companyprofile.index', ['id' => $user->id]) }}">
+                             <form class="form-horizontal" method="POST" action="{{ route('settings.profile.index') }}">
                             {{ csrf_field() }}
                              <div class="form-group{{ $errors->has('authorised_person_name') ? ' has-error' : '' }} required">
                             <label for="authorised_person_name" class="col-md-4 control-label">Authorised Person Name</label>

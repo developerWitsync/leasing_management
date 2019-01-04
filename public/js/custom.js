@@ -123,6 +123,12 @@ $(function(){
     });
 
 
+    //sub_drop sub tables
+    $('.sub_drop_escalation').on('click', function(){
+        $(this).children('i').toggleClass('fa-plus-square');
+        $(this).children('i').toggleClass('fa-minus-square');
+        $(this).parent('td').parent('tr').next('tr.sub_table').toggle('500');
+    });
 });
 
 /**

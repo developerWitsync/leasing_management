@@ -152,18 +152,19 @@ function calculatePaymentDueDates($firt_payment_date, $last_payment_date, $payme
  * @return array
  */
 function calculatePaymentDueDatesByPaymentId(\App\LeaseAssetPayments $payment){
+    $final_payout_dates = [];
     //calculate all the due dates here from the start date till the end date...
     if($payment->payment_interval == 1) {
         //check if the payments are going to be One-Time
-        if($payment->payment_payout == 1) {
+        if($payment->payout_time == 1) {
             //means that the payment is going to be made at the start of the interval
-            $month = Carbon::parse($payment->first_payment_start_date)->format('F');
-            $current_year  = Carbon::parse($payment->first_payment_start_date)->format('Y');
+            $month = \Carbon\Carbon::parse($payment->first_payment_start_date)->format('F');
+            $current_year  = \Carbon\Carbon::parse($payment->first_payment_start_date)->format('Y');
             $final_payout_dates[$current_year][$month][$payment->first_payment_start_date] =  $payment->first_payment_start_date;
         } else if($payment->payout_time == 2){
             //means that the payment is going to be made at the end of the interval
-            $month = Carbon::parse($payment->last_payment_end_date)->format('F');
-            $current_year  = Carbon::parse($payment->last_payment_end_date)->format('Y');
+            $month = \Carbon\Carbon::parse($payment->last_payment_end_date)->format('F');
+            $current_year  = \Carbon\Carbon::parse($payment->last_payment_end_date)->format('Y');
             $final_payout_dates[$current_year][$month][$payment->last_payment_end_date] =  $payment->last_payment_end_date;
         }
     }
@@ -182,6 +183,5 @@ function calculatePaymentDueDatesByPaymentId(\App\LeaseAssetPayments $payment){
             $final_payout_dates = calculatePaymentDueDates($payment->first_payment_start_date, $payment->last_payment_end_date,$payment->payout_time, 12);
             break;
     }
-
     return $final_payout_dates;
 }
