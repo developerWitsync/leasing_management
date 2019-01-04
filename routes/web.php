@@ -118,6 +118,16 @@ Route::middleware('auth')->group(function(){
             Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.durationclassified.update', 'uses' => 'LeaseDurationClassifiedController@update']);
         });
 
+        /**
+         * Initial Direct Cost NL13
+         */
+        Route::prefix('initial-direct-cost')->group(function(){
+            
+            Route::get('index/{id}', ['as' => 'addlease.initialdirectcost.index', 'uses' => 'InitialDirectCostController@index']);
+            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.initialdirectcost.create', 'uses' => 'InitialDirectCostController@create']);
+            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.initialdirectcost.update', 'uses' => 'InitialDirectCostController@update']);
+        });
+
     });
 
     /*
