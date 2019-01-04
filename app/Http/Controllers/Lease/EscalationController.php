@@ -123,6 +123,49 @@ class EscalationController extends Controller
                 $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
                 if($lease) {
 
+                    $rules = [
+                        'is_escalation_applicable'  => 'required',
+                        'effective_from'    => 'required_if:is_escalation_applicable,yes',
+                        'escalation_basis'  => 'required_if:is_escalation_applicable,yes',
+                        'escalation_rate_type' => 'required_if:is_escalation_applicable,yes',
+                        'is_escalation_applied_annually_consistently'   => 'required_if:is_escalation_applicable,yes',
+                        'total_escalation_rate' => 'required_if:is_escalation_applied_annually_consistently,yes'
+                    ];
+
+                    if($request->is_escalation_applicable == "yes" && $request->is_escalation_applied_annually_consistently == "yes") {
+                        if($request->escalation_rate_type == '1' || $request->escalation_rate_type == '3') {
+                            $rules['fixed_rate'] = 'required|numeric';
+                        }
+
+                        if($request->escalation_rate_type == '2' || $request->escalation_rate_type == '3') {
+                            $rules['current_variable_rate'] = 'required|numeric';
+                        }
+                    }
+
+                    $validator = Validator::make($request->except('_token', 'method', 'uri', 'ip'), $rules);
+
+                    $errors = [];
+                    if($validator->fails()) {
+                        $errors = $validator->errors();
+                        return view('lease.escalation._chart',compact(
+                            'errors'
+                        ));
+                    }
+
+                    $escalationData = generateEsclationChart($request->except('_token', 'method', 'uri', 'ip'), $payment, $lease, $asset);
+                    $years = $escalationData['years'];
+                    $months = $escalationData['months'];
+                    $escalations = $escalationData['escalations'];
+
+                    return view('lease.escalation._chart',compact(
+                        'errors',
+                        'lease',
+                        'asset',
+                        'years',
+                        'months',
+                        'escalations'
+                    ));
+
                 } else {
                     abort(404);
                 }
