@@ -13,7 +13,6 @@ use App\Countries;
 use App\ExpectedLifeOfAsset;
 use App\Http\Controllers\Controller;
 use App\Lease;
-use App\Currencies;
 use App\LeaseAccountingTreatment;
 use App\LeaseAssetCategories;
 use App\LeaseAssets;
@@ -47,9 +46,19 @@ class LeaseTerminationOptionController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id){
+         $breadcrumbs = [
+            [
+                'link' => route('add-new-lease.index'),
+                'title' => 'Add New Lease'
+            ],
+            [
+                'link' => route('addlease.leaseterminationoption.index',['id' => $id]),
+                'title' => 'Termination Option'
+            ],
+        ];
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->with('leaseType')->with('assets')->first();
         if($lease) {
-            return view('lease.lease-termination-option.index', compact(
+            return view('lease.lease-termination-option.index', compact('breadcrumbs',
                 'lease'
             ));
         } else {
@@ -91,7 +100,6 @@ class LeaseTerminationOptionController extends Controller
                         return redirect(route('addlease.leaseterminationoption.index',['id' => $lease->id]))->with('status', 'Lease Termination Option Details has been added successfully.');
                     }
                 }
-
                 return view('lease.lease-termination-option.create', compact(
                     'model',
                     'lease',

@@ -30,6 +30,21 @@ class LessorDetailsController extends Controller
         ];
     }
 
+    public $breadcrumbs;
+    public function __construct()
+    {
+        $this->breadcrumbs = [
+            [
+                'link' => route('add-new-lease.index'),
+                'title' => 'Add New Lease'
+            ],
+            [
+                'link' => route('add-new-lease.index'),
+                'title' => 'Lessor Details'
+            ],
+        ];
+    }
+
     /**
      * Renders the index form to create a new Lease
      * @param Request $request
@@ -46,12 +61,7 @@ class LessorDetailsController extends Controller
             $lease = new Lease();
         }
     
-       $breadcrumbs = [
-            [
-                'link' => route('add-new-lease.index'),
-                'title' => 'Lessor Details'
-            ]
-        ];
+       
         $contract_classifications = ContractClassifications::query()->select('id', 'title')->where('status', '=', '1')->get();
         $currencies = Currencies::query()->where('status', '=', '1')->get();
         $reporting_currency_settings = ReportingCurrencySettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
@@ -59,7 +69,7 @@ class LessorDetailsController extends Controller
         if(collect($reporting_currency_settings)->isEmpty()) {
             $reporting_currency_settings = new ReportingCurrencySettings();
         }
-
+        $breadcrumbs = $this->breadcrumbs;
         return view('lease.lessor-details.index', compact('breadcrumbs','contract_classifications','currencies','reporting_currency_settings','reporting_foreign_currency_transaction_settings','lease'));
     }
 

@@ -131,8 +131,14 @@ Route::middleware('auth')->group(function(){
 
     });
 
+    /*
+    * Drafts Routes
+    */
+
     Route::namespace('Drafts')->prefix('drafts')->group(function(){
         Route::get('/', ['as' => 'drafts.index', 'uses' => 'IndexController@index']);
+        Route::get('fetch-lease-details', ['as' => 'drafts.fetchleasedetails', 'uses' => 'IndexController@fetchLeaseDetails']);
+        Route::match(['post', 'get', 'delete'], 'delete-lease-details/{id}', ['as' => 'drafts.deleteleasedetails', 'uses' => 'IndexController@deleteLeaseDetails']);
     });
 
     Route::namespace('Settings')->middleware(['permission:settings'])->prefix('settings')->group(function(){
@@ -250,6 +256,10 @@ Route::middleware('auth')->group(function(){
 
         Route::prefix('codification')->group(function (){
             Route::get('/', ['as' => 'settings.codification', 'uses' => 'CodificationController@index']);
+        });
+
+        Route::prefix('companyprofile')->group(function (){
+            Route::match(['get', 'post'], 'index/{id}', ['as' => 'settings.companyprofile.index', 'uses' => 'CompanyProfileController@index']);
         });
     });
       

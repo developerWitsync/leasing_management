@@ -35,6 +35,16 @@ class LeaseDurationClassifiedController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id, Request $request){
+        $breadcrumbs = [
+            [
+                'link' => route('add-new-lease.index'),
+                'title' => 'Add New Lease'
+            ],
+            [
+                'link' => route('addlease.durationclassified.index',['id' => $id]),
+                'title' => 'Lease Duration Classified'
+            ],
+        ];
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->with('leaseType')->with('assets')->first();
         if($lease) {
             $back_button = route('addlease.purchaseoption.index', ['id' => $lease->id]);
@@ -46,7 +56,7 @@ class LeaseDurationClassifiedController extends Controller
             if(count($assets) == 0) {
                 $back_button = route('addlease.leaseterminationoption.index', ['id' => $lease->id]);
             }
-            return view('lease.lease-duration-classified.index', compact(
+            return view('lease.lease-duration-classified.index', compact('breadcrumbs',
                 'lease',
                 'back_button'
             ));
@@ -144,6 +154,8 @@ class LeaseDurationClassifiedController extends Controller
                         return redirect(route('addlease.durationclassified.index',['id' => $lease->id]))->with('status', 'Lease Duration Classified Value has been updated successfully.');
                     }
                 }
+                $model->lease_end_date                 = $model->getExpectedLeaseEndDate($asset);
+                $model->lease_contract_duration_id               = $model->getLeaseAssetClassification($asset);
 
                 $lease_contract_duration = LeaseContractDuration::query()->get();
               

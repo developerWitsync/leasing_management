@@ -46,9 +46,19 @@ class FairMarketValueController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id, Request $request){
+        $breadcrumbs = [
+            [
+                'link' => route('add-new-lease.index'),
+                'title' => 'Add New Lease'
+            ],
+            [
+                'link' => route('addlease.fairmarketvalue.index',['id' => $id]),
+                'title' => 'Fair Market Value'
+            ],
+        ];
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->with('leaseType')->with('assets')->first();
         if($lease) {
-            return view('lease.fair-market-value.index', compact(
+            return view('lease.fair-market-value.index', compact('breadcrumbs',
                 'lease'
             ));
         } else {
