@@ -32,4 +32,12 @@ class LeaseAssetPayments extends Model
     public function category(){
         return $this->belongsTo('App\LeasePaymentComponents', 'type', 'id');
     }
+
+    public function asset(){
+        return $this->belongsTo('App\LeaseAssets', 'asset_id', 'id');
+    }
+
+    public function paymentNature(){
+        return $this->belongsTo('App\LeaseAssetPaymentsNature', 'nature', 'id');
+    }
 }

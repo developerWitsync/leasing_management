@@ -18,6 +18,7 @@ class Lease extends Model
         'file',
         'status',
         'total_assets',
+        'escalation_clause_applicable',
         'created_at',
         'updated_at'
     ];

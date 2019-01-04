@@ -158,3 +158,11 @@ legend.scheduler-border {
     height: 820px !important;
     overflow: scroll;
 }
+
+/*.sub_table{*/
+    /*background-color: #eeeeee !important;*/
+/*}*/
+
+.sub_table td table{
+    background-color: #eeeeee !important;
+}

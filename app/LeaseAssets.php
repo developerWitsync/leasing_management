@@ -71,6 +71,23 @@ class LeaseAssets extends Model
 
      public function leaseDurationClassified(){
         return $this->hasOne('App\LeaseDurationClassified', 'asset_id','id');
+    }
 
+    /**
+     * Fetch the expected lease end date for a particular lease asset based upon all the conditions on the sheet NL9
+     * @param LeaseAssets $asset
+     * @return mixed
+     */
+    public function getLeaseEndDate(self $asset){
+        if($asset->purchaseOption && $asset->purchaseOption->purchase_option_exerecisable == 'yes'){
+            $lease_end_date =   $asset->purchaseOption->expected_lease_end_date;
+        } else if($asset->renewableOptionValue && $asset->renewableOptionValue->is_reasonable_certainity_option == 'yes'){
+            $lease_end_date =   $asset->renewableOptionValue->expected_lease_end_Date;
+        } else if($asset->terminationOption && $asset->terminationOption->exercise_termination_option_available == 'yes'){
+            $lease_end_date =   $asset->terminationOption->lease_end_date;
+        } else {
+            $lease_end_date = $asset->lease_end_date;
+        }
+        return $lease_end_date;
     }
 }
