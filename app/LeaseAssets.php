@@ -69,7 +69,7 @@ class LeaseAssets extends Model
         return $this->hasOne('App\PurchaseOption', 'asset_id','id');
     }
 
-     public function leaseDurationClassified(){
+    public function leaseDurationClassified(){
         return $this->hasOne('App\LeaseDurationClassified', 'asset_id','id');
     }
 
@@ -89,5 +89,20 @@ class LeaseAssets extends Model
             $lease_end_date = $asset->lease_end_date;
         }
         return $lease_end_date;
+    }
+
+    public function leaseSelectLowValue(){
+        return $this->hasOne('App\LeaseSelectLowValue', 'asset_id','id');
+
+    }
+
+    public function leaseSelectDiscountRate(){
+        return $this->hasOne('App\LeaseSelectDiscountRate', 'asset_id','id');
+
+    }
+
+    public function leaseBalanceAsOnDec(){
+        return $this->hasOne('App\LeaseBalanceAsOnDec', 'asset_id','id');
+
     }
 }
