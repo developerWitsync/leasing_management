@@ -185,3 +185,79 @@ function calculatePaymentDueDatesByPaymentId(\App\LeaseAssetPayments $payment){
     }
     return $final_payout_dates;
 }
+
+/**
+ * generate the escalations that will be applied through out the year
+ * @param array $data
+ * @param \App\LeaseAssetPayments $payment
+ * @param \App\Lease $lease
+ * @param \App\LeaseAssets $asset
+ * @return array
+ */
+function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \App\Lease $lease, \App\LeaseAssets $asset){
+    $effective_date = \Carbon\Carbon::parse($data['effective_from']);
+
+    $escalation_basis = $data['escalation_basis'];
+    $escalation_applied_consistently_annually = $data['is_escalation_applied_annually_consistently'];
+
+    $start_date = $asset->accural_period; //start date with the free period
+    $end_date   = $asset->getLeaseEndDate($asset); //end date based upon all the conditions
+
+    $escalation_start_date = ($payment->using_lease_payment == '1')?\Carbon\Carbon::create(2019,01,01):\Carbon\Carbon::parse($start_date);
+    $escalation_end_date   = \Carbon\Carbon::parse($end_date);
+
+    $amount_to_consider    = 0;
+
+    $years =  [];
+    $start_year = $escalation_start_date->format('Y');
+    $end_year = $escalation_end_date->format('Y');
+
+    if($start_year == $end_year) {
+        $years[] = $end_year;
+    } else if($end_year > $start_year) {
+        $years = range($start_year, $end_year);
+    }
+
+    for($m=1; $m<=12; ++$m ){
+        $months[$m] = date('F', mktime(0, 0, 0, $m, 1));
+    }
+
+    $escalations = [];
+
+    if($escalation_basis == '1' && $escalation_applied_consistently_annually == "yes"){
+        //means the escalations will be applied annually and consistently and percentage basis is selected
+        $escalation_percentage = $data['total_escalation_rate'];
+        while ($start_year <= $end_year) {
+            //always strat from Jan till December
+            foreach ($months as $key => $month){
+                if($effective_date->format('Y') > $start_year) {
+                    //escalation percentage will be 0 here as the escalation is not applied upto this year
+                    //need to check if the payment is need to be done on this month of this year
+                    if(\Carbon\Carbon::parse($start_date)->format('Y') == $start_year && $key == \Carbon\Carbon::parse($start_date)->format('m')){
+                        $amount_to_consider = $payment->payment_per_interval_per_unit;
+                    }
+                    $escalations[$start_year][$month] = ['percentage' => 0, 'amount' => $amount_to_consider];
+                } else {
+                    //compare the month here if the escalation is applied to current month as well
+                    if($key == $effective_date->format('m')){
+                        //yes the escalation is needed to be applied this month
+                        if($amount_to_consider == 0){
+                            $amount_to_consider = $payment->payment_per_interval_per_unit;
+                        }
+
+                        $amount_to_consider += ($amount_to_consider * $escalation_percentage)/100;
+                        $escalations[$start_year][$month] = ['percentage' => $escalation_percentage, 'amount' => $amount_to_consider];
+                    } else {
+                        //no the escalation will not be applied on this year and this month
+                        $escalations[$start_year][$month] = ['percentage' => 0, 'amount' => $amount_to_consider];
+                    }
+                }
+            }
+            $start_year = $start_year + 1; //increase annually here
+        }
+    }
+
+//    die();
+
+    return ['years' => $years,'months'    => $months,'escalations' => $escalations];
+}

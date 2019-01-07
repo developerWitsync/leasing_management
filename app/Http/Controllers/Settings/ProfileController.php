@@ -20,7 +20,7 @@ use App\Permission;
 use App\PermissionRole;
 use App\RoleUser;
 
-class CompanyProfileController extends Controller
+class ProfileController extends Controller
 {
   
     /**
@@ -29,17 +29,18 @@ class CompanyProfileController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
-    public function index($id, Request $request){
+    public function index(Request $request){
+    $id = auth()->user()->id;
       $breadcrumbs = [
             [
                 'link' => route('settings.index'),
                 'title' => 'Settings'
             ],
             [
-                'link' => route('settings.companyprofile.index',['id' => $id]),
+                'link' => route('settings.profile.index'),
                 'title' => 'My Profile'
             ],
-        ];
+        ]; 
           $user = User::query()->findOrFail($id);
             if($request->isMethod('post')) {
                $validator = Validator::make($request->except('_token'), [
@@ -70,11 +71,11 @@ class CompanyProfileController extends Controller
                 $userdata->save();
                 if($userdata){
                     \Mail::to($userdata)->queue(new UserCreateConfirmation($userdata));
-                    return redirect(route('settings.companyprofile.index', ['id' => $id]))->with('status', 'Profile has been updated successfully.');
+                    return redirect(route('settings.profile.index'))->with('status', 'Profile has been updated successfully.');
                 }
 
          }
-            return view('settings.companyprofile.index', ['breadcrumbs'=> $breadcrumbs,'user'=>$user, 'id'=>$id]);
+            return view('settings.profile.index', ['breadcrumbs'=> $breadcrumbs,'user'=>$user, 'id'=>$id]);
     }
 
 }

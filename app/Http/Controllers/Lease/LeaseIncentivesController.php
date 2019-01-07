@@ -72,7 +72,7 @@ class LeaseIncentivesController extends Controller
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
             $currency = ForeignCurrencyTransactionSettings::where('business_account_id', '=', $lease->business_account_id)->get();
              $customer_details = CustomerIncentives::query()->get();
-           
+           dd($customer_details);
             
             if($lease) {
 
