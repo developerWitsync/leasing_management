@@ -157,7 +157,18 @@ class InitialDirectCostController extends Controller
         }
     }
 
-    public function createSupplier(){
-        
+    public function createSupplier(Request $request){
+        try{
+            $validator = Validator::make($request->except('_token'), [
+                'supplier_name.*' => 'required'
+            ]);
+
+            if($validator->fails()) {
+                
+            }
+            
+        } catch(\Exception $e){
+            dd($e);
+        }
     }
 }
