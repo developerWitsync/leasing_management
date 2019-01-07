@@ -25,8 +25,7 @@ class InitialDirectCostController extends Controller
         return [
             'initial_direct_cost_involved'   => 'required',
             'currency' => 'required_if:initial_direct_cost_involved,yes',
-            'similar_asset_items'   => 'required_if:initial_direct_cost_involved,yes',
-            'total_initial_direct_cost'  => 'required_if:is_market_value_present,yes'
+            'total_initial_direct_cost'  => 'required_if:initial_direct_cost_involved,yes'
         ];
     }
     /**
@@ -87,6 +86,22 @@ class InitialDirectCostController extends Controller
 
                     if($initial_direct_cost){
 
+                        $supplier_details = Session::get('supplier_details');
+
+                        foreach ($supplier_details as $supplier_detail){
+                            SupplierDetails::create([
+                                'initial_direct_cost_id' => $initial_direct_cost->id,
+                                'supplier_name' => $supplier_detail['supplier_name'],
+                                'direct_cost_description'   => $supplier_detail['direct_cost_description'],
+                                'expense_date'  => $supplier_detail['expense_date'],
+                                'currency'  => $supplier_detail['currency'],
+                                'amount'    => $supplier_detail['amount'],
+                                'rate'  => $supplier_detail['rate']
+                            ]);
+                        }
+
+                        Session::forget('supplier_details');
+
                         return redirect(route('addlease.initialdirectcost.index',['id' => $lease->id]))->with('status', 'Initial Direct Cost has been added successfully.');
                     }
                 }
@@ -119,8 +134,9 @@ class InitialDirectCostController extends Controller
      */
     public function update($id, Request $request){
         try{
+            Session::forget('supplier_details');
             $asset = LeaseAssets::query()->findOrFail($id);
-            $lease = $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
+            $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
             if($lease) {
 
                 $model = InitialDirectCost::query()->where('asset_id', '=', $id)->first();
@@ -155,6 +171,11 @@ class InitialDirectCostController extends Controller
         }
     }
 
+    /**
+     * Add suppliers to the session variables so that those can be saved
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
+     */
     public function addSupplier(Request $request){
         try{
             $supplier_details = Session::get('supplier_details');
@@ -162,7 +183,7 @@ class InitialDirectCostController extends Controller
                 if($request->isMethod('post')) {
                     $validator = Validator::make($request->all(), [
                         'supplier_name' => 'required',
-                        'direct_cost' => 'required',
+                        'direct_cost_description' => 'required',
                         'expense_date'  => 'required|date',
                         'currency'  => 'required',
                         'amount'    => 'required|numeric',
@@ -193,6 +214,74 @@ class InitialDirectCostController extends Controller
                 ));
             }
         } catch (\Exception $e){
+            dd($e);
+        }
+    }
+
+    public function updateSupplier($id, Request $request){
+        try{
+            $directCost = InitialDirectCost::query()->findOrFail($id);
+            return view('lease.initial-direct-cost._supplier_details_update_form',compact(
+                'directCost'
+            ));
+        } catch (\Exception $e) {
+            dd($e);
+        }
+    }
+
+    /**
+     * create supplier to the database for any
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
+     */
+    public function createSupplier(Request $request){
+        try{
+            if($request->ajax()) {
+                $validator = Validator::make($request->all(), [
+                    'supplier_name' => 'required',
+                    'direct_cost_description' => 'required',
+                    'expense_date'  => 'required|date',
+                    'currency'  => 'required',
+                    'amount'    => 'required|numeric',
+                    'rate'  => 'required|numeric'
+                ]);
+
+                if($validator->fails()){
+                    return response()->json([
+                        'status' => false,
+                        'errors' => $validator->errors()
+                    ], 200);
+                }
+
+                SupplierDetails::create($request->except('_token'));
+
+                Session::flash('status', 'Supplier Details has been updated successfully.');
+
+                return response()->json([
+                    'status' => true
+                ], 200);
+            }
+        } catch (\Exception $e){
+            dd($e);
+        }
+    }
+
+    /**
+     * Delete a particular Supplier Details from the update popup
+     * @param $id SupplierDetails id
+     * @param $lease_id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteSupplier($id, $lease_id){
+        try {
+            $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $lease_id)->first();
+            if($lease){
+                SupplierDetails::query()->where('id', '=', $id)->delete();
+                return response()->json([
+                    'status' => true
+                ], 200);
+            }
+        } catch (\Exception $e) {
             dd($e);
         }
     }

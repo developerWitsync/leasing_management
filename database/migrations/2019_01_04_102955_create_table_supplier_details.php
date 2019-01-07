@@ -19,7 +19,7 @@ class CreateTableSupplierDetails extends Migration
             $table->foreign('initial_direct_cost_id', 'initial_fo_id')->references('id')->on('initial_direct_cost')->onDelete('cascade');
 
             $table->string('supplier_name');
-            $table->decimal('direct_cost', 12, 2);
+            $table->text('direct_cost_description');
             $table->date('expense_date');
             $table->string('currency');
             $table->decimal('amount', 12, 2);
