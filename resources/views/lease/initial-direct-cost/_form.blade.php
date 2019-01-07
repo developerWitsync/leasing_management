@@ -32,7 +32,7 @@
         <div class="form-group{{ $errors->has('total_initial_direct_cost') ? ' has-error' : '' }} required">
             <label for="total_initial_direct_cost" class="col-md-4 control-label">Total Initial Direct Cost</label>
             <div class="col-md-6 form-check form-check-inline">
-                <input type="text" value="{{ $asset->total_initial_direct_cost }}" class="form-control" id="total_initial_direct_cost" name="total_initial_direct_cost" readonly="readonly">
+                <input type="text" value="{{ old('total_initial_direct_cost', $model->total_initial_direct_cost)}}" class="form-control" id="total_initial_direct_cost" name="total_initial_direct_cost" readonly="readonly">
                 @if ($errors->has('total_initial_direct_cost'))
                     <span class="help-block">
                         <strong>{{ $errors->first('total_initial_direct_cost') }}</strong>
@@ -83,11 +83,15 @@
 
         $('.enter_supplier_details').on('click', function () {
             $.ajax({
-                url : '{{ route("addlease.initialdirectcost.addsupplier") }}',
+                @if(request()->segment('2') == 'initial-direct-cost' && request()->segment('3') == 'update')
+                    url : '{{ route("addlease.initialdirectcost.updatesupplier", ['id' => $model->id]) }}',
+                @else
+                    url : '{{ route("addlease.initialdirectcost.addsupplier") }}',
+                @endif
                 type : 'get',
                 success : function(response){
                     $('._form_supplier_details').html(response);
-                    // $('.table_supplier_details').dataTable();
+
                     $("#myModal").modal('show');
                 }
             });
@@ -116,5 +120,72 @@
                 }
             });
         });
+
+        $('#myModal').on('hidden.bs.modal', function () {
+            // will only come inside after the modal is shown
+            var total = 0;
+            $('.supplier_details_amount').each(function(){
+                total = parseFloat(total) + parseFloat($(this).text());
+            });
+            $('#total_initial_direct_cost').val(total);
+        });
+
+        //create supplier details on the update pop up...
+        $(document.body).on('submit', '#supplier_details_form_update', function(e){
+            e.preventDefault();
+            $.ajax({
+                url : "{{ route('addlease.initialdirectcost.createsupplier') }}",
+                type : 'post',
+                data : $(this).serialize(),
+                success : function(response){
+                    if(typeof(response['status'])!='undefined' && !response['status']) {
+                        var errors = response['errors'];
+                        $('.error_via_ajax').remove();
+                        $.each(errors, function(i, e){
+                            if($('input[name="'+i+'"]').length ){
+                                $('input[name="'+i+'"]').after('<span class="help-block error_via_ajax" style="color:red">\n' +
+                                    '                        <strong>'+e+'</strong>\n' +
+                                    '                    </span>');
+                            }
+                        });
+                    } else {
+                        window.location.reload();
+                    }
+                }
+            });
+        });
+
+        //delete supplier details on the update pop up
+        //@todo Need to implement the bootbox
+        $(document.body).on('click', '.supplier_details_form_delete', function(e){
+            var supplier_id = $(this).data('supplier_id');
+            var lease_id = $(this).data('lease_id');
+            var that = $(this);
+            $.ajax({
+                url : "/lease/initial-direct-cost/delete-supplier/"+supplier_id+'/'+lease_id,
+                type : 'delete',
+                success : function(response){
+                    if(response['status']){
+                        $(that).parent('td').parent('tr').remove();
+                    }
+                }
+            });
+        });
+
+        $(document.body).on('click', '.supplier_details_form_edit', function(e){
+            var supplier_id = $(this).data('supplier_id');
+            var lease_id = $(this).data('lease_id');
+            var that = $(this);
+            $.ajax({
+                url : "/lease/initial-direct-cost/delete-supplier/"+supplier_id+'/'+lease_id,
+                type : 'delete',
+                success : function(response){
+                    if(response['status']){
+                        $(that).parent('td').parent('tr').remove();
+                    }
+                }
+            });
+        });
+
     </script>
 @endsection

@@ -22,10 +22,10 @@
                 @foreach($supplier_details as $supplier_detail)
                     <tr>
                         <td>{{ $supplier_detail['supplier_name'] }}</td>
-                        <td>{{ $supplier_detail['direct_cost'] }}</td>
+                        <td>{{ $supplier_detail['direct_cost_description'] }}</td>
                         <td>{{ $supplier_detail['expense_date'] }}</td>
                         <td>{{ $supplier_detail['currency'] }}</td>
-                        <td>{{ $supplier_detail['amount'] }}</td>
+                        <td class="supplier_details_amount">{{ $supplier_detail['amount'] }}</td>
                         <td>{{ $supplier_detail['rate'] }}</td>
                         <td>&nbsp;</td>
                     </tr>
@@ -36,7 +36,7 @@
                     <input type="text" class="form-control" name="supplier_name">
                 </td>
                 <td>
-                    <input type="text" class="form-control" name="direct_cost">
+                    <input type="text" class="form-control" name="direct_cost_description">
                 </td>
                 <td>
                     <input type="text" class="form-control" name="expense_date">
