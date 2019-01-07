@@ -88,4 +88,9 @@ class LeaseAssets extends Model
         return $this->hasOne('App\LeaseBalanceAsOnDec', 'asset_id','id');
 
     }
+
+    public function leaseIncentives(){
+        return $this->hasOne('App\LeaseIncentives', 'asset_id','id');
+
+    }
 }
