@@ -1,4 +1,3 @@
-{{$errors}}
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal">&times;</button>
     <h4 class="modal-title">Modal Header</h4>
@@ -79,7 +78,16 @@
 </div>
  <script src="{{ asset('js/jquery-ui.js') }}"></script>
  <script type="text/javascript">
-     $('.incentive_date').datepicker({
-         dateFormat: "dd-M-yy"
+  
+
+    $(document).ready(function () {
+        DatePickerIn();
      });
+    function DatePickerIn(){
+        console.log("Hello");                
+        $('.incentive_date').datepicker({
+            dateFormat: "dd-M-yy"
+        });
+     }
+    
  </script>

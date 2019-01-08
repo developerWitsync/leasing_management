@@ -39,6 +39,7 @@
                 @if($reporting_currency_settings->is_foreign_transaction_involved == 'yes' || $reporting_currency_settings->is_foreign_transaction_involved == 'no' )
                
                 {{--@include('lease._menubar')--}}
+
                <div class="tab-content" style="padding: 0px;">
                     <div role="tabpanel" class="tab-pane active">
                         @if($lease->id)
