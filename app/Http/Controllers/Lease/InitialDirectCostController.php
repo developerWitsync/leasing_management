@@ -47,7 +47,13 @@ class InitialDirectCostController extends Controller
         ];
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->with('leaseType')->with('assets')->first();
         if($lease) {
-            return view('lease.initial-direct-cost.index', compact('breadcrumbs',
+            //Load the assets only lease start on or after jan 01 2019
+             
+            $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date','>=','2019-01-01')->get();
+
+            return view('lease.initial-direct-cost.index', compact(
+                'assets',
+                'breadcrumbs',
                 'lease'
             ));
         } else {

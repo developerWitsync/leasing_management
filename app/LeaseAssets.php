@@ -114,4 +114,8 @@ class LeaseAssets extends Model
     public function initialDirectCost(){
         return $this->hasOne('App\InitialDirectCost', 'asset_id','id');
     }
+
+    public function leaseIncentiveCost(){
+        return $this->hasOne('App\LeaseIncentives', 'asset_id','id');
+    }
 }

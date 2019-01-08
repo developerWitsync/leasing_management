@@ -17,4 +17,8 @@ class LeaseIncentives extends Model
         'created_at',
         'updated_at'
     ];
+
+    public function customerDetails(){
+        return $this->hasMany('App\CustomerDetails', 'lease_incentive_id', 'id');
+    }
 }
