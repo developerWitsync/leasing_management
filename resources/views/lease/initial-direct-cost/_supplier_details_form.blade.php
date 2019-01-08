@@ -19,15 +19,16 @@
             </thead>
             <tbody>
             @if(!empty($supplier_details))
-                @foreach($supplier_details as $supplier_detail)
+                @foreach($supplier_details as $key=>$supplier_detail)
                     <tr>
                         <td>{{ $supplier_detail['supplier_name'] }}</td>
                         <td>{{ $supplier_detail['direct_cost_description'] }}</td>
                         <td>{{ $supplier_detail['expense_date'] }}</td>
-                        <td>{{ $supplier_detail['currency'] }}</td>
+                        <td>{{ $supplier_detail['supplier_currency'] }}</td>
                         <td class="supplier_details_amount">{{ $supplier_detail['amount'] }}</td>
                         <td>{{ $supplier_detail['rate'] }}</td>
-                        <td>&nbsp;</td>
+                        <td>
+                        <a href="javascript:void(0);" class="btn btn-sm btn-danger supplier_create_details_form_delete" data-supplier_id="{{$key}}"><i class="fa fa-trash-o"></i></a></td> 
                     </tr>
                 @endforeach
             @endif
@@ -39,10 +40,15 @@
                     <input type="text" class="form-control" name="direct_cost_description">
                 </td>
                 <td>
-                    <input type="text" class="form-control" name="expense_date">
+                    <input type="text" class="form-control expense_date" name="expense_date" id= "expense_date">
                 </td>
                 <td>
-                    <input type="text" class="form-control" name="currency">
+                    <select class="form-control" name="supplier_currency">
+            <option value="">--Select Currency--</option>
+            @foreach($currencies as $currency)
+                <option value="{{ $currency->code }}">{{ $currency->code }}  {{ $currency->symbol }}</option>
+            @endforeach
+        </select>
                 </td>
                 <td>
                     <input type="text" class="form-control" name="amount">
@@ -61,3 +67,9 @@
 <div class="modal-footer">
     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 </div>
+<script src="{{ asset('js/jquery-ui.js') }}"></script>
+<script type="text/javascript">
+    $('.expense_date').datepicker({
+                dateFormat: 'dd-M-yy'
+            });
+</script>

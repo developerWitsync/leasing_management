@@ -70,6 +70,8 @@
 </div>
 
 @section('footer-script')
+<script src="{{ asset('assets/plugins/bootbox/bootbox.min.js') }}"></script>
+<script src="{{ asset('js/jquery-ui.js') }}"></script>
     <script type="text/javascript">
         $(document).on('click', 'input[type="checkbox"]', function() {
             $('input[type="checkbox"]').not(this).prop('checked', false);
@@ -112,10 +114,22 @@
                                 $('input[name="'+i+'"]').after('<span class="help-block error_via_ajax" style="color:red">\n' +
                                     '                        <strong>'+e+'</strong>\n' +
                                     '                    </span>');
+                            } else if($('select[name="'+i+'"]').length ){
+                                $('select[name="'+i+'"]').after('<span class="help-block error_via_ajax" style="color:red">\n' +
+                                    '                        <strong>'+e+'</strong>\n' +
+                                    '                    </span>');
                             }
                         });
                     } else {
+
                         $('._form_supplier_details').html(response);
+                        
+                        $('._form_supplier_details .expense_date').datepicker({
+                            dateFormat: 'dd-M-yy'
+                        });
+
+                        // alert("asfsdf");
+
                     }
                 }
             });
@@ -146,6 +160,10 @@
                                 $('input[name="'+i+'"]').after('<span class="help-block error_via_ajax" style="color:red">\n' +
                                     '                        <strong>'+e+'</strong>\n' +
                                     '                    </span>');
+                            } else if($('select[name="'+i+'"]').length ){
+                                $('select[name="'+i+'"]').after('<span class="help-block error_via_ajax" style="color:red">\n' +
+                                    '                        <strong>'+e+'</strong>\n' +
+                                    '                    </span>');
                             }
                         });
                     } else {
@@ -156,20 +174,75 @@
         });
 
         //delete supplier details on the update pop up
-        //@todo Need to implement the bootbox
         $(document.body).on('click', '.supplier_details_form_delete', function(e){
             var supplier_id = $(this).data('supplier_id');
             var lease_id = $(this).data('lease_id');
             var that = $(this);
-            $.ajax({
-                url : "/lease/initial-direct-cost/delete-supplier/"+supplier_id+'/'+lease_id,
-                type : 'delete',
-                success : function(response){
-                    if(response['status']){
-                        $(that).parent('td').parent('tr').remove();
+            var rowCount = $("tr.supplier").length;
+            if(rowCount == 1){
+                var modal = bootbox.dialog({
+                message: 'You can not delete this detail to do this you have to Select No Any Lease Incentive Receivable field',
+                buttons: [
+                {
+                    label: "OK",
+                    className: "btn btn-success pull-left",
+                    callback: function() {
                     }
                 }
-            });
+                ],
+                    show: false,
+                    onEscape: function() {
+                    modal.modal("hide");
+                    }
+                });
+                    modal.modal("show");
+            }
+            else{
+            bootbox.confirm({
+                    message: "Are you sure that you want to delete this? These changes cannot be reverted.",
+                    buttons: {
+                        confirm: {
+                            label: 'Yes',
+                            className: 'btn btn-success'
+                        },
+                        cancel: {
+                            label: 'No',
+                            className: 'btn btn-danger'
+                        }
+                    },
+                    callback: function (result) {
+                        if(result) {
+                            $.ajax({
+                            url : "/lease/initial-direct-cost/delete-supplier/"+supplier_id+'/'+lease_id,
+                            type : 'delete',
+                            success : function(response){
+                            if(response['status']){
+                            $(that).parent('td').parent('tr').remove();
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        });
+
+        //delete supplier details on the create pop up
+        //@todo Need to implement the bootbox
+        $(document.body).on('click', '.supplier_create_details_form_delete', function(e){
+            var supplier_id = $(this).data('supplier_id');
+            var that = $(this);
+         
+                            $.ajax({
+                            url : "/lease/initial-direct-cost/delete-create-supplier/"+supplier_id,
+                            type : 'delete',
+                            success : function(response){
+                            if(response['status']){
+                            $(that).parent('td').parent('tr').remove();
+                                    }
+                                }
+                            });
+                      
         });
 
         $(document.body).on('click', '.supplier_details_form_edit', function(e){
@@ -186,6 +259,12 @@
                 }
             });
         });
+        $(function(){
+            $('.expense_date').datepicker({
+                dateFormat: 'dd-M-yy'
+            });
+        })
+
 
     </script>
 @endsection

@@ -9,7 +9,7 @@ namespace App\Http\Controllers\Drafts;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Lease;
-
+use App\LeaseAssets;
 // Using Eloquent
 
 
@@ -32,7 +32,7 @@ class IndexController extends Controller
     public function fetchLeaseDetails(Request $request){
         try{
             if ($request->ajax()) {
-            	return datatables()->eloquent(Lease::query())->toJson();
+            	return datatables()->eloquent(Lease::query()->with('assets'))->toJson();
             } else {
                 return redirect()->back();
             }

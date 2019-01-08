@@ -121,6 +121,7 @@ Route::middleware('auth')->group(function(){
         });
 
         /**
+
          * Lease Escalation Clause Routes NL9
          */
 
@@ -134,11 +135,39 @@ Route::middleware('auth')->group(function(){
         });
 
 
+        /*
+         * Select Low Value Value NL10
+         */
+        Route::prefix('select-low-value')->group(function(){
+            Route::get('index/{id}', ['as' => 'addlease.lowvalue.index', 'uses' => 'SelectLowValueController@index']);
+            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.lowvalue.create', 'uses' => 'SelectLowValueController@create']);
+            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.lowvalue.update', 'uses' => 'SelectLowValueController@update']);
+
+         });
+        /**
+         * Select Discount Rate  NL11
+         */
+        Route::prefix('select-discount-rate')->group(function(){
+            
+            Route::get('index/{id}', ['as' => 'addlease.discountrate.index', 'uses' => 'SelectDiscountRateController@index']);
+            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.discountrate.create', 'uses' => 'SelectDiscountRateController@create']);
+            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.discountrate.update', 'uses' => 'SelectDiscountRateController@update']);
+        });
+        /**
+         * Lease Balances as on Dec 31, 2018  NL12
+         */
+        Route::prefix('lease-balnce-as-on-dec')->group(function(){
+            
+            Route::get('index/{id}', ['as' => 'addlease.balanceasondec.index', 'uses' => 'LeaseBalanceAsOnDecController@index']);
+            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.balanceasondec.create', 'uses' => 'LeaseBalanceAsOnDecController@create']);
+            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.balanceasondec.update', 'uses' => 'LeaseBalanceAsOnDecController@update']);
+        });
+        
         /**
          * Initial Direct Cost NL13
          */
         Route::prefix('initial-direct-cost')->group(function(){
-            
+
             Route::get('index/{id}', ['as' => 'addlease.initialdirectcost.index', 'uses' => 'InitialDirectCostController@index']);
             Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.initialdirectcost.create', 'uses' => 'InitialDirectCostController@create']);
             Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.initialdirectcost.update', 'uses' => 'InitialDirectCostController@update']);
@@ -150,40 +179,39 @@ Route::middleware('auth')->group(function(){
             Route::post('create-supplier',['as' => 'addlease.initialdirectcost.createsupplier', 'uses' => 'InitialDirectCostController@createSupplier']);
 
             Route::delete('delete-supplier/{id}/{lease_id}', ['as' => 'addlease.initialdirectcost.deletesupplier', 'uses' => 'InitialDirectCostController@deleteSupplier']);
-        });
 
+             Route::delete('delete-create-supplier/{id}', ['as' => 'addlease.initialdirectcost.deletecreatesupplier', 'uses' => 'InitialDirectCostController@deleteCreateSupplier']); 
+        });
+        /**
+         * Lease Incentives  NL14
+         */
+        Route::prefix('lease-incentives')->group(function(){
+            
+             Route::get('index/{id}', ['as' => 'addlease.leaseincentives.index', 'uses' => 'LeaseIncentivesController@index']);
+            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.leaseincentives.create', 'uses' => 'LeaseIncentivesController@create']);
+            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.leaseincentives.update', 'uses' => 'LeaseIncentivesController@update']);
+            Route::match(['post', 'get'], 'add-customer-details', ['as' => 'addlease.leaseincentives.addcustomer', 'uses' => 'LeaseIncentivesController@addCustomer']);
+            Route::match(['post', 'get'], 'update-customer-details/{id}', ['as' => 'addlease.leaseincentives.updatecustomer', 'uses' => 'LeaseIncentivesController@updateCustomer']);
+             Route::post('create-customer',['as' => 'addlease.leaseincentives.createcustomer', 'uses' => 'LeaseIncentivesController@createCustomer']);
+
+            Route::delete('delete-customer/{id}/{lease_id}', ['as' => 'addlease.leaseincentives.deletecustomer', 'uses' => 'LeaseIncentivesController@deleteCustomer']);
+            Route::delete('delete-create-customer/{id}', ['as' => 'addlease.leaseincentives.deletecreatecustomer', 'uses' => 'LeaseIncentivesController@deleteCreateCustomer']);
+        });
         /**
          * Lease Payment Invoice NL16
          */
         Route::prefix('lease-payment-invoice')->group(function(){
             Route::match(['post', 'get'], 'index/{id}', ['as' => 'addlease.leasepaymentinvoice.index', 'uses' => 'LeaseInvoiceController@index']);
         });
-
-
         /**
-         * Lease Balances as on Dec 31, 2018  NL12
+         * Review&Submit  NL17
          */
-        Route::prefix('lease-balnce-as-on-dec')->group(function(){
+        Route::prefix('review-submit')->group(function(){
             
-            Route::get('index/{id}', ['as' => 'addlease.balanceasondec.index', 'uses' => 'LeaseBalanceAsOnDecController@index']);
-            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.balanceasondec.create', 'uses' => 'LeaseBalanceAsOnDecController@create']);
-            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.balanceasondec.update', 'uses' => 'LeaseBalanceAsOnDecController@update']);
+            Route::get('index/{id}', ['as' => 'addlease.reviewsubmit.index', 'uses' => 'ReviewSubmitController@index']);
+            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.reviewsubmit.create', 'uses' => 'ReviewSubmitController@create']);
+            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.reviewsubmit.update', 'uses' => 'ReviewSubmitController@update']);
         });
-
-        /**
-         * Lease Incentives  NL14
-         */
-        Route::prefix('lease-incentives')->group(function(){
-            
-            Route::get('index/{id}', ['as' => 'addlease.leaseincentives.index', 'uses' => 'LeaseIncentivesController@index']);
-            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.leaseincentives.create', 'uses' => 'LeaseIncentivesController@create']);
-            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.leaseincentives.update', 'uses' => 'LeaseIncentivesController@update']);
-
-            Route::post('add-customer-details', ['as' => 'addlease.leaseincentives.addcustomerdetails', 'uses' => 'LeaseIncentivesController@addCustomerDetails']);
-
-            Route::match(['post', 'get'], 'updateCustomer/{id}', ['as' => 'addlease.leaseincentives.updateCustomer', 'uses' => 'LeaseIncentivesController@updateCustomer']);
-            Route::match(['post', 'get'], 'deletecustomerdetails/{id}', ['as' => 'addlease.leaseincentives.deletecustomerdetails', 'uses' => 'LeaseIncentivesController@deletecustomerdetails']);
-         });
 
     });
 
@@ -316,8 +344,8 @@ Route::middleware('auth')->group(function(){
             Route::get('/', ['as' => 'settings.codification', 'uses' => 'CodificationController@index']);
         });
 
-        Route::prefix('profile')->group(function (){
-            Route::match(['get', 'post'], '/', ['as' => 'settings.profile.index', 'uses' => 'ProfileController@index']);
+        Route::prefix('companyprofile')->group(function (){
+            Route::match(['get', 'post'], 'index/{id}', ['as' => 'settings.profile.index', 'uses' => 'ProfileController@index']);
         });
     });
       

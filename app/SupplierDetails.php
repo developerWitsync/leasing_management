@@ -13,7 +13,7 @@ class SupplierDetails extends Model
     	'supplier_name',
     	'direct_cost_description',
     	'expense_date',
-    	'currency',
+    	'supplier_currency',
     	'amount',
     	'rate',
     	'created_at',
