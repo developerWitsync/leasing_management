@@ -51,15 +51,12 @@ class ReviewSubmitController extends Controller
 
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
         if($lease) {
-            //Load the assets only which is not in very short tem/short term lease in NL 8.1(lease_contract_duration table) and not in intengible under license arrangements and biological assets (lease asset categories)
              
-             $own_assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('specific_use',1)->whereNotIn('category_id',[8,5])->whereHas('leaseDurationClassified',  function($query){
-                $query->where('lease_contract_duration_id', '=', '3');
-            })->get();
+             $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->get();
 
-             $sublease_assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('specific_use',2)->whereNotIn('category_id',[8,5])->whereHas('leaseDurationClassified',  function($query){
-                $query->where('lease_contract_duration_id', '=', '3');
-            })->get();
+            //  $sublease_assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('specific_use',2)->whereNotIn('category_id',[8,5])->whereHas('leaseDurationClassified',  function($query){
+            //     $query->where('lease_contract_duration_id', '=', '3');
+            // })->get();
 
              $reporting_currency_settings = ReportingCurrencySettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
               $contract_classifications = ContractClassifications::query()->select('id', 'title')->where('status', '=', '1')->get();
@@ -67,8 +64,7 @@ class ReviewSubmitController extends Controller
            
             return view('lease.review-submit.index', compact(
                 'lease',
-                'own_assets',
-                'sublease_assets',
+                'assets',
                 'breadcrumbs',
                 'reporting_currency_settings',
                 'contract_classifications',

@@ -145,16 +145,18 @@
                         <tr>
                             <th>Sr. No.</th>
                             <th>Unique ULA Code</th>
-                            <th>Name of the Underlying Lease Asset</th>
+                            <th>Underlying Lease Asset Category</th>
                             <th>Underlying Lease Asset Classification</th>
+                            <th>Name of the Underlying Lease Asset</th>
+                            <th>Number of Units of Lease Assets of Similar Characteristics</th>
                             <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
-                            @php
+                           <!--  @php
                                 $show_next = [];
-                            @endphp
-                            @foreach($sublease_assets as $key=>$asset)
+                            @endphp -->
+                            @foreach($assets as $key=>$asset)
                           <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td style="width: 10%">
@@ -166,8 +168,8 @@
                                     <td>
                                         {{ $asset->subcategory->title }}
                                     </td>
-                                   <td>
-                                        @if($asset->leaseSelectDiscountRate)
+                                 <!--  <td>
+                                         @if($asset->leaseSelectDiscountRate)
                                             @php
                                                 $show_next[] = true;
                                             @endphp
@@ -178,7 +180,7 @@
                                             @endphp
                                             <a class="btn btn-sm btn-info" href="{{ route('addlease.discountrate.create', ['id'=> $asset->id]) }}">Add Select Low Value</a>
                                         @endif
-                                    </td>
+                                    </td> -->
                                 </tr>
                             @endforeach
                         </tbody>
@@ -191,16 +193,18 @@
                         <tr>
                             <th>Sr. No.</th>
                             <th>Unique ULA Code</th>
-                            <th>Name of the Underlying Lease Asset</th>
-                            <th>Underlying Lease Asset Classification</th>
+                            <th>Country of the Lease Asset</th>
+                            <th>Place</th>
+                            <th>Specific Use of the Lease Asset</th>
+                            <th>Expected Remaining Useful Life of the Underlying</th>
                             <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
-                            @php
+                            <!-- @php
                                 $show_next = [];
-                            @endphp
-                            @foreach($sublease_assets as $key=>$asset)
+                            @endphp -->
+                            @foreach($assets as $key=>$asset)
                           <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td style="width: 10%">
@@ -212,7 +216,7 @@
                                     <td>
                                         {{ $asset->subcategory->title }}
                                     </td>
-                                   <td>
+                                   <!-- <td>
                                         @if($asset->leaseSelectDiscountRate)
                                             @php
                                                 $show_next[] = true;
@@ -224,7 +228,7 @@
                                             @endphp
                                             <a class="btn btn-sm btn-info" href="{{ route('addlease.discountrate.create', ['id'=> $asset->id]) }}">Add Select Low Value</a>
                                         @endif
-                                    </td>
+                                    </td> -->
                                 </tr>
                             @endforeach
                         </tbody>
@@ -237,8 +241,11 @@
                         <tr>
                             <th>Sr. No.</th>
                             <th>Unique ULA Code</th>
-                            <th>Name of the Underlying Lease Asset</th>
-                            <th>Underlying Lease Asset Classification</th>
+                            <th>Lease Start Date</th>
+                            <th>Initial Lease Free Period, If any</th>
+                            <th>Start Date of Lease Payment / Accrual Period</th>
+                            <th>Lease End Date, Non-Cancellable Period</th>
+                            <th>Lease Term (in Months & Years)</th>
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -246,7 +253,7 @@
                             @php
                                 $show_next = [];
                             @endphp
-                            @foreach($sublease_assets as $key=>$asset)
+                            @foreach($assets as $key=>$asset)
                           <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td style="width: 10%">
@@ -258,7 +265,7 @@
                                     <td>
                                         {{ $asset->subcategory->title }}
                                     </td>
-                                   <td>
+                                   <!-- <td>
                                         @if($asset->leaseSelectDiscountRate)
                                             @php
                                                 $show_next[] = true;
@@ -270,7 +277,7 @@
                                             @endphp
                                             <a class="btn btn-sm btn-info" href="{{ route('addlease.discountrate.create', ['id'=> $asset->id]) }}">Add Select Low Value</a>
                                         @endif
-                                    </td>
+                                    </td> -->
                                 </tr>
                             @endforeach
                         </tbody>
@@ -289,10 +296,10 @@
                         </tr>
                         </thead>
                         <tbody>
-                            @php
+                           <!--  @php
                                 $show_next = [];
-                            @endphp
-                            @foreach($sublease_assets as $key=>$asset)
+                            @endphp -->
+                            @foreach($assets as $key=>$asset)
                           <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td style="width: 10%">
@@ -302,9 +309,9 @@
                                         {{ $asset->name }}
                                     </td>
                                     <td>
-                                        {{ $asset->subcategory->title }}
+                                        <!-- {{ $asset->category_id->title }} -->
                                     </td>
-                                   <td>
+                                   <!-- <td>
                                         @if($asset->leaseSelectDiscountRate)
                                             @php
                                                 $show_next[] = true;
@@ -316,7 +323,7 @@
                                             @endphp
                                             <a class="btn btn-sm btn-info" href="{{ route('addlease.discountrate.create', ['id'=> $asset->id]) }}">Add Select Low Value</a>
                                         @endif
-                                    </td>
+                                    </td> -->
                                 </tr>
                             @endforeach
                         </tbody>
@@ -329,16 +336,19 @@
                         <tr>
                             <th>Sr. No.</th>
                             <th>Unique ULA Code</th>
-                            <th>Name of the Underlying Lease Asset</th>
-                            <th>Underlying Lease Asset Classification</th>
+                            <th>Total FMV</th>
+                            <th>Total Residual Guarantee Value</th>
+                            <th>Termination Penalty</th>
+                            <th>Anticipated Purchase Price</th>
+                            <th>Expected Purchse Date</th>
                             <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
-                            @php
+                            <!-- @php
                                 $show_next = [];
-                            @endphp
-                            @foreach($sublease_assets as $key=>$asset)
+                            @endphp -->
+                            @foreach($assets as $key=>$asset)
                           <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td style="width: 10%">
@@ -350,7 +360,7 @@
                                     <td>
                                         {{ $asset->subcategory->title }}
                                     </td>
-                                   <td>
+                                   <!-- <td>
                                         @if($asset->leaseSelectDiscountRate)
                                             @php
                                                 $show_next[] = true;
@@ -362,7 +372,7 @@
                                             @endphp
                                             <a class="btn btn-sm btn-info" href="{{ route('addlease.discountrate.create', ['id'=> $asset->id]) }}">Add Select Low Value</a>
                                         @endif
-                                    </td>
+                                    </td> -->
                                 </tr>
                             @endforeach
                         </tbody>
@@ -375,16 +385,19 @@
                         <tr>
                             <th>Sr. No.</th>
                             <th>Unique ULA Code</th>
-                            <th>Name of the Underlying Lease Asset</th>
-                            <th>Underlying Lease Asset Classification</th>
+                            <th>Lease Classified</th>
+                            <th>Classify under Low Value Lease Asset</th>
+                            <th>Discount Rates</th>
+                            <th>Total Initial Direct Cost</th>
+                            <th>Total Lease Incentive</th>
                             <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
-                            @php
+                            <!-- @php
                                 $show_next = [];
-                            @endphp
-                            @foreach($sublease_assets as $key=>$asset)
+                            @endphp -->
+                            @foreach($assets as $key=>$asset)
                           <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td style="width: 10%">
@@ -396,7 +409,7 @@
                                     <td>
                                         {{ $asset->subcategory->title }}
                                     </td>
-                                   <td>
+                                   <!-- <td>
                                         @if($asset->leaseSelectDiscountRate)
                                             @php
                                                 $show_next[] = true;
@@ -408,7 +421,7 @@
                                             @endphp
                                             <a class="btn btn-sm btn-info" href="{{ route('addlease.discountrate.create', ['id'=> $asset->id]) }}">Add Select Low Value</a>
                                         @endif
-                                    </td>
+                                    </td> -->
                                 </tr>
                             @endforeach
                         </tbody>
@@ -421,16 +434,17 @@
                         <tr>
                             <th>Sr. No.</th>
                             <th>Unique ULA Code</th>
-                            <th>Name of the Underlying Lease Asset</th>
-                            <th>Underlying Lease Asset Classification</th>
+                            <th>Present Value of Lease Liability</th>
+                            <th>Value of a Lease Asset</th>
+                            <th>Adjustment to Equity</th>
                             <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
-                            @php
+                            <!-- @php
                                 $show_next = [];
-                            @endphp
-                            @foreach($sublease_assets as $key=>$asset)
+                            @endphp -->
+                            @foreach($assets as $key=>$asset)
                           <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td style="width: 10%">
@@ -442,7 +456,7 @@
                                     <td>
                                         {{ $asset->subcategory->title }}
                                     </td>
-                                   <td>
+                                   <!-- <td>
                                         @if($asset->leaseSelectDiscountRate)
                                             @php
                                                 $show_next[] = true;
@@ -454,7 +468,7 @@
                                             @endphp
                                             <a class="btn btn-sm btn-info" href="{{ route('addlease.discountrate.create', ['id'=> $asset->id]) }}">Add Select Low Value</a>
                                         @endif
-                                    </td>
+                                    </td> -->
                                 </tr>
                             @endforeach
                         </tbody>
