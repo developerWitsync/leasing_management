@@ -5,7 +5,7 @@
 
 @section('content')
     <div class="panel panel-default">
-        <div class="panel-heading">Add New Lease | Add Lease Incentives for the asset - {{ $asset->name }}</div>
+        <div class="panel-heading">Add New Lease | Edit Existing Select Discount Rate for the asset - {{ $asset->name }}</div>
 
         <div class="panel-body">
             @if (session('status'))
@@ -16,7 +16,7 @@
 
             <div class="tab-content" style="padding: 0px;">
                 <div role="tabpanel" class="tab-pane active">
-                    @include('lease.lease-incentives._form')
+                    @include('lease.select-discount-rate._form')
                 </div>
             </div>
 

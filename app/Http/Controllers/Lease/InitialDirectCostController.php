@@ -48,7 +48,13 @@ class InitialDirectCostController extends Controller
         ];
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->with('leaseType')->with('assets')->first();
         if($lease) {
-            return view('lease.initial-direct-cost.index', compact('breadcrumbs',
+            //Load the assets only lease start on or after jan 01 2019
+             
+            $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date','>=','2019-01-01')->get();
+
+            return view('lease.initial-direct-cost.index', compact(
+                'assets',
+                'breadcrumbs',
                 'lease'
             ));
         } else {
@@ -141,6 +147,7 @@ class InitialDirectCostController extends Controller
             if($lease) {
 
                 $model = InitialDirectCost::query()->where('asset_id', '=', $id)->first();
+                $initial_direct_cost_id = $model->id;
 
                 if($request->isMethod('post')) {
                     $validator = Validator::make($request->except('_token'), $this->validationRules());
@@ -152,6 +159,13 @@ class InitialDirectCostController extends Controller
                     $data = $request->except('_token');
                     $data['lease_id']   = $asset->lease->id;
                     $data['asset_id']   = $asset->id;
+
+                    if($request->initial_direct_cost_involved == 'no')
+                     {
+                        SupplierDetails::query()->where('initial_direct_cost_id', '=', $initial_direct_cost_id)->delete();
+                        $data['total_initial_direct_cost'] = 0;
+                     }
+
 
                     $model->setRawAttributes($data);
 

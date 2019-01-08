@@ -25,7 +25,7 @@
             <tbody>
 
                 @foreach($directCost->supplierDetails as $supplier_detail)
-                    <tr>
+                    <tr class= "supplier">
                         <td>{{ $supplier_detail->supplier_name }}</td>
                         <td>{{ $supplier_detail->direct_cost_description }}</td>
                         <td>{{ $supplier_detail->expense_date }}</td>

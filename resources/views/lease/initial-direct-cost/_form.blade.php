@@ -178,6 +178,26 @@
             var supplier_id = $(this).data('supplier_id');
             var lease_id = $(this).data('lease_id');
             var that = $(this);
+            var rowCount = $("tr.supplier").length;
+            if(rowCount == 1){
+                var modal = bootbox.dialog({
+                message: 'You can not delete this detail to do this you have to Select No Any Lease Incentive Receivable field',
+                buttons: [
+                {
+                    label: "OK",
+                    className: "btn btn-success pull-left",
+                    callback: function() {
+                    }
+                }
+                ],
+                    show: false,
+                    onEscape: function() {
+                    modal.modal("hide");
+                    }
+                });
+                    modal.modal("show");
+            }
+            else{
             bootbox.confirm({
                     message: "Are you sure that you want to delete this? These changes cannot be reverted.",
                     buttons: {
@@ -204,6 +224,7 @@
                         }
                     }
                 });
+            }
         });
 
         //delete supplier details on the create pop up

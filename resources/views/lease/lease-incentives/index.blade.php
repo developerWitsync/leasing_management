@@ -6,7 +6,7 @@
 @endsection
 @section('content')
     <div class="panel panel-default">
-        <div class="panel-heading">Add New Lease | Lease Incentives </div>
+        <div class="panel-heading">Add New Lease | Any Lease Incentives Receivable of Underlying Lease Asset</div>
 
         <div class="panel-body">
             @if (session('status'))
@@ -24,10 +24,9 @@
                     </ul>
                 </div>
             @endif
-              {{--@include('lease._menubar')--}}
+
             <div class="tab-content" style="padding: 0px;">
                 <div role="tabpanel" class="tab-pane active">
-                 
                     <table class="table table-bordered table-responsive">
                         <thead>
                         <tr>
@@ -42,8 +41,8 @@
                             @php
                                 $show_next = [];
                             @endphp
-                            @foreach($assets as $key=>$asset)
-                          <tr>
+                            @foreach($lease->assets as $key=>$asset)
+                                <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td style="width: 10%">
                                         {{ $asset->uuid}}
@@ -54,30 +53,33 @@
                                     <td>
                                         {{ $asset->subcategory->title }}
                                     </td>
-                                   <td>
-                                        @if($asset->leaseIncentives)
+                                    <td>
+                                        @if($asset->leaseIncentiveCost)
                                             @php
                                                 $show_next[] = true;
                                             @endphp
-                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.leaseincentives.update', ['id'=> $asset->id]) }}">Update Lease Incentives </a>
+                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.leaseincentives.update', ['id'=> $asset->id]) }}">Update Lease Incentive Costs Details</a>
                                         @else
                                             @php
                                                 $show_next[] = false;
                                             @endphp
-                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.leaseincentives.create', ['id'=> $asset->id]) }}">Add Lease Incentives</a>
+                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.leaseincentives.create', ['id'=> $asset->id]) }}">Add Lease Incentive Costs Details</a>
                                         @endif
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
+
                     <div class="form-group">
 
                         <div class="col-md-6 col-md-offset-4">
-                              <a href="{{ route('addlease.discountrate.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
-                              @if(!in_array(false, $show_next))
-                                    <a href="#" class="btn btn-primary">Next</a>
-                              @endif
+
+                            <a href="{{ route('addlease.payments.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
+
+                            @if(!in_array(false, $show_next))
+                                <a href="{{ route('addlease.residual.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
+                            @endif
                         </div>
 
                     </div>
