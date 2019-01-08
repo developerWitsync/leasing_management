@@ -49,7 +49,7 @@ class LeaseBalanceAsOnDecController extends Controller
 
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
         if($lease) {
-            //Load the assets only lease start prior to jan 31 2018
+            //Load the assets only lease start prior to Dec 31 2018
              
             $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date','<','2019-01-01')->get();
 

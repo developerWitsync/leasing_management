@@ -40,4 +40,8 @@ class LeaseAssetPayments extends Model
     public function paymentNature(){
         return $this->belongsTo('App\LeaseAssetPaymentsNature', 'nature', 'id');
     }
+
+    public function paymentInterval(){
+        return $this->belongsTo('App\LeasePaymentsInterval', 'payment_interval', 'id');
+    }
 }

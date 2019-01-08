@@ -17,4 +17,8 @@ class InitialDirectCost extends Model
     	'created_at',
     	'updated_at'
     ];
+
+    public function supplierDetails(){
+        return $this->hasMany('App\SupplierDetails', 'initial_direct_cost_id', 'id');
+    }
 }

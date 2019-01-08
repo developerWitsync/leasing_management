@@ -11,7 +11,7 @@ class SupplierDetails extends Model
     protected $fillable = [
     	'initial_direct_cost_id',
     	'supplier_name',
-    	'direct_cost',
+    	'direct_cost_description',
     	'expense_date',
     	'currency',
     	'amount',

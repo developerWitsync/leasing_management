@@ -29,7 +29,7 @@
         </div>
 
         <div class="form-group{{ $errors->has('escalation_basis') ? ' has-error' : '' }} required">
-            <label for="effective_from" class="col-md-4 control-label">Escalation Effective From</label>
+            <label for="effective_from" class="col-md-4 control-label">Escalation Basis</label>
             <div class="col-md-6 form-check form-check-inline">
                 <select name="escalation_basis" class="form-control">
                     <option>--Select Escalation Basis--</option>
@@ -49,7 +49,7 @@
             <label for="escalation_rate_type" class="col-md-4 control-label">Escalation Rate Type</label>
             <div class="col-md-6 form-check form-check-inline">
                 <select name="escalation_rate_type" class="form-control">
-                    <option>--Select Rate Type--</option>
+                    <option value="">--Select Rate Type--</option>
                     @foreach($percentage_rate_types as $type)
                         <option value="{{ $type->id }}" @if(old('escalation_rate_type', $model->escalation_rate_type) == $type->id) selected="selected" @endif>{{ $type->title }}</option>
                     @endforeach
@@ -134,6 +134,17 @@
     </div>
 
 </form>
+
+<!--Escalations Chart -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="dialog">
+        <div class="modal-content escalation_chart_modal_body">
+
+        </div>
+    </div>
+</div>
+
+<!--Escalations Chart -->
 @section('footer-script')
     <script src="{{ asset('js/jquery-ui.js') }}"></script>
     <script src="{{ asset('assets/plugins/bootbox/bootbox.min.js') }}"></script>
@@ -144,7 +155,13 @@
                 url : "{{ route('lease.escalation.showescalationchart', ['id' => $payment->id]) }}",
                 data : $('form').serialize(),
                 type : 'get',
+                success : function(response){
+                    setTimeout(function () {
+                        $('.escalation_chart_modal_body').html(response);
 
+                        $('#myModal').modal('show');
+                    }, 100);
+                }
             });
         });
 
@@ -298,7 +315,12 @@
                     $('.is_j_12_y_e_s_variable_rate').addClass('hidden');
                 }
 
-                calculateTotalEscalationRate();
+                if($(this).val() != '' && checkbox_value == "yes"){
+                    $('.total_escalation_rate').removeClass('hidden');
+                    calculateTotalEscalationRate();
+                } else {
+                    $('.total_escalation_rate').addClass('hidden');
+                }
             });
 
             //calculate total escalation rate based upon the fixed and variable rates

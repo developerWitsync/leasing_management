@@ -32,7 +32,7 @@
         <div class="form-group{{ $errors->has('total_initial_direct_cost') ? ' has-error' : '' }} required">
             <label for="total_initial_direct_cost" class="col-md-4 control-label">Total Initial Direct Cost</label>
             <div class="col-md-6 form-check form-check-inline">
-                <input type="text" value="{{ $asset->total_initial_direct_cost }}" class="form-control" id="total_initial_direct_cost" name="total_initial_direct_cost" readonly="readonly">
+                <input type="text" value="{{ old('total_initial_direct_cost', $model->total_initial_direct_cost)}}" class="form-control" id="total_initial_direct_cost" name="total_initial_direct_cost" readonly="readonly">
                 @if ($errors->has('total_initial_direct_cost'))
                     <span class="help-block">
                         <strong>{{ $errors->first('total_initial_direct_cost') }}</strong>
@@ -44,7 +44,7 @@
     <div class="form-group{{ $errors->has('details') ? ' has-error' : '' }}">
         <label for="details" class="col-md-4 control-label"></label>
         <div class="col-md-6">
-            <a data-toggle="modal" data-target="#myModal" href="javascript:void(0);" class="btn btn-primary">Enter Details</a>
+            <a data-toggle="modal" href="javascript:void(0);" class="btn btn-primary enter_supplier_details">Enter Details</a>
         </div>
     </div>
      </div>
@@ -58,63 +58,20 @@
             </button>
         </div>
     </div>
-
 </form>
 
-
+<!-- Modal -->
 <div id="myModal" class="modal fade" role="dialog">
-          <div class="modal-dialog">
-
-            <!-- Modal content-->
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Modal Header</h4>
-              </div>
-              <div class="modal-body">
-                    <form action="{{ route('addlease.initialdirectcost.createsupplier') }}" method="post" id="supplier_details">
-                        {{ csrf_field()}}
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Supplier Name</th>
-                                    <th>Initial Direct Cost Description</th>
-                                    <th>Date of Expense</th>
-                                    <th>Currency</th>
-                                    <th>Amount </th>
-                                    <th>Exchange Rate</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    @if(empty($supplierData))
-                                        <td><input type="text" class="form-control" name="supplier_name[]">  </td>
-                                        <td><input type="text" class="form-control" name="direct_cost[]">  </td>
-                                        <td><input type="text" class="form-control" name="expense_date[]">  </td>
-                                        <td><input type="text" class="form-control" name="currency[]">  </td>
-                                        <td><input type="text" class="form-control" name="amount[]">  </td>
-                                        <td><input type="text" class="form-control" name="rate[]">  </td>
-                                        <td>
-                                            <button type="button" class="btn btn-success" data-dismiss="modal">Save</button>
-                                        </td>
-                                    @else
-
-                                    @endif
-                                </tr>
-                            </tbody>
-                        </table>
-                    </form>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              </div>
-            </div>
-
-          </div>
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content _form_supplier_details">
         </div>
+    </div>
+</div>
 
 @section('footer-script')
+<script src="{{ asset('assets/plugins/bootbox/bootbox.min.js') }}"></script>
+<script src="{{ asset('js/jquery-ui.js') }}"></script>
     <script type="text/javascript">
         $(document).on('click', 'input[type="checkbox"]', function() {
             $('input[type="checkbox"]').not(this).prop('checked', false);
@@ -125,5 +82,161 @@
                 $('#hidden-fields').hide();
             }
         });
+
+        $('.enter_supplier_details').on('click', function () {
+            $.ajax({
+                @if(request()->segment('2') == 'initial-direct-cost' && request()->segment('3') == 'update')
+                    url : '{{ route("addlease.initialdirectcost.updatesupplier", ['id' => $model->id]) }}',
+                @else
+                    url : '{{ route("addlease.initialdirectcost.addsupplier") }}',
+                @endif
+                type : 'get',
+                success : function(response){
+                    $('._form_supplier_details').html(response);
+
+                    $("#myModal").modal('show');
+                }
+            });
+        });
+
+        $(document.body).on('submit', '#supplier_details_form', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url : '{{ route("addlease.initialdirectcost.addsupplier") }}',
+                type : 'post',
+                data : $(this).serialize(),
+                success : function(response){
+                    if(typeof(response['status'])!='undefined' && !response['status']) {
+                        var errors = response['errors'];
+                        $('.error_via_ajax').remove();
+                        $.each(errors, function(i, e){
+                            if($('input[name="'+i+'"]').length ){
+                                $('input[name="'+i+'"]').after('<span class="help-block error_via_ajax" style="color:red">\n' +
+                                    '                        <strong>'+e+'</strong>\n' +
+                                    '                    </span>');
+                            }
+                        });
+                    } else {
+
+                        $('._form_supplier_details').html(response);
+                        
+                        $('._form_supplier_details .expense_date').datepicker({
+                            dateFormat: 'dd-M-yy'
+                        });
+
+                        alert("asfsdf");
+
+                    }
+                }
+            });
+        });
+
+        $('#myModal').on('hidden.bs.modal', function () {
+            // will only come inside after the modal is shown
+            var total = 0;
+            $('.supplier_details_amount').each(function(){
+                total = parseFloat(total) + parseFloat($(this).text());
+            });
+            $('#total_initial_direct_cost').val(total);
+        });
+
+        //create supplier details on the update pop up...
+        $(document.body).on('submit', '#supplier_details_form_update', function(e){
+            e.preventDefault();
+            $.ajax({
+                url : "{{ route('addlease.initialdirectcost.createsupplier') }}",
+                type : 'post',
+                data : $(this).serialize(),
+                success : function(response){
+                    if(typeof(response['status'])!='undefined' && !response['status']) {
+                        var errors = response['errors'];
+                        $('.error_via_ajax').remove();
+                        $.each(errors, function(i, e){
+                            if($('input[name="'+i+'"]').length ){
+                                $('input[name="'+i+'"]').after('<span class="help-block error_via_ajax" style="color:red">\n' +
+                                    '                        <strong>'+e+'</strong>\n' +
+                                    '                    </span>');
+                            }
+                        });
+                    } else {
+                        window.location.reload();
+                    }
+                }
+            });
+        });
+
+        //delete supplier details on the update pop up
+        //@todo Need to implement the bootbox
+        $(document.body).on('click', '.supplier_details_form_delete', function(e){
+            var supplier_id = $(this).data('supplier_id');
+            var lease_id = $(this).data('lease_id');
+            var that = $(this);
+            bootbox.confirm({
+                    message: "Are you sure that you want to delete this? These changes cannot be reverted.",
+                    buttons: {
+                        confirm: {
+                            label: 'Yes',
+                            className: 'btn btn-success'
+                        },
+                        cancel: {
+                            label: 'No',
+                            className: 'btn btn-danger'
+                        }
+                    },
+                    callback: function (result) {
+                        if(result) {
+                            $.ajax({
+                            url : "/lease/initial-direct-cost/delete-supplier/"+supplier_id+'/'+lease_id,
+                            type : 'delete',
+                            success : function(response){
+                            if(response['status']){
+                            $(that).parent('td').parent('tr').remove();
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+        });
+
+        //delete supplier details on the create pop up
+        //@todo Need to implement the bootbox
+        $(document.body).on('click', '.supplier_create_details_form_delete', function(e){
+            var supplier_id = $(this).data('supplier_id');
+            var that = $(this);
+         
+                            $.ajax({
+                            url : "/lease/initial-direct-cost/delete-create-supplier/"+supplier_id,
+                            type : 'delete',
+                            success : function(response){
+                            if(response['status']){
+                            $(that).parent('td').parent('tr').remove();
+                                    }
+                                }
+                            });
+                      
+        });
+
+        $(document.body).on('click', '.supplier_details_form_edit', function(e){
+            var supplier_id = $(this).data('supplier_id');
+            var lease_id = $(this).data('lease_id');
+            var that = $(this);
+            $.ajax({
+                url : "/lease/initial-direct-cost/delete-supplier/"+supplier_id+'/'+lease_id,
+                type : 'delete',
+                success : function(response){
+                    if(response['status']){
+                        $(that).parent('td').parent('tr').remove();
+                    }
+                }
+            });
+        });
+        $(function(){
+            $('.expense_date').datepicker({
+                dateFormat: 'dd-M-yy'
+            });
+        })
+
+
     </script>
 @endsection
