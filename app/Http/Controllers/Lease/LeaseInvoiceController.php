@@ -18,7 +18,7 @@ use App\LeaseAssetSimilarCharacteristicSettings;
 use App\LeaseAssetsNumberSettings;
 use App\LeaseAssetSubCategorySetting;
 use App\UseOfLeaseAsset;
-use App\InitialDirectCost;
+use App\LeasePaymentInvoice;
 use Illuminate\Http\Request;
 use Validator;
 

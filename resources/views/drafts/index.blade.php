@@ -45,11 +45,8 @@
                                         <thead>
                                         <tr>
                                             <th>Sr No.</th>
-                                            <th>Business Account Id</th>
                                             <th>Lessor Name</th>
-                                            <th>Lessor Code</th>
-                                            <th>Lessor Currency</th>
-                                            <th>Total Assets</th>
+                                            <th>Number of Lease Asset</th>
                                             <th>Action</th>
                                         </tr>
                                         </thead>
@@ -87,16 +84,13 @@
                             return meta.row + meta.settings._iDisplayStart + 1;
                         }
                     },
-                    { "data": "business_account_id"},
                     { "data": "lessor_name"},
-                    { "data": "lease_code"},
-                    { "data": "lease_contract_id"},
                     { "data": "total_assets"},
                     { "data": "id"}
                 ],
                 "columnDefs": [
                     {
-                        "targets" : 6,
+                        "targets" : 3,
                         "data" : null,
                         "orderable": false,
                         "className" : "text-center",
