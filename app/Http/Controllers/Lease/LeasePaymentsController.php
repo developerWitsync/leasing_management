@@ -30,8 +30,8 @@ class LeasePaymentsController extends Controller
      * validation rules for the create and update payments
      * @return array
      */
-    protected function validationRules(){
-        return [
+    protected function validationRules($create = true){
+        $rules = [
             'name'                          => 'required',
             'type'                          => 'required',
             'nature'                        => 'required',
@@ -45,17 +45,20 @@ class LeasePaymentsController extends Controller
             'similar_chateristics_assets'   => 'required|numeric',
             'payment_per_interval_per_unit' => 'required|numeric',
             'total_amount_per_interval'     => 'required|numeric',
-            'attachment'                  => 'file|mimes:jpeg,pdf,doc'
+            'attachment'                    => 'file|mimes:jpeg,pdf,doc',
+            'due_dates_confirmed'           => 'in:1',
+            'altered_payment_due_date.*'    => 'required|date'
         ];
+
+        return $rules;
     }
 
     /**
      * Render the table for all the lease assets so that the user can complete steps for the payments
      * @param $id
-     * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index($id, Request $request){
+    public function index($id){
         $breadcrumbs = [
             [
                 'link' => route('add-new-lease.index'),
@@ -152,11 +155,15 @@ class LeasePaymentsController extends Controller
             }
 
             if($request->isMethod('post')) {
-                $validator = Validator::make($request->except('_token'), $this->validationRules());
+                $validator = Validator::make($request->except('_token'), $this->validationRules(), [
+                    'altered_payment_due_date.*.required' => 'Please confirm the payment due dates by clicking on the Confirm Payment Due Dates.',
+                    'due_dates_confirmed.in'    => 'Please confirm the payment due dates by clicking on the Confirm Payment Due Dates.'
+                ]);
+
                 if($validator->fails()){
                     return redirect()->back()->withErrors($validator->errors())->withInput($request->except('_token'));
                 }
-                $data = $request->except('_token', 'similar_chateristics_assets', 'step', 'submit');
+                $data = $request->except('_token', 'similar_chateristics_assets', 'step', 'submit', 'altered_payment_due_date', 'due_dates_confirmed');
                 $data['first_payment_start_date'] = Carbon::parse($request->first_payment_start_date)->format('Y-m-d');
                 $data['last_payment_end_date'] = Carbon::parse($request->last_payment_end_date)->format('Y-m-d');
                 $data['attachment'] = "";
@@ -169,30 +176,17 @@ class LeasePaymentsController extends Controller
                 }
                 $payment->setRawAttributes($data);
                 if($payment->save()) {
-
                     //code to create the due dates for the payment
                     LeaseAssetPaymenetDueDate::query()->where('asset_id', '=', $id)->where('payment_id', '=', $payment->id)->delete();
                     if($request->has('altered_payment_due_date') && !empty($request->altered_payment_due_date)) {
                         //create new dates here from the posted dates
                         foreach ($request->altered_payment_due_date as $date) {
-                            LeaseAssetPaymenetDueDate::create([
-                                'asset_id' => $id,
-                                'payment_id'    => $payment->id,
-                                'date'  => Carbon::parse($date)->format('Y-m-d')
-                            ]);
-                        }
-                    } else {
-                        //calculate the payment due dates and have to save them here to the payment
-                        $payment_due_dates = calculatePaymentDueDatesByPaymentId($payment);
-                        foreach ($payment_due_dates as $year=>$month) {
-                            foreach($month as $dates) {
-                                foreach ($dates as $date) {
-                                    LeaseAssetPaymenetDueDate::create([
-                                        'asset_id' => $id,
-                                        'payment_id'    => $payment->id,
-                                        'date'  => Carbon::parse($date)->format('Y-m-d')
-                                    ]);
-                                }
+                            if($date){
+                                LeaseAssetPaymenetDueDate::create([
+                                    'asset_id' => $id,
+                                    'payment_id'    => $payment->id,
+                                    'date'  => Carbon::parse($date)->format('Y-m-d')
+                                ]);
                             }
                         }
                     }
@@ -207,6 +201,7 @@ class LeasePaymentsController extends Controller
             $lease_payments_nature = LeaseAssetPaymentsNature::query()->get();
             $payments_frequencies =   LeasePaymentsFrequency::query()->get();
             $payments_payout_times = LeasePaymentsInterval::query()->get();
+            $payout_due_dates  = [];
 
             return view('lease.payments.createpayment', compact(
                 'asset',
@@ -215,7 +210,8 @@ class LeasePaymentsController extends Controller
                 'lease_payments_nature',
                 'lease_payments_types',
                 'payments_frequencies',
-                'payments_payout_times'
+                'payments_payout_times',
+                'payout_due_dates'
             ));
 
         } catch (\Exception $e) {
@@ -237,11 +233,17 @@ class LeasePaymentsController extends Controller
             $payment = LeaseAssetPayments::query()->where('asset_id', '=', $id)->where('id', '=', $payment_id)->first();
             if($payment) {
                 if($request->isMethod('post')) {
-                    $validator = Validator::make($request->except('_token'), $this->validationRules());
+
+                    $validator = Validator::make($request->except('_token'), $this->validationRules(false),[
+                        'altered_payment_due_date.*.required' => 'Please confirm the payment due dates by clicking on the Confirm Payment Due Dates.',
+                        'due_dates_confirmed.in'    => 'Please confirm the payment due dates by clicking on the Confirm Payment Due Dates.'
+                    ]);
+
                     if($validator->fails()){
                         return redirect()->back()->withErrors($validator->errors())->withInput($request->except('_token'));
                     }
-                    $data = $request->except('_token', 'similar_chateristics_assets', 'step', 'submit', 'altered_payment_due_date');
+
+                    $data = $request->except('_token', 'similar_chateristics_assets', 'step', 'submit', 'altered_payment_due_date', 'due_dates_confirmed');
                     $data['first_payment_start_date'] = Carbon::parse($request->first_payment_start_date)->format('Y-m-d');
                     $data['last_payment_end_date'] = Carbon::parse($request->last_payment_end_date)->format('Y-m-d');
                     $data['attachment'] = "";
@@ -259,26 +261,15 @@ class LeasePaymentsController extends Controller
                         if($request->has('altered_payment_due_date') && !empty($request->altered_payment_due_date)) {
                             //create new dates here from the posted dates
                             foreach ($request->altered_payment_due_date as $date) {
-                                LeaseAssetPaymenetDueDate::create([
-                                    'asset_id' => $id,
-                                    'payment_id'    => $payment_id,
-                                    'date'  => Carbon::parse($date)->format('Y-m-d')
-                                ]);
-                            }
-                        } else {
-                            //calculate the payment due dates and have to save them here to the payment
-                            $payment_due_dates = calculatePaymentDueDatesByPaymentId($payment);
-                            foreach ($payment_due_dates as $year=>$month) {
-                                foreach($month as $dates) {
-                                    foreach ($dates as $date) {
-                                        LeaseAssetPaymenetDueDate::create([
-                                            'asset_id' => $id,
-                                            'payment_id'    => $payment_id,
-                                            'date'  => Carbon::parse($date)->format('Y-m-d')
-                                        ]);
-                                    }
+                                if($date) {
+                                    LeaseAssetPaymenetDueDate::create([
+                                        'asset_id' => $id,
+                                        'payment_id'    => $payment_id,
+                                        'date'  => Carbon::parse($date)->format('Y-m-d')
+                                    ]);
                                 }
                             }
+
                         }
 
                         return redirect(route('lease.payments.add', ['lease_id' => $asset->lease->id, 'asset_id' => $asset->id]))->with('status', 'Lease Asset Payments has been updated successfully.');
@@ -291,7 +282,7 @@ class LeasePaymentsController extends Controller
                 $lease_payments_nature = LeaseAssetPaymentsNature::query()->get();
                 $payments_frequencies =   LeasePaymentsFrequency::query()->get();
                 $payments_payout_times = LeasePaymentsInterval::query()->get();
-
+                $payout_due_dates = $payment->paymentDueDates->pluck('date')->toArray();
                 return view('lease.payments.updatepayment', compact(
                     'asset',
                     'lease',
@@ -299,7 +290,8 @@ class LeasePaymentsController extends Controller
                     'lease_payments_nature',
                     'lease_payments_types',
                     'payments_frequencies',
-                    'payments_payout_times'
+                    'payments_payout_times',
+                    'payout_due_dates'
                 ));
             } else {
                 abort(404);
@@ -360,9 +352,12 @@ class LeasePaymentsController extends Controller
         try{
             if($request->ajax()){
 
+
                 $errors =  [];
 
                 $validator = Validator::make($request->all(), [
+                    'lease_id'  => 'required|exists:lease,id',
+                    'asset_id'  => 'required|exists:lease_assets,id',
                     'start_date' => 'required|date',
                     'end_date'  => 'required|date',
                     'payment_interval'  => 'required|exists:lease_payments_frequency,id',
@@ -373,10 +368,17 @@ class LeasePaymentsController extends Controller
                     $errors = $validator->errors();
                 }
 
+                $lease = Lease::query()->findOrFail($request->lease_id);
+
+                $asset = LeaseAssets::query()->findOrFail($request->asset_id);
+
                 $final_payout_dates = [];
                 $years =  [];
-                $start_year = Carbon::parse($request->start_date)->format('Y');
-                $end_year = Carbon::parse($request->end_date)->format('Y');
+//                $start_year = Carbon::parse($request->start_date)->format('Y');
+//                $end_year = Carbon::parse($request->end_date)->format('Y');
+
+                $start_year = Carbon::parse($asset->accural_period)->format('Y');
+                $end_year = Carbon::parse($asset->lease_end_date)->format('Y');
 
                 if($start_year == $end_year) {
                     $years[] = $end_year;
@@ -419,15 +421,37 @@ class LeasePaymentsController extends Controller
                         break;
                 }
 
-                return view('lease.payments._due_dates_annexure', compact(
-                    'errors',
-                    'months',
-                    'years',
-                    'final_payout_dates'
-                ));
+
+                return response()->json([
+                    'status' => true,
+                    'html' =>  view('lease.payments._due_dates_annexure', compact('errors','months','years','final_payout_dates'))->render(),
+                    'final_payout_dates' => $final_payout_dates
+                ], 200);
             }
         } catch (\Exception $e) {
             abort(404);
+        }
+    }
+
+    /**
+     * Renders the current payment due dates on the modal pop up...
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Throwable
+     */
+    public function viewExistingDates($id){
+        if($id){
+            $payment = LeaseAssetPayments::query()->where('id', '=', $id)->first();
+            if($payment) {
+                return response()->json([
+                    'status' => true,
+                    'html' => view('lease.payments._current_due_dates_annexure', compact(
+                        'payment'
+                    ))->render()
+                ]);
+            } else {
+                return response()->json(['status' => false], 200);
+            }
         }
     }
 }

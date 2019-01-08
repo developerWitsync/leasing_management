@@ -151,10 +151,30 @@
             </div>
         </div>
 
-        <div class="form-group show_annexure" style="display: @if(old('last_payment_end_date', $payment->last_payment_end_date)!="") block @else none; @endif">
+        <div class="form-group{{ $errors->has('altered_payment_due_date.0') || $errors->has('due_dates_confirmed') ? ' has-error' : '' }} show_annexure">
             <div class="col-md-4">&nbsp;</div>
             <div class="col-md-6">
                 <a href="javascript:void(0);" class="btn btn-primary confirm_lease_payment_due_dates">Confirm Lease Payment Due Dates</a>
+                @if($payment->payment_interval == 6)
+                    <a href="javascript:void(0);" class="btn btn-warning view_current_lease_payment_due_dates">View Current Dates</a>
+                @endif
+                @if(!empty($payout_due_dates))
+                    <input type="hidden" value="1" name="due_dates_confirmed">
+                @else
+                    <input type="hidden" value="0" name="due_dates_confirmed">
+                @endif
+
+                @if ($errors->has('altered_payment_due_date.0'))
+                    <span class="help-block">
+                        <strong>{{ $errors->first('altered_payment_due_date.0') }}</strong>
+                    </span>
+                @endif
+
+                @if ($errors->has('due_dates_confirmed'))
+                    <span class="help-block">
+                        <strong>{{ $errors->first('due_dates_confirmed') }}</strong>
+                    </span>
+                @endif
             </div>
         </div>
 
@@ -240,7 +260,13 @@
         </div>
 
         <span class="hidden altered_payment_due_dates">
-
+            @if(!empty($payout_due_dates))
+                @foreach($payout_due_dates as $date)
+                    <input type="hidden" class="altered_payment_due_date" name="altered_payment_due_date[]" value="{{ $date }}">
+                @endforeach
+            @else
+                <input type="hidden" class="altered_payment_due_date" name="altered_payment_due_date[]" value="">
+            @endif
         </span>
 
     </fieldset>
@@ -441,29 +467,56 @@
                 bootbox.alert(message);
             });
 
+            var final_payout_dates;
+
             $('.confirm_lease_payment_due_dates').on('click', function(){
                 $start_date         = $('#first_payment_start_date').val();
                 $end_date           =    $('#last_payment_end_date').val();
                 $payment_interval   = $('select[name="payment_interval"]').val();
                 $payment_payout     = $('select[name="payout_time"]').val();
+                $asset_id = '{{ $asset->id }}';
+                $lease_id = '{{ $asset->lease->id }}';
+
                 $.ajax({
                     url : '{{ route("lease.payments.duedatesannexure") }}',
                     data : {
                         start_date : $start_date,
                         end_date : $end_date,
                         payment_interval : $payment_interval,
-                        payment_payout : $payment_payout
+                        payment_payout : $payment_payout,
+                        lease_id    : $lease_id,
+                        asset_id    : $asset_id
                     },
                     type : 'get',
                     success : function (response) {
                         setTimeout(function () {
-                            $('.annexure_modal_body').html(response);
+                            $('.annexure_modal_body').html(response['html']);
 
-                            $('.alter_due_dates_input').datepicker({
-                                dateFormat: "yy-mm-dd",
+                            final_payout_dates = response['final_payout_dates'];
+
+                            //setting up datepicker calendar on each input field.. taking care of lease start date and lease end date as well....
+                            $('.alter_due_dates_input').each(function () {
+                                var data_year = $(this).data('year');
+                                var data_month = $(this).data('month');
+                                var temp_date  = new Date(data_year+"-"+data_month);
+                                var asset_lease_start_date = new Date('{{ \Carbon\Carbon::parse($asset->accural_period)->format('Y') ."-". \Carbon\Carbon::parse($asset->accural_period)->format('m') }}');
+                                var asset_lease_end_date = new Date('{{ \Carbon\Carbon::parse($asset->lease_end_date)->format('Y')."-".\Carbon\Carbon::parse($asset->lease_end_date)->format('m') }}');
+                                if(temp_date >= asset_lease_start_date && temp_date <= asset_lease_end_date){
+                                    $(this).datepicker({
+                                        dateFormat: "yy-mm-dd",
+                                        minDate : new Date('{{ $asset->accural_period }}'),
+                                        maxDate : new Date('{{ $asset->lease_end_date }}'),
+                                        stepMonths: 0
+                                    });
+                                     $(this).datepicker('setDate', temp_date);
+                                } else {
+                                    $(this).remove();
+                                }
+
                             });
 
                             $('#myModal').modal('show');
+
                         }, 100);
                     }
                 });
@@ -476,6 +529,7 @@
             /**
              * Confirm the user before they can override the payment dates
              */
+            var is_dates_edited = false;
             $(document.body).on('click', '.edit_payment_due_dates', function () {
                 bootbox.confirm({
                     message: "You are over-riding the inputs and any date edit will be considered as final lease payment dates. Are you sure that you want to proceed?",
@@ -491,26 +545,98 @@
                     },
                     callback: function (result) {
                         if(result) {
+                            //set the dropdowns to Custom here....
+                            $('select[name="payment_interval"]').val(6);
+                            $('select[name="payout_time"]').val(3);
+
+                            is_dates_edited = true;
+
                             $('.alter_due_dates_input').toggleClass('hidden');
                             $('.alter_due_dates_info').hide();
                         }
                     }
                 });
+            });
+
+            /**
+             * In case the user have made the changes to the dates than we have to find the first and last payment dates and have to populate them as well...
+             */
+            $('#myModal').on('click', '.confirm_payment_due_dates', function () {
+                var _first_payment_date;
+                var _last_payment_date;
+                var dates_array = new Array();
+
+                if(is_dates_edited) {
+
+                    var html = '';
+
+                    $('.alter_due_dates_input').each(function (i,e) {
+                        if($(this).val() != ""){
+                            dates_array.push(new Date($(this).val()));
+                            html += '<input type="hidden" class="altered_payment_due_date" name="altered_payment_due_date[]" value="'+$(this).val()+'">';
+                        }
+                    });
+
+                    if(html==""){
+                        bootbox.alert('Payout dates cannot be calculated. Please check your inputs and try again.');
+                        return false;
+                    }
+
+                    //find the first payment date and the last payment date here and fill the inputs with the values
+                    var _last_payment_date = new Date(Math.max.apply(null,dates_array));
+                    var _first_payment_date = new Date(Math.min.apply(null,dates_array));
+
+                    $('#first_payment_start_date').datepicker('setDate', _first_payment_date);
+
+                    $('#last_payment_end_date').datepicker('setDate', _last_payment_date);
+
+                } else {
+                    //not edited and the user have directly clicked on the edit button
+
+                    var html = '';
+                    //console.log(final_payout_dates);
+                    for (var item in final_payout_dates) {
+                        for(var month in final_payout_dates[item]){
+                            for(payout_date in final_payout_dates[item][month]){
+                                html += '<input type="hidden" class="altered_payment_due_date" name="altered_payment_due_date[]" value="'+payout_date+'">';
+                            }
+                        }
+                    }
+                }
+
+                if(html!=""){
+
+                    $('input[name="due_dates_confirmed"]').val('1');
+
+                    $('.altered_payment_due_date').remove();
+
+                    $('.altered_payment_due_dates').html(html);
+
+                    $('#myModal').modal('hide');
+
+                    setTimeout(function () {
+                        bootbox.alert('We have captured your input dates. Please proceed further on the form.');
+                    },1000);
+
+                } else {
+                    bootbox.alert('Unable to capture the payout dates. Please click on edit and provide custom dates.');
+                    return false;
+                }
 
             });
 
-            $('#myModal').on('click', '.confirm_payment_due_dates', function () {
-                var html = '';
-                $('.alter_due_dates_input').each(function (i,e) {
-                    html += '<input type="hidden" class="altered_payment_due_date" name="altered_payment_due_date[]" value="'+$(this).val()+'">';
+            /**
+             * Generate the view current payment dates whent the user comes to edit payments
+             */
+            $('.view_current_lease_payment_due_dates').on('click', function(){
+                $.ajax({
+                    url : '{{ route('addlease.payments.showpaymentdates', ['id' => $payment->id]) }}',
+                    type : 'get',
+                    success : function (response) {
+                        $('.annexure_modal_body').html(response['html']);
+                        $('#myModal').modal('show');
+                    }
                 });
-                $('.altered_payment_due_date').remove();
-                $('.altered_payment_due_dates').html(html);
-
-                $('#myModal').modal('hide');
-                setTimeout(function () {
-                    bootbox.alert('We have captured your input dates. Please proceed further on the form.');
-                },1000);
             });
         });
     </script>
