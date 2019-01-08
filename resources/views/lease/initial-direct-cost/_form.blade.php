@@ -114,6 +114,10 @@
                                 $('input[name="'+i+'"]').after('<span class="help-block error_via_ajax" style="color:red">\n' +
                                     '                        <strong>'+e+'</strong>\n' +
                                     '                    </span>');
+                            } else if($('select[name="'+i+'"]').length ){
+                                $('select[name="'+i+'"]').after('<span class="help-block error_via_ajax" style="color:red">\n' +
+                                    '                        <strong>'+e+'</strong>\n' +
+                                    '                    </span>');
                             }
                         });
                     } else {
@@ -124,7 +128,7 @@
                             dateFormat: 'dd-M-yy'
                         });
 
-                        alert("asfsdf");
+                        // alert("asfsdf");
 
                     }
                 }
@@ -156,6 +160,10 @@
                                 $('input[name="'+i+'"]').after('<span class="help-block error_via_ajax" style="color:red">\n' +
                                     '                        <strong>'+e+'</strong>\n' +
                                     '                    </span>');
+                            } else if($('select[name="'+i+'"]').length ){
+                                $('select[name="'+i+'"]').after('<span class="help-block error_via_ajax" style="color:red">\n' +
+                                    '                        <strong>'+e+'</strong>\n' +
+                                    '                    </span>');
                             }
                         });
                     } else {
@@ -166,7 +174,6 @@
         });
 
         //delete supplier details on the update pop up
-        //@todo Need to implement the bootbox
         $(document.body).on('click', '.supplier_details_form_delete', function(e){
             var supplier_id = $(this).data('supplier_id');
             var lease_id = $(this).data('lease_id');

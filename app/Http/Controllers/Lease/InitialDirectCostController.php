@@ -89,14 +89,13 @@ class InitialDirectCostController extends Controller
                     if($initial_direct_cost){
 
                         $supplier_details = Session::get('supplier_details');
-
                         foreach ($supplier_details as $supplier_detail){
                             SupplierDetails::create([
                                 'initial_direct_cost_id' => $initial_direct_cost->id,
                                 'supplier_name' => $supplier_detail['supplier_name'],
                                 'direct_cost_description'   => $supplier_detail['direct_cost_description'],
-                                'expense_date'  => $supplier_detail['expense_date'],
-                                'currency'  => $supplier_detail['currency'],
+                                'expense_date'  => date('Y-m-d', strtotime($supplier_detail['expense_date'])),
+                                'supplier_currency'  => $supplier_detail['supplier_currency'],
                                 'amount'    => $supplier_detail['amount'],
                                 'rate'  => $supplier_detail['rate']
                             ]);
@@ -188,7 +187,7 @@ class InitialDirectCostController extends Controller
                         'supplier_name' => 'required',
                         'direct_cost_description' => 'required',
                         'expense_date'  => 'required|date',
-                        'currency'  => 'required',
+                        'supplier_currency'  => 'required',
                         'amount'    => 'required|numeric',
                         'rate'  => 'required|numeric'
                     ]);
@@ -202,6 +201,7 @@ class InitialDirectCostController extends Controller
 
                     //save to the session variable
                     $supplier_details = Session::get('supplier_details');
+                    $currencies = Currencies::query()->where('status', '=', '1')->get();
                     array_push($supplier_details, $request->except('_token'));
 
                     Session::put('supplier_details', $supplier_details);
@@ -244,7 +244,7 @@ class InitialDirectCostController extends Controller
                     'supplier_name' => 'required',
                     'direct_cost_description' => 'required',
                     'expense_date'  => 'required|date',
-                    'currency'  => 'required',
+                    'supplier_currency'  => 'required',
                     'amount'    => 'required|numeric',
                     'rate'  => 'required|numeric'
                 ]);
@@ -255,8 +255,9 @@ class InitialDirectCostController extends Controller
                         'errors' => $validator->errors()
                     ], 200);
                 }
-
-                SupplierDetails::create($request->except('_token'));
+                $data = $request->except('_token');
+                $data['expense_date'] = date('Y-m-d', strtotime($request->expense_date));
+                SupplierDetails::create($data);
 
                 Session::flash('status', 'Supplier Details has been updated successfully.');
 

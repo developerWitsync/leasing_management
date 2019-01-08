@@ -29,7 +29,7 @@
                         <td>{{ $supplier_detail->supplier_name }}</td>
                         <td>{{ $supplier_detail->direct_cost_description }}</td>
                         <td>{{ $supplier_detail->expense_date }}</td>
-                        <td>{{ $supplier_detail->currency }}</td>
+                        <td>{{ $supplier_detail->supplier_currency }}</td>
                         <td class="supplier_details_amount">{{ $supplier_detail->amount }}</td>
                         <td>{{ $supplier_detail->rate }}</td>
                         <td>
@@ -52,7 +52,7 @@
                     </td>
                     <td>
                         <!-- <input type="text" class="form-control" name="currency"> -->
-                         <select class="form-control" name="currency">
+                         <select class="form-control" name="supplier_currency">
             <option value="">--Select Currency--</option>
             @foreach($currencies as $currency)
                 <option value="{{ $currency->code }}">{{ $currency->code }}  {{ $currency->symbol }}</option>
