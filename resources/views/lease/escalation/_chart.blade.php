@@ -33,6 +33,9 @@
                     </tr>
                     </thead>
                     <tbody>
+                        @php
+                            $grand_total = 0;
+                        @endphp
                         @foreach($years as $year)
                             <tr>
                                 <td>
@@ -45,9 +48,9 @@
                                 @endphp
                                 @foreach($months as $month)
                                     @if(isset($escalations[$year][$month]) && !empty($escalations[$year][$month]))
-                                        <td class="success">
+                                        <td class="{{ $escalations[$year][$month]['current_class'] }}">
                                             <span>
-                                                {{ $escalations[$year][$month]['percentage'] }}% / {{ $escalations[$year][$month]['amount'] }}
+                                                {{ $escalations[$year][$month]['percentage'] }} @if($requestData['escalation_basis'] == '1') % @endif / {{ $escalations[$year][$month]['amount'] }}
                                             </span>
                                             @php
                                                 $total = $total + $escalations[$year][$month]['amount'];
@@ -58,8 +61,15 @@
                                     @endif
                                 @endforeach
                                 <td>{{ $total }}</td>
+                                @php
+                                    $grand_total += $total;
+                                @endphp
                             </tr>
                         @endforeach
+                        <tr>
+                            <td colspan="13">TOTAL</td>
+                            <td>{{ $grand_total }}</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>

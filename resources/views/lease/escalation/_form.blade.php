@@ -15,7 +15,7 @@
         </div>
     </div>
 
-    <div class="hidden hidden_fields">
+    <div class="@if(old('is_escalation_applicable', $model->is_escalation_applicable) != 'yes')) hidden @endif hidden_fields">
         <div class="form-group{{ $errors->has('effective_from') ? ' has-error' : '' }} required">
             <label for="effective_from" class="col-md-4 control-label">Escalation Effective From</label>
             <div class="col-md-6 form-check form-check-inline">
@@ -32,7 +32,7 @@
             <label for="effective_from" class="col-md-4 control-label">Escalation Basis</label>
             <div class="col-md-6 form-check form-check-inline">
                 <select name="escalation_basis" class="form-control">
-                    <option>--Select Escalation Basis--</option>
+                    <option value="">--Select Escalation Basis--</option>
                     @foreach($contract_escalation_basis as $basis)
                         <option value="{{ $basis->id }}" @if(old('escalation_basis', $model->escalation_basis) == $basis->id) selected="selected" @endif>{{ $basis->title }}</option>
                     @endforeach
@@ -45,7 +45,7 @@
             </div>
         </div>
 
-        <div class="form-group{{ $errors->has('escalation_rate_type') ? ' has-error' : '' }} required escalation_rate_type hidden">
+        <div class="form-group{{ $errors->has('escalation_rate_type') ? ' has-error' : '' }} required escalation_rate_type @if(old('escalation_basis', $model->escalation_basis) != '1') hidden @endif">
             <label for="escalation_rate_type" class="col-md-4 control-label">Escalation Rate Type</label>
             <div class="col-md-6 form-check form-check-inline">
                 <select name="escalation_rate_type" class="form-control">
@@ -62,7 +62,7 @@
             </div>
         </div>
 
-        <div class="form-group{{ $errors->has('applied_annually') ? ' has-error' : '' }} required">
+        <div class="form-group{{ $errors->has('is_escalation_applied_annually_consistently') ? ' has-error' : '' }} required">
             <label for="is_escalation_applied_annually_consistently" class="col-md-4 control-label">Escalation Consistently Annually Applied ?</label>
             <div class="col-md-6 form-check form-check-inline" required>
                 <input class="form-check-input" name="is_escalation_applied_annually_consistently" id="yes" type="checkbox" value="yes" @if(old('is_escalation_applied_annually_consistently', $model->is_escalation_applied_annually_consistently) == "yes") checked="checked" @endif>
@@ -77,7 +77,7 @@
             </div>
         </div>
 
-        <div class="form-group{{ $errors->has('fixed_rate') ? ' has-error' : '' }} required hidden is_j_12_y_e_s_fixed_rate">
+        <div class="form-group{{ $errors->has('fixed_rate') ? ' has-error' : '' }} required @if(old('escalation_basis', $model->escalation_basis) == '1' && (old('escalation_rate_type', $model->escalation_rate_type) == '1' || old('escalation_rate_type', $model->escalation_rate_type) == '3'))  @else hidden @endif is_j_12_y_e_s_fixed_rate">
             <label for="fixed_rate" class="col-md-4 control-label">Specify Fixed Rate</label>
             <div class="col-md-6 form-check form-check-inline">
                 <select class="form-control" name="fixed_rate">
@@ -94,7 +94,7 @@
             </div>
         </div>
 
-        <div class="form-group{{ $errors->has('current_variable_rate') ? ' has-error' : '' }} required hidden is_j_12_y_e_s_variable_rate">
+        <div class="form-group{{ $errors->has('current_variable_rate') ? ' has-error' : '' }} required @if(old('escalation_basis', $model->escalation_basis) == '1' && (old('escalation_rate_type', $model->escalation_rate_type) == '2' || old('escalation_rate_type', $model->escalation_rate_type) == '3'))  @else hidden @endif is_j_12_y_e_s_variable_rate">
             <label for="current_variable_rate" class="col-md-4 control-label">Specify the Current Variable Rate</label>
             <div class="col-md-6 form-check form-check-inline">
                 <select class="form-control" name="current_variable_rate">
@@ -111,7 +111,7 @@
             </div>
         </div>
 
-        <div class="form-group{{ $errors->has('total_escalation_rate') ? ' has-error' : '' }} required total_escalation_rate hidden">
+        <div class="form-group{{ $errors->has('total_escalation_rate') ? ' has-error' : '' }} required total_escalation_rate @if(old('escalation_basis', $model->escalation_basis) != '1') hidden @endif">
             <label for="total_escalation_rate" class="col-md-4 control-label">Total Escalation Rate</label>
             <div class="col-md-6 form-check form-check-inline">
                 <input type="text" class="form-control" placeholder="Total Escalation Rate" name="total_escalation_rate" value="{{ old('total_escalation_rate', $model->total_escalation_rate) }}">
@@ -123,13 +123,77 @@
             </div>
         </div>
 
+        <div class="form-group{{ $errors->has('amount_based_currency') ? ' has-error' : '' }} required @if(old('escalation_basis', $model->escalation_basis) == '1' && old('is_escalation_applied_annually_consistently', $model->is_escalation_applied_annually_consistently) == 'yes') hidden @endif amount_based_fields">
+            <label for="amount_based_currency" class="col-md-4 control-label">Currency</label>
+            <div class="col-md-6 form-check form-check-inline">
+                <input type="text" class="form-control" placeholder="Currency" name="amount_based_currency" value="{{ $lease->lease_contract_id }}" readonly="readonly">
+                @if ($errors->has('amount_based_currency'))
+                    <span class="help-block">
+                        <strong>{{ $errors->first('amount_based_currency') }}</strong>
+                    </span>
+                @endif
+            </div>
+        </div>
 
+        <div class="form-group{{ $errors->has('escalated_amount') ? ' has-error' : '' }} required @if(old('escalation_basis', $model->escalation_basis) == '1' && old('is_escalation_applied_annually_consistently', $model->is_escalation_applied_annually_consistently) == 'yes') hidden @endif amount_based_escalation_amount">
+            <label for="escalated_amount" class="col-md-4 control-label">Enter Amount of Increase</label>
+            <div class="col-md-6 form-check form-check-inline">
+                <input type="text" class="form-control" placeholder="Enter Amount of Increase" name="escalated_amount" value="{{ old('escalated_amount', $model->escalated_amount) }}" >
+                @if ($errors->has('escalated_amount'))
+                    <span class="help-block">
+                        <strong>{{ $errors->first('escalated_amount') }}</strong>
+                    </span>
+                @endif
+            </div>
+        </div>
 
     </div>
 
-    <div class="form-group total_escalation_rate hidden">
+    <!-- will be visible when wither the "amount_based_escalation_amount" or "total_escalation_rate" is visible -->
+
+    <div class="form-group see_escalation_chart @if(old('escalation_basis', $model->escalation_basis) != '') @else hidden @endif">
+        <div class="col-md-6 col-md-offset-4">
+            <a href="javascript:void(0);" class="btn btn-info compute_escalation">Compute</a>
+        </div>
+    </div>
+
+    <div class="form-group{{ $errors->has('escalation_currency') ? ' has-error' : '' }} required @if(old('escalation_basis', $model->escalation_basis) != '') @else hidden @endif computed_fields">
+        <label for="amount_based_currency" class="col-md-4 control-label">Currency</label>
+        <div class="col-md-6 form-check form-check-inline">
+            <input type="text" class="form-control" placeholder="Escalation Currency" name="escalation_currency" value="{{ $lease->lease_contract_id }}" readonly="readonly">
+            @if ($errors->has('escalation_currency'))
+                <span class="help-block">
+                        <strong>{{ $errors->first('escalation_currency') }}</strong>
+                    </span>
+            @endif
+        </div>
+    </div>
+
+    <div class="form-group{{ $errors->has('total_undiscounted_lease_payment_amount') ? ' has-error' : '' }} required @if(old('escalation_basis', $model->escalation_basis) != '') @else hidden @endif computed_fields">
+        <label for="escalated_amount" class="col-md-4 control-label">Total Undiscounted Lease Payments</label>
+        <div class="col-md-6 form-check form-check-inline">
+            <input type="text" class="form-control" placeholder="Total Undiscounted Lease Payments" name="total_undiscounted_lease_payment_amount" value="" id="computed_total" readonly="readonly">
+            @if ($errors->has('total_undiscounted_lease_payment_amount'))
+                <span class="help-block">
+                        <strong>{{ $errors->first('total_undiscounted_lease_payment_amount') }}</strong>
+                    </span>
+            @endif
+        </div>
+    </div>
+
+    <div class="form-group see_escalation_chart @if(old('escalation_basis', $model->escalation_basis) != '') @else hidden @endif">
         <div class="col-md-6 col-md-offset-4">
             <a href="javascript:void(0);" class="btn btn-info show_escalation_chart">See Escalation Chart</a>
+        </div>
+    </div>
+
+    <div class="form-group computed_fields @if(old('escalation_basis', $model->escalation_basis) != '') @else hidden @endif">
+        <div class="col-md-6 col-md-offset-4">
+
+            <a href="" class="btn btn-danger">Cancel</a>
+            <button type="submit" class="btn btn-success">
+                Submit
+            </button>
         </div>
     </div>
 
@@ -150,6 +214,67 @@
     <script src="{{ asset('assets/plugins/bootbox/bootbox.min.js') }}"></script>
     <script>
 
+        // Create a closure
+        (function(){
+            // Your base, I'm in it!
+            var originalAddClassMethod = jQuery.fn.addClass;
+
+            jQuery.fn.addClass = function(){
+                // Execute the original method.
+                var result = originalAddClassMethod.apply( this, arguments );
+
+                // trigger a custom event
+                jQuery(this).trigger('cssClassChanged');
+
+                // return the original result
+                return result;
+            }
+        })();
+
+        // Create a closure
+        (function(){
+            // Your base, I'm in it!
+            var originalAddClassMethod = jQuery.fn.removeClass;
+
+            jQuery.fn.removeClass = function(){
+                // Execute the original method.
+                var result = originalAddClassMethod.apply( this, arguments );
+
+                // trigger a custom event
+                jQuery(this).trigger('cssClassChanged');
+
+                // return the original result
+                return result;
+            }
+        })();
+
+        // document ready function
+        $(function(){
+
+            $(".amount_based_escalation_amount").bind('cssClassChanged', function(){
+                if(!$(this).hasClass('hidden')) {
+                    $('.see_escalation_chart').removeClass('hidden');
+                } else {
+                    //check if the  total_escalation_rate is visible
+                    if($('.total_escalation_rate').hasClass('hidden')) {
+                        $('.see_escalation_chart').addClass('hidden');
+                    }
+                }
+            });
+
+            $(".total_escalation_rate").bind('cssClassChanged', function(){
+                if(!$(this).hasClass('hidden')) {
+                    $('.see_escalation_chart').removeClass('hidden');
+                } else {
+                    //check if the  amount_based_escalation_amount is visible
+                    if($('.amount_based_escalation_amount').hasClass('hidden')) {
+                        $('.see_escalation_chart').addClass('hidden');
+                    }
+                }
+            });
+
+        });
+
         $('.show_escalation_chart').on('click', function(){
             $.ajax({
                 url : "{{ route('lease.escalation.showescalationchart', ['id' => $payment->id]) }}",
@@ -161,6 +286,36 @@
 
                         $('#myModal').modal('show');
                     }, 100);
+                }
+            });
+        });
+
+        $('.compute_escalation').on('click', function(){
+            $.ajax({
+                url : "{{ route('lease.escalation.compute', ['id' => $payment->id]) }}",
+                data : $('form').serialize(),
+                type : 'get',
+                dataType : 'json',
+                beforeSend : function(){
+                    $('.error_via_ajax').remove();
+                    $('.computed_fields').addClass('hidden');
+                },
+                success : function(response){
+                   console.log(response);
+                   if(response['status']) {
+
+                       $('.computed_fields').removeClass('hidden');
+                       $('#computed_total').val(response['computed_total']);
+
+                   } else {
+                       $.each(response['errors'], function (i,e) {
+                           if($('input[name="'+i+'"]').length ){
+                               $('input[name="'+i+'"]').after('<span class="help-block error_via_ajax" style="color:red">\n' +
+                                   '<strong>'+e+'</strong>\n' +
+                                   '</span>');
+                           }
+                       });
+                   }
                 }
             });
         });
@@ -181,7 +336,7 @@
                 maxDate : new Date('{{ $lease_end_date }}'),
                 @if($payment->using_lease_payment == '1')
                     //1 => Current Lease Payment as on Jan 01, 2019
-                    minYear : '2019'
+                    yearRange : '2019:{{ \Carbon\Carbon::parse($lease_end_date)->format('Y') }}'
                 @else
                     //2=> Initial Lease Payment as on First Lease Start
                     minDate : new Date('{{ $payment->asset->accural_period }}')
@@ -193,6 +348,9 @@
                 if($(this).val() == '1') {
                     //Rate Based
                     $('.escalation_rate_type').removeClass('hidden');
+                    $('.amount_based_fields').addClass('hidden');
+                    $('.amount_based_escalation_amount').addClass('hidden');
+
                 } else {
                     //amount based
                     $('.is_j_12_y_e_s_fixed_rate').addClass('hidden');
@@ -206,6 +364,15 @@
                     $('.escalation_rate_type').addClass('hidden');
 
                     $('select[name="escalation_rate_type"]').val('');
+
+                    // show the amount based input fields here
+                    if($('input[type="checkbox"][name="is_escalation_applied_annually_consistently"]:checked').val() == 'yes'){
+                        $('.amount_based_fields').removeClass('hidden');
+                        $('.amount_based_escalation_amount').removeClass('hidden');
+                    } else {
+                        $('.amount_based_fields').addClass('hidden');
+                        $('.amount_based_escalation_amount').addClass('hidden');
+                    }
                 }
             });
 
@@ -239,6 +406,15 @@
                                 if($('select[name="escalation_rate_type"]').val() == '2' || $('select[name="escalation_rate_type"]').val() == '3') {
                                     $('.is_j_12_y_e_s_variable_rate').removeClass('hidden');
                                     $('.total_escalation_rate').removeClass('hidden');
+                                }
+
+                                //check if escalation_basis is amount based
+                                if($('select[name="escalation_basis"]').val() == '2') {
+                                    $('.amount_based_fields').removeClass('hidden');
+                                    $('.amount_based_escalation_amount').removeClass('hidden');
+                                } else {
+                                    $('.amount_based_fields').addClass('hidden');
+                                    $('.amount_based_escalation_amount').addClass('hidden');
                                 }
                             }
                         }
@@ -284,6 +460,12 @@
 
                         $('.total_escalation_rate').addClass('hidden');
                         $('input[name="total_escalation_rate"]').val('');
+
+                        //check if escalation_basis is amount based
+                        if($('select[name="escalation_basis"]').val() == '2') {
+                            $('.amount_based_fields').addClass('hidden');
+                            $('.amount_based_escalation_amount').addClass('hidden');
+                        }
 
                         if(result) {
                             $('input[type="checkbox"][name="is_escalation_applied_annually_consistently"][value="yes"]').prop('checked', false);

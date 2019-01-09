@@ -56,6 +56,8 @@ Route::middleware('auth')->group(function(){
             Route::match(['post', 'get'],'create-asset-payment/{id}', ['as' => 'lease.payments.createassetpayment', 'uses' => 'LeasePaymentsController@createAssetPayments']);
             Route::match(['post', 'get'],'update-asset-payment/{id}/{payment_id}', ['as' => 'lease.payments.updateassetpayment', 'uses' => 'LeasePaymentsController@updateAssetPayments']);
             Route::get('lease-asset-payment-due-dates-annexure', ['as' => 'lease.payments.duedatesannexure', 'uses' => 'LeasePaymentsController@dueDatesAnnexure']);
+
+            Route::get('lease-asset-payment-due-dates-view-dates/{id}', ['as'=> 'addlease.payments.showpaymentdates', 'uses'=> 'LeasePaymentsController@viewExistingDates']);
         });
 
 
@@ -119,6 +121,21 @@ Route::middleware('auth')->group(function(){
         });
 
         /**
+
+         * Lease Escalation Clause Routes NL9
+         */
+
+        Route::prefix('escalation')->group(function (){
+            Route::get('index/{id}', ['as'=>'lease.escalation.index', 'uses'=> 'EscalationController@index']);
+            Route::post('update-lease-escalation-applicable-status/{id}', ['as' => 'lease.esacalation.applicablestatus', 'uses' => 'EscalationController@updateLeaseEscalationApplicableStatus']);
+            Route::match(['get', 'post'],'create/{id}/{lease}', ['as'=>'lease.escalation.create', 'uses'=> 'EscalationController@create']);
+
+            Route::get('escalation-chart/{id}', ['as'=>'lease.escalation.showescalationchart', 'uses'=> 'EscalationController@escalationChart']);
+            Route::get('compute-total-escalation/{id}', ['as'=>'lease.escalation.compute', 'uses'=> 'EscalationController@computeTotalUndiscountedPayment']);
+        });
+
+
+        /*
          * Select Low Value Value NL10
          */
         Route::prefix('select-low-value')->group(function(){
@@ -145,6 +162,7 @@ Route::middleware('auth')->group(function(){
             Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.balanceasondec.create', 'uses' => 'LeaseBalanceAsOnDecController@create']);
             Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.balanceasondec.update', 'uses' => 'LeaseBalanceAsOnDecController@update']);
         });
+        
         /**
          * Initial Direct Cost NL13
          */

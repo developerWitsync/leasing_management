@@ -104,7 +104,7 @@ class UnderlyingLeaseAssetController extends Controller
                 }
 
                 //delete other lease_assets if exists for the current logged in business account
-                LeaseAssets::query()->whereNotIn('id', $created_lease_asset_ids)->delete();
+                LeaseAssets::query()->where('lease_id', '=',$lease->id)->whereNotIn('id', $created_lease_asset_ids)->delete();
                 return redirect()->back()->with('status', 'Lease Assets has been created successfully. Click on Complete Details button to complete other details for the lease assets.');
             }
 

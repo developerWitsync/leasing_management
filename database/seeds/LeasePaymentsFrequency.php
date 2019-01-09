@@ -9,7 +9,7 @@ class LeasePaymentsFrequency extends Seeder
      *
      * @return void
      */
-    protected $values = 'One-Time, Monthly, Quarterly, Semi-Annualy, Annually';
+    protected $values = 'One-Time, Monthly, Quarterly, Semi-Annualy, Annually, Custom';
     public function run()
     {
         foreach (explode(',',$this->values) as $title) {
