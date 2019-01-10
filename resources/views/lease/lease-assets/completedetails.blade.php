@@ -24,7 +24,7 @@
                             <legend class="scheduler-border">Basic Details of the Underlying Lease Asset</legend>
                             <div class="form-group{{ $errors->has('other_details') ? ' has-error' : '' }} required">
                                 <label for="other_details" class="col-md-4 control-label">Any other Details of the Underlying Lease Asset</label>
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <input id="other_details" type="text" placeholder="Other Details" class="form-control" name="other_details" value="{{ old('other_details', $asset->other_details) }}" >
                                     @if ($errors->has('other_details'))
                                         <span class="help-block">
@@ -39,7 +39,7 @@
                             <legend class="scheduler-border">Location of the Underlying Lease Asset</legend>
                             <div class="form-group{{ $errors->has('country_id') ? ' has-error' : '' }} required">
                                 <label for="country" class="col-md-4 control-label">Country</label>
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <select name="country_id" class="form-control">
                                         <option value="">--Select Country--</option>
                                         @foreach($countries as $country)
@@ -57,7 +57,7 @@
 
                             <div class="form-group{{ $errors->has('location') ? ' has-error' : '' }} required">
                                 <label for="location" class="col-md-4 control-label">Place Where Located</label>
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <input id="location" type="text" placeholder="Place Where Located" class="form-control" name="location" value="{{ old('location', $asset->location) }}" >
                                     @if ($errors->has('location'))
                                         <span class="help-block">
@@ -73,7 +73,7 @@
                             <legend class="scheduler-border">Purpose of the Underlying Lease Asset</legend>
                             <div class="form-group{{ $errors->has('specific_use') ? ' has-error' : '' }} required">
                                 <label for="specific_use" class="col-md-4 control-label">Specific Use of the Lease Asset</label>
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <select name="specific_use" class="form-control">
                                         <option value="">--Select Use Of Lease Asset--</option>
                                         @foreach($use_of_lease_asset as $use)
@@ -92,7 +92,7 @@
 
                             <div class="form-group{{ $errors->has('use_of_asset') ? ' has-error' : '' }} required use_of_asset" @if(old('specific_use', $asset->specific_use) == '1') style="display: block" @else style="display: none" @endif>
                                 <label for="use_of_asset" class="col-md-4 control-label">State Use Of Asset</label>
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <input id="use_of_asset" type="text" placeholder="State Use Of Asset" class="form-control" name="use_of_asset" value="{{ old('use_of_asset', $asset->use_of_asset) }}" >
                                     @if ($errors->has('use_of_asset'))
                                         <span class="help-block">
@@ -108,7 +108,7 @@
                             <legend class="scheduler-border">Expected Useful Life of the Underlying Lease Asset</legend>
                             <div class="form-group{{ $errors->has('expected_life') ? ' has-error' : '' }} required">
                                 <label for="expected_life" class="col-md-4 control-label">Specific Use of the Lease Asset</label>
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <select name="expected_life" class="form-control">
                                         <option value="">--Expected Life Of Lease Asset--</option>
                                         @foreach($expected_life_of_assets as $life)
@@ -131,7 +131,7 @@
                             <legend class="scheduler-border">Lease Term of the Underlying Lease Asset</legend>
                             <div class="form-group{{ $errors->has('lease_start_date') ? ' has-error' : '' }} required">
                                 <label for="lease_start_date" class="col-md-4 control-label">Lease Start Date</label>
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <input id="lease_start_date" type="text" placeholder="Lease Start Date" class="form-control" name="lease_start_date" value="{{ old('lease_start_date', $asset->lease_start_date) }}" autocomplete="off">
                                     @if ($errors->has('lease_start_date'))
                                         <span class="help-block">
@@ -143,7 +143,7 @@
 
                             <div class="form-group{{ $errors->has('lease_free_period') ? ' has-error' : '' }} required">
                                 <label for="lease_free_period" class="col-md-4 control-label">Initial Lease Free Period, If any(In Days)</label>
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <input id="lease_free_period" type="text" placeholder="Number of Days" class="form-control" name="lease_free_period" value="{{ old('lease_free_period', $asset->lease_free_period) }}" >
                                     @if ($errors->has('lease_free_period'))
                                         <span class="help-block">
@@ -155,7 +155,7 @@
 
                             <div class="form-group{{ $errors->has('accural_period') ? ' has-error' : '' }} required">
                                 <label for="accural_period" class="col-md-4 control-label">Start Date of Lease Payment / Accrual Period</label>
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <input id="accural_period" type="text" placeholder="Start Date of Lease Payment / Accrual Period" class="form-control" name="accural_period" value="{{ old('accural_period', $asset->accural_period) }}" readonly="readonly" style="pointer-events: none">
                                     @if ($errors->has('accural_period'))
                                         <span class="help-block">
@@ -167,7 +167,7 @@
 
                             <div class="form-group{{ $errors->has('lease_end_date') ? ' has-error' : '' }} required">
                                 <label for="lease_end_date" class="col-md-4 control-label">Lease End Date, Non-Cancellable Period</label>
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <input id="lease_end_date" type="text" placeholder="Lease End Date, Non-Cancellable Period" class="form-control" name="lease_end_date" value="{{ old('lease_end_date', $asset->lease_end_date) }}" autocomplete="off">
                                     @if ($errors->has('lease_end_date'))
                                         <span class="help-block">
@@ -179,7 +179,7 @@
 
                             <div class="form-group{{ $errors->has('lease_term') ? ' has-error' : '' }} required">
                                 <label for="lease_term" class="col-md-4 control-label">Lease Term (in Months & Years)</label>
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <input id="lease_term" type="text" placeholder="Lease Term (in Months & Years)" class="form-control" name="lease_term" value="{{ old('lease_term', $asset->lease_term) }}" readonly="readonly">
                                     @if ($errors->has('lease_term'))
                                         <span class="help-block">
@@ -195,7 +195,7 @@
                             <legend class="scheduler-border" >Lease Asset Accounting Adopted Prior to 2019</legend>
                             <div class="form-group{{ $errors->has('accounting_treatment') ? ' has-error' : '' }} required">
                                 <label for="accounting_treatment" class="col-md-4 control-label">Lease Asset Accounting Treatment Followed Upto 2018</label>
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <select name="accounting_treatment" class="form-control" id="accounting_treatment">
                                         <option value="">--Lease Accounting Treatment--</option>
                                             @foreach($accounting_terms as $accounting_term)

@@ -58,12 +58,12 @@
                                             @php
                                                 $show_next[] = true;
                                             @endphp
-                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.fairmarketvalue.update', ['id'=> $asset->id]) }}">Update Fair Market Value Details</a>
+                                            <a class="btn btn-sm btn-primary" href="{{ route('addlease.fairmarketvalue.update', ['id'=> $asset->id]) }}">Update Fair Market Value Details</a>
                                         @else
                                             @php
                                                 $show_next[] = false;
                                             @endphp
-                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.fairmarketvalue.create', ['id'=> $asset->id]) }}">Add Fair Market Value Details</a>
+                                            <a class="btn btn-sm btn-primary" href="{{ route('addlease.fairmarketvalue.create', ['id'=> $asset->id]) }}">Add Fair Market Value Details</a>
                                         @endif
                                     </td>
                                 </tr>

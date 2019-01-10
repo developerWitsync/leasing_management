@@ -52,10 +52,8 @@
                         </div>
 
                         <div class="row form-group" style="margin-top: 12px;">
-                            <div class="col-md-4">
-                                <label for="no_of_lease_payments">Number of Lease Payments</label>
-                            </div>
-                            <div class="col-md-8">
+                            <label for="no_of_lease_payments" class="col-md-2 leasepayLbl">Number of Lease Payments</label>
+                            <div class="col-md-3">
                                 <select name="no_of_lease_payments" class="form-control">
                                     <option value="0">--Select Number of Lease Payments--</option>
                                     @foreach($lease_asset_number_of_payments as $number_of_payment)
@@ -68,14 +66,14 @@
 
                     @if($asset->total_payments > 0)
                         <div class="panel panel-info">
-                            <div class="panel-heading">
+                            <div class="panel-heading clearfix">
                                 {{ $asset->name }} Payments
                                 <span>
                                     <a href="{{ route('lease.payments.createassetpayment', ['id' => $asset->id]) }}" class="btn btn-sm btn-primary pull-right add_more">@if($asset->total_payments > 1) Add More @else Add Payment Details @endif</a>
                                 </span>
                             </div>
                             <div class="panel-body">
-                                <div class="panel-body">
+                                <div class="addpayTbleOuter">
                                     <table class="table table-condensed asset_payments_table">
                                         <thead>
                                         <tr>
@@ -92,18 +90,13 @@
                             </div>
                         </div>
                     @endif
-
                     <div class="row">
                         <div class="col-md-12 align-right" >
-                            <a href="{{ route('addlease.payments.index', ['id'=> $asset->lease->id]) }}" class="btn btn-info">Go Back to Assets List</a>
+                            <a href="{{ route('addlease.payments.index', ['id'=> $asset->lease->id]) }}" class="btn btn-primary">Go Back to Assets List</a>
                         </div>
                     </div>
-
                 </div>
             </div>
-
-
-
         </div>
     </div>
 @endsection
