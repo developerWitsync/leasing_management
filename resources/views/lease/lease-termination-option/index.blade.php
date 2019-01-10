@@ -58,12 +58,12 @@
                                             @php
                                                 $show_next[] = true;
                                             @endphp
-                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.leaseterminationoption.update', ['id'=> $asset->id]) }}">Update Lease Termination Option Details</a>
+                                            <a class="btn btn-sm btn-primary" href="{{ route('addlease.leaseterminationoption.update', ['id'=> $asset->id]) }}">Update Lease Termination Option Details</a>
                                         @else
                                             @php
                                                 $show_next[] = false;
                                             @endphp
-                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.leaseterminationoption.create', ['id'=> $asset->id]) }}">Add Lease Termination Option Details</a>
+                                            <a class="btn btn-sm btn-primary" href="{{ route('addlease.leaseterminationoption.create', ['id'=> $asset->id]) }}">Add Lease Termination Option Details</a>
                                         @endif
                                     </td>
                                 </tr>

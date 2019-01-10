@@ -12,6 +12,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Lease;
 use App\ModifyLeaseApplication;
+use App\LeaseModificationReason;
 use Validator;
 
 
@@ -57,9 +58,9 @@ class ModifyLeaseController extends Controller
      */
     public function create($id, Request $request){
         try{
-            $lease = $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
+            $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
              
-
+            $lase_modification = LeaseModificationReason::query()->get();
             if($lease) {
 
                 $model = Lease::query()->where('id', '=', $id)->first();
@@ -87,7 +88,7 @@ class ModifyLeaseController extends Controller
                     return redirect(route('modifylease.create',['id' => $id]))->with('status', 'Modify Lease has been Created successfully.');
                     
                 }
-                return view('modifylease.create',compact('lease'));
+                return view('modifylease.create',compact('lease','lase_modification'));
             } else {
                 abort(404);
             }

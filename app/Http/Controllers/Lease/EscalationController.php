@@ -14,6 +14,7 @@ use App\EscalationPercentageSettings;
 use App\Http\Controllers\Controller;
 use App\Lease;
 use App\LeaseAssetPayments;
+use App\PaymentEscalationDates;
 use App\PaymentEscalationDetails;
 use App\RateTypes;
 use Carbon\Carbon;
@@ -88,7 +89,11 @@ class EscalationController extends Controller
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $lease)->first();
             if($lease) {
                 $payment = LeaseAssetPayments::query()->findOrFail($id);
-                $model   =  new PaymentEscalationDetails();
+                $asset =  $payment->asset;
+                $model   =  PaymentEscalationDetails::query()->where('payment_id','=', $id)->first();
+                if(is_null($model)) {
+                    $model   =  new PaymentEscalationDetails();
+                }
 
                 if($request->isMethod('post')){
                     $rules = [
@@ -126,11 +131,68 @@ class EscalationController extends Controller
 
                     $request->request->add(['lease_id' => $lease->id, 'asset_id' => $payment->asset_id, 'payment_id'=> $payment->id]);
 
-                    $model->setRawAttributes($request->except('_token'));
-                    if($model->save()){
-                        //need to save the escalation dates along with all the
-                        
+                    $data  = $request->except('_token');
+
+                    if($request->is_escalation_applicable == "no"){
+                        $data['effective_from'] = null;
+                        $data['escalation_basis'] = null;
+                        $data['escalation_rate_type'] = null;
+                        $data['is_escalation_applied_annually_consistently'] = null;
+                        $data['fixed_rate'] = null;
+                        $data['current_variable_rate'] = null;
+                        $data['total_escalation_rate'] = null;
+                        $data['amount_based_currency'] = null;
+                        $data['escalated_amount'] = null;
+                        $data['escalation_currency'] = null;
+                        $data['total_undiscounted_lease_payment_amount'] = null;
                     }
+
+                    $model->setRawAttributes($data);
+                    if($model->save()){
+                        //delete all the previous escalation dates for the payment if exists
+                        PaymentEscalationDates::query()->where('payment_id', '=', $payment->id)->delete();
+
+                        //need to save the escalation dates along with all the
+                        if($request->is_escalation_applicable == 'yes'){
+                            $escalationData = generateEsclationChart($request->except('_token', 'method', 'uri', 'ip'), $payment, $lease, $asset);
+                            foreach ($escalationData['escalations'] as $year=>$escalations){
+                                foreach ($escalations as $month=>$escalation){
+                                    $data = [
+                                        'payment_id' => $payment->id,
+                                        'escalation_year'   => $year,
+                                        'escalation_month'  => date('m', strtotime($month)),
+                                        'percentage_or_amount_based'    => ($request->escalation_basis=='2')?'amount':'percentage',
+                                        'value_escalated'   => $escalation['percentage'],
+                                        'total_amount_payable'  => $escalation['amount']
+                                    ];
+                                    PaymentEscalationDates::create($data);
+                                }
+                            }
+                        }
+
+                        return redirect()->back()->with('status', 'Escalation Details has been saved sucessfully.');
+                    }
+                }
+
+                //code for the inconsistent escalations to be applied
+                $start_date = $asset->accural_period; //start date with the free period
+                $end_date   = $asset->getLeaseEndDate($asset); //end date based upon all the conditions
+
+                $start_date = ($payment->using_lease_payment == '1')?\Carbon\Carbon::create(2019,01,01):\Carbon\Carbon::parse($start_date);
+                $end_date   = \Carbon\Carbon::parse($end_date);
+
+                $years =  [];
+                $start_year = $start_date->format('Y');
+                $end_year = $end_date->format('Y');
+
+                if($start_year == $end_year) {
+                    $years[] = $end_year;
+                } else if($end_year > $start_year) {
+                    $years = range($start_year, $end_year);
+                }
+
+                for($m=1; $m<=12; ++$m ){
+                    $months[$m] = date('M', mktime(0, 0, 0, $m, 1));
                 }
 
                 $lease_end_date = $payment->asset->getLeaseEndDate($payment->asset);
@@ -144,7 +206,9 @@ class EscalationController extends Controller
                     'lease_end_date',
                     'contract_escalation_basis',
                     'percentage_rate_types',
-                    'escalation_percentage_settings'
+                    'escalation_percentage_settings',
+                    'years',
+                    'months'
                 ));
             } else {
                 abort(404);

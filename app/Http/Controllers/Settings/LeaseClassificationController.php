@@ -28,6 +28,7 @@ use App\LeasePaymentsNumber;
 use App\LeasesExcludedFromTransitionalValuation;
 use App\RateTypes;
 use App\UseOfLeaseAsset;
+use App\LeaseModificationReason;
 use Illuminate\Http\Request;
 use Validator;
 use Session;
@@ -71,6 +72,8 @@ class LeaseClassificationController extends Controller
         $escalation_amount_calculated_on = EscalationAmountCalculated::query()->select('id', 'title')->where('status', '=', '1')->get();
         $escalation_percentage_settings = EscalationPercentageSettings::query()->select('id', 'number')->where('business_account_id', '=', auth()->user()->id)->orderBy('number','asc')->get();
 
+        $modication_reason = LeaseModificationReason::query()->select('id', 'title')->where('status', '=', '1')->get();
+
         return view('settings.classification.index', compact('breadcrumbs',
             'rates',
             'contract_classifications',
@@ -89,7 +92,8 @@ class LeaseClassificationController extends Controller
             'lease_payment_interval',
             'lease_payment_escalation_clause',
             'escalation_amount_calculated_on',
-            'escalation_percentage_settings'
+            'escalation_percentage_settings',
+            'modication_reason'
         ));
     }
 
@@ -652,6 +656,101 @@ class LeaseClassificationController extends Controller
                 $escalation_percentage_number = EscalationPercentageSettings::query()->where('id', $id)->where('business_account_id', '=', auth()->user()->id);
                 if($escalation_percentage_number) {
                     $escalation_percentage_number->delete();
+                    Session::flash('status', 'Setting has been deleted successfully.');
+                    return response()->json(['status' => true], 200);
+                } else {
+                    return response()->json(['status' => false, "message" => "Invalid request!"], 200);
+                }
+            } else {
+                return redirect()->back();
+            }
+        } catch (\Exception $e){
+            abort(404);
+        }
+    }
+
+     /**
+     * Add title of Lease Modification Reason
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function addLeaseModificationReason(Request $request){
+        try{
+            if($request->isMethod('post')) {
+                $validator = Validator::make($request->except("_token"), [
+                    'title' => 'required'
+                ]);
+
+                if($validator->fails()){
+                    return redirect()->back()->withErrors($validator->errors())->withInput($request->except("_token"));
+                }
+
+                $model = LeaseModificationReason::create([
+                    'title' => $request->title
+                 ]);
+
+                if($model){
+                    return redirect()->back()->with('status', 'Lease Modification Reason been added successfully.');
+                }
+            } else {
+                return redirect()->back();
+            }
+        } catch (\Exception $e) {
+            abort(404);
+        }
+    }
+
+
+    /**
+     * update Title of Lease Modification Reason
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
+     */
+    public function editLeaseModificationReason($id, Request $request){
+        try{
+            if($request->ajax()){
+                $lease_reason = LeaseModificationReason::query()->where('id', $id)->first();
+                if($request->isMethod('post')) {
+                    $validator = Validator::make($request->except("_token"), [
+                        'title' => ['required',]
+                    ]);
+
+                    if($validator->fails()){
+                        return response()->json([
+                            'status' => false,
+                            'errors' => $validator->errors()
+                        ]);
+                    }
+
+                    $lease_reason->title = $request->title;
+                    $lease_reason->save();
+                    return response()->json([
+                        'status' =>true,
+                        'message' => 'Settings has been saved successfully.'
+                    ]);
+                }
+
+                return view('settings.classification._edit_lease_modification_reason', compact('lease_reason'));
+            }
+        } catch (\Exception $e){
+            dd($e);
+            abort(404);
+        }
+    }
+
+    /**
+     * Delete a Title of Lease Modification Reason
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     */
+    public function deleteLeaseModificationReason($id, Request $request){
+        try{
+            if($request->ajax()) {
+                $lease_reason = LeaseModificationReason::query()->where('id', $id);
+                if($lease_reason) {
+                    $lease_reason->delete();
                     Session::flash('status', 'Setting has been deleted successfully.');
                     return response()->json(['status' => true], 200);
                 } else {

@@ -18,7 +18,7 @@
 <body>
     <div id="app">
         <nav class="navbar navbar-default navbar-static-top">
-            <div class="container">
+            <div class="hdrTop">
                 <div class="navbar-header">
 
                     <!-- Collapsed Hamburger -->
@@ -75,12 +75,16 @@
         </nav>
 
         @if(auth()->check())
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-3 col-xs-12 list-group">
-                        @include('layouts._sidebar')
+            <div class="dashOuter clearfix">
+                    <div class="dashLeft">
+                        <div class="leftmenuHd">
+                            <div class="menuHd"><span>Menu</span> <a class="dash_navicon" href="javascript:void(0)"><i class="fa fa-bars" aria-hidden="true"></i></a></div>
+                        </div>
+                        <div class="leftNav">
+                            @include('layouts._sidebar')
+                        </div>
                     </div>
-                    <div class="col-md-9 col-xs-12">
+                    <div class="DashRight">
                         @if(isset($breadcrumbs ))
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
@@ -93,7 +97,6 @@
                         @endif
                         @yield('content')
                     </div>
-                </div>
             </div>
         @else
             @yield('content')

@@ -18,7 +18,6 @@
         <div class="alert alert-danger">
             <strong>Note!</strong> The below information is calculated on the basis of the input dates, your previous changes(if any) has been lost. However you can edit the dates again.
         </div>
-
         <div class="row">
             <div class="col-md-12">
             <table class="table table-bordered">

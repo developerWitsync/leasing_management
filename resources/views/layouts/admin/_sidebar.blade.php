@@ -7,8 +7,10 @@
             <ul>
 
                 <li class="submenu">
-                    <a class="@if(request()->segment('2') == 'dashboard') active @endif" href="{{ route('admin.dashboard.index') }}"><i class="fa fa-fw fa-bars"></i><span>
-                            @lang('_sidebar.Dashboard')</span> </a>
+                    <a class="@if(request()->segment('2') == 'dashboard') active @endif" href="{{ route('admin.dashboard.index') }}">
+                        <i class="fa fa-fw fa-bars"></i><span>
+                            @lang('_sidebar.Dashboard')</span> 
+                    </a>
                 </li>
 
                 <li class="submenu">
