@@ -225,6 +225,18 @@ Route::middleware('auth')->group(function(){
         Route::match(['post', 'get', 'delete'], 'delete-lease-details/{id}', ['as' => 'drafts.deleteleasedetails', 'uses' => 'IndexController@deleteLeaseDetails']);
     });
 
+    /*
+    * Modify Lease Routes
+    */
+
+    Route::namespace('Modifylease')->prefix('modify-lease')->group(function(){
+         Route::get('/', ['as' => 'modifylease.index', 'uses' => 'ModifyLeaseController@index']);
+         Route::get('fetch-lease-details', ['as' => 'modifylease.fetchleasedetails', 'uses' => 'ModifyLeaseController@fetchLeaseDetails']);
+        Route::match(['post', 'get'], 'create/{id}', ['as' => 'modifylease.create', 'uses' => 'ModifyLeaseController@create']);
+        Route::match(['post', 'get'], 'update/{id}', ['as' => 'modifylease.update', 'uses' => 'ModifyLeaseController@update']);
+    });
+
+
     Route::namespace('Settings')->middleware(['permission:settings'])->prefix('settings')->group(function(){
 
         Route::prefix('general')->group(function(){
@@ -344,8 +356,8 @@ Route::middleware('auth')->group(function(){
             Route::get('/', ['as' => 'settings.codification', 'uses' => 'CodificationController@index']);
         });
 
-        Route::prefix('companyprofile')->group(function (){
-            Route::match(['get', 'post'], 'index/{id}', ['as' => 'settings.profile.index', 'uses' => 'ProfileController@index']);
+        Route::prefix('profile')->group(function (){
+            Route::match(['get', 'post'], 'index', ['as' => 'settings.profile.index', 'uses' => 'ProfileController@index']);
         });
     });
       
