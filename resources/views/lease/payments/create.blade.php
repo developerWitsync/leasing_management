@@ -57,7 +57,7 @@
                                 <select name="no_of_lease_payments" class="form-control">
                                     <option value="0">--Select Number of Lease Payments--</option>
                                     @foreach($lease_asset_number_of_payments as $number_of_payment)
-                                        <option value="{{ $number_of_payment['id'] }}" @if($asset->total_payments == $number_of_payment['id']) selected="selected" @endif>{{ $number_of_payment['number'] }}</option>
+                                        <option value="{{ $number_of_payment['number'] }}" @if($asset->total_payments == $number_of_payment['number']) selected="selected" @endif>{{ $number_of_payment['number'] }}</option>
                                     @endforeach
                                 </select>
                             </div>

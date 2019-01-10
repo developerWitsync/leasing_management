@@ -30,7 +30,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                @foreach($months as $month)
+                @foreach($months as $key=>$month)
                     <tr>
                         <td>
                             <strong>
@@ -44,11 +44,13 @@
                                         <span class="alter_due_dates_info">
                                             {{ \Carbon\Carbon::parse($date)->format('l jS \of F Y') }}
                                         </span><br/>
-                                        <input type="text" class="form-control alter_due_dates_input hidden" name="altered_payment_due_date[]" value="{{ $date }}">
+                                        <input type="text" data-month="{{ $key }}" data-year="{{ $year }}" class="form-control alter_due_dates_input hidden" name="altered_payment_due_date[]" value="{{ $date }}">
                                     @endforeach
                                 </td>
                             @else
-                                <td class="info">&nbsp;</td>
+                                <td class="info">
+                                    <input type="text" data-month="{{ $key }}" data-year="{{ $year }}" class="form-control alter_due_dates_input hidden" name="altered_payment_due_date[]" value="">
+                                </td>
                             @endif
                         @endforeach
                     </tr>
@@ -61,6 +63,11 @@
 
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-danger edit_payment_due_dates">Edit</button>
-    <button type="button" class="btn btn-success confirm_payment_due_dates">Confirm</button>
+    @if (empty($errors))
+        <button type="button" class="btn btn-danger edit_payment_due_dates">Edit</button>
+        <button type="button" class="btn btn-success confirm_payment_due_dates">Confirm</button>
+    @else
+        &nbsp;
+
+    @endif
 </div>

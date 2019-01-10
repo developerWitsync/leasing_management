@@ -90,7 +90,42 @@ $(function(){
             }
         });
     });
-
+       $(document.body).on('submit', '#edit_settings2', function (e) {
+        e.preventDefault();
+        $.ajax({
+            url : $(this).attr('action'),
+            data : {
+                customer_name : $('#customer_name').val(),
+                description : $('#description').val(),
+                currency : $('#currency').val(),
+                amount : $('#amount').val()
+            },
+            dataType : 'json',
+            type : 'post',
+            success : function (response) {
+                if(response['status']){
+                    $('.alert-success').html(response['message']).show();
+                    $('.status_sucess').show();
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 200);
+                } else {
+                    alert('df');
+                    $('#edit_settings2 .form-group').addClass('has-error');
+                    var html='<span class="help-block">\n' +
+                        '                        <strong>'+response['errors']['audit_year1_ended_on1'][0]+'</strong>\n' +
+                        '                    </span>';
+                    var html1='<span class="help-block">\n' +
+                        '                        <strong>'+response['errors']['audit_year2_ended_on1'][0]+'</strong>\n' +
+                        '                    </span>';
+                    
+                    
+                    $('#error_section').html(html);
+                    $('#error_section1').html(html1);
+                }
+            }
+        });
+    });
     $(document.body).on("click", ".delete_settings", function () {
          var href = $(this).data('href');
         bootbox.confirm({
@@ -123,6 +158,12 @@ $(function(){
     });
 
 
+    //sub_drop sub tables
+    $('.sub_drop_escalation').on('click', function(){
+        $(this).children('i').toggleClass('fa-plus-square');
+        $(this).children('i').toggleClass('fa-minus-square');
+        $(this).parent('td').parent('tr').next('tr.sub_table').toggle('500');
+    });
 });
 
 

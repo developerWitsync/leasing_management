@@ -124,7 +124,7 @@
         <div class="col-md-6 col-md-offset-5 frmBtnBx">
 
             <a href="{{ route('add-new-lease.index',['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
-
+  
             <button type="submit" class="btn btn-success">
                 Submit
             </button>

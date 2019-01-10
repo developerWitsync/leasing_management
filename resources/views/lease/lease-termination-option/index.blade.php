@@ -6,7 +6,7 @@
 @endsection
 @section('content')
     <div class="panel panel-default">
-        <div class="panel-heading">Add New Lease | Lease Termination Option</div>
+        <div class="panel-heading">Add New Lease |  Termination Option</div>
 
         <div class="panel-body">
             @if (session('status'))
@@ -24,7 +24,7 @@
                     </ul>
                 </div>
             @endif
-
+              {{--@include('lease._menubar')--}}
             <div class="tab-content" style="padding: 0px;">
                 <div role="tabpanel" class="tab-pane active">
                     <table class="table table-bordered table-responsive">
@@ -54,7 +54,7 @@
                                         {{ $asset->subcategory->title }}
                                     </td>
                                     <td>
-                                        @if($asset->leaseTerminationOption)
+                                        @if($asset->terminationOption)
                                             @php
                                                 $show_next[] = true;
                                             @endphp
@@ -78,7 +78,7 @@
                             <a href="{{ route('addlease.residual.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
 
                             @if(!in_array(false, $show_next))
-                                <a href="{{ route('addlease.leaseterminationoption.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
+                                <a href="{{ route('addlease.renewable.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
                             @endif
                         </div>
 

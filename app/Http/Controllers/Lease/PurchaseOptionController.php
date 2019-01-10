@@ -9,21 +9,14 @@
 namespace App\Http\Controllers\Lease;
 
 
-use App\Countries;
-use App\ExpectedLifeOfAsset;
 use App\Http\Controllers\Controller;
 use App\Lease;
 use App\Currencies;
-use App\LeaseAccountingTreatment;
-use App\LeaseAssetCategories;
 use App\LeaseAssets;
-use App\LeaseAssetSimilarCharacteristicSettings;
-use App\LeaseAssetsNumberSettings;
-use App\LeaseAssetSubCategorySetting;
-use App\UseOfLeaseAsset;
 use App\PurchaseOption;
 use App\ReportingCurrencySettings;
 use App\ForeignCurrencyTransactionSettings;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -33,10 +26,10 @@ class PurchaseOptionController extends Controller
         return [
             'purchase_option_clause'   => 'required',
             'purchase_option_exerecisable'   => 'required_if:purchase_option_clause,yes',
-            'expected_purchase_date'  => 'required_if:purchase_option_exerecisable,yes|date',
-            'expected_lease_end_date'  => 'required_if:purchase_option_exerecisable,yes|date',
+            'expected_purchase_date'  => 'required_if:purchase_option_exerecisable,yes|nullable|date',
+            'expected_lease_end_date'  => 'required_if:purchase_option_exerecisable,yes|nullable|date',
             'currency' => 'required_if:purchase_option_exerecisable,yes',
-            'purchase_price'  => 'required_if:purchase_option_exerecisable,yes',
+            'purchase_price'  => 'required_if:purchase_option_exerecisable,yes|nullable|numeric',
         ];
     }
     /**
@@ -46,10 +39,30 @@ class PurchaseOptionController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id, Request $request){
+         $breadcrumbs = [
+            [
+                'link' => route('add-new-lease.index'),
+                'title' => 'Add New Lease'
+            ],
+            [
+                'link' => route('addlease.purchaseoption.index',['id' => $id]),
+                'title' => 'Purchase Option'
+            ],
+        ];
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->with('leaseType')->with('assets')->first();
         if($lease) {
-            return view('lease.purchase-option.index', compact(
-                'lease'
+            //Load the assets only for the assets where no selected at `exercise_termination_option_available` on lease termination
+            $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->whereHas('terminationOption',  function($query){
+                $query->where('exercise_termination_option_available', '=', 'no');
+            })->get();
+
+            if(count($assets) == 0) {
+                return redirect(route('addlease.durationclassified.index', ['id' => $id]));
+            }
+
+            return view('lease.purchase-option.index', compact('breadcrumbs',
+                'lease',
+                'assets'
             ));
         } else {
             abort(404);
@@ -57,7 +70,7 @@ class PurchaseOptionController extends Controller
     }
 
     /**
-     * add fair market value details for an asset
+     * create lease asset purchase options for the lease asset
      * @param $id
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -65,7 +78,7 @@ class PurchaseOptionController extends Controller
     public function create($id, Request $request){
         try{
             $asset = LeaseAssets::query()->findOrFail($id);
-            $lease = $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
+            $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
             if($lease) {
 
                 $model = new PurchaseOption();
@@ -80,6 +93,20 @@ class PurchaseOptionController extends Controller
                     $data = $request->except('_token');
                     $data['lease_id']   = $asset->lease->id;
                     $data['asset_id']   = $asset->id;
+                    if($data['expected_purchase_date'] != "") {
+                        $data['expected_purchase_date'] = Carbon::parse($data['expected_purchase_date'])->format('Y-m-d');
+                    }
+
+                    if($data['expected_lease_end_date'] != "") {
+                        $data['expected_lease_end_date'] = Carbon::parse($data['expected_lease_end_date'])->format('Y-m-d');
+                    }
+
+                    if($data['purchase_option_exerecisable'] == 'no'){
+                        $data['expected_purchase_date'] = null;
+                        $data['expected_lease_end_date'] = null;
+                        $data['currency'] = null;
+                        $data['purchase_price'] = null;
+                    }
 
                     $purchase_option = PurchaseOption::create($data);
 
@@ -88,19 +115,10 @@ class PurchaseOptionController extends Controller
                     }
                 }
 
-                $currencies = Currencies::query()->where('status', '=', '1')->get();
-                $reporting_currency_settings = ReportingCurrencySettings::query()->where('business_account_id', '=', auth()->user()->id)->first();
-                $reporting_foreign_currency_transaction_settings = ForeignCurrencyTransactionSettings::query()->where('business_account_id', '=', auth()->user()->id)->get();
-                if(collect($reporting_currency_settings)->isEmpty()) {
-                    $reporting_currency_settings = new ReportingCurrencySettings();
-                }
                 return view('lease.purchase-option.create', compact(
                     'model',
                     'lease',
-                    'asset',
-                    'currencies',
-                    'reporting_foreign_currency_transaction_settings',
-                    'reporting_currency_settings'
+                    'asset'
                 ));
             } else {
                 abort(404);
@@ -112,7 +130,7 @@ class PurchaseOptionController extends Controller
 
 
     /**
-     * edit existing fair market value details for an asset
+     * edit existing purchase options for the lease asset
      * @param $id
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -136,6 +154,21 @@ class PurchaseOptionController extends Controller
                     $data['lease_id']   = $asset->lease->id;
                     $data['asset_id']   = $asset->id;
 
+                    if($data['expected_purchase_date'] != "") {
+                        $data['expected_purchase_date'] = Carbon::parse($data['expected_purchase_date'])->format('Y-m-d');
+                    }
+
+                    if($data['expected_lease_end_date'] != "") {
+                        $data['expected_lease_end_date'] = Carbon::parse($data['expected_lease_end_date'])->format('Y-m-d');
+                    }
+
+                    if($data['purchase_option_exerecisable'] == 'no'){
+                        $data['expected_purchase_date'] = null;
+                        $data['expected_lease_end_date'] = null;
+                        $data['currency'] = null;
+                        $data['purchase_price'] = null;
+                    }
+
                     $model->setRawAttributes($data);
 
                     if($model->save()){
@@ -143,19 +176,10 @@ class PurchaseOptionController extends Controller
                     }
                 }
 
-                $currencies = Currencies::query()->where('status', '=', '1')->get();
-                $reporting_currency_settings = ReportingCurrencySettings::query()->where('business_account_id', '=', auth()->user()->id)->first();
-                $reporting_foreign_currency_transaction_settings = ForeignCurrencyTransactionSettings::query()->where('business_account_id', '=', auth()->user()->id)->get();
-                if(collect($reporting_currency_settings)->isEmpty()) {
-                    $reporting_currency_settings = new ReportingCurrencySettings();
-                }
                 return view('lease.purchase-option.update', compact(
                     'model',
                     'lease',
-                    'asset',
-                    'currencies',
-                    'reporting_foreign_currency_transaction_settings',
-                    'reporting_currency_settings'
+                    'asset'
                 ));
             } else {
                 abort(404);

@@ -490,3 +490,7 @@ legend.scheduler-border {
 .modal-content.annexure_modal_body .modal-header .close {
     margin-top: -20px;
 }
+
+.sub_table td table{
+    background-color: #eeeeee !important;
+}

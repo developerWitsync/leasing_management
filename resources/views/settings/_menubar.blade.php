@@ -5,4 +5,6 @@
     <li role="presentation" class="@if(request()->segment(2) == 'lease-assets') active @endif"><a href="{{ route('settings.leaseassets') }}">Lease Assets</a></li>
     <li role="presentation" class="@if(request()->segment(2) == 'user-access') active @endif"><a href="{{ route('settings.useraccess') }}">User Access</a></li>
     <li role="presentation" class="@if(request()->segment(2) == 'codification') active @endif"><a href="{{ route('settings.codification') }}">Codification</a></li>
+    <li role="presentation" class="@if(request()->segment(2) == 'profile') active @endif"><a href="{{ route('settings.profile.index')}}">My Profile</a></li>
+
 </ul>

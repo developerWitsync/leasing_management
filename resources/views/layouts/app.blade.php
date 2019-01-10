@@ -118,5 +118,6 @@
         } );
     </script>
     @yield('footer-script')
+    @yield('inside-script')
 </body>
 </html>

@@ -12,6 +12,7 @@ use App\Http\Controllers\Controller;
 use App\Lease;
 use App\LeaseRenewableOption;
 use App\LeaseAssets;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -20,6 +21,7 @@ class LeaseRenewableOptionController extends Controller
     protected function validationRules(){
         return [
             'is_renewal_option_under_contract'   => 'required',
+            'renewal_option_not_available_reason'   => 'required_if:is_renewal_option_under_contract,no',
             'is_reasonable_certainity_option' => 'required_if:is_renewal_option_under_contract,yes',
             'expected_lease_end_Date'   => 'required_if:is_reasonable_certainity_option,yes'
         ];
@@ -30,11 +32,21 @@ class LeaseRenewableOptionController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index($id, Request $request){
-        $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->with('leaseType')->with('assets')->first();
+    public function index($id){
+        $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
         if($lease) {
+            //Load the assets only for the assets where no selected at `exercise_termination_option_available` on lease termination
+            $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->whereHas('terminationOption',  function($query){
+                $query->where('exercise_termination_option_available', '=', 'no');
+            })->get();
+
+            if(count($assets) == 0) {
+                return redirect(route('addlease.durationclassified.index', ['id' => $id]));
+            }
+
             return view('lease.lease-renewable-option.index', compact(
-                'lease'
+                'lease',
+                'assets'
             ));
         } else {
             abort(404);
@@ -62,11 +74,14 @@ class LeaseRenewableOptionController extends Controller
                         return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
                     }
 
-                    $data = $request->except('_token');
+                    $data = $request->except('_token', 'submit');
                     $data['lease_id']   = $asset->lease->id;
                     $data['asset_id']   = $asset->id;
-                    $data['expected_lease_end_Date'] = date('Y-m-d', strtotime($request->expected_lease_end_Date));
-                    
+                    if($request->is_reasonable_certainity_option == "yes") {
+                        $data['expected_lease_end_Date'] = Carbon::parse($request->expected_lease_end_Date)->format('Y-m-d');
+                    } else {
+                        $data['expected_lease_end_Date']  = null;
+                    }
 
                     $renewable_value = LeaseRenewableOption::create($data);
 
@@ -86,7 +101,6 @@ class LeaseRenewableOptionController extends Controller
             dd($e);
         }
     }
-
 
     /**
      * edit existing renewable option value details for an asset
@@ -109,10 +123,14 @@ class LeaseRenewableOptionController extends Controller
                         return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
                     }
 
-                    $data = $request->except('_token');
+                    $data = $request->except('_token', 'submit');
                     $data['lease_id']   = $asset->lease->id;
                     $data['asset_id']   = $asset->id;
-                    $data['expected_lease_end_Date'] = date('Y-m-d', strtotime($request->expected_lease_end_Date));
+                    if($request->is_reasonable_certainity_option == "yes") {
+                        $data['expected_lease_end_Date'] = Carbon::parse($request->expected_lease_end_Date)->format('Y-m-d');
+                    } else {
+                        $data['expected_lease_end_Date']  = null;
+                    }
 
                     $model->setRawAttributes($data);
 

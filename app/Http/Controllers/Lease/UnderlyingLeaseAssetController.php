@@ -32,7 +32,20 @@ class UnderlyingLeaseAssetController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id, Request $request){
+        
+        $breadcrumbs = [
+            [
+                'link' => route('add-new-lease.index'),
+                'title' => 'Add New Lease'
+            ],
+            [
+                'link' => route('addlease.leaseasset.index',['id' => $id]),
+                'title' => 'Underlying Lease Assets'
+            ],
+        ];
+
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->with('leaseType')->with('assets')->first();
+         
         if($lease) {
 
             $lease_assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->get()->toArray();
@@ -91,7 +104,7 @@ class UnderlyingLeaseAssetController extends Controller
                 }
 
                 //delete other lease_assets if exists for the current logged in business account
-                LeaseAssets::query()->whereNotIn('id', $created_lease_asset_ids)->delete();
+                LeaseAssets::query()->where('lease_id', '=',$lease->id)->whereNotIn('id', $created_lease_asset_ids)->delete();
                 return redirect()->back()->with('status', 'Lease Assets has been created successfully. Click on Complete Details button to complete other details for the lease assets.');
             }
 
@@ -102,7 +115,7 @@ class UnderlyingLeaseAssetController extends Controller
                 ->select('number')
                 ->whereIn('business_account_id', getDependentUserIds())
                 ->get();
-            return view('lease.lease-assets.index', compact(
+           return view('lease.lease-assets.index', compact('breadcrumbs',
                 'lease',
                 'numbers_of_lease_assets',
                 'lease_assets_categories',

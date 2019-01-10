@@ -6,7 +6,7 @@
 @endsection
 @section('content')
     <div class="panel panel-default">
-        <div class="panel-heading">Add New Lease | Add Lease Payments</div>
+        <div class="panel-heading">Add New Lease | Lease Payments</div>
 
         <div class="panel-body">
             @if (session('status'))
@@ -24,7 +24,7 @@
                     </ul>
                 </div>
             @endif
-
+            {{--@include('lease._menubar')--}}
             <div class="tab-content" style="padding: 0px;">
                 <div role="tabpanel" class="tab-pane active">
                     <table class="table table-bordered table-responsive">
