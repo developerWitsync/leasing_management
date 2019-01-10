@@ -100,7 +100,7 @@
                 <select class="form-control" name="current_variable_rate">
                     <option value="">--Select Current Variable Rate--</option>
                     @foreach($escalation_percentage_settings as $setting)
-                        <option value="{{ $setting->number }}" @if(old('current_variable_rate', $model->current_variable_rate) == $setting->number) @endif>{{ $setting->number }}%</option>
+                        <option value="{{ $setting->number }}" @if(old('current_variable_rate', (int)$model->current_variable_rate) == $setting->number) selected="selected" @endif>{{ $setting->number }}%</option>
                     @endforeach
                 </select>
                 @if ($errors->has('current_variable_rate'))
@@ -151,13 +151,13 @@
 
     <!-- will be visible when wither the "amount_based_escalation_amount" or "total_escalation_rate" is visible -->
 
-    <div class="form-group see_escalation_chart @if(old('escalation_basis', $model->escalation_basis) != '') @else hidden @endif">
+    <div class="form-group see_escalation_chart @if(old('escalation_basis', $model->escalation_basis) != '' && old('is_escalation_applicable', $model->is_escalation_applicable) == 'yes') @else hidden @endif hidden_fields">
         <div class="col-md-6 col-md-offset-4">
             <a href="javascript:void(0);" class="btn btn-info compute_escalation">Compute</a>
         </div>
     </div>
 
-    <div class="form-group{{ $errors->has('escalation_currency') ? ' has-error' : '' }} required @if(old('escalation_basis', $model->escalation_basis) != '') @else hidden @endif computed_fields">
+    <div class="form-group{{ $errors->has('escalation_currency') ? ' has-error' : '' }} required @if(old('escalation_basis', $model->escalation_basis) != '' && old('is_escalation_applicable', $model->is_escalation_applicable) == 'yes') @else hidden @endif computed_fields hidden_fields">
         <label for="amount_based_currency" class="col-md-4 control-label">Currency</label>
         <div class="col-md-6 form-check form-check-inline">
             <input type="text" class="form-control" placeholder="Escalation Currency" name="escalation_currency" value="{{ $lease->lease_contract_id }}" readonly="readonly">
@@ -169,10 +169,10 @@
         </div>
     </div>
 
-    <div class="form-group{{ $errors->has('total_undiscounted_lease_payment_amount') ? ' has-error' : '' }} required @if(old('escalation_basis', $model->escalation_basis) != '') @else hidden @endif computed_fields">
+    <div class="form-group{{ $errors->has('total_undiscounted_lease_payment_amount') ? ' has-error' : '' }} required @if(old('escalation_basis', $model->escalation_basis) != '' && old('is_escalation_applicable', $model->is_escalation_applicable) == 'yes') @else hidden @endif computed_fields hidden_fields">
         <label for="escalated_amount" class="col-md-4 control-label">Total Undiscounted Lease Payments</label>
         <div class="col-md-6 form-check form-check-inline">
-            <input type="text" class="form-control" placeholder="Total Undiscounted Lease Payments" name="total_undiscounted_lease_payment_amount" value="" id="computed_total" readonly="readonly">
+            <input type="text" class="form-control" placeholder="Total Undiscounted Lease Payments" name="total_undiscounted_lease_payment_amount" value="{{ old('total_undiscounted_lease_payment_amount', $model->total_undiscounted_lease_payment_amount) }}" id="computed_total" readonly="readonly">
             @if ($errors->has('total_undiscounted_lease_payment_amount'))
                 <span class="help-block">
                         <strong>{{ $errors->first('total_undiscounted_lease_payment_amount') }}</strong>
@@ -181,13 +181,23 @@
         </div>
     </div>
 
-    <div class="form-group see_escalation_chart @if(old('escalation_basis', $model->escalation_basis) != '') @else hidden @endif">
+    <div class="form-group see_escalation_chart @if(old('escalation_basis', $model->escalation_basis) != '' && old('is_escalation_applicable', $model->is_escalation_applicable) == 'yes') @else hidden @endif hidden_fields">
         <div class="col-md-6 col-md-offset-4">
             <a href="javascript:void(0);" class="btn btn-info show_escalation_chart">See Escalation Chart</a>
         </div>
     </div>
 
-    <div class="form-group computed_fields @if(old('escalation_basis', $model->escalation_basis) != '') @else hidden @endif">
+    <!-- Inconsistently Applied Form fields -->
+
+    <div class="form-group inconsistently_applied hidden">
+
+        
+
+    </div>
+
+    <!-- Inconsistently Applied Form fields ends here -->
+
+    <div class="form-group">
         <div class="col-md-6 col-md-offset-4">
 
             <a href="" class="btn btn-danger">Cancel</a>
@@ -416,6 +426,8 @@
                                     $('.amount_based_fields').addClass('hidden');
                                     $('.amount_based_escalation_amount').addClass('hidden');
                                 }
+
+                                $('.computed_fields').removeClass('hidden');
                             }
                         }
                     });
@@ -470,8 +482,15 @@
                         if(result) {
                             $('input[type="checkbox"][name="is_escalation_applied_annually_consistently"][value="yes"]').prop('checked', false);
                             $('input[type="checkbox"][name="is_escalation_applied_annually_consistently"][value="no"]').prop('checked', true);
+
+                            $('.computed_fields').addClass('hidden');
+
+                            //show the inconsistently form fields here
+
+
                         } else {
                             $('input[type="checkbox"][name="is_escalation_applied_annually_consistently"]').prop('checked', false);
+                            $('.computed_fields').removeClass('hidden');
                         }
                     }
                 });
