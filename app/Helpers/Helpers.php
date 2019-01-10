@@ -89,6 +89,18 @@ function getDependentUserIds(){
     }
     return array_merge($userIdsWithChildrens, [auth()->user()->id]);
 }
+/**
+ * get the parent user details where required 
+ * in case the current logged in user is not a parent user than in that case returns the parent user details
+ * @return [type] [description]
+ */
+function getParentDetails(){
+    if(auth()->user()->parent_id == 0){
+        return auth()->user();
+    } else {
+        return \App\User::query()->where('id', '=', auth()->user()->parent_id)->first();
+    }
+}
 
 /**
  * calculate all the payment due dates provided the first payment due date and the last payment due date

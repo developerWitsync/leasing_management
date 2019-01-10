@@ -41,7 +41,7 @@ class ModifyLeaseController extends Controller
     public function fetchLeaseDetails(Request $request){
         try{
             if ($request->ajax()) {
-              return datatables()->eloquent(Lease::query()->with('leaseType'))->toJson();
+              return datatables()->eloquent(Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('status', '=', '1')->with('leaseType'))->toJson();
             } else {
                 return redirect()->back();
             }
@@ -62,7 +62,8 @@ class ModifyLeaseController extends Controller
 
             if($lease) {
 
-                $model = new ModifyLeaseApplication();
+                $model = Lease::query()->where('id', '=', $id)->first();
+                
 
                 if($request->isMethod('post')) {
                     $validator = Validator::make($request->except('_token'), $this->validationRules());
@@ -78,6 +79,10 @@ class ModifyLeaseController extends Controller
                      $data['effective_from'] = date('Y-m-d', strtotime($request->effective_from));
                    }
                     $modify_lease = ModifyLeaseApplication::create($data);
+
+                    $data1['status'] = '0';
+                    $model->setRawAttributes($data1);
+                    $model->save();
 
                     return redirect(route('modifylease.create',['id' => $id]))->with('status', 'Modify Lease has been Created successfully.');
                     
