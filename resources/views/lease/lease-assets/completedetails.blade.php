@@ -304,7 +304,7 @@
                     $('#accural_period').datepicker('setDate', newdate);
                     //set the minimum date for the lease end date as well
 
-                    //lease end date should _+30 days of accural peroid date
+                    //lease end date should be +30 days of accural peroid date
                     var dt2 = $('#lease_end_date');
                     var dt3 = new Date($('#accural_period').datepicker('getDate'));
                     var dt4 = new Date(dt3.setDate(dt3.getDate() + 30));

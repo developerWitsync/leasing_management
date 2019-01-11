@@ -119,6 +119,10 @@ class LeaseAssets extends Model
         return $this->hasOne('App\LeaseIncentives', 'asset_id','id');
     }
 
+
+    public function categoriesleaseassetexcluded(){
+        return $this->hasOne('App\CategoriesLeaseAssetExcluded', 'asset_id','id');
+    }
     public function country(){
         return $this->belongsTo('App\Countries', 'country_id', 'id');
     }
