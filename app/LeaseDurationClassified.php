@@ -63,4 +63,8 @@ class LeaseDurationClassified extends Model
         $classification = LeaseContractDuration::query()->whereRaw("(`lower_limit` <= ?) AND (`upper_limit` >= ? OR upper_limit is NULL)")->setBindings([$diff_in_months, $diff_in_months])->first();
         return $classification->id;
     }
+
+    public function getLeaseClassification(){
+        return $this->belongsTo('App\LeaseContractDuration', 'lease_contract_duration_id', 'id');
+    }
 }

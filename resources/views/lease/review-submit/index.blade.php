@@ -24,119 +24,47 @@
                     </ul>
                 </div>
             @endif
-              {{--@include('lease._menubar')--}}
-            <div class="tab-content" style="padding: 0px;">
-                <div role="tabpanel" class="tab-pane active">
-                    <div class="panel panel-info">
-                        <div class="panel-heading">Section A: Lessor Details</div>
-                  <div class="panel-body">
-                @if (session('status'))
-                    <div class="alert alert-success">
-                        {{ session('status') }}
-                    </div>
-                @endif
-               
-                @if($reporting_currency_settings->is_foreign_transaction_involved == 'yes' || $reporting_currency_settings->is_foreign_transaction_involved == 'no' )
                
                 {{--@include('lease._menubar')--}}
-               <div class="tab-content" style="padding: 0px;">
-                    <div role="tabpanel" class="tab-pane active">
-                        @if($lease->id)
-                            <form id="add-new-lease-form" class="form-horizontal" method="POST" action="{{ route('add-new-lease.index.update', ['id' => $lease->id]) }}" enctype="multipart/form-data">
-                        @else
-                            <form id="add-new-lease-form" class="form-horizontal" method="POST" action="{{ route('add-new-lease.index.save') }}" enctype="multipart/form-data">
-                        @endif
-                            {{ csrf_field() }}
-
-                            <div class="form-group{{ $errors->has('lessor_name') ? ' has-error' : '' }} required">
-                                <label for="lessor_name" class="col-md-4 control-label">Lessor Name</label>
-                                <div class="col-md-6">
-                                        <input id="lessor_name" type="text" placeholder="Lessor Name" class="form-control" name="lessor_name" value="{{ old('lessor_name',$lease->lessor_name) }}" >
-                                    @if ($errors->has('lessor_name'))
-                                        <span class="help-block">
-                                            <strong>{{ $errors->first('lessor_name') }}</strong>
-                                        </span>
-                                    @endif
-                                </div>
-                            </div>
-
-                            <div class="form-group{{ $errors->has('lease_type_id') ? ' has-error' : '' }} required">
-                                <label for="lease_type_id" class="col-md-4 control-label">Lease Type Classification</label>
-                                <div class="col-md-6">
-                                   <select name="lease_type_id" class="form-control" id="lease_type_id">
-                                        <option value="">Please Type Classification</option>
-                                         @php $i =1 @endphp
-                                         @foreach($contract_classifications as $classification)
-                                         <option class="cla-{{$i}}" value="{{ $classification->id }}" @if(old('lease_type_id',$lease->lease_type_id) == $classification->id) selected="selected" @endif>
-                                            {{ $classification->title }} </option>
-                                           @php $i++ @endphp
-                                        @endforeach
-                                    </select>
-                                    @if ($errors->has('lease_type_id'))
-                                        <span class="help-block">
-                                            <strong>{{ $errors->first('lease_type_id') }}</strong>
-                                        </span>
-                                    @endif
-                                </div>
-                            </div>
-
-                            @if($reporting_currency_settings->is_foreign_transaction_involved == "yes")
-                                  <div class="form-group{{ $errors->has('lease_contract_id') ? ' has-error' : '' }} required">
-                                        <label for="lease_contract_id" class="col-md-4 control-label">Lease Contract Currency</label>
-                                        <div class="col-md-6">
-                                              <select name="lease_contract_id" class="form-control">
-                                                <option value="">Please Type Lease Contract</option>
-
-                                                @foreach($reporting_foreign_currency_transaction_settings as $currencies)
-                                                 <option value="{{ $currencies->foreign_exchange_currency }}" @if(old('lease_contract_id', $lease->lease_contract_id) == $currencies->foreign_exchange_currency) selected="selected" @endif>
-                                                    {{ $currencies->foreign_exchange_currency }}{{ '('.$currencies->base_currency.')' }}</option>
-                                                     @endforeach
-                                            </select>
-                                            @if ($errors->has('lease_contract_id'))
-                                                <span class="help-block">
-                                                    <strong>{{ $errors->first('lease_contract_id') }}</strong>
-                                                </span>
-                                            @endif
-                                        </div>
-                                  </div>
+               <div class="panel panel-info">
+            <div class="panel-heading">Section A: Lessor Details</div>
+                    <table class="table table-bordered table-responsive">
+                        <thead>
+                        <tr>
+                            <th>Lessor Name</th>
+                            @if(isset($lease->lessor_name))
+                            <td>{{ $lease->lessor_name }}</td>
+                            @else
+                            <td>-</td>
                             @endif
-
-                            @if($reporting_currency_settings->is_foreign_transaction_involved == "no") 
-                                    <div class="form-group{{ $errors->has('lease_contract_id') ? ' has-error' : '' }} required">
-                                            <label for="lease_contract_id" class="col-md-4 control-label">Lease Contract Currency</label>
-                                            <div class="col-md-6">
-                                                   <select name="lease_contract_id" class="form-control">
-                                                    <option value="">Please Type Lease Contract</option>
-                                                     <option value="{{ $reporting_currency_settings->currency_for_lease_reports }}" @if(old('lease_contract_id', $lease->lease_contract_id) == $reporting_currency_settings->currency_for_lease_reports) selected="selected" @endif >
-                                                        {{ $reporting_currency_settings->currency_for_lease_reports }}</option>
-                                                       
-                                                </select>
-                                                @if ($errors->has('lease_contract_id'))
-                                                    <span class="help-block">
-                                                        <strong>{{ $errors->first('lease_contract_id') }}</strong>
-                                                    </span>
-                                                @endif
-                                            </div>
-                                     </div>
+                        </tr><tr>
+                            <th>Lease Type Classification</th>
+                            @if(isset($lease->leaseType->title))
+                            <td>{{ $lease->leaseType->title }}</td>
+                            @else
+                            <td>-</td>
                             @endif
-
-
-                            <div class="form-group">
+                        </tr><tr>
+                            <th>Lease Contract Currency</th>
+                            @if(isset($lease->lease_contract_id))
+                            <td>{{ $lease->lease_contract_id }}</td>
+                            @else
+                            <td>-</td>
+                            @endif
+                        </tr>
+                        <tr>
+                            <th>Action</th>
+                            <td> <a href="{{ route('add-new-lease.index', ['id' => $lease->id]) }}"><div class="form-group">
                                 <div class="col-md-6 col-md-offset-4">
-                                   <button type="submit" class="btn btn-success">
+                                   <button type="Submit" class="btn btn-success">
                                        Edit
                                     </button>
                                     </div>
-                            </div>
-
-                        </form>
-                    </div>
-                </div>
-                 @else
-                <a href="{{route('settings.currencies')}}"><div class="alert alert-danger">Please change the foreign currency settings</div></a>
-             @endif
+                            </div></a></td>
+                        </tr>
+                        </thead>
+                    </table>
             </div>
-                </div>
 
             <div class="panel panel-info">
             <div class="panel-heading">Section B: Underlying Lease Assets</div>
@@ -153,34 +81,45 @@
                         </tr>
                         </thead>
                         <tbody>
-                           <!--  @php
-                                $show_next = [];
-                            @endphp -->
                             @foreach($assets as $key=>$asset)
                           <tr>
                                     <td>{{ $key + 1 }}</td>
+                                    @if(isset($asset->uuid))
                                     <td style="width: 10%">
                                         {{ $asset->uuid}}
                                     </td>
+                                    @else
+                                    <td>-</td>
+                                    @endif
+                                    @if(isset($asset->category->title))
                                     <td>
-                                        {{ $asset->name }}
+                                        {{ $asset->category->title }}
                                     </td>
+                                    @else
+                                    <td>-</td>
+                                    @endif
+                                    @if(isset($asset->subcategory->title))
                                     <td>
                                         {{ $asset->subcategory->title }}
                                     </td>
-                                 <!--  <td>
-                                         @if($asset->leaseSelectDiscountRate)
-                                            @php
-                                                $show_next[] = true;
-                                            @endphp
-                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.discountrate.update', ['id'=> $asset->id]) }}">Update Select Low Value </a>
-                                        @else
-                                            @php
-                                                $show_next[] = false;
-                                            @endphp
-                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.discountrate.create', ['id'=> $asset->id]) }}">Add Select Low Value</a>
-                                        @endif
-                                    </td> -->
+                                    @else
+                                    <td>-</td>
+                                    @endif
+                                    @if(isset($asset->name))
+                                    <td>
+                                        {{ $asset->name }}
+                                    </td>
+                                    @else
+                                    <td>-</td>
+                                    @endif
+                                    @if(isset($asset->similar_asset_items))
+                                    <td>
+                                        {{ $asset->similar_asset_items }}
+                                    </td>
+                                    @else
+                                    <td>-</td>
+                                    @endif
+                                    <td><a href="{{ route('addlease.leaseasset.index', ['id' => $lease->id]) }}"><button data-toggle='tooltip' data-placement='top' title='Edit Lease Details' type="button" class="btn btn-sm  btn-success edit_lease_detail"><i class="fa fa-pencil-square-o fa-lg"></td></i></a>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -201,34 +140,45 @@
                         </tr>
                         </thead>
                         <tbody>
-                            <!-- @php
-                                $show_next = [];
-                            @endphp -->
                             @foreach($assets as $key=>$asset)
                           <tr>
                                     <td>{{ $key + 1 }}</td>
+                                    @if(isset($asset->uuid))
                                     <td style="width: 10%">
                                         {{ $asset->uuid}}
                                     </td>
+                                    @else
+                                    <td>-</td>
+                                    @endif
+                                    @if(isset($asset->name))
                                     <td>
                                         {{ $asset->name }}
                                     </td>
+                                    @else
+                                    <td>-</td>
+                                    @endif
+                                    @if(isset($asset->country->name))
                                     <td>
-                                        {{ $asset->subcategory->title }}
+                                        {{ $asset->country->name }}
                                     </td>
-                                   <!-- <td>
-                                        @if($asset->leaseSelectDiscountRate)
-                                            @php
-                                                $show_next[] = true;
-                                            @endphp
-                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.discountrate.update', ['id'=> $asset->id]) }}">Update Select Low Value </a>
-                                        @else
-                                            @php
-                                                $show_next[] = false;
-                                            @endphp
-                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.discountrate.create', ['id'=> $asset->id]) }}">Add Select Low Value</a>
-                                        @endif
-                                    </td> -->
+                                    @else
+                                    <td>-</td>
+                                    @endif
+                                    @if(isset($asset->specificUse->title))
+                                    <td>
+                                        {{ $asset->specificUse->title }}
+                                    </td>
+                                    @else
+                                    <td>-</td>
+                                    @endif
+                                    @if(isset($asset->expectedLife->years))
+                                    <td>
+                                        {{ $asset->expectedLife->years }}
+                                    </td>
+                                    @else
+                                    <td>-</td>
+                                    @endif 
+                                     <td><a href="{{ route('addlease.leaseasset.completedetails', ['lease' => $lease->id, 'asset' => $asset->id]) }}"><button data-toggle='tooltip' data-placement='top' title='Edit Lease Details' type="button" class="btn btn-sm  btn-success edit_lease_detail"><i class="fa fa-pencil-square-o fa-lg"></td></i></a>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -243,41 +193,59 @@
                             <th>Unique ULA Code</th>
                             <th>Lease Start Date</th>
                             <th>Initial Lease Free Period, If any</th>
-                            <th>Start Date of Lease Payment / Accrual Period</th>
+                            <th>Start Date of Lease Payment/Accrual Period</th>
                             <th>Lease End Date, Non-Cancellable Period</th>
-                            <th>Lease Term (in Months & Years)</th>
+                            <th>Lease Term(in Months & Years)</th>
                             <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
-                            @php
-                                $show_next = [];
-                            @endphp
                             @foreach($assets as $key=>$asset)
                           <tr>
                                     <td>{{ $key + 1 }}</td>
+                                    @if(isset($asset->uuid))
                                     <td style="width: 10%">
                                         {{ $asset->uuid}}
                                     </td>
+                                    @else
+                                    <td>-</td>
+                                    @endif
+                                    @if(isset($asset->lease_start_date))
                                     <td>
-                                        {{ $asset->name }}
+                                        {{date('d-m-Y', strtotime($asset->lease_start_date))}}
                                     </td>
+                                    @else
+                                    <td>-</td>
+                                    @endif
+                                    @if(isset($asset->lease_free_period))
                                     <td>
-                                        {{ $asset->subcategory->title }}
+                                        {{ $asset->lease_free_period }}
                                     </td>
-                                   <!-- <td>
-                                        @if($asset->leaseSelectDiscountRate)
-                                            @php
-                                                $show_next[] = true;
-                                            @endphp
-                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.discountrate.update', ['id'=> $asset->id]) }}">Update Select Low Value </a>
-                                        @else
-                                            @php
-                                                $show_next[] = false;
-                                            @endphp
-                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.discountrate.create', ['id'=> $asset->id]) }}">Add Select Low Value</a>
-                                        @endif
-                                    </td> -->
+                                    @else
+                                    <td>-</td>
+                                    @endif
+                                    @if(isset($asset->accural_period))
+                                    <td>
+                                        {{date('d-m-Y', strtotime($asset->accural_period))}}
+                                    </td>
+                                    @else
+                                    <td>-</td>
+                                    @endif
+                                    @if(isset($asset->lease_end_date))
+                                    <td>
+                                        {{date('d-m-Y', strtotime($asset->lease_end_date))}}
+                                    </td>
+                                    @else
+                                    <td>-</td>
+                                    @endif
+                                    @if(isset($asset->lease_term))
+                                    <td>
+                                        {{ $asset->lease_term }}
+                                    </td>
+                                    @else
+                                    <td>-</td>
+                                    @endif
+                                    <td><a href="{{ route('addlease.leaseasset.completedetails', ['lease' => $lease->id, 'asset' => $asset->id]) }}"><button data-toggle='tooltip' data-placement='top' title='Edit Lease Details' type="button" class="btn btn-sm  btn-success edit_lease_detail"><i class="fa fa-pencil-square-o fa-lg"></td></i></a>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -287,46 +255,107 @@
             <div class="panel-heading">Section E:  Lease Payments</div>
                     <table class="table table-bordered table-responsive">
                         <thead>
-                        <tr>
-                            <th>Sr. No.</th>
-                            <th>Unique ULA Code</th>
-                            <th>Name of the Underlying Lease Asset</th>
-                            <th>Underlying Lease Asset Classification</th>
-                            <th>Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                           <!--  @php
-                                $show_next = [];
-                            @endphp -->
                             @foreach($assets as $key=>$asset)
-                          <tr>
-                                    <td>{{ $key + 1 }}</td>
-                                    <td style="width: 10%">
-                                        {{ $asset->uuid}}
-                                    </td>
-                                    <td>
-                                        {{ $asset->name }}
-                                    </td>
-                                    <td>
-                                        <!-- {{ $asset->category_id->title }} -->
-                                    </td>
-                                   <!-- <td>
-                                        @if($asset->leaseSelectDiscountRate)
-                                            @php
-                                                $show_next[] = true;
-                                            @endphp
-                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.discountrate.update', ['id'=> $asset->id]) }}">Update Select Low Value </a>
-                                        @else
-                                            @php
-                                                $show_next[] = false;
-                                            @endphp
-                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.discountrate.create', ['id'=> $asset->id]) }}">Add Select Low Value</a>
-                                        @endif
-                                    </td> -->
-                                </tr>
+                        <tr>
+                            <th>Unique ULA Code</th>
+                            @if(isset($asset->uuid))
+                            <td style="width: 10%">{{ $asset->uuid}}</td>
+                            @else
+                            <td>-</td>
+                            @endif
+                        </tr>
+                        <tr>
+                        <th>Name of Lease Payment</th>
+                        @if(isset($asset->payments[$key]->name))
+                        <td>{{$asset->payments[$key]->name}}</td>
+                        @else
+                        <td>-</td>
+                        @endif
+                    </tr>  
+                    <tr>
+                        <th>Type of Lease Payment</th>
+                        @if(isset($asset->payments[$key]->paymentType->title))
+                        <td>{{$asset->payments[$key]->paymentType->title}}</td>
+                        @else
+                        <td>-</td>
+                        @endif
+                    </tr>
+                    <tr>
+                        <th>Nature of Lease Payment</th>
+                        @if(isset($asset->payments[$key]->paymentNature->title))
+                        <td>{{$asset->payments[$key]->paymentNature->title}}</td>
+                        @else
+                        <td>-</td>
+                        @endif
+                    </tr>
+                    <tr>
+                        <th>Lease Payment Interval</th>
+                        @if(isset($asset->payments[$key]->paymentFrequency->title))
+                        <td>{{$asset->payments[$key]->paymentFrequency->title}}</td>
+                        @else
+                        <td>-</td>
+                        @endif
+                    </tr>
+                    <tr>
+                        <th>Lease Payment Payout Time</th>
+                        @if(isset($asset->payments[$key]->paymentInterval->title))
+                         <td>{{$asset->payments[$key]->paymentInterval->title}}</td>
+                         @else
+                        <td>-</td>
+                        @endif
+                    </tr>
+                    <tr>
+                        <th>First Lease Payment Start Date</th>
+                        @if(isset($asset->payments[$key]->first_payment_start_date))
+                         <td>{{date('d-m-Y', strtotime($asset->payments[$key]->first_payment_start_date))}}</td>
+                         @else
+                        <td>-</td>
+                        @endif
+                    </tr>
+                    <tr>
+                        <th>Last Lease Payment End Date</th>
+                        @if(isset($asset->payments[$key]->last_payment_end_date))
+                        <td>{{date('d-m-Y', strtotime($asset->payments[$key]->last_payment_end_date))}}</td>
+                        @else
+                        <td>-</td>
+                        @endif
+                    </tr>
+                    <tr>
+                        <th>Lease Payment Base</th>
+                        @if(isset($asset->payments[$key]->last_payment_end_date))
+                        <td>{{date('d-m-Y', strtotime($asset->payments[$key]->last_payment_end_date))}}</td>
+                        @else
+                        <td>-</td>
+                        @endif
+                    </tr>
+                    <tr>
+                        <th>Total Lease Amount Per Interval</th>
+                        @if(isset($asset->payments[$key]->total_amount_per_interval))
+                        <td>{{$asset->payments[$key]->total_amount_per_interval}}</td>
+                        @else
+                        <td>-</td>
+                        @endif
+                    </tr>
+                    <tr>
+                        <th>Total Undiscounted Lease Payments</th>
+                        @if(isset($asset->payments[$key]->last_payment_end_date))
+                        <td>{{date('d-m-Y', strtotime($asset->payments[$key]->last_payment_end_date))}}</td>
+                        @else
+                        <td>-</td>
+                        @endif
+                    </tr>
+                    <tr>
+                        <th>Action</th>
+                          <td> <a href="{{ route('lease.payments.add', ['lease_id' => $lease->id, 'asset_id' => $asset->id, 'payment_id'=> $asset->payments[$key]->id]) }}"><div class="form-group">
+                                <div class="col-md-6 col-md-offset-4">
+                                   <button type="Submit" class="btn btn-success">
+                                       Edit
+                                    </button>
+                                    </div>
+                            </div></a></td>
+                    </tr>
+                        </thead>
                             @endforeach
-                        </tbody>
                     </table>
             </div>
               <div class="panel panel-info">
@@ -345,34 +374,51 @@
                         </tr>
                         </thead>
                         <tbody>
-                            <!-- @php
-                                $show_next = [];
-                            @endphp -->
                             @foreach($assets as $key=>$asset)
                           <tr>
                                     <td>{{ $key + 1 }}</td>
+                                    @if(isset($asset->uuid))
                                     <td style="width: 10%">
                                         {{ $asset->uuid}}
                                     </td>
+                                    @else
+                                    <td>-</td>
+                                    @endif
+                                    @if(isset($asset->fairMarketValue->total_units))
                                     <td>
-                                        {{ $asset->name }}
+                                        {{ $asset->fairMarketValue->total_units }}
                                     </td>
+                                    @else
+                                    <td>-</td>
+                                    @endif
+                                    @if(isset($asset->residualGuranteeValue->total_residual_gurantee_value))
                                     <td>
-                                        {{ $asset->subcategory->title }}
+                                        {{ $asset->residualGuranteeValue->total_residual_gurantee_value }}
                                     </td>
-                                   <!-- <td>
-                                        @if($asset->leaseSelectDiscountRate)
-                                            @php
-                                                $show_next[] = true;
-                                            @endphp
-                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.discountrate.update', ['id'=> $asset->id]) }}">Update Select Low Value </a>
-                                        @else
-                                            @php
-                                                $show_next[] = false;
-                                            @endphp
-                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.discountrate.create', ['id'=> $asset->id]) }}">Add Select Low Value</a>
-                                        @endif
-                                    </td> -->
+                                    @else
+                                    <td>-</td>
+                                    @endif
+                                    @if(isset($asset->terminationOption->termination_penalty))
+                                    <td>
+                                        {{ $asset->terminationOption->termination_penalty }}
+                                    </td>
+                                    @else
+                                    <td>-</td>
+                                    @endif
+                                    @if(isset($asset->purchaseOption->purchase_price))
+                                    <td>
+                                        {{ $asset->purchaseOption->purchase_price }}
+                                    </td>
+                                    @else
+                                    <td>-</td>
+                                    @endif
+                                    @if(isset($asset->purchaseOption->expected_purchase_date))
+                                    <td>{{date('d-m-Y', strtotime($asset->purchaseOption->expected_purchase_date)) }}
+                                    </td>
+                                    @else
+                                    <td>-</td>
+                                    @endif
+                                   <td><a href="{{ route('addlease.residual.index', ['lease' => $lease->id]) }}"><button data-toggle='tooltip' data-placement='top' title='Edit Lease Details' type="button" class="btn btn-sm  btn-success edit_lease_detail"><i class="fa fa-pencil-square-o fa-lg"></td></i></a> 
                                 </tr>
                             @endforeach
                         </tbody>
@@ -394,34 +440,55 @@
                         </tr>
                         </thead>
                         <tbody>
-                            <!-- @php
-                                $show_next = [];
-                            @endphp -->
                             @foreach($assets as $key=>$asset)
                           <tr>
                                     <td>{{ $key + 1 }}</td>
+                                    @if(isset($asset->uuid))
                                     <td style="width: 10%">
                                         {{ $asset->uuid}}
                                     </td>
+                                    @else
+                                    <td>-</td>
+                                     @endif
+                                    @if($asset->leaseDurationClassified->getLeaseClassification->title)
                                     <td>
-                                        {{ $asset->name }}
+                                        {{ $asset->leaseDurationClassified->getLeaseClassification->title}}
                                     </td>
-                                    <td>
-                                        {{ $asset->subcategory->title }}
+                                    @else
+                                    <td>-</td>
+                                     @endif
+                                     @if(isset($asset->leaseSelectLowValue->is_classify_under_low_value))
+                                    @if($asset->leaseSelectLowValue->is_classify_under_low_value =="yes")
+                                    <td>Low Value</td>
+                                    @endif
+                                    @if($asset->leaseSelectLowValue->is_classify_under_low_value =="no")
+                                    <td>High Value</td>
+                                    @endif
+                                    @else
+                                    <td>-</td>
+                                     @endif
+                                    @if(isset($asset->leaseSelectDiscountRate->discount_rate_to_use))
+                                     <td>
+                                        {{ $asset->leaseSelectDiscountRate->discount_rate_to_use }}
                                     </td>
-                                   <!-- <td>
-                                        @if($asset->leaseSelectDiscountRate)
-                                            @php
-                                                $show_next[] = true;
-                                            @endphp
-                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.discountrate.update', ['id'=> $asset->id]) }}">Update Select Low Value </a>
-                                        @else
-                                            @php
-                                                $show_next[] = false;
-                                            @endphp
-                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.discountrate.create', ['id'=> $asset->id]) }}">Add Select Low Value</a>
-                                        @endif
-                                    </td> -->
+                                    @else
+                                    <td>-</td>
+                                     @endif
+                                      @if(isset($asset->initialDirectCost->total_initial_direct_cost))
+                                     <td>
+                                        {{ $asset->initialDirectCost->total_initial_direct_cost }}
+                                    </td>
+                                    @else
+                                    <td>-</td>
+                                     @endif
+                                    @if(isset($asset->leaseIncentiveCost->total_lease_incentives))
+                                     <td>
+                                        {{ $asset->leaseIncentiveCost->total_lease_incentives }}
+                                    </td>
+                                    @else
+                                    <td>-</td>
+                                     @endif
+                                     <td><a href="{{ route('addlease.durationclassified.index', ['lease' => $lease->id]) }}"><button data-toggle='tooltip' data-placement='top' title='Edit Lease Details' type="button" class="btn btn-sm  btn-success edit_lease_detail"><i class="fa fa-pencil-square-o fa-lg"></td></i></a> 
                                 </tr>
                             @endforeach
                         </tbody>
@@ -441,34 +508,38 @@
                         </tr>
                         </thead>
                         <tbody>
-                            <!-- @php
-                                $show_next = [];
-                            @endphp -->
                             @foreach($assets as $key=>$asset)
                           <tr>
                                     <td>{{ $key + 1 }}</td>
+                                    @if(isset($asset->uuid))
                                     <td style="width: 10%">
                                         {{ $asset->uuid}}
                                     </td>
+                                    @else
+                                    <td>-</td>
+                                     @endif
+                                    @if(isset($asset->name))
                                     <td>
                                         {{ $asset->name }}
                                     </td>
+                                    @else
+                                    <td>-</td>
+                                     @endif
+                                    @if(isset($asset->subcategory->title ))
                                     <td>
                                         {{ $asset->subcategory->title }}
                                     </td>
-                                   <!-- <td>
-                                        @if($asset->leaseSelectDiscountRate)
-                                            @php
-                                                $show_next[] = true;
-                                            @endphp
-                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.discountrate.update', ['id'=> $asset->id]) }}">Update Select Low Value </a>
-                                        @else
-                                            @php
-                                                $show_next[] = false;
-                                            @endphp
-                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.discountrate.create', ['id'=> $asset->id]) }}">Add Select Low Value</a>
-                                        @endif
-                                    </td> -->
+                                    @else
+                                    <td>-</td>
+                                     @endif
+                                    @if(isset($asset->subcategory->title ))
+                                     <td>
+                                        {{ $asset->subcategory->title }}
+                                    </td>
+                                    @else
+                                    <td>-</td>
+                                     @endif
+                                    <td><button data-toggle='tooltip' data-placement='top' title='Edit Lease Details' type="button" class="btn btn-sm  btn-success edit_lease_detail"><i class="fa fa-pencil-square-o fa-lg"></td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -477,10 +548,9 @@
                     <div class="form-group">
 
                         <div class="col-md-6 col-md-offset-4">
-                              <a href="{{ route('addlease.lowvalue.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
-                              @if(!in_array(false, $show_next))
-                                    <a href="#" class="btn btn-primary">Next</a>
-                              @endif
+                              <!-- <a href="{{ route('addlease.lowvalue.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a> -->
+                                    <a href="{{route('addlease.reviewsubmit.index', ['id'=>$lease->id])}}" class="btn btn-success">Save As Draft</a>
+                                    <a href="#" class="btn btn-primary">Print</a>
                         </div>
 
                     </div>
