@@ -50,4 +50,8 @@ class LeaseAssetPayments extends Model
     public function paymentFrequency(){
         return $this->belongsTo('App\LeasePaymentsFrequency', 'payment_interval', 'id');
     }
+
+    public function paymentDueDates(){
+        return $this->hasMany('App\LeaseAssetPaymenetDueDate', 'payment_id', 'id')->orderBy('date', 'asc');
+    }
 }

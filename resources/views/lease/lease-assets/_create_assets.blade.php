@@ -1,8 +1,8 @@
-<form class="update_total_lease_assets" action="{{ route('add-new-lease.index.updatetotalassets', ['id' => $lease->id]) }}" method="post">
+<form class="update_total_lease_assets form-horizontal" action="{{ route('add-new-lease.index.updatetotalassets', ['id' => $lease->id]) }}" method="post">
     {{ csrf_field() }}
     <div class="form-group required">
-        <label for="no_of_lease_assets" class="col-md-4 control-label">Number of Underlying Lease Assets Involved</label>
-        <div class="col-md-6">
+        <label for="no_of_lease_assets" class="col-md-5 control-label">Number of Underlying Lease Assets Involved</label>
+        <div class="col-md-3">
             @if($lease->lease_type_id == 1)
                 <select name="total_lease_assets" id="no_of_lease_assets" class="form-control">
                     <option value="0">--Select Total Assets--</option>

@@ -28,7 +28,7 @@ class ReviewSubmitController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index($id){
+    public function index($id, Request $request){
 
         $breadcrumbs = [
             [
@@ -46,7 +46,14 @@ class ReviewSubmitController extends Controller
              
              $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->get();
               $contract_classifications = ContractClassifications::query()->select('id', 'title')->where('status', '=', '1')->get();
-           
+           if($request->isMethod('post')) {
+                    $model = Lease::query()->where('id', '=', $id)->first();
+                    $model->status = "2";
+                    $model->save();
+
+                    return redirect(route('addlease.reviewsubmit.index',['id' => $id]))->with('status', 'Lease Information has been Submitted successfully.');
+                    
+                }
             return view('lease.review-submit.index', compact(
                 'lease',
                 'assets',

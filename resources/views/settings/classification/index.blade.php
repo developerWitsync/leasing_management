@@ -612,6 +612,64 @@
                             </div>
                         </div>
 
+                         <div class="panel panel-info">
+                            <div class="panel-heading">
+                                Lease Modification Reasons
+                                <span>
+                                    <a href="javascript:void(0);" class="btn btn-sm btn-primary pull-right add_more" data-form="add_more_modification_form">Add More</a>
+                                </span>
+                            </div>
+                            <div class="panel-body">
+                                <table class="table table-condensed">
+                                    <thead>
+                                    <tr>
+                                        <th>Sr No.</th>
+                                        <th>Tile</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($modication_reason as $key => $value)
+                                        <tr>
+                                            <td>{{ $key + 1 }}</td>
+                                            <td class="title">
+                                                {{ $value->title }}
+                                            </td>
+                                            <td>
+
+                                                <a data-href="{{ route('settings.leaseclassification.editleasemodificationreason', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-success edit_table_setting">
+                                                    <i class="fa fa-pencil-square-o"></i>
+                                                </a>
+
+                                                <a data-href="{{ route('settings.leaseclassification.deleteleasemodificationreason', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-danger delete_settings"><i class="fa fa-trash-o"></i></a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    <tr style=" {{ $errors->has('modification_reason') ? ' has-error' : 'display: none' }}" class="add_more_modification_form">
+                                        <td>{{ count($modication_reason) + 1 }}</td>
+                                        <td>
+                                            <form action="{{ route('settings.leaseclassification.addleasemodificationreason') }}" method="POST" class="add_more_modification_reason_form">
+                                                {{ csrf_field() }}
+                                                <div class="form-group{{ $errors->has('title') ? ' has-error' : '' }}">
+                                                    <input type="text" value="{{ old('title') }}" name="title" placeholder="Title" class="form-control {{ $errors->has('title') ? ' has-error' : '' }}"/>
+                                                    @if ($errors->has('title'))
+                                                        <span class="help-block">
+                                                            <strong>{{ $errors->first('title') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <button type="button" onclick="javascript:$('.add_more_modification_reason_form').submit();" class="btn btn-sm btn-success">Save</button>
+                                            <a href="javascript:;" class="btn btn-sm btn-danger add_more" data-form="add_more_modification_reason">Cancel</a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+
                     </div>
                 </div>
             </div>

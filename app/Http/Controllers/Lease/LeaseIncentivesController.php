@@ -62,7 +62,7 @@ class LeaseIncentivesController extends Controller
         }
     }
  /**
-     * add fair market value details for an asset
+     * add Lease incentive details for an asset
      * @param $id
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -132,10 +132,8 @@ class LeaseIncentivesController extends Controller
             dd($e);
         }
     }
-
-
     /**
-     * edit existing fair market value details for an asset
+     * edit existing lease incentives value details for an asset
      * @param $id
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -151,22 +149,22 @@ class LeaseIncentivesController extends Controller
                 $model = LeaseIncentives::query()->where('asset_id', '=', $id)->first();
                 $lease_incentive_id = $model->id;
                 
-               //$is_any_lease_incentives_receivable = $request->is_any_lease_incentives_receivable;
-               
-               if($request->isMethod('post')) {
+                if($request->isMethod('post')) {
 
                     $validator = Validator::make($request->except('_token'), $this->validationRules());
 
                     if($validator->fails()){
                         return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
                     }
-                    if($request->is_any_lease_incentives_receivable == 'no')
-                     {
-                        CustomerDetails::query()->where('lease_incentive_id', '=', $lease_incentive_id)->delete();
-                     }
                     $data = $request->except('_token');
                     $data['lease_id']   = $asset->lease->id;
                     $data['asset_id']   = $asset->id;
+                    if($request->is_any_lease_incentives_receivable == 'no')
+                     {
+                        CustomerDetails::query()->where('lease_incentive_id', '=', $lease_incentive_id)->delete();
+                        $data['total_lease_incentives'] = 0;
+                     }
+                  
 
                     $model->setRawAttributes($data);
 
@@ -246,14 +244,9 @@ class LeaseIncentivesController extends Controller
             return view('lease.lease-incentives._customer_details_update_form',compact(
                 'directCost','currencies'
             ));
-           /* $directCost = LeaseIncentives::query()->findOrFail($id);
-            echo '<pre>';print_r($directCost);
-          echo'40';die;
-            return view('lease.lease-incentives._customer_details_update_form',compact('directCost'));*/
+           
         } catch (\Exception $e) {
-           // echo'33';
-            //dd($e->getMessage());die;
-            dd($e);
+          dd($e);
 
         }
     }

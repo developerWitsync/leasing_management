@@ -64,7 +64,7 @@
     <div class="hidden-group" id="hidden-fields" @if(old('termination_penalty_applicable',$model->termination_penalty_applicable) == "yes" && old('exercise_termination_option_available',$model->exercise_termination_option_available ) == "yes" && old('lease_termination_option_available', $model->lease_termination_option_available) == "yes") style="display:block;" @else  style="display:none;" @endif>
     <div class="form-group{{ $errors->has('currency') ? ' has-error' : '' }} required">
             <label for="currency" class="col-md-4 control-label">Currency</label>
-            <div class="col-md-6 form-check form-check-inline">
+            <div class="col-md-4 form-check form-check-inline">
                 <input type="text" value="{{ $lease->lease_contract_id }}" class="form-control" id="currency" name="currency" readonly="readonly">
                 @if ($errors->has('currency'))
                     <span class="help-block">
@@ -76,7 +76,7 @@
 
      <div class="form-group{{ $errors->has('termination_penalty') ? ' has-error' : '' }} required">
             <label for="termination_penalty" class="col-md-4 control-label">Termination Penalty</label>
-            <div class="col-md-6 form-check form-check-inline">
+            <div class="col-md-4 form-check form-check-inline">
                 <input type="text" class="form-control" id="termination_penalty" name="termination_penalty" value="{{ old('termination_penalty', $model->termination_penalty) }}">
                 @if ($errors->has('termination_penalty'))
                     <span class="help-block">
@@ -86,7 +86,6 @@
             </div>
         </div>
     </div>
-
     <div class="form-group">
         <div class="col-md-6 col-md-offset-4">
 
@@ -96,7 +95,6 @@
             </button>
         </div>
     </div>
-
 </form>
 
 @section('footer-script')

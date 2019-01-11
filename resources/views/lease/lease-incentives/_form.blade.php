@@ -99,9 +99,15 @@
                 }
             });
         });
+         function  DatePickerIns(){
+            $('body .incentive_date').datepicker({
+                dateFormat: "dd-M-yy"
+            });
+        }
 
         $(document.body).on('submit', '#customer_details_form', function (e) {
            // $('.incentive_date').datepicker({dateFormat: "dd-M-yy"});
+            
             e.preventDefault();
             $.ajax({
                 url : '{{ route("addlease.leaseincentives.addcustomer") }}',
@@ -125,14 +131,20 @@
                         });
                     } else {
                         $('._form_customer_details').html(response);
-                        //$( ".incentive_date" ).datepicker();
-                        /*$('._form_customer_details  .incentive_date').datepicker({
-                             dateFormat: "dd-M-yy"
-                         });
-*/                    }
+                        //$(".incentive_date").datepicker("destroy");
+                         $(".incentive_date").datepicker("refresh");
+                        setTimeout( function(){
+                            DatePickerIn();
+                        }, 5000)
+                       
+                   }
                 }
             });
         });
+
+       
+        
+         //DatePickerIn();
 
         $('#myModal').on('hidden.bs.modal', function () {
             // will only come inside after the modal is shown

@@ -26,7 +26,9 @@
             @endif
                
                 {{--@include('lease._menubar')--}}
-               <div class="panel panel-info">
+            <form class="form-horizontal" method="POST" action="{{ route('addlease.reviewsubmit.index', ['id' => $lease->id]) }}" enctype="multipart/form-data">
+            {{ csrf_field() }}
+            <div class="panel panel-info">
             <div class="panel-heading">Section A: Lessor Details</div>
                     <table class="table table-bordered table-responsive">
                         <thead>
@@ -548,15 +550,13 @@
                     <div class="form-group">
 
                         <div class="col-md-6 col-md-offset-4">
-                              <!-- <a href="{{ route('addlease.lowvalue.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a> -->
-                                    <a href="{{route('addlease.reviewsubmit.index', ['id'=>$lease->id])}}" class="btn btn-success">Save As Draft</a>
+                                    <button type="submit" class="btn btn-success">
+                                        Save As Draft
+                                    </button>
+                                    <!-- <a href="{{route('addlease.reviewsubmit.index', ['id'=>$lease->id])}}" class="btn btn-success">Save As Draft</a> -->
                                     <a href="#" class="btn btn-primary">Print</a>
                         </div>
 
                     </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
+              </form>  
 @endsection

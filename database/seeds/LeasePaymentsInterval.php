@@ -9,7 +9,7 @@ class LeasePaymentsInterval extends Seeder
      *
      * @return void
      */
-    protected $values = 'At Lease Interval Start, At Lease Interval End';
+    protected $values = 'At Lease Interval Start, At Lease Interval End, Custom';
     public function run()
     {
         foreach (explode(',',$this->values) as $title) {

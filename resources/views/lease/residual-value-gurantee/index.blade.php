@@ -58,12 +58,12 @@
                                             @php
                                                 $show_next[] = true;
                                             @endphp
-                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.residual.update', ['id'=> $asset->id]) }}">Update Residual Value Gurantee</a>
+                                            <a class="btn btn-sm btn-primary" href="{{ route('addlease.residual.update', ['id'=> $asset->id]) }}">Update Residual Value Gurantee</a>
                                         @else
                                             @php
                                                 $show_next[] = false;
                                             @endphp
-                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.residual.create', ['id'=> $asset->id]) }}">Add Residual Value Gurantee</a>
+                                            <a class="btn btn-sm btn-primary" href="{{ route('addlease.residual.create', ['id'=> $asset->id]) }}">Add Residual Value Gurantee</a>
                                         @endif
                                     </td>
                                 </tr>

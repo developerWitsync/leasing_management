@@ -32,7 +32,6 @@ Route::middleware('auth')->group(function(){
             Route::match(['post','get'],'create/{id?}', ['as' => 'add-new-lease.index', 'uses' => 'LessorDetailsController@index']);
             Route::post('save', ['as' => 'add-new-lease.index.save', 'uses' => 'LessorDetailsController@save']);
             Route::post('update/{id}', ['as' => 'add-new-lease.index.update', 'uses' => 'LessorDetailsController@udpate']);
-
             Route::post('udpate-total-assets/{id}', ['as' => 'add-new-lease.index.updatetotalassets', 'uses' => 'LessorDetailsController@udpateTotalAssets']);
         });
 
@@ -56,6 +55,8 @@ Route::middleware('auth')->group(function(){
             Route::match(['post', 'get'],'create-asset-payment/{id}', ['as' => 'lease.payments.createassetpayment', 'uses' => 'LeasePaymentsController@createAssetPayments']);
             Route::match(['post', 'get'],'update-asset-payment/{id}/{payment_id}', ['as' => 'lease.payments.updateassetpayment', 'uses' => 'LeasePaymentsController@updateAssetPayments']);
             Route::get('lease-asset-payment-due-dates-annexure', ['as' => 'lease.payments.duedatesannexure', 'uses' => 'LeasePaymentsController@dueDatesAnnexure']);
+
+            Route::get('lease-asset-payment-due-dates-view-dates/{id}', ['as'=> 'addlease.payments.showpaymentdates', 'uses'=> 'LeasePaymentsController@viewExistingDates']);
         });
 
 
@@ -119,6 +120,21 @@ Route::middleware('auth')->group(function(){
         });
 
         /**
+
+         * Lease Escalation Clause Routes NL9
+         */
+
+        Route::prefix('escalation')->group(function (){
+            Route::get('index/{id}', ['as'=>'lease.escalation.index', 'uses'=> 'EscalationController@index']);
+            Route::post('update-lease-escalation-applicable-status/{id}', ['as' => 'lease.esacalation.applicablestatus', 'uses' => 'EscalationController@updateLeaseEscalationApplicableStatus']);
+            Route::match(['get', 'post'],'create/{id}/{lease}', ['as'=>'lease.escalation.create', 'uses'=> 'EscalationController@create']);
+
+            Route::get('escalation-chart/{id}', ['as'=>'lease.escalation.showescalationchart', 'uses'=> 'EscalationController@escalationChart']);
+            Route::get('compute-total-escalation/{id}', ['as'=>'lease.escalation.compute', 'uses'=> 'EscalationController@computeTotalUndiscountedPayment']);
+        });
+
+
+        /*
          * Select Low Value Value NL10
          */
         Route::prefix('select-low-value')->group(function(){
@@ -145,6 +161,7 @@ Route::middleware('auth')->group(function(){
             Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.balanceasondec.create', 'uses' => 'LeaseBalanceAsOnDecController@create']);
             Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.balanceasondec.update', 'uses' => 'LeaseBalanceAsOnDecController@update']);
         });
+
         /**
          * Initial Direct Cost NL13
          */
@@ -189,7 +206,7 @@ Route::middleware('auth')->group(function(){
          * Review&Submit  NL17
          */
         Route::prefix('review-submit')->group(function(){
-            Route::get('index/{id}', ['as' => 'addlease.reviewsubmit.index', 'uses' => 'ReviewSubmitController@index']);
+            Route::match(['post', 'get'], 'index/{id}', ['as' => 'addlease.reviewsubmit.index', 'uses' => 'ReviewSubmitController@index']);
         });
 
     });
@@ -203,6 +220,18 @@ Route::middleware('auth')->group(function(){
         Route::get('fetch-lease-details', ['as' => 'drafts.fetchleasedetails', 'uses' => 'IndexController@fetchLeaseDetails']);
         Route::match(['post', 'get', 'delete'], 'delete-lease-details/{id}', ['as' => 'drafts.deleteleasedetails', 'uses' => 'IndexController@deleteLeaseDetails']);
     });
+
+    /*
+    * Modify Lease Routes
+    */
+
+    Route::namespace('Modifylease')->prefix('modify-lease')->group(function(){
+         Route::get('/', ['as' => 'modifylease.index', 'uses' => 'ModifyLeaseController@index']);
+         Route::get('fetch-lease-details', ['as' => 'modifylease.fetchleasedetails', 'uses' => 'ModifyLeaseController@fetchLeaseDetails']);
+        Route::match(['post', 'get'], 'create/{id}', ['as' => 'modifylease.create', 'uses' => 'ModifyLeaseController@create']);
+        Route::match(['post', 'get'], 'update/{id}', ['as' => 'modifylease.update', 'uses' => 'ModifyLeaseController@update']);
+    });
+
 
     Route::namespace('Settings')->middleware(['permission:settings'])->prefix('settings')->group(function(){
 
@@ -253,6 +282,15 @@ Route::middleware('auth')->group(function(){
             Route::post('add-escalation-percentage-number', ['as' => 'settings.leaseclassification.addescalationpercentagenumber', 'uses' => 'LeaseClassificationController@addEscalationPercentageNumber']);
             Route::match(['get', 'post'], '/edit-escalation-percentage-number/{id}', ['as' => 'settings.leaseclassification.editescalationpercentagenumber', 'uses' => 'LeaseClassificationController@editEscalationPercentageNumber']);
             Route::delete('delete-escalation-percentage-number/{id}', ['as' => 'settings.leaseclassification.deleteescalationpercentagenumber', 'uses' => 'LeaseClassificationController@deleteEscalationPercentageNumber']);
+
+
+            /**
+             * Lease Modification Reason
+             */
+            Route::post('add-lease-modification-reason', ['as' => 'settings.leaseclassification.addleasemodificationreason', 'uses' => 'LeaseClassificationController@addLeaseModificationReason']);
+            Route::match(['get', 'post'], '/edit-lease-modification-reason/{id}', ['as' => 'settings.leaseclassification.editleasemodificationreason', 'uses' => 'LeaseClassificationController@editLeaseModificationReason']);
+            Route::delete('lease-modification_reason-delete/{id}', ['as' => 'settings.leaseclassification.deleteleasemodificationreason', 'uses' => 'LeaseClassificationController@deleteLeaseModificationReason']);
+
         });
 
         Route::prefix('currencies')->group(function (){

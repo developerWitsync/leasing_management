@@ -166,6 +166,18 @@ $(function(){
     });
 });
 
+
+$(document).ready(function(){
+    $(".dash_navicon").click(function(){
+        $(".dashLeft").toggleClass("leftNavOpen");
+        $(".DashRight").toggleClass("dashRightBx");
+    });
+});
+
+
+
+
+
 /**
  * calculate the datedifference in between a start date and end date in terms of days, months and years
  * @param start_date

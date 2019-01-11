@@ -121,7 +121,7 @@
                                     <a href="javascript:void(0);" class="btn btn-sm btn-primary pull-right add_more" data-form="add_lease_lock_year">Add More</a>
                                 </span>
                             </div>
-                            <div class="panel-body">
+                            <div class="panel-body settingTble">
                                  <table class="table table-condensed">
                                     <thead>
                                     <tr>
