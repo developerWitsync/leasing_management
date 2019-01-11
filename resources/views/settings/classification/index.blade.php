@@ -695,9 +695,6 @@
                                                 {{ $value->leaseassetcategories->title }}
                                             </td>
                                             <td>
-                                                <a href="javascript:void(0);" class="btn btn-sm btn-success add_more" data-form="add_more_category_form">Include </a>
-                                                
-
                                                 <a data-href="{{ route('settings.leaseclassification.deletecategoriesexcluded', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-danger delete_settings">Exclude</a>
                                             </td>
                                         </tr>
@@ -705,13 +702,14 @@
                                     <tr style=" {{ $errors->has('categories_excluded') ? ' has-error' : 'display: none' }}" class="add_more_category_form">
                                         <td>{{ count($category_excluded) + 1 }}</td>
                                         <td>
+
                                             <form action="{{ route('settings.leaseclassification.addcategoriesexcluded') }}" method="POST" class="add_more_categories_excluded_form">
                                                 {{ csrf_field() }}
                                                 <div class="form-group{{ $errors->has('title') ? ' has-error' : '' }}">
                                                     <select name="category_id" class="form-control">
                                                         <option value="">--Please Select</option>
                                                         @foreach($categories as $value)
-                                                        <option value="{{$value->id}}">{{$value->title}}</option>
+                                                        <option value="{{$value->id}}"@if(in_array($value->id,$category_excluded_id)) disabled="disabled" @endif>{{$value->title}}</option>
                                                         @endforeach
                                                     </select>
                                                     @if ($errors->has('category_id'))

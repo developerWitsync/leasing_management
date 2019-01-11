@@ -77,9 +77,13 @@ class LeaseClassificationController extends Controller
         $modication_reason = LeaseModificationReason::query()->select('id', 'title')->where('status', '=', '1')->get();
 
         $categories = LeaseAssetCategories::query()->select('id', 'title')->where('status', '=', '1')->get();
+        
         $category_excluded = CategoriesLeaseAssetExcluded::query()->where('status', '=', '1')->with('leaseassetcategories')->get();
-        //dd($category_excludeded);
 
+         $category_excluded = CategoriesLeaseAssetExcluded::query()->get();
+        
+         $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
+     
         return view('settings.classification.index', compact('breadcrumbs',
             'rates',
             'contract_classifications',
@@ -101,7 +105,8 @@ class LeaseClassificationController extends Controller
             'escalation_percentage_settings',
             'modication_reason',
             'categories',
-            'category_excluded'
+            'category_excluded',
+            'category_excluded_id'
         ));
     }
 

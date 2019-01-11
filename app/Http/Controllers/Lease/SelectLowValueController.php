@@ -50,14 +50,12 @@ class SelectLowValueController extends Controller
          $category_excluded = CategoriesLeaseAssetExcluded::query()->get();
         
          $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
-         $category_excluded_id =implode(',', $category_excluded_id);
          
          $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->whereNotIn('specific_use', [2])->whereHas('leaseDurationClassified',  function($query){
                 $query->whereNotIn('lease_contract_duration_id',[1,2]);
-            })->get();
-           
-           //dd($assets);
-            if(count($assets) == 0) {
+            })->whereNotIn('category_id', $category_excluded_id)->get();
+          
+           if(count($assets) == 0) {
                 return redirect(route('addlease.leaseasset.index', ['id' => $id]));
             }
             return view('lease.select-low-value.index', compact(

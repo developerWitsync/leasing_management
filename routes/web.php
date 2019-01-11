@@ -31,7 +31,7 @@ Route::middleware('auth')->group(function(){
         Route::prefix('lessor-details')->group(function(){
             Route::match(['post','get'],'create/{id?}', ['as' => 'add-new-lease.index', 'uses' => 'LessorDetailsController@index']);
             Route::post('save', ['as' => 'add-new-lease.index.save', 'uses' => 'LessorDetailsController@save']);
-            Route::post('udpate/{id}', ['as' => 'add-new-lease.index.update', 'uses' => 'LessorDetailsController@udpate']);
+            Route::post('update/{id}', ['as' => 'add-new-lease.index.update', 'uses' => 'LessorDetailsController@udpate']);
             Route::post('udpate-total-assets/{id}', ['as' => 'add-new-lease.index.updatetotalassets', 'uses' => 'LessorDetailsController@udpateTotalAssets']);
         });
 
@@ -206,10 +206,7 @@ Route::middleware('auth')->group(function(){
          * Review&Submit  NL17
          */
         Route::prefix('review-submit')->group(function(){
-            
-            Route::get('index/{id}', ['as' => 'addlease.reviewsubmit.index', 'uses' => 'ReviewSubmitController@index']);
-            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.reviewsubmit.create', 'uses' => 'ReviewSubmitController@create']);
-            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.reviewsubmit.update', 'uses' => 'ReviewSubmitController@update']);
+            Route::match(['post', 'get'], 'index/{id}', ['as' => 'addlease.reviewsubmit.index', 'uses' => 'ReviewSubmitController@index']);
         });
 
     });
@@ -372,7 +369,7 @@ Route::middleware('auth')->group(function(){
         });
 
         Route::prefix('profile')->group(function (){
-            Route::match(['get', 'post'], 'index', ['as' => 'settings.profile.index', 'uses' => 'ProfileController@index']);
+            Route::match(['get', 'post'], '/', ['as' => 'settings.profile.index', 'uses' => 'ProfileController@index']);
         });
     });
       
