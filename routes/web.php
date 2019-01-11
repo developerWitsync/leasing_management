@@ -294,6 +294,13 @@ Route::middleware('auth')->group(function(){
             Route::match(['get', 'post'], '/edit-lease-modification-reason/{id}', ['as' => 'settings.leaseclassification.editleasemodificationreason', 'uses' => 'LeaseClassificationController@editLeaseModificationReason']);
             Route::delete('lease-modification_reason-delete/{id}', ['as' => 'settings.leaseclassification.deleteleasemodificationreason', 'uses' => 'LeaseClassificationController@deleteLeaseModificationReason']);
 
+            /**
+             * Categories of Lease Assets Excluded
+             */
+            Route::post('add-categories-excluded', ['as' => 'settings.leaseclassification.addcategoriesexcluded', 'uses' => 'LeaseClassificationController@addCategoriesExcluded']);
+            
+            Route::delete('categories-excluded-delete/{id}', ['as' => 'settings.leaseclassification.deletecategoriesexcluded', 'uses' => 'LeaseClassificationController@deleteCategoriesExcluded']);
+
         });
 
         Route::prefix('currencies')->group(function (){

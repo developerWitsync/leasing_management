@@ -12,6 +12,7 @@ use App\Http\Controllers\Controller;
 use App\Lease;
 use App\LeaseSelectLowValue;
 use App\LeaseAssets;
+use App\CategoriesLeaseAssetExcluded;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -44,8 +45,18 @@ class SelectLowValueController extends Controller
 
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
         if($lease) {
-            //Load the assets only for the assets where specific use  is equal to owe use(id=1) not availble for specifiec use(id=2)
-            $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('specific_use', '=', '1')->get();
+        
+        //Load the assets only for the assets where specific use  is not availbale for sublease and not availble for very/short term lease
+         $category_excluded = CategoriesLeaseAssetExcluded::query()->get();
+        
+         $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
+         $category_excluded_id =implode(',', $category_excluded_id);
+         
+         $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->whereNotIn('specific_use', [2])->whereHas('leaseDurationClassified',  function($query){
+                $query->whereNotIn('lease_contract_duration_id',[1,2]);
+            })->get();
+           
+           //dd($assets);
             if(count($assets) == 0) {
                 return redirect(route('addlease.leaseasset.index', ['id' => $id]));
             }

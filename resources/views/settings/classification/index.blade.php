@@ -669,6 +669,69 @@
                             </div>
                         </div>
 
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                Categories of Lease Assets Excluded
+                              <span>
+                                    <a href="javascript:void(0);" class="btn btn-sm btn-primary pull-right add_more" data-form="add_more_category_form">Add More</a>
+                                </span>
+
+                            </div>
+                            <div class="panel-body">
+                                <table class="table table-condensed">
+                                    <thead>
+                                    <tr>
+                                        <th>Sr No.</th>
+                                        <th>Category</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($category_excluded as $key=> $value)
+
+                                        <tr>
+                                            <td>{{ $key + 1 }}</td>
+                                            <td class="title">
+                                                {{ $value->leaseassetcategories->title }}
+                                            </td>
+                                            <td>
+                                                <a href="javascript:void(0);" class="btn btn-sm btn-success add_more" data-form="add_more_category_form">Include </a>
+                                                
+
+                                                <a data-href="{{ route('settings.leaseclassification.deletecategoriesexcluded', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-danger delete_settings">Exclude</a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    <tr style=" {{ $errors->has('categories_excluded') ? ' has-error' : 'display: none' }}" class="add_more_category_form">
+                                        <td>{{ count($category_excluded) + 1 }}</td>
+                                        <td>
+                                            <form action="{{ route('settings.leaseclassification.addcategoriesexcluded') }}" method="POST" class="add_more_categories_excluded_form">
+                                                {{ csrf_field() }}
+                                                <div class="form-group{{ $errors->has('title') ? ' has-error' : '' }}">
+                                                    <select name="category_id" class="form-control">
+                                                        <option value="">--Please Select</option>
+                                                        @foreach($categories as $value)
+                                                        <option value="{{$value->id}}">{{$value->title}}</option>
+                                                        @endforeach
+                                                    </select>
+                                                    @if ($errors->has('category_id'))
+                                                        <span class="help-block">
+                                                            <strong>{{ $errors->first('category_id') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <button type="button" onclick="javascript:$('.add_more_categories_excluded_form').submit();" class="btn btn-sm btn-success">Save</button>
+                                            <a href="javascript:;" class="btn btn-sm btn-danger add_more" data-form="add_more_category_form">Cancel</a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+
 
                     </div>
                 </div>

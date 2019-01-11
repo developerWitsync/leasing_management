@@ -118,4 +118,8 @@ class LeaseAssets extends Model
     public function leaseIncentiveCost(){
         return $this->hasOne('App\LeaseIncentives', 'asset_id','id');
     }
+
+    public function categoriesleaseassetexcluded(){
+        return $this->hasOne('App\CategoriesLeaseAssetExcluded', 'asset_id','id');
+    }
 }
