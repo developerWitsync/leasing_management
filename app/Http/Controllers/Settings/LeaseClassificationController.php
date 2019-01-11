@@ -12,6 +12,7 @@ namespace App\Http\Controllers\Settings;
 use App\ContractClassifications;
 use App\ContractEscalationBasis;
 use App\EscalationAmountCalculated;
+use App\EscalationFrequency;
 use App\EscalationPercentageSettings;
 use App\Http\Controllers\Controller;
 use App\LeaseAccountingTreatment;
@@ -70,6 +71,7 @@ class LeaseClassificationController extends Controller
         $lease_payment_escalation_clause = LeasePaymentsEscalationClause::query()->select('id', 'title')->where('status', '=', '1')->get();
         $escalation_amount_calculated_on = EscalationAmountCalculated::query()->select('id', 'title')->where('status', '=', '1')->get();
         $escalation_percentage_settings = EscalationPercentageSettings::query()->select('id', 'number')->where('business_account_id', '=', auth()->user()->id)->orderBy('number','asc')->get();
+        $escalation_frequencies = EscalationFrequency::all();
 
         return view('settings.classification.index', compact('breadcrumbs',
             'rates',
@@ -89,7 +91,8 @@ class LeaseClassificationController extends Controller
             'lease_payment_interval',
             'lease_payment_escalation_clause',
             'escalation_amount_calculated_on',
-            'escalation_percentage_settings'
+            'escalation_percentage_settings',
+            'escalation_frequencies'
         ));
     }
 

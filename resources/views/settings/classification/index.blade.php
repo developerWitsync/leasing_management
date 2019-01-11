@@ -612,6 +612,29 @@
                             </div>
                         </div>
 
+
+                        <div class="panel panel-info">
+                            <div class="panel-heading">Escalation Frequency</div>
+                            <div class="panel-body">
+                                <table class="table table-condensed">
+                                    <thead>
+                                    <tr>
+                                        <th>Sr No.</th>
+                                        <th>Title</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($escalation_frequencies  as $key => $frequency)
+                                        <tr>
+                                            <td>{{ $key + 1 }}</td>
+                                            <td>{{ $frequency->title}}</td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>

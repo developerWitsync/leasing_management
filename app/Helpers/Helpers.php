@@ -216,6 +216,7 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
         $years = range($start_year, $end_year);
     }
 
+    $months = [];
     for($m=1; $m<=12; ++$m ){
         $months[$m] = date('M', mktime(0, 0, 0, $m, 1));
     }
@@ -278,6 +279,66 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
                     }
 
                 } else {
+                    //no the user is not paying on this month of this year
+                    $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => 0, 'current_class' => $current_class];
+                }
+            }
+            $start_year = $start_year + 1; //for each year
+        }
+    }
+
+    //code to compute the escalations when applied inconsistently...
+    if(($escalation_basis == '1' && $escalation_applied_consistently_annually == 'no') || ($escalation_basis == '2' && $escalation_applied_consistently_annually == 'no')){
+        while ($start_year <= $end_year) {
+            foreach ($months as $key => $month){
+
+                $k_m = sprintf("%02d", $key);
+                $payments_in_this_year_month = \App\LeaseAssetPaymenetDueDate::query()->whereRaw("`payment_id` = '{$payment->id}' AND DATE_FORMAT(`date`,'%m') = '{$k_m}' and DATE_FORMAT(`date`,'%Y') = '{$start_year}'")->count();
+                if($payments_in_this_year_month > 0){
+
+                    $first_date_of_month = \Carbon\Carbon::parse("first day of {$month} {$start_year}");
+                    $last_date_of_month = \Carbon\Carbon::parse("last day of {$month} {$start_year}");
+                    if(isset($data['inconsistent_effective_date'][$start_year])) {
+                        foreach ($data['inconsistent_effective_date'][$start_year] as $key => $escalation_date){
+                            $escalation_date_parsed = \Carbon\Carbon::parse($escalation_date);
+                            if($escalation_date_parsed->between($first_date_of_month, $last_date_of_month)){
+                                if($amount_to_consider == 0){
+                                    $amount_to_consider = $payment->payment_per_interval_per_unit;
+                                }
+
+                                if($escalation_basis == '1') {
+//                            $escalation_percentage_or_amount = $data['total_escalation_rate'];
+//                            $amount_to_consider += ($amount_to_consider * $escalation_percentage_or_amount)/100;
+
+                                    $escalation_percentage_or_amount = $data['inconsistent_escalated_amount'][$start_year][$key];
+                                    $amount_to_consider += $data['inconsistent_escalated_amount'][$start_year][$key];
+
+                                } else {
+                                    $escalation_percentage_or_amount = $data['inconsistent_escalated_amount'][$start_year][$key];
+                                    $amount_to_consider += $data['inconsistent_escalated_amount'][$start_year][$key];
+                                }
+
+                                if($current_class == "info"){$current_class = 'warning';} elseif($current_class == 'warning') {$current_class = 'success';} else {$current_class = 'info';}
+
+                                $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => number_format($amount_to_consider, 2), 'current_class' => $current_class];
+
+                            } else {
+                                //escalation is not applied however the user needs to pay for this month and year
+                                if($amount_to_consider == 0){
+                                    $amount_to_consider = $payment->payment_per_interval_per_unit;
+                                }
+                                $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => number_format($amount_to_consider, 2), 'current_class' => $current_class];
+                            }
+                        }
+                    } else {
+                        //escalation is not applied however the user needs to pay for this month and year
+                        if($amount_to_consider == 0){
+                            $amount_to_consider = $payment->payment_per_interval_per_unit;
+                        }
+                        $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => number_format($amount_to_consider, 2), 'current_class' => $current_class];
+                    }
+
+                } else{
                     //no the user is not paying on this month of this year
                     $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => 0, 'current_class' => $current_class];
                 }
