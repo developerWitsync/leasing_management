@@ -17,8 +17,6 @@ class CreateTableLeasePaymentInvoice extends Migration
             $table->increments('id');
             $table->unsignedInteger('lease_id');
             $table->foreign('lease_id')->references('id')->on('lease')->onDelete('cascade');
-            $table->unsignedInteger('asset_id');
-            $table->foreign('asset_id')->references('id')->on('lease_assets')->onDelete('cascade');
             $table->enum('lease_payment_invoice_received', ['yes', 'no'])->nullable();
             $table->timestamps();
         });

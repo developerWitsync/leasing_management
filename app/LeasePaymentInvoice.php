@@ -10,7 +10,6 @@ class LeasePaymentInvoice extends Model
 
     protected $fillable = [
     	'lease_id',
-    	'asset_id',
     	'lease_payment_invoice_received'
     ];
 }

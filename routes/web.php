@@ -201,6 +201,7 @@ Route::middleware('auth')->group(function(){
          */
         Route::prefix('lease-payment-invoice')->group(function(){
             Route::match(['post', 'get'], 'index/{id}', ['as' => 'addlease.leasepaymentinvoice.index', 'uses' => 'LeaseInvoiceController@index']);
+            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.leasepaymentinvoice.update', 'uses' => 'LeaseInvoiceController@index']);
         });
         /**
          * Review&Submit  NL17
