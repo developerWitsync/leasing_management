@@ -18,4 +18,5 @@ class LeaseAssetCategories extends Model
     public function subcategories(){
         return $this->hasMany('App\LeaseAssetSubCategorySetting', 'category_id', 'id');
     }
+    
 }

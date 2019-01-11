@@ -32,8 +32,10 @@
         <div class="col-md-6 form-check form-check-inline" required>
              <select class="form-control" name="reason">
                 <option value="">Please select reason</option>
-                <option value="Internal Reaons">Internal Reaons</option>
-                <option value="Changes in Lease Contract">Changes in Lease Contract</option></select>
+                 @foreach($lase_modification as $lease)
+                        <option value="{{ $lease->id }}">{{ $lease->title }}</option>
+                    @endforeach
+                </select>
             @if ($errors->has('reason'))
                 <span class="help-block">
                         <strong>{{ $errors->first('reason') }}</strong>

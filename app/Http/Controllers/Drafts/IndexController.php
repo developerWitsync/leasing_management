@@ -32,7 +32,7 @@ class IndexController extends Controller
     public function fetchLeaseDetails(Request $request){
         try{
             if ($request->ajax()) {
-            	return datatables()->eloquent(Lease::query()->with('assets'))->toJson();
+            	return datatables()->eloquent(Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('status', '=', '0')->with('assets'))->toJson();
             } else {
                 return redirect()->back();
             }

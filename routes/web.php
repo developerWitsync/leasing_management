@@ -31,8 +31,7 @@ Route::middleware('auth')->group(function(){
         Route::prefix('lessor-details')->group(function(){
             Route::match(['post','get'],'create/{id?}', ['as' => 'add-new-lease.index', 'uses' => 'LessorDetailsController@index']);
             Route::post('save', ['as' => 'add-new-lease.index.save', 'uses' => 'LessorDetailsController@save']);
-            Route::post('udpate/{id}', ['as' => 'add-new-lease.index.update', 'uses' => 'LessorDetailsController@udpate']);
-
+            Route::post('update/{id}', ['as' => 'add-new-lease.index.update', 'uses' => 'LessorDetailsController@udpate']);
             Route::post('udpate-total-assets/{id}', ['as' => 'add-new-lease.index.updatetotalassets', 'uses' => 'LessorDetailsController@udpateTotalAssets']);
         });
 
@@ -202,15 +201,13 @@ Route::middleware('auth')->group(function(){
          */
         Route::prefix('lease-payment-invoice')->group(function(){
             Route::match(['post', 'get'], 'index/{id}', ['as' => 'addlease.leasepaymentinvoice.index', 'uses' => 'LeaseInvoiceController@index']);
+            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.leasepaymentinvoice.update', 'uses' => 'LeaseInvoiceController@index']);
         });
         /**
          * Review&Submit  NL17
          */
         Route::prefix('review-submit')->group(function(){
-            
-            Route::get('index/{id}', ['as' => 'addlease.reviewsubmit.index', 'uses' => 'ReviewSubmitController@index']);
-            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.reviewsubmit.create', 'uses' => 'ReviewSubmitController@create']);
-            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.reviewsubmit.update', 'uses' => 'ReviewSubmitController@update']);
+            Route::match(['post', 'get'], 'index/{id}', ['as' => 'addlease.reviewsubmit.index', 'uses' => 'ReviewSubmitController@index']);
         });
 
     });
@@ -286,6 +283,22 @@ Route::middleware('auth')->group(function(){
             Route::post('add-escalation-percentage-number', ['as' => 'settings.leaseclassification.addescalationpercentagenumber', 'uses' => 'LeaseClassificationController@addEscalationPercentageNumber']);
             Route::match(['get', 'post'], '/edit-escalation-percentage-number/{id}', ['as' => 'settings.leaseclassification.editescalationpercentagenumber', 'uses' => 'LeaseClassificationController@editEscalationPercentageNumber']);
             Route::delete('delete-escalation-percentage-number/{id}', ['as' => 'settings.leaseclassification.deleteescalationpercentagenumber', 'uses' => 'LeaseClassificationController@deleteEscalationPercentageNumber']);
+
+
+            /**
+             * Lease Modification Reason
+             */
+            Route::post('add-lease-modification-reason', ['as' => 'settings.leaseclassification.addleasemodificationreason', 'uses' => 'LeaseClassificationController@addLeaseModificationReason']);
+            Route::match(['get', 'post'], '/edit-lease-modification-reason/{id}', ['as' => 'settings.leaseclassification.editleasemodificationreason', 'uses' => 'LeaseClassificationController@editLeaseModificationReason']);
+            Route::delete('lease-modification_reason-delete/{id}', ['as' => 'settings.leaseclassification.deleteleasemodificationreason', 'uses' => 'LeaseClassificationController@deleteLeaseModificationReason']);
+
+            /**
+             * Categories of Lease Assets Excluded
+             */
+            Route::post('add-categories-excluded', ['as' => 'settings.leaseclassification.addcategoriesexcluded', 'uses' => 'LeaseClassificationController@addCategoriesExcluded']);
+            
+            Route::delete('categories-excluded-delete/{id}', ['as' => 'settings.leaseclassification.deletecategoriesexcluded', 'uses' => 'LeaseClassificationController@deleteCategoriesExcluded']);
+
         });
 
         Route::prefix('currencies')->group(function (){
@@ -357,7 +370,7 @@ Route::middleware('auth')->group(function(){
         });
 
         Route::prefix('profile')->group(function (){
-            Route::match(['get', 'post'], 'index', ['as' => 'settings.profile.index', 'uses' => 'ProfileController@index']);
+            Route::match(['get', 'post'], '/', ['as' => 'settings.profile.index', 'uses' => 'ProfileController@index']);
         });
     });
       

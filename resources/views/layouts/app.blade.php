@@ -51,7 +51,7 @@
                         @else
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>
-                                    {{ Auth::user()->authorised_person_name }} | {{ Auth::user()->legal_entity_name }} <span class="caret"></span>
+                                    {{ Auth::user()->authorised_person_name }} | {{ getParentDetails()->legal_entity_name }} <span class="caret"></span>
                                 </a>
 
                                 <ul class="dropdown-menu">

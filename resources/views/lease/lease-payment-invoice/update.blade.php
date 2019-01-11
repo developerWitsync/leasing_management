@@ -25,15 +25,15 @@
                 </div>
             @endif
 
-            <form role="form" class="form-horizontal" enctype="multipart/form-data" method="POST" action="{{ route('addlease.leasepaymentinvoice.index', ['id' => $lease->id]) }}">
+            <form role="form" class="form-horizontal" enctype="multipart/form-data" method="POST" action="{{ route('addlease.leasepaymentinvoice.update', ['id' => $lease->id]) }}">
     {{ csrf_field() }}
 
     <div class="form-group{{ $errors->has('lease_payment_invoice_received') ? ' has-error' : '' }} required">
         <label for="name" class="col-md-4 control-label">Any Lease Payment Invoice Received from Lessor</label>
         <div class="col-md-6 form-check form-check-inline" required>
-            <input class="form-check-input" name="lease_payment_invoice_received" id="yes" type="checkbox" value = "yes">
+            <input class="form-check-input" name="lease_payment_invoice_received" id="yes" type="checkbox" value = "yes" @if(old('lease_payment_invoice_received', $model->lease_payment_invoice_received) == "yes") checked="checked" @endif>
             <label class="form-check-label" for="yes" id="yes" style="vertical-align: 4px">Yes</label><br>
-            <input class="form-check-input" name="lease_payment_invoice_received" id="no" type="checkbox" value = "no" >
+            <input class="form-check-input" name="lease_payment_invoice_received" id="no" type="checkbox" value = "no" @if(old('lease_payment_invoice_received', $model->lease_payment_invoice_received)  == "no") checked="checked" @endif>
             <label class="form-check-label" for="no" id="no" style="vertical-align: 4px">No</label>
             @if ($errors->has('lease_payment_invoice_received'))
                 <span class="help-block">
@@ -50,6 +50,9 @@
             <button type="submit" class="btn btn-success">
                 Submit
             </button>
+            @if($lease->leaseInvoice)
+            <a href="{{ route('addlease.residual.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
+             @endif
         </div>
     </div>
 

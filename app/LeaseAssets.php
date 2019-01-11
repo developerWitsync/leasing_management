@@ -118,4 +118,19 @@ class LeaseAssets extends Model
     public function leaseIncentiveCost(){
         return $this->hasOne('App\LeaseIncentives', 'asset_id','id');
     }
+
+
+    public function categoriesleaseassetexcluded(){
+        return $this->hasOne('App\CategoriesLeaseAssetExcluded', 'asset_id','id');
+    }
+    public function country(){
+        return $this->belongsTo('App\Countries', 'country_id', 'id');
+    }
+
+    public function specificUse(){
+        return $this->belongsTo('App\UseOfLeaseAsset', 'specific_use', 'id');
+    }
+    public function expectedLife(){
+        return $this->belongsTo('App\ExpectedLifeOfAsset', 'expected_life', 'id');
+    }
 }
