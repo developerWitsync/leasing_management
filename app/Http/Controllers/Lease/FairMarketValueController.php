@@ -77,7 +77,7 @@ class FairMarketValueController extends Controller
             $asset = LeaseAssets::query()->findOrFail($id);
             $lease = $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
             if($lease) {
-
+                $model = FairMarketValue::query()->where('asset_id', '=', $id)->first();
                 $model = new FairMarketValue();
 
                 if($request->isMethod('post')) {

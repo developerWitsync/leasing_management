@@ -48,6 +48,44 @@ class LeaseInvoiceController extends Controller
         ];
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->with('leaseType')->with('assets')->first();
         if($lease) {
+            $model = LeasePaymentInvoice::query()->where('lease_id', '=', $id)->first();
+            if($model){
+                if($request->isMethod('post')) {
+                    $validator = Validator::make($request->except('_token'), $this->validationRules());
+
+                    if($validator->fails()){
+                        return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
+                    }
+
+                    $data = $request->except('_token');
+                    $data['lease_id']   = $id;
+
+                    $model->setRawAttributes($data);
+
+                    if($model->save()){
+                        return redirect(route('addlease.leasepaymentinvoice.update',['id' => $lease->id]))->with('status', 'Lease Payment Invoice details has been updated successfully.');
+                    }
+                }
+                return view('lease.lease-payment-invoice.update', compact('breadcrumbs',
+                'lease', 'model'
+            ));
+            } else if($request->isMethod('post')){
+                $model = new LeasePaymentInvoice();
+
+                $validator = Validator::make($request->except('_token'), $this->validationRules());
+
+                    if($validator->fails()){
+                        return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
+                    }
+
+                    $data = $request->except('_token');
+                    $data['lease_id']   = $id;
+                    $invoice = LeasePaymentInvoice::create($data);
+
+                    if($invoice){
+                        return redirect(route('addlease.leasepaymentinvoice.update',['id' => $lease->id]))->with('status', 'Lease Payment Invoice details has been Created successfully.');
+                    }
+                }
             return view('lease.lease-payment-invoice.index', compact('breadcrumbs',
                 'lease'
             ));
@@ -55,92 +93,6 @@ class LeaseInvoiceController extends Controller
             abort(404);
         }
     }
-
-    /**
-     * add fair market value details for an asset
-     * @param $id
-     * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function create($id, Request $request){
-        try{
-            $asset = LeaseAssets::query()->findOrFail($id);
-            $lease = $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
-            if($lease) {
-
-                $model = new InitialDirectCost();
-
-                if($request->isMethod('post')) {
-                    $validator = Validator::make($request->except('_token'), $this->validationRules());
-
-                    if($validator->fails()){
-                        return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
-                    }
-
-                    $data = $request->except('_token');
-                    $data['lease_id']   = $asset->lease->id;
-                    $data['asset_id']   = $asset->id;
-                    $initial_direct_cost = InitialDirectCost::create($data);
-
-                    if($initial_direct_cost){
-                        return redirect(route('addlease.initialdirectcost.index',['id' => $lease->id]))->with('status', 'Initial Direct Cost has been added successfully.');
-                    }
-                }
-                return view('lease.initial-direct-cost.create', compact(
-                    'model',
-                    'lease',
-                    'asset'
-                ));
-            } else {
-                abort(404);
-            }
-        } catch (\Exception $e) {
-            dd($e);
-        }
-    }
-
-
-    /**
-     * edit existing fair market value details for an asset
-     * @param $id
-     * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function update($id, Request $request){
-        try{
-            $asset = LeaseAssets::query()->findOrFail($id);
-            $lease = $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
-            if($lease) {
-
-                $model = InitialDirectCost::query()->where('asset_id', '=', $id)->first();
-
-                if($request->isMethod('post')) {
-                    $validator = Validator::make($request->except('_token'), $this->validationRules());
-
-                    if($validator->fails()){
-                        return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
-                    }
-
-                    $data = $request->except('_token');
-                    $data['lease_id']   = $asset->lease->id;
-                    $data['asset_id']   = $asset->id;
-
-                    $model->setRawAttributes($data);
-
-                    if($model->save()){
-                        return redirect(route('addlease.initialdirectcost.index',['id' => $lease->id]))->with('status', 'Initial Direct Cost has been updated successfully.');
-                    }
-                }
-                return view('lease.initial-direct-cost.update', compact(
-                    'model',
-                    'lease',
-                    'asset'
-                ));
-            } else {
-                abort(404);
-            }
-        } catch (\Exception $e) {
-            dd($e);
-        }
-    }
 }
+
+    

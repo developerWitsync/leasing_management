@@ -494,3 +494,12 @@ legend.scheduler-border {
 .sub_table td table{
     background-color: #eeeeee !important;
 }
+
+.escalation_inconsistent_table td {
+    padding: 5px;
+}
+
+.escalation_inconsistent_table {
+    background-color: #eeeeee !important;
+    margin-top: 10px;
+}
