@@ -26,7 +26,7 @@
             @endif
              {{--@include('lease._menubar')--}}
             <div class="tab-content" style="padding: 0px;">
-                <div role="tabpanel" class="tab-pane active">
+                <div role="tabpanel" class="tab-pane frmOuterBx active">
                     <table class="table table-bordered table-responsive">
                         <thead>
                         <tr>
@@ -60,12 +60,12 @@
                                             @php
                                                 $show_next[] = true;
                                             @endphp
-                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.durationclassified.update', ['id'=> $asset->id]) }}">Update Duartion Classified Value </a>
+                                            <a class="btn btn-sm btn-primary" href="{{ route('addlease.durationclassified.update', ['id'=> $asset->id]) }}">Update Duartion Classified Value </a>
                                         @else
                                             @php
                                                 $show_next[] = false;
                                             @endphp
-                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.durationclassified.create', ['id'=> $asset->id]) }}">Add Duration Classifed Value</a>
+                                            <a class="btn btn-sm btn-primary" href="{{ route('addlease.durationclassified.create', ['id'=> $asset->id]) }}">Add Duration Classifed Value</a>
                                         @endif
                                     </td>
                                 </tr>

@@ -25,7 +25,7 @@
             <div class="form-group{{ $errors->has('internal_company_financial_reporting_currency') || $errors->has('internal_same_as_statutory_reporting') ? ' has-error' : '' }} required">
                 <label for="internal_company_financial_reporting_currency" class="col-md-4 control-label">Internal Company Financial Reporting Currency</label>
                 <div class="col-md-6">
-                    <div class="input-group">
+                    <div class="input-group reportTble">
                         <div class="form-check">
                             <input class="form-check-input" @if(old('internal_same_as_statutory_reporting', $reporting_currency_settings->internal_same_as_statutory_reporting) == 'yes') checked="checked" @endif type="checkbox" name="internal_same_as_statutory_reporting" value="yes" id="same_as_statutory_reporting_yes">
                             <label class="form-check-label" for="same_as_statutory_reporting_yes">
@@ -68,7 +68,7 @@
             <div class="form-group{{ $errors->has('currency_for_lease_reports') || $errors->has('lease_report_same_as_statutory_reporting') ? ' has-error' : '' }} required">
                 <label for="currency_for_lease_reports" class="col-md-4 control-label">Currency for Lease Reports</label>
                 <div class="col-md-6">
-                    <div class="input-group">
+                    <div class="input-group reportTble">
                         <div class="form-check">
                             <input class="form-check-input" @if(old('lease_report_same_as_statutory_reporting', $reporting_currency_settings->lease_report_same_as_statutory_reporting) == '1') checked="checked" @endif type="checkbox" name="lease_report_same_as_statutory_reporting" value="1" id="lease_report_same_as_statutory_reporting_1">
                             <label class="form-check-label" for="lease_report_same_as_statutory_reporting_1">

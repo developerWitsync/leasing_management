@@ -46,7 +46,7 @@
                                         <th>Sr No.</th>
                                         <th>Name</th>
                                         <th>Permissions</th>
-                                        <th>Description</th>
+                                        <th width="30%">Description</th>
                                         <th>Action</th>
                                     </tr>
                                     </thead>

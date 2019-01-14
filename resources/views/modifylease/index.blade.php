@@ -39,7 +39,7 @@
                                Modify Lease
                             </div>
                             <div class="panel-body">
-                                <div class="panel-body">
+                                <div class="panel-body frmOuterBx">
                                     <table class="table table-condensed modify_table">
                                         <thead>
                                         <tr>

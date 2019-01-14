@@ -40,7 +40,7 @@
                                 Lease Drafts
                             </div>
                             <div class="panel-body">
-                                <div class="panel-body">
+                                <div class="panel-body frmOuterBx">
                                     <table class="table table-condensed drafts_table">
                                         <thead>
                                         <tr>
