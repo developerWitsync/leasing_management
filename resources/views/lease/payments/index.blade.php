@@ -26,7 +26,7 @@
             @endif
             {{--@include('lease._menubar')--}}
             <div class="tab-content" style="padding: 0px;">
-                <div role="tabpanel" class="tab-pane active">
+                <div role="tabpanel" class="tab-pane FrmOuterBx active">
                     <table class="table table-bordered table-responsive">
                         <thead>
                         <tr>
@@ -69,7 +69,9 @@
                         </tbody>
                     </table>
 
-                    <div class="form-group">
+                    
+                </div>
+                <div class="form-group">
 
                         <div class="col-md-6 col-md-offset-4">
 
@@ -83,7 +85,6 @@
 
                     </div>
 
-                </div>
             </div>
 
         </div>

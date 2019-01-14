@@ -28,8 +28,8 @@
                             {{ csrf_field() }}
 
                             <div class="form-group{{ $errors->has('lessor_name') ? ' has-error' : '' }} required">
-                                <label for="lessor_name" class="col-md-4 control-label">Lessor Name</label>
-                                <div class="col-md-4">
+                                <label for="lessor_name" class="col-lg-4 col-md-5 control-label">Lessor Name</label>
+                                <div class="col-lg-4 col-md-6">
                                         <input id="lessor_name" type="text" placeholder="Lessor Name" class="form-control" name="lessor_name" value="{{ old('lessor_name',$lease->lessor_name) }}" >
                                     @if ($errors->has('lessor_name'))
                                         <span class="help-block">
@@ -38,10 +38,9 @@
                                     @endif
                                 </div>
                             </div>
-
                             <div class="form-group{{ $errors->has('lease_type_id') ? ' has-error' : '' }} required">
-                                <label for="lease_type_id" class="col-md-4 control-label">Lease Type Classification</label>
-                                <div class="col-md-4">
+                                <label for="lease_type_id" class="col-lg-4 col-md-5 control-label">Lease Type Classification</label>
+                                <div class="col-lg-4 col-md-6">
                                    <select name="lease_type_id" class="form-control" id="lease_type_id">
                                         <option value="">Please Type Classification</option>
                                          @php $i =1 @endphp
@@ -61,8 +60,8 @@
 
                             @if($reporting_currency_settings->is_foreign_transaction_involved == "yes")
                                   <div class="form-group{{ $errors->has('lease_contract_id') ? ' has-error' : '' }} required">
-                                        <label for="lease_contract_id" class="col-md-4 control-label">Lease Contract Currency</label>
-                                        <div class="col-md-4">
+                                        <label for="lease_contract_id" class="col-lg-4 col-md-5 control-label">Lease Contract Currency</label>
+                                        <div class="col-lg-4 col-md-6">
                                               <select name="lease_contract_id" class="form-control">
                                                 <option value="">Please Type Lease Contract</option>
 
@@ -82,13 +81,12 @@
 
                             @if($reporting_currency_settings->is_foreign_transaction_involved == "no") 
                                     <div class="form-group{{ $errors->has('lease_contract_id') ? ' has-error' : '' }} required">
-                                            <label for="lease_contract_id" class="col-md-4 control-label">Lease Contract Currency</label>
-                                            <div class="col-md-4">
-                                                   <select name="lease_contract_id" class="form-control">
+                                            <label for="lease_contract_id" class="col-lg-4 col-md-5 control-label">Lease Contract Currency</label>
+                                            <div class="col-lg-4 col-md-6">
+                                                <select name="lease_contract_id" class="form-control">
                                                     <option value="">Please Type Lease Contract</option>
                                                      <option value="{{ $reporting_currency_settings->currency_for_lease_reports }}" @if(old('lease_contract_id', $lease->lease_contract_id) == $reporting_currency_settings->currency_for_lease_reports) selected="selected" @endif >
                                                         {{ $reporting_currency_settings->currency_for_lease_reports }}</option>
-                                                       
                                                 </select>
                                                 @if ($errors->has('lease_contract_id'))
                                                     <span class="help-block">
@@ -98,10 +96,9 @@
                                             </div>
                                      </div>
                             @endif
-
                             <div class="form-group{{ $errors->has('file') ? ' has-error' : '' }} ">
-                                <label for="file" class="col-md-4 control-label">Upload a Copy of Contract Signed</label>
-                                <div class="col-md-4 frmattachFile">
+                                <label for="file" class="col-lg-4 col-md-5 control-label">Upload a Copy of Contract Signed</label>
+                                <div class="col-lg-4 col-md-6 frmattachFile">
                                     <input type="name" id="upload" name="name" class="form-control" disabled="disabled">
                                     <button type="button" class="browseBtn">Browse</button>
                                     <input type="file" id="file-name" name="file" class="fileType">
@@ -117,7 +114,7 @@
                             </div>
 
                             <div class="form-group">
-                                <div class="col-md-4 col-md-offset-4 frmBtnBx">
+                                <div class="col-lg-4 col-md-6 col-lg-offset-4 col-md-offset-5 frmBtnBx">
                                    <a href="/home" class="btn btn-danger">Cancel</a>
 
                                     <button type="submit" class="btn btn-success">
@@ -127,11 +124,8 @@
                                     <button type="submit" class="btn btn-primary next_submit">
                                         Next
                                     </button>
-
                                 </div>
-
                             </div>
-
                         </form>
                     </div>
                 </div>
@@ -213,8 +207,6 @@
             var or_name=filename.split("\\");
             $('#upload').val(or_name[or_name.length-1]);
         });
-
-
-});
+    });
 </script>
 @endsection

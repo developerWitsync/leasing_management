@@ -27,7 +27,7 @@
                     <div role="tabpanel" class="tab-pane active">
                         <div class="panel panel-info">
                             <div class="panel-heading">Percentage Rate Types</div>
-                            <div class="panel-body">
+                            <div class="panel-body settingTble">
                                 <table class="table table-condensed">
                                     <thead>
                                         <tr>
@@ -49,7 +49,7 @@
 
                         <div class="panel panel-info">
                             <div class="panel-heading">Lease Contract Classification</div>
-                            <div class="panel-body">
+                            <div class="panel-body settingTble">
                                 <table class="table table-condensed">
                                     <thead>
                                     <tr>
@@ -71,7 +71,7 @@
 
                         <div class="panel panel-info">
                             <div class="panel-heading">Use of Lease Asset</div>
-                            <div class="panel-body">
+                            <div class="panel-body settingTble">
                                 <table class="table table-condensed">
                                     <thead>
                                     <tr>
@@ -93,7 +93,7 @@
 
                         <div class="panel panel-info">
                             <div class="panel-heading">Components of Lease Payments</div>
-                            <div class="panel-body">
+                            <div class="panel-body settingTble">
                                 <table class="table table-condensed">
                                     <thead>
                                     <tr>
@@ -115,7 +115,7 @@
 
                         <div class="panel panel-info">
                             <div class="panel-heading">Nature of Lease Payments</div>
-                            <div class="panel-body">
+                            <div class="panel-body settingTble">
                                 <table class="table table-condensed">
                                     <thead>
                                     <tr>
@@ -143,7 +143,7 @@
                                     <a href="javascript:void(0);" class="btn btn-sm btn-primary pull-right add_more" data-form="add_more_form_lease_basis">Add More</a>
                                 </span>
                             </div>
-                            <div class="panel-body">
+                            <div class="panel-body settingTble">
                                 <table class="table table-condensed lease_payment_basis_table">
                                     <thead>
                                     <tr>
@@ -201,7 +201,7 @@
                                     <a href="javascript:void(0);" class="btn btn-sm btn-primary pull-right add_more" data-form="add_more_no_of_underlying_asset">Add More</a>
                                 </span>
                             </div>
-                            <div class="panel-body">
+                            <div class="panel-body settingTble">
                                 <table class="table table-condensed lease_payment_basis_table">
                                     <thead>
                                     <tr>
@@ -258,7 +258,7 @@
                                     <a href="javascript:void(0);" class="btn btn-sm btn-primary pull-right add_more" data-form="add_more_no_of_lease_asset_similar_charac">Add More</a>
                                 </span>
                             </div>
-                            <div class="panel-body">
+                            <div class="panel-body settingTble">
                                 <table class="table table-condensed">
                                     <thead>
                                     <tr>
@@ -310,7 +310,7 @@
 
                         <div class="panel panel-info">
                             <div class="panel-heading">Contract Escalation Basis</div>
-                            <div class="panel-body">
+                            <div class="panel-body settingTble">
                                 <table class="table table-condensed">
                                     <thead>
                                     <tr>
@@ -332,7 +332,7 @@
 
                         <div class="panel panel-info">
                             <div class="panel-heading">Lease Contract Duration</div>
-                            <div class="panel-body">
+                            <div class="panel-body settingTble">
                                 <table class="table table-condensed">
                                     <thead>
                                     <tr>
@@ -356,7 +356,7 @@
 
                         <div class="panel panel-info">
                             <div class="panel-heading">Leases Excluded from Transitional Valuation</div>
-                            <div class="panel-body">
+                            <div class="panel-body settingTble">
                                 <table class="table table-condensed">
                                     <thead>
                                     <tr>
@@ -387,7 +387,7 @@
                         @foreach($lease_accounting_treatment as $year=>$treatments)
                             <div class="panel panel-info">
                                 <div class="panel-heading">Lease Accounting Treatment Upto {{ $year }}</div>
-                                <div class="panel-body">
+                                <div class="panel-body settingTble">
                                     <table class="table table-condensed">
                                         <thead>
                                         <tr>
@@ -415,7 +415,7 @@
                                     <a href="javascript:void(0);" class="btn btn-sm btn-primary pull-right add_more" data-form="add_more_no_of_lease_payments">Add More</a>
                                 </span>
                             </div>
-                            <div class="panel-body">
+                            <div class="panel-body settingTble">
                                 <table class="table table-condensed">
                                     <thead>
                                     <tr>
@@ -467,7 +467,7 @@
 
                         <div class="panel panel-info">
                             <div class="panel-heading">Lease Payment Interval</div>
-                            <div class="panel-body">
+                            <div class="panel-body settingTble">
                                 <table class="table table-condensed">
                                     <thead>
                                     <tr>
@@ -491,7 +491,7 @@
 
                         <div class="panel panel-info">
                             <div class="panel-heading">Lease Payments Frequency</div>
-                            <div class="panel-body">
+                            <div class="panel-body settingTble">
                                 <table class="table table-condensed">
                                     <thead>
                                     <tr>
@@ -518,7 +518,7 @@
                                     <a href="javascript:void(0);" class="btn btn-sm btn-primary pull-right add_more" data-form="add_more_escalation_percentage">Add More</a>
                                 </span>
                             </div>
-                            <div class="panel-body">
+                            <div class="panel-body settingTble">
                                 <table class="table table-condensed">
                                     <thead>
                                     <tr>
@@ -570,7 +570,7 @@
 
                         <div class="panel panel-info">
                             <div class="panel-heading">Escalation Clause Applicable on Lease Payments</div>
-                            <div class="panel-body">
+                            <div class="panel-body settingTble">
                                 <table class="table table-condensed">
                                     <thead>
                                     <tr>
@@ -592,7 +592,7 @@
 
                         <div class="panel panel-info">
                             <div class="panel-heading">Escalation Amount Calculated On</div>
-                            <div class="panel-body">
+                            <div class="panel-body settingTble">
                                 <table class="table table-condensed">
                                     <thead>
                                     <tr>

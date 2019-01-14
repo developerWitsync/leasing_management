@@ -35,12 +35,13 @@
                                     <a href="javascript:void(0);" class="btn btn-sm btn-primary pull-right add_more" data-form="add_more_expected_life_of_assets">Add More</a>
                                 </span>
                             </div>
-                            <div class="panel-body">
+                            <div class="panel-body settingTble">
                                 <table class="table table-condensed">
                                     <thead>
                                     <tr>
                                         <th>Sr No.</th>
                                         <th>Useful Life In Years</th>
+                                        <th></th>
                                     </tr>
                                     </thead>
                                     <tbody>

@@ -28,7 +28,7 @@
             </span>
         </div>
         <div class="panel-body">
-            <div class="card-body">
+            <div class="card-body settingTble">
                 <table cellpadding="0" cellspacing="0" id="foreign_transaction_currency" class="table table-bordered table-hover display">
                     <thead>
                         <tr>
