@@ -124,6 +124,7 @@ $(document).on('click', 'input[type="checkbox"][name="is_escalation_applicable"]
     if($(this).is(':checked') && $(this).val() == 'yes') {
         $('.hidden_fields').removeClass('hidden');
     } else {
+        $('.inconsistently_applied').addClass('hidden');
         $('.hidden_fields').addClass('hidden');
     }
 });
@@ -159,6 +160,35 @@ $(document).ready(function () {
                 }
             }
         }
+
+
+        //populate the Escalation Percentages When the escalation is applied inconsistently and percentage based [[FIXED RATE]]
+        for (var key in _inconsistent_escalation_inputs.inconsistent_fixed_rate) {
+            if (_inconsistent_escalation_inputs.inconsistent_fixed_rate.hasOwnProperty(key)) {
+                for(var fixed_rate in _inconsistent_escalation_inputs.inconsistent_fixed_rate[key]){
+                    $('select[name="inconsistent_fixed_rate['+key+'][]"]:eq('+fixed_rate+')').val(_inconsistent_escalation_inputs.inconsistent_fixed_rate[key][fixed_rate]);
+                }
+            }
+        }
+
+        //populate the Escalation Percentages When the escalation is applied inconsistently and percentage based [[VARIABLE RATE]]
+        for (var key in _inconsistent_escalation_inputs.inconsistent_current_variable_rate) {
+            if (_inconsistent_escalation_inputs.inconsistent_current_variable_rate.hasOwnProperty(key)) {
+                for(var variable_rate in _inconsistent_escalation_inputs.inconsistent_current_variable_rate[key]){
+                    $('select[name="inconsistent_current_variable_rate['+key+'][]"]:eq('+variable_rate+')').val(_inconsistent_escalation_inputs.inconsistent_current_variable_rate[key][variable_rate]);
+                }
+            }
+        }
+
+        //populate the Escalation Percentages When the escalation is applied inconsistently and percentage based [[TOTAL ESCALATION RATE]]
+        for (var key in _inconsistent_escalation_inputs.inconsistent_total_escalation_rate) {
+            if (_inconsistent_escalation_inputs.inconsistent_total_escalation_rate.hasOwnProperty(key)) {
+                for(var total_rate in _inconsistent_escalation_inputs.inconsistent_total_escalation_rate[key]){
+                    $('input[name="inconsistent_total_escalation_rate['+key+'][]"]:eq('+total_rate+')').val(_inconsistent_escalation_inputs.inconsistent_total_escalation_rate[key][total_rate]);
+                }
+            }
+        }
+
     }
 
 

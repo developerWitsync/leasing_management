@@ -81,7 +81,7 @@
                             <a href="{{ $back_button}}" class="btn btn-danger">Back</a>
 
                             @if(!in_array(false, $show_next))
-                                <a href="#" class="btn btn-primary">Next</a>
+                                <a href="{{ route('lease.escalation.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
                             @endif  
                         </div>
 

@@ -77,7 +77,7 @@
             </div>
         </div>
 
-        <div class="form-group{{ $errors->has('fixed_rate') ? ' has-error' : '' }} required @if(old('escalation_basis', $model->escalation_basis) == '1' && (old('escalation_rate_type', $model->escalation_rate_type) == '1' || old('escalation_rate_type', $model->escalation_rate_type) == '3'))  @else hidden @endif is_j_12_y_e_s_fixed_rate">
+        <div class="form-group{{ $errors->has('fixed_rate') ? ' has-error' : '' }} required @if(old('is_escalation_applied_annually_consistently', $model->is_escalation_applied_annually_consistently) == 'yes' && old('escalation_basis', $model->escalation_basis) == '1' && (old('escalation_rate_type', $model->escalation_rate_type) == '1' || old('escalation_rate_type', $model->escalation_rate_type) == '3'))  @else hidden @endif is_j_12_y_e_s_fixed_rate">
             <label for="fixed_rate" class="col-md-4 control-label">Specify Fixed Rate</label>
             <div class="col-md-6 form-check form-check-inline">
                 <select class="form-control" name="fixed_rate">
@@ -94,7 +94,7 @@
             </div>
         </div>
 
-        <div class="form-group{{ $errors->has('current_variable_rate') ? ' has-error' : '' }} required @if(old('escalation_basis', $model->escalation_basis) == '1' && (old('escalation_rate_type', $model->escalation_rate_type) == '2' || old('escalation_rate_type', $model->escalation_rate_type) == '3'))  @else hidden @endif is_j_12_y_e_s_variable_rate">
+        <div class="form-group{{ $errors->has('current_variable_rate') ? ' has-error' : '' }} required @if(old('is_escalation_applied_annually_consistently', $model->is_escalation_applied_annually_consistently)  == 'yes' && old('escalation_basis', $model->escalation_basis) == '1' && (old('escalation_rate_type', $model->escalation_rate_type) == '2' || old('escalation_rate_type', $model->escalation_rate_type) == '3'))  @else hidden @endif is_j_12_y_e_s_variable_rate">
             <label for="current_variable_rate" class="col-md-4 control-label">Specify the Current Variable Rate</label>
             <div class="col-md-6 form-check form-check-inline">
                 <select class="form-control" name="current_variable_rate">
@@ -111,7 +111,7 @@
             </div>
         </div>
 
-        <div class="form-group{{ $errors->has('total_escalation_rate') ? ' has-error' : '' }} required total_escalation_rate @if(old('escalation_basis', $model->escalation_basis) != '1') hidden @endif">
+        <div class="form-group{{ $errors->has('total_escalation_rate') ? ' has-error' : '' }} required total_escalation_rate @if(old('is_escalation_applied_annually_consistently', $model->is_escalation_applied_annually_consistently)  == 'yes' && old('escalation_basis', $model->escalation_basis) == '1')  @else hidden @endif">
             <label for="total_escalation_rate" class="col-md-4 control-label">Total Escalation Rate</label>
             <div class="col-md-6 form-check form-check-inline">
                 <input type="text" class="form-control" placeholder="Total Escalation Rate" name="total_escalation_rate" value="{{ old('total_escalation_rate', $model->total_escalation_rate) }}">
@@ -151,7 +151,7 @@
 
     <!-- Inconsistently Applied Form fields -->
 
-    <div class="form-group inconsistently_applied @if(old('is_escalation_applied_annually_consistently', $model->is_escalation_applied_annually_consistently) == 'yes') hidden @endif">
+    <div class="form-group inconsistently_applied @if(old('is_escalation_applicable',$model->is_escalation_applicable == "yes") && old('is_escalation_applied_annually_consistently', $model->is_escalation_applied_annually_consistently) == 'no')  @else hidden @endif">
         <table class="table table-bordered table-condensed">
             <thead>
             <th>Relevant Years</th>
@@ -230,7 +230,7 @@
     <div class="form-group">
         <div class="col-md-6 col-md-offset-4">
 
-            <a href="" class="btn btn-danger">Cancel</a>
+            <a href="{{ route('lease.escalation.index', ['id' => $lease->id]) }}" class="btn btn-danger">Cancel</a>
             <button type="submit" class="btn btn-success">
                 Submit
             </button>
@@ -282,7 +282,11 @@
 
        var _compute_escalation_url = "{{ route('lease.escalation.compute', ['id' => $payment->id]) }}";
 
-       var _inconsistent_escalation_inputs = '{!! json_encode(unserialize($inconsistentDataModel->inconsistent_data)) !!}';
+       @if($inconsistentDataModel)
+            var _inconsistent_escalation_inputs = '{!! json_encode(unserialize($inconsistentDataModel->inconsistent_data)) !!}';
+       @else
+            var _inconsistent_escalation_inputs = '{}';
+       @endif
 
        var effective_date_calendar_options = {
            dateFormat: "dd-M-yy",

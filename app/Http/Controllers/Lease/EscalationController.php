@@ -35,9 +35,34 @@ class EscalationController extends Controller
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
             if($lease){
                 //take out the payments for every lease asset
-                //$payments = LeaseAssetPayments::query()->whereIn('asset_id', $lease->assets->pluck('id')->toArray())->with('asset')->orderBy('asset_id', 'desc')->get();
+                $payments = LeaseAssetPayments::query()->whereIn('asset_id', $lease->assets->pluck('id')->toArray())
+                    ->with('asset')
+                    ->with('paymentEscalations')
+                    ->orderBy('asset_id', 'desc')->get();
+
+                $show_next = false;
+                $required_escalations = 0;
+                $completed_escalations = 0;
+                if($lease->escalation_clause_applicable == "no") {
+                    $show_next = true;
+                } else {
+                    foreach ($payments as $payment){
+                        $required_escalations = $required_escalations + 1;
+                        if(count($payment->paymentEscalations) > 0){
+                            $completed_escalations = $completed_escalations + 1;
+                        }
+                    }
+                }
+
+                if($lease->escalation_clause_applicable == "yes") {
+                    if($required_escalations == $completed_escalations){
+                        $show_next = true;
+                    }
+                }
+
                 return view('lease.escalation.index', compact(
-                    'lease'
+                    'lease',
+                    'show_next'
                 ));
 
             } else {
@@ -107,16 +132,18 @@ class EscalationController extends Controller
                         'escalation_basis'  => 'required_if:is_escalation_applicable,yes',
                         'escalation_rate_type' => 'required_if:escalation_basis,1',
                         'is_escalation_applied_annually_consistently'   => 'required_if:is_escalation_applicable,yes',
-                        'total_escalation_rate' => 'required_if:escalation_basis,1',
+                        'total_undiscounted_lease_payment_amount'   => 'required_if:is_escalation_applicable,yes',
                     ];
 
                     if($request->is_escalation_applicable == "yes" && $request->is_escalation_applied_annually_consistently == "yes") {
                         if($request->escalation_basis == '1' && ($request->escalation_rate_type == '1' || $request->escalation_rate_type == '3')) {
                             $rules['fixed_rate'] = 'required|numeric';
+                            $rules['total_escalation_rate'] = 'required_if:escalation_basis,1';
                         }
 
                         if($request->escalation_basis == '1' && ($request->escalation_rate_type == '2' || $request->escalation_rate_type == '3')) {
                             $rules['current_variable_rate'] = 'required|numeric';
+                            $rules['total_escalation_rate'] = 'required_if:escalation_basis,1';
                         }
 
                         if($request->escalation_basis == '2') {
@@ -136,7 +163,7 @@ class EscalationController extends Controller
 
                     $request->request->add(['lease_id' => $lease->id, 'asset_id' => $payment->asset_id, 'payment_id'=> $payment->id]);
 
-                    $data  = $request->except('_token', 'inconsistent_escalation_frequency', 'inconsistent_effective_date', 'inconsistent_amount_based_currency', 'inconsistent_escalated_amount');
+                    $data  = $request->except('_token', 'inconsistent_escalation_frequency', 'inconsistent_effective_date', 'inconsistent_amount_based_currency', 'inconsistent_escalated_amount', 'inconsistent_current_variable_rate', 'inconsistent_total_escalation_rate', 'inconsistent_fixed_rate');
 
                     if($request->is_escalation_applicable == "no"){
                         $data['effective_from'] = null;
@@ -164,13 +191,18 @@ class EscalationController extends Controller
                             $inconsistent_array = [];
                             $inconsistent_array['inconsistent_escalation_frequency'] = $request->inconsistent_escalation_frequency;
                             $inconsistent_array['inconsistent_effective_date'] = $request->inconsistent_effective_date;
+
                             if($request->escalation_basis == '2'){
                                 $inconsistent_array['inconsistent_amount_based_currency'] = $request->inconsistent_amount_based_currency;
                             }
 
-                            $inconsistent_array['inconsistent_escalated_amount']    = $request->inconsistent_escalated_amount;
-                            $inconsistent_array = serialize($inconsistent_array);
+                            $inconsistent_array['inconsistent_current_variable_rate']   = $request->inconsistent_current_variable_rate;
+                            $inconsistent_array['inconsistent_total_escalation_rate']   = $request->inconsistent_total_escalation_rate;
+                            $inconsistent_array['inconsistent_fixed_rate']   = $request->inconsistent_fixed_rate;
 
+                            $inconsistent_array['inconsistent_escalated_amount']    = $request->inconsistent_escalated_amount;
+
+                            $inconsistent_array = serialize($inconsistent_array);
                             $inconsistentDataModel->payment_id = $payment->id;
                             $inconsistentDataModel->inconsistent_data = $inconsistent_array;
                             $inconsistentDataModel->save();
@@ -266,16 +298,19 @@ class EscalationController extends Controller
                         'effective_from'    => 'required_if:is_escalation_applicable,yes',
                         'escalation_basis'  => 'required_if:is_escalation_applicable,yes',
                         'escalation_rate_type' => 'required_if:escalation_basis,1',
-                        'is_escalation_applied_annually_consistently'   => 'required_if:is_escalation_applicable,yes'
+                        'is_escalation_applied_annually_consistently'   => 'required_if:is_escalation_applicable,yes',
+                        'total_undiscounted_lease_payment_amount'   => 'required'
                     ];
 
                     if($request->is_escalation_applicable == "yes" && $request->is_escalation_applied_annually_consistently == "yes") {
                         if($request->escalation_basis == '1' && ($request->escalation_rate_type == '1' || $request->escalation_rate_type == '3')) {
                             $rules['fixed_rate'] = 'required|numeric';
+                            $rules['total_escalation_rate'] = 'required_if:escalation_basis,1';
                         }
 
                         if($request->escalation_basis == '1' && ($request->escalation_rate_type == '2' || $request->escalation_rate_type == '3')) {
                             $rules['current_variable_rate'] = 'required|numeric';
+                            $rules['total_escalation_rate'] = 'required_if:escalation_basis,1';
                         }
 
                         if($request->escalation_basis == '2') {
@@ -344,10 +379,12 @@ class EscalationController extends Controller
                     if($request->is_escalation_applicable == "yes" && $request->is_escalation_applied_annually_consistently == "yes") {
                         if($request->escalation_basis == '1' && ($request->escalation_rate_type == '1' || $request->escalation_rate_type == '3')) {
                             $rules['fixed_rate'] = 'required|numeric';
+                            $rules['total_escalation_rate'] = 'required_if:escalation_basis,1';
                         }
 
                         if($request->escalation_basis == '1' && ($request->escalation_rate_type == '2' || $request->escalation_rate_type == '3')) {
                             $rules['current_variable_rate'] = 'required|numeric';
+                            $rules['total_escalation_rate'] = 'required_if:escalation_basis,1';
                         }
 
                         if($request->escalation_basis == '2') {
