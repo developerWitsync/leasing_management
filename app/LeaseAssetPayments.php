@@ -54,4 +54,8 @@ class LeaseAssetPayments extends Model
     public function paymentDueDates(){
         return $this->hasMany('App\LeaseAssetPaymenetDueDate', 'payment_id', 'id')->orderBy('date', 'asc');
     }
+
+    public function paymentEscalations(){
+        return $this->hasMany('App\PaymentEscalationDetails', 'payment_id', 'id');
+    }
 }

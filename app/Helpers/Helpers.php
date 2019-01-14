@@ -279,7 +279,7 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
 
                         if($current_class == "info"){$current_class = 'warning';} elseif($current_class == 'warning') {$current_class = 'success';} else {$current_class = 'info';}
 
-                        $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => number_format($amount_to_consider, 2), 'current_class' => $current_class];
+                        $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => $amount_to_consider, 'current_class' => $current_class];
                         $escalation_date->addYear(1); //applied annually
 
                     } else {
@@ -287,7 +287,7 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
                         if($amount_to_consider == 0){
                             $amount_to_consider = $payment->payment_per_interval_per_unit;
                         }
-                        $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => number_format($amount_to_consider, 2), 'current_class' => $current_class];
+                        $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => $amount_to_consider, 'current_class' => $current_class];
                     }
 
                 } else {
@@ -319,11 +319,8 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
                                 }
 
                                 if($escalation_basis == '1') {
-//                            $escalation_percentage_or_amount = $data['total_escalation_rate'];
-//                            $amount_to_consider += ($amount_to_consider * $escalation_percentage_or_amount)/100;
-
-                                    $escalation_percentage_or_amount = $data['inconsistent_escalated_amount'][$start_year][$key];
-                                    $amount_to_consider += $data['inconsistent_escalated_amount'][$start_year][$key];
+                                    $escalation_percentage_or_amount = $data['inconsistent_total_escalation_rate'][$start_year][$key];
+                                    $amount_to_consider += ($amount_to_consider * $escalation_percentage_or_amount)/100;
 
                                 } else {
                                     $escalation_percentage_or_amount = $data['inconsistent_escalated_amount'][$start_year][$key];
@@ -332,14 +329,14 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
 
                                 if($current_class == "info"){$current_class = 'warning';} elseif($current_class == 'warning') {$current_class = 'success';} else {$current_class = 'info';}
 
-                                $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => number_format($amount_to_consider, 2), 'current_class' => $current_class];
+                                $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => $amount_to_consider, 'current_class' => $current_class];
 
                             } else {
                                 //escalation is not applied however the user needs to pay for this month and year
                                 if($amount_to_consider == 0){
                                     $amount_to_consider = $payment->payment_per_interval_per_unit;
                                 }
-                                $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => number_format($amount_to_consider, 2), 'current_class' => $current_class];
+                                $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => $amount_to_consider, 'current_class' => $current_class];
                             }
                         }
                     } else {
@@ -347,7 +344,7 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
                         if($amount_to_consider == 0){
                             $amount_to_consider = $payment->payment_per_interval_per_unit;
                         }
-                        $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => number_format($amount_to_consider, 2), 'current_class' => $current_class];
+                        $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => $amount_to_consider, 'current_class' => $current_class];
                     }
 
                 } else{
