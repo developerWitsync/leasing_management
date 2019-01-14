@@ -304,8 +304,11 @@
                     $('#accural_period').datepicker('setDate', newdate);
                     //set the minimum date for the lease end date as well
 
+                    //lease end date should be +30 days of accural peroid date
                     var dt2 = $('#lease_end_date');
-                    dt2.datepicker('option', 'minDate', newdate);
+                    var dt3 = new Date($('#accural_period').datepicker('getDate'));
+                    var dt4 = new Date(dt3.setDate(dt3.getDate() + 30));
+                    dt2.datepicker('option', 'minDate', dt4);
 
                     //@todo check for the accural_period if that is prior to jan 01, 2019 than show the accounting period fields
                     var jan_1_date = new Date('January 1, 2019');

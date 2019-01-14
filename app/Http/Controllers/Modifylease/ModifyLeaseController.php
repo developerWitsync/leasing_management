@@ -12,6 +12,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Lease;
 use App\ModifyLeaseApplication;
+use App\LeaseModificationReason;
 use Validator;
 
 
@@ -41,7 +42,7 @@ class ModifyLeaseController extends Controller
     public function fetchLeaseDetails(Request $request){
         try{
             if ($request->ajax()) {
-              return datatables()->eloquent(Lease::query()->with('leaseType'))->toJson();
+              return datatables()->eloquent(Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('status', '=', '1')->with('leaseType'))->toJson();
             } else {
                 return redirect()->back();
             }
@@ -57,12 +58,13 @@ class ModifyLeaseController extends Controller
      */
     public function create($id, Request $request){
         try{
-            $lease = $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
+            $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
              
-
+            $lase_modification = LeaseModificationReason::query()->get();
             if($lease) {
 
-                $model = new ModifyLeaseApplication();
+                $model = Lease::query()->where('id', '=', $id)->first();
+                
 
                 if($request->isMethod('post')) {
                     $validator = Validator::make($request->except('_token'), $this->validationRules());
@@ -79,10 +81,14 @@ class ModifyLeaseController extends Controller
                    }
                     $modify_lease = ModifyLeaseApplication::create($data);
 
+                    $data1['status'] = '0';
+                    $model->setRawAttributes($data1);
+                    $model->save();
+
                     return redirect(route('modifylease.create',['id' => $id]))->with('status', 'Modify Lease has been Created successfully.');
                     
                 }
-                return view('modifylease.create',compact('lease'));
+                return view('modifylease.create',compact('lease','lase_modification'));
             } else {
                 abort(404);
             }

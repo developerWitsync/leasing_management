@@ -243,3 +243,31 @@ ul.nav.nav-tabs > li.active > a, ul.nav.nav-tabs > li > a:hover {border: none; b
 .reportTble{display: block !important;}
 .settNavOuter {overflow: auto; padding-bottom: 8px;}
 .settNavOuter ul{width: 915px;}
+
+.loginOuter {
+    padding-top: 100px;
+}
+.txtareaInp {
+    height: 130px !important;
+    border: #ccc solid 1px;
+    border-radius: 0px;
+    box-shadow: none;
+    resize: none;
+}
+
+.modal-content.annexure_modal_body .modal-header .close {
+    margin-top: -20px;
+}
+
+.sub_table td table{
+    background-color: #eeeeee !important;
+}
+
+.escalation_inconsistent_table td {
+    padding: 5px;
+}
+
+.escalation_inconsistent_table {
+    background-color: #eeeeee !important;
+    margin-top: 10px;
+}

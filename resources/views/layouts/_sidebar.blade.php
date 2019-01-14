@@ -9,10 +9,14 @@
         <small class="fa fa-angle-right" aria-hidden="true"></small>
     </a>
 @endif
-@if(Auth::user())
-<a href="{{route('drafts.index')}}" class="list-group-item @if(request()->segment('1') == 'drafts') active @endif"><i class="fa fa-envelope-square"></i> <span>Drafts Saved</span><small class="fa fa-angle-right" aria-hidden="true"></small></a>
+@if(Auth::user()->can('drafts')) 
+<a href="{{route('drafts.index')}}" class="list-group-item @if(request()->segment('1') == 'drafts') active @endif"><i class="fa fa-envelope-square"></i> <span>Drafts Saved</span></a>
 @endif
-<a href="{{route('modifylease.index')}}" class="list-group-item  @if(request()->segment('1') == 'modify-lease') active @endif"><i class="fa fa-pencil-square"></i> <span>Modify Lease</span><small class="fa fa-angle-right" aria-hidden="true"></small></a>
+@if(Auth::user()->can('modify_lease')) 
+<a href="{{route('modifylease.index')}}" class="list-group-item  @if(request()->segment('1') == 'modify-lease') active @endif"><i class="fa fa-pencil-square"></i> <span>Modify Lease</span></a>
+@endif
+
+
 <a href="#" class="list-group-item"><i class="fa fa-dollar"></i> <span>Lease Valuation</span></a>
 <a href="#" class="list-group-item"><i class="fa fa-calendar-minus-o"></i> <span>Active/Expired Leases</span><small class="fa fa-angle-right" aria-hidden="true"></small></a>
 <a href="#" class="list-group-item"><i class="fa fa-drivers-license-o"></i> <span>Leasing Disclosure</span><small class="fa fa-angle-right" aria-hidden="true"></small></a>

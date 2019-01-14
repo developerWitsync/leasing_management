@@ -19,6 +19,16 @@ class PermissionSeeder extends Seeder
             'name' => 'settings',
             'display_name' => 'Settings',
             'description'   => 'User who has been provided the access will be responsible for managing the settings on behalf of the main business account.'
+        ],
+        [
+            'name' => 'drafts',
+            'display_name' => 'Drafts Saved',
+            'description'   => 'User can access the lease before review & submit form.'
+        ],
+        [
+            'name' => 'modify_lease',
+            'display_name' => 'Modify Lease',
+            'description'   => 'User can access the lease after review and submit form.'
         ]
         
     ];

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableLeasePaymentInvoice extends Migration
+class CreateTableEscalationFrequency extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class CreateTableLeasePaymentInvoice extends Migration
      */
     public function up()
     {
-        Schema::create('lease_payment_invoice', function (Blueprint $table) {
+        Schema::create('escalation_frequency', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('lease_id');
-            $table->foreign('lease_id')->references('id')->on('lease')->onDelete('cascade');
-            $table->enum('lease_payment_invoice_received', ['yes', 'no'])->nullable();
+            $table->string('title');
+            $table->unsignedInteger('frequency');
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ class CreateTableLeasePaymentInvoice extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lease_payment_invoice');
+        Schema::dropIfExists('escalation_frequency');
     }
 }

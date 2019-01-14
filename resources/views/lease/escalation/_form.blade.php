@@ -123,7 +123,7 @@
             </div>
         </div>
 
-        <div class="form-group{{ $errors->has('amount_based_currency') ? ' has-error' : '' }} required @if(old('escalation_basis', $model->escalation_basis) == '1' && old('is_escalation_applied_annually_consistently', $model->is_escalation_applied_annually_consistently) == 'yes') hidden @endif amount_based_fields">
+        <div class="form-group{{ $errors->has('amount_based_currency') ? ' has-error' : '' }} required @if(old('escalation_basis', $model->escalation_basis) == '1' || old('is_escalation_applied_annually_consistently', $model->is_escalation_applied_annually_consistently) == 'no') hidden @endif amount_based_fields">
             <label for="amount_based_currency" class="col-md-4 control-label">Currency</label>
             <div class="col-md-6 form-check form-check-inline">
                 <input type="text" class="form-control" placeholder="Currency" name="amount_based_currency" value="{{ $lease->lease_contract_id }}" readonly="readonly">
@@ -135,7 +135,7 @@
             </div>
         </div>
 
-        <div class="form-group{{ $errors->has('escalated_amount') ? ' has-error' : '' }} required @if(old('escalation_basis', $model->escalation_basis) == '1' && old('is_escalation_applied_annually_consistently', $model->is_escalation_applied_annually_consistently) == 'yes') hidden @endif amount_based_escalation_amount">
+        <div class="form-group{{ $errors->has('escalated_amount') ? ' has-error' : '' }} required @if(old('escalation_basis', $model->escalation_basis) == '1' || old('is_escalation_applied_annually_consistently', $model->is_escalation_applied_annually_consistently) == 'no') hidden @endif amount_based_escalation_amount">
             <label for="escalated_amount" class="col-md-4 control-label">Enter Amount of Increase</label>
             <div class="col-md-6 form-check form-check-inline">
                 <input type="text" class="form-control" placeholder="Enter Amount of Increase" name="escalated_amount" value="{{ old('escalated_amount', $model->escalated_amount) }}" >
@@ -148,6 +148,44 @@
         </div>
 
     </div>
+
+    <!-- Inconsistently Applied Form fields -->
+
+    <div class="form-group inconsistently_applied @if(old('is_escalation_applied_annually_consistently', $model->is_escalation_applied_annually_consistently) == 'yes') hidden @endif">
+        <table class="table table-bordered table-condensed">
+            <thead>
+            <th>Relevant Years</th>
+            <th>Escalation Frequency</th>
+            </thead>
+            <tbody>
+            @foreach($years as $year)
+                <tr>
+                    <td>{{ $year }}</td>
+                    <td>
+                        <select class="form-control escalation_frequency" name="inconsistent_escalation_frequency[{{$year}}][]" data-year="{{$year}}">
+                            <option value="">--Select Escalation Frequency--</option>
+                            @foreach($escalation_frequency as $frequency)
+                                <option value="{{ $frequency->frequency }}">{{ $frequency->title }}</option>
+                            @endforeach
+                        </select>
+
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" class="escalation_inconsistent_table escalation_inconsistent_table_{{$year}} table table-condensed table-bordered hidden">
+                            <thead class="theads_escalations">
+                            </thead>
+                            <tbody class="replace_with_{{$year}}">
+
+                            </tbody>
+                        </table>
+
+                    </td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Inconsistently Applied Form fields ends here -->
+
 
     <!-- will be visible when wither the "amount_based_escalation_amount" or "total_escalation_rate" is visible -->
 
@@ -187,15 +225,7 @@
         </div>
     </div>
 
-    <!-- Inconsistently Applied Form fields -->
 
-    <div class="form-group inconsistently_applied hidden">
-
-        
-
-    </div>
-
-    <!-- Inconsistently Applied Form fields ends here -->
 
     <div class="form-group">
         <div class="col-md-6 col-md-offset-4">
@@ -208,6 +238,11 @@
     </div>
 
 </form>
+
+
+<div style="display: none" class="inconsistent_clonable_row">
+
+</div>
 
 <!--Escalations Chart -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -222,322 +257,58 @@
 @section('footer-script')
     <script src="{{ asset('js/jquery-ui.js') }}"></script>
     <script src="{{ asset('assets/plugins/bootbox/bootbox.min.js') }}"></script>
+    <script src="{{ asset('js/pages/escalations.js') }}"></script>
     <script>
 
-        // Create a closure
-        (function(){
-            // Your base, I'm in it!
-            var originalAddClassMethod = jQuery.fn.addClass;
+       var paymentDueDates = '{!! json_encode($paymentDueDates)  !!}';
 
-            jQuery.fn.addClass = function(){
-                // Execute the original method.
-                var result = originalAddClassMethod.apply( this, arguments );
+       var _global_fixed_rate_select = '<select class="form-control" name="inconsistent_fixed_rate[YEAR][]" data-year="YEAR" onChange="javascript:calculateTotalEscalationRateInconsistent(this)">\n' +
+           '                    <option value="">--Select Fixed Rate Percentage--</option>\n' +
+           '                    @foreach($escalation_percentage_settings as $setting)\n' +
+           '                        <option value="{{ $setting->number }}">{{ $setting->number }}%</option>\n' +
+           '                    @endforeach\n' +
+           '                </select>';
 
-                // trigger a custom event
-                jQuery(this).trigger('cssClassChanged');
+       var _global_current_variable_rate_select = '<select class="form-control" name="inconsistent_current_variable_rate[YEAR][]" data-year="YEAR" onChange="javascript:calculateTotalEscalationRateInconsistent(this)">\n' +
+           '                    <option value="">--Select Current Variable Rate--</option>\n' +
+           '                    @foreach($escalation_percentage_settings as $setting)\n' +
+           '                        <option value="{{ $setting->number }}">{{ $setting->number }}%</option>\n' +
+           '                    @endforeach\n' +
+           '</select>';
 
-                // return the original result
-                return result;
-            }
-        })();
+       var lease_contract_id = "{{ $lease->lease_contract_id }}";
 
-        // Create a closure
-        (function(){
-            // Your base, I'm in it!
-            var originalAddClassMethod = jQuery.fn.removeClass;
+       var _show_escalation_char_url = "{{ route('lease.escalation.showescalationchart', ['id' => $payment->id]) }}";
 
-            jQuery.fn.removeClass = function(){
-                // Execute the original method.
-                var result = originalAddClassMethod.apply( this, arguments );
+       var _compute_escalation_url = "{{ route('lease.escalation.compute', ['id' => $payment->id]) }}";
 
-                // trigger a custom event
-                jQuery(this).trigger('cssClassChanged');
+       var _inconsistent_escalation_inputs = '{!! json_encode(unserialize($inconsistentDataModel->inconsistent_data)) !!}';
 
-                // return the original result
-                return result;
-            }
-        })();
+       var effective_date_calendar_options = {
+           dateFormat: "dd-M-yy",
+           maxDate : new Date('{{ $lease_end_date }}'),
+           @if($payment->using_lease_payment == '1')
+           //1 => Current Lease Payment as on Jan 01, 2019
+           yearRange : '2019:{{ \Carbon\Carbon::parse($lease_end_date)->format('Y') }}'
+           @else
+           //2=> Initial Lease Payment as on First Lease Start
+           minDate : new Date('{{ $payment->asset->accural_period }}')
+           @endif
+       };
 
-        // document ready function
-        $(function(){
+       $("#effective_from").datepicker(effective_date_calendar_options);
 
-            $(".amount_based_escalation_amount").bind('cssClassChanged', function(){
-                if(!$(this).hasClass('hidden')) {
-                    $('.see_escalation_chart').removeClass('hidden');
-                } else {
-                    //check if the  total_escalation_rate is visible
-                    if($('.total_escalation_rate').hasClass('hidden')) {
-                        $('.see_escalation_chart').addClass('hidden');
-                    }
-                }
-            });
+       /**
+        * calculate total escalation rate when the inconsistent escalations needs to be applied
+        * @param that
+        */
+       function calculateTotalEscalationRateInconsistent(that){
+           var year = $(that).data('year');
+           var current_variable_rate = ($('select[name="inconsistent_current_variable_rate['+year+'][]"]').length) ? $('select[name="inconsistent_current_variable_rate['+year+'][]"]').val() : 0;
+           var fixed_rate = ($('select[name="inconsistent_fixed_rate['+year+'][]"]').length ) ? $('select[name="inconsistent_fixed_rate['+year+'][]"]').val() : 0;
+           var total = parseInt(((current_variable_rate!="")?current_variable_rate:0)) + parseInt(((fixed_rate !="")?fixed_rate:0));
+           $('input[name="inconsistent_total_escalation_rate['+year+'][]"]').val(total);
+       }
 
-            $(".total_escalation_rate").bind('cssClassChanged', function(){
-                if(!$(this).hasClass('hidden')) {
-                    $('.see_escalation_chart').removeClass('hidden');
-                } else {
-                    //check if the  amount_based_escalation_amount is visible
-                    if($('.amount_based_escalation_amount').hasClass('hidden')) {
-                        $('.see_escalation_chart').addClass('hidden');
-                    }
-                }
-            });
-
-        });
-
-        $('.show_escalation_chart').on('click', function(){
-            $.ajax({
-                url : "{{ route('lease.escalation.showescalationchart', ['id' => $payment->id]) }}",
-                data : $('form').serialize(),
-                type : 'get',
-                success : function(response){
-                    setTimeout(function () {
-                        $('.escalation_chart_modal_body').html(response);
-
-                        $('#myModal').modal('show');
-                    }, 100);
-                }
-            });
-        });
-
-        $('.compute_escalation').on('click', function(){
-            $.ajax({
-                url : "{{ route('lease.escalation.compute', ['id' => $payment->id]) }}",
-                data : $('form').serialize(),
-                type : 'get',
-                dataType : 'json',
-                beforeSend : function(){
-                    $('.error_via_ajax').remove();
-                    $('.computed_fields').addClass('hidden');
-                },
-                success : function(response){
-                   console.log(response);
-                   if(response['status']) {
-
-                       $('.computed_fields').removeClass('hidden');
-                       $('#computed_total').val(response['computed_total']);
-
-                   } else {
-                       $.each(response['errors'], function (i,e) {
-                           if($('input[name="'+i+'"]').length ){
-                               $('input[name="'+i+'"]').after('<span class="help-block error_via_ajax" style="color:red">\n' +
-                                   '<strong>'+e+'</strong>\n' +
-                                   '</span>');
-                           }
-                       });
-                   }
-                }
-            });
-        });
-
-        $(document).on('click', 'input[type="checkbox"][name="is_escalation_applicable"]', function() {
-            $('input[type="checkbox"][name="is_escalation_applicable"]').not(this).prop('checked', false);
-
-            if($(this).is(':checked') && $(this).val() == 'yes') {
-                $('.hidden_fields').removeClass('hidden');
-            } else {
-                $('.hidden_fields').addClass('hidden');
-            }
-        });
-
-        $(document).ready(function () {
-            $("#effective_from").datepicker({
-                dateFormat: "dd-M-yy",
-                maxDate : new Date('{{ $lease_end_date }}'),
-                @if($payment->using_lease_payment == '1')
-                    //1 => Current Lease Payment as on Jan 01, 2019
-                    yearRange : '2019:{{ \Carbon\Carbon::parse($lease_end_date)->format('Y') }}'
-                @else
-                    //2=> Initial Lease Payment as on First Lease Start
-                    minDate : new Date('{{ $payment->asset->accural_period }}')
-                @endif
-            });
-
-            //toggle Rate Type Dropdown on the basis of the Escalation Basis selected
-            $('select[name="escalation_basis"]').on('change', function () {
-                if($(this).val() == '1') {
-                    //Rate Based
-                    $('.escalation_rate_type').removeClass('hidden');
-                    $('.amount_based_fields').addClass('hidden');
-                    $('.amount_based_escalation_amount').addClass('hidden');
-
-                } else {
-                    //amount based
-                    $('.is_j_12_y_e_s_fixed_rate').addClass('hidden');
-                    $('.is_j_12_y_e_s_variable_rate').addClass('hidden');
-
-                    $('select[name="fixed_rate"]').val('');
-                    $('select[name="current_variable_rate"]').val('');
-
-                    $('.total_escalation_rate').addClass('hidden');
-                    $('input[name="total_escalation_rate"]').val('');
-                    $('.escalation_rate_type').addClass('hidden');
-
-                    $('select[name="escalation_rate_type"]').val('');
-
-                    // show the amount based input fields here
-                    if($('input[type="checkbox"][name="is_escalation_applied_annually_consistently"]:checked').val() == 'yes'){
-                        $('.amount_based_fields').removeClass('hidden');
-                        $('.amount_based_escalation_amount').removeClass('hidden');
-                    } else {
-                        $('.amount_based_fields').addClass('hidden');
-                        $('.amount_based_escalation_amount').addClass('hidden');
-                    }
-                }
-            });
-
-            //show the pop up and confirm messages on the Escalation Consistently Annually Applied Post Effective Date checkbox
-            $(document).on('click', 'input[type="checkbox"][name="is_escalation_applied_annually_consistently"]', function() {
-                $('input[type="checkbox"][name="is_escalation_applied_annually_consistently"]').not(this).prop('checked', false);
-                var that = $(this);
-                if($(this).is(':checked') && $(this).val() == 'yes') {
-                    bootbox.confirm({
-                        message: "Every Year Escalation will be applied at the same rate on Previous Year Lease Payment. Are you sure?",
-                        buttons: {
-                            confirm: {
-                                label: 'Yes' ,
-                                className: 'btn-success'
-                            },
-                            cancel: {
-                                label: 'No',
-                                className: 'btn-danger'
-                            }
-                        },
-                        callback: function (result) {
-                            if(!result) {
-                                confirmWhenEscalationAppliedInconsistently();
-                            } else {
-                                //check if the fixed/fixed & variable selected in j11
-                                if($('select[name="escalation_rate_type"]').val() == '1' || $('select[name="escalation_rate_type"]').val() == '3') {
-                                    $('.is_j_12_y_e_s_fixed_rate').removeClass('hidden');
-                                    $('.total_escalation_rate').removeClass('hidden');
-                                }
-
-                                if($('select[name="escalation_rate_type"]').val() == '2' || $('select[name="escalation_rate_type"]').val() == '3') {
-                                    $('.is_j_12_y_e_s_variable_rate').removeClass('hidden');
-                                    $('.total_escalation_rate').removeClass('hidden');
-                                }
-
-                                //check if escalation_basis is amount based
-                                if($('select[name="escalation_basis"]').val() == '2') {
-                                    $('.amount_based_fields').removeClass('hidden');
-                                    $('.amount_based_escalation_amount').removeClass('hidden');
-                                } else {
-                                    $('.amount_based_fields').addClass('hidden');
-                                    $('.amount_based_escalation_amount').addClass('hidden');
-                                }
-
-                                $('.computed_fields').removeClass('hidden');
-                            }
-                        }
-                    });
-                } else if($(this).is(':checked') && $(this).val() == 'no'){
-                    confirmWhenEscalationAppliedInconsistently();
-                } else {
-                    $('.is_j_12_y_e_s_fixed_rate').addClass('hidden');
-                    $('.is_j_12_y_e_s_variable_rate').addClass('hidden');
-
-                    $('select[name="current_fixed_rate"]').val('');
-                    $('select[name="current_variable_rate"]').val('');
-
-                    $('.total_escalation_rate').addClass('hidden');
-                    $('input[name="total_escalation_rate"]').val('');
-
-                }
-            });
-
-            /**
-             * confirmation pop up when no is selected for escalations applied inconsistently.
-             */
-            function confirmWhenEscalationAppliedInconsistently(){
-                //need to show other confirm box here
-                bootbox.confirm({
-                    message: "Are You Sure that the Escalation applied inconsistently?",
-                    buttons: {
-                        confirm: {
-                            label: 'Yes',
-                            className: 'btn-success'
-                        },
-                        cancel: {
-                            label: 'No',
-                            className: 'btn-danger'
-                        }
-                    },
-                    callback: function (result) {
-                        $('.is_j_12_y_e_s_fixed_rate').addClass('hidden');
-                        $('.is_j_12_y_e_s_variable_rate').addClass('hidden');
-
-                        $('select[name="fixed_rate"]').val('');
-                        $('select[name="current_variable_rate"]').val('');
-
-                        $('.total_escalation_rate').addClass('hidden');
-                        $('input[name="total_escalation_rate"]').val('');
-
-                        //check if escalation_basis is amount based
-                        if($('select[name="escalation_basis"]').val() == '2') {
-                            $('.amount_based_fields').addClass('hidden');
-                            $('.amount_based_escalation_amount').addClass('hidden');
-                        }
-
-                        if(result) {
-                            $('input[type="checkbox"][name="is_escalation_applied_annually_consistently"][value="yes"]').prop('checked', false);
-                            $('input[type="checkbox"][name="is_escalation_applied_annually_consistently"][value="no"]').prop('checked', true);
-
-                            $('.computed_fields').addClass('hidden');
-
-                            //show the inconsistently form fields here
-
-
-                        } else {
-                            $('input[type="checkbox"][name="is_escalation_applied_annually_consistently"]').prop('checked', false);
-                            $('.computed_fields').removeClass('hidden');
-                        }
-                    }
-                });
-            }
-
-            $('select[name="escalation_rate_type"]').on('change', function(){
-                var checkbox_value = $('input[type="checkbox"][name="is_escalation_applied_annually_consistently"]:checked').val();
-
-                //If YES Selected in J12.1 and Fixed rate / Fixed & Variable in J11
-                if(($(this).val() == '1' || $(this).val() == '3') && typeof (checkbox_value)!= "undefined" && checkbox_value == 'yes'){
-                    $('.is_j_12_y_e_s_fixed_rate').removeClass('hidden');
-                } else {
-                    $('select[name="fixed_rate"]').val('');
-                    $('.is_j_12_y_e_s_fixed_rate').addClass('hidden');
-                }
-
-                //If YES Selected in J12.1 and Variable rate / Fixed & Variable in J11
-                if(($(this).val() == '2' || $(this).val() == '3') && typeof (checkbox_value)!= "undefined" && checkbox_value == 'yes'){
-                    $('select[name="fixed_rate"]').val('');
-                    $('.is_j_12_y_e_s_variable_rate').removeClass('hidden');
-                } else {
-                    $('select[name="current_variable_rate"]').val('');
-                    $('.is_j_12_y_e_s_variable_rate').addClass('hidden');
-                }
-
-                if($(this).val() != '' && checkbox_value == "yes"){
-                    $('.total_escalation_rate').removeClass('hidden');
-                    calculateTotalEscalationRate();
-                } else {
-                    $('.total_escalation_rate').addClass('hidden');
-                }
-            });
-
-            //calculate total escalation rate based upon the fixed and variable rates
-            $('select[name="current_variable_rate"] , select[name="fixed_rate"]').on('change', function(){
-                calculateTotalEscalationRate();
-            });
-
-            /**
-             * calculate the Total escalation rate when the percentage rate is selected and when the Yes is selected
-             */
-            function calculateTotalEscalationRate(){
-                var current_variable_rate = $('select[name="current_variable_rate"]').val();
-                var fixed_rate = $('select[name="fixed_rate"]').val();
-                var total = parseInt(((current_variable_rate!="")?current_variable_rate:0)) + parseInt(((fixed_rate !="")?fixed_rate:0));
-                $('input[name="total_escalation_rate"]').val(total);
-            }
-        });
     </script>
 @endsection
