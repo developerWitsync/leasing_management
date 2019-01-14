@@ -209,8 +209,9 @@ function calculatePaymentDueDatesByPaymentId(\App\LeaseAssetPayments $payment){
 function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \App\Lease $lease, \App\LeaseAssets $asset){
     $effective_date = \Carbon\Carbon::parse($data['effective_from']);
 
-    $escalation_basis = $data['escalation_basis'];
-    $escalation_applied_consistently_annually = $data['is_escalation_applied_annually_consistently'];
+    $escalation_applicable = $data['is_escalation_applicable'];
+    $escalation_basis = isset($data['escalation_basis'])?$data['escalation_basis']:null;
+    $escalation_applied_consistently_annually = isset($data['is_escalation_applied_annually_consistently'])?$data['is_escalation_applied_annually_consistently']:null;
 
     $start_date = $asset->accural_period; //start date with the free period
     $end_date   = $asset->getLeaseEndDate($asset); //end date based upon all the conditions
@@ -251,7 +252,7 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
     $current_class = 'info';
 
     //consistently applied annually and for percentage basis and amount based
-    if(($escalation_basis == '1' && $escalation_applied_consistently_annually == 'yes') || ($escalation_basis == '2' && $escalation_applied_consistently_annually == 'yes')){
+    if($escalation_applicable == "yes" && (($escalation_basis == '1' && $escalation_applied_consistently_annually == 'yes') || ($escalation_basis == '2' && $escalation_applied_consistently_annually == 'yes'))){
         while ($start_year <= $end_year) {
             foreach ($months as $key => $month){
                 $k_m = sprintf("%02d", $key);
@@ -300,7 +301,7 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
     }
 
     //code to compute the escalations when applied inconsistently...
-    if(($escalation_basis == '1' && $escalation_applied_consistently_annually == 'no') || ($escalation_basis == '2' && $escalation_applied_consistently_annually == 'no')){
+    if($escalation_applicable == "yes" && (($escalation_basis == '1' && $escalation_applied_consistently_annually == 'no') || ($escalation_basis == '2' && $escalation_applied_consistently_annually == 'no'))){
         while ($start_year <= $end_year) {
             foreach ($months as $key => $month){
 
@@ -356,6 +357,29 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
         }
     }
 
+    //code to generate the escalation chart even when the escalations are not applied so that the total undiscounted amount can be calculated
+    if($escalation_applicable == "no"){
+        while ($start_year <= $end_year) {
+            foreach ($months as $key => $month){
+
+                $k_m = sprintf("%02d", $key);
+                $payments_in_this_year_month = \App\LeaseAssetPaymenetDueDate::query()->whereRaw("`payment_id` = '{$payment->id}' AND DATE_FORMAT(`date`,'%m') = '{$k_m}' and DATE_FORMAT(`date`,'%Y') = '{$start_year}'")->count();
+                if($payments_in_this_year_month > 0){
+                    //escalation is not applied however the user needs to pay for this month and year
+                    if($amount_to_consider == 0){
+                        $amount_to_consider = $payment->payment_per_interval_per_unit;
+                    }
+                    $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => $amount_to_consider, 'current_class' => $current_class];
+
+                } else{
+                    //no the user is not paying on this month of this year
+                    $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => 0, 'current_class' => $current_class];
+                }
+            }
+            $start_year = $start_year + 1; //for each year
+        }
+    }
+
     return ['years' => $years,'months'    => $months,'escalations' => $escalations];
 }
 
@@ -380,4 +404,30 @@ function firstEscalationDate($effective_date, $escalation_end_date ,\App\LeaseAs
     }
 
     return $return_date;
+}
+
+/**
+ * get total undiscounted lease payment total for the NL10
+ * @param $asset_id
+ * @return float|int|mixed
+ */
+function getUndiscountedTotalLeasePayment($asset_id){
+    if($asset_id) {
+        $asset  = \App\LeaseAssets::query()->findOrFail($asset_id);
+        $total = 0;
+        foreach ($asset->payments as $payment){
+            if($payment->paymentEscalationSingle->is_escalation_applicable == 'no'){
+                //need to fetch the total of all the payments in payment annexure...
+                $payments_total = \App\LeaseAssetPaymenetDueDate::query()->where('payment_id', '=', $payment->id)->count();
+                $payments_total = $payments_total * $payment->total_amount_per_interval;
+                $total = $total + $payments_total;
+            } else {
+                //need to fetch the total of all the payments in payment escalation dates....
+                $payments_total = \App\PaymentEscalationDates::query()->where('payment_id', '=', $payment->id)->sum('total_amount_payable');
+                $total = $total + $payments_total;
+            }
+        }
+
+        return $total;
+    }
 }

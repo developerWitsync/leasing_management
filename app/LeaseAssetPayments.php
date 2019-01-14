@@ -58,4 +58,8 @@ class LeaseAssetPayments extends Model
     public function paymentEscalations(){
         return $this->hasMany('App\PaymentEscalationDetails', 'payment_id', 'id');
     }
+
+    public function paymentEscalationSingle(){
+        return $this->hasOne('App\PaymentEscalationDetails', 'payment_id', 'id');
+    }
 }

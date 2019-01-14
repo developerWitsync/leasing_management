@@ -69,6 +69,25 @@ $(function(){
     });
 
 });
+/**
+ * Show payment Annexure in case of escalation is not applicable
+ */
+
+$('.show_payment_annexure').on('click', function(){
+    $.ajax({
+        url : _show_payment_annexure_url,
+        data : $('form').serialize(),
+        type : 'get',
+        success : function(response){
+            setTimeout(function () {
+                $('.escalation_chart_modal_body').html(response);
+
+                $('#myModal').modal('show');
+            }, 100);
+        }
+    });
+});
+
 
 $('.show_escalation_chart').on('click', function(){
     $.ajax({
@@ -123,9 +142,11 @@ $(document).on('click', 'input[type="checkbox"][name="is_escalation_applicable"]
 
     if($(this).is(':checked') && $(this).val() == 'yes') {
         $('.hidden_fields').removeClass('hidden');
+        $('.see_payment_annexure').addClass('hidden');
     } else {
         $('.inconsistently_applied').addClass('hidden');
         $('.hidden_fields').addClass('hidden');
+        $('.see_payment_annexure').removeClass('hidden');
     }
 });
 

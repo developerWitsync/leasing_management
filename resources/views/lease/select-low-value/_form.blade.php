@@ -4,7 +4,7 @@
     <div class="form-group{{ $errors->has('undiscounted_lease_payment') ? ' has-error' : '' }} required">
         <label for="name" class="col-md-4 control-label">Undiscounted Lease Payments</label>
         <div class="col-md-6 form-check form-check-inline" required>
-            <input class="form-control" name="undiscounted_lease_payment" id="yes" type="text" value="{{ old('undiscounted_lease_payment', $model->undiscounted_lease_payment) }}" >
+            <input class="form-control" name="undiscounted_lease_payment" id="yes" type="text" value="{{ getUndiscountedTotalLeasePayment($asset->id) }}" >
              @if ($errors->has('undiscounted_lease_payment'))
                 <span class="help-block">
                     <strong>{{ $errors->first('undiscounted_lease_payment') }}</strong>
