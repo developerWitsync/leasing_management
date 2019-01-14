@@ -26,7 +26,7 @@
             @endif
 
             <div class="tab-content" style="padding: 0px;">
-                <div role="tabpanel" class="tab-pane active">
+                <div role="tabpanel" class="tab-pane frmOuterBx active">
                     <table class="table table-bordered table-responsive">
                         <thead>
                         <tr>

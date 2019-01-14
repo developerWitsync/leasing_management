@@ -6,7 +6,7 @@
         </span>
     </div>
     <div class="panel-body">
-        <div class="panel-body">
+        <div class="panel-body settingTble">
             <table class="table table-condensed {{ str_slug($category->title) }}">
                 <thead>
                 <tr>

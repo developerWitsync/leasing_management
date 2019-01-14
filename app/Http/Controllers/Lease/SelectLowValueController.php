@@ -45,8 +45,8 @@ class SelectLowValueController extends Controller
 
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
         if($lease) {
-        
         //Load the assets only for the assets where specific use  is not availbale for sublease and not availble for very/short term lease
+
          $category_excluded = CategoriesLeaseAssetExcluded::query()->get();
         
          $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
@@ -55,9 +55,10 @@ class SelectLowValueController extends Controller
                 $query->whereNotIn('lease_contract_duration_id',[1,2]);
             })->whereNotIn('category_id', $category_excluded_id)->get();
           
-           if(count($assets) == 0) {
+            if(count($assets) < 1) {
                 return redirect(route('addlease.leaseasset.index', ['id' => $id]));
             }
+
             return view('lease.select-low-value.index', compact(
                 'lease',
                 'assets',

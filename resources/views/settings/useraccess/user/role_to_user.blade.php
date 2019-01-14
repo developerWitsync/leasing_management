@@ -34,8 +34,10 @@
                              
                         <div class="form-group {{ $errors->has('user') ? ' has-error' : '' }} ">
                             <label for="user" class="col-md-4 control-label">Users</label>
-                            <input type="hidden" name="user" value="{{$user[0]->id}}">
-                            {{ $user[0]->authorised_person_name }}
+                            <div class="col-md-6">
+                                <input type="hidden" name="user" value="{{$user[0]->id}}">
+                                {{ $user[0]->authorised_person_name }}
+                            </div>      
                             
                         </div>
                         <div class="form-group{{ $errors->has('role') ? ' has-error' : '' }} required">

@@ -52,8 +52,8 @@
                         </div>
 
                         <div class="row form-group" style="margin-top: 12px;">
-                            <label for="no_of_lease_payments" class="col-md-2 leasepayLbl">Number of Lease Payments</label>
-                            <div class="col-md-3">
+                            <label for="no_of_lease_payments" class="col-lg-2 col-md-4 leasepayLbl">Number of Lease Payments</label>
+                            <div class="col-lg-3 col-md-6">
                                 <select name="no_of_lease_payments" class="form-control">
                                     <option value="0">--Select Number of Lease Payments--</option>
                                     @foreach($lease_asset_number_of_payments as $number_of_payment)
