@@ -416,7 +416,7 @@ function getUndiscountedTotalLeasePayment($asset_id){
         $asset  = \App\LeaseAssets::query()->findOrFail($asset_id);
         $total = 0;
         foreach ($asset->payments as $payment){
-            if($payment->paymentEscalationSingle->is_escalation_applicable == 'no'){
+            if((isset($payment->paymentEscalationSingle) && $payment->paymentEscalationSingle->is_escalation_applicable == 'no') || !isset($payment->paymentEscalationSingle)){
                 //need to fetch the total of all the payments in payment annexure...
                 $payments_total = \App\LeaseAssetPaymenetDueDate::query()->where('payment_id', '=', $payment->id)->count();
                 $payments_total = $payments_total * $payment->total_amount_per_interval;

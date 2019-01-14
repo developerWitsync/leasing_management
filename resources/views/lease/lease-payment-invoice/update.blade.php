@@ -46,12 +46,12 @@
     <div class="form-group">
         <div class="col-md-6 col-md-offset-4">
 
-            <a href="{{ route('addlease.initialdirectcost.index', ['id' => $lease->id]) }}" class="btn btn-danger">Cancel</a>
+            <a href="{{ route('addlease.leaseincentives.index', ['id' => $lease->id]) }}" class="btn btn-danger">Cancel</a>
             <button type="submit" class="btn btn-success">
                 Submit
             </button>
             @if($lease->leaseInvoice)
-            <a href="{{ route('addlease.residual.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
+            <a href="{{ route('addlease.reviewsubmit.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
              @endif
         </div>
     </div>
