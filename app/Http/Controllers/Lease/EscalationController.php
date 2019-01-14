@@ -429,4 +429,47 @@ class EscalationController extends Controller
             dd($e);
         }
     }
+
+    /**
+     * Genearate the
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function paymentAnnexure($id, Request $request){
+        try{
+            if($request->ajax()) {
+                $payment = LeaseAssetPayments::query()->findOrFail($id);
+                $asset =  $payment->asset;
+                $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
+                if($lease) {
+                    if($request->is_escalation_applicable == "no") {
+                        $escalationData = generateEsclationChart($request->except('_token', 'method', 'uri', 'ip'), $payment, $lease, $asset);
+                        $years = $escalationData['years'];
+                        $months = $escalationData['months'];
+                        $escalations = $escalationData['escalations'];
+                        $requestData = $request->except('_token', 'method', 'uri', 'ip');
+                        $errors = [];
+                        return view('lease.escalation._chart',compact(
+                            'errors',
+                            'lease',
+                            'asset',
+                            'years',
+                            'months',
+                            'escalations',
+                            'requestData'
+                        ));
+                    } else {
+                        abort(404);
+                    }
+                } else {
+                    abort(404);
+                }
+            } else {
+                abort(404);
+            }
+        }catch (\Exception $e){
+            dd($e);
+        }
+    }
 }

@@ -15,6 +15,13 @@
         </div>
     </div>
 
+    <div class="form-group @if(old('is_escalation_applicable', $model->is_escalation_applicable) == 'yes') hidden @endif see_payment_annexure">
+        <div class="col-md-6 col-md-offset-4">
+            <a href="javascript:void(0);" class="btn btn-info show_payment_annexure">See Lease Payment Annexure</a>
+        </div>
+    </div>
+
+
     <div class="@if(old('is_escalation_applicable', $model->is_escalation_applicable) != 'yes')) hidden @endif hidden_fields">
         <div class="form-group{{ $errors->has('effective_from') ? ' has-error' : '' }} required">
             <label for="effective_from" class="col-md-4 control-label">Escalation Effective From</label>
@@ -281,6 +288,8 @@
        var _show_escalation_char_url = "{{ route('lease.escalation.showescalationchart', ['id' => $payment->id]) }}";
 
        var _compute_escalation_url = "{{ route('lease.escalation.compute', ['id' => $payment->id]) }}";
+
+       var _show_payment_annexure_url  = "{{ route('lease.escalation.showpaymentannexure', ['id' => $payment->id]) }}";
 
        @if($inconsistentDataModel)
             var _inconsistent_escalation_inputs = '{!! json_encode(unserialize($inconsistentDataModel->inconsistent_data)) !!}';

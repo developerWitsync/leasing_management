@@ -78,7 +78,8 @@ class SelectLowValueController extends Controller
     public function create($id, Request $request){
         try{
             $asset = LeaseAssets::query()->findOrFail($id);
-            $lease = $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
+            getUndiscountedTotalLeasePayment($id);
+            $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
             if($lease) {
 
                 $model = new LeaseSelectLowValue();
