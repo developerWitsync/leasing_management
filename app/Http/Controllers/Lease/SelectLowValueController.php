@@ -21,7 +21,8 @@ class SelectLowValueController extends Controller
     protected function validationRules(){
         return [
             'undiscounted_lease_payment'   => 'required',
-            'is_classify_under_low_value' => 'required'
+            'is_classify_under_low_value' => 'required',
+            'reason'  => 'required_if:is_classify_under_low_value,yes'
         ];
     }
     /**

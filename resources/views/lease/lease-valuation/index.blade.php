@@ -36,7 +36,8 @@
                             <th>Unique ULA Code</th>
                             <th>Name of the Underlying Lease Asset</th>
                             <th>Underlying Lease Asset Classification</th>
-                            <th>Action</th>
+                            <th>Currency</th>
+                            <!-- <th>Action</th> -->
                         </tr>
                         </thead>
                         <tbody>
@@ -55,7 +56,8 @@
                                     <td>
                                         {{ $asset->subcategory->title }}
                                     </td>
-                                   <td>
+                                    <td>{{ $asset->lease_contract_id }}</td>
+                                   <!-- <td>
                                         @if($asset->leaseSelectDiscountRate)
                                             @php
                                                 $show_next[] = true;
@@ -67,7 +69,8 @@
                                             @endphp
                                             <a class="btn btn-sm btn-info" href="{{ route('addlease.discountrate.create', ['id'=> $asset->id]) }}">Add Select Discount Rate</a>
                                         @endif
-                                    </td>
+                                    </td> -->
+                                  
                                 </tr>
                             @endforeach
                         </tbody>
