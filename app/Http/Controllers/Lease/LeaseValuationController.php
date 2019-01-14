@@ -2,27 +2,27 @@
 /**
  * Created by Sublime.
  * User: Jyoti Gupta
- * Date: 03/01/19
- * Time: 9:24 AM
+ * Date: 14/01/19
+ * Time: 09:35 AM
  */
 
 namespace App\Http\Controllers\Lease;
 
 use App\Http\Controllers\Controller;
 use App\Lease;
-use App\LeaseSelectLowValue;
+use App\LeaseSelectDiscountRate;
+use App\LeaseDurationClassified;
 use App\LeaseAssets;
-use App\CategoriesLeaseAssetExcluded;
 use Illuminate\Http\Request;
 use Validator;
 
-class SelectLowValueController extends Controller
+class LeaseValuationController extends Controller
 {
     protected function validationRules(){
         return [
-            'undiscounted_lease_payment'   => 'required',
-            'is_classify_under_low_value' => 'required',
-            'reason'  => 'required_if:is_classify_under_low_value,yes'
+            'interest_rate'   => 'required',
+            'annual_average_esclation_rate' => 'required',
+            'discount_rate_to_use' => 'required|numeric|min:2'
         ];
     }
     /**
@@ -39,30 +39,31 @@ class SelectLowValueController extends Controller
                 'title' => 'Add New Lease'
             ],
             [
-                'link' => route('addlease.lowvalue.index',['id' => $id]),
-                'title' => 'Select Low Value'
+                'link' => route('addlease.discountrate.index',['id' => $id]),
+                'title' => 'Lease Valuation'
             ],
         ];
 
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
         if($lease) {
-        //Load the assets only for the assets where specific use  is not availbale for sublease and not availble for very/short term lease
-
-         $category_excluded = CategoriesLeaseAssetExcluded::query()->get();
-        
-         $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
-         
-         $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->whereNotIn('specific_use', [2])->whereHas('leaseDurationClassified',  function($query){
-                $query->whereNotIn('lease_contract_duration_id',[1,2]);
-            })->whereNotIn('category_id', $category_excluded_id)->get();
-          
-            if(count($assets) < 1) {
-                return redirect(route('addlease.leaseasset.index', ['id' => $id]));
-            }
-
-            return view('lease.select-low-value.index', compact(
+            //Load the assets only which will  not in is_classify_under_low_value = Yes in NL10 (Lease Select Low Value)and will not in very short tem/short term lease in NL 8.1(lease_contract_duration table) and not in intengible under license arrangements and biological assets (lease asset categories)
+             
+             $own_assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('specific_use',1)->whereHas('leaseSelectLowValue',  function($query){
+                $query->where('is_classify_under_low_value', '=', 'no');
+            })->whereHas('leaseDurationClassified',  function($query){
+                $query->where('lease_contract_duration_id', '=', '3');
+            })->whereNotIn('category_id',[5,8])->get();
+           
+            $sublease_assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('specific_use',2)->whereHas('leaseSelectLowValue',  function($query){
+                $query->where('is_classify_under_low_value', '=', 'no');
+            })->whereHas('leaseDurationClassified',  function($query){
+                $query->where('lease_contract_duration_id', '=', '3');
+            })->whereNotIn('category_id',[5,8])->get();
+           
+            return view('lease.lease-valuation.index', compact(
                 'lease',
-                'assets',
+                'own_assets',
+                'sublease_assets',
                 'breadcrumbs'
             ));
         } else {
@@ -71,7 +72,7 @@ class SelectLowValueController extends Controller
     }
 
     /**
-     * add select low value details for an asset in NL-10
+     * add select discount rate details for an asset in NL-10
      * @param $id
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -79,11 +80,10 @@ class SelectLowValueController extends Controller
     public function create($id, Request $request){
         try{
             $asset = LeaseAssets::query()->findOrFail($id);
-            getUndiscountedTotalLeasePayment($id);
-            $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
+            $lease = $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
             if($lease) {
 
-                $model = new LeaseSelectLowValue();
+                $model = new LeaseSelectDiscountRate();
 
                 if($request->isMethod('post')) {
                     $validator = Validator::make($request->except('_token'), $this->validationRules());
@@ -96,12 +96,12 @@ class SelectLowValueController extends Controller
                     $data['lease_id']   = $asset->lease->id;
                     $data['asset_id']   = $asset->id;
 
-                    $select_low_value = LeaseSelectLowValue::create($data);
-                    if($select_low_value){
-                        return redirect(route('addlease.lowvalue.index',['id' => $lease->id]))->with('status', 'Select Low Value has been added successfully.');
+                    $select_discount_value = LeaseSelectDiscountRate::create($data);
+                    if($select_discount_value){
+                        return redirect(route('addlease.discountrate.index',['id' => $lease->id]))->with('status', 'Select Discount Rate has been added successfully.');
                     }
                 }
-                return view('lease.select-low-value.create', compact(
+                return view('lease.lease-valuation.create', compact(
                     'model',
                     'lease',
                     'asset'
@@ -115,7 +115,7 @@ class SelectLowValueController extends Controller
     }
 
     /**
-     * edit existing select low value details for an asset
+     * edit existing select discount rate details for an asset
      * @param $id
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -126,7 +126,7 @@ class SelectLowValueController extends Controller
             $lease = $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
             if($lease) {
 
-                $model = LeaseSelectLowValue::query()->where('asset_id', '=', $id)->first();
+                $model = LeaseSelectDiscountRate::query()->where('asset_id', '=', $id)->first();
 
                 if($request->isMethod('post')) {
                     $validator = Validator::make($request->except('_token'), $this->validationRules());
@@ -142,10 +142,10 @@ class SelectLowValueController extends Controller
                     $model->setRawAttributes($data);
 
                     if($model->save()){
-                        return redirect(route('addlease.lowvalue.index',['id' => $lease->id]))->with('status', 'Select Low Value has been updated successfully.');
+                        return redirect(route('addlease.discountrate.index',['id' => $lease->id]))->with('status', 'Select Discount Rate has been updated successfully.');
                     }
                 }
-                return view('lease.select-low-value.update', compact(
+                return view('lease.lease-valuation.update', compact(
                     'model',
                     'lease',
                     'asset'

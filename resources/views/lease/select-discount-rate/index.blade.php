@@ -125,7 +125,7 @@
                         <div class="col-md-6 col-md-offset-4">
                               <a href="{{ route('addlease.lowvalue.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
                               @if(!in_array(false, $show_next))
-                                    <a href="#" class="btn btn-primary">Next</a>
+                                    <a href="{{ route('addlease.balanceasondec.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
                               @endif
                         </div>
 

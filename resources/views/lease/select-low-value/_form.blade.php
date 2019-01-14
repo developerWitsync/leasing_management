@@ -27,6 +27,19 @@
                 @endif
             </div>
     </div>
+    <div class="hidden-group" id="hidden-fields" @if(old('is_classify_under_low_value',$model->is_classify_under_low_value ) == "yes") style="display:block;" @else  style="display:none;" @endif>
+    <div class="form-group{{ $errors->has('reason') ? ' has-error' : '' }} required">
+        <label for="name" class="col-md-4 control-label">Provide Reasons for Selection to Low Value Asset</label>
+        <div class="col-md-6 form-check form-check-inline" required>
+            <input class="form-control" name="reason" id="yes" type="text" value="{{ old('reason', $model->reason) }}" >
+             @if ($errors->has('reason'))
+                <span class="help-block">
+                    <strong>{{ $errors->first('reason') }}</strong>
+                </span>
+            @endif
+        </div>
+    </div>
+</div>
   <div class="form-group">
         <div class="col-md-6 col-md-offset-4">
             <a href="{{ route('addlease.renewable.index', ['id' => $lease->id]) }}" class="btn btn-danger">Cancel</a>
@@ -46,8 +59,10 @@
 
             if($(this).is(':checked') && $(this).val() == 'yes') {
                 $("#is_classify_under_low_value	_no").prop('checked', false);
+                $('#hidden-fields').show();
             } else {
                 $("#is_classify_under_low_value	_yes").prop('checked', false);
+                $('#hidden-fields').hide();
             }
 
             
