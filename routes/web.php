@@ -197,6 +197,18 @@ Route::middleware('auth')->group(function(){
             Route::delete('delete-create-customer/{id}', ['as' => 'addlease.leaseincentives.deletecreatecustomer', 'uses' => 'LeaseIncentivesController@deleteCreateCustomer']);
         });
         /**
+         * Lease Incentives  NL15
+         */
+        Route::prefix('lease-valuation')->group(function(){
+            
+             Route::get('index/{id}', ['as' => 'addlease.leasevaluation.index', 'uses' => 'LeaseValuationController@index']);
+            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.leasevaluation.create', 'uses' => 'LeaseValuationController@create']);
+            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.leasevaluation.update', 'uses' => 'LeaseValuationController@update']);
+            Route::match(['post', 'get'], 'add-customer-details', ['as' => 'addlease.leasevaluation.addcustomer', 'uses' => 'LeaseValuationController@addCustomer']);
+            Route::match(['post', 'get'], 'update-customer-details/{id}', ['as' => 'addlease.leasevaluation.updatecustomer', 'uses' => 'LeaseValuationController@updateCustomer']);
+             Route::post('create-customer',['as' => 'addlease.leasevaluation.createcustomer', 'uses' => 'LeaseValuationController@createCustomer']);
+         });
+        /**
          * Lease Payment Invoice NL16
          */
         Route::prefix('lease-payment-invoice')->group(function(){
