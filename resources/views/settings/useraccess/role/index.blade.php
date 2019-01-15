@@ -15,7 +15,7 @@
 @endsection
 @section('content')
         <div class="panel panel-default">
-            <div class="panel-heading">Settings | User Access | Create Role</div>
+            <div class="panel-heading">User Access | Create Role</div>
              <div class="panel-body">
                 @if (session('status'))
                     <div class="alert alert-success">

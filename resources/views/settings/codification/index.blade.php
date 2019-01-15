@@ -2,7 +2,7 @@
 
 @section('content')
         <div class="panel panel-default">
-            <div class="panel-heading">Settings | Codification Settings</div>
+            <div class="panel-heading">Codification Settings</div>
 
             <div class="panel-body">
                 @if (session('status'))

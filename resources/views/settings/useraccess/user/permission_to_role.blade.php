@@ -41,10 +41,10 @@
                         <div class="form-group {{ $errors->has('permission') ? ' has-error' : '' }} required">
                             <label for="permission" class="col-md-4 control-label">Permission</label>
                             <div class="col-md-6">
-                                
+                               
                                 @foreach($permission as $permission)
                                 <div class="col-md-12">
-                                <input type="checkbox" name="permission[]" @if(old('permission',in_array($permission->id,$PermissionRoleId))) checked="checked" @endif value="{{$permission->id}}" >{{ $permission->display_name }}
+                                <input type="checkbox" name="permission[]" @if(old('permission',in_array($permission->id,$PermissionRoleId))) checked="checked" @endif @if($permission->id == "2") disabled="disabled" @endif value="{{$permission->id}}" >{{ $permission->display_name }}
                             </div>
                                 @endforeach
                                 @if ($errors->has('permission'))
@@ -59,6 +59,7 @@
                                     <button type="submit" class="btn btn-success">
                                         Submit
                                     </button>
+                                     <a href="{{route('settings.role')}}" class="btn btn-sm btn-danger add_more" data-form="add_more_form_lease_basis">Cancel</a>
                                 </div>
                             </div>
                         </form>

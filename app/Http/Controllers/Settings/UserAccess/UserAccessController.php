@@ -195,6 +195,7 @@ class UserAccessController extends Controller
       $PermissionRole= PermissionRole::where('role_id',$id)->get();
       $permission = Permission::all();
       $PermissionRoleId = $PermissionRole->pluck('permission_id')->toArray();
+      //dd($PermissionRoleId);
       if($request->isMethod('post')) {
              $validator = Validator::make($request->except('_token'), [
                 'permission'  =>  'required',

@@ -7,7 +7,7 @@
 @endsection
 @section('content')
         <div class="panel panel-default">
-            <div class="panel-heading">Settings | My Profile</div>
+            <div class="panel-heading">My Profile</div>
 
             <div class="panel-body">
                 @if (session('status'))
