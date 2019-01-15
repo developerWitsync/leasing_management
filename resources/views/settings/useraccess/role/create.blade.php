@@ -71,7 +71,9 @@
                                 </div>
                             </div>
                             <div class="form-group">
+
                                 <div class="col-md-6 col-md-offset-4">
+                                    <a href="{{ route('settings.role') }}" class="btn btn-danger">Cancel</a>
                                     <button type="submit" class="btn btn-success">
                                         Submit
                                     </button>

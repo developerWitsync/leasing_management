@@ -44,7 +44,7 @@
                                 
                                 @foreach($permission as $permission)
                                 <div class="col-md-12">
-                                <input type="checkbox" name="permission[]" @if(old('permission',in_array($permission->id,$PermissionRoleId))) checked="checked" @endif value="{{$permission->id}}" >{{$permission->name }}
+                                <input type="checkbox" name="permission[]" @if(old('permission',in_array($permission->id,$PermissionRoleId))) checked="checked" @endif value="{{$permission->id}}" >{{ $permission->display_name }}
                             </div>
                                 @endforeach
                                 @if ($errors->has('permission'))

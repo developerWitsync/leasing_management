@@ -14,7 +14,7 @@
                         User Access Settings
                         <ul>
                             <li><a href="{{ route('settings.role') }}"> Manage Roles</a></li>
-                            <li><a href="{{ route('settings.user') }}">Manage user</a></li>
+                            <li><a href="{{ route('settings.user') }}">Manage Users</a></li>
                         </ul>
                      </div>
                 </div>

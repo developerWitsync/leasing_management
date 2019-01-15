@@ -46,7 +46,7 @@
                             <div class="col-md-6">
                                 @foreach($role as $role)
                                 <div class="col-md-12">
-                                <input type="checkbox" name="role[]"  @if(old('role',in_array($role->id,$RoleUserId))) checked="checked" @endif value="{{$role->id}}">{{$role->name }}
+                                <input type="checkbox" name="role[]"  @if(old('role',in_array($role->id,$RoleUserId))) checked="checked" @endif value="{{$role->id}}">{{$role->display_name }}
                             </div>
                                  @endforeach
 

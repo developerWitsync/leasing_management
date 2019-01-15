@@ -100,7 +100,7 @@
                                     <a href="#">
                                         <img src="{{ asset('assets/images/breatcrum-icon.png') }}" class="img" alt="" >
                                         <img src="{{ asset('assets/images/breatcrum-icon-hover.png') }}" alt="" class="over" >
-                                        <span>HoLessor Details</span>
+                                        <span>Lessor Details</span>
                                     </a>
                                 </li>
                                 <li>
