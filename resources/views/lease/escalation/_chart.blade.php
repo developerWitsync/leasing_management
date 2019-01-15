@@ -50,7 +50,11 @@
                                     @if(isset($escalations[$year][$month]) && !empty($escalations[$year][$month]))
                                         <td class="{{ $escalations[$year][$month]['current_class'] }}">
                                             <span>
-                                                {{ $escalations[$year][$month]['percentage'] }} @if($requestData['escalation_basis'] == '1') % @endif / {{ $escalations[$year][$month]['amount'] }}
+                                                @if($requestData['is_escalation_applicable'] == 'yes')
+                                                    {{ $escalations[$year][$month]['percentage'] }} @if($requestData['escalation_basis'] == '1') % @endif / {{ $escalations[$year][$month]['amount'] }}
+                                                @elseif($requestData['is_escalation_applicable'] == 'no')
+                                                    {{ $escalations[$year][$month]['amount'] }}
+                                                @endif
                                             </span>
                                             @php
                                                 $total = $total + $escalations[$year][$month]['amount'];

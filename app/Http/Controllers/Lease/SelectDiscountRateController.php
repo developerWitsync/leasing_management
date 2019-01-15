@@ -46,6 +46,8 @@ class SelectDiscountRateController extends Controller
 
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
         if($lease) {
+             $discountrate = LeaseSelectDiscountRate::query()->where('lease_id', '=', $id)->get();
+
             //Load the assets only which is not in very short tem/short term lease in NL 8.1(lease_contract_duration table) and not in intengible under license arrangements and biological assets (lease asset categories)
              
              $own_assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('specific_use',1)->whereNotIn('category_id',[8,5])->whereHas('leaseDurationClassified',  function($query){
@@ -60,6 +62,7 @@ class SelectDiscountRateController extends Controller
                 'lease',
                 'own_assets',
                 'sublease_assets',
+                'discountrate',
                 'breadcrumbs'
             ));
         } else {

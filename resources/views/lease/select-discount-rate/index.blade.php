@@ -41,8 +41,9 @@
                         </thead>
                         <tbody>
                             @php
-                                $show_next = [];
+                                $show_next1 = [];
                             @endphp
+                            @if(count($own_assets)>0)
                             @foreach($own_assets as $key=>$asset)
                           <tr>
                                     <td>{{ $key + 1 }}</td>
@@ -58,18 +59,22 @@
                                    <td>
                                         @if($asset->leaseSelectDiscountRate)
                                             @php
-                                                $show_next[] = true;
+                                                $show_next1[] = true;
                                             @endphp
                                             <a class="btn btn-sm btn-primary" href="{{ route('addlease.discountrate.update', ['id'=> $asset->id]) }}">Update Select Discount Rate </a>
                                         @else
                                             @php
-                                                $show_next[] = false;
+                                                $show_next1[] = false;
                                             @endphp
                                             <a class="btn btn-sm btn-primary" href="{{ route('addlease.discountrate.create', ['id'=> $asset->id]) }}">Add Select Discount Rate</a>
                                         @endif
                                     </td>
                                 </tr>
                             @endforeach
+                            @else
+                            <tr>
+                                <td colspan="5"><center>No Record exsist.</center></td>
+                                @endif
                         </tbody>
                     </table>
                 </div>
@@ -88,8 +93,9 @@
                         </thead>
                         <tbody>
                             @php
-                                $show_next = [];
+                                $show_next2 = [];
                             @endphp
+                            @if(count($sublease_assets) >0)
                             @foreach($sublease_assets as $key=>$asset)
                           <tr>
                                     <td>{{ $key + 1 }}</td>
@@ -105,18 +111,22 @@
                                    <td>
                                         @if($asset->leaseSelectDiscountRate)
                                             @php
-                                                $show_next[] = true;
+                                                $show_next2[] = true;
                                             @endphp
                                             <a class="btn btn-sm btn-info" href="{{ route('addlease.discountrate.update', ['id'=> $asset->id]) }}">Update Select Low Value </a>
                                         @else
                                             @php
-                                                $show_next[] = false;
+                                                $show_next2[] = false;
                                             @endphp
                                             <a class="btn btn-sm btn-info" href="{{ route('addlease.discountrate.create', ['id'=> $asset->id]) }}">Add Select Low Value</a>
                                         @endif
                                     </td>
                                 </tr>
                             @endforeach
+                            @else
+                            <tr>
+                                <td colspan="5"><center>No Record exsist.</center></td>
+                                @endif
                         </tbody>
                     </table>
             </div>
@@ -124,9 +134,11 @@
 
                         <div class="col-md-6 col-md-offset-4">
                               <a href="{{ route('addlease.lowvalue.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
-                              @if(!in_array(false, $show_next))
-                                    <a href="#" class="btn btn-primary">Next</a>
+                              @if(count($discountrate)>0)
+                                    <a href="{{ route('addlease.balanceasondec.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
+                             
                               @endif
+                            
                         </div>
 
                     </div>

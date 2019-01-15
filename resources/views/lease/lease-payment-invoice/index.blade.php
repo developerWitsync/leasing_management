@@ -46,7 +46,7 @@
     <div class="form-group">
         <div class="col-md-6 col-md-offset-4">
 
-            <a href="{{ route('addlease.initialdirectcost.index', ['id' => $lease->id]) }}" class="btn btn-danger">Cancel</a>
+            <a href="{{ route('addlease.leasepaymentinvoice.index', ['id' => $lease->id]) }}" class="btn btn-danger">Cancel</a>
             <button type="submit" class="btn btn-success">
                 Submit
             </button>

@@ -78,7 +78,7 @@
                     <div class="form-group">
 
                         <div class="col-md-6 col-md-offset-4">
-                              <a href="{{ route('addlease.lowvalue.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
+                              <a href="{{ route('lease.escalation.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
                               @if(!in_array(false, $show_next))
                                     <a href="{{ route('addlease.discountrate.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
                               @endif

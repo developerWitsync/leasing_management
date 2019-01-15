@@ -21,7 +21,8 @@ class SelectLowValueController extends Controller
     protected function validationRules(){
         return [
             'undiscounted_lease_payment'   => 'required',
-            'is_classify_under_low_value' => 'required'
+            'is_classify_under_low_value' => 'required',
+            'reason'  => 'required_if:is_classify_under_low_value,yes'
         ];
     }
     /**
@@ -50,11 +51,9 @@ class SelectLowValueController extends Controller
          $category_excluded = CategoriesLeaseAssetExcluded::query()->get();
         
          $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
-         
          $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->whereNotIn('specific_use', [2])->whereHas('leaseDurationClassified',  function($query){
                 $query->whereNotIn('lease_contract_duration_id',[1,2]);
             })->whereNotIn('category_id', $category_excluded_id)->get();
-          
             if(count($assets) < 1) {
                 return redirect(route('addlease.leaseasset.index', ['id' => $id]));
             }
@@ -78,7 +77,8 @@ class SelectLowValueController extends Controller
     public function create($id, Request $request){
         try{
             $asset = LeaseAssets::query()->findOrFail($id);
-            $lease = $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
+            getUndiscountedTotalLeasePayment($id);
+            $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
             if($lease) {
 
                 $model = new LeaseSelectLowValue();

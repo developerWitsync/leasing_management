@@ -14,6 +14,7 @@ class LeaseSelectLowValue extends Model
         'fair_market_value',
         'undiscounted_lease_payment',
         'is_classify_under_low_value',
+        'reason',
         'created_at',
         'updated_at'
     ];

@@ -131,6 +131,8 @@ Route::middleware('auth')->group(function(){
 
             Route::get('escalation-chart/{id}', ['as'=>'lease.escalation.showescalationchart', 'uses'=> 'EscalationController@escalationChart']);
             Route::get('compute-total-escalation/{id}', ['as'=>'lease.escalation.compute', 'uses'=> 'EscalationController@computeTotalUndiscountedPayment']);
+
+            Route::get('show-payment-annexure/{id}', ['as'=>'lease.escalation.showpaymentannexure', 'uses'=> 'EscalationController@paymentAnnexure']);
         });
 
 
@@ -196,6 +198,18 @@ Route::middleware('auth')->group(function(){
             Route::delete('delete-customer/{id}/{lease_id}', ['as' => 'addlease.leaseincentives.deletecustomer', 'uses' => 'LeaseIncentivesController@deleteCustomer']);
             Route::delete('delete-create-customer/{id}', ['as' => 'addlease.leaseincentives.deletecreatecustomer', 'uses' => 'LeaseIncentivesController@deleteCreateCustomer']);
         });
+        /**
+         * Lease Incentives  NL15
+         */
+        Route::prefix('lease-valuation')->group(function(){
+            
+             Route::get('index/{id}', ['as' => 'addlease.leasevaluation.index', 'uses' => 'LeaseValuationController@index']);
+            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.leasevaluation.create', 'uses' => 'LeaseValuationController@create']);
+            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.leasevaluation.update', 'uses' => 'LeaseValuationController@update']);
+            Route::match(['post', 'get'], 'add-customer-details', ['as' => 'addlease.leasevaluation.addcustomer', 'uses' => 'LeaseValuationController@addCustomer']);
+            Route::match(['post', 'get'], 'update-customer-details/{id}', ['as' => 'addlease.leasevaluation.updatecustomer', 'uses' => 'LeaseValuationController@updateCustomer']);
+             Route::post('create-customer',['as' => 'addlease.leasevaluation.createcustomer', 'uses' => 'LeaseValuationController@createCustomer']);
+         });
         /**
          * Lease Payment Invoice NL16
          */

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class LeaseAssets extends Model
@@ -123,6 +124,7 @@ class LeaseAssets extends Model
     public function categoriesleaseassetexcluded(){
         return $this->hasOne('App\CategoriesLeaseAssetExcluded', 'asset_id','id');
     }
+
     public function country(){
         return $this->belongsTo('App\Countries', 'country_id', 'id');
     }
@@ -130,7 +132,38 @@ class LeaseAssets extends Model
     public function specificUse(){
         return $this->belongsTo('App\UseOfLeaseAsset', 'specific_use', 'id');
     }
+
     public function expectedLife(){
         return $this->belongsTo('App\ExpectedLifeOfAsset', 'expected_life', 'id');
+    }
+
+    public function presentValueOfLeaseLiability(){
+        $start_date =   Carbon::parse($this->accural_period);
+        $base_date = Carbon::create(2019, 01, 01);
+        $base_date = ($start_date->lessThan($base_date))?$base_date:$start_date;
+        $end_date = Carbon::parse($this->lease_end_date);
+
+        $start_year = $base_date->format('Y');
+        $end_year = $end_date->format('Y');
+
+        if($start_year == $end_year) {
+            $years[] = $end_year;
+        } else if($end_year > $start_year) {
+            $years = range($start_year, $end_year);
+        }
+
+        $months = [];
+        for($m=1; $m<=12; ++$m ){
+            $months[$m] = date('M', mktime(0, 0, 0, $m, 1));
+        }
+        $present_value_of_lease_liability = [];
+        while ($start_year <= $end_year) {
+            foreach ($months as $month){
+
+            }
+            $start_year = $start_year + 1;
+        }
+
+        return 20458;
     }
 }
