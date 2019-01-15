@@ -42,6 +42,7 @@ class ReviewSubmitController extends Controller
         ];
 
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
+
         if($lease) {
              $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->get();
               $contract_classifications = ContractClassifications::query()->select('id', 'title')->where('status', '=', '1')->get();

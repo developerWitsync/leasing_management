@@ -82,7 +82,8 @@
                             <th>Unique ULA Code</th>
                             <th>Name of the Underlying Lease Asset</th>
                             <th>Underlying Lease Asset Classification</th>
-                            <th>Action</th>
+                            <th>Currency</th>
+                        
                         </tr>
                         </thead>
                         <tbody>

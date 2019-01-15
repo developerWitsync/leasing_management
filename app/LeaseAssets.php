@@ -159,7 +159,7 @@ class LeaseAssets extends Model
         $present_value_of_lease_liability = [];
         while ($start_year <= $end_year) {
             foreach ($months as $month){
-                
+
             }
             $start_year = $start_year + 1;
         }

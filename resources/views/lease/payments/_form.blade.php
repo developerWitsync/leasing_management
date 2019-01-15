@@ -451,7 +451,20 @@
                 $(this).prop("checked",true);
             });
 
-            var _start_date = new Date("{{ date('D M d Y', strtotime($asset->accural_period)) }}");
+            //calculation (total_amount_per_interval= similar_chateristics_assets*payment_per_interval_per_unit)
+             var $total = $('#total_amount_per_interval'),
+                $value = $('#payment_per_interval_per_unit');
+            $units = $("#similar_chateristics_assets").val();
+            $value.on('input', function(e) {
+                var total = 0;
+                $value.each(function(index, elem) {
+                    if(!Number.isNaN(parseInt(this.value, 10)))
+                       total = $units * parseInt(this.value, 10);
+                });
+                $total.val(total);
+            });
+
+             var _start_date = new Date("{{ date('D M d Y', strtotime($asset->accural_period)) }}");
             if(_start_date < new Date('January 01 2019')){
                 $('.using_lease_payment').show();
             } else {
@@ -646,6 +659,8 @@
                 var or_name=filename.split("\\");
                 $('#upload').val(or_name[or_name.length-1]);
             });
+
+
 
         });
     </script>
