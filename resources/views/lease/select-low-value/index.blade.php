@@ -42,36 +42,44 @@
                             @php
                                 $show_next = [];
                             @endphp
-                            @foreach($assets as $key=>$asset)
-                          <tr>
-                                    <td>{{ $key + 1 }}</td>
-                                    <td style="width: 10%">
-                                        {{ $asset->uuid}}
-                                    </td>
-                                    <td>
-                                        {{ $asset->name }}
-                                    </td>
-                                    <td>
-                                        {{ $asset->subcategory->title }}
-                                    </td>
-                                    <td>
-                                        {{ $asset->fairMarketValue->total_units }}
-                                    </td>
-                                    <td>
-                                        @if($asset->leaseSelectLowValue)
-                                            @php
-                                                $show_next[] = true;
-                                            @endphp
-                                            <a class="btn btn-sm btn-primary" href="{{ route('addlease.lowvalue.update', ['id'=> $asset->id]) }}">Update Select Low Value </a>
-                                        @else
-                                            @php
-                                                $show_next[] = false;
-                                            @endphp
-                                            <a class="btn btn-sm btn-primary" href="{{ route('addlease.lowvalue.create', ['id'=> $asset->id]) }}">Add Select Low Value</a>
-                                        @endif
+                            @if(count($assets) > 0)
+                                @foreach($assets as $key=>$asset)
+                                <tr>
+                                        <td>{{ $key + 1 }}</td>
+                                        <td style="width: 10%">
+                                            {{ $asset->uuid}}
+                                        </td>
+                                        <td>
+                                            {{ $asset->name }}
+                                        </td>
+                                        <td>
+                                            {{ $asset->subcategory->title }}
+                                        </td>
+                                        <td>
+                                            {{ $asset->fairMarketValue->total_units }}
+                                        </td>
+                                        <td>
+                                            @if($asset->leaseSelectLowValue)
+                                                @php
+                                                    $show_next[] = true;
+                                                @endphp
+                                                <a class="btn btn-sm btn-primary" href="{{ route('addlease.lowvalue.update', ['id'=> $asset->id]) }}">Update Select Low Value </a>
+                                            @else
+                                                @php
+                                                    $show_next[] = false;
+                                                @endphp
+                                                <a class="btn btn-sm btn-primary" href="{{ route('addlease.lowvalue.create', ['id'=> $asset->id]) }}">Add Select Low Value</a>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @else
+                                <tr>
+                                    <td colspan="5">
+                                        <center>No underlying asset falls in the criteria. Please click on the next button to proceed further.</center>
                                     </td>
                                 </tr>
-                            @endforeach
+                            @endif
                         </tbody>
                     </table>
 

@@ -11,7 +11,6 @@ namespace App\Http\Controllers\Lease;
 use App\Http\Controllers\Controller;
 use App\Lease;
 use App\LeaseSelectDiscountRate;
-use App\LeaseDurationClassified;
 use App\LeaseAssets;
 use Illuminate\Http\Request;
 use Validator;
@@ -46,19 +45,9 @@ class SelectDiscountRateController extends Controller
 
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
         if($lease) {
-    $discountrate = LeaseSelectDiscountRate::query()->where('lease_id', '=', $id)->get();
-             
+            $discountrate = LeaseSelectDiscountRate::query()->where('lease_id', '=', $id)->get();
 
-            $own_assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('specific_use',1)->whereNotIn('category_id',[8,5])->whereHas('leaseDurationClassified',  function($query){
-                $query->where('lease_contract_duration_id', '=', '3');
-            })->get();
-            
-            $own_assets_id = $own_assets->pluck('id')->toArray();
-            //dd($own_assets_id);
-
-            $sublease_assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('specific_use',2)->whereNotIn('category_id',[8,5])->whereHas('leaseDurationClassified',  function($query){
-
-             $own_assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)
+            $own_assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)
              ->where('specific_use',1)
              ->whereNotIn('category_id',[8,5])
              ->whereHas('leaseSelectLowValue',  function($query){
@@ -67,6 +56,8 @@ class SelectDiscountRateController extends Controller
              ->whereHas('leaseDurationClassified',  function($query){
                 $query->where('lease_contract_duration_id', '=', '3');
               })->get();
+
+            $own_assets_id = $own_assets->pluck('id')->toArray();
 
              $sublease_assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)
              ->where('specific_use',2)
@@ -78,16 +69,15 @@ class SelectDiscountRateController extends Controller
 
                 $query->where('lease_contract_duration_id', '=', '3');
             })->get();
-            
-            $sublease_assets_id = $sublease_assets->pluck('id')->toArray();
 
+            $sublease_assets_id = $sublease_assets->pluck('id')->toArray();
 
             $discountrate = LeaseSelectDiscountRate::query()->whereIn('asset_id', array_merge($own_assets_id, $sublease_assets_id))->count();
 
             $required_discount_rate =  count($own_assets_id) + count($sublease_assets_id);
 
             $show_next = ($required_discount_rate == $discountrate);
-           
+
             return view('lease.select-discount-rate.index', compact(
                 'lease',
                 'own_assets',
@@ -168,7 +158,7 @@ class SelectDiscountRateController extends Controller
                     $data = $request->except('_token', 'submit');
                     $data['lease_id']   = $asset->lease->id;
                     $data['asset_id']   = $asset->id;
-                   
+
                     $model->setRawAttributes($data);
 
                     if($model->save()){
