@@ -614,8 +614,7 @@
 
 
 
-                        <div class="panel panel-info">
-                            <div class="panel-heading">Escalation Frequency</div>
+                       
 
                          <div class="panel panel-info">
                             <div class="panel-heading">
