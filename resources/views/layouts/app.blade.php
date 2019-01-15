@@ -30,7 +30,7 @@
 
                     <!-- Branding Image -->
                     <a class="navbar-brand logoBx" href="{{ url('/') }}">
-                        <img src="../../assets/images/logo.png" />
+                        <img src="{{ asset('assets/images/logo.png') }}" />
                     </a>
                 </div>
 
@@ -98,22 +98,22 @@
                             <ul>
                                 <li>
                                     <a href="#">
-                                        <img src="../../assets/images/breatcrum-icon.png" class="img" alt="" >
-                                        <img src="../../assets/images/breatcrum-icon-hover.png" alt="" class="over" >
+                                        <img src="{{ asset('assets/images/breatcrum-icon.png') }}" class="img" alt="" >
+                                        <img src="{{ asset('assets/images/breatcrum-icon-hover.png') }}" alt="" class="over" >
                                         <span>HoLessor Details</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="#">
-                                        <img src="../../assets/images/breatcrum-icon2.png" class="img" alt="" >
-                                        <img src="../../assets/images/breatcrum-icon2-hover.png" alt="" class="over" >
+                                        <img src="{{ asset('assets/images/breatcrum-icon2.png') }}" class="img" alt="" >
+                                        <img src="{{ asset('assets/images/breatcrum-icon2-hover.png') }}" alt="" class="over" >
                                         <span>Underlying Lease Asset</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="#">
-                                        <img src="../../assets/images/breatcrum-icon3.png" class="img" alt="" >
-                                        <img src="../../assets/images/breatcrum-icon3-hover.png" alt="" class="over" >
+                                        <img src="{{ asset('assets/images/breatcrum-icon3.png') }}" class="img" alt="" >
+                                        <img src="{{ asset('assets/images/breatcrum-icon3-hover.png') }}" alt="" class="over" >
                                         <span>Add Lease Payments</span>
                                     </a>
                                 </li>
@@ -222,25 +222,6 @@
                                         <span>Review & Submit</span>
                                     </a>
                                 </li>
-                                
-                                <!-- <li><a href="#" class="active">HoLessor Details</a></li>
-                                <li><a href="#">Underlying Lease Asset</a></li>
-                                <li><a href="#">Add Lease Payments</a></li>
-                                <li><a href="#">Fair Market Value</a></li>
-                                <li><a href="#">Residual Value Guarantee</a></li>
-                                <li><a href="#">Termination Option</a></li>
-                                <li><a href="#">Renewal Option</a></li>
-                                <li><a href="#">Purchase Option</a></li>
-                                <li><a href="#">Lease Duration Classified</a></li>
-                                <li><a href="#">Lease Escalation</a></li>
-                                <li><a href="#">Select Low Value</a></li>
-                                <li><a href="#">Select Discount Rate</a></li>
-                                <li><a href="#">Lease Balances</a></li>
-                                <li><a href="#">Initial Direct Cost</a></li>
-                                <li><a href="#">Lease Incentives</a></li>
-                                <li><a href="#">Lease Valuation</a></li>
-                                <li><a href="#">Lessor Invoice</a></li>
-                                <li><a href="#">Review & Submit</a></li> -->
 
                             </ul>
                         </div>
