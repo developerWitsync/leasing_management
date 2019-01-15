@@ -198,7 +198,7 @@
 
     <div class="form-group see_escalation_chart @if(old('escalation_basis', $model->escalation_basis) != '' && old('is_escalation_applicable', $model->is_escalation_applicable) == 'yes') @else hidden @endif hidden_fields">
         <div class="col-md-6 col-md-offset-4">
-            <a href="javascript:void(0);" class="btn btn-info compute_escalation">Compute</a>
+            <a href="javascript:void(0);" class="btn btn-primary compute_escalation">Compute</a>
         </div>
     </div>
 
@@ -228,7 +228,7 @@
 
     <div class="form-group see_escalation_chart @if(old('escalation_basis', $model->escalation_basis) != '' && old('is_escalation_applicable', $model->is_escalation_applicable) == 'yes') @else hidden @endif hidden_fields">
         <div class="col-md-6 col-md-offset-4">
-            <a href="javascript:void(0);" class="btn btn-info show_escalation_chart">See Escalation Chart</a>
+            <a href="javascript:void(0);" class="btn btn-primary show_escalation_chart">See Escalation Chart</a>
         </div>
     </div>
 

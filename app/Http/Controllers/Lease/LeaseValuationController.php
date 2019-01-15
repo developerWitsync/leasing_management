@@ -47,14 +47,17 @@ class LeaseValuationController extends Controller
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
         if($lease) {
             //Load the assets only which will  not in is_classify_under_low_value = Yes in NL10 (Lease Select Low Value)and will not in very short tem/short term lease in NL 8.1(lease_contract_duration table) and not in intengible under license arrangements and biological assets (lease asset categories)
-             
-             $own_assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('specific_use',1)->whereHas('leaseSelectLowValue',  function($query){
+             $own_assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)
+             ->where('specific_use',1)
+             ->whereHas('leaseSelectLowValue',  function($query){
                 $query->where('is_classify_under_low_value', '=', 'no');
             })->whereHas('leaseDurationClassified',  function($query){
                 $query->where('lease_contract_duration_id', '=', '3');
             })->whereNotIn('category_id',[5,8])->get();
-           
-            $sublease_assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('specific_use',2)->whereHas('leaseSelectLowValue',  function($query){
+
+            $sublease_assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)
+            ->where('specific_use',2)
+            ->whereHas('leaseSelectLowValue',  function($query){
                 $query->where('is_classify_under_low_value', '=', 'no');
             })->whereHas('leaseDurationClassified',  function($query){
                 $query->where('lease_contract_duration_id', '=', '3');

@@ -31,7 +31,7 @@
                                 <table class="table table-condensed">
                                     <thead>
                                         <tr>
-                                            <th>Sr No.</th>
+                                            <th width="80px">Sr No.</th>
                                             <th>Title</th>
                                         </tr>
                                     </thead>
@@ -53,7 +53,7 @@
                                 <table class="table table-condensed">
                                     <thead>
                                     <tr>
-                                        <th>Sr No.</th>
+                                        <th width="80px">Sr No.</th>
                                         <th>Title</th>
                                     </tr>
                                     </thead>
@@ -75,7 +75,7 @@
                                 <table class="table table-condensed">
                                     <thead>
                                     <tr>
-                                        <th>Sr No.</th>
+                                        <th width="80px">Sr No.</th>
                                         <th>Title</th>
                                     </tr>
                                     </thead>
@@ -97,7 +97,7 @@
                                 <table class="table table-condensed">
                                     <thead>
                                     <tr>
-                                        <th>Sr No.</th>
+                                        <th width="80px">Sr No.</th>
                                         <th>Title</th>
                                     </tr>
                                     </thead>
@@ -119,7 +119,7 @@
                                 <table class="table table-condensed">
                                     <thead>
                                     <tr>
-                                        <th>Sr No.</th>
+                                        <th width="80px">Sr No.</th>
                                         <th>Title</th>
                                     </tr>
                                     </thead>
@@ -147,9 +147,9 @@
                                 <table class="table table-condensed lease_payment_basis_table">
                                     <thead>
                                     <tr>
-                                        <th>Sr No.</th>
+                                        <th width="80px">Sr No.</th>
                                         <th>Title</th>
-                                        <th>Action</th>
+                                        <th width="120px">Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -205,9 +205,9 @@
                                 <table class="table table-condensed lease_payment_basis_table">
                                     <thead>
                                     <tr>
-                                        <th>Sr No.</th>
+                                        <th width="80px">Sr No.</th>
                                         <th>Number</th>
-                                        <th>Action</th>
+                                        <th width="120px">Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -262,9 +262,9 @@
                                 <table class="table table-condensed">
                                     <thead>
                                     <tr>
-                                        <th>Sr No.</th>
+                                        <th width="80px">Sr No.</th>
                                         <th>Number</th>
-                                        <th>Action</th>
+                                        <th width="120px">Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -314,7 +314,7 @@
                                 <table class="table table-condensed">
                                     <thead>
                                     <tr>
-                                        <th>Sr No.</th>
+                                        <th width="80px">Sr No.</th>
                                         <th>Title</th>
                                     </tr>
                                     </thead>
@@ -336,7 +336,7 @@
                                 <table class="table table-condensed">
                                     <thead>
                                     <tr>
-                                        <th>Sr No.</th>
+                                        <th width="80px">Sr No.</th>
                                         <th>Time Range</th>
                                         <th>Title</th>
                                     </tr>
@@ -360,7 +360,7 @@
                                 <table class="table table-condensed">
                                     <thead>
                                     <tr>
-                                        <th>Sr No.</th>
+                                        <th width="80px">Sr No.</th>
                                         <th>Purpose</th>
                                         <th>Title</th>
                                     </tr>
@@ -391,7 +391,7 @@
                                     <table class="table table-condensed">
                                         <thead>
                                         <tr>
-                                            <th>Sr No.</th>
+                                            <th width="80px">Sr No.</th>
                                             <th>Title</th>
                                         </tr>
                                         </thead>
@@ -419,9 +419,9 @@
                                 <table class="table table-condensed">
                                     <thead>
                                     <tr>
-                                        <th>Sr No.</th>
+                                        <th width="80px">Sr No.</th>
                                         <th>Number</th>
-                                        <th>Action</th>
+                                        <th width="120px">Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -471,7 +471,7 @@
                                 <table class="table table-condensed">
                                     <thead>
                                     <tr>
-                                        <th>Sr No.</th>
+                                        <th width="80px">Sr No.</th>
                                         <th>Title</th>
                                     </tr>
                                     </thead>
@@ -487,15 +487,13 @@
                             </div>
                         </div>
 
-
-
                         <div class="panel panel-info">
                             <div class="panel-heading">Lease Payments Frequency</div>
                             <div class="panel-body settingTble">
                                 <table class="table table-condensed">
                                     <thead>
                                     <tr>
-                                        <th>Sr No.</th>
+                                        <th width="80px">Sr No.</th>
                                         <th>Title</th>
                                     </tr>
                                     </thead>
@@ -522,9 +520,9 @@
                                 <table class="table table-condensed">
                                     <thead>
                                     <tr>
-                                        <th>Sr No.</th>
+                                        <th width="80px">Sr No.</th>
                                         <th>Number</th>
-                                        <th>Action</th>
+                                        <th width="120px">Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -573,10 +571,10 @@
                             <div class="panel-body settingTble">
                                 <table class="table table-condensed">
                                     <thead>
-                                    <tr>
-                                        <th>Sr No.</th>
-                                        <th>Title</th>
-                                    </tr>
+                                        <tr>
+                                            <th width="80px">Sr No.</th>
+                                            <th>Title</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
                                     @foreach($lease_payment_escalation_clause  as $key => $value)
@@ -596,7 +594,7 @@
                                 <table class="table table-condensed">
                                     <thead>
                                     <tr>
-                                        <th>Sr No.</th>
+                                        <th width="80px">Sr No.</th>
                                         <th>Title</th>
                                     </tr>
                                     </thead>
@@ -612,24 +610,20 @@
                             </div>
                         </div>
 
-
-
-                       
-
-                         <div class="panel panel-info">
+                     <div class="panel panel-info">
                             <div class="panel-heading">
                                 Lease Modification Reasons
                                 <span>
                                     <a href="javascript:void(0);" class="btn btn-sm btn-primary pull-right add_more" data-form="add_more_modification_form">Add More</a>
                                 </span>
                             </div>
-                            <div class="panel-body">
+                            <div class="panel-body settingTble">
                                 <table class="table table-condensed">
                                     <thead>
                                     <tr>
-                                        <th>Sr No.</th>
+                                        <th width="80px">Sr No.</th>
                                         <th>Tile</th>
-                                        <th>Action</th>
+                                        <th width="120px">Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -682,26 +676,16 @@
 
                             </div>
 
-                            <div class="panel-body">
+                            <div class="panel-body settingTble">
                                 <table class="table table-condensed">
                                     <thead>
                                     <tr>
-                                        <th>Sr No.</th>
+                                        <th width="50px">Sr No.</th>
                                         <th>Title</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    @foreach($escalation_frequencies  as $key => $frequency)
-                                        <tr>
-                                            <td>{{ $key + 1 }}</td>
-                                            <td>{{ $frequency->title}}</td>
-                                        </tr>
-                                    @endforeach
-                                    </tbody>
-                                        <th>Category</th>
                                         <th>Action</th>
                                     </tr>
                                     </thead>
+                                   
                                     <tbody>
                                     @foreach($category_excluded as $key=> $value)
 
@@ -748,7 +732,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Edit Settings Modal -->
         <div id="myModal" class="modal fade" role="dialog">
             <div class="modal-dialog">

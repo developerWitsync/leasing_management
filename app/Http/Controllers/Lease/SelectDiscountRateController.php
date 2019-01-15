@@ -46,10 +46,9 @@ class SelectDiscountRateController extends Controller
 
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
         if($lease) {
-            
-
-            //Load the assets only which is not in very short tem/short term lease in NL 8.1(lease_contract_duration table) and not in intengible under license arrangements and biological assets (lease asset categories)
+    $discountrate = LeaseSelectDiscountRate::query()->where('lease_id', '=', $id)->get();
              
+
             $own_assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('specific_use',1)->whereNotIn('category_id',[8,5])->whereHas('leaseDurationClassified',  function($query){
                 $query->where('lease_contract_duration_id', '=', '3');
             })->get();
@@ -58,6 +57,25 @@ class SelectDiscountRateController extends Controller
             //dd($own_assets_id);
 
             $sublease_assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('specific_use',2)->whereNotIn('category_id',[8,5])->whereHas('leaseDurationClassified',  function($query){
+
+             $own_assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)
+             ->where('specific_use',1)
+             ->whereNotIn('category_id',[8,5])
+             ->whereHas('leaseSelectLowValue',  function($query){
+                     $query->where('is_classify_under_low_value', '=', 'no');
+              })
+             ->whereHas('leaseDurationClassified',  function($query){
+                $query->where('lease_contract_duration_id', '=', '3');
+              })->get();
+
+             $sublease_assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)
+             ->where('specific_use',2)
+             ->whereNotIn('category_id',[8,5])
+             ->whereHas('leaseSelectLowValue',  function($query){
+                 $query->where('is_classify_under_low_value', '=', 'no');
+             })
+             ->whereHas('leaseDurationClassified',  function($query){
+
                 $query->where('lease_contract_duration_id', '=', '3');
             })->get();
             
