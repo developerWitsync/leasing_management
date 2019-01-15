@@ -42,6 +42,7 @@
                             @php
                                 $show_next = [];
                             @endphp
+                            @if(count($assets) > 0)
                             @foreach($assets as $key=>$asset)
                           <tr>
                                     <td>{{ $key + 1 }}</td>
@@ -69,6 +70,12 @@
                                     </td>
                                 </tr>
                             @endforeach
+                            @else 
+                                <tr>
+                                    <td colspan="5">
+                                        <center>No Records Exists. Please click on the next button to go to next step.</center></td>
+                                </tr>
+                            @endif
                         </tbody>
                     </table>
                     <div class="form-group">

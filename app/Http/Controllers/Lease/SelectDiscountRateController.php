@@ -46,9 +46,18 @@ class SelectDiscountRateController extends Controller
 
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
         if($lease) {
-
-             $discountrate = LeaseSelectDiscountRate::query()->where('lease_id', '=', $id)->get();
+    $discountrate = LeaseSelectDiscountRate::query()->where('lease_id', '=', $id)->get();
              
+
+            $own_assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('specific_use',1)->whereNotIn('category_id',[8,5])->whereHas('leaseDurationClassified',  function($query){
+                $query->where('lease_contract_duration_id', '=', '3');
+            })->get();
+            
+            $own_assets_id = $own_assets->pluck('id')->toArray();
+            //dd($own_assets_id);
+
+            $sublease_assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('specific_use',2)->whereNotIn('category_id',[8,5])->whereHas('leaseDurationClassified',  function($query){
+
              $own_assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)
              ->where('specific_use',1)
              ->whereNotIn('category_id',[8,5])
@@ -66,15 +75,26 @@ class SelectDiscountRateController extends Controller
                  $query->where('is_classify_under_low_value', '=', 'no');
              })
              ->whereHas('leaseDurationClassified',  function($query){
+
                 $query->where('lease_contract_duration_id', '=', '3');
             })->get();
+            
+            $sublease_assets_id = $sublease_assets->pluck('id')->toArray();
+
+
+            $discountrate = LeaseSelectDiscountRate::query()->whereIn('asset_id', array_merge($own_assets_id, $sublease_assets_id))->count();
+
+            $required_discount_rate =  count($own_assets_id) + count($sublease_assets_id);
+
+            $show_next = ($required_discount_rate == $discountrate);
            
             return view('lease.select-discount-rate.index', compact(
                 'lease',
                 'own_assets',
                 'sublease_assets',
                 'discountrate',
-                'breadcrumbs'
+                'breadcrumbs',
+                'show_next'
             ));
         } else {
             abort(404);

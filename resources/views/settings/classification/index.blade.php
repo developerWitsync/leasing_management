@@ -609,10 +609,8 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="panel panel-info">
-                            <div class="panel-heading">Escalation Frequency</div>
-                        </div>
-                         <div class="panel panel-info">
+
+                     <div class="panel panel-info">
                             <div class="panel-heading">
                                 Lease Modification Reasons
                                 <span>
@@ -684,20 +682,10 @@
                                     <tr>
                                         <th width="50px">Sr No.</th>
                                         <th>Title</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    @foreach($escalation_frequencies  as $key => $frequency)
-                                        <tr>
-                                            <td>{{ $key + 1 }}</td>
-                                            <td>{{ $frequency->title}}</td>
-                                        </tr>
-                                    @endforeach
-                                    </tbody>
-                                        <th>Category</th>
                                         <th>Action</th>
                                     </tr>
                                     </thead>
+                                   
                                     <tbody>
                                     @foreach($category_excluded as $key=> $value)
 
