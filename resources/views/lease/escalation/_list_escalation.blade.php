@@ -26,7 +26,7 @@
                 </td>
             </tr>
             <tr class="sub_table" style="display: none;">
-                <td colspan="5">
+                <td colspan="5" class="tableInner">
                     <table class="table table-bordered table-responsive">
                         <tr>
                             <th>Number of Lease Payment</th>
@@ -42,7 +42,7 @@
                                 <td>{{ $payment->category->title }}</td>
                                 <td>{{ $payment->paymentNature->title }}</td>
                                 <td>
-                                    <a href="{{ route('lease.escalation.create', ['id' => $payment->id, 'lease' => $asset->lease->id]) }}" class="btn btn-sm btn-info">Provide Escalation Details</a>
+                                    <a href="{{ route('lease.escalation.create', ['id' => $payment->id, 'lease' => $asset->lease->id]) }}" class="btn btn-sm btn-primary">Provide Escalation Details</a>
                                 </td>
                             </tr>
                         @endforeach

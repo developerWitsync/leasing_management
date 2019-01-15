@@ -20,7 +20,6 @@
         <nav class="navbar navbar-default navbar-static-top">
             <div class="hdrTop">
                 <div class="navbar-header">
-
                     <!-- Collapsed Hamburger -->
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse" aria-expanded="false">
                         <span class="sr-only">Toggle Navigation</span>
@@ -30,8 +29,8 @@
                     </button>
 
                     <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/') }}">
-                        {{ config('app.name', 'Laravel') }}
+                    <a class="navbar-brand logoBx" href="{{ url('/') }}">
+                        <img src="../../assets/images/logo.png" />
                     </a>
                 </div>
 
@@ -95,7 +94,158 @@
                                 </ol>
                             </nav>
                         @endif
+                        <div class="itemTab" >
+                            <ul>
+                                <li>
+                                    <a href="#">
+                                        <img src="../../assets/images/breatcrum-icon.png" class="img" alt="" >
+                                        <img src="../../assets/images/breatcrum-icon-hover.png" alt="" class="over" >
+                                        <span>HoLessor Details</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="../../assets/images/breatcrum-icon2.png" class="img" alt="" >
+                                        <img src="../../assets/images/breatcrum-icon2-hover.png" alt="" class="over" >
+                                        <span>Underlying Lease Asset</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="../../assets/images/breatcrum-icon3.png" class="img" alt="" >
+                                        <img src="../../assets/images/breatcrum-icon3-hover.png" alt="" class="over" >
+                                        <span>Add Lease Payments</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="../../assets/images/breatcrum-icon4.png" class="img" alt="" >
+                                        <img src="../../assets/images/breatcrum-icon4-hover.png" alt="" class="over" >
+                                        <span>Fair Market Value</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="../../assets/images/breatcrum-icon5.png" class="img" alt="" >
+                                        <img src="../../assets/images/breatcrum-icon5-hover.png" alt="" class="over" >
+                                        <span>Residual Value Guarantee</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="../../assets/images/breatcrum-icon6.png" class="img" alt="" >
+                                        <img src="../../assets/images/breatcrum-icon6-hover.png" alt="" class="over" >
+                                        <span>Termination Option</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="../../assets/images/breatcrum-icon7.png" class="img" alt="" >
+                                        <img src="../../assets/images/breatcrum-icon7-hover.png" alt="" class="over" >
+                                        <span>Renewal Option</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="../../assets/images/breatcrum-icon8.png" class="img" alt="" >
+                                        <img src="../../assets/images/breatcrum-icon8-hover.png" alt="" class="over" >
+                                        <span>Purchase Option</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="../../assets/images/breatcrum-icon9.png" class="img" alt="" >
+                                        <img src="../../assets/images/breatcrum-icon9-hover.png" alt="" class="over" >
+                                        <span>Lease Duration Classified</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="../../assets/images/breatcrum-icon10.png" class="img" alt="" >
+                                        <img src="../../assets/images/breatcrum-icon10-hover.png" alt="" class="over" >
+                                        <span>Lease Escalation</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="../../assets/images/breatcrum-icon11.png" class="img" alt="" >
+                                        <img src="../../assets/images/breatcrum-icon11-hover.png" alt="" class="over" >
+                                        <span>Select Low Value</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="../../assets/images/breatcrum-icon12.png" class="img" alt="" >
+                                        <img src="../../assets/images/breatcrum-icon12-hover.png" alt="" class="over" >
+                                        <span>Select Discount Rate</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="../../assets/images/breatcrum-icon13.png" class="img" alt="" >
+                                        <img src="../../assets/images/breatcrum-icon13-hover.png" alt="" class="over" >
+                                        <span>Lease Balances</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="../../assets/images/breatcrum-icon14.png" class="img" alt="" >
+                                        <img src="../../assets/images/breatcrum-icon14-hover.png" alt="" class="over" >
+                                        <span>Initial Direct Cost</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="../../assets/images/breatcrum-icon15.png" class="img" alt="" >
+                                        <img src="../../assets/images/breatcrum-icon15-hover.png" alt="" class="over" >
+                                        <span>Lease Incentives</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="../../assets/images/breatcrum-icon16.png" class="img" alt="" >
+                                        <img src="../../assets/images/breatcrum-icon16-hover.png" alt="" class="over" >
+                                        <span>Lease Valuation</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="../../assets/images/breatcrum-icon17.png" class="img" alt="" >
+                                        <img src="../../assets/images/breatcrum-icon17-hover.png" alt="" class="over" >
+                                        <span>Lessor Invoice</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="../../assets/images/breatcrum-icon18.png" class="img" alt="" >
+                                        <img src="../../assets/images/breatcrum-icon18-hover.png" alt="" class="over" >
+                                        <span>Review & Submit</span>
+                                    </a>
+                                </li>
+                                
+                                <!-- <li><a href="#" class="active">HoLessor Details</a></li>
+                                <li><a href="#">Underlying Lease Asset</a></li>
+                                <li><a href="#">Add Lease Payments</a></li>
+                                <li><a href="#">Fair Market Value</a></li>
+                                <li><a href="#">Residual Value Guarantee</a></li>
+                                <li><a href="#">Termination Option</a></li>
+                                <li><a href="#">Renewal Option</a></li>
+                                <li><a href="#">Purchase Option</a></li>
+                                <li><a href="#">Lease Duration Classified</a></li>
+                                <li><a href="#">Lease Escalation</a></li>
+                                <li><a href="#">Select Low Value</a></li>
+                                <li><a href="#">Select Discount Rate</a></li>
+                                <li><a href="#">Lease Balances</a></li>
+                                <li><a href="#">Initial Direct Cost</a></li>
+                                <li><a href="#">Lease Incentives</a></li>
+                                <li><a href="#">Lease Valuation</a></li>
+                                <li><a href="#">Lessor Invoice</a></li>
+                                <li><a href="#">Review & Submit</a></li> -->
+
+                            </ul>
+                        </div>
                         @yield('content')
+                        
                     </div>
             </div>
         @else

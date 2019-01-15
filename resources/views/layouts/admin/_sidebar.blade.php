@@ -1,11 +1,7 @@
 <div class="left main-sidebar">
-
     <div class="sidebar-inner leftscroll">
-
         <div id="sidebar-menu">
-
             <ul>
-
                 <li class="submenu">
                     <a class="@if(request()->segment('2') == 'dashboard') active @endif" href="{{ route('admin.dashboard.index') }}">
                         <i class="fa fa-fw fa-bars"></i><span>

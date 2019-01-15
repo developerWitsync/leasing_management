@@ -4,7 +4,7 @@
     <div class="headerbar-left">
         <a href="{{ route('admin.dashboard.index') }}" class="logo">
             <!-- <img alt="Logo" src="{{ asset('assets/images/logo.png') }}" /> -->
-            <span>Witsync Lease @lang('_sidebar.Admin')</span>
+            <img src="assets/images/logo.png" alt="">
         </a>
     </div>
 

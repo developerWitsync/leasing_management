@@ -160,8 +160,8 @@ legend.scheduler-border {
 }
 
 /*---------------------- css by Dushyant-----------------*/
-@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900');
-body{background: #fff; font-family: 'Roboto', sans-serif;}
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600,700');
+body{background: #fff; font-family: 'Open Sans', sans-serif;}
 .navbar-default { background-color: #f5f5f5; border-color: #e4e5e6; position: fixed; left: 0; top: 0; right: 0; padding: 0 15px 0 0px;}
 .dashOuter {position: relative; top: 50px;}
 .dashLeft {padding: 0; width: 270px; position: fixed; float: left; left: 0; top: 50px; bottom: 0; background: #f5f5f5;}
@@ -186,7 +186,7 @@ a.list-group-item, button.list-group-item {color: #333;}
 .panel-default > .panel-heading {color: #fff; background-color: #3576bc; border-color: #3576bc; border-radius: 0; font-size: 18px; line-height: 25px;}
 .panel-default {border-color: #ccc;}
 .panel-body {font-size: 16px; color: #333;}
-.form-group label {font-weight: 500; font-size: 14px;}
+.form-group label {font-weight: 600; font-size: 14px;}
 .form-group.required .control-label:after{ font-size: 7px;}
 input.form-control {height: 35px; border: #ccc solid 1px; border-radius: 0px; box-shadow: none; padding: 0px 5px;}
 select.form-control {height: 35px; border: #ccc solid 1px; border-radius: 0px; box-shadow: none; padding: 0px;}
@@ -209,7 +209,7 @@ fieldset.scheduler-border {background: #f9f9f9;}
 legend.scheduler-border {border: #898989 solid 1px; padding: 5px 15px; background: #f9f9f9;}
 .frmBtnBx a, .frmBtnBx button{margin-right: 5px; padding: 4px 15px;}
 .btn-primary:hover {background-color: #1c69af; border-color: #1c69af;}
-.exitingBtn {padding: 7px 0; margin-top: 5px; margin-left: 7px; line-height: 20px; font-size: 15px; font-weight: 500; border-radius: 0; width: 217px;}
+.exitingBtn {padding: 7px 0; margin-top: 5px; margin-left: 7px; line-height: 20px; font-size: 15px; font-weight: 600; border-radius: 0; width: 217px;}
 .leasepayLbl{line-height: 35px;}
 .addpayTbleOuter table { border-top: #ccc solid 1px; border-left: #ccc solid 1px;}
 .addpayTbleOuter table th {border-right: #ccc solid 1px; padding: 10px 30px 10px 10px !important; border-bottom: #ccc solid 1px !important;}
@@ -242,7 +242,7 @@ ul.nav.nav-tabs > li > a{color: #333; cursor: pointer;}
 ul.nav.nav-tabs > li.active > a, ul.nav.nav-tabs > li > a:hover {border: none; background: #2e79bd; border-radius: 0; color: #fff !important;}
 .reportTble{display: block !important;}
 .settNavOuter {overflow: auto; padding-bottom: 8px;}
-.settNavOuter ul{width: 915px;}
+
 
 .loginOuter {
     padding-top: 100px;
@@ -258,6 +258,9 @@ ul.nav.nav-tabs > li.active > a, ul.nav.nav-tabs > li > a:hover {border: none; b
 .modal-content.annexure_modal_body .modal-header .close {
     margin-top: -20px;
 }
+.modal-content.escalation_chart_modal_body .modal-header .close {
+    margin-top: -20px;
+}
 
 .sub_table td table{
     background-color: #eeeeee !important;
@@ -271,3 +274,46 @@ ul.nav.nav-tabs > li.active > a, ul.nav.nav-tabs > li > a:hover {border: none; b
     background-color: #eeeeee !important;
     margin-top: 10px;
 }
+
+td.tableInner table {
+    background: #f5f5f5 !important;
+}
+td.tableInner table > tbody > tr > th {
+    background: #888;
+    color: #fff !important;
+    font-weight: 400 !important;
+}
+
+/* .itemTab{list-style: none; overflow: hidden; overflow-x: auto; font-size: 15px; margin-bottom: 15px; padding: 0;}
+.itemTab ul{ margin: 0px; padding:0px; width: 3505px;}
+.itemTab li {float: left;}
+.itemTab li a{color: white; text-decoration: none; padding: 10px 0 10px 55px; background: rgb(14, 45, 90); position: relative; display: block; float: left;}
+.itemTab li a:after {content:""; display: block; width: 0; height: 0; border-top: 50px solid transparent; border-bottom: 50px solid transparent; border-left: 30px solid rgb(14, 45, 90); position: absolute; top: 50%; margin-top: -50px; left: 100%;
+  z-index: 2;}   
+.itemTab li a:before{content:""; display: block; width: 0; height: 0; border-top: 50px solid transparent;  border-bottom: 50px solid transparent; border-left: 30px solid white;  position: absolute; top: 50%; margin-top: -50px; margin-left: 1px;
+  left: 100%; z-index: 1;}   
+.itemTab li:first-child a {padding-left: 10px; border-radius:3px 0 0 3px;}
+.itemTab li:last-child a { padding-right:15px; border-radius:0px 3px 3px 0px;}
+.itemTab li:last-child a:after { border: 0; }
+.itemTab li a:hover, .itemTab li a.active{ background: #289415; }
+.itemTab li a:hover:after, .itemTab li a.active:after { border-left-color:#289415 !important; }
+.itemTab li:last-child a:hover, .itemTab li:last-child a.active{ background:#289415 !important;} */
+
+.itemTab{padding-bottom: 10px; padding-top: 5px;}
+.itemTab ul{ margin: 0px; padding:0px;}
+.itemTab ul li{display: inline-block; vertical-align: top; padding-right: 10px;}
+.itemTab ul li a{ position: relative; display: inline-block; position: relative; background: #f5f5f5; border: #e5e5e5 solid 1px; border-radius: 3px; width: 70px; height: 60px;}
+.itemTab ul li a img {position: absolute; left: 0; top: 0; bottom: 0; right: 0; margin: auto;}
+.itemTab ul li a:hover, .itemTab ul li a.active{ background: #3576bc; border: #1c69af solid 1px;}
+.itemTab ul li a .img{ display:block;}
+.itemTab ul li a .over{ display:none;}
+.itemTab ul li a:hover .img, .itemTab ul li a.active .img{ display:none;}
+.itemTab ul li a:hover .over, .itemTab ul li a.active .over{ display:block;}
+.itemTab ul li a span {position: absolute; left: 50%; top: -49px; background: #e5e5e5; padding: 8px 0px; color: #000; border-radius: 3px;   width: 200px;
+    text-align: center; margin-left: -100px; font-weight: 500; display: none;}
+.itemTab ul li a span:after{ border-left: transparent solid 10px; border-right: transparent solid 10px; border-top:#e5e5e5 solid 10px; content: ''; position: absolute; left: 50%; margin-left: -10px; bottom:-10px;}
+.itemTab ul li a:hover span, .itemTab ul li a.active span{ display: block;}
+
+
+.navbar-brand.logoBx {padding: 6px 10px;}
+ul.nav.navbar-nav.navbar-right li.dropdown{border-left: #e4e5e6 solid 1px;}
