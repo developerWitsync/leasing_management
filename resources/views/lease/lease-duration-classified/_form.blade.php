@@ -30,7 +30,7 @@
             <select name="lease_contract_duration_id" class="form-control">
                 <option>--Select Lease Classification--</option>
                 @foreach($lease_contract_duration as $item)
-                    <option value="{{ $item->id }}" @if(old('lease_contract_duration_id', $model->lease_contract_duration_id) == $item->id) selected="selected" @endif disabled="true">{{ $item->title }}</option>
+                    <option value="{{ $item->id }}" @if(old('lease_contract_duration_id', $model->lease_contract_duration_id) == $item->id) selected="selected" @endif>{{ $item->title }}</option>
                 @endforeach
             </select>
            @if ($errors->has('lease_classified'))

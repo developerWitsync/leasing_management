@@ -213,7 +213,7 @@ class UnderlyingLeaseAssetController extends Controller
                 $accounting_terms  = LeaseAccountingTreatment::query()->where('upto_year', '=', '2018')->get();
                 // get max previous year from general settings for lease start year which will be minimum year
                 $min_year = GeneralSettings::query()->where('business_account_id', '=', auth()->user()->id)->first();
-                //dd($min_year);
+               
                 return view('lease.lease-assets.completedetails', compact(
                     'lease',
                     'asset',

@@ -19,7 +19,7 @@
                 <div role="tabpanel" class="tab-pane active">
                     <form class="form-horizontal" method="POST">
                         {{ csrf_field() }}
-<input type="hidden" name="min_year" id="min_year" value="{{$min_year->max_previous_lease_start_year}}">
+
                         <fieldset class="scheduler-border">
                             <legend class="scheduler-border">Basic Details of the Underlying Lease Asset</legend>
                             <div class="form-group{{ $errors->has('other_details') ? ' has-error' : '' }} required">

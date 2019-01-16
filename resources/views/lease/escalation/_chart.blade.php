@@ -83,5 +83,9 @@
 
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-success">Confirm</button>
+    <button type="button" class="btn btn-success close" data-dismiss="modal" aria-label="Close">Confirm</button>
+
+    <!-- <button type="button" class="close" >
+        <span aria-hidden="true">×</span>
+    </button> -->
 </div>

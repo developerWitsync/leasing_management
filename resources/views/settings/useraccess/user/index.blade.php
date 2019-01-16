@@ -47,6 +47,7 @@
                                         <th>Name</th>
                                         <th>Roles</th>
                                         <th>Eamil</th>
+                                        <th>Status</th>
                                         <th>Action</th>
                                     </tr>
                                     </thead>
@@ -74,17 +75,31 @@
                     {
                         "data": "id",
                         render: function (data, type, row, meta) {
+
                             return meta.row + meta.settings._iDisplayStart + 1;
                         }
                     },
                     { "data": "authorised_person_name" },
                     { "data": "roles" },
                     { "data": "email"},
+                    { "data": "is_verified"},
                     { "data": "id" }
                 ],
                 "columnDefs": [
                     {
                         "targets" : 4,
+                        "data" : "is_verified",
+                        "render" : function(data, type, full, meta){
+                            var html = "";
+                            if(full["is_verified"] == "0"){
+                                return "<button type=\"button\" data-user='"+full['id']+"'  data-is_verified=\"1\" class=\"btn btn-success status-update waves-effect\">Activate</button>";
+                            } else {
+                                return "<button type=\"button\" data-user='"+full['id']+"' data-is_verified=\"0\" class=\"btn btn-danger status-update waves-effect\">Disable</button>";
+                            }
+                        }
+                    },
+                    {
+                        "targets" : 5,
                         "data" : null,
                         "orderable": false,
                         "className" : "text-center",
@@ -139,6 +154,21 @@
                         }
                     }
                 });
+            });
+
+            $(document.body).on("click", ".status-update", function () {
+                $.ajax({
+                    url : "{{ route('settings.user.updatestatus') }}",
+                    data : {
+                        id : $(this).data('user'),
+                        is_verified : $(this).data('is_verified')
+                    },
+                    type : 'post',
+                    dataType : 'json',
+                    success : function (response) {
+                        user_table.ajax.reload();
+                    }
+                })
             });
         });
     </script>

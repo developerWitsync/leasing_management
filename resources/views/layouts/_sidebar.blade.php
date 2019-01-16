@@ -32,3 +32,6 @@
 <a href="#" class="list-group-item"><i class="fa fa-balance-scale"></i> <span>Resource Material</span>
 <small class="fa fa-angle-right" aria-hidden="true"></small>
 </a>
+<a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="list-group-item"><i class="fa fa-sign-out"></i> <span>Logout</span>
+<small class="fa fa-angle-right" aria-hidden="true"></small>
+</a>

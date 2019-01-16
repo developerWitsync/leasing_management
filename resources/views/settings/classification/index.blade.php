@@ -610,6 +610,28 @@
                             </div>
                         </div>
 
+                          <div class="panel panel-info">
+                            <div class="panel-heading">Escalation Frequency</div>
+                            <div class="panel-body settingTble">
+                                <table class="table table-condensed">
+                                    <thead>
+                                    <tr>
+                                        <th width="80px">Sr No.</th>
+                                        <th>Esclation Frequency</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($escalation_frequencies  as $key => $frequency)
+                                        <tr>
+                                            <td>{{ $key + 1 }}</td>
+                                            <td>{{ $frequency->title}}</td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
                      <div class="panel panel-info">
                             <div class="panel-heading">
                                 Lease Modification Reasons

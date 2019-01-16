@@ -252,5 +252,33 @@ class UserAccessController extends Controller
       }
       return view('settings.useraccess.user.role_to_user', ['breadcrumbs'=> $this->breadcrumbs,'role'=>$role,'user'=>$user,'RoleUserId'=>$RoleUserId]);
     }
+    /**
+     * updates the verified status of the user and  returns the response in json format
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     */
+    public function changeStatus(Request $request){
+        try{
+            if($request->ajax()){
+                $validator = Validator::make($request->all(), [
+                    'is_verified' => 'required',
+                    'id'    => 'required|exists:users,id'
+                ]);
+
+                if($validator->fails()) {
+                    return response()->json(['status' => false, 'errors' => $validator->errors()], 200);
+                }
+
+                $question = User::query()->find($request->id);
+                $question->is_verified = $request->is_verified;
+                $question->save();
+                return response()->json(['status' => true], 200);
+            } else {
+                return redirect()->back();
+            }
+        } catch (\Exception $e) {
+            abort('404');
+        }
+    }
 
 }

@@ -54,6 +54,7 @@
                                 </a>
 
                                 <ul class="dropdown-menu">
+                                   <li> <a href="{{route('settings.profile.index')}}">My Profile</a></li>
                                     <li>
                                         <a href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
