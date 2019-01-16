@@ -36,7 +36,7 @@
                             <label for="user" class="col-md-4 control-label">Users</label>
                             <div class="col-md-6">
                                 <input type="hidden" name="user" value="{{$user[0]->id}}">
-                                {{ $user[0]->authorised_person_name }}
+                                <input type="text" value="{{ $user[0]->authorised_person_name }}" readonly="off" class="form-control">
                             </div>      
                             
                         </div>
@@ -63,6 +63,7 @@
                                     <button type="submit" class="btn btn-success">
                                         Submit
                                     </button>
+                                    <a href="{{route('settings.user')}}" class="btn btn-sm btn-danger add_more" data-form="add_more_form_lease_basis">Cancel</a
                                 </div>
                             </div>
                         </form>

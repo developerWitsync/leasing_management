@@ -319,6 +319,7 @@ td.tableInner table > tbody > tr > th {
 ul.nav.navbar-nav.navbar-right li.dropdown{border-left: #e4e5e6 solid 1px;}
 
 
+
 .tableInnData th {
     font-size: 10px;
     font-weight: 600;
@@ -332,4 +333,14 @@ ul.nav.navbar-nav.navbar-right li.dropdown{border-left: #e4e5e6 solid 1px;}
     text-align: center;
     padding: 5px 0;
     color: #333;
+}
+button.btn.btn-success.close {
+    background: #2ab27b !important;
+    border: #2ab27b solid 1px;
+    padding: 6px 12px;
+    color: #fff !important;
+    opacity: 1;
+    font-size: 15px !important;
+    font-weight: 400 !important;
+    line-height: 22px;
 }

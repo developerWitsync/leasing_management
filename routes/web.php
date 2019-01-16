@@ -355,6 +355,9 @@ Route::middleware('auth')->group(function(){
 
             Route::match(['get', 'post'], 'create', ['as' => 'settings.user.create', 'uses' => 'UserAccessController@create']);
 
+            Route::post('user-status-update', ['as' => 'settings.user.updatestatus', 'uses' => 'UserAccessController@changeStatus']);
+
+
             Route::match(['get', 'post'], '/update/{id}', ['as' => 'settings.user.update', 'uses' => 'UserAccessController@update']);
             
             Route::delete('delete/{id}', ['as' => 'settings.user.delete', 'uses' => 'UserAccessController@delete']);

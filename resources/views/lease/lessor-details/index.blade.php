@@ -6,7 +6,7 @@
 @endsection
 @section('content')
         <div class="panel panel-default">
-            <div class="panel-heading">Add New Lease | Lessor Details</div>
+            <div class="panel-heading">Lessor Details</div>
 
             <div class="panel-body">
                 @if (session('status'))
@@ -14,7 +14,7 @@
                         {{ session('status') }}
                     </div>
                 @endif
-               
+          
                 @if($reporting_currency_settings->is_foreign_transaction_involved == 'yes' || $reporting_currency_settings->is_foreign_transaction_involved == 'no' )
                
                 {{--@include('lease._menubar')--}}
@@ -130,8 +130,13 @@
                     </div>
                 </div>
                  @else
+                 @if(Auth::user()->parent_id==0)
                 <a href="{{route('settings.currencies')}}"><div class="alert alert-danger">Please change the foreign currency settings</div></a>
+               @endif
              @endif
+            @if(Auth::user()->parent_id!=0)
+             <div class="alert alert-danger">“Super Admin has not created the settings that can be utilised by you. Please contact to your Super Admin to generate the Settings. Thanks!”</div>
+            @endif
             </div>
         </div>
 @endsection
