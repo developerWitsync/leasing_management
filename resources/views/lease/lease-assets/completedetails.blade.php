@@ -6,7 +6,7 @@
 @endsection
 @section('content')
     <div class="panel panel-default">
-        <div class="panel-heading">Add New Lease | Underlying Lease Asset Complete Details</div>
+        <div class="panel-heading">Underlying Lease Asset Complete Details</div>
 
         <div class="panel-body">
             @if (session('status'))

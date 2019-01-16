@@ -6,7 +6,7 @@
 @endsection
 @section('content')
     <div class="panel panel-default">
-        <div class="panel-heading">Add New Lease | Any Lease Incentives Receivable of Underlying Lease Asset</div>
+        <div class="panel-heading">Any Lease Incentives Receivable of Underlying Lease Asset</div>
 
         <div class="panel-body">
             @if (session('status'))

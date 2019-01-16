@@ -6,7 +6,7 @@
 @endsection
 @section('content')
     <div class="panel panel-default">
-        <div class="panel-heading">Add New Lease | Lease Payment Invoice from Lessor</div>
+        <div class="panel-heading">Lease Payment Invoice from Lessor</div>
 
         <div class="panel-body">
             @if (session('status'))

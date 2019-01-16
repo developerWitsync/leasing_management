@@ -6,7 +6,7 @@
 @endsection
 @section('content')
     <div class="panel panel-default">
-        <div class="panel-heading">Add New Lease | Renewal Option Available Under the Contract</div>
+        <div class="panel-heading">Renewal Option Available Under the Contract</div>
 
         <div class="panel-body">
             @if (session('status'))

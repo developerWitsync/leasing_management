@@ -6,7 +6,7 @@
 @endsection
 @section('content')
     <div class="panel panel-default">
-        <div class="panel-heading">Add New Lease | Select Discount Rate </div>
+        <div class="panel-heading">Select Discount Rate </div>
 
         <div class="panel-body">
             @if (session('status'))
