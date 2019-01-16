@@ -165,14 +165,14 @@ class LeaseAssets extends Model
             $discount_rate = $this->leaseSelectDiscountRate()->first()->discount_rate_to_use;
         }
 
-        while ($start_year <= $end_year) {
-            foreach ($months as $key=>$month){
-                $k_m = sprintf("%02d", $key);
-                $payments_in_this_year_month = \App\LeaseAssetPaymenetDueDate::query()->whereRaw("`asset_id` = '{$this->id}' AND DATE_FORMAT(`date`,'%m') = '{$k_m}' and DATE_FORMAT(`date`,'%Y') = '{$start_year}'")->get();
-                dd($payments_in_this_year_month);
-            }
-            $start_year = $start_year + 1;
-        }
+//        while ($start_year <= $end_year) {
+//            foreach ($months as $key=>$month){
+//                $k_m = sprintf("%02d", $key);
+//                $payments_in_this_year_month = \App\LeaseAssetPaymenetDueDate::query()->whereRaw("`asset_id` = '{$this->id}' AND DATE_FORMAT(`date`,'%m') = '{$k_m}' and DATE_FORMAT(`date`,'%Y') = '{$start_year}'")->get();
+//
+//            }
+//            $start_year = $start_year + 1;
+//        }
 
         return 20458;
     }
