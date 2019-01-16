@@ -312,7 +312,7 @@ td.tableInner table > tbody > tr > th {
 .itemTab ul li a span {position: absolute; left: 50%; top: -49px; background: #e5e5e5; padding: 8px 0px; color: #000; border-radius: 3px;   width: 200px;
     text-align: center; margin-left: -100px; font-weight: 500; display: none;}
 .itemTab ul li a span:after{ border-left: transparent solid 10px; border-right: transparent solid 10px; border-top:#e5e5e5 solid 10px; content: ''; position: absolute; left: 50%; margin-left: -10px; bottom:-10px;}
-.itemTab ul li a:hover span, .itemTab ul li a.active span{ display: block;}
+.itemTab ul li a:hover span{ display: block;}
 
 
 .navbar-brand.logoBx {padding: 6px 10px;}

@@ -80,12 +80,17 @@ class LeaseTerminationOptionController extends Controller
 
                 $model = new LeaseTerminationOption();
 
-                if($request->isMethod('post')) {
+                if($request->isMethod('post') ) {
+                    //dd($request->all());
+                if($request->lease_termination_option_available == 'yes')
+                {
                     $validator = Validator::make($request->except('_token'), $this->validationRules());
 
                     if($validator->fails()){
+                       // dd($validator->errors());
                         return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
-                    }
+                }
+             }
 
                     $data = $request->except('_token');
                     if($request->lease_end_date!=""){
@@ -129,12 +134,15 @@ class LeaseTerminationOptionController extends Controller
                 $model = LeaseTerminationOption::query()->where('asset_id', '=', $id)->first();
 
                 if($request->isMethod('post')) {
+
+                    if($request->lease_termination_option_available == 'yes')
+                {
                     $validator = Validator::make($request->except('_token'), $this->validationRules());
 
                     if($validator->fails()){
                         return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
                     }
-
+                }   
                     $data = $request->except('_token');
                     if($request->lease_end_date!=""){
                         $data['lease_end_date']  = Carbon::parse($request->lease_end_date)->format('Y-m-d');

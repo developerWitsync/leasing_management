@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
         <div class="panel panel-default">
-            <div class="panel-heading">Settings | User Access Settings</div>
+            <div class="panel-heading">User Access Settings</div>
             <div class="panel-body">
                 @if (session('status'))
                     <div class="alert alert-success">

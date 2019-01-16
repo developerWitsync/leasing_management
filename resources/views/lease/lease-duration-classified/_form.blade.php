@@ -15,7 +15,7 @@
    <div class="form-group{{ $errors->has('lease_end_date') ? ' has-error' : '' }} required">
         <label for="name" class="col-md-4 control-label">Lease End Date</label>
         <div class="col-md-6 form-check form-check-inline" required>
-            <input class="form-control" name="lease_end_date" id="lease_end_date" type="text" autocomplete="off"  value="{{old('lease_end_date', $model->lease_end_date)}}">
+            <input class="form-control" name="lease_end_date" id="lease_end_date" type="text" autocomplete="off"  value="{{old('lease_end_date', $model->lease_end_date)}}" readonly="off">
             @if ($errors->has('lease_end_date'))
                 <span class="help-block">
                     <strong>{{ $errors->first('lease_end_date') }}</strong>
@@ -30,7 +30,7 @@
             <select name="lease_contract_duration_id" class="form-control">
                 <option>--Select Lease Classification--</option>
                 @foreach($lease_contract_duration as $item)
-                    <option value="{{ $item->id }}" @if(old('lease_contract_duration_id', $model->lease_contract_duration_id) == $item->id) selected="selected" @endif>{{ $item->title }}</option>
+                    <option value="{{ $item->id }}" @if(old('lease_contract_duration_id', $model->lease_contract_duration_id) == $item->id) selected="selected" @endif disabled="true">{{ $item->title }}</option>
                 @endforeach
             </select>
            @if ($errors->has('lease_classified'))

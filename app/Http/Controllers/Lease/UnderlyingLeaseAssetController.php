@@ -20,6 +20,7 @@ use App\LeaseAssetSimilarCharacteristicSettings;
 use App\LeaseAssetsNumberSettings;
 use App\LeaseAssetSubCategorySetting;
 use App\UseOfLeaseAsset;
+use App\GeneralSettings;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -210,13 +211,17 @@ class UnderlyingLeaseAssetController extends Controller
                 $use_of_lease_asset = UseOfLeaseAsset::query()->where('status', '=', '1')->get();
                 $expected_life_of_assets = ExpectedLifeOfAsset::query()->whereIn('business_account_id', getDependentUserIds())->get();
                 $accounting_terms  = LeaseAccountingTreatment::query()->where('upto_year', '=', '2018')->get();
+                // get max previous year from general settings for lease start year which will be minimum year
+                $min_year = GeneralSettings::query()->where('business_account_id', '=', auth()->user()->id)->first();
+                //dd($min_year);
                 return view('lease.lease-assets.completedetails', compact(
                     'lease',
                     'asset',
                     'countries',
                     'use_of_lease_asset',
                     'expected_life_of_assets',
-                    'accounting_terms'
+                    'accounting_terms',
+                    'min_year'
                 ));
             } else {
                 abort(404);
