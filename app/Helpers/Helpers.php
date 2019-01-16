@@ -306,7 +306,7 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
             foreach ($months as $key => $month){
 
                 $k_m = sprintf("%02d", $key);
-                $payments_in_this_year_month = \App\LeaseAssetPaymenetDueDate::query()->whereRaw("`payment_id` = '{$payment->id}' 0 DATE_FORMAT(`date`,'%m') = '{$k_m}' and DATE_FORMAT(`date`,'%Y') = '{$start_year}'")->count();
+                $payments_in_this_year_month = \App\LeaseAssetPaymenetDueDate::query()->whereRaw("`payment_id` = '{$payment->id}' AND DATE_FORMAT(`date`,'%m') = '{$k_m}' and DATE_FORMAT(`date`,'%Y') = '{$start_year}'")->count();
                 if($payments_in_this_year_month > 0){
 
                     $first_date_of_month = \Carbon\Carbon::parse("first day of {$month} {$start_year}");

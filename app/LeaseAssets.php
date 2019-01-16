@@ -4,7 +4,8 @@ namespace App;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Support\Facades\App;
+use DB;
 class LeaseAssets extends Model
 {
     protected $table = 'lease_assets';
@@ -137,7 +138,12 @@ class LeaseAssets extends Model
         return $this->belongsTo('App\ExpectedLifeOfAsset', 'expected_life', 'id');
     }
 
-    public function presentValueOfLeaseLiability(){
+    /**
+     * calculate the Present Value of Lease Liability
+     * @param bool $return_value
+     * @return array|int
+     */
+    public function presentValueOfLeaseLiability($return_value = false){
         $start_date =   Carbon::parse($this->accural_period);
         $base_date = Carbon::create(2019, 01, 01);
         $base_date = ($start_date->lessThan($base_date))?$base_date:$start_date;
@@ -165,15 +171,25 @@ class LeaseAssets extends Model
             $discount_rate = $this->leaseSelectDiscountRate()->first()->discount_rate_to_use;
         }
 
-//        while ($start_year <= $end_year) {
-//            foreach ($months as $key=>$month){
-//                $k_m = sprintf("%02d", $key);
-//                $payments_in_this_year_month = \App\LeaseAssetPaymenetDueDate::query()->whereRaw("`asset_id` = '{$this->id}' AND DATE_FORMAT(`date`,'%m') = '{$k_m}' and DATE_FORMAT(`date`,'%Y') = '{$start_year}'")->get();
-//
-//            }
-//            $start_year = $start_year + 1;
-//        }
+        $total_lease_liability = 0;
+        while ($start_year <= $end_year) {
+            foreach ($months as $key=>$month){
+                $k_m = sprintf("%02d", $key);
+                //need to call a procedure from here that can return the value of the lease liablity for all the payments of the asset
+                foreach ($this->payments as $payment){
+                    $data = DB::select('call present_value_of_lease_liability(?, ?, ?, ?, ?)',[$start_year, $k_m, $base_date, $this->id, $payment->id]);
+                    $total_lease_liability = $total_lease_liability + $data[0]->lease_liability;
+                    $present_value_of_lease_liability[$start_year][$month]["payment_".$payment->id] = $data;
+                }
 
-        return 20458;
+            }
+            $start_year = $start_year + 1;
+        }
+
+        if($return_value) {
+            return $total_lease_liability;
+        } else {
+            return ['present_value_data' => $present_value_of_lease_liability, 'years' => $years, 'months' => $months];
+        }
     }
 }

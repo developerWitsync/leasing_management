@@ -56,9 +56,10 @@
                                             {{ $asset->subcategory->title }}
                                         </td>
                                         <td>{{ $asset->lease->lease_contract_id }}</td>
-                                        <td>{{ $asset->presentValueOfLeaseLiability() }}</td>
+                                        <td class="load_lease_liability" data-asset_id="{{ $asset->id }}"></td>
                                         <td>
-                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.discountrate.create', ['id'=> $asset->id]) }}">PV Calculus</a>
+                                            <a class="btn btn-sm btn-primary" href="javascript:void(0);"  onclick="javascript:showPresentValueCalculus('{{ $asset->id }}');">PV Calculus</a>
+                                            <i class="fa fa-spinner fa-spin calculus_spinner_{{$asset->id}}" style="font-size:24px;display: none;"></i>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -307,4 +308,22 @@
         </div>
     </div>
 </div>
+
+<!--Escalations Chart -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="dialog">
+        <div class="modal-content current_modal_body">
+
+        </div>
+    </div>
+</div>
+
+<!--Escalations Chart -->
+
+@endsection
+@section('footer-script')
+    <script src="{{ asset('js/pages/lease_valuation.js') }}"></script>
+    <script>
+
+    </script>
 @endsection
