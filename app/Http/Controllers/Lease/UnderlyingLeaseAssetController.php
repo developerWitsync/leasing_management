@@ -26,6 +26,7 @@ use Validator;
 
 class UnderlyingLeaseAssetController extends Controller
 {
+     
     /**
      * Renders the Underlying Lease asset form for the Lease with Primary key $id
      * @param $id Primary key for the lease
@@ -33,6 +34,8 @@ class UnderlyingLeaseAssetController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id, Request $request){
+        
+       // $this->checkvalidateurl($id);
         
         $breadcrumbs = [
             [

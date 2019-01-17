@@ -53,12 +53,29 @@ class LeasePaymentsController extends Controller
         return $rules;
     }
 
+    protected function checkvalidateurl($id)
+    {
+
+          $lease = LeaseAssets::query()->where('lease_id', '=', $id)->get();
+          if(count($lease) == 0) {
+                return false;
+            }else {
+                return true;
+            }
+    }
+
     /**
      * Render the table for all the lease assets so that the user can complete steps for the payments
      * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id){
+
+       if(!$this->checkvalidateurl($id))
+        {
+             return redirect(route('add-new-lease.index', ['id' => $id]))->with('error', 'Please fill the details on the previous steps.');
+        }
+
         $breadcrumbs = [
             [
                 'link' => route('add-new-lease.index'),
@@ -77,7 +94,7 @@ class LeasePaymentsController extends Controller
                 ->where('id', '=', $id)
                 ->first();
 
-
+           
             if($lease) {
                 $show_next = false;
                 $completed_payments = 0;
@@ -102,7 +119,7 @@ class LeasePaymentsController extends Controller
                 abort(404);
             }
         } catch (\Exception $e){
-            dd($e);
+            abort(404);
         }
     }
 

@@ -24,6 +24,7 @@ use App\UseOfLeaseAsset;
 use App\FairMarketValue;
 use App\ReportingCurrencySettings;
 use App\ForeignCurrencyTransactionSettings;
+use App\LeaseAssetPayments;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -39,6 +40,21 @@ class FairMarketValueController extends Controller
             'attachment'                  => 'file|mimes:jpeg,pdf,doc'
         ];
     }
+     protected function checkvalidateurl($id)
+    {
+
+          $lease = LeaseAssets::query()->where('lease_id', '=', $id)->get();
+          if($lease){
+             $lease_asset_number_of_payments = LeaseAssetPayments::query()->where('asset_id',$lease[0]->id)->get();
+            if(count($lease_asset_number_of_payments) ==0){
+                  return false;
+             }
+          }
+          else {
+                return true;
+            }
+          
+    }
     /**
      * renders the table to list all the lease assets.
      * @param $id Primary key for the lease
@@ -46,6 +62,12 @@ class FairMarketValueController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id, Request $request){
+        
+        if(!$this->checkvalidateurl($id))
+        {
+             return redirect(route('addlease.payments.index', ['id' => $id]))->with('error', 'Please fill the details on the previous steps.');
+        }
+
         $breadcrumbs = [
             [
                 'link' => route('add-new-lease.index'),
