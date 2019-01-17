@@ -318,6 +318,22 @@ td.tableInner table > tbody > tr > th {
 .navbar-brand.logoBx {padding: 6px 10px;}
 ul.nav.navbar-nav.navbar-right li.dropdown{border-left: #e4e5e6 solid 1px;}
 
+
+
+.tableInnData th {
+    font-size: 10px;
+    font-weight: 600;
+    color: #000;
+    background: #e5e5e5;
+    text-align: center;
+    padding: 5px 0;
+}
+.tableInnData td {
+    font-size: 11px;
+    text-align: center;
+    padding: 5px 0;
+    color: #333;
+}
 button.btn.btn-success.close {
     background: #2ab27b !important;
     border: #2ab27b solid 1px;
@@ -328,4 +344,3 @@ button.btn.btn-success.close {
     font-weight: 400 !important;
     line-height: 22px;
 }
-

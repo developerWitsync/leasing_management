@@ -204,11 +204,11 @@ Route::middleware('auth')->group(function(){
         Route::prefix('lease-valuation')->group(function(){
             
              Route::get('index/{id}', ['as' => 'addlease.leasevaluation.index', 'uses' => 'LeaseValuationController@index']);
-            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.leasevaluation.create', 'uses' => 'LeaseValuationController@create']);
-            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.leasevaluation.update', 'uses' => 'LeaseValuationController@update']);
-            Route::match(['post', 'get'], 'add-customer-details', ['as' => 'addlease.leasevaluation.addcustomer', 'uses' => 'LeaseValuationController@addCustomer']);
-            Route::match(['post', 'get'], 'update-customer-details/{id}', ['as' => 'addlease.leasevaluation.updatecustomer', 'uses' => 'LeaseValuationController@updateCustomer']);
-             Route::post('create-customer',['as' => 'addlease.leasevaluation.createcustomer', 'uses' => 'LeaseValuationController@createCustomer']);
+
+             Route::get('lease-liability-asset/{id}', ['as' => 'addlease.leasevaluation.liability', 'uses' => 'LeaseValuationController@presentValueOfLeaseLiability']);
+
+            Route::get('show-lease-liability-calculus/{id}', ['as' => 'addlease.leasevaluation.showcalculus', 'uses' => 'LeaseValuationController@showPresentValueOfLeaseLiabilityCalculus']);
+
          });
         /**
          * Lease Payment Invoice NL16

@@ -74,5 +74,54 @@ class LeaseValuationController extends Controller
         }
     }
 
+    /**
+     * find and returns the Present Value of Lease Liability
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function presentValueOfLeaseLiability($id, Request $request){
+        try{
+            if($request->ajax()){
+                $asset = LeaseAssets::query()->findOrFail($id);
+                $value = $asset->presentValueOfLeaseLiability(true);
+                return response()->json([
+                    'status' => true,
+                    'value' => number_format($value, 2)
+                ], 200);
+            } else {
+                abort(404);
+            }
+        } catch (\Exception $e){
+            abort(404);
+        }
+    }
+
+    /**
+     * renders the pop up to show the present lease value calculation calculus here
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function showPresentValueOfLeaseLiabilityCalculus($id, Request $request){
+        try{
+            if($request->ajax()){
+                $asset = LeaseAssets::query()->findOrFail($id);
+                $data = $asset->presentValueOfLeaseLiability(false);
+                $years = $data['years'];
+                $months = $data['months'];
+                $liability_caclulus_data = $data['present_value_data'];
+                return view('lease.lease-valuation._present_value_calculus', compact(
+                    'years',
+                    'months',
+                    'liability_caclulus_data'
+                ));
+            } else {
+                abort(404);
+            }
+        } catch (\Exception $e){
+            abort(404);
+        }
+    }
       
 }
