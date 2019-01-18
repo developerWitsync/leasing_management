@@ -36,7 +36,7 @@
                                     </td>
                                 </tr>
                                 {{-- CHECK FOR THE CONDITION IF THE CUMULATIVE NEEDS TO BE SHOWN FOR THIS ASSET--}}
-                                @if($asset->using_lease_payment == 1 &&  \Carbon\Carbon::cr)
+                                {{--@if($asset->using_lease_payment == 1 &&  \Carbon\Carbon::cr)--}}
                                 <tr class="sub_table">
                                     <td colspan="4" class="tableInner">
 
