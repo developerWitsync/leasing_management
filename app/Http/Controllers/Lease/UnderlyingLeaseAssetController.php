@@ -223,8 +223,8 @@ class UnderlyingLeaseAssetController extends Controller
                 $expected_life_of_assets = ExpectedLifeOfAsset::query()->whereIn('business_account_id', getDependentUserIds())->get();
                 $accounting_terms  = LeaseAccountingTreatment::query()->where('upto_year', '=', '2018')->get();
                 // get max previous year from general settings for lease start year which will be minimum year
-                $min_year = GeneralSettings::query()->where('business_account_id', '=', auth()->user()->id)->first();
-               
+                $min_year = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
+
                 return view('lease.lease-assets.completedetails', compact(
                     'lease',
                     'asset',
