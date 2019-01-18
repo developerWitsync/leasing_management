@@ -300,7 +300,7 @@
        var effective_date_calendar_options = {
            dateFormat: "dd-M-yy",
            maxDate : new Date('{{ $lease_end_date }}'),
-           @if($payment->using_lease_payment == '1')
+           @if($payment->asset->using_lease_payment == '1')
            //1 => Current Lease Payment as on Jan 01, 2019
            yearRange : '2019:{{ \Carbon\Carbon::parse($lease_end_date)->format('Y') }}'
            @else

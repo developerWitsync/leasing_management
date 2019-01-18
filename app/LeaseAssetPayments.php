@@ -21,7 +21,6 @@ class LeaseAssetPayments extends Model
         'first_payment_start_date',
         'last_payment_end_date',
         'payment_currency',
-        'using_lease_payment',
         'payment_per_interval_per_unit',
         'total_amount_per_interval',
         'attachment',

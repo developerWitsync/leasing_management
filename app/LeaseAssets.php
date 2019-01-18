@@ -30,6 +30,7 @@ class LeaseAssets extends Model
         'accounting_treatment',
         'similar_asset_items',
         'is_details_completed',
+        'using_lease_payment',
         'total_payments',
         'created_at',
         'updated_at'

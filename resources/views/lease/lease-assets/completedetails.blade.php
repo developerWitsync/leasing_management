@@ -191,7 +191,7 @@
 
                         </fieldset>
 
-                        <fieldset class="scheduler-border" id="prior_accounting" >
+                        <fieldset class="scheduler-border" id="prior_accounting" style="display: none">
                             <legend class="scheduler-border" >Lease Asset Accounting Adopted Prior to 2019</legend>
                             <div class="form-group{{ $errors->has('accounting_treatment') ? ' has-error' : '' }} required">
                                 <label for="accounting_treatment" class="col-lg-4 col-md-6 control-label">Lease Asset Accounting Treatment Followed Upto 2018</label>
@@ -209,6 +209,32 @@
                                         </span>
                                     @endif
                                 </div>
+                            </div>
+
+                        </fieldset>
+
+                        <fieldset class="scheduler-border using_lease_payment" style="display:none;">
+                            <legend class="scheduler-border">Lease Payment Use</legend>
+                            <div class="form-group{{ $errors->has('using_lease_payment') ? ' has-error' : '' }} required using_lease_payment" style="display: block">
+                                <label for="variable_amount_determinable" class="col-lg-4 col-md-5 control-label">Using Lease Payment</label>
+                                <div class="col-lg-5 col-md-6">
+
+                                    <div class="col-md-12 form-check form-check-inline">
+                                        <input class="form-check-input" name="using_lease_payment" type="checkbox" id="yes" value="1" @if(old('using_lease_payment' ,$asset->using_lease_payment) == "1") checked="checked" @endif>
+                                        <label class="form-check-label" for="1" style="vertical-align: 4px">Current Lease Payment as on Jan 01, 2019</label>
+                                    </div>
+
+                                    <div class=" col-md-12 form-check form-check-inline">
+                                        <input class="form-check-input" name="using_lease_payment" type="checkbox" id="no" value="2" @if(old('using_lease_payment',$asset->using_lease_payment) == "2") checked="checked" @endif>
+                                        <label class="form-check-label" for="2" style="vertical-align: 4px">Initial Lease Payment as on First Lease Start</label>
+                                    </div>
+                                    @if ($errors->has('using_lease_payment'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('using_lease_payment') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+
                             </div>
 
                         </fieldset>
@@ -244,6 +270,46 @@
 
             $(function() {
 
+                toggleUsinLeasePayment();
+
+
+                $("input[type='checkbox']").on('click', function(){
+                    var group = "input[name='"+$(this).attr("name")+"']";
+                    $(group).prop("checked",false);
+                    $(this).prop("checked",true);
+                });
+
+
+                function toggleUsinLeasePayment(){
+                    var _start_date = new Date($('input[name="accural_period"]').val());
+                    console.log(_start_date);
+                    console.log(_start_date < new Date('January 01 2019'));
+                    if(_start_date < new Date('January 01 2019')){
+                        $('.using_lease_payment').show();
+
+                        $('#prior_accounting').show();
+
+                    } else {
+                        $('.using_lease_payment').hide();
+
+                        $('#prior_accounting').hide();
+                        $('#accounting_treatment').val('');
+                    }
+
+
+                }
+
+                $('input[name="using_lease_payment"]').on('click', function(){
+                    if($(this).is(":checked") && $(this).val() == '1'){
+                        var message = "You are required to place escalation rates if applicable, effective from 2019.";
+                    } else {
+                        var message = "You are required to place escalation rates if applicable, effective from the Lease Start Date.";
+                    }
+
+                    bootbox.alert(message);
+                });
+
+
                 $("#lease_start_date").datepicker({
                     dateFormat: "dd-M-yy",
                     maxDate: 0,
@@ -269,6 +335,7 @@
                         // dt2.datepicker('option', 'maxDate', startDate);
                         //first day which can be selected in dt2 is selected date in dt1
                         dt2.datepicker('option', 'minDate', minDate);
+
 
                         setTimeout(function(){
                             calculateLeaseTerm();
@@ -311,17 +378,13 @@
                     dt2.datepicker('option', 'minDate', dt4);
 
                     //@todo check for the accural_period if that is prior to jan 01, 2019 than show the accounting period fields
-                    var jan_1_date = new Date('January 1, 2019');
-                    var start_prior_date = $('#accural_period').val();
-                    var prior_date = new Date(start_prior_date);
-                    if(prior_date > jan_1_date){
-                     $('#prior_accounting').hide();
-                     $('#accounting_treatment').val('');
-                    }
+                    toggleUsinLeasePayment();
+
                     $('#lease_term').val('');
                     $('#lease_end_date').val('');
                 });
             });
+
             $('select[name="accounting_treatment"]').on('change', function () {
                  var lease_asset_accounting = $("#accounting_treatment").find('option:selected').text();
                  if(lease_asset_accounting == 'Finance Lease Accounting'){
