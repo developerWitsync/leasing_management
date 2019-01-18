@@ -130,13 +130,12 @@
                     </div>
                 </div>
                  @else
-                 @if(Auth::user()->parent_id==0)
-                <a href="{{route('settings.currencies')}}"><div class="alert alert-danger">Please change the foreign currency settings</div></a>
-               @endif
+                    @if(Auth::user()->parent_id==0)
+                        <a href="{{route('settings.currencies')}}"><div class="alert alert-danger">Please change the foreign currency settings</div></a>
+                    @else
+                        <div class="alert alert-danger">“Super Admin has not created the settings that can be utilised by you. Please contact to your Super Admin to generate the Settings. Thanks!”</div>
+                    @endif
              @endif
-            @if(Auth::user()->parent_id!=0)
-             <div class="alert alert-danger">“Super Admin has not created the settings that can be utilised by you. Please contact to your Super Admin to generate the Settings. Thanks!”</div>
-            @endif
             </div>
         </div>
 @endsection
