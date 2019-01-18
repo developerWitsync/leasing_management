@@ -54,7 +54,9 @@
                                 </a>
 
                                 <ul class="dropdown-menu">
-                                   <li> <a href="{{route('settings.profile.index')}}">My Profile</a></li>
+                                    @if(auth()->user()->parent_id == '0')
+                                        <li> <a href="{{route('settings.profile.index')}}">My Profile</a></li>
+                                    @endif
                                     <li>
                                         <a href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
