@@ -270,7 +270,7 @@
 
             $(function() {
 
-                toggleUsinLeasePayment();
+
 
 
                 $("input[type='checkbox']").on('click', function(){
@@ -281,9 +281,7 @@
 
 
                 function toggleUsinLeasePayment(){
-                    var _start_date = new Date($('input[name="accural_period"]').val());
-                    console.log(_start_date);
-                    console.log(_start_date < new Date('January 01 2019'));
+                    var _start_date =  $('#accural_period').datepicker('getDate');
                     if(_start_date < new Date('January 01 2019')){
                         $('.using_lease_payment').show();
 
@@ -360,6 +358,8 @@
                 $('#accural_period').datepicker({
                     dateFormat: "dd-M-yy",
                 });
+
+                toggleUsinLeasePayment();
 
                 // $( "#accural_period" ).datepicker( "option", "disabled", true );
 
