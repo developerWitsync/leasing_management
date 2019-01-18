@@ -109,7 +109,6 @@ class LeaseAssets extends Model
 
     }
 
-
     public function leaseIncentives(){
         return $this->hasOne('App\LeaseIncentives', 'asset_id','id');
     }
