@@ -16,6 +16,10 @@ use App\LeaseRenewableOption;
 use App\LeaseTerminationOption;
 use App\PurchaseOption;
 use App\LeaseAssets;
+use App\LeaseAssetPayments;
+use App\LeaseResidualValue;
+use App\FairMarketValue;
+
 use Illuminate\Http\Request;
 use Validator;
 
@@ -28,6 +32,7 @@ class LeaseDurationClassifiedController extends Controller
             
         ];
     }
+
     /**
      * renders the table to list all the lease assets.
      * @param $id Primary key for the lease
@@ -54,6 +59,9 @@ class LeaseDurationClassifiedController extends Controller
             })->get();
 
             if(count($assets) == 0) {
+                if(!checkPreviousSteps($id,'step6')){
+                return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
+                }
                 $back_button = route('addlease.leaseterminationoption.index', ['id' => $lease->id]);
             }
             return view('lease.lease-duration-classified.index', compact('breadcrumbs',
@@ -99,6 +107,12 @@ class LeaseDurationClassifiedController extends Controller
                     $duration_classified_value = LeaseDurationClassified::create($data);
 
                     if($duration_classified_value){
+                        
+                        // complete Step
+                        $lease_id = $lease->id;
+                        $step= 'step9';
+                        $complete_step9 = confirmSteps($lease_id,$step);
+
                         return redirect(route('addlease.durationclassified.index',['id' => $lease->id]))->with('status', 'Lease Duration Classified Value has been added successfully.');
                     }
                 }

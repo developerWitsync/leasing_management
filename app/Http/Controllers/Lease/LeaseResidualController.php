@@ -25,6 +25,8 @@ use App\LeaseResidualValue;
 use App\ReportingCurrencySettings;
 use App\ForeignCurrencyTransactionSettings;
 use App\LeaseAssetPaymentsNature;
+use App\LeaseAssetPayments;
+use App\FairMarketValue;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -41,6 +43,7 @@ class LeaseResidualController extends Controller
             'attachment' => 'file|mimes:jpeg,pdf,doc'
         ];
     }
+
     /**
      * renders the table to list all the lease assets.
      * @param $id Primary key for the lease
@@ -48,6 +51,9 @@ class LeaseResidualController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id, Request $request){
+         if(!checkPreviousSteps($id,'step4')){
+          return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
+        }
         $breadcrumbs = [
             [
                 'link' => route('add-new-lease.index'),
@@ -110,6 +116,12 @@ class LeaseResidualController extends Controller
                     $residual_value = LeaseResidualValue::create($data);
 
                     if($residual_value){
+
+                        // complete Step
+                        $lease_id = $lease->id;
+                        $step= 'step5';
+                        $complete_step5 = confirmSteps($lease_id,$step);
+
                         return redirect(route('addlease.residual.index',['id' => $lease->id]))->with('status', 'Residual value Gurantee has been added successfully.');
                     }
                 }

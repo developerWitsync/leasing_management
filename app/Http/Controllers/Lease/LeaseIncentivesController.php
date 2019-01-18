@@ -35,7 +35,9 @@ class LeaseIncentivesController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id){
-
+        if(!checkPreviousSteps($id,'step14')){
+                return  redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
+        }
         $breadcrumbs = [
             [
                 'link' => route('add-new-lease.index'),
@@ -109,6 +111,11 @@ class LeaseIncentivesController extends Controller
                         }
 
                         Session::forget('customer_details');
+
+                         // complete Step
+                        $lease_id = $lease->id;
+                        $step= 'step15';
+                        $complete_step15 = confirmSteps($lease_id,$step);
 
                         return redirect(route('addlease.leaseincentives.index',['id' => $lease->id]))->with('status', 'Lease incentive cost has been added successfully.');
                     }

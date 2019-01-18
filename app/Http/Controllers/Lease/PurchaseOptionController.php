@@ -39,6 +39,9 @@ class PurchaseOptionController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id, Request $request){
+        if(!checkPreviousSteps($id,'step7')){
+               return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
+            }
          $breadcrumbs = [
             [
                 'link' => route('add-new-lease.index'),
@@ -111,6 +114,12 @@ class PurchaseOptionController extends Controller
                     $purchase_option = PurchaseOption::create($data);
 
                     if($purchase_option){
+
+                         // complete Step
+                        $lease_id = $lease->id;
+                        $step= 'step8';
+                        $complete_step8 = confirmSteps($lease_id,$step);
+
                         return redirect(route('addlease.purchaseoption.index',['id' => $lease->id]))->with('status', 'Lease Termination Option Details has been added successfully.');
                     }
                 }

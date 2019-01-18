@@ -33,6 +33,9 @@ class LeaseRenewableOptionController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id){
+        if(!checkPreviousSteps($id,'step6')){
+                 return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
+        }
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
         if($lease) {
             //Load the assets only for the assets where no selected at `exercise_termination_option_available` on lease termination
@@ -86,6 +89,12 @@ class LeaseRenewableOptionController extends Controller
                     $renewable_value = LeaseRenewableOption::create($data);
 
                     if($renewable_value){
+
+                         // complete Step
+                        $lease_id = $lease->id;
+                        $step= 'step7';
+                        $complete_step7 = confirmSteps($lease_id,$step);
+                        
                         return redirect(route('addlease.renewable.index',['id' => $lease->id]))->with('status', 'Renewable Option has been added successfully.');
                     }
                 }

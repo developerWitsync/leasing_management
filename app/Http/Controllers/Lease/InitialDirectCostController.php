@@ -36,6 +36,9 @@ class InitialDirectCostController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id, Request $request){
+         if(!checkPreviousSteps($id,'step13')){
+                return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
+        }
         $breadcrumbs = [
             [
                 'link' => route('add-new-lease.index'),
@@ -108,6 +111,11 @@ class InitialDirectCostController extends Controller
                         }
 
                         Session::forget('supplier_details');
+
+                        // complete Step
+                        $lease_id = $lease->id;
+                        $step= 'step14';
+                        $complete_step14 = confirmSteps($lease_id,$step);
 
                         return redirect(route('addlease.initialdirectcost.index',['id' => $lease->id]))->with('status', 'Initial Direct Cost has been added successfully.');
                     }

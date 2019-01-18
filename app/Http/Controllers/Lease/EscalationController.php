@@ -18,6 +18,7 @@ use App\LeaseAssetPayments;
 use App\PaymentEscalationDates;
 use App\PaymentEscalationDetails;
 use App\PaymentEscalationInconsistentData;
+use App\LeaseDurationClassified;
 use App\RateTypes;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -31,6 +32,19 @@ class EscalationController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id){
+        if(!checkPreviousSteps($id,'step9')){
+                return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
+        }
+        $breadcrumbs = [
+            [
+                'link' => route('add-new-lease.index'),
+                'title' => 'Add New Lease'
+            ],
+            [
+                'link' => route('lease.escalation.index',['id' => $id]),
+                'title' => 'Escaltion'
+            ],
+        ];
         try{
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
             if($lease){
@@ -60,9 +74,11 @@ class EscalationController extends Controller
                     }
                 }
 
+
                 return view('lease.escalation.index', compact(
                     'lease',
-                    'show_next'
+                    'show_next',
+                    'breadcrumbs'
                 ));
 
             } else {
@@ -230,6 +246,10 @@ class EscalationController extends Controller
                                 }
                             }
                         }
+                        // complete Step
+                        $lease_id = $lease->id;
+                        $step= 'step10';
+                        $complete_step10 = confirmSteps($lease_id,$step);
 
                         return redirect()->back()->with('status', 'Escalation Details has been saved sucessfully.');
                     }

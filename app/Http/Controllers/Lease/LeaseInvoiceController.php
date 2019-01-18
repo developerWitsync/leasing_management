@@ -36,6 +36,9 @@ class LeaseInvoiceController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id, Request $request){
+        if(!checkPreviousSteps($id,'step16')){
+                return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
+        }
         $breadcrumbs = [
             [
                 'link' => route('add-new-lease.index'),
@@ -83,6 +86,12 @@ class LeaseInvoiceController extends Controller
                     $invoice = LeasePaymentInvoice::create($data);
 
                     if($invoice){
+
+                        // complete Step
+                        $lease_id = $lease->id;
+                        $step= 'step17';
+                        $complete_step17 = confirmSteps($lease_id,$step);
+
                         return redirect(route('addlease.leasepaymentinvoice.update',['id' => $lease->id]))->with('status', 'Lease Payment Invoice details has been Created successfully.');
                     }
                 }

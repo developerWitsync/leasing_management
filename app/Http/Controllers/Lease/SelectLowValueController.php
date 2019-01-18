@@ -32,6 +32,9 @@ class SelectLowValueController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id){
+         if(!checkPreviousSteps($id,'step10')){
+                  return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
+        }
 
         $breadcrumbs = [
             [
@@ -96,6 +99,12 @@ class SelectLowValueController extends Controller
 
                     $select_low_value = LeaseSelectLowValue::create($data);
                     if($select_low_value){
+                        
+                        // complete Step
+                        $lease_id = $asset->lease->id;
+                        $step= 'step11';
+                        $complete_step11 = confirmSteps($lease_id,$step);
+
                         return redirect(route('addlease.lowvalue.index',['id' => $lease->id]))->with('status', 'Select Low Value has been added successfully.');
                     }
                 }

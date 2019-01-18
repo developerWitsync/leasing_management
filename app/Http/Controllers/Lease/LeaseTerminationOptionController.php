@@ -24,6 +24,8 @@ use App\LeaseTerminationOption;
 use App\FairMarketValue;
 use App\ReportingCurrencySettings;
 use App\ForeignCurrencyTransactionSettings;
+use App\LeaseAssetPayments;
+use App\LeaseResidualValue;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Validator;
@@ -40,12 +42,16 @@ class LeaseTerminationOptionController extends Controller
             'termination_penalty'  => 'required_if:termination_penalty_applicable,yes|nullable|numeric',
         ];
     }
+
     /**
      * renders the table to list all the lease assets.
      * @param $id Primary key for the lease
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id){
+        if(!checkPreviousSteps($id,'step5')){
+           return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
+        }
          $breadcrumbs = [
             [
                 'link' => route('add-new-lease.index'),
@@ -102,6 +108,12 @@ class LeaseTerminationOptionController extends Controller
                     $lease_termination_option = LeaseTerminationOption::create($data);
 
                     if($lease_termination_option){
+
+                         // complete Step
+                        $lease_id = $lease->id;
+                        $step= 'step6';
+                        $complete_step6 = confirmSteps($lease_id,$step);
+
                         return redirect(route('addlease.leaseterminationoption.index',['id' => $lease->id]))->with('status', 'Lease Termination Option Details has been added successfully.');
                     }
                 }

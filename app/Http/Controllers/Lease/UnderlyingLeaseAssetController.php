@@ -34,10 +34,7 @@ class UnderlyingLeaseAssetController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id, Request $request){
-        
-       // $this->checkvalidateurl($id);
-        
-        $breadcrumbs = [
+            $breadcrumbs = [
             [
                 'link' => route('add-new-lease.index'),
                 'title' => 'Add New Lease'
@@ -203,6 +200,12 @@ class UnderlyingLeaseAssetController extends Controller
                     $data['is_details_completed']  = '1';
                     $asset->setRawAttributes($data);
                     $asset->save();
+
+                    // complete Step
+                    $lease_id = $lease_id;
+                    $step= 'step2';
+                    $complete_step2 = confirmSteps($lease_id,$step);
+
                     
                     return redirect(
                         route('addlease.leaseasset.index', ['id' => $lease->id,'total_assets' => count($lease->assets)])
