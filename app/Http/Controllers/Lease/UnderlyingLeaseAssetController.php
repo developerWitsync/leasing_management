@@ -108,8 +108,6 @@ class UnderlyingLeaseAssetController extends Controller
                 LeaseAssets::query()->where('lease_id', '=',$lease->id)->whereNotIn('id', $created_lease_asset_ids)->delete();
                 return redirect()->back()->with('status', 'Lease Assets has been created successfully. Click on Complete Details button to complete other details for the lease assets.');
             }
-
-
             $numbers_of_lease_assets  = LeaseAssetsNumberSettings::query()->select('number')->whereIn('business_account_id', getDependentUserIds())->get();
             $lease_assets_categories  = LeaseAssetCategories::query()->with('subcategories')->get();
             $la_similar_charac_number = LeaseAssetSimilarCharacteristicSettings::query()
@@ -144,7 +142,6 @@ class UnderlyingLeaseAssetController extends Controller
                 ->first();
 
             $asset = LeaseAssets::query()->where('lease_id', '=', $lease_id)->where('id', '=', $asset_id)->first();
-
             if($lease && $asset) {
 
                 if($request->isMethod('post')) {
@@ -161,7 +158,21 @@ class UnderlyingLeaseAssetController extends Controller
                         }
                     });
 
-                    $validator = Validator::make($request->except('_token'),[
+
+                    Validator::extend('required_if_prior_to_date_using', function ($attribute, $value, $parameters, $validator) {
+                        if(date('Y-m-d',strtotime($parameters['0'])) < date('Y-m-d', strtotime('2019-01-01'))){
+                            dd($parameters);
+                            if(is_null($value)) {
+                                return false;
+                            } else {
+                                return true;
+                            }
+                        } else {
+                            return true;
+                        }
+                    });
+
+                    $rules = [
                         'other_details' => 'required',
                         'country_id'   => 'required|exists:countries,id',
                         'location'  => 'required',
@@ -173,8 +184,10 @@ class UnderlyingLeaseAssetController extends Controller
                         'accural_period'    => 'required|date',
                         'lease_end_date'    => 'required|date|after:accural_period',
                         'lease_term'        => 'required',
-                        'accounting_treatment' => 'required_if_prior_to_date:'.$request->accural_period
-                    ],[
+                        'accounting_treatment' => 'required_if_prior_to_date:'.$request->accural_period,
+                    ];
+
+                    $messages =  [
                         'country_id.required'          => 'The country field is required.',
                         'other_details.required'       =>   'The Other Details field is required.',
                         'specific_use.required'        =>   'The Specific use of asset field is required.',
@@ -187,9 +200,16 @@ class UnderlyingLeaseAssetController extends Controller
                         'lease_end_date.required'      =>   'The Lease End Date field is required.',
                         'lease_end_date.date'          =>   'The Lease End Date field must be a valid date.',
                         'accounting_treatment.required_if_prior_to_date'   => 'The accounting period is required when Start Date of Lease Payment / Accrual Period is prior to Jan 01, 2019.'
-                    ]);
+                    ];
+                    
+                    if(date('Y-m-d',strtotime($request->accural_period)) < date('Y-m-d', strtotime('2019-01-01'))){
+                        $rules['using_lease_payment'] = 'required';
+                    }
+
+                    $validator = Validator::make($request->except('_token'),$rules, $messages);
 
                     if($validator->fails()) {
+                      
                         return redirect()->back()->withErrors($validator->errors())->withInput($request->except('_token'));
                     }
 

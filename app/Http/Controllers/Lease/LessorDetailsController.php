@@ -108,7 +108,6 @@ class LessorDetailsController extends Controller
             $lease = Lease::create($data);
            
             if($lease) {
-                
                  $lease_id = $lease->id;
                  $step= 'step1';
                  $complete_step1 = confirmSteps($lease_id,$step);

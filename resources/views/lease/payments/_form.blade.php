@@ -193,22 +193,6 @@
             </div>
         </div>
 
-        <div class="form-group{{ $errors->has('variable_amount_determinable') ? ' has-error' : '' }} required using_lease_payment" style="display: none">
-            <label for="variable_amount_determinable" class="col-lg-4 col-md-5 control-label">Using Lease Payment</label>
-            <div class="col-lg-5 col-md-6">
-
-                <div class="col-md-12 form-check form-check-inline">
-                    <input class="form-check-input" name="using_lease_payment" type="checkbox" id="yes" value="1" @if(old('using_lease_payment' ,$payment->using_lease_payment) == "1") checked="checked" @endif>
-                    <label class="form-check-label" for="1" style="vertical-align: 4px">Current Lease Payment as on Jan 01, 2019</label>
-                </div>
-
-                <div class=" col-md-12 form-check form-check-inline">
-                    <input class="form-check-input" name="using_lease_payment" type="checkbox" id="no" value="2" @if(old('using_lease_payment',$payment->using_lease_payment) == "2") checked="checked" @endif>
-                    <label class="form-check-label" for="2" style="vertical-align: 4px">Initial Lease Payment as on First Lease Start</label>
-                </div>
-            </div>
-        </div>
-
         <div class="form-group{{ $errors->has('similar_chateristics_assets') ? ' has-error' : '' }} required">
             <label for="similar_chateristics_assets" class="col-lg-4 col-md-5 control-label">Number of Units of Lease Assets of Similar Characteristics</label>
             <div class="col-lg-5 col-md-6">
@@ -462,23 +446,6 @@
                        total = $units * parseInt(this.value, 10);
                 });
                 $total.val(total);
-            });
-
-             var _start_date = new Date("{{ date('D M d Y', strtotime($asset->accural_period)) }}");
-            if(_start_date < new Date('January 01 2019')){
-                $('.using_lease_payment').show();
-            } else {
-                $('.using_lease_payment').hide();
-            }
-
-            $('input[name="using_lease_payment"]').on('click', function(){
-                if($(this).is(":checked") && $(this).val() == '1'){
-                    var message = "You are required to place escalation rates if applicable, effective from 2019.";
-                } else {
-                    var message = "You are required to place escalation rates if applicable, effective from the Lease Start Date.";
-                }
-
-                bootbox.alert(message);
             });
 
             var final_payout_dates;

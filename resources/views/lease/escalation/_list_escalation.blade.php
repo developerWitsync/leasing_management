@@ -22,7 +22,7 @@
                     {{ $asset->subcategory->title }}
                 </td>
                 <td>
-                    <a href="javascript:void(0)" class="btn btn-success sub_drop_escalation" title="Provide Escalation Details"><i class="fa fa-plus-square"></i></a>
+                    <a href="javascript:void(0)" class="btn btn-success sub_drop_escalation" title="Provide Escalation Details"><i class="fa fa-minus-square"></i></a>
                 </td>
             </tr>
             <tr class="sub_table">

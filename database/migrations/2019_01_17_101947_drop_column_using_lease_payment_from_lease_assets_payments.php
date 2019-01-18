@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddColumnIsDetailsCompletedToLeaseAssets extends Migration
+class DropColumnUsingLeasePaymentFromLeaseAssetsPayments extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddColumnIsDetailsCompletedToLeaseAssets extends Migration
      */
     public function up()
     {
-        Schema::table('lease_assets', function (Blueprint $table) {
-            $table->enum('is_details_completed', ['0','1'])->default('0')->after('similar_asset_items');
+        Schema::table('lease_assets_payments', function (Blueprint $table) {
+            $table->dropColumn('using_lease_payment');
         });
     }
 
@@ -25,8 +25,8 @@ class AddColumnIsDetailsCompletedToLeaseAssets extends Migration
      */
     public function down()
     {
-        Schema::table('lease_assets', function (Blueprint $table) {
-            $table->dropColumn('is_details_completed');
+        Schema::table('lease_assets_payments', function (Blueprint $table) {
+            //
         });
     }
 }

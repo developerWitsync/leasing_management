@@ -46,13 +46,16 @@ class ReviewSubmitController extends Controller
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
 
         if($lease) {
-             $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->get();
-              $contract_classifications = ContractClassifications::query()->select('id', 'title')->where('status', '=', '1')->get();
-           if($request->isMethod('post')) {
-                    $model = Lease::query()->where('id', '=', $id)->first();
-                    $model->status = "1";
-                    $model->save();
+            $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->get();
+            $contract_classifications = ContractClassifications::query()->select('id', 'title')->where('status', '=', '1')->get();
+            if($request->isMethod('post')) {
+                $model = Lease::query()->where('id', '=', $id)->first();
+                $model->status = "1";
+                $model->save();
+                return redirect(route('addlease.reviewsubmit.index',['id' => $id]))->with('status', 'Lease Information has been Submitted successfully.');
+            }
 
+<<<<<<< HEAD
                        // complete Step
                         $lease_id = $id;
                         $step= 'step18';
@@ -61,6 +64,8 @@ class ReviewSubmitController extends Controller
                     return redirect(route('addlease.reviewsubmit.index',['id' => $id]))->with('status', 'Lease Information has been Submitted successfully.');
                     
                 }
+=======
+>>>>>>> e90e078ec4d23969c3361da2cdcaacc38a0465e6
             return view('lease.review-submit.index', compact(
                 'lease',
                 'assets',
@@ -69,6 +74,7 @@ class ReviewSubmitController extends Controller
                 'contract_classifications',
                 'reporting_foreign_currency_transaction_settings'
             ));
+
         } else {
             abort(404);
         }

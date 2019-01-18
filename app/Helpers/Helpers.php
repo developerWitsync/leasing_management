@@ -216,7 +216,7 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
     $start_date = $asset->accural_period; //start date with the free period
     $end_date   = $asset->getLeaseEndDate($asset); //end date based upon all the conditions
 
-    $escalation_start_date = ($payment->using_lease_payment == '1')?\Carbon\Carbon::create(2019,01,01):\Carbon\Carbon::parse($start_date);
+    $escalation_start_date = ($asset->using_lease_payment == '1')?\Carbon\Carbon::create(2019,01,01):\Carbon\Carbon::parse($start_date);
     $escalation_end_date   = \Carbon\Carbon::parse($end_date);
 
     $years =  [];

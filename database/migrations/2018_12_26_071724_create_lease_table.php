@@ -22,7 +22,7 @@ class CreateLeaseTable extends Migration
         $table->string('lease_contract_id');
         $table->string('lease_code');
         $table->string('file');
-        $table->enum('status', ['0', '1','2'])->comment("0 => Incomplete, 1 => Completed But Not Filtered, 2 => Complete & Submit")->before('created_at');
+        $table->enum('status', ['0', '1','2'])->comment("0 => Incomplete, 1 => Completed But Not Filtered, 2 => Complete & Submit");
         $table->timestamps();
         });
     }

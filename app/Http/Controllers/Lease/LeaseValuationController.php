@@ -41,7 +41,7 @@ class LeaseValuationController extends Controller
                 'title' => 'Add New Lease'
             ],
             [
-                'link' => route('addlease.discountrate.index',['id' => $id]),
+                'link' => route('addlease.leasevaluation.index',['id' => $id]),
                 'title' => 'Lease Valuation'
             ],
         ];

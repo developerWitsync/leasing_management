@@ -60,12 +60,12 @@
                                             @php
                                                 $show_next[] = true;
                                             @endphp
-                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.balanceasondec.update', ['id'=> $asset->id]) }}">Update Lease Balance </a>
+                                            <a class="btn btn-sm btn-primary" href="{{ route('addlease.balanceasondec.update', ['id'=> $asset->id]) }}">Update Lease Balance </a>
                                         @else
                                             @php
                                                 $show_next[] = false;
                                             @endphp
-                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.balanceasondec.create', ['id'=> $asset->id]) }}">Add Lease Balance</a>
+                                            <a class="btn btn-sm btn-primary" href="{{ route('addlease.balanceasondec.create', ['id'=> $asset->id]) }}">Add Lease Balance</a>
                                         @endif
                                     </td>
                                 </tr>

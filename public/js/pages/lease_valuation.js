@@ -1,4 +1,7 @@
-
+/**
+ * Show present value calculus for an asset
+ * @param asset_id
+ */
 function showPresentValueCalculus(asset_id = null){
     if(asset_id) {
         $.ajax({

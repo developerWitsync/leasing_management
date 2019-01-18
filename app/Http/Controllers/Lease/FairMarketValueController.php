@@ -40,7 +40,7 @@ class FairMarketValueController extends Controller
             'attachment'                  => 'file|mimes:jpeg,pdf,doc'
         ];
     }
-   
+
     /**
      * renders the table to list all the lease assets.
      * @param $id Primary key for the lease
@@ -48,10 +48,11 @@ class FairMarketValueController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id, Request $request){
+
         if(!checkPreviousSteps($id,'step3')){
            return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
        }
-        $breadcrumbs = [
+            $breadcrumbs = [
             [
                 'link' => route('add-new-lease.index'),
                 'title' => 'Add New Lease'

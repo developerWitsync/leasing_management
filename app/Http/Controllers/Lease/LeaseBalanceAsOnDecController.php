@@ -35,9 +35,9 @@ class LeaseBalanceAsOnDecController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id){
-        if(!checkPreviousSteps($id,'step12')){
+       /*if(!checkPreviousSteps($id,'step12')){
               return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
-        }
+        }*/
         $breadcrumbs = [
             [
                 'link' => route('add-new-lease.index'),
@@ -55,6 +55,11 @@ class LeaseBalanceAsOnDecController extends Controller
              
             $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date','<','2019-01-01')->get();
 
+             if(count($assets) >0) {
+                    if(!checkPreviousSteps($id,'step12')){
+                     return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
+            } 
+         }
            return view('lease.lease-balnce-as-on-dec.index', compact(
                 'lease',
                 'assets',

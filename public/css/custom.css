@@ -344,3 +344,16 @@ button.btn.btn-success.close {
     font-weight: 400 !important;
     line-height: 22px;
 }
+.errorTxt{text-align: center; font-size: 16px; padding:100px 0 20px 10px; max-width: 600px; margin: 0 auto;}
+.errorTxt i{ padding:30px 0; text-align:center; display:block;}
+.errorTxt i img{ max-width:100%;}
+.errorTxt strong{ display:block; font-size:20px; text-transform:uppercase; color:#000;}
+.errorTxt span { display: block; padding: 20px 0 30px 0; font-size: 15px; color: #666; line-height: 25px;}
+.errorTxt a {display: inline-block; color: #ffffff; background: #0f6fc6; text-decoration: none; text-transform: uppercase; font-size: 18px; padding: 8px 30px; border-radius: 30px; line-height: 25px;}
+.errorTxt a:hover{ background:#075091;}
+.sub_table_heading {
+    background: #cfe5f3;
+    color: #000 !important;
+    font-weight: 500;
+    padding: 6px;
+}

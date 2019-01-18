@@ -58,12 +58,12 @@
                                             @php
                                                 $show_next[] = true;
                                             @endphp
-                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.leaseincentives.update', ['id'=> $asset->id]) }}">Update Lease Incentive Costs Details</a>
+                                            <a class="btn btn-sm btn-primary" href="{{ route('addlease.leaseincentives.update', ['id'=> $asset->id]) }}">Update Lease Incentive Costs Details</a>
                                         @else
                                             @php
                                                 $show_next[] = false;
                                             @endphp
-                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.leaseincentives.create', ['id'=> $asset->id]) }}">Add Lease Incentive Costs Details</a>
+                                            <a class="btn btn-sm btn-primary" href="{{ route('addlease.leaseincentives.create', ['id'=> $asset->id]) }}">Add Lease Incentive Costs Details</a>
                                         @endif
                                     </td>
                                 </tr>

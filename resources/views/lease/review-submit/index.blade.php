@@ -24,7 +24,7 @@
                     </ul>
                 </div>
             @endif
-               
+
                 {{--@include('lease._menubar')--}}
             <form class="form-horizontal" method="POST" action="{{ route('addlease.reviewsubmit.index', ['id' => $lease->id]) }}" enctype="multipart/form-data">
             {{ csrf_field() }}
@@ -179,7 +179,7 @@
                                     </td>
                                     @else
                                     <td>-</td>
-                                    @endif 
+                                    @endif
                                      <td><a href="{{ route('addlease.leaseasset.completedetails', ['lease' => $lease->id, 'asset' => $asset->id]) }}"><button data-toggle='tooltip' data-placement='top' title='Edit Lease Details' type="button" class="btn btn-sm  btn-success edit_lease_detail"><i class="fa fa-pencil-square-o fa-lg"></td></i></a>
                                 </tr>
                             @endforeach
@@ -273,7 +273,7 @@
                         @else
                         <td>-</td>
                         @endif
-                    </tr>  
+                    </tr>
                     <tr>
                         <th>Type of Lease Payment</th>
                         @if(isset($asset->payments[$key]->paymentType->title))
@@ -420,7 +420,7 @@
                                     @else
                                     <td>-</td>
                                     @endif
-                                   <td><a href="{{ route('addlease.residual.index', ['lease' => $lease->id]) }}"><button data-toggle='tooltip' data-placement='top' title='Edit Lease Details' type="button" class="btn btn-sm  btn-success edit_lease_detail"><i class="fa fa-pencil-square-o fa-lg"></td></i></a> 
+                                   <td><a href="{{ route('addlease.residual.index', ['lease' => $lease->id]) }}"><button data-toggle='tooltip' data-placement='top' title='Edit Lease Details' type="button" class="btn btn-sm  btn-success edit_lease_detail"><i class="fa fa-pencil-square-o fa-lg"></td></i></a>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -490,7 +490,7 @@
                                     @else
                                     <td>-</td>
                                      @endif
-                                     <td><a href="{{ route('addlease.durationclassified.index', ['lease' => $lease->id]) }}"><button data-toggle='tooltip' data-placement='top' title='Edit Lease Details' type="button" class="btn btn-sm  btn-success edit_lease_detail"><i class="fa fa-pencil-square-o fa-lg"></td></i></a> 
+                                     <td><a href="{{ route('addlease.durationclassified.index', ['lease' => $lease->id]) }}"><button data-toggle='tooltip' data-placement='top' title='Edit Lease Details' type="button" class="btn btn-sm  btn-success edit_lease_detail"><i class="fa fa-pencil-square-o fa-lg"></td></i></a>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -558,7 +558,7 @@
                         </div>
 
                     </div>
-              </form>  
+              </form>
           </div>
       </div>
 @endsection

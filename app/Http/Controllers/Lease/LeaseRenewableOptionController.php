@@ -44,6 +44,9 @@ class LeaseRenewableOptionController extends Controller
             })->get();
 
             if(count($assets) == 0) {
+                 if(!checkPreviousSteps($id,'step8')){
+                 return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
+                }
                 return redirect(route('addlease.durationclassified.index', ['id' => $id]));
             }
 
