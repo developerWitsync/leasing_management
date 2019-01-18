@@ -172,8 +172,6 @@ class UserController extends Controller
                         'annual_reporting_period'   => 'required'
                     ]);
 
-//                     dd($request->all());
-
                     if($validator->fails()) {
                         return redirect()->back()->withErrors($validator->errors())->withInput($request->except("_token"));
                     }
