@@ -15,25 +15,15 @@
                 </div>
             @endif
 
-            @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach (array_unique($errors->all()) as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
             <form role="form" class="form-horizontal" enctype="multipart/form-data" method="POST" action="{{ route('addlease.leasepaymentinvoice.index', ['id' => $lease->id]) }}">
-    {{ csrf_field() }}
+            {{ csrf_field() }}
 
     <div class="form-group{{ $errors->has('lease_payment_invoice_received') ? ' has-error' : '' }} required">
         <label for="name" class="col-md-4 control-label">Any Lease Payment Invoice Received from Lessor</label>
         <div class="col-md-6 form-check form-check-inline" required>
-            <input class="form-check-input" name="lease_payment_invoice_received" id="yes" type="checkbox" value = "yes">
+            <input class="form-check-input" name="lease_payment_invoice_received" id="yes" type="checkbox" value = "yes" @if(old('lease_payment_invoice_received', $model->lease_payment_invoice_received) == "yes") checked="checked" @endif>
             <label class="form-check-label" for="yes" id="yes" style="vertical-align: 4px">Yes</label><br>
-            <input class="form-check-input" name="lease_payment_invoice_received" id="no" type="checkbox" value = "no" >
+            <input class="form-check-input" name="lease_payment_invoice_received" id="no" type="checkbox" value = "no" @if(old('lease_payment_invoice_received', $model->lease_payment_invoice_received)  == "no") checked="checked" @endif>
             <label class="form-check-label" for="no" id="no" style="vertical-align: 4px">No</label>
             @if ($errors->has('lease_payment_invoice_received'))
                 <span class="help-block">
@@ -46,10 +36,14 @@
     <div class="form-group">
         <div class="col-md-6 col-md-offset-4">
 
-            <a href="{{ route('addlease.leasepaymentinvoice.index', ['id' => $lease->id]) }}" class="btn btn-danger">Cancel</a>
+            <a href="{{ route('addlease.leasepaymentinvoice.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
             <button type="submit" class="btn btn-success">
                 Submit
             </button>
+
+            @if($model->id)
+                <a href="{{ route('addlease.reviewsubmit.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
+            @endif
         </div>
     </div>
 

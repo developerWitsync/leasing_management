@@ -87,7 +87,7 @@ class LeaseValuationController extends Controller
                 $value = $asset->presentValueOfLeaseLiability(true);
                 return response()->json([
                     'status' => true,
-                    'value' => number_format($value, 2)
+                    'value' => $value
                 ], 200);
             } else {
                 abort(404);
@@ -134,7 +134,11 @@ class LeaseValuationController extends Controller
         try{
             if($request->ajax()){
                 $asset = LeaseAssets::query()->findOrFail($id);
-                $present_value_of_lease_liability = $asset->presentValueOfLeaseLiability(true);
+                if(!$request->has('lease_liability_value')){
+                    $present_value_of_lease_liability = $asset->presentValueOfLeaseLiability(true);
+                } else {
+                    $present_value_of_lease_liability = $request->lease_liability_value;
+                }
                 $prepaid_lease_payment = isset($asset->leaseBalanceAsOnDec)?$asset->leaseBalanceAsOnDec->prepaid_lease_payment_balance:0;
                 $accured_lease_payment = isset($asset->leaseBalanceAsOnDec)?$asset->leaseBalanceAsOnDec->accrued_lease_payment_balance:0;
                 $initial_direct_cost = isset($asset->initialDirectCost)?($asset->initialDirectCost->initial_direct_cost_involved == "yes"?$asset->initialDirectCost->total_initial_direct_cost:0):0;
@@ -142,7 +146,49 @@ class LeaseValuationController extends Controller
                 $value_of_lease_asset = ($present_value_of_lease_liability + $prepaid_lease_payment + $initial_direct_cost) - ($accured_lease_payment + $lease_incentive_cost);
                 return response()->json([
                     'status' => true,
-                    'value' => number_format($value_of_lease_asset, 2)
+                    'value' => $value_of_lease_asset
+                ], 200);
+            } else {
+                abort(404);
+            }
+        } catch (\Exception $e){
+            abort(404);
+        }
+    }
+
+    /**
+     * Returns the Lease Asset Impairment Value for the Lease on the Lease Valuation Sheet
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function leaseAssetImpairment($id, Request $request){
+        try{
+            if($request->ajax()){
+                $asset = LeaseAssets::query()->findOrFail($id);
+
+                if(!$request->has('lease_valuation_value')){
+                    $present_value_of_lease_liability = $asset->presentValueOfLeaseLiability(true);
+                    $prepaid_lease_payment = isset($asset->leaseBalanceAsOnDec)?$asset->leaseBalanceAsOnDec->prepaid_lease_payment_balance:0;
+                    $accured_lease_payment = isset($asset->leaseBalanceAsOnDec)?$asset->leaseBalanceAsOnDec->accrued_lease_payment_balance:0;
+                    $initial_direct_cost = isset($asset->initialDirectCost)?($asset->initialDirectCost->initial_direct_cost_involved == "yes"?$asset->initialDirectCost->total_initial_direct_cost:0):0;
+                    $lease_incentive_cost = isset($asset->leaseIncentives)?($asset->leaseIncentives->is_any_lease_incentives_receivable == "yes"?$asset->leaseIncentives->total_lease_incentives0:0):0;
+                    $value_of_lease_asset = ($present_value_of_lease_liability + $prepaid_lease_payment + $initial_direct_cost) - ($accured_lease_payment + $lease_incentive_cost);
+                } else {
+                    $value_of_lease_asset = $request->lease_valuation_value;
+                }
+
+                $fair_market_value = isset($asset->fairMarketValue)?($asset->fairMarketValue->is_market_value_present == "yes"?$asset->fairMarketValue->total_units:0):0;
+
+                $value = 0;
+
+                if($value_of_lease_asset > $fair_market_value && $fair_market_value > 0){
+                    $value = $value_of_lease_asset - $fair_market_value;
+                }
+
+                return response()->json([
+                    'status' => true,
+                    'value' => $value
                 ], 200);
             } else {
                 abort(404);
