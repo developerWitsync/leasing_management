@@ -14,9 +14,14 @@ class AddMaxPreviousLeaseStartYearToGeneralSettings extends Migration
     public function up()
     {
         Schema::table('general_settings', function (Blueprint $table) {
+<<<<<<< HEAD
            $table->string('max_previous_lease_start_year',50)
            ->after('date_of_initial_application_earlier_date')
            ->nullable();
+=======
+           $table->string('max_previous_lease_start_year',50)->after('date_of_initial_application_earlier_date')->nullable();
+           
+>>>>>>> ef3ea1fa26771f8b1cd42908c92bfa1192179543
         });
     }
 

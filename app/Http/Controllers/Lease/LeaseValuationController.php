@@ -130,5 +130,32 @@ class LeaseValuationController extends Controller
             abort(404);
         }
     }
-      
+
+    /**
+     * Returns the Lease Valuation value for the Lease on the Lease Valuation Sheet
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function equivalentPresentValueOfLeaseLiability($id , Request $request){
+        try{
+            if($request->ajax()){
+                $asset = LeaseAssets::query()->findOrFail($id);
+                $present_value_of_lease_liability = $asset->presentValueOfLeaseLiability(true);
+                $prepaid_lease_payment = isset($asset->leaseBalanceAsOnDec)?$asset->leaseBalanceAsOnDec->prepaid_lease_payment_balance:0;
+                $accured_lease_payment = isset($asset->leaseBalanceAsOnDec)?$asset->leaseBalanceAsOnDec->accrued_lease_payment_balance:0;
+                $initial_direct_cost = isset($asset->initialDirectCost)?($asset->initialDirectCost->initial_direct_cost_involved == "yes"?$asset->initialDirectCost->total_initial_direct_cost:0):0;
+                $lease_incentive_cost = isset($asset->leaseIncentives)?($asset->leaseIncentives->is_any_lease_incentives_receivable == "yes"?$asset->leaseIncentives->total_lease_incentives0:0):0;
+                $value_of_lease_asset = ($present_value_of_lease_liability + $prepaid_lease_payment + $initial_direct_cost) - ($accured_lease_payment + $lease_incentive_cost);
+                return response()->json([
+                    'status' => true,
+                    'value' => number_format($value_of_lease_asset, 2)
+                ], 200);
+            } else {
+                abort(404);
+            }
+        } catch (\Exception $e){
+            abort(404);
+        }
+    }
 }

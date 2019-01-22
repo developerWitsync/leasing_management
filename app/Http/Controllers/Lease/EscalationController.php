@@ -46,6 +46,18 @@ class EscalationController extends Controller
             ],
         ];
         try{
+
+            $breadcrumbs = [
+                [
+                    'link' => route('add-new-lease.index'),
+                    'title' => 'Add New Lease'
+                ],
+                [
+                    'link' => route('lease.escalation.index',['id' => $id]),
+                    'title' => 'Lease Escalations'
+                ],
+            ];
+
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
             if($lease){
                 //take out the payments for every lease asset

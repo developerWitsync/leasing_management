@@ -18,6 +18,7 @@ function showPresentValueCalculus(asset_id = null){
     }
 }
 
+//@todo Need to put the ajax calls in callbacks so that we can re-use the same values again when required...
 // document ready function
 $(function(){
     $('.load_lease_liability').each(function(index, value){
@@ -25,6 +26,22 @@ $(function(){
         var that = $(this);
         $.ajax({
             url : '/lease/lease-valuation/lease-liability-asset/'+asset_id,
+            dataType : 'json',
+            beforeSend : function(){
+                $(that).text('Calculating...');
+            },
+            success : function (response) {
+                $(that).text(response['value']);
+            }
+        });
+    });
+
+
+    $('.value_of_lease_asset').each(function(index, value){
+        var asset_id = $(this).data('asset_id');
+        var that = $(this);
+        $.ajax({
+            url : '/lease/lease-valuation/lease-valuation-asset/'+asset_id,
             dataType : 'json',
             beforeSend : function(){
                 $(that).text('Calculating...');

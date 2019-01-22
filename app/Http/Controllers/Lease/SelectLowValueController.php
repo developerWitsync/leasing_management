@@ -59,9 +59,9 @@ class SelectLowValueController extends Controller
 
             if($assets)
             {
-              if(!checkPreviousSteps($id,'step10')){
+             /* if(!checkPreviousSteps($id,'step10')){
                   return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
-               }
+               }*/
   
             }
             return view('lease.select-low-value.index', compact(

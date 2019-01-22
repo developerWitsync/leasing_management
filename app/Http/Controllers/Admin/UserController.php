@@ -110,7 +110,7 @@ class UserController extends Controller
                         'authorised_person_dob'     => 'required|date',
                         'gender'    => 'required',
                         'authorised_person_designation' => 'required',
-                        'username' => 'required|string|max:255',
+                        'username' => 'required|string|max:255|unique:users',
                         'email' => 'required|string|email|max:255|unique:users',
                         'password' => 'required|string|min:6|confirmed',
                         'phone' => 'required',
@@ -122,6 +122,8 @@ class UserController extends Controller
                 $data = $request->except('_token');
                 $data['password']   = bcrypt($request->password); 
                 $data['authorised_person_dob'] = date('Y-m-d', strtotime($request->authorised_person_dob));
+                $data['parent_id'] = 0;
+                $data['email_verification_code'] = md5(time());
                 $user = User::create($data);
                 
                 if($user){
@@ -165,11 +167,11 @@ class UserController extends Controller
                         'authorised_person_designation' => 'required',
                         'username' => 'required|string|max:255',
                         'email' => 'required|string|email|max:255',
-                        'password' => 'string|min:6|confirmed',
+                        'password' => 'min:6|confirmed|nullable',
                         'phone' => 'required',
                         'annual_reporting_period'   => 'required'
                     ]);
-                    
+
                     if($validator->fails()) {
                         return redirect()->back()->withErrors($validator->errors())->withInput($request->except("_token"));
                     }

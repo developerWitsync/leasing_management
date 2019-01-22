@@ -270,7 +270,7 @@
 
             $(function() {
 
-                toggleUsinLeasePayment();
+
 
 
                 $("input[type='checkbox']").on('click', function(){
@@ -281,9 +281,7 @@
 
 
                 function toggleUsinLeasePayment(){
-                    var _start_date = new Date($('input[name="accural_period"]').val());
-                    console.log(_start_date);
-                    console.log(_start_date < new Date('January 01 2019'));
+                    var _start_date =  $('#accural_period').datepicker('getDate');
                     if(_start_date < new Date('January 01 2019')){
                         $('.using_lease_payment').show();
 
@@ -312,7 +310,10 @@
 
                 $("#lease_start_date").datepicker({
                     dateFormat: "dd-M-yy",
-                    maxDate: 0,
+                    changeYear : true,
+                    @if($min_year && $min_year->max_previous_lease_start_year)
+                            minDate: new Date('{{ \Carbon\Carbon::create($min_year->max_previous_lease_start_year, 1, 1)->format('Y-m-d') }}'),
+                    @endif
                     onSelect: function () {
                         var dt2 = $('#lease_end_date');
                         var startDate = $(this).datepicker('getDate');
@@ -323,21 +324,10 @@
                         //difference in days. 86400 seconds in day, 1000 ms in second
                         var dateDiff = (dt2Date - minDate)/(86400 * 1000);
 
-                        // //dt2 not set or dt1 date is greater than dt2 date
-                        // if (dt2Date == null || dateDiff < 0) {
-                        //     dt2.datepicker('setDate', minDate);
-                        // }
-                        // //dt1 date is 30 days under dt2 date
-                        // else if (dateDiff > 30){
-                        //     dt2.datepicker('setDate', startDate);
-                        // }
-                        //sets dt2 maxDate to the last day of 30 days window
-                        // dt2.datepicker('option', 'maxDate', startDate);
-                        //first day which can be selected in dt2 is selected date in dt1
-                        dt2.datepicker('option', 'minDate', minDate);
-
+                        // dt2.datepicker('option', 'minDate', minDate);
 
                         setTimeout(function(){
+                            resetAllDates();
                             calculateLeaseTerm();
                         }, 100);
                     }
@@ -359,30 +349,38 @@
 
                 $('#accural_period').datepicker({
                     dateFormat: "dd-M-yy",
+                    onSelect : function(){
+
+                    }
                 });
 
-                // $( "#accural_period" ).datepicker( "option", "disabled", true );
+                toggleUsinLeasePayment();
 
                 $('#lease_free_period').on('keyup',function(){
+                    resetAllDates();
+                });
 
+                function resetAllDates(){
                     var startDate       = $('#lease_start_date').datepicker('getDate');
                     var newdate = new Date(startDate);
-                    newdate.setDate(startDate.getDate() + parseInt($(this).val()));
+                    newdate.setDate(startDate.getDate() + parseInt($('#lease_free_period').val()));
                     $('#accural_period').datepicker('setDate', newdate);
                     //set the minimum date for the lease end date as well
 
                     //lease end date should be +30 days of accural peroid date
                     var dt2 = $('#lease_end_date');
+                    var endDate = $('#lease_end_date').datepicker('getDate');
                     var dt3 = new Date($('#accural_period').datepicker('getDate'));
                     var dt4 = new Date(dt3.setDate(dt3.getDate() + 30));
                     dt2.datepicker('option', 'minDate', dt4);
 
+                    @if(old('lease_end_date', $asset->lease_end_date))
+                        dt2.datepicker('setDate', new Date('{{ $asset->lease_end_date }}'));
+                    @endif
+
                     //@todo check for the accural_period if that is prior to jan 01, 2019 than show the accounting period fields
                     toggleUsinLeasePayment();
-
-                    $('#lease_term').val('');
-                    $('#lease_end_date').val('');
-                });
+                }
             });
 
             $('select[name="accounting_treatment"]').on('change', function () {

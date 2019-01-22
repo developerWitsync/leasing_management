@@ -158,20 +158,6 @@ class UnderlyingLeaseAssetController extends Controller
                         }
                     });
 
-
-                    Validator::extend('required_if_prior_to_date_using', function ($attribute, $value, $parameters, $validator) {
-                        if(date('Y-m-d',strtotime($parameters['0'])) < date('Y-m-d', strtotime('2019-01-01'))){
-                            dd($parameters);
-                            if(is_null($value)) {
-                                return false;
-                            } else {
-                                return true;
-                            }
-                        } else {
-                            return true;
-                        }
-                    });
-
                     $rules = [
                         'other_details' => 'required',
                         'country_id'   => 'required|exists:countries,id',
@@ -201,7 +187,7 @@ class UnderlyingLeaseAssetController extends Controller
                         'lease_end_date.date'          =>   'The Lease End Date field must be a valid date.',
                         'accounting_treatment.required_if_prior_to_date'   => 'The accounting period is required when Start Date of Lease Payment / Accrual Period is prior to Jan 01, 2019.'
                     ];
-                    
+
                     if(date('Y-m-d',strtotime($request->accural_period)) < date('Y-m-d', strtotime('2019-01-01'))){
                         $rules['using_lease_payment'] = 'required';
                     }
@@ -238,8 +224,8 @@ class UnderlyingLeaseAssetController extends Controller
                 $expected_life_of_assets = ExpectedLifeOfAsset::query()->whereIn('business_account_id', getDependentUserIds())->get();
                 $accounting_terms  = LeaseAccountingTreatment::query()->where('upto_year', '=', '2018')->get();
                 // get max previous year from general settings for lease start year which will be minimum year
-                $min_year = GeneralSettings::query()->where('business_account_id', '=', auth()->user()->id)->first();
-               
+                $min_year = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
+
                 return view('lease.lease-assets.completedetails', compact(
                     'lease',
                     'asset',
