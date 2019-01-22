@@ -1,5 +1,3 @@
-
-
 <?php
 /**
  * Created by PhpStorm.
@@ -10,16 +8,8 @@
 
 namespace App\Http\Controllers\Lease;
 
-use App\ExpectedLifeOfAsset;
 use App\Http\Controllers\Controller;
 use App\Lease;
-use App\LeaseAccountingTreatment;
-use App\LeaseAssetCategories;
-use App\LeaseAssets;
-use App\LeaseAssetSimilarCharacteristicSettings;
-use App\LeaseAssetsNumberSettings;
-use App\LeaseAssetSubCategorySetting;
-use App\UseOfLeaseAsset;
 use App\LeasePaymentInvoice;
 use Illuminate\Http\Request;
 use Validator;

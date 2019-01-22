@@ -357,3 +357,15 @@ button.btn.btn-success.close {
     font-weight: 500;
     padding: 6px;
 }
+.affix {
+    position: fixed;
+    top: 50px;
+    left: 320px;
+    right: 36px;
+    /*z-index: 9999;*/
+    transition:all 0.3s ease-in-out;
+}
+
+.DashRight.dashRightBx .affix{
+    left: 100px;
+}

@@ -79,9 +79,12 @@
         @if(auth()->check())
             <div class="dashOuter clearfix">
                     <div class="dashLeft">
-                        <div class="leftmenuHd">
-                            <div class="menuHd"><span>Menu</span> <a class="dash_navicon" href="javascript:void(0)"><i class="fa fa-bars" aria-hidden="true"></i></a></div>
-                        </div>
+                        {{--<div class="leftmenuHd">--}}
+                            {{--<div class="menuHd">--}}
+                                {{--<span>&nbsp;</span>--}}
+                                {{--<a class="dash_navicon" href="javascript:void(0)"><i class="fa fa-bars" aria-hidden="true"></i></a>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
                         <div class="leftNav">
                             @include('layouts._sidebar')
                         </div>
@@ -90,7 +93,7 @@
                         @if(isset($breadcrumbs ))
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="/home">Dashboard</a></li>
+                                    {{--<li class="breadcrumb-item"><a href="/home">Dashboard</a></li>--}}
                                         @foreach($breadcrumbs as $breadcrumb)
                                             <li class="breadcrumb-item"><a href="{{ $breadcrumb['link'] }}">{{ $breadcrumb['title'] }}</a></li>
                                         @endforeach

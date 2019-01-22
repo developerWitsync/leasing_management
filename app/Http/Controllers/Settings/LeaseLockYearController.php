@@ -19,8 +19,8 @@ class LeaseLockYearController extends Controller
         try{
             if($request->isMethod('post')) {
                 $validator = Validator::make($request->except("_token"), [
-                    'audit_year1_ended_on' => 'required|date',
-                    'audit_year2_ended_on' => 'required|date'
+                    'start_date' => 'required|date',
+                    'end_date' => 'required|date|after:start_date'
               ]);
 
                 if($validator->fails()){
@@ -29,8 +29,8 @@ class LeaseLockYearController extends Controller
 
                 $model = LeaseLockYear::create([
                     'business_account_id'   =>  auth()->user()->id,
-                    'audit_year1_ended_on' => date('Y-m-d', strtotime($request->audit_year1_ended_on)),
-                    'audit_year2_ended_on' => date('Y-m-d', strtotime($request->audit_year2_ended_on))
+                    'start_date' => date('Y-m-d', strtotime($request->start_date)),
+                    'end_date' => date('Y-m-d', strtotime($request->end_date))
                 ]);
                 if($model){
                     return redirect()->back()->with('status', 'Lease Lock Year has been added successfully.');
@@ -52,12 +52,12 @@ class LeaseLockYearController extends Controller
     public function editLeaseLockYear($id, Request $request){
         try{
             if($request->ajax()){
-                $lease_lock_year = LeaseLockYear::query()->where('id', $id)->where('business_account_id', '=', auth()->user()->id)->first();
+                $lease_lock_year = LeaseLockYear::query()->where('id', $id)->whereIn('business_account_id', getDependentUserIds())->first();
                 //dd($lease_lock_year);
                 if($request->isMethod('post')) {
                     $validator = Validator::make($request->except("_token"), [
-                    'audit_year1_ended_on1' => 'required|date',
-                    'audit_year2_ended_on1' => 'required|date'
+                        'start_date' => 'required|date',
+                        'end_date' => 'required|date|after:start_date'
               		]);
                      
                     
@@ -68,8 +68,8 @@ class LeaseLockYearController extends Controller
                         ]);
                     }
                     $lease_lock_year->business_account_id = auth()->user()->id;
-                    $lease_lock_year->audit_year1_ended_on = date('Y-m-d', strtotime($request->audit_year1_ended_on1));
-                    $lease_lock_year->audit_year2_ended_on = date('Y-m-d', strtotime($request->audit_year2_ended_on1));
+                    $lease_lock_year->start_date = date('Y-m-d', strtotime($request->start_date ));
+                    $lease_lock_year->end_date = date('Y-m-d', strtotime($request->end_date));
                  // dd($lease_lock_year);
                     $lease_lock_year->save();
                     return response()->json([
@@ -97,7 +97,7 @@ class LeaseLockYearController extends Controller
     public function deleteLeaseLockYear($id, Request $request){
         try{
             if($request->ajax()) {
-                $lease_lock_year = LeaseLockYear::query()->where('id', $id)->where('business_account_id', '=', auth()->user()->id);
+                $lease_lock_year = LeaseLockYear::query()->where('id', $id)->whereIn('business_account_id', getDependentUserIds());
                 if($lease_lock_year) {
                     $lease_lock_year->delete();
                     Session::flash('status', 'Setting has been deleted successfully.');

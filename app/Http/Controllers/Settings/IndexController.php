@@ -26,6 +26,10 @@ class IndexController extends Controller
         $breadcrumbs = [
             [
                 'link' => route('settings.index'),
+                'title' => 'Settings'
+            ],
+            [
+                'link' => route('settings.index'),
                 'title' => 'General Settings'
             ]
         ];
@@ -51,7 +55,9 @@ class IndexController extends Controller
 
             $validator = Validator::make($request->except("_token"), [
                 'annual_year_end_on' => 'required|date',
-                'date_of_initial_application'   => 'required'
+                'date_of_initial_application'   => 'required',
+                'min_previous_first_lease_start_year' => 'required',
+                'max_lease_end_year' => 'required'
             ]);
 
             if($validator->fails()){

@@ -67,7 +67,7 @@
 
                                                 @foreach($reporting_foreign_currency_transaction_settings as $currencies)
                                                  <option value="{{ $currencies->foreign_exchange_currency }}" @if(old('lease_contract_id', $lease->lease_contract_id) == $currencies->foreign_exchange_currency) selected="selected" @endif>
-                                                    {{ $currencies->foreign_exchange_currency }}{{ '('.$currencies->base_currency.')' }}</option>
+                                                    {{ $currencies->foreign_exchange_currency }}</option>
                                                      @endforeach
                                             </select>
                                             @if ($errors->has('lease_contract_id'))
@@ -145,7 +145,7 @@
     $(document).ready(function() {
          $("#lease_type_id").on('change', function(){
             var value = $(this).val();
-            if(value == '1')
+            if(value == '1' || value == "2")
             {
                 var modal = bootbox.dialog({
                     message: "Does any Non-Lease component also exist? ",
@@ -177,8 +177,12 @@
         });
 
         function secondPopUp(){
+            var message = 'If Non-Lease Component Exists, please select Single Lease & Non-Lease Contract.';
+            if($('#lease_type_id').val() == '2'){
+                message = 'If Non-Lease Component Exists, please select Mulitple Lease & Non-Lease Contract.';
+            }
             var modal = bootbox.dialog({
-                message: 'If Non-Lease Component Exists, please select Single Lease & Non-Lease Contract.',
+                message: message,
                 buttons: [
                   {
                     label: "OK",

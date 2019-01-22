@@ -134,6 +134,17 @@ class UnderlyingLeaseAssetController extends Controller
      */
     public function assetDetails($lease_id,$asset_id, Request $request){
         try{
+            $breadcrumbs = [
+                [
+                    'link' => route('add-new-lease.index'),
+                    'title' => 'Add New Lease'
+                ],
+                [
+                    'link' => route('addlease.leaseasset.completedetails',['lease' => $lease_id, 'asset' => $asset_id]),
+                    'title' => 'Complete Details for Underlying Lease Assets'
+                ],
+            ];
+
             $lease = Lease::query()
                 ->whereIn('business_account_id', getDependentUserIds())
                 ->where('id', '=', $lease_id)
@@ -207,10 +218,10 @@ class UnderlyingLeaseAssetController extends Controller
                     $asset->setRawAttributes($data);
                     $asset->save();
 
-                    // complete Step
+                    // make the entry to the completed steps table so that the log can be created to check the completed steps
                     $lease_id = $lease_id;
-                    $step= 'step2';
-                    $complete_step2 = confirmSteps($lease_id,$step);
+                    $step   = 'step2';
+                    confirmSteps($lease_id,$step);
 
                     
                     return redirect(
@@ -224,7 +235,7 @@ class UnderlyingLeaseAssetController extends Controller
                 $expected_life_of_assets = ExpectedLifeOfAsset::query()->whereIn('business_account_id', getDependentUserIds())->get();
                 $accounting_terms  = LeaseAccountingTreatment::query()->where('upto_year', '=', '2018')->get();
                 // get max previous year from general settings for lease start year which will be minimum year
-                $min_year = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
+                $settings = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
 
                 return view('lease.lease-assets.completedetails', compact(
                     'lease',
@@ -233,7 +244,8 @@ class UnderlyingLeaseAssetController extends Controller
                     'use_of_lease_asset',
                     'expected_life_of_assets',
                     'accounting_terms',
-                    'min_year'
+                    'settings',
+                    'breadcrumbs'
                 ));
             } else {
                 abort(404);

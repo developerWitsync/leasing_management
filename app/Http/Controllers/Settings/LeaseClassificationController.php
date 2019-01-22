@@ -62,7 +62,10 @@ class LeaseClassificationController extends Controller
         $lease_payment_nature  = LeaseAssetPaymentsNature::query()->select('id', 'title')->where('status', '=', '1')->get();
         $lease_payment_basis  = LeasePaymentsBasis::query()->select('id', 'title')->where('status', '=', '1')->where('business_account_id', '=', auth()->user()->id)->get();
         $number_of_underlying_assets_settings  = LeaseAssetsNumberSettings::query()->select('id', 'number')->where('status', '=', '1')->where('business_account_id', '=', auth()->user()->id)->orderBy('number','asc')->get();
-        $la_similar_charac_number  = LeaseAssetSimilarCharacteristicSettings::query()->select('id', 'number')->where('status', '=', '1')->where('business_account_id', '=', auth()->user()->id)->orderBy('number','asc')->get();
+
+        $la_similar_charac_number  = LeaseAssetSimilarCharacteristicSettings::query()->select('id', 'number')->where('status', '=', '1')->where('business_account_id', '=', auth()->user()->id)->orderBy('number','asc')
+            ->get();
+
         $contract_escalation_basis   = ContractEscalationBasis::query()->select('id', 'title')->where('status', '=', '1')->get();
         $lease_contract   = LeaseContractDuration::query()->select('id', 'title', 'month_range_description')->where('status', '=', '1')->get();
         $lease_excluded_from_transitional_valuation = LeasesExcludedFromTransitionalValuation::query()->select('id', 'title', 'value_for')->where('status', '=', '1')->get();

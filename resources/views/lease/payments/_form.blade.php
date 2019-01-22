@@ -163,12 +163,6 @@
                     <input type="hidden" value="0" name="due_dates_confirmed">
                 @endif
 
-                @if ($errors->has('altered_payment_due_date.0'))
-                    <span class="help-block">
-                        <strong>{{ $errors->first('altered_payment_due_date.0') }}</strong>
-                    </span>
-                @endif
-
                 @if ($errors->has('due_dates_confirmed'))
                     <span class="help-block">
                         <strong>{{ $errors->first('due_dates_confirmed') }}</strong>
