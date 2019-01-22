@@ -31,7 +31,7 @@ class SelectDiscountRateController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id){
-
+       
         $breadcrumbs = [
             [
                 'link' => route('add-new-lease.index'),
@@ -75,6 +75,13 @@ class SelectDiscountRateController extends Controller
             $discountrate = LeaseSelectDiscountRate::query()->whereIn('asset_id', array_merge($own_assets_id, $sublease_assets_id))->count();
 
             $required_discount_rate =  count($own_assets_id) + count($sublease_assets_id);
+           /* if($own_assets  $sublease_assets)
+            {
+              if(!checkPreviousSteps($id,'step11')){
+                 return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
+               }
+
+            }*/
 
             $show_next = ($required_discount_rate == $discountrate);
 
@@ -118,6 +125,12 @@ class SelectDiscountRateController extends Controller
 
                     $select_discount_value = LeaseSelectDiscountRate::create($data);
                     if($select_discount_value){
+
+                        // complete Step
+                        $lease_id = $asset->lease->id;
+                        $step= 'step12';
+                        $complete_step12 = confirmSteps($lease_id,$step);
+
                         return redirect(route('addlease.discountrate.index',['id' => $lease->id]))->with('status', 'Select Discount Rate has been added successfully.');
                     }
                 }

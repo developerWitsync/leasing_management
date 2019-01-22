@@ -32,7 +32,9 @@ class LeaseValuationController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id){
-
+        if(!checkPreviousSteps($id,'step15')){
+               return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
+        }
         $breadcrumbs = [
             [
                 'link' => route('add-new-lease.index'),
@@ -62,6 +64,11 @@ class LeaseValuationController extends Controller
             })->whereHas('leaseDurationClassified',  function($query){
                 $query->where('lease_contract_duration_id', '=', '3');
             })->whereNotIn('category_id',[5,8])->get();
+
+             // complete Step
+            $lease_id = $lease->id;
+            $step= 'step16';
+            $complete_step16 = confirmSteps($lease_id,$step);
            
             return view('lease.lease-valuation.index', compact(
                 'lease',

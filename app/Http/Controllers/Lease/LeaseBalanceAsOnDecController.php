@@ -35,7 +35,9 @@ class LeaseBalanceAsOnDecController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id){
-
+       /*if(!checkPreviousSteps($id,'step12')){
+              return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
+        }*/
         $breadcrumbs = [
             [
                 'link' => route('add-new-lease.index'),
@@ -53,6 +55,11 @@ class LeaseBalanceAsOnDecController extends Controller
              
             $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date','<','2019-01-01')->get();
 
+             if(count($assets) >0) {
+                    if(!checkPreviousSteps($id,'step12')){
+                     return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
+            } 
+         }
            return view('lease.lease-balnce-as-on-dec.index', compact(
                 'lease',
                 'assets',
@@ -92,6 +99,12 @@ class LeaseBalanceAsOnDecController extends Controller
 
                     $select_discount_value = LeaseBalanceAsOnDec::create($data);
                     if($select_discount_value){
+
+                        // complete Step
+                        $lease_id = $asset->lease->id;
+                        $step= 'step13';
+                        $complete_step13 = confirmSteps($lease_id,$step);
+
                         return redirect(route('addlease.balanceasondec.index',['id' => $lease->id]))->with('status', 'Lease Balance as on 31 Dec 2018 has been added successfully.');
                     }
                 }

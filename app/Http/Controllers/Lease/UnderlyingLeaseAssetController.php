@@ -34,10 +34,7 @@ class UnderlyingLeaseAssetController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id, Request $request){
-        
-       // $this->checkvalidateurl($id);
-        
-        $breadcrumbs = [
+            $breadcrumbs = [
             [
                 'link' => route('add-new-lease.index'),
                 'title' => 'Add New Lease'
@@ -111,8 +108,6 @@ class UnderlyingLeaseAssetController extends Controller
                 LeaseAssets::query()->where('lease_id', '=',$lease->id)->whereNotIn('id', $created_lease_asset_ids)->delete();
                 return redirect()->back()->with('status', 'Lease Assets has been created successfully. Click on Complete Details button to complete other details for the lease assets.');
             }
-
-
             $numbers_of_lease_assets  = LeaseAssetsNumberSettings::query()->select('number')->whereIn('business_account_id', getDependentUserIds())->get();
             $lease_assets_categories  = LeaseAssetCategories::query()->with('subcategories')->get();
             $la_similar_charac_number = LeaseAssetSimilarCharacteristicSettings::query()
@@ -147,7 +142,6 @@ class UnderlyingLeaseAssetController extends Controller
                 ->first();
 
             $asset = LeaseAssets::query()->where('lease_id', '=', $lease_id)->where('id', '=', $asset_id)->first();
-
             if($lease && $asset) {
 
                 if($request->isMethod('post')) {
@@ -201,6 +195,7 @@ class UnderlyingLeaseAssetController extends Controller
                     $validator = Validator::make($request->except('_token'),$rules, $messages);
 
                     if($validator->fails()) {
+                      
                         return redirect()->back()->withErrors($validator->errors())->withInput($request->except('_token'));
                     }
 
@@ -211,6 +206,12 @@ class UnderlyingLeaseAssetController extends Controller
                     $data['is_details_completed']  = '1';
                     $asset->setRawAttributes($data);
                     $asset->save();
+
+                    // complete Step
+                    $lease_id = $lease_id;
+                    $step= 'step2';
+                    $complete_step2 = confirmSteps($lease_id,$step);
+
                     
                     return redirect(
                         route('addlease.leaseasset.index', ['id' => $lease->id,'total_assets' => count($lease->assets)])

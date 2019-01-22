@@ -60,7 +60,10 @@ class LeasePaymentsController extends Controller
      */
     public function index($id){
 
-        $breadcrumbs = [
+        if(!checkPreviousSteps($id,'step2')){
+           return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
+       }
+            $breadcrumbs = [
             [
                 'link' => route('add-new-lease.index'),
                 'title' => 'Add New Lease'
@@ -191,6 +194,11 @@ class LeasePaymentsController extends Controller
                             }
                         }
                     }
+
+                    // complete Step
+                    $lease_id = $asset->lease->id;
+                    $step= 'step3';
+                    $complete_step3 = confirmSteps($lease_id,$step);
 
                     return redirect(route('lease.payments.add', ['lease_id' => $asset->lease->id, 'asset_id' => $asset->id]))->with('status', 'Lease Asset Payments has been added successfully.');
                 } else {

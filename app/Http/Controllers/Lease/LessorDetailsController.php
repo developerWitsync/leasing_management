@@ -13,6 +13,7 @@ use App\Currencies;
 use App\Lease;
 use App\ReportingCurrencySettings;
 use App\ForeignCurrencyTransactionSettings;
+use App\LeaseCompletedSteps;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Validator;
@@ -51,7 +52,7 @@ class LessorDetailsController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id = null, Request $request ){
-       
+      
         if($id) {
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $request->id)->first();
             if(is_null($lease)) {
@@ -107,6 +108,10 @@ class LessorDetailsController extends Controller
             $lease = Lease::create($data);
            
             if($lease) {
+                 $lease_id = $lease->id;
+                 $step= 'step1';
+                 $complete_step1 = confirmSteps($lease_id,$step);
+
                 if($request->has('action') && $request->action == "next") {
                     return redirect(route('addlease.leaseasset.index', ['id'=>$lease->id]))->with('status', 'Lessor Details has been updated successfully.');
                 } else {
@@ -115,6 +120,7 @@ class LessorDetailsController extends Controller
             }
 
          } catch (\Exception $e){
+            //dd($e->getMessage());
             abort(404);
         }
     }

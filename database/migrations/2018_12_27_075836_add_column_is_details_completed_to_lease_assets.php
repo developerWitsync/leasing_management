@@ -14,7 +14,7 @@ class AddColumnIsDetailsCompletedToLeaseAssets extends Migration
     public function up()
     {
         Schema::table('lease_assets', function (Blueprint $table) {
-            $table->enum('is_details_completed', [0,1])->default(0)->after('similar_asset_items');
+            $table->enum('is_details_completed', ['0','1'])->default('0')->after('similar_asset_items');
         });
     }
 

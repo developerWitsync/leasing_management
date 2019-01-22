@@ -32,7 +32,7 @@ class SelectLowValueController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id){
-
+         
         $breadcrumbs = [
             [
                 'link' => route('add-new-lease.index'),
@@ -57,7 +57,13 @@ class SelectLowValueController extends Controller
                 $query->whereNotIn('lease_contract_duration_id',[1,2]);
             })->whereNotIn('category_id', $category_excluded_id)->get();
 
-
+            if($assets)
+            {
+             /* if(!checkPreviousSteps($id,'step10')){
+                  return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
+               }*/
+  
+            }
             return view('lease.select-low-value.index', compact(
                 'lease',
                 'assets',
@@ -96,6 +102,12 @@ class SelectLowValueController extends Controller
 
                     $select_low_value = LeaseSelectLowValue::create($data);
                     if($select_low_value){
+                        
+                        // complete Step
+                        $lease_id = $asset->lease->id;
+                        $step= 'step11';
+                        $complete_step11 = confirmSteps($lease_id,$step);
+
                         return redirect(route('addlease.lowvalue.index',['id' => $lease->id]))->with('status', 'Select Low Value has been added successfully.');
                     }
                 }

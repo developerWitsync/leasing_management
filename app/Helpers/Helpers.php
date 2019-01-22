@@ -459,4 +459,45 @@ function getUndiscountedTotalLeasePayment($asset_id){
 
         return $total;
     }
+
+
+}
+
+
+/**
+ * to confirm the perfrom steps
+ * @param $asset_id
+ * @return float|int|mixed
+ */
+function confirmSteps($lease_id,$complete_step){
+    if($lease_id)
+    {
+        $data['lease_id'] = $lease_id;
+        $data['completed_step'] = $complete_step;
+      
+        $confrim_steps = \App\LeaseCompletedSteps::create($data);
+   }
+   return $confrim_steps;
+}
+
+
+
+/**
+ * to check  the previous steps
+ * @param $asset_id
+ * @return float|int|mixed
+ */
+function checkPreviousSteps($lease_id,$complete_step){
+    if($lease_id)
+    {
+        $confrim_steps = \App\LeaseCompletedSteps::query()->where('lease_id', '=', $lease_id)->where('completed_step','=', $complete_step)->get();
+       
+        if(count($confrim_steps)>0){
+            return true;
+        }
+        else{
+            return false;
+        }
+   }
+   return false;
 }
