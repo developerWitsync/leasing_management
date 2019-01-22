@@ -263,7 +263,8 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
                     //the condition is applying the escalations only on the escalation date
                     //however it should apply the escalation on the next year as well
                     $condition = ((int)$escalation_date->format('Y') == $start_year && $k_m == (int)$escalation_date->format('m'))
-                        || ($start_year >= (int)$escalation_date->format('Y') && $k_m >= (int)$escalation_date->format('m')) ;
+                        || ($start_year >= (int)$escalation_date->format('Y') && $k_m >= (int)$escalation_date->format('m'));
+
                     if($condition){
 
                         if($amount_to_consider == 0){
@@ -300,8 +301,17 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
         }
     }
 
+
     //code to compute the escalations when applied inconsistently...
     if($escalation_applicable == "yes" && (($escalation_basis == '1' && $escalation_applied_consistently_annually == 'no') || ($escalation_basis == '2' && $escalation_applied_consistently_annually == 'no'))){
+        if($escalation_basis == '1') {
+            $all_escalation_dates = array_column($data['inconsistent_effective_date'], '0');
+            $all_escalation_dates_final = [];
+            foreach ($all_escalation_dates as $all_escalation_date) {
+                $all_escalation_dates_final[date('Y', strtotime($all_escalation_date))] = $all_escalation_date;
+            }
+        }
+
         while ($start_year <= $end_year) {
             foreach ($months as $key => $month){
 
@@ -320,8 +330,27 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
                                 }
 
                                 if($escalation_basis == '1') {
+
+                                    $current_escalation_date = \Carbon\Carbon::parse($all_escalation_dates_final[$start_year]);
+
+                                    $next_escalation_date    = \Carbon\Carbon::parse(next($all_escalation_dates_final));
+
+                                    if($next_escalation_date==""){
+                                        $next_escalation_date = \Carbon\Carbon::create($start_year, 1, 1)->lastOfYear();
+                                    }
+
+                                    $diff_in_days = $next_escalation_date->diffInDays($current_escalation_date);
+
+                                    if($diff_in_days > 365){
+                                        $next_escalation_date = \Carbon\Carbon::create($start_year, 1, 1)->lastOfYear();
+                                        $diff_in_days = $next_escalation_date->diffInDays($current_escalation_date);
+                                    }
+
+                                    $days_in_current_year = \Carbon\Carbon::create($start_year, 1, 1)->firstOfYear()->diffInDays(\Carbon\Carbon::create($start_year, 1, 1)->lastOfYear());
+
                                     $escalation_percentage_or_amount = $data['inconsistent_total_escalation_rate'][$start_year][$key];
-                                    $amount_to_consider += ($amount_to_consider * $escalation_percentage_or_amount)/100;
+
+                                    $amount_to_consider = $amount_to_consider*(1 + (($escalation_percentage_or_amount/100)/$days_in_current_year) * $diff_in_days);
 
                                 } else {
                                     $escalation_percentage_or_amount = $data['inconsistent_escalated_amount'][$start_year][$key];

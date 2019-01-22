@@ -439,7 +439,7 @@ class EscalationController extends Controller
                 abort(404);
             }
         }catch (\Exception $e){
-            dd($e);
+            abort(404);
         }
     }
 
