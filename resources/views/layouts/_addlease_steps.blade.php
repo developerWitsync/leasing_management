@@ -1,7 +1,7 @@
  <div class="itemTab" >
                             <ul>
                                 <li>
-                                    <a class="@if(request()->segment(2) == 'lessor-details') active @endif" href="#">
+                                    <a class="@if(request()->segment(2) == 'lessor-details') active @endif" href="{{route('add-new-lease.index')}}">
                                         <img src="{{ asset('assets/images/breatcrum-icon.png') }}" class="img" alt="" >
                                         <img src="{{ asset('assets/images/breatcrum-icon-hover.png') }}" alt="" class="over" >
                                         <span>Lessor Details</span>
