@@ -29,9 +29,12 @@ class ReviewSubmitController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id, Request $request){
+
         if(!checkPreviousSteps($id,'step17')){
-                return  redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
+            //check lease incentives
+            return  redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
         }
+
         $breadcrumbs = [
             [
                 'link' => route('add-new-lease.index'),
@@ -52,20 +55,11 @@ class ReviewSubmitController extends Controller
                 $model = Lease::query()->where('id', '=', $id)->first();
                 $model->status = "1";
                 $model->save();
+                // complete Step
+                confirmSteps($id,'step18');
                 return redirect(route('addlease.reviewsubmit.index',['id' => $id]))->with('status', 'Lease Information has been Submitted successfully.');
             }
 
-<<<<<<< HEAD
-                       // complete Step
-                        $lease_id = $id;
-                        $step= 'step18';
-                        $complete_step18 = confirmSteps($lease_id,$step);
-
-                    return redirect(route('addlease.reviewsubmit.index',['id' => $id]))->with('status', 'Lease Information has been Submitted successfully.');
-                    
-                }
-=======
->>>>>>> e90e078ec4d23969c3361da2cdcaacc38a0465e6
             return view('lease.review-submit.index', compact(
                 'lease',
                 'assets',

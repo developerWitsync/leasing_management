@@ -50,8 +50,8 @@ class IndexController extends Controller
     public function deleteLeaseDetails($id, Request $request) {
         try{
             if($request->ajax()) {
-                $lease = Lease::query()->find($id);
-                if($lease) {
+                $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id',$id)->first();
+                if($lease){
                     $lease->delete();
                     return response()->json(['status' => true], 200);
                 } else {

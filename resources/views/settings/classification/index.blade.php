@@ -218,12 +218,15 @@
                                                 {{ $value->number }}
                                             </td>
                                             <td>
+                                                @if($value->number != "1")
+                                                    <a data-href="{{ route('settings.leaseclassification.editleaseassetnumber', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-success edit_table_setting">
+                                                        <i class="fa fa-pencil-square-o"></i>
+                                                    </a>
 
-                                                <a data-href="{{ route('settings.leaseclassification.editleaseassetnumber', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-success edit_table_setting">
-                                                    <i class="fa fa-pencil-square-o"></i>
-                                                </a>
-
-                                                <a data-href="{{ route('settings.leaseclassification.deleteleaseassetnumber', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-danger delete_settings"><i class="fa fa-trash-o"></i></a>
+                                                    <a data-href="{{ route('settings.leaseclassification.deleteleaseassetnumber', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-danger delete_settings"><i class="fa fa-trash-o"></i></a>
+                                                @else
+                                                    &nbsp;
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach
@@ -275,12 +278,13 @@
                                                 {{ $value->number }}
                                             </td>
                                             <td>
+                                                @if($value->number != "1")
+                                                    <a data-href="{{ route('settings.leaseclassification.editleasesimilarcharac', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-success edit_table_setting">
+                                                        <i class="fa fa-pencil-square-o"></i>
+                                                    </a>
 
-                                                <a data-href="{{ route('settings.leaseclassification.editleasesimilarcharac', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-success edit_table_setting">
-                                                    <i class="fa fa-pencil-square-o"></i>
-                                                </a>
-
-                                                <a data-href="{{ route('settings.leaseclassification.deleteleasesimilarcharac', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-danger delete_settings"><i class="fa fa-trash-o"></i></a>
+                                                    <a data-href="{{ route('settings.leaseclassification.deleteleasesimilarcharac', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-danger delete_settings"><i class="fa fa-trash-o"></i></a>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach

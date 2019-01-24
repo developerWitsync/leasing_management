@@ -66,9 +66,7 @@ class LeaseValuationController extends Controller
             })->whereNotIn('category_id',[5,8])->get();
 
              // complete Step
-            $lease_id = $lease->id;
-            $step= 'step16';
-            $complete_step16 = confirmSteps($lease_id,$step);
+            confirmSteps($lease->id,'step16');
            
             return view('lease.lease-valuation.index', compact(
                 'lease',
@@ -159,6 +157,7 @@ class LeaseValuationController extends Controller
                 abort(404);
             }
         } catch (\Exception $e){
+            dd($e->getMessage());
             abort(404);
         }
     }

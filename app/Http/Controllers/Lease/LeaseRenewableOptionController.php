@@ -33,10 +33,24 @@ class LeaseRenewableOptionController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id){
+
         if(!checkPreviousSteps($id,'step6')){
-                 return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
+             return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
         }
+
+        $breadcrumbs = [
+            [
+                'link' => route('add-new-lease.index'),
+                'title' => 'Add New Lease'
+            ],
+            [
+                'link' => route('addlease.renewable.index', ['id' => $id]),
+                'title' => 'Renewal Option'
+            ],
+        ];
+
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
+
         if($lease) {
             //Load the assets only for the assets where no selected at `exercise_termination_option_available` on lease termination
             $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->whereHas('terminationOption',  function($query){
@@ -52,7 +66,8 @@ class LeaseRenewableOptionController extends Controller
 
             return view('lease.lease-renewable-option.index', compact(
                 'lease',
-                'assets'
+                'assets',
+                'breadcrumbs'
             ));
         } else {
             abort(404);
@@ -67,6 +82,18 @@ class LeaseRenewableOptionController extends Controller
      */
     public function create($id, Request $request){
         try{
+
+            $breadcrumbs = [
+                [
+                    'link' => route('add-new-lease.index'),
+                    'title' => 'Add New Lease'
+                ],
+                [
+                    'link' => route('addlease.renewable.create', ['id' => $id]),
+                    'title' => 'Create Renewal Option'
+                ],
+            ];
+
             $asset = LeaseAssets::query()->findOrFail($id);
             $lease = $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
             if($lease) {
@@ -104,7 +131,8 @@ class LeaseRenewableOptionController extends Controller
                 return view('lease.lease-renewable-option.create', compact(
                     'model',
                     'lease',
-                    'asset'
+                    'asset',
+                    'breadcrumbs'
                 ));
             } else {
                 abort(404);
@@ -122,6 +150,18 @@ class LeaseRenewableOptionController extends Controller
      */
     public function update($id, Request $request){
         try{
+
+            $breadcrumbs = [
+                [
+                    'link' => route('add-new-lease.index'),
+                    'title' => 'Add New Lease'
+                ],
+                [
+                    'link' => route('addlease.renewable.update', ['id' => $id]),
+                    'title' => 'Update Renewal Option'
+                ],
+            ];
+
             $asset = LeaseAssets::query()->findOrFail($id);
             $lease = $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
             if($lease) {
@@ -155,7 +195,8 @@ class LeaseRenewableOptionController extends Controller
                 return view('lease.lease-renewable-option.update', compact(
                     'model',
                     'lease',
-                    'asset'
+                    'asset',
+                    'breadcrumbs'
                 ));
             } else {
                 abort(404);

@@ -11,8 +11,8 @@ class LeaseLockYear extends Model
     protected $fillable = [
     	'id',
         'business_account_id',
-        'audit_year1_ended_on',
-        'audit_year2_ended_on',
+        'start_date',
+        'end_date',
         'created_at',
         'updated_at'
     ];

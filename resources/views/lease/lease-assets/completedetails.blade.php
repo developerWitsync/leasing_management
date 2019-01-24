@@ -72,7 +72,7 @@
                         <fieldset class="scheduler-border">
                             <legend class="scheduler-border">Purpose of the Underlying Lease Asset</legend>
                             <div class="form-group{{ $errors->has('specific_use') ? ' has-error' : '' }} required">
-                                <label for="specific_use" class="col-lg-4 col-md-6 control-label">Specific Use of the Lease Asset</label>
+                                <label for="specific_use" class="col-lg-4 col-md-6 control-label">Useful Life of the Lease Asset</label>
                                 <div class="col-lg-4 col-md-6">
                                     <select name="specific_use" class="form-control">
                                         <option value="">--Select Use Of Lease Asset--</option>
@@ -112,6 +112,11 @@
                                     <select name="expected_life" class="form-control">
                                         <option value="">--Expected Life Of Lease Asset--</option>
                                         @foreach($expected_life_of_assets as $life)
+                                            @if($asset->category_id != '1' && $life->years < 0)
+                                                @php
+                                                    continue;
+                                                @endphp
+                                            @endif
                                             <option value="{{ $life->id }}" @if(old('expected_life', $asset->expected_life) == $life->id) selected="selected" @endif>{{ ($life->years > 0)?$life->years:'Indefinite' }}</option>
                                         @endforeach
                                     </select>
@@ -132,7 +137,7 @@
                             <div class="form-group{{ $errors->has('lease_start_date') ? ' has-error' : '' }} required">
                                 <label for="lease_start_date" class="col-lg-4 col-md-6 control-label">Lease Start Date</label>
                                 <div class="col-lg-4 col-md-6">
-                                    <input id="lease_start_date" type="text" placeholder="Lease Start Date" class="form-control" name="lease_start_date" value="{{ old('lease_start_date', $asset->lease_start_date) }}" autocomplete="off">
+                                    <input id="lease_start_date" type="text" placeholder="Lease Start Date" class="form-control" name="lease_start_date" value="{{ old('lease_start_date', ($asset->lease_start_date)?(\Carbon\Carbon::parse($asset->lease_start_date)->format('d-M-Y')):'') }}" autocomplete="off">
                                     @if ($errors->has('lease_start_date'))
                                         <span class="help-block">
                                             <strong>{{ $errors->first('lease_start_date') }}</strong>
@@ -156,7 +161,7 @@
                             <div class="form-group{{ $errors->has('accural_period') ? ' has-error' : '' }} required">
                                 <label for="accural_period" class="col-lg-4 col-md-6 control-label">Start Date of Lease Payment / Accrual Period</label>
                                 <div class="col-lg-4 col-md-6">
-                                    <input id="accural_period" type="text" placeholder="Start Date of Lease Payment / Accrual Period" class="form-control" name="accural_period" value="{{ old('accural_period', $asset->accural_period) }}" readonly="readonly" style="pointer-events: none">
+                                    <input id="accural_period" type="text" placeholder="Start Date of Lease Payment / Accrual Period" class="form-control" name="accural_period" value="{{ old('accural_period',($asset->accural_period)?(\Carbon\Carbon::parse($asset->accural_period)->format('d-M-Y')):'') }}" readonly="readonly" style="pointer-events: none">
                                     @if ($errors->has('accural_period'))
                                         <span class="help-block">
                                             <strong>{{ $errors->first('accural_period') }}</strong>
@@ -168,7 +173,7 @@
                             <div class="form-group{{ $errors->has('lease_end_date') ? ' has-error' : '' }} required">
                                 <label for="lease_end_date" class="col-lg-4 col-md-6 control-label">Lease End Date, Non-Cancellable Period</label>
                                 <div class="col-lg-4 col-md-6">
-                                    <input id="lease_end_date" type="text" placeholder="Lease End Date, Non-Cancellable Period" class="form-control" name="lease_end_date" value="{{ old('lease_end_date', $asset->lease_end_date) }}" autocomplete="off">
+                                    <input id="lease_end_date" type="text" placeholder="Lease End Date, Non-Cancellable Period" class="form-control" name="lease_end_date" value="{{ old('lease_end_date', ($asset->lease_end_date)?(\Carbon\Carbon::parse($asset->lease_end_date)->format('d-M-Y')):'') }}" autocomplete="off">
                                     @if ($errors->has('lease_end_date'))
                                         <span class="help-block">
                                             <strong>{{ $errors->first('lease_end_date') }}</strong>
@@ -270,9 +275,6 @@
 
             $(function() {
 
-
-
-
                 $("input[type='checkbox']").on('click', function(){
                     var group = "input[name='"+$(this).attr("name")+"']";
                     $(group).prop("checked",false);
@@ -311,9 +313,7 @@
                 $("#lease_start_date").datepicker({
                     dateFormat: "dd-M-yy",
                     changeYear : true,
-                    @if($min_year && $min_year->max_previous_lease_start_year)
-                            minDate: new Date('{{ \Carbon\Carbon::create($min_year->max_previous_lease_start_year, 1, 1)->format('Y-m-d') }}'),
-                    @endif
+                    yearRange : '{{ $settings->min_previous_first_lease_start_year }}:{{$settings->max_lease_end_year}}',
                     onSelect: function () {
                         var dt2 = $('#lease_end_date');
                         var startDate = $(this).datepicker('getDate');
@@ -335,7 +335,9 @@
 
                 $('#lease_end_date').datepicker({
                     dateFormat: "dd-M-yy",
-                    minDate: 0,
+                    minDate: new Date('2019-01-30'),
+                    yearRange : '{{ $settings->min_previous_first_lease_start_year }}:{{$settings->max_lease_end_year}}',
+                    changeYear : true,
                     onSelect : function (){
                         calculateLeaseTerm();
                     }
@@ -349,6 +351,7 @@
 
                 $('#accural_period').datepicker({
                     dateFormat: "dd-M-yy",
+                    changeYear : true,
                     onSelect : function(){
 
                     }
@@ -372,7 +375,12 @@
                     var endDate = $('#lease_end_date').datepicker('getDate');
                     var dt3 = new Date($('#accural_period').datepicker('getDate'));
                     var dt4 = new Date(dt3.setDate(dt3.getDate() + 30));
-                    dt2.datepicker('option', 'minDate', dt4);
+
+                    if(dt4 <= new Date('2019-01-30')) {
+                        dt2.datepicker('option', 'minDate', new Date('2019-01-30'));
+                    } else {
+                        dt2.datepicker('option', 'minDate', dt4);
+                    }
 
                     @if(old('lease_end_date', $asset->lease_end_date))
                         dt2.datepicker('setDate', new Date('{{ $asset->lease_end_date }}'));
@@ -395,7 +403,7 @@
                         callback: function() {
                         }
                       },
-                     
+
                     ],
                     show: false,
                     onEscape: function() {

@@ -1,5 +1,3 @@
-
-
 <?php
 /**
  * Created by PhpStorm.
@@ -10,16 +8,8 @@
 
 namespace App\Http\Controllers\Lease;
 
-use App\ExpectedLifeOfAsset;
 use App\Http\Controllers\Controller;
 use App\Lease;
-use App\LeaseAccountingTreatment;
-use App\LeaseAssetCategories;
-use App\LeaseAssets;
-use App\LeaseAssetSimilarCharacteristicSettings;
-use App\LeaseAssetsNumberSettings;
-use App\LeaseAssetSubCategorySetting;
-use App\UseOfLeaseAsset;
 use App\LeasePaymentInvoice;
 use Illuminate\Http\Request;
 use Validator;
@@ -77,6 +67,8 @@ class LeaseInvoiceController extends Controller
                     $model->setRawAttributes($data);
 
                     if($model->save()){
+                        // complete Step
+                        confirmSteps($lease->id,'step17');
                         return redirect(route('addlease.leasepaymentinvoice.update',['id' => $lease->id]))->with('status', 'Lease Payment Invoice details has been updated successfully.');
                     }
                 }
@@ -89,9 +81,8 @@ class LeaseInvoiceController extends Controller
                 abort(404);
             }
         }catch (\Exception $e){
-            dd($e);
+            abort(404, $e->getMessage());
         }
-
     }
 }
 

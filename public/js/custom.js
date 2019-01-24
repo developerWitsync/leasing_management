@@ -11,13 +11,15 @@ $(function(){
             type : 'get',
             success : function (response) {
                 $('.modal-content').html(response);
+
                 $("#myModal").modal('show');
-                $("#audit_year1_ended_on1").datepicker({
+
+                $("#myModal #start_date_edit").datepicker({
                     changeMonth: true,
                     changeYear: true
                 });
 
-                $("#audit_year2_ended_on1").datepicker({
+                $("#myModal #end_date_edit").datepicker({
                     changeMonth: true,
                     changeYear: true
                 });
@@ -61,8 +63,8 @@ $(function(){
         $.ajax({
             url : $(this).attr('action'),
             data : {
-                audit_year1_ended_on1 : $('#audit_year1_ended_on1').val(),
-                audit_year2_ended_on1 : $('#audit_year2_ended_on1').val()
+                start_date : $('#start_date_edit').val(),
+                end_date : $('#end_date_edit').val()
             },
             dataType : 'json',
             type : 'post',
@@ -76,13 +78,19 @@ $(function(){
                 } else {
                     
                     $('#edit_settings1 .form-group').addClass('has-error');
-                    var html='<span class="help-block">\n' +
-                        '                        <strong>'+response['errors']['audit_year1_ended_on1'][0]+'</strong>\n' +
-                        '                    </span>';
-                    var html1='<span class="help-block">\n' +
-                        '                        <strong>'+response['errors']['audit_year2_ended_on1'][0]+'</strong>\n' +
-                        '                    </span>';
-                    
+                    var html = '';
+                    var html1 = '';
+                    if(typeof(response['errors']['start_date'])!="undefined") {
+                        html = '<span class="help-block">\n' +
+                            '                        <strong>'+response['errors']['start_date'][0]+'</strong>\n' +
+                            '                    </span>';
+                    }
+
+                    if(typeof(response['errors']['end_date'])!="undefined") {
+                        html1 = '<span class="help-block">\n' +
+                            '                        <strong>' + response['errors']['end_date'][0] + '</strong>\n' +
+                            '                    </span>';
+                    }
                     
                     $('#error_section').html(html);
                     $('#error_section1').html(html1);
@@ -110,13 +118,12 @@ $(function(){
                         window.location.reload();
                     }, 200);
                 } else {
-                    alert('df');
                     $('#edit_settings2 .form-group').addClass('has-error');
                     var html='<span class="help-block">\n' +
-                        '                        <strong>'+response['errors']['audit_year1_ended_on1'][0]+'</strong>\n' +
+                        '                        <strong>'+response['errors']['start_date'][0]+'</strong>\n' +
                         '                    </span>';
                     var html1='<span class="help-block">\n' +
-                        '                        <strong>'+response['errors']['audit_year2_ended_on1'][0]+'</strong>\n' +
+                        '                        <strong>'+response['errors']['end_date'][0]+'</strong>\n' +
                         '                    </span>';
                     
                     

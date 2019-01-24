@@ -35,16 +35,6 @@ class EscalationController extends Controller
         if(!checkPreviousSteps($id,'step9')){
                 return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
         }
-        $breadcrumbs = [
-            [
-                'link' => route('add-new-lease.index'),
-                'title' => 'Add New Lease'
-            ],
-            [
-                'link' => route('lease.escalation.index',['id' => $id]),
-                'title' => 'Escaltion'
-            ],
-        ];
         try{
 
             $breadcrumbs = [
@@ -260,8 +250,8 @@ class EscalationController extends Controller
                         }
                         // complete Step
                         $lease_id = $lease->id;
-                        $step= 'step10';
-                        $complete_step10 = confirmSteps($lease_id,$step);
+                        $step = 'step10';
+                        confirmSteps($lease_id,$step);
 
                         return redirect()->back()->with('status', 'Escalation Details has been saved sucessfully.');
                     }

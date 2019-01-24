@@ -95,7 +95,7 @@
                         "orderable": false,
                         "className" : "text-center",
                         "render" : function(data, type, full, meta) {
-                            var html = "<button  data-toggle='tooltip' data-placement='top' title='Edit Lease Details' type=\"button\" data-lease_id='"+full['id']+"' class=\"btn btn-sm  btn-success edit_lease_detail\"><i class=\"fa fa-pencil-square-o fa-lg\"></i></button><a href=\"javascript:;\"<button  data-toggle='tooltip' data-placement='top' title='Delete Lease Details' type=\"button\" data-lease_id='"+full['id']+"' class=\"btn btn-sm btn-danger delete_lease_detail\"><i class=\"far fa-trash-o\"></i></button></a>";
+                            var html = "<button  data-toggle='tooltip' data-placement='top' title='Edit Lease Details' type=\"button\" data-lease_id='"+full['id']+"' class=\"btn btn-sm  btn-success edit_lease_detail\"><i class=\"fa fa-pencil-square-o fa-lg\"></i></button><button  data-toggle='tooltip' data-placement='top' title='Delete Lease Details' type=\"button\" data-lease_id='"+full['id']+"' class=\"btn btn-sm btn-danger delete_lease_detail\"><i class=\"fa fa-trash-o\"></i></button>";
                             return html;
                         }
                     }
@@ -111,7 +111,7 @@
                 window.location.href = '/lease/lessor-details/create/'+lease_id;
             });
 
-             $(document.body).on('click', '.delete_lease_detail', function(){
+         $(document.body).on('click', '.delete_lease_detail', function(){
             var category_id = $(this).data('lease_id');
             bootbox.confirm({
                 message: "Are you sure that you want to delete this? These changes cannot be reverted.",
@@ -133,7 +133,7 @@
                             dataType : 'json',
                             success : function (response) {
                                 if(response['status']) {
-                                    window.location.reload();
+                                    drafts_table.ajax.reload();
                                 }
                             }
                         })

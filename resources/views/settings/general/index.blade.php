@@ -50,13 +50,13 @@
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" @if(old('date_of_initial_application', isset($settings->date_of_initial_application)?$settings->date_of_initial_application:"") == '1') checked="checked" @endif name="date_of_initial_application" value="1" id="jan_1_2019">
                                             <label class="form-check-label" for="jan_1_2019">
-                                                01/01/2019
+                                                January 01, 2019
                                             </label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" @if(old('date_of_initial_application', isset($settings->date_of_initial_application)?$settings->date_of_initial_application:"") == '2') checked="checked" @endif name="date_of_initial_application" value="2" id="earlier_jan_1_2019" disabled="disabled">
                                             <label class="form-check-label" for="earlier_jan_1_2019">
-                                                Earlier to Jan 01, 2019
+                                                Prior to January 01, 2019
                                             </label>
                                         </div>
                                     </div>
@@ -85,26 +85,48 @@
                                 </div>
                             </div>
 
-                             <div class="form-group{{ $errors->has('max_previous_lease_start_year') ? ' has-error' : '' }}">
-                                <label for="max_previous_lease_start_year" class="col-md-4 control-label">Maximum Previous First Lease Start Year</label>
+                             <div class="form-group{{ $errors->has('min_previous_first_lease_start_year') ? ' has-error' : '' }} required">
+                                <label for="min_previous_first_lease_start_year" class="col-md-4 control-label">Minimum Previous First Lease Start Year</label>
                                 <div class="col-md-6">
                                     <div class="from-group">
 
-                                        <select name="max_previous_lease_start_year" id="max_previous_lease_start_year" type="text" placeholder="Select Year" class="form-control max_previous_lease_start_year">
+                                        <select name="min_previous_first_lease_start_year" id="min_previous_first_lease_start_year  " type="text" placeholder="Select Year" class="form-control max_previous_lease_start_year">
                                         <option value="">Please select Year</option>
                                          {{ $earliest_year = 1990 }}
-                                         @foreach (range(date('Y'), $earliest_year) as $x)
-                                         <option value="{{ $x }}" @if(old('max_previous_lease_start_year', $settings->max_previous_lease_start_year) == $x) selected="selected" @endif>{{ $x }}</option>
+                                         @foreach (range(date('Y') - 1, $earliest_year) as $x)
+                                         <option value="{{ $x }}" @if(old('min_previous_first_lease_start_year', $settings->min_previous_first_lease_start_year) == $x) selected="selected" @endif>{{ $x }}</option>
                                         @endforeach
                                         </select>
                                       </div>
-                                    @if ($errors->has('max_previous_lease_start_year'))
+                                    @if ($errors->has('min_previous_first_lease_start_year'))
                                         <span class="help-block">
-                                            <strong>{{ $errors->first('max_previous_lease_start_year') }}</strong>
+                                            <strong>{{ $errors->first('min_previous_first_lease_start_year') }}</strong>
                                         </span>
                                     @endif
                                 </div>
                             </div>
+
+                            <div class="form-group{{ $errors->has('max_lease_end_year') ? ' has-error' : '' }} required">
+                                <label for="max_lease_end_year" class="col-md-4 control-label">Maximum Lease End Year</label>
+                                <div class="col-md-6">
+                                    <div class="from-group">
+
+                                        <select name="max_lease_end_year" id="max_lease_end_year  " type="text" placeholder="Select Year" class="form-control max_lease_end_year">
+                                            <option value="">Please select Year</option>
+                                            {{ $end_year = date('Y') + 100 }}
+                                            @foreach (range(date('Y'), $end_year) as $x)
+                                                <option value="{{ $x }}" @if(old('max_lease_end_year', $settings->max_lease_end_year) == $x) selected="selected" @endif>{{ $x }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    @if ($errors->has('max_lease_end_year'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('max_lease_end_year') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+
                              <div class="form-group">
                                 <div class="col-md-6 col-md-offset-4">
                                     <button type="submit" class="btn btn-success">
@@ -126,8 +148,8 @@
                                     <thead>
                                     <tr>
                                         <th>Sr No.</th>
-                                        <th>Audit Year 1 Ended On</th>
-                                         <th>Audit Year 2 Ended On</th>
+                                            <th>Audit Year Start On</th>
+                                            <th>Audit Year Ends On</th>
                                         <th>Action</th>
                                     </tr>
                                     </thead>
@@ -135,8 +157,8 @@
                                    @foreach($lease_lock_year as $key => $value)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $value->audit_year1_ended_on }}</td>
-                                            <td>{{ $value->audit_year2_ended_on }}</td>
+                                            <td>{{ $value->start_date }}</td>
+                                            <td>{{ $value->end_date }}</td>
                                             
                                             <td>
 
@@ -148,28 +170,31 @@
                                             </td>
                                         </tr>
                                     @endforeach
-                                    <tr style=" {{ $errors->has('audit_year1_ended_on') ? ' has-error' : 'display: none' }}" class="add_lease_lock_year">
+                                    <tr style=" {{ $errors->has('start_date') ||  $errors->has('end_date') ? ' has-error' : 'display: none' }}" class="add_lease_lock_year">
                                         <td></td>
                                         <td>
-                                        <form action="{{ route('settings.leaselockyear.addleaselockyear') }}" method="POST" class="add_lease_lock_year_form">
-                                                        {{ csrf_field() }}
-                                            <div class="form-group{{ $errors->has('audit_year1_ended_on') ? ' has-error' : '' }}">
-                                             <input type="text" value="{{ old('audit_year1_ended_on') }}" name="audit_year1_ended_on" placeholder="Audit Year 1 Ended On" id="audit_year1_ended_on" class="form-control {{ $errors->has('audit_year1_ended_on') ? ' has-error' : '' }}"/>
-                                            @if ($errors->has('audit_year1_ended_on'))
-                                                <span class="help-block">
-                                                    <strong>{{ $errors->first('audit_year1_ended_on') }}</strong>
-                                                </span>
-                                            @endif
-                                            </div>
-                                            <div class="form-group{{ $errors->has('audit_year2_ended_on') ? ' has-error' : '' }}">
-                                             <input type="text" value="{{ old('audit_year2_ended_on') }}" name="audit_year2_ended_on" placeholder="Audit Year 2 Ended On" id="audit_year2_ended_on" class="form-control {{ $errors->has('audit_year2_ended_on') ? ' has-error' : '' }}"/>
-                                            @if ($errors->has('audit_year2_ended_on'))
-                                                <span class="help-block">
-                                                    <strong>{{ $errors->first('audit_year2_ended_on') }}</strong>
-                                                </span>
-                                            @endif
-                                            </div>
-                                             </form>
+                                            <form action="{{ route('settings.leaselockyear.addleaselockyear') }}" method="POST" class="add_lease_lock_year_form">
+                                                {{ csrf_field() }}
+                                                <div class="form-group{{ $errors->has('start_date') ? ' has-error' : '' }}">
+                                                <input type="text" value="{{ old('start_date') }}" name="start_date" placeholder="Audit Year {{ count($lease_lock_year) + 1 }} Starts On" id="start_date" class="form-control {{ $errors->has('start_date') ? ' has-error' : '' }}"/>
+                                                @if ($errors->has('start_date'))
+                                                    <span class="help-block">
+                                                        <strong>{{ $errors->first('start_date') }}</strong>
+                                                    </span>
+                                                @endif
+                                                </div>
+                                                <div class="form-group{{ $errors->has('end_date') ? ' has-error' : '' }}">
+                                                 <input type="text" value="{{ old('end_date') }}" name="end_date" placeholder="Audit Year {{ count($lease_lock_year) + 1 }} End On" id="end_date" class="form-control {{ $errors->has('end_date') ? ' has-error' : '' }}"/>
+                                                @if ($errors->has('end_date'))
+                                                    <span class="help-block">
+                                                        <strong>{{ $errors->first('end_date') }}</strong>
+                                                    </span>
+                                                @endif
+                                                </div>
+                                            </form>
+                                        </td>
+                                        <td>
+
                                         </td>
                                         <td>
                                             <button type="button" onclick="javascript:$('.add_lease_lock_year_form').submit();" class="btn btn-sm btn-success">Save</button>
@@ -221,12 +246,12 @@
                $(".ui-datepicker-month").hide();
             });
 
-            $("#audit_year1_ended_on").datepicker({
+            $("#start_date").datepicker({
                 changeMonth: true,
                 changeYear: true
             });
 
-            $("#audit_year2_ended_on").datepicker({
+            $("#end_date").datepicker({
                 changeMonth: true,
                 changeYear: true
             });

@@ -465,39 +465,34 @@ function getUndiscountedTotalLeasePayment($asset_id){
 
 
 /**
- * to confirm the perfrom steps
- * @param $asset_id
- * @return float|int|mixed
+ * confirm if the steps are present for any lease
+ * @param $lease_id
+ * @param $complete_step
+ * @return mixed
  */
 function confirmSteps($lease_id,$complete_step){
     if($lease_id)
     {
         $data['lease_id'] = $lease_id;
         $data['completed_step'] = $complete_step;
-      
+        \App\LeaseCompletedSteps::query()->where('lease_id', '=',$lease_id)->where('completed_step', '=', $complete_step)->delete();
         $confrim_steps = \App\LeaseCompletedSteps::create($data);
    }
    return $confrim_steps;
 }
 
 
-
 /**
- * to check  the previous steps
- * @param $asset_id
- * @return float|int|mixed
+ * check and confirm if a particular step have the values
+ * @param $lease_id
+ * @param $complete_step
+ * @return bool
  */
 function checkPreviousSteps($lease_id,$complete_step){
     if($lease_id)
     {
         $confrim_steps = \App\LeaseCompletedSteps::query()->where('lease_id', '=', $lease_id)->where('completed_step','=', $complete_step)->get();
-       
-        if(count($confrim_steps)>0){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return (count($confrim_steps) > 0);
    }
    return false;
 }

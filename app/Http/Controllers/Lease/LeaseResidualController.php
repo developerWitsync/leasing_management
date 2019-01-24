@@ -20,6 +20,7 @@ use App\LeaseAssets;
 use App\LeaseAssetSimilarCharacteristicSettings;
 use App\LeaseAssetsNumberSettings;
 use App\LeaseAssetSubCategorySetting;
+use App\LeasePaymentsBasis;
 use App\UseOfLeaseAsset;
 use App\LeaseResidualValue;
 use App\ReportingCurrencySettings;
@@ -32,15 +33,15 @@ use Validator;
 
 class LeaseResidualController extends Controller
 {
-    protected function validationRules(){
+    protected function validationRules()
+    {
         return [
             'any_residual_value_gurantee'   => 'required',
-            'lease_payemnt_nature_id'   => 'required_if:any_residual_value_gurantee,yes',
-            'amount_determinable'   => 'required_if:any_residual_value_gurantee,yes',
-            'similar_asset_items'   => 'required_if:any_residual_value_gurantee,yes',
-            'residual_gurantee_value'  => 'required_if:any_residual_value_gurantee,yes',
-            'total_residual_gurantee_value'  => 'required_if:any_residual_value_gurantee,yes',
-            'attachment' => 'file|mimes:jpeg,pdf,doc'
+            'lease_payemnt_nature_id'       => 'required_if:any_residual_value_gurantee,yes|nullable',
+            'similar_asset_items' => 'required_if:any_residual_value_gurantee,yes|nullable',
+            'residual_gurantee_value' => 'required_if:any_residual_value_gurantee,yes|numeric|nullable',
+            'total_residual_gurantee_value' => 'required_if:any_residual_value_gurantee,yes|nullable',
+            'attachment' => 'file|mimes:jpeg,pdf,doc|nullable'
         ];
     }
 
@@ -50,9 +51,10 @@ class LeaseResidualController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index($id, Request $request){
-         if(!checkPreviousSteps($id,'step4')){
-          return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
+    public function index($id, Request $request)
+    {
+        if (!checkPreviousSteps($id, 'step4')) {
+            return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
         }
         $breadcrumbs = [
             [
@@ -60,13 +62,14 @@ class LeaseResidualController extends Controller
                 'title' => 'Add New Lease'
             ],
             [
-                'link' => route('addlease.residual.index',['id' => $id]),
+                'link' => route('addlease.residual.index', ['id' => $id]),
                 'title' => 'Residual Value Guarantee'
             ],
         ];
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->with('leaseType')->with('assets')->first();
-        if($lease) {
-            return view('lease.residual-value-gurantee.index', compact('breadcrumbs',
+        if ($lease) {
+            return view('lease.residual-value-gurantee.index', compact(
+                'breadcrumbs',
                 'lease'
             ));
         } else {
@@ -80,59 +83,73 @@ class LeaseResidualController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function create($id, Request $request){
-        try{
+    public function create($id, Request $request)
+    {
+        try {
+            $breadcrumbs = [
+                [
+                    'link' => route('add-new-lease.index'),
+                    'title' => 'Add New Lease'
+                ],
+                [
+                    'link' => route('addlease.residual.create', ['id' => $id]),
+                    'title' => 'Create Residual Value Guarantee'
+                ],
+            ];
             $asset = LeaseAssets::query()->findOrFail($id);
             $lease = $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
-            
-             if($lease) {
+
+            if ($lease) {
 
                 $model = new LeaseResidualValue();
                 //$model->any_residual_value_gurantee=$request->any_residual_value_gurantee;
 
-                if($request->isMethod('post')) {
+                if ($request->isMethod('post')) {
 
-                   $validator = Validator::make($request->except('_token'), $this->validationRules());
+                    $rules = $this->validationRules();
 
-                    /*if($validator->fails()){
-                        return redirect()->back()->with(['class'=>'active','model' => $model])->withInput($request->except('_token'))->withErrors($validator->errors());
-                    }*/
-                    
-                     if($validator->fails()){
+                    if($request->has('any_residual_value_gurantee') && $request->any_residual_value_gurantee == 'yes' && $request->has('lease_payemnt_nature_id') && $request->lease_payemnt_nature_id == '2'){
+                        $rules['variable_basis_id'] = 'required';
+                        $rules['amount_determinable'] = 'required';
+                    }
+
+                    $validator = Validator::make($request->except('_token'), $rules);
+
+                    if ($validator->fails()) {
                         return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
                     }
 
                     $data = $request->except('_token');
                     $data['attachment'] = "";
-                    $data['lease_id']   = $asset->lease->id;
-                    $data['asset_id']   = $asset->id;
-                    if($request->hasFile('attachment')){
+                    $data['lease_id'] = $asset->lease->id;
+                    $data['asset_id'] = $asset->id;
+                    if ($request->hasFile('attachment')) {
                         $file = $request->file('attachment');
                         $uniqueFileName = uniqid() . $file->getClientOriginalName();
                         $request->file('attachment')->move('uploads', $uniqueFileName);
                         $data['attachment'] = $uniqueFileName;
                     }
-                      
+
                     $residual_value = LeaseResidualValue::create($data);
 
-                    if($residual_value){
-
+                    if ($residual_value) {
                         // complete Step
                         $lease_id = $lease->id;
-                        $step= 'step5';
-                        $complete_step5 = confirmSteps($lease_id,$step);
+                        $step = 'step5';
+                        $complete_step5 = confirmSteps($lease_id, $step);
 
-                        return redirect(route('addlease.residual.index',['id' => $lease->id]))->with('status', 'Residual value Gurantee has been added successfully.');
+                        return redirect(route('addlease.residual.index', ['id' => $lease->id]))->with('status', 'Residual value Gurantee has been added successfully.');
                     }
                 }
                 $lease_payments_nature = LeaseAssetPaymentsNature::query()->get();
-            
+
                 $currencies = Currencies::query()->where('status', '=', '1')->get();
-                $reporting_currency_settings = ReportingCurrencySettings::query()->where('business_account_id', '=', auth()->user()->id)->first();
-                $reporting_foreign_currency_transaction_settings = ForeignCurrencyTransactionSettings::query()->where('business_account_id', '=', auth()->user()->id)->get();
-                if(collect($reporting_currency_settings)->isEmpty()) {
+                $reporting_currency_settings = ReportingCurrencySettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
+                $reporting_foreign_currency_transaction_settings = ForeignCurrencyTransactionSettings::query()->whereIn('business_account_id', getDependentUserIds())->get();
+                if (collect($reporting_currency_settings)->isEmpty()) {
                     $reporting_currency_settings = new ReportingCurrencySettings();
                 }
+                $payment_lease_basis = LeasePaymentsBasis::query()->whereIn('business_account_id', getDependentUserIds())->get();
                 return view('lease.residual-value-gurantee.create', compact(
                     'model',
                     'lease',
@@ -140,7 +157,9 @@ class LeaseResidualController extends Controller
                     'lease_payments_nature',
                     'currencies',
                     'reporting_foreign_currency_transaction_settings',
-                    'reporting_currency_settings'
+                    'reporting_currency_settings',
+                    'breadcrumbs',
+                    'payment_lease_basis'
                 ));
             } else {
                 abort(404);
@@ -157,27 +176,47 @@ class LeaseResidualController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function update($id, Request $request){
-        try{
-
+    public function update($id, Request $request)
+    {
+        try {
+            $breadcrumbs = [
+                [
+                    'link' => route('add-new-lease.index'),
+                    'title' => 'Add New Lease'
+                ],
+                [
+                    'link' => route('addlease.residual.update', ['id' => $id]),
+                    'title' => 'Update Residual Value Guarantee'
+                ],
+            ];
             $asset = LeaseAssets::query()->findOrFail($id);
             $lease = $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
-            if($lease) {
+            if ($lease) {
 
                 $model = LeaseResidualValue::query()->where('asset_id', '=', $id)->first();
 
-                if($request->isMethod('post')) {
-                    $validator = Validator::make($request->except('_token'), $this->validationRules());
+                if ($request->isMethod('post')) {
 
-                    if($validator->fails()){
+
+
+                    $rules = $this->validationRules();
+
+                    if($request->has('any_residual_value_gurantee') && $request->any_residual_value_gurantee == 'yes' && $request->has('lease_payemnt_nature_id') && $request->lease_payemnt_nature_id == '2'){
+                        $rules['variable_basis_id'] = 'required';
+                        $rules['amount_determinable'] = 'required';
+                    }
+
+                    $validator = Validator::make($request->except('_token'), $rules);
+
+                    if ($validator->fails()) {
                         return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
                     }
 
                     $data = $request->except('_token');
                     $data['attachment'] = "";
-                    $data['lease_id']   = $asset->lease->id;
-                    $data['asset_id']   = $asset->id;
-                    if($request->hasFile('attachment')){
+                    $data['lease_id'] = $asset->lease->id;
+                    $data['asset_id'] = $asset->id;
+                    if ($request->hasFile('attachment')) {
                         $file = $request->file('attachment');
                         $uniqueFileName = uniqid() . $file->getClientOriginalName();
                         $request->file('attachment')->move('uploads', $uniqueFileName);
@@ -186,17 +225,18 @@ class LeaseResidualController extends Controller
 
                     $model->setRawAttributes($data);
 
-                    if($model->save()){
-                        return redirect(route('addlease.residual.index',['id' => $lease->id]))->with('status', 'Residual Gurantee has been updated successfully.');
+                    if ($model->save()) {
+                        return redirect(route('addlease.residual.index', ['id' => $lease->id]))->with('status', 'Residual Gurantee has been updated successfully.');
                     }
                 }
                 $lease_payments_nature = LeaseAssetPaymentsNature::query()->get();
                 $currencies = Currencies::query()->where('status', '=', '1')->get();
-                $reporting_currency_settings = ReportingCurrencySettings::query()->where('business_account_id', '=', auth()->user()->id)->first();
-                $reporting_foreign_currency_transaction_settings = ForeignCurrencyTransactionSettings::query()->where('business_account_id', '=', auth()->user()->id)->get();
-                if(collect($reporting_currency_settings)->isEmpty()) {
+                $reporting_currency_settings = ReportingCurrencySettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
+                $reporting_foreign_currency_transaction_settings = ForeignCurrencyTransactionSettings::query()->whereIn('business_account_id', getDependentUserIds())->get();
+                if (collect($reporting_currency_settings)->isEmpty()) {
                     $reporting_currency_settings = new ReportingCurrencySettings();
                 }
+                $payment_lease_basis = LeasePaymentsBasis::query()->whereIn('business_account_id', getDependentUserIds())->get();
                 return view('lease.residual-value-gurantee.update', compact(
                     'model',
                     'lease',
@@ -204,14 +244,15 @@ class LeaseResidualController extends Controller
                     'lease_payments_nature',
                     'currencies',
                     'reporting_foreign_currency_transaction_settings',
-                    'reporting_currency_settings'
+                    'reporting_currency_settings',
+                    'breadcrumbs',
+                    'payment_lease_basis'
                 ));
             } else {
                 abort(404);
             }
         } catch (\Exception $e) {
-            //dd($e);
-            dd($e->getMessage());
+            abort(404, $e->getMessage());
         }
     }
 }

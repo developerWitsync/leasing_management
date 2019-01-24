@@ -58,12 +58,12 @@
                                             @php
                                                 $show_next[] = true;
                                             @endphp
-                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.renewable.update', ['id'=> $asset->id]) }}">Update Renewable Option Value </a>
+                                            <a class="btn btn-sm btn-primary" href="{{ route('addlease.renewable.update', ['id'=> $asset->id]) }}">Update Renewable Option Value </a>
                                         @else
                                             @php
                                                 $show_next[] = false;
                                             @endphp
-                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.renewable.create', ['id'=> $asset->id]) }}">Add Renewable Option Value</a>
+                                            <a class="btn btn-sm btn-primary" href="{{ route('addlease.renewable.create', ['id'=> $asset->id]) }}">Add Renewable Option Value</a>
                                         @endif
                                     </td>
                                 </tr>
