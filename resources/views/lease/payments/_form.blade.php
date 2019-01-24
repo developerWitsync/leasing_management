@@ -98,7 +98,30 @@
                 <select name="payment_interval" class="form-control">
                     <option value="">--Select Payment Interval--</option>
                     @foreach($payments_frequencies as $frequency)
-                        <option value="{{ $frequency->id }}" @if(old('payment_interval',$payment->payment_interval) == $frequency->id) selected="selected" @endif>{{ $frequency->title }}</option>
+                        @php
+                            $disabled_option = "";
+                        @endphp
+                        @if($frequency->id > 1 && $frequency->id!= 6)
+                            @if($frequency->id == 2 && $lease_span_time_in_days < 1)
+                                @php
+                                    $disabled_option = 'disabled="disabled"';
+                                @endphp
+                            @elseif($frequency->id == 3 && $lease_span_time_in_days < 3)
+                                @php
+                                    $disabled_option = 'disabled="disabled"';
+                                @endphp
+                            @elseif($frequency->id == 4 && $lease_span_time_in_days < 6)
+                                @php
+                                    $disabled_option = 'disabled="disabled"';
+                                @endphp
+                            @elseif($frequency->id == 5 && $lease_span_time_in_days < 12)
+                                @php
+                                    $disabled_option = 'disabled="disabled"';
+                                @endphp
+                            @endif
+
+                        @endif
+                        <option {{ $disabled_option }} value="{{ $frequency->id }}" @if(old('payment_interval',$payment->payment_interval) == $frequency->id) selected="selected" @endif>{{ $frequency->title }}</option>
                     @endforeach
                 </select>
                 @if ($errors->has('payment_interval'))
@@ -224,7 +247,7 @@
             </div>
         </div>
 
-        <div class="form-group{{ $errors->has('attachment') ? ' has-error' : '' }} required">
+        <div class="form-group{{ $errors->has('attachment') ? ' has-error' : '' }}">
             <label for="workings_doc" class="col-lg-4 col-md-5 control-label">Upload Any Workings</label>
             <div class="col-lg-5 col-md-6 frmattachFile">
                 <input type="name" id="upload" name="name" class="form-control" disabled="disabled">

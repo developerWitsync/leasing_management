@@ -475,7 +475,7 @@ function confirmSteps($lease_id,$complete_step){
     {
         $data['lease_id'] = $lease_id;
         $data['completed_step'] = $complete_step;
-      
+        \App\LeaseCompletedSteps::query()->where('lease_id', '=',$lease_id)->where('completed_step', '=', $complete_step)->delete();
         $confrim_steps = \App\LeaseCompletedSteps::create($data);
    }
    return $confrim_steps;
@@ -492,13 +492,7 @@ function checkPreviousSteps($lease_id,$complete_step){
     if($lease_id)
     {
         $confrim_steps = \App\LeaseCompletedSteps::query()->where('lease_id', '=', $lease_id)->where('completed_step','=', $complete_step)->get();
-       
-        if(count($confrim_steps)>0){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return (count($confrim_steps) > 0);
    }
    return false;
 }

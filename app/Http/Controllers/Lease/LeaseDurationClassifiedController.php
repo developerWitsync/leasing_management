@@ -12,24 +12,19 @@ use App\Http\Controllers\Controller;
 use App\Lease;
 use App\LeaseContractDuration;
 use App\LeaseDurationClassified;
-use App\LeaseRenewableOption;
-use App\LeaseTerminationOption;
-use App\PurchaseOption;
 use App\LeaseAssets;
-use App\LeaseAssetPayments;
-use App\LeaseResidualValue;
-use App\FairMarketValue;
 
 use Illuminate\Http\Request;
 use Validator;
 
 class LeaseDurationClassifiedController extends Controller
 {
-    protected function validationRules(){
+    protected function validationRules()
+    {
         return [
-            'lease_start_date'   => 'required',
-            'lease_end_date'   => 'required'
-            
+            'lease_start_date' => 'required',
+            'lease_end_date' => 'required'
+
         ];
     }
 
@@ -39,34 +34,36 @@ class LeaseDurationClassifiedController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index($id, Request $request){
+    public function index($id, Request $request)
+    {
         $breadcrumbs = [
             [
                 'link' => route('add-new-lease.index'),
                 'title' => 'Add New Lease'
             ],
             [
-                'link' => route('addlease.durationclassified.index',['id' => $id]),
+                'link' => route('addlease.durationclassified.index', ['id' => $id]),
                 'title' => 'Lease Duration Classified'
             ],
         ];
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->with('leaseType')->with('assets')->first();
-        if($lease) {
+        if ($lease) {
             $back_button = route('addlease.purchaseoption.index', ['id' => $lease->id]);
 
-            $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->whereHas('terminationOption',  function($query){
+            $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->whereHas('terminationOption', function ($query) {
                 $query->where('exercise_termination_option_available', '=', 'no');
             })->get();
 
-            if(count($assets) == 0) {
-                if(!checkPreviousSteps($id,'step6')){
-                return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
+            if (count($assets) == 0) {
+                if (!checkPreviousSteps($id, 'step6')) {
+                    return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
                 }
                 $back_button = route('addlease.leaseterminationoption.index', ['id' => $lease->id]);
             }
             return view('lease.lease-duration-classified.index', compact('breadcrumbs',
                 'lease',
-                'back_button'
+                'back_button',
+                'breadcrumbs'
             ));
         } else {
             abort(404);
@@ -79,47 +76,58 @@ class LeaseDurationClassifiedController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function create($id, Request $request){
-        try{
+    public function create($id, Request $request)
+    {
+        try {
+            $breadcrumbs = [
+                [
+                    'link' => route('add-new-lease.index'),
+                    'title' => 'Add New Lease'
+                ],
+                [
+                    'link' => route('addlease.durationclassified.create', ['id' => $id]),
+                    'title' => 'Create Lease Duration Classified'
+                ],
+            ];
             $asset = LeaseAssets::query()->findOrFail($id);
             $lease = $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
 
-            if($lease) {
+            if ($lease) {
 
                 $model = new LeaseDurationClassified();
 
-                if($request->isMethod('post')) {
+                if ($request->isMethod('post')) {
                     $validator = Validator::make($request->except('_token'), $this->validationRules());
 
-                    if($validator->fails()){
+                    if ($validator->fails()) {
                         return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
                     }
-                    
+
                     $data = $request->except('_token');
-                    $data['lease_id']   = $asset->lease->id;
-                    $data['asset_id']   = $asset->id;
+                    $data['lease_id'] = $asset->lease->id;
+                    $data['asset_id'] = $asset->id;
                     $data['lease_start_date'] = date('Y-m-d', strtotime($request->lease_start_date));
                     $data['lease_end_date'] = date('Y-m-d', strtotime($request->lease_end_date));
-                    $data['lease_contract_duration_id'] =$request->lease_contract_duration_id;
+                    $data['lease_contract_duration_id'] = $request->lease_contract_duration_id;
                     $data['expected_lease_end_Date'] = date('Y-m-d', strtotime($request->expected_lease_end_Date));
-                    
+
 
                     $duration_classified_value = LeaseDurationClassified::create($data);
 
-                    if($duration_classified_value){
-                        
+                    if ($duration_classified_value) {
+
                         // complete Step
                         $lease_id = $lease->id;
-                        $step= 'step9';
-                        $complete_step9 = confirmSteps($lease_id,$step);
+                        $step = 'step9';
+                        $complete_step9 = confirmSteps($lease_id, $step);
 
-                        return redirect(route('addlease.durationclassified.index',['id' => $lease->id]))->with('status', 'Lease Duration Classified Value has been added successfully.');
+                        return redirect(route('addlease.durationclassified.index', ['id' => $lease->id]))->with('status', 'Lease Duration Classified Value has been added successfully.');
                     }
                 }
 
                 //find the expected values for the end date, lease classification
-                $model->lease_end_date                 = $model->getExpectedLeaseEndDate($asset);
-                $model->lease_contract_duration_id               = $model->getLeaseAssetClassification($asset);
+                $model->lease_end_date = $model->getExpectedLeaseEndDate($asset);
+                $model->lease_contract_duration_id = $model->getLeaseAssetClassification($asset);
 
                 $lease_contract_duration = LeaseContractDuration::query()->get();
 
@@ -128,7 +136,8 @@ class LeaseDurationClassifiedController extends Controller
                     'lease',
                     'asset',
                     'expected_lease_classification',
-                    'lease_contract_duration'
+                    'lease_contract_duration',
+                    'breadcrumbs'
                 ));
             } else {
                 abort(404);
@@ -145,42 +154,54 @@ class LeaseDurationClassifiedController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function update($id, Request $request){
-        try{
+    public function update($id, Request $request)
+    {
+        try {
+            $breadcrumbs = [
+                [
+                    'link' => route('add-new-lease.index'),
+                    'title' => 'Add New Lease'
+                ],
+                [
+                    'link' => route('addlease.durationclassified.update', ['id' => $id]),
+                    'title' => 'Update Lease Duration Classified'
+                ],
+            ];
             $asset = LeaseAssets::query()->findOrFail($id);
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
-            if($lease) {
+            if ($lease) {
 
                 $model = LeaseDurationClassified::query()->where('asset_id', '=', $id)->first();
 
-                if($request->isMethod('post')) {
+                if ($request->isMethod('post')) {
                     $validator = Validator::make($request->except('_token'), $this->validationRules());
 
-                    if($validator->fails()){
+                    if ($validator->fails()) {
                         return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
                     }
 
                     $data = $request->except('_token');
-                    $data['lease_id']   = $asset->lease->id;
-                    $data['asset_id']   = $asset->id;
+                    $data['lease_id'] = $asset->lease->id;
+                    $data['asset_id'] = $asset->id;
                     $data['lease_start_date'] = date('Y-m-d', strtotime($request->lease_start_date));
                     $data['lease_end_date'] = date('Y-m-d', strtotime($request->lease_end_date));
 
                     $model->setRawAttributes($data);
-                    if($model->save()){
-                        return redirect(route('addlease.durationclassified.index',['id' => $lease->id]))->with('status', 'Lease Duration Classified Value has been updated successfully.');
+                    if ($model->save()) {
+                        return redirect(route('addlease.durationclassified.index', ['id' => $lease->id]))->with('status', 'Lease Duration Classified Value has been updated successfully.');
                     }
                 }
-                $model->lease_end_date                 = $model->getExpectedLeaseEndDate($asset);
-                $model->lease_contract_duration_id               = $model->getLeaseAssetClassification($asset);
+                $model->lease_end_date = $model->getExpectedLeaseEndDate($asset);
+                $model->lease_contract_duration_id = $model->getLeaseAssetClassification($asset);
 
                 $lease_contract_duration = LeaseContractDuration::query()->get();
-              
+
                 return view('lease.lease-duration-classified.update', compact(
                     'model',
                     'lease',
                     'asset',
-                    'lease_contract_duration'
+                    'lease_contract_duration',
+                    'breadcrumbs'
                 ));
             } else {
                 abort(404);

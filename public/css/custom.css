@@ -164,7 +164,7 @@ legend.scheduler-border {
 body{background: #fff; font-family: 'Open Sans', sans-serif;}
 .navbar-default { background-color: #f5f5f5; border-color: #e4e5e6; position: fixed; left: 0; top: 0; right: 0; padding: 0 15px 0 0px;}
 .dashOuter {position: relative; top: 50px;}
-.dashLeft {padding: 0; width: 270px; position: fixed; float: left; left: 0; top: 50px; bottom: 0; background: #f5f5f5;}
+.dashLeft {padding: 0; width: 270px; position: fixed; float: left; left: 0; top: 50px; bottom: 0; background: #f5f5f5; border-right:#e5e5e5 solid 2px; }
 .dashLeft a.list-group-item {border: 0; background: none; border-bottom: #dadada solid 1px !important; margin-bottom: 0px;}
 .dashLeft a.list-group-item small { display: none; font-size: 18px; line-height: 26px; position: absolute; top: 50%; margin-top: -12px; right: 5px;}
 .dashLeft a.list-group-item:hover, .dashLeft a.list-group-item.active { color: #3576bc; background: #fff;}
@@ -368,4 +368,46 @@ button.btn.btn-success.close {
 
 .DashRight.dashRightBx .affix{
     left: 100px;
+}
+.menuHd {
+    font-size: 14px;
+    color: #fff;
+    text-transform: uppercase;
+    line-height: 17px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 99;
+    border-top: #ccc solid 1px;
+    width: 268px;
+    padding: 0px;
+
+
+}
+.menuHd a {
+    color: #000;
+    font-size: 14px;
+    line-height: 20px;
+    text-decoration: none;
+    background: #fff;
+    padding: 10px 20px;
+    float: none;
+    display: block !important;
+}
+.menuHd a:hover{
+    background: #e5e5e5;
+}
+.menuHd a > i{
+    display: none;
+}
+.dashLeft.leftNavOpen .menuHd{
+    width: 58px;
+}
+.dashLeft.leftNavOpen .menuHd a span{
+    display: none;
+}
+
+.dashLeft.leftNavOpen .menuHd a > i{
+    display: block;
+    text-align: center;
 }

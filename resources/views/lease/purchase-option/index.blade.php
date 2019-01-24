@@ -58,12 +58,12 @@
                                             @php
                                                 $show_next[] = true;
                                             @endphp
-                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.purchaseoption.update', ['id'=> $asset->id]) }}">Update Purchase Option Details</a>
+                                            <a class="btn btn-sm btn-primary" href="{{ route('addlease.purchaseoption.update', ['id'=> $asset->id]) }}">Update Purchase Option Details</a>
                                         @else
                                             @php
                                                 $show_next[] = false;
                                             @endphp
-                                            <a class="btn btn-sm btn-info" href="{{ route('addlease.purchaseoption.create', ['id'=> $asset->id]) }}">Add Purchase Option Details</a>
+                                            <a class="btn btn-sm btn-primary" href="{{ route('addlease.purchaseoption.create', ['id'=> $asset->id]) }}">Add Purchase Option Details</a>
                                         @endif
                                     </td>
                                 </tr>

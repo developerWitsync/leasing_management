@@ -79,14 +79,16 @@
         @if(auth()->check())
             <div class="dashOuter clearfix">
                     <div class="dashLeft">
-                        {{--<div class="leftmenuHd">--}}
-                            {{--<div class="menuHd">--}}
-                                {{--<span>&nbsp;</span>--}}
-                                {{--<a class="dash_navicon" href="javascript:void(0)"><i class="fa fa-bars" aria-hidden="true"></i></a>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
+
                         <div class="leftNav">
                             @include('layouts._sidebar')
+                        </div>
+                        <div class="leftmenuHd">
+                            <div class="menuHd">
+                                <a class="dash_navicon" href="javascript:void(0)">
+                                    <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                                    <span><i class="fa fa-angle-double-left" aria-hidden="true"></i> Collapse sidebar</span></a>
+                            </div>
                         </div>
                     </div>
                     <div class="DashRight">

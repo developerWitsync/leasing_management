@@ -13,6 +13,7 @@ class LeaseResidualValue extends Model
         'lease_id',
         'any_residual_value_gurantee',
         'lease_payemnt_nature_id',
+        'variable_basis_id',
         'amount_determinable',
         'currency',
         'similar_asset_items',

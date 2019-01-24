@@ -254,6 +254,8 @@ class LeasePaymentsController extends Controller
             $lease_payments_nature = LeaseAssetPaymentsNature::query()->get();
             $payments_frequencies = LeasePaymentsFrequency::query()->get();
             $payments_payout_times = LeasePaymentsInterval::query()->get();
+            $lease_span_time_in_days = Carbon::parse($asset->lease_end_date)->diffInMonths(Carbon::parse($asset->accural_period));
+
             $payout_due_dates = [];
 
             return view('lease.payments.createpayment', compact(
@@ -265,7 +267,8 @@ class LeasePaymentsController extends Controller
                 'payments_frequencies',
                 'payments_payout_times',
                 'payout_due_dates',
-                'breadcrumbs'
+                'breadcrumbs',
+                'lease_span_time_in_days'
             ));
 
         } catch (\Exception $e) {
@@ -338,6 +341,9 @@ class LeasePaymentsController extends Controller
                 $payments_frequencies = LeasePaymentsFrequency::query()->get();
                 $payments_payout_times = LeasePaymentsInterval::query()->get();
                 $payout_due_dates = $payment->paymentDueDates->pluck('date')->toArray();
+
+                $lease_span_time_in_days = Carbon::parse($asset->lease_end_date)->diffInMonths(Carbon::parse($asset->accural_period));
+
                 return view('lease.payments.updatepayment', compact(
                     'asset',
                     'lease',
@@ -346,7 +352,8 @@ class LeasePaymentsController extends Controller
                     'lease_payments_types',
                     'payments_frequencies',
                     'payments_payout_times',
-                    'payout_due_dates'
+                    'payout_due_dates',
+                    'lease_span_time_in_days'
                 ));
             } else {
                 abort(404);
@@ -432,8 +439,6 @@ class LeasePaymentsController extends Controller
 
                 $final_payout_dates = [];
                 $years = [];
-//                $start_year = Carbon::parse($request->start_date)->format('Y');
-//                $end_year = Carbon::parse($request->end_date)->format('Y');
 
                 $start_year = Carbon::parse($asset->accural_period)->format('Y');
                 $end_year = Carbon::parse($asset->lease_end_date)->format('Y');
@@ -478,6 +483,8 @@ class LeasePaymentsController extends Controller
                         $final_payout_dates = calculatePaymentDueDates($request->start_date, $request->end_date, $request->payment_payout, 12);
                         break;
                 }
+
+
 
 
                 return response()->json([

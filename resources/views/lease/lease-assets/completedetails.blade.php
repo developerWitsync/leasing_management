@@ -375,7 +375,12 @@
                     var endDate = $('#lease_end_date').datepicker('getDate');
                     var dt3 = new Date($('#accural_period').datepicker('getDate'));
                     var dt4 = new Date(dt3.setDate(dt3.getDate() + 30));
-                    dt2.datepicker('option', 'minDate', dt4);
+
+                    if(dt4 <= new Date('2019-01-30')) {
+                        dt2.datepicker('option', 'minDate', new Date('2019-01-30'));
+                    } else {
+                        dt2.datepicker('option', 'minDate', dt4);
+                    }
 
                     @if(old('lease_end_date', $asset->lease_end_date))
                         dt2.datepicker('setDate', new Date('{{ $asset->lease_end_date }}'));

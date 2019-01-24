@@ -102,8 +102,17 @@
     <script type="text/javascript">
 
         $(document).ready(function(){
+
+            @if(\Carbon\Carbon::parse($asset->accural_period)->greaterThanOrEqualTo(\Carbon\Carbon::today()))
+                var minDate = new Date({{ $asset->accural_period }});
+            @else
+                var minDate = new Date();
+            @endif
+
             $("#lease_end_date").datepicker({
                 dateFormat: "dd-M-yy",
+                minDate : minDate,
+                maxDate : new Date('{{ $asset->lease_end_date }}')
             });
         });
 
