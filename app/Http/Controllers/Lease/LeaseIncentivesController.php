@@ -72,7 +72,7 @@ class LeaseIncentivesController extends Controller
     }
 
     /**
-     * add fair market value details for an asset
+     * add lease incentive cost details for an asset
      * @param $id
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -149,7 +149,7 @@ class LeaseIncentivesController extends Controller
                     }
                 }
 
-                $customerr_details = [];
+                $customer_details = [];
 
                 return view('lease.lease-incentives.create', compact(
                     'model',
@@ -168,10 +168,7 @@ class LeaseIncentivesController extends Controller
             abort(404);
         }
     }
-
-    
-
-    /**
+     /**
      * edit existing lease Incentive value details for an asset
      * @param $id
      * @param Request $request

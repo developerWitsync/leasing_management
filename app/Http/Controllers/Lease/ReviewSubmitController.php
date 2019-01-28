@@ -52,14 +52,7 @@ class ReviewSubmitController extends Controller
         if ($lease) {
             $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->get();
             $contract_classifications = ContractClassifications::query()->select('id', 'title')->where('status', '=', '1')->get();
-            if ($request->isMethod('post')) {
-                $model = Lease::query()->where('id', '=', $id)->first();
-                $model->status = "1";
-                $model->save();
-                // complete Step
-                confirmSteps($id, 'step18');
-                return redirect(route('addlease.reviewsubmit.index', ['id' => $id]))->with('status', 'Lease Information has been Submitted successfully.');
-            }
+           
 
 
             return view('lease.review-submit.index', compact(
@@ -75,6 +68,20 @@ class ReviewSubmitController extends Controller
             abort(404);
         }
     }
+  
+  public function submit($id, Request $request)
+  {
+    if ($request->isMethod('post')) {
+
+                $model = Lease::query()->where('id', '=', $id)->first();
+                $model->status = "1";
+                $model->save();
+                // complete Step
+                confirmSteps($id, 'step18');
+                return redirect(route('addlease.reviewsubmit.index', ['id' => $id]))->with('status', 'Lease Information has been Submitted successfully.');
+     }
+
+  }
 }
 
     
