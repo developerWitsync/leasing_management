@@ -25,516 +25,551 @@
                 </div>
             @endif
 
-                {{--@include('lease._menubar')--}}
-            <form class="form-horizontal" method="POST" action="{{ route('addlease.reviewsubmit.index', ['id' => $lease->id]) }}" enctype="multipart/form-data">
-            {{ csrf_field() }}
+
             <div class="panel panel-info">
-            <div class="panel-heading">Section A: Lessor Details</div>
-                    <table class="table table-bordered table-responsive">
-                        <thead>
-                        <tr>
-                            <th>Sr. No</th>
-                            <th>Lessor Name</th>
-                            <th>Lease Type Classification</th>
-                             <th>Lease Contract Currency</th>
-                            <th>Action</th>
-                            
-                        </tr>
-                        <tr>
-                            <td> 1 </td>
-                           @if(isset($lease->lessor_name))
+                <div class="panel-heading">Section A: Lessor Details</div>
+                <table class="table table-bordered table-responsive">
+                    <thead>
+                    <tr>
+                        <th>Sr. No</th>
+                        <th>Lessor Name</th>
+                        <th>Lease Type Classification</th>
+                        <th>Lease Contract Currency</th>
+                        <th>Action</th>
+
+                    </tr>
+                    <tr>
+                        <td> 1</td>
+                        @if(isset($lease->lessor_name))
                             <td>{{ $lease->lessor_name }}</td>
-                           @endif
-                           @if(isset($lease->leaseType->title))
-                           <td>{{ $lease->leaseType->title }}</td>
-                           @endif
-                            @if(isset($lease->lease_contract_id))
+                        @endif
+                        @if(isset($lease->leaseType->title))
+                            <td>{{ $lease->leaseType->title }}</td>
+                        @endif
+                        @if(isset($lease->lease_contract_id))
                             <td>{{ $lease->lease_contract_id }}</td>
-                            @endif
-                            <td> 
-                                <a href="{{ route('add-new-lease.index', ['id' => $lease->id]) }}"><button data-toggle='tooltip' data-placement='top' title='Edit Lessor Details' type="button" class="btn btn-sm  btn-success"><i class="fa fa-pencil-square-o fa-lg"></td></i></a>
-                          </tr>
-                        </thead>
-                    </table>
+                        @endif
+                        <td>
+                            <a href="{{ route('add-new-lease.index', ['id' => $lease->id]) }}">
+                                <button data-toggle='tooltip' data-placement='top' title='Edit Lessor Details'
+                                        type="button" class="btn btn-sm  btn-success"><i
+                                            class="fa fa-pencil-square-o fa-lg"></td>
+                        </i></a>
+                    </tr>
+                    </thead>
+                </table>
             </div>
 
             <div class="panel panel-info">
-            <div class="panel-heading">Section B: Underlying Lease Assets</div>
-                    <table class="table table-bordered table-responsive">
-                        <thead>
-                        <tr>
-                            <th>Sr. No.</th>
-                            <th>Unique ULA Code</th>
-                            <th>Underlying Lease Asset Category</th>
-                            <th>Underlying Lease Asset Classification</th>
-                            <th>Name of the Underlying Lease Asset</th>
-                            <th>Number of Units of Lease Assets of Similar Characteristics</th>
-                            <th>Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                            @if(count($assets) >0)
-                            @foreach($assets as $key=>$asset)
-                          <tr>
-                                    <td>{{ $key + 1 }}</td>
-                                    @if(isset($asset->uuid))
+                <div class="panel-heading">Section B: Underlying Lease Assets</div>
+                <table class="table table-bordered table-responsive">
+                    <thead>
+                    <tr>
+                        <th>Sr. No.</th>
+                        <th>Unique ULA Code</th>
+                        <th>Underlying Lease Asset Category</th>
+                        <th>Underlying Lease Asset Classification</th>
+                        <th>Name of the Underlying Lease Asset</th>
+                        <th>Number of Units of Lease Assets of Similar Characteristics</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @if(count($assets) >0)
+                        @foreach($assets as $key=>$asset)
+                            <tr>
+                                <td>{{ $key + 1 }}</td>
+                                @if(isset($asset->uuid))
                                     <td style="width: 10%">
                                         {{ $asset->uuid}}
                                     </td>
-                                    @else
+                                @else
                                     <td>-</td>
-                                    @endif
-                                    @if(isset($asset->category->title))
+                                @endif
+                                @if(isset($asset->category->title))
                                     <td>
                                         {{ $asset->category->title }}
                                     </td>
-                                    @else
+                                @else
                                     <td>-</td>
-                                    @endif
-                                    @if(isset($asset->subcategory->title))
+                                @endif
+                                @if(isset($asset->subcategory->title))
                                     <td>
                                         {{ $asset->subcategory->title }}
                                     </td>
-                                    @else
+                                @else
                                     <td>-</td>
-                                    @endif
-                                    @if(isset($asset->name))
+                                @endif
+                                @if(isset($asset->name))
                                     <td>
                                         {{ $asset->name }}
                                     </td>
-                                    @else
+                                @else
                                     <td>-</td>
-                                    @endif
-                                    @if(isset($asset->similar_asset_items))
+                                @endif
+                                @if(isset($asset->similar_asset_items))
                                     <td>
                                         {{ $asset->similar_asset_items }}
                                     </td>
-                                    @else
+                                @else
                                     <td>-</td>
-                                    @endif
-                                    <td><a href="{{ route('addlease.leaseasset.index', ['id' => $lease->id]) }}"><button data-toggle='tooltip' data-placement='top' title='Edit Lease Details' type="button" class="btn btn-sm  btn-success edit_lease_detail"><i class="fa fa-pencil-square-o fa-lg"></td></i></a>
-                                </tr>
-                            @endforeach
-                            @endif
-                        </tbody>
-                    </table>
+                                @endif
+                                <td><a href="{{ route('addlease.leaseasset.index', ['id' => $lease->id]) }}">
+                                        <button data-toggle='tooltip' data-placement='top' title='Edit Lease Details'
+                                                type="button" class="btn btn-sm  btn-success edit_lease_detail"><i
+                                                    class="fa fa-pencil-square-o fa-lg"></td>
+                                </i></a>
+                            </tr>
+                        @endforeach
+                    @endif
+                    </tbody>
+                </table>
             </div>
             <div class="panel panel-info">
-            <div class="panel-heading">Section C: Basic Details of Underlying Lease Assets</div>
-                    <table class="table table-bordered table-responsive">
-                        <thead>
-                        <tr>
-                            <th>Sr. No.</th>
-                            <th>Unique ULA Code</th>
-                            <th>Country of the Lease Asset</th>
-                            <th>Place</th>
-                            <th>Specific Use of the Lease Asset</th>
-                            <th>Expected Remaining Useful Life of the Underlying</th>
-                            <th>Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                             @if(count($assets) >0)
-                            @foreach($assets as $key=>$asset)
-                          <tr>
-                                    <td>{{ $key + 1 }}</td>
-                                    @if(isset($asset->uuid))
+                <div class="panel-heading">Section C: Basic Details of Underlying Lease Assets</div>
+                <table class="table table-bordered table-responsive">
+                    <thead>
+                    <tr>
+                        <th>Sr. No.</th>
+                        <th>Unique ULA Code</th>
+                        <th>Country of the Lease Asset</th>
+                        <th>Place</th>
+                        <th>Specific Use of the Lease Asset</th>
+                        <th>Expected Remaining Useful Life of the Underlying</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @if(count($assets) >0)
+                        @foreach($assets as $key=>$asset)
+                            <tr>
+                                <td>{{ $key + 1 }}</td>
+                                @if(isset($asset->uuid))
                                     <td style="width: 10%">
                                         {{ $asset->uuid}}
                                     </td>
-                                    @else
+                                @else
                                     <td>-</td>
-                                    @endif
-                                    @if(isset($asset->country->name))
+                                @endif
+                                @if(isset($asset->country->name))
                                     <td>
                                         {{ $asset->country->name }}
                                     </td>
-                                    @else
+                                @else
                                     <td>-</td>
-                                    @endif
-                                    @if(isset($asset->location))
+                                @endif
+                                @if(isset($asset->location))
                                     <td>
                                         {{ $asset->location }}
                                     </td>
-                                    @else
+                                @else
                                     <td>-</td>
-                                    @endif
-                                    @if(isset($asset->specificUse->title))
+                                @endif
+                                @if(isset($asset->specificUse->title))
                                     <td>
                                         {{ $asset->specificUse->title }}
                                     </td>
-                                    @else
+                                @else
                                     <td>-</td>
-                                    @endif
-                                    @if(isset($asset->expectedLife->years))
+                                @endif
+                                @if(isset($asset->expectedLife->years))
                                     <td>
                                         {{ $asset->expectedLife->years }}
                                     </td>
-                                    @else
+                                @else
                                     <td>-</td>
-                                    @endif
-                                     <td><a href="{{ route('addlease.leaseasset.completedetails', ['lease' => $lease->id, 'asset' => $asset->id]) }}"><button data-toggle='tooltip' data-placement='top' title='Edit Lease Details' type="button" class="btn btn-sm  btn-success edit_lease_detail"><i class="fa fa-pencil-square-o fa-lg"></td></i></a>
-                                </tr>
-                            @endforeach
-                            @endif
-                        </tbody>
-                    </table>
+                                @endif
+                                <td>
+                                    <a href="{{ route('addlease.leaseasset.completedetails', ['lease' => $lease->id, 'asset' => $asset->id]) }}">
+                                        <button data-toggle='tooltip' data-placement='top' title='Edit Lease Details'
+                                                type="button" class="btn btn-sm  btn-success edit_lease_detail"><i
+                                                    class="fa fa-pencil-square-o fa-lg"></td>
+                                </i></a>
+                            </tr>
+                        @endforeach
+                    @endif
+                    </tbody>
+                </table>
             </div>
-             <div class="panel panel-info">
-            <div class="panel-heading">Section D: Lease Start & End Dates</div>
-                    <table class="table table-bordered table-responsive">
-                        <thead>
-                        <tr>
-                            <th>Sr. No.</th>
-                            <th>Unique ULA Code</th>
-                            <th>Lease Start Date</th>
-                            <th>Initial Lease Free Period, If any</th>
-                            <th>Start Date of Lease Payment/Accrual Period</th>
-                            <th>Lease End Date, Non-Cancellable Period</th>
-                            <th>Lease Term(in Months & Years)</th>
-                            <th>Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                             @if(count($assets) >0)
-                            @foreach($assets as $key=>$asset)
-                          <tr>
-                                    <td>{{ $key + 1 }}</td>
-                                    @if(isset($asset->uuid))
+            <div class="panel panel-info">
+                <div class="panel-heading">Section D: Lease Start & End Dates</div>
+                <table class="table table-bordered table-responsive">
+                    <thead>
+                    <tr>
+                        <th>Sr. No.</th>
+                        <th>Unique ULA Code</th>
+                        <th>Lease Start Date</th>
+                        <th>Initial Lease Free Period, If any</th>
+                        <th>Start Date of Lease Payment/Accrual Period</th>
+                        <th>Lease End Date, Non-Cancellable Period</th>
+                        <th>Lease Term(in Months & Years)</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @if(count($assets) >0)
+                        @foreach($assets as $key=>$asset)
+                            <tr>
+                                <td>{{ $key + 1 }}</td>
+                                @if(isset($asset->uuid))
                                     <td style="width: 10%">
                                         {{ $asset->uuid}}
                                     </td>
-                                    @else
+                                @else
                                     <td>-</td>
-                                    @endif
-                                    @if(isset($asset->lease_start_date))
+                                @endif
+                                @if(isset($asset->lease_start_date))
                                     <td>
                                         {{date('d-m-Y', strtotime($asset->lease_start_date))}}
                                     </td>
-                                    @else
+                                @else
                                     <td>-</td>
-                                    @endif
-                                    @if(isset($asset->lease_free_period))
+                                @endif
+                                @if(isset($asset->lease_free_period))
                                     <td>
                                         {{ $asset->lease_free_period }}
                                     </td>
-                                    @else
+                                @else
                                     <td>-</td>
-                                    @endif
-                                    @if(isset($asset->accural_period))
+                                @endif
+                                @if(isset($asset->accural_period))
                                     <td>
                                         {{date('d-m-Y', strtotime($asset->accural_period))}}
                                     </td>
-                                    @else
+                                @else
                                     <td>-</td>
-                                    @endif
-                                    @if(isset($asset->lease_end_date))
+                                @endif
+                                @if(isset($asset->lease_end_date))
                                     <td>
                                         {{date('d-m-Y', strtotime($asset->lease_end_date))}}
                                     </td>
-                                    @else
+                                @else
                                     <td>-</td>
-                                    @endif
-                                    @if(isset($asset->lease_term))
+                                @endif
+                                @if(isset($asset->lease_term))
                                     <td>
                                         {{ $asset->lease_term }}
                                     </td>
-                                    @else
+                                @else
                                     <td>-</td>
-                                    @endif
-                                    <td><a href="{{ route('addlease.leaseasset.completedetails', ['lease' => $lease->id, 'asset' => $asset->id]) }}"><button data-toggle='tooltip' data-placement='top' title='Edit Lease Details' type="button" class="btn btn-sm  btn-success edit_lease_detail"><i class="fa fa-pencil-square-o fa-lg"></td></i></a>
-                                </tr>
-                            @endforeach
-                            @endif
-                        </tbody>
-                    </table>
+                                @endif
+                                <td>
+                                    <a href="{{ route('addlease.leaseasset.completedetails', ['lease' => $lease->id, 'asset' => $asset->id]) }}">
+                                        <button data-toggle='tooltip' data-placement='top' title='Edit Lease Details'
+                                                type="button" class="btn btn-sm  btn-success edit_lease_detail"><i
+                                                    class="fa fa-pencil-square-o fa-lg"></td>
+                                </i></a>
+                            </tr>
+                        @endforeach
+                    @endif
+                    </tbody>
+                </table>
             </div>
-           
-             <div class="panel panel-info">
-                <div class="panel-heading">Section E:  Lease Payments</div>
-                    <table class="table table-bordered table-responsive">
-                        <thead>
-                            <tr>
-                                @foreach($lease->assets as $asset)
-                                <td>Unique ULA Code</td>
-                                <td colspan="10">{{ $asset->uuid }}</td>
-                            </thead>    
-                        
-                            <thead>
-                                <tr>
-                                    <th>Name of Lease Payment</th>
-                                    <th>Type of Lease Payment</th>
-                                    <th>Nature of Lease Payment</th>
-                                    <th>Lease Payment Interval</th>
-                                    <th>Lease Payment Payout Time</th>
-                                    <th>First Lease Payment Start Date</th>
-                                    <th>Last Lease Payment End Date</th>
-                                    <th>Lease Payment Base</th>
-                                    <th>Total Lease Amount Per Interval</th>
-                                    <th>Total Undiscounted Lease Payments</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                 <tr>
-                                    @foreach($asset->payments as $payment)
-                                <td>{{$payment->name}}</td>
-                                <td>{{$payment->paymentType->title}}</td>
-                                <td>{{$payment->paymentNature->title}}</td>
-                                <td>{{$payment->paymentFrequency->title}}</td>
-                                <td>{{$payment->paymentInterval->title}}</td>
-                                <td>{{date('d-m-Y', strtotime($payment->first_payment_start_date))}}</td>
-                               <td>{{date('d-m-Y', strtotime($payment->last_payment_end_date))}}</td>
-                                 <td>{{date('d-m-Y', strtotime($payment->first_payment_start_date))}}</td>
-                                <td>{{$payment->total_amount_per_interval}}</td>
-                                <td>{{$payment->total_amount_per_interval}}</td>
-                                 <td> 
 
-                                    <a href="{{ route('lease.payments.add', ['lease_id' => $lease->id, 'asset_id' => $asset->id, 'payment_id'=> $payment->id]) }}">
-                                        <button data-toggle='tooltip' data-placement='top' title='Edit Lease Payments' type="button" class="btn btn-sm  btn-success"><i class="fa fa-pencil-square-o fa-lg"></i>
-                                        </button>
-                                        </a>
-                                </td>   
-                                @endforeach
-                                </tr>
-                            </tbody>
+            <div class="panel panel-info">
+                <div class="panel-heading">Section E: Lease Payments</div>
+                <table class="table table-bordered table-responsive">
+                    <thead>
+                    <tr>
+                        @foreach($lease->assets as $asset)
+                            <td>Unique ULA Code</td>
+                            <td colspan="10">{{ $asset->uuid }}</td>
+                    </thead>
 
+                    <thead>
+                    <tr>
+                        <th>Name of Lease Payment</th>
+                        <th>Type of Lease Payment</th>
+                        <th>Nature of Lease Payment</th>
+                        <th>Lease Payment Interval</th>
+                        <th>Lease Payment Payout Time</th>
+                        <th>First Lease Payment Start Date</th>
+                        <th>Last Lease Payment End Date</th>
+                        <th>Lease Payment Base</th>
+                        <th>Total Lease Amount Per Interval</th>
+                        <th>Total Undiscounted Lease Payments</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        @foreach($asset->payments as $payment)
+                            <td>{{$payment->name}}</td>
+                            <td>{{$payment->paymentType->title}}</td>
+                            <td>{{$payment->paymentNature->title}}</td>
+                            <td>{{$payment->paymentFrequency->title}}</td>
+                            <td>{{$payment->paymentInterval->title}}</td>
+                            <td>{{date('d-m-Y', strtotime($payment->first_payment_start_date))}}</td>
+                            <td>{{date('d-m-Y', strtotime($payment->last_payment_end_date))}}</td>
+                            <td>{{date('d-m-Y', strtotime($payment->first_payment_start_date))}}</td>
+                            <td>{{$payment->total_amount_per_interval}}</td>
+                            <td>{{$payment->total_amount_per_interval}}</td>
+                            <td>
+                                <a href="{{ route('lease.payments.add', ['lease_id' => $lease->id, 'asset_id' => $asset->id, 'payment_id'=> $payment->id]) }}">
+                                    <button data-toggle='tooltip' data-placement='top' title='Edit Lease Payments'
+                                            type="button" class="btn btn-sm  btn-success"><i
+                                                class="fa fa-pencil-square-o fa-lg"></i>
+                                    </button>
+                                </a>
+                            </td>
                         @endforeach
                     </tr>
-                      </table>
+                    </tbody>
+
+                    @endforeach
+                    </tr>
+                </table>
             </div>
 
-              <div class="panel panel-info">
-            <div class="panel-heading">Section F:  Underlying Lease Assets - Termination, or Purchase Options</div>
-                    <table class="table table-bordered table-responsive">
-                        <thead>
-                        <tr>
-                            <th>Sr. No.</th>
-                            <th>Unique ULA Code</th>
-                            <th>Total FMV</th>
-                            <th>Total Residual Guarantee Value</th>
-                            <th>Termination Penalty</th>
-                            <th>Anticipated Purchase Price</th>
-                            <th>Expected Purchse Date</th>
-                            <th>Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                             @if(count($assets) >0)
-                            @foreach($assets as $key=>$asset)
-                          <tr>
-                                    <td>{{ $key + 1 }}</td>
-                                    @if(isset($asset->uuid))
+            <div class="panel panel-info">
+                <div class="panel-heading">Section F: Underlying Lease Assets - Termination, or Purchase Options</div>
+                <table class="table table-bordered table-responsive">
+                    <thead>
+                    <tr>
+                        <th>Sr. No.</th>
+                        <th>Unique ULA Code</th>
+                        <th>Total FMV</th>
+                        <th>Total Residual Guarantee Value</th>
+                        <th>Termination Penalty</th>
+                        <th>Anticipated Purchase Price</th>
+                        <th>Expected Purchse Date</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @if(count($assets) >0)
+                        @foreach($assets as $key=>$asset)
+                            <tr>
+                                <td>{{ $key + 1 }}</td>
+                                @if(isset($asset->uuid))
                                     <td style="width: 10%">
                                         {{ $asset->uuid}}
                                     </td>
-                                    @else
+                                @else
                                     <td>-</td>
-                                    @endif
-                                    @if(isset($asset->fairMarketValue->total_units))
+                                @endif
+                                @if(isset($asset->fairMarketValue->total_units))
                                     <td>
                                         {{ $asset->fairMarketValue->total_units }}
                                     </td>
-                                    @else
+                                @else
                                     <td>-</td>
-                                    @endif
-                                    @if(isset($asset->residualGuranteeValue->total_residual_gurantee_value))
+                                @endif
+                                @if(isset($asset->residualGuranteeValue->total_residual_gurantee_value))
                                     <td>
                                         {{ $asset->residualGuranteeValue->total_residual_gurantee_value }}
                                     </td>
-                                    @else
+                                @else
                                     <td>-</td>
-                                    @endif
-                                    @if(isset($asset->terminationOption->termination_penalty))
+                                @endif
+                                @if(isset($asset->terminationOption->termination_penalty))
                                     <td>
                                         {{ $asset->terminationOption->termination_penalty }}
                                     </td>
-                                    @else
+                                @else
                                     <td>-</td>
-                                    @endif
-                                    @if(isset($asset->purchaseOption->purchase_price))
+                                @endif
+                                @if(isset($asset->purchaseOption->purchase_price))
                                     <td>
                                         {{ $asset->purchaseOption->purchase_price }}
                                     </td>
-                                    @else
+                                @else
                                     <td>-</td>
-                                    @endif
-                                    @if(isset($asset->purchaseOption->expected_purchase_date))
+                                @endif
+                                @if(isset($asset->purchaseOption->expected_purchase_date))
                                     <td>{{date('d-m-Y', strtotime($asset->purchaseOption->expected_purchase_date)) }}
                                     </td>
-                                    @else
+                                @else
                                     <td>-</td>
-                                    @endif
-                                   <td><a href="{{ route('addlease.residual.index', ['lease' => $lease->id]) }}"><button data-toggle='tooltip' data-placement='top' title='Edit Lease Details' type="button" class="btn btn-sm  btn-success edit_lease_detail"><i class="fa fa-pencil-square-o fa-lg"></i></a>
-                                    </td>
-                                </tr>
-                            @endforeach
-                            @endif
-                        </tbody>
-                    </table>
+                                @endif
+                                <td>
+                                    <a href="{{ route('addlease.residual.index', ['lease' => $lease->id]) }}">
+                                        <button data-toggle='tooltip' data-placement='top' title='Edit Lease Details'
+                                                type="button" class="btn btn-sm  btn-success edit_lease_detail"><i
+                                                    class="fa fa-pencil-square-o fa-lg"></i>
+                                        </button>
+                                    </a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
+                    </tbody>
+                </table>
             </div>
             <div class="panel panel-info">
-            <div class="panel-heading">Section G:  Underlying Lease Assets Classified</div>
-                    <table class="table table-bordered table-responsive">
-                        <thead>
-                        <tr>
-                            <th>Sr. No.</th>
-                            <th>Unique ULA Code</th>
-                            <th>Lease Classified</th>
-                            <th>Classify under Low Value Lease Asset</th>
-                            <th>Discount Rates</th>
-                            <th>Total Initial Direct Cost</th>
-                            <th>Total Lease Incentive</th>
-                            <th>Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                             @if(count($assets) >0)
-                            @foreach($assets as $key=>$asset)
-                          <tr>
-                                    <td>{{ $key + 1 }}</td>
-                                    @if(isset($asset->uuid))
+                <div class="panel-heading">Section G: Underlying Lease Assets Classified</div>
+                <table class="table table-bordered table-responsive">
+                    <thead>
+                    <tr>
+                        <th>Sr. No.</th>
+                        <th>Unique ULA Code</th>
+                        <th>Lease Classified</th>
+                        <th>Classify under Low Value Lease Asset</th>
+                        <th>Discount Rates</th>
+                        <th>Total Initial Direct Cost</th>
+                        <th>Total Lease Incentive</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @if(count($assets) >0)
+                        @foreach($assets as $key=>$asset)
+                            <tr>
+                                <td>{{ $key + 1 }}</td>
+                                @if(isset($asset->uuid))
                                     <td style="width: 10%">
                                         {{ $asset->uuid}}
                                     </td>
-                                    @else
+                                @else
                                     <td>-</td>
-                                     @endif
-                                    @if($asset->leaseDurationClassified->getLeaseClassification->title)
+                                @endif
+                                @if($asset->leaseDurationClassified->getLeaseClassification->title)
                                     <td>
                                         {{ $asset->leaseDurationClassified->getLeaseClassification->title}}
                                     </td>
-                                    @else
+                                @else
                                     <td>-</td>
-                                     @endif
-                                     @if(isset($asset->leaseSelectLowValue->is_classify_under_low_value))
+                                @endif
+                                @if(isset($asset->leaseSelectLowValue->is_classify_under_low_value))
                                     @if($asset->leaseSelectLowValue->is_classify_under_low_value =="yes")
-                                    <td>Low Value</td>
+                                        <td>Low Value</td>
                                     @endif
                                     @if($asset->leaseSelectLowValue->is_classify_under_low_value =="no")
-                                    <td>High Value</td>
+                                        <td>High Value</td>
                                     @endif
-                                    @else
+                                @else
                                     <td>-</td>
-                                     @endif
-                                    @if(isset($asset->leaseSelectDiscountRate->discount_rate_to_use))
-                                     <td>
+                                @endif
+                                @if(isset($asset->leaseSelectDiscountRate->discount_rate_to_use))
+                                    <td>
                                         {{ $asset->leaseSelectDiscountRate->discount_rate_to_use }}
                                     </td>
-                                    @else
+                                @else
                                     <td>-</td>
-                                     @endif
-                                      @if(isset($asset->initialDirectCost->total_initial_direct_cost))
-                                     <td>
+                                @endif
+                                @if(isset($asset->initialDirectCost->total_initial_direct_cost))
+                                    <td>
                                         {{ $asset->initialDirectCost->total_initial_direct_cost }}
                                     </td>
-                                    @else
+                                @else
                                     <td>-</td>
-                                     @endif
-                                    @if(isset($asset->leaseIncentiveCost->total_lease_incentives))
-                                     <td>
+                                @endif
+                                @if(isset($asset->leaseIncentiveCost->total_lease_incentives))
+                                    <td>
                                         {{ $asset->leaseIncentiveCost->total_lease_incentives }}
                                     </td>
-                                    @else
+                                @else
                                     <td>-</td>
-                                     @endif
-                                     <td><a href="{{ route('addlease.durationclassified.index', ['lease' => $lease->id]) }}"><button data-toggle='tooltip' data-placement='top' title='Edit Lease Details' type="button" class="btn btn-sm  btn-success edit_lease_detail"><i class="fa fa-pencil-square-o fa-lg"></td></i></a>
-                                </tr>
-                            @endforeach
-                            @endif
-                        </tbody>
-                    </table>
+                                @endif
+                                <td>
+                                    <a href="{{ route('addlease.durationclassified.index', ['lease' => $lease->id]) }}">
+                                        <button data-toggle='tooltip' data-placement='top' title='Edit Lease Details'
+                                                type="button" class="btn btn-sm  btn-success edit_lease_detail">
+                                                <i class="fa fa-pencil-square-o fa-lg"></i>
+                                        </button>
+                                    </a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
+                    </tbody>
+                </table>
             </div>
-              <div class="panel panel-info">
-            <div class="panel-heading">Section H:  Underlying Lease Assets Valuation</div>
-                    <table class="table table-bordered table-responsive">
-                        <thead>
-                        <tr>
-                            <th>Sr. No.</th>
-                            <th>Unique ULA Code</th>
-                            <th>Present Value of Lease Liability</th>
-                            <th>Value of a Lease Asset</th>
-                            <th>Adjustment to Equity</th>
-                            <th>Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                             @if(count($assets) >0)
-                            @foreach($assets as $key=>$asset)
-                          <tr>
-                                    <td>{{ $key + 1 }}</td>
-                                    @if(isset($asset->uuid))
+            <div class="panel panel-info">
+                <div class="panel-heading">Section H: Underlying Lease Assets Valuation</div>
+                <table class="table table-bordered table-responsive">
+                    <thead>
+                    <tr>
+                        <th>Sr. No.</th>
+                        <th>Unique ULA Code</th>
+                        <th>Present Value of Lease Liability</th>
+                        <th>Value of a Lease Asset</th>
+                        <th>Adjustment to Equity</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @if(count($assets) >0)
+                        @foreach($assets as $key=>$asset)
+                            <tr>
+                                <td>{{ $key + 1 }}</td>
+                                @if(isset($asset->uuid))
                                     <td style="width: 10%">
                                         {{ $asset->uuid}}
                                     </td>
-                                    @else
+                                @else
                                     <td>-</td>
-                                     @endif
+                                @endif
 
-                                    <td class="load_lease_liability" data-asset_id="{{ $asset->id }}"></td>
-                                    @if(isset($asset->subcategory->title ))
+                                <td class="load_lease_liability" data-asset_id="{{ $asset->id }}"></td>
+                                @if(isset($asset->subcategory->title ))
                                     <td>
                                         {{ $asset->subcategory->title }}
                                     </td>
-                                    @else
+                                @else
                                     <td>-</td>
-                                     @endif
-                                    @if(isset($asset->subcategory->title ))
-                                     <td>
+                                @endif
+                                @if(isset($asset->subcategory->title ))
+                                    <td>
                                         {{ $asset->subcategory->title }}
                                     </td>
-                                    @else
+                                @else
                                     <td>-</td>
-                                     @endif
-                                    <td><a href="{{ route('addlease.leasevaluation.index', ['lease' => $lease->id]) }}"><button data-toggle='tooltip' data-placement='top' title='Edit Lease Details' type="button" class="btn btn-sm  btn-success edit_lease_detail"><i class="fa fa-pencil-square-o fa-lg"></td></i></button></a>
-                                </tr>
-                            @endforeach
-                            @endif
-                        </tbody>
-                    </table>
+                                @endif
+                                <td>
+                                    <a href="{{ route('addlease.leasevaluation.index', ['lease' => $lease->id]) }}">
+                                        <button data-toggle='tooltip' data-placement='top' title='Edit Lease Details'
+                                                type="button" class="btn btn-sm  btn-success edit_lease_detail"><i class="fa fa-pencil-square-o fa-lg"></i>
+                                        </button>
+                                    </a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
+                    </tbody>
+                </table>
             </div>
-                    <div class="form-group">
-                     <div class="col-md-6 col-md-offset-4">
-                                    <button type="submit" class="btn btn-success">
-                                        Save As Draft
-                                    </button>
-                                    <!-- <a href="{{route('addlease.reviewsubmit.index', ['id'=>$lease->id])}}" class="btn btn-success">Save As Draft</a> -->
-                                    <a href="#" class="btn btn-primary">Print</a>
-                        </div>
+            <div class="form-group">
+                <div class="col-md-6 col-md-offset-4">
+                    <button type="submit" class="btn btn-success">
+                        Save As Draft
+                    </button>
+                <!-- <a href="{{route('addlease.reviewsubmit.index', ['id'=>$lease->id])}}" class="btn btn-success">Save As Draft</a> -->
+                    <a href="#" class="btn btn-primary">Print</a>
+                </div>
 
-                    </div>
-              </form>
-          </div>
-      </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @section('footer-script')
-<script type="text/javascript">
-    $(function(){
+    <script type="text/javascript">
+        $(function () {
 
-    var lease_liability_array = new Array();
+            var lease_liability_array = new Array();
 
-    $('.load_lease_liability').each(function(index, value){
-        var asset_id = $(this).data('asset_id');
-        
-        if(typeof (lease_liability_array[asset_id])!= "undefined") {
-            $(this).text(lease_liability_array[asset_id].toFixed(2));
-        } else {
-            var that = $(this);
-            $.ajax({
-                url : '/lease/lease-valuation/lease-liability-asset/'+asset_id,
-                dataType : 'json',
-                async : false,
-                beforeSend : function(){
-                    $(that).text('Calculating...');
-                },
-                success : function (response) {
-                    $(that).text(response['value'].toFixed(2));
-                    lease_liability_array[asset_id] = response['value'];
+            $('.load_lease_liability').each(function (index, value) {
+                var asset_id = $(this).data('asset_id');
+
+                if (typeof (lease_liability_array[asset_id]) != "undefined") {
+                    $(this).text(lease_liability_array[asset_id].toFixed(2));
+                } else {
+                    var that = $(this);
+                    $.ajax({
+                        url: '/lease/lease-valuation/lease-liability-asset/' + asset_id,
+                        dataType: 'json',
+                        async: false,
+                        beforeSend: function () {
+                            $(that).text('Calculating...');
+                        },
+                        success: function (response) {
+                            $(that).text(response['value'].toFixed(2));
+                            lease_liability_array[asset_id] = response['value'];
+                        }
+                    });
                 }
             });
-        }
-    });
 
-});
-</script>
+        });
+    </script>
 @endsection

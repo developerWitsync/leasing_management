@@ -90,6 +90,9 @@ class LeaseValuationController extends Controller
             if($request->ajax()){
                 $asset = LeaseAssets::query()->findOrFail($id);
                 $value = $asset->presentValueOfLeaseLiability(true);
+
+                $asset->setAttribute('present_of_lease_liablity', $value);
+                $asset->save();
                 return response()->json([
                     'status' => true,
                     'value' => $value
@@ -149,6 +152,10 @@ class LeaseValuationController extends Controller
                 $initial_direct_cost = isset($asset->initialDirectCost)?($asset->initialDirectCost->initial_direct_cost_involved == "yes"?$asset->initialDirectCost->total_initial_direct_cost:0):0;
                 $lease_incentive_cost = isset($asset->leaseIncentives)?($asset->leaseIncentives->is_any_lease_incentives_receivable == "yes"?$asset->leaseIncentives->total_lease_incentives0:0):0;
                 $value_of_lease_asset = ($present_value_of_lease_liability + $prepaid_lease_payment + $initial_direct_cost) - ($accured_lease_payment + $lease_incentive_cost);
+
+                $asset->setAttribute('value_of_lease_asset', $value_of_lease_asset);
+                $asset->save();
+
                 return response()->json([
                     'status' => true,
                     'value' => $value_of_lease_asset
@@ -191,6 +198,9 @@ class LeaseValuationController extends Controller
                 if($value_of_lease_asset > $fair_market_value && $fair_market_value > 0){
                     $value = $value_of_lease_asset - $fair_market_value;
                 }
+
+                $asset->setAttribute('impairment_test_value', $value);
+                $asset->save();
 
                 return response()->json([
                     'status' => true,

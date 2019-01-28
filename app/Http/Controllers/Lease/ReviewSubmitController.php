@@ -28,11 +28,12 @@ class ReviewSubmitController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index($id, Request $request){
+    public function index($id, Request $request)
+    {
 
-        if(!checkPreviousSteps($id,'step17')){
+        if (!checkPreviousSteps($id, 'step17')) {
             //check lease incentives
-            return  redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
+            return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
         }
 
         $breadcrumbs = [
@@ -41,25 +42,25 @@ class ReviewSubmitController extends Controller
                 'title' => 'Add New Lease'
             ],
             [
-                'link' => route('addlease.reviewsubmit.index',['id' => $id]),
+                'link' => route('addlease.reviewsubmit.index', ['id' => $id]),
                 'title' => 'Review & Submit'
             ],
         ];
 
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
 
-        if($lease) {
+        if ($lease) {
             $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->get();
             $contract_classifications = ContractClassifications::query()->select('id', 'title')->where('status', '=', '1')->get();
-            if($request->isMethod('post')) {
+            if ($request->isMethod('post')) {
                 $model = Lease::query()->where('id', '=', $id)->first();
                 $model->status = "1";
                 $model->save();
                 // complete Step
-                confirmSteps($id,'step18');
-                return redirect(route('addlease.reviewsubmit.index',['id' => $id]))->with('status', 'Lease Information has been Submitted successfully.');
+                confirmSteps($id, 'step18');
+                return redirect(route('addlease.reviewsubmit.index', ['id' => $id]))->with('status', 'Lease Information has been Submitted successfully.');
             }
-            
+
 
             return view('lease.review-submit.index', compact(
                 'lease',
@@ -74,6 +75,6 @@ class ReviewSubmitController extends Controller
             abort(404);
         }
     }
-  }
+}
 
     
