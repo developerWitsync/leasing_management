@@ -51,10 +51,10 @@ class LeaseDurationClassifiedController extends Controller
             $back_button = route('addlease.purchaseoption.index', ['id' => $lease->id]);
 
             $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->whereHas('terminationOption', function ($query) {
-                $query->where('exercise_termination_option_available', '=', 'no');
+                $query->where('exercise_termination_option_available', '=', 'yes');
             })->get();
-
-            if (count($assets) == 0) {
+            
+            if (count($assets) > 0) {
                 if (!checkPreviousSteps($id, 'step6')) {
                     return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
                 }

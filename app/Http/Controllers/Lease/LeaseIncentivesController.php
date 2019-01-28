@@ -70,6 +70,16 @@ class LeaseIncentivesController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function create($id, Request $request){
+         $breadcrumbs = [
+            [
+                'link' => route('add-new-lease.index'),
+                'title' => 'Add New Lease'
+            ],
+            [
+                'link' => route('addlease.leaseincentives.index',['id' => $id]),
+                'title' => 'Lease Incentives'
+            ],
+        ];
         try{
             $asset = LeaseAssets::query()->findOrFail($id);
             $lease = $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
@@ -130,7 +140,8 @@ class LeaseIncentivesController extends Controller
                     'lease',
                     'asset',
                     'customer_model',
-                    'customer_details'
+                    'customer_details',
+                    'breadcrumbs'
                 ));
             } else {
                 abort(404);

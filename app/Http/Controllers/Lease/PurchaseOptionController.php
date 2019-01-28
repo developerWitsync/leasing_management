@@ -62,12 +62,14 @@ class PurchaseOptionController extends Controller
                 $query->where('exercise_termination_option_available', '=', 'no');
             })->get();
 
-            if (count($assets) == 0) {
-                if (!checkPreviousSteps($id, 'step8')) {
-                    return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
+            if(count($assets) > 0) {
+                 if(!checkPreviousSteps($id,'step7')){
+                 return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
                 }
-                return redirect(route('addlease.durationclassified.index', ['id' => $id]));
             }
+            else{
+                return redirect(route('addlease.durationclassified.index', ['id' => $id]));
+             }
 
             return view('lease.purchase-option.index', compact('breadcrumbs',
                 'lease',

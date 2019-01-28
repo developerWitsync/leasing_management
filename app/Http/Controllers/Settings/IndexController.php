@@ -79,7 +79,7 @@ class IndexController extends Controller
             }
             return redirect()->back()->with('status', $status);
         } catch (\Exception $e){
-           abort(404);
+             abort(404);
         }
     }
     

@@ -154,7 +154,6 @@ class UnderlyingLeaseAssetController extends Controller
 
             $asset = LeaseAssets::query()->where('lease_id', '=', $lease_id)->where('id', '=', $asset_id)->first();
             if($lease && $asset) {
-
                 if($request->isMethod('post')) {
 
                     Validator::extend('required_if_prior_to_date', function ($attribute, $value, $parameters, $validator) {
@@ -198,11 +197,9 @@ class UnderlyingLeaseAssetController extends Controller
                         'lease_end_date.date'          =>   'The Lease End Date field must be a valid date.',
                         'accounting_treatment.required_if_prior_to_date'   => 'The accounting period is required when Start Date of Lease Payment / Accrual Period is prior to Jan 01, 2019.'
                     ];
-
                     if(date('Y-m-d',strtotime($request->accural_period)) < date('Y-m-d', strtotime('2019-01-01'))){
                         $rules['using_lease_payment'] = 'required';
                     }
-
                     $validator = Validator::make($request->except('_token'),$rules, $messages);
 
                     if($validator->fails()) {
@@ -234,9 +231,9 @@ class UnderlyingLeaseAssetController extends Controller
                 $use_of_lease_asset = UseOfLeaseAsset::query()->where('status', '=', '1')->get();
                 $expected_life_of_assets = ExpectedLifeOfAsset::query()->whereIn('business_account_id', getDependentUserIds())->get();
                 $accounting_terms  = LeaseAccountingTreatment::query()->where('upto_year', '=', '2018')->get();
+
                 // get max previous year from general settings for lease start year which will be minimum year
                 $settings = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
-
                 return view('lease.lease-assets.completedetails', compact(
                     'lease',
                     'asset',
@@ -248,6 +245,7 @@ class UnderlyingLeaseAssetController extends Controller
                     'breadcrumbs'
                 ));
             } else {
+                dd('ds');
                 abort(404);
             }
         } catch (\Exception $e) {
