@@ -30,7 +30,7 @@ class ModifyLeaseController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(){
-            return view('modifylease.index');
+        return view('modifylease.index');
     }
 
     /**
@@ -93,7 +93,7 @@ class ModifyLeaseController extends Controller
                 abort(404);
             }
         } catch (\Exception $e) {
-           dd($e);
+           abort(404);
         }
     }
  }
