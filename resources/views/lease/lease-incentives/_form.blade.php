@@ -194,7 +194,7 @@
             var that = $(this);
              if(rowCount == 1){
                 var modal = bootbox.dialog({
-                message: 'You can not delete this detail to do this you have to Select No Any Lease Incentive Receivable field',
+                message: 'You can not delete this detail to do this you have to enter the intial direct cost details',
                 buttons: [
                 {
                     label: "OK",

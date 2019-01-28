@@ -59,6 +59,7 @@ class ReviewSubmitController extends Controller
                 confirmSteps($id,'step18');
                 return redirect(route('addlease.reviewsubmit.index',['id' => $id]))->with('status', 'Lease Information has been Submitted successfully.');
             }
+            
 
             return view('lease.review-submit.index', compact(
                 'lease',

@@ -28,7 +28,7 @@
                         <td class="supplier_details_amount">{{ $supplier_detail['amount'] }}</td>
                         <td>{{ $supplier_detail['rate'] }}</td>
                         <td>
-                        <a href="javascript:void(0);" class="btn btn-sm btn-danger supplier_create_details_form_delete" data-supplier_id="{{$key}}"><i class="fa fa-trash-o"></i></a></td> 
+                        <a href="javascript:void(0);" class="btn btn-sm btn-danger supplier_create_details_form_delete" data-supplier_id="{{$key}}"><i class="fa fa-trash-o">fdgfgd</i></a></td> 
                     </tr>
                 @endforeach
             @endif
@@ -44,11 +44,11 @@
                 </td>
                 <td>
                     <select class="form-control" name="supplier_currency">
-            <option value="">--Select Currency--</option>
-            @foreach($currencies as $currency)
-                <option value="{{ $currency->code }}">{{ $currency->code }}  {{ $currency->symbol }}</option>
-            @endforeach
-        </select>
+                        <option value="">--Select Currency--</option>
+                        @foreach($currencies as $currency)
+                            <option value="{{ $currency->code }}">{{ $currency->code }}  {{ $currency->symbol }}</option>
+                        @endforeach
+                    </select>
                 </td>
                 <td>
                     <input type="text" class="form-control" name="amount">
@@ -70,6 +70,6 @@
 <script src="{{ asset('js/jquery-ui.js') }}"></script>
 <script type="text/javascript">
     $('.expense_date').datepicker({
-                dateFormat: 'dd-M-yy'
-            });
+        dateFormat: 'dd-M-yy'
+    });
 </script>
