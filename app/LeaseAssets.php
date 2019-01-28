@@ -32,6 +32,9 @@ class LeaseAssets extends Model
         'is_details_completed',
         'using_lease_payment',
         'total_payments',
+        'lease_liablity_value',
+        'value_of_lease_asset',
+        'impairment_test_value',
         'created_at',
         'updated_at'
     ];

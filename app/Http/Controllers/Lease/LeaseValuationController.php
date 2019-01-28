@@ -91,7 +91,7 @@ class LeaseValuationController extends Controller
                 $asset = LeaseAssets::query()->findOrFail($id);
                 $value = $asset->presentValueOfLeaseLiability(true);
 
-                $asset->setAttribute('present_of_lease_liablity', $value);
+                $asset->setAttribute('lease_liablity_value', $value);
                 $asset->save();
                 return response()->json([
                     'status' => true,

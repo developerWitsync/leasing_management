@@ -501,21 +501,9 @@
                                     <td>-</td>
                                 @endif
 
-                                <td class="load_lease_liability" data-asset_id="{{ $asset->id }}"></td>
-                                @if(isset($asset->subcategory->title ))
-                                    <td>
-                                        {{ $asset->subcategory->title }}
-                                    </td>
-                                @else
-                                    <td>-</td>
-                                @endif
-                                @if(isset($asset->subcategory->title ))
-                                    <td>
-                                        {{ $asset->subcategory->title }}
-                                    </td>
-                                @else
-                                    <td>-</td>
-                                @endif
+                                <td>{{ is_null($asset->lease_liablity_value)?'-':$asset->lease_liablity_value }}</td>
+                                <td>{{ is_null($asset->value_of_lease_asset)?'-':$asset->value_of_lease_asset }}</td>
+                                <td>{{ $asset->lease_liablity_value - $asset->value_of_lease_asset }}</td>
                                 <td>
                                     <a href="{{ route('addlease.leasevaluation.index', ['lease' => $lease->id]) }}">
                                         <button data-toggle='tooltip' data-placement='top' title='Edit Lease Details'
@@ -531,45 +519,12 @@
             </div>
             <div class="form-group">
                 <div class="col-md-6 col-md-offset-4">
-                    <button type="submit" class="btn btn-success">
-                        Save As Draft
-                    </button>
-                <!-- <a href="{{route('addlease.reviewsubmit.index', ['id'=>$lease->id])}}" class="btn btn-success">Save As Draft</a> -->
+                    <a href="{{route('addlease.leasepaymentinvoice.index', ['id'=>$lease->id])}}" class="btn btn-danger">Back</a>
+                    <a href="{{route('addlease.reviewsubmit.index', ['id'=>$lease->id])}}" class="btn btn-success">Submit</a>
                     <a href="#" class="btn btn-primary">Print</a>
                 </div>
 
             </div>
         </div>
     </div>
-@endsection
-@section('footer-script')
-    <script type="text/javascript">
-        $(function () {
-
-            var lease_liability_array = new Array();
-
-            $('.load_lease_liability').each(function (index, value) {
-                var asset_id = $(this).data('asset_id');
-
-                if (typeof (lease_liability_array[asset_id]) != "undefined") {
-                    $(this).text(lease_liability_array[asset_id].toFixed(2));
-                } else {
-                    var that = $(this);
-                    $.ajax({
-                        url: '/lease/lease-valuation/lease-liability-asset/' + asset_id,
-                        dataType: 'json',
-                        async: false,
-                        beforeSend: function () {
-                            $(that).text('Calculating...');
-                        },
-                        success: function (response) {
-                            $(that).text(response['value'].toFixed(2));
-                            lease_liability_array[asset_id] = response['value'];
-                        }
-                    });
-                }
-            });
-
-        });
-    </script>
 @endsection
