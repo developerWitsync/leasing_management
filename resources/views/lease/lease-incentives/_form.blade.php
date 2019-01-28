@@ -1,4 +1,13 @@
 
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (array_unique($errors->all()) as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 <form role="form" class="form-horizontal" method="post" enctype="multipart/form-data">
     {{ csrf_field() }}
 
@@ -41,12 +50,90 @@
             </div>
         </div>
 
-    <div class="form-group{{ $errors->has('details') ? ' has-error' : '' }}">
-        <label for="details" class="col-md-4 control-label"></label>
-        <div class="col-md-6">
-            <a data-toggle="modal" href="javascript:void(0);" class="btn btn-primary enter_customer_details">Enter Details</a>
+    <div class="row">
+            <table class="table table-bordered table-condensed add_more_table">
+                <thead>
+                    <th>Customer Name</th>
+                    <th>Description</th>
+                    <th>Date</th>
+                    <th>Currency</th>
+                    <th>Amount </th>
+                    <th>Exchange Rate </th>
+                    <th>Action</th>
+                </thead>
+                <tbody>
+<?php //dd($model->customerDetails)?>
+                    @if(count($model->customerDetails) > 0)
+                        @foreach($model->customerDetails as $customerDetail)
+                            <tr class="clonable_row customer">
+                                <td>
+                                    <input type="text" class="form-control" name="customer_name[]" value="{{ $customerDetail->customer_name }}">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="description[]" value="{{ $customerDetail->description }}">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control incentive_date" name="incentive_date[]" value="{{ \Carbon\Carbon::parse($customerDetail->incentive_date)->format('Y-m-d') }}">
+                                </td>
+                                <td>
+                                    <select class="form-control" name="currency_id[]">
+                                        <option value="">--Select Currency--</option>
+                                        @foreach($currencies as $currency)
+                                            <option value="{{ $currency->code }}" @if($customerDetail->currency_id == $currency->code) selected="selected" @endif>{{ $currency->code }}  {{ $currency->symbol }}</option>
+                                        @endforeach
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="amount[]" value="{{ $customerDetail->amount }}">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="exchange_rate[]" value="{{ $customerDetail->exchange_rate }}">
+                                </td>
+                                <td>
+                                    <a href="javascript:void(0);" class="btn btn-sm btn-danger customer_create_details_form_delete" onClick="javascript:removeRow(this)">Remove</a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @else
+                        <tr class="clonable_row customer">
+                            <td>
+                                <input type="text" class="form-control" name="customer_name[]">
+                                 @if ($errors->has('customer_name[]'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('customer_name[]') }}</strong>
+                                    </span>
+                                @endif
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="description[]">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control incentive_date" name="incentive_date[]">
+                            </td>
+                            <td>
+                                <select class="form-control" name="currency_id[]">
+                                    <option value="">--Select Currency--</option>
+                                    @foreach($currencies as $currency)
+                                        <option value="{{ $currency->code }}">{{ $currency->code }}  {{ $currency->symbol }}</option>
+                                    @endforeach
+                                </select>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="amount[]">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="exchange_rate[]">
+                            </td>
+                            <td>
+                                <a href="javascript:void(0);" class="btn btn-sm btn-danger customer_create_details_form_delete" onClick="javascript:removeRow(this)">Remove</a>
+                            </td>
+                        </tr>
+                    @endif
+                </tbody>
+            </table>
+
+            <a href="javascript:void(0)" onclick="javascript:addMore(this)" class="btn btn-sm right btn-success add_more"><i class="fa fa-plus-square"></i> Add More</a>
         </div>
-    </div>
      </div>
 
     <div class="form-group">
@@ -83,118 +170,63 @@
                 $('#hidden-fields').hide();
             }
         });
-
-        $('.enter_customer_details').on('click', function () {
-           $.ajax({
-                @if(request()->segment('2') == 'lease-incentives' && request()->segment('3') == 'update')
-                    url : '{{ route("addlease.leaseincentives.updatecustomer", ['id' => $model->id]) }}',
-                @else
-                    url : '{{ route("addlease.leaseincentives.addcustomer") }}',
-                @endif
-                type : 'get',
-                success : function(response){
-                    $('._form_customer_details').html(response);
-
-                    $("#myModal").modal('show');
-                }
-            });
+        $(function () {
+            $('.incentive_date').datepicker();
         });
-         function  DatePickerIns(){
-            $('body .incentive_date').datepicker({
-                dateFormat: "dd-M-yy"
-            });
+
+
+        function addMore(that){
+
+            var cloned_html = '<tr class="customer clonable_row">\n' +
+                '                <td>\n' +
+                '                    <input type="text" class="form-control" name="customer_name[]">\n' +
+                '                </td>\n' +
+                '                <td>\n' +
+                '                    <input type="text" class="form-control" name="description[]">\n' +
+                '                </td>\n' +
+                '                <td>\n' +
+                '                    <input type="text" class="form-control cale_n_dar" name="incentive_date[]">\n' +
+                '                </td>\n' +
+                '                <td>\n' +
+                '                    <select class="form-control" name="currency_id[]">\n' +
+                '                        <option value="">--Select Currency--</option>\n' +
+                '                        @foreach($currencies as $currency)\n' +
+                '                            <option value="{{ $currency->code }}">{{ $currency->code }}  {{ $currency->symbol }}</option>\n' +
+                '                        @endforeach\n' +
+                '                    </select>\n' +
+                '                </td>\n' +
+                '                <td>\n' +
+                '                    <input type="text" class="form-control" name="amount[]">\n' +
+                '                </td>\n' +
+                '                <td>\n' +
+                '                    <input type="text" class="form-control" name="exchange_rate[]">\n' +
+                '                </td>\n' +
+                '                <td>\n' +
+                '                    <a href="javascript:void(0);" class="btn btn-sm btn-danger customer_create_details_form_delete" onClick="javascript:removeRow(this)">Remove</a>\n' +
+                '                </td>\n' +
+                '            </tr>';
+
+            var newRow = $(cloned_html).insertAfter($('.clonable_row:last'));
+
+            newRow.find("input.cale_n_dar")
+                .removeClass('hasDatepicker')
+                .removeData('datepicker')
+                .unbind()
+                .datepicker({
+                    beforeShow: function() {
+                        setTimeout(function() {
+                            $('.ui-datepicker').css('z-index', 99999999999999);
+
+                        }, 0);
+                    }
+                });
         }
 
-        $(document.body).on('submit', '#customer_details_form', function (e) {
-           // $('.incentive_date').datepicker({dateFormat: "dd-M-yy"});
-            
-            e.preventDefault();
-            $.ajax({
-                url : '{{ route("addlease.leaseincentives.addcustomer") }}',
-                type : 'post',
-                data : $(this).serialize(),
-                success : function(response){
-                    if(typeof(response['status'])!='undefined' && !response['status']) {
-                        var errors = response['errors'];
-                        $('.error_via_ajax').remove();
-                        $.each(errors, function(i, e){
-                            if($('input[name="'+i+'"]').length ){
-                                $('input[name="'+i+'"]').after('<span class="help-block error_via_ajax" style="color:red">\n' +
-                                    '                        <strong>'+e+'</strong>\n' +
-                                    '                    </span>');
-                            }
-                             else if($('select[name="'+i+'"]').length){
-                                 $('select[name="'+i+'"]').after('<span class="help-block error_via_ajax" style="color:red">\n' +
-                                    '                        <strong>'+e+'</strong>\n' +
-                                    '                    </span>');
-                            }
-                        });
-                    } else {
-                        $('._form_customer_details').html(response);
-                        //$(".incentive_date").datepicker("destroy");
-                         $(".incentive_date").datepicker("refresh");
-                        setTimeout( function(){
-                            DatePickerIn();
-                        }, 5000)
-                       
-                   }
-                }
-            });
-        });
-
-       
-        
-         //DatePickerIn();
-
-        $('#myModal').on('hidden.bs.modal', function () {
-            // will only come inside after the modal is shown
-            var total = 0;
-            $('.customer_details_amount').each(function(){
-                total = parseFloat(total) + parseFloat($(this).text());
-            });
-            $('#total_lease_incentives').val(total);
-        });
-
-        //create supplier details on the update pop up...
-        $(document.body).on('submit', '#customer_details_form_update', function(e){
-            e.preventDefault();
-            $.ajax({
-                url : "{{ route('addlease.leaseincentives.createcustomer') }}",
-                type : 'post',
-                data : $(this).serialize(),
-                success : function(response){
-                    if(typeof(response['status'])!='undefined' && !response['status']) {
-                        var errors = response['errors'];
-                        $('.error_via_ajax').remove();
-                        $.each(errors, function(i, e){ 
-                            if($('input[name="'+i+'"]').length ){
-                               $('input[name="'+i+'"]').after('<span class="help-block error_via_ajax" style="color:red">\n' +
-                                    '                        <strong>'+e+'</strong>\n' +
-                                    '                    </span>');
-                            }
-                            else if($('select[name="'+i+'"]').length){
-                                $('select[name="'+i+'"]').after('<span class="help-block error_via_ajax" style="color:red">\n' +
-                                    '                        <strong>'+e+'</strong>\n' +
-                                    '                    </span>');
-                            }
-                        });
-                    } else {
-                        window.location.reload();
-                    }
-                }
-            });
-        });
-
-        //delete customer details on the update pop up
-        
-        $(document.body).on('click', '.customer_details_form_delete', function(e){
-            var customer_id = $(this).data('customer_id');
-            var lease_id = $(this).data('lease_id');
-            var rowCount = $("tr.customer").length;
-            var that = $(this);
-             if(rowCount == 1){
+        function removeRow(that){
+        var rowCount =  $('tr.customer').length;
+            if(rowCount == 1){
                 var modal = bootbox.dialog({
-                message: 'You can not delete this detail to do this you have to enter the intial direct cost details',
+                message: 'You can not delete this detail to do this you have to Enter lease incentives details',
                 buttons: [
                 {
                     label: "OK",
@@ -208,68 +240,12 @@
                     modal.modal("hide");
                     }
                 });
-                    modal.modal("show");
+                modal.modal("show");
             }
-            else{
-            bootbox.confirm({
-                    message: "Are you sure that you want to delete this? These changes cannot be reverted.",
-                    buttons: {
-                        confirm: {
-                            label: 'Yes',
-                            className: 'btn btn-success'
-                        },
-                        cancel: {
-                            label: 'No',
-                            className: 'btn btn-danger'
-                        }
-                    },
-                    callback: function (result) {
-                        if(result) {
-                            $.ajax({
-                            url : "/lease/lease-incentives/delete-customer/"+customer_id+'/'+lease_id,
-                            type : 'delete',
-                            success : function(response){
-                            if(response['status']){
-                            $(that).parent('td').parent('tr').remove();
-                                    }
-                                }
-                            });
-                        }
-                    }
-                });
+            else {
+               $(that).parent('td').parent('tr').remove();
             }
-        }); 
-        
-
-        $(document.body).on('click', '.customer_details_form_edit', function(e){
-            var customer_id = $(this).data('customer_id');
-            var lease_id = $(this).data('lease_id');
-            var that = $(this);
-            $.ajax({
-                url : "/lease/lease-incentives/delete-customer/"+customer_id+'/'+lease_id,
-                type : 'delete',
-                success : function(response){
-                    if(response['status']){
-                        $(that).parent('td').parent('tr').remove();
-                    }
-                }
-            });
-        });
-
-        //delete customer details on the create pop up
-         $(document.body).on('click', '.customer_create_details_form_delete', function(e){
-            var customer_id = $(this).data('customer_id');
-            var that = $(this);
-            $.ajax({
-                url : "/lease/lease-incentives/delete-create-customer/"+customer_id,
-                type : 'delete',
-                success : function(response){
-                    if(response['status']){
-                        $(that).parent('td').parent('tr').remove();
-                    }
-                }
-            });
-        });
+        }
 
     </script>
 @endsection
