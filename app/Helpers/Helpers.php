@@ -493,6 +493,6 @@ function checkPreviousSteps($lease_id,$complete_step){
     {
         $confrim_steps = \App\LeaseCompletedSteps::query()->where('lease_id', '=', $lease_id)->where('completed_step','=', $complete_step)->get();
         return (count($confrim_steps) > 0);
-   }
+    }
    return false;
 }
