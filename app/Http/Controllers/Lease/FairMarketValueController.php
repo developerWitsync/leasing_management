@@ -49,27 +49,28 @@ class FairMarketValueController extends Controller
      */
     public function index($id, Request $request){
 
-        if(!checkPreviousSteps($id,'step3')){
-           return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
-       }
+            if(!checkPreviousSteps($id,'step3')){
+               return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
+            }
+
             $breadcrumbs = [
-            [
-                'link' => route('add-new-lease.index'),
-                'title' => 'Add New Lease'
-            ],
-            [
-                'link' => route('addlease.fairmarketvalue.index',['id' => $id]),
-                'title' => 'Fair Market Value'
-            ],
-        ];
-        $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->with('leaseType')->with('assets')->first();
-        if($lease) {
-            return view('lease.fair-market-value.index', compact('breadcrumbs',
-                'lease'
-            ));
-        } else {
-            abort(404);
-        }
+                [
+                    'link' => route('add-new-lease.index'),
+                    'title' => 'Add New Lease'
+                ],
+                [
+                    'link' => route('addlease.fairmarketvalue.index',['id' => $id]),
+                    'title' => 'Fair Market Value'
+                ],
+            ];
+            $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->with('leaseType')->with('assets')->first();
+            if($lease) {
+                return view('lease.fair-market-value.index', compact('breadcrumbs',
+                    'lease'
+                ));
+            } else {
+                abort(404);
+            }
     }
 
     /**
@@ -83,6 +84,8 @@ class FairMarketValueController extends Controller
             $asset = LeaseAssets::query()->findOrFail($id);
             $lease = $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
             if($lease) {
+
+
                 $model = FairMarketValue::query()->where('asset_id', '=', $id)->first();
                 $model = new FairMarketValue();
 
