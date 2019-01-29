@@ -59,9 +59,9 @@ class InitialDirectCostController extends Controller
             //Load the assets only lease start on or after jan 01 2019
             $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '>=', '2019-01-01')->get();
             if (count($assets) > 0) {
-                /*if(!checkPreviousSteps($id,'step13')){
+                if(!checkPreviousSteps($id,'step13')){
                      return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
-                 }*/
+                 }
             }
             return view('lease.initial-direct-cost.index', compact(
                 'assets',
@@ -168,11 +168,8 @@ class InitialDirectCostController extends Controller
             abort(404);
         }
     }
-
-    
-
     /**
-     * edit existing fair market value details for an asset
+     * edit existing InitiaLdirectCost Controller details for an asset
      * @param $id
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View

@@ -203,6 +203,7 @@ Route::middleware('auth')->group(function(){
          */
         Route::prefix('review-submit')->group(function(){
             Route::match(['post', 'get'], 'index/{id}', ['as' => 'addlease.reviewsubmit.index', 'uses' => 'ReviewSubmitController@index']);
+             Route::match(['post', 'get'], 'submit/{id}', ['as' => 'addlease.reviewsubmit.submit', 'uses' => 'ReviewSubmitController@submit']);
         });
 
     });

@@ -520,7 +520,10 @@
             <div class="form-group">
                 <div class="col-md-6 col-md-offset-4">
                     <a href="{{route('addlease.leasepaymentinvoice.index', ['id'=>$lease->id])}}" class="btn btn-danger">Back</a>
-                    <a href="{{route('addlease.reviewsubmit.index', ['id'=>$lease->id])}}" class="btn btn-success">Submit</a>
+                   <form style="display: inline-block;" action="{{route('addlease.reviewsubmit.submit', ['id'=>$lease->id])}}" method="post" > 
+                     {{ csrf_field() }}
+                 <button type="submit" class="btn btn-success">Submit</button> 
+              </form>
                     <a href="#" class="btn btn-primary">Print</a>
                 </div>
 
