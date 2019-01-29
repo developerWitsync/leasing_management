@@ -73,13 +73,13 @@ class ReviewSubmitController extends Controller
   {
     if ($request->isMethod('post')) {
 
-                $model = Lease::query()->where('id', '=', $id)->first();
-                $model->status = "1";
-                $model->save();
-                // complete Step
-                confirmSteps($id, 'step18');
-                return redirect(route('addlease.reviewsubmit.index', ['id' => $id]))->with('status', 'Lease Information has been Submitted successfully.');
-     }
+        $model = Lease::query()->where('id', '=', $id)->first();
+        $model->status = "1";
+        $model->save();
+        // complete Step
+        confirmSteps($id, 'step18');
+        return redirect(route('addlease.reviewsubmit.index', ['id' => $id]))->with('status', 'Lease Information has been Submitted successfully.');
+    }
 
   }
 }
