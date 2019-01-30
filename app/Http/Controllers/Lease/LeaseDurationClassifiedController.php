@@ -55,9 +55,7 @@ class LeaseDurationClassifiedController extends Controller
             })->get();
             
             if (count($assets) > 0) {
-                if (!checkPreviousSteps($id, 'step6')) {
-                    return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
-                }
+               
                 $back_button = route('addlease.leaseterminationoption.index', ['id' => $lease->id]);
             }
             return view('lease.lease-duration-classified.index', compact('breadcrumbs',

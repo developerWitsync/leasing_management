@@ -42,9 +42,6 @@ class PurchaseOptionController extends Controller
      */
     public function index($id, Request $request)
     {
-        if (!checkPreviousSteps($id, 'step7')) {
-            return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
-        }
         $breadcrumbs = [
             [
                 'link' => route('add-new-lease.index'),
@@ -62,14 +59,6 @@ class PurchaseOptionController extends Controller
                 $query->where('exercise_termination_option_available', '=', 'no');
             })->get();
 
-            if(count($assets) > 0) {
-                 if(!checkPreviousSteps($id,'step7')){
-                 return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
-                }
-            }
-            else{
-                return redirect(route('addlease.durationclassified.index', ['id' => $id]));
-             }
 
             return view('lease.purchase-option.index', compact('breadcrumbs',
                 'lease',
@@ -135,9 +124,7 @@ class PurchaseOptionController extends Controller
                     if ($purchase_option) {
 
                         // complete Step
-                        $lease_id = $lease->id;
-                        $step = 'step8';
-                        $complete_step8 = confirmSteps($lease_id, $step);
+                        $complete_step8 = confirmSteps($lease->id, 'step8');
 
                         return redirect(route('addlease.purchaseoption.index', ['id' => $lease->id]))->with('status', 'Lease Termination Option Details has been added successfully.');
                     }

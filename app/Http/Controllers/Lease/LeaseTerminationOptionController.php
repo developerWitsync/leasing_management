@@ -49,10 +49,7 @@ class LeaseTerminationOptionController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id){
-        if(!checkPreviousSteps($id,'step5')){
-           return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
-        }
-         $breadcrumbs = [
+        $breadcrumbs = [
             [
                 'link' => route('add-new-lease.index'),
                 'title' => 'Add New Lease'
@@ -109,9 +106,7 @@ class LeaseTerminationOptionController extends Controller
                     if($lease_termination_option){
 
                          // complete Step
-                        $lease_id = $lease->id;
-                        $step= 'step6';
-                        $complete_step6 = confirmSteps($lease_id,$step);
+                        $complete_step6 = confirmSteps($lease->id,'step6');
 
                         return redirect(route('addlease.leaseterminationoption.index',['id' => $lease->id]))->with('status', 'Lease Termination Option Details has been added successfully.');
                     }

@@ -30,12 +30,6 @@ class ReviewSubmitController extends Controller
      */
     public function index($id, Request $request)
     {
-
-        if (!checkPreviousSteps($id, 'step17')) {
-            //check lease incentives
-            return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
-        }
-
         $breadcrumbs = [
             [
                 'link' => route('add-new-lease.index'),

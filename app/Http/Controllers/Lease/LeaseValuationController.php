@@ -32,10 +32,7 @@ class LeaseValuationController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id){
-        if(!checkPreviousSteps($id,'step15')){
-               return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
-        }
-        $breadcrumbs = [
+       $breadcrumbs = [
             [
                 'link' => route('add-new-lease.index'),
                 'title' => 'Add New Lease'

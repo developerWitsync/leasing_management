@@ -42,9 +42,6 @@ class LeaseIncentivesController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id){
-        if(!checkPreviousSteps($id,'step14')){
-                return  redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
-        }
         $breadcrumbs = [
             [
                 'link' => route('add-new-lease.index'),

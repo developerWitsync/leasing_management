@@ -216,10 +216,7 @@ class UnderlyingLeaseAssetController extends Controller
                     $asset->save();
 
                     // make the entry to the completed steps table so that the log can be created to check the completed steps
-                    $lease_id = $lease_id;
-                    $step   = 'step2';
-                    confirmSteps($lease_id,$step);
-
+                    confirmSteps($lease_id,'step2');
                     
                     return redirect(
                         route('addlease.leaseasset.index', ['id' => $lease->id,'total_assets' => count($lease->assets)])

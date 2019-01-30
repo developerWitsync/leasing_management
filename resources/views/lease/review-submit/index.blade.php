@@ -423,7 +423,7 @@
                                 @else
                                     <td>-</td>
                                 @endif
-                                @if($asset->leaseDurationClassified->getLeaseClassification->title)
+                                @if(isset($asset->leaseDurationClassified->getLeaseClassification->title))
                                     <td>
                                         {{ $asset->leaseDurationClassified->getLeaseClassification->title}}
                                     </td>
