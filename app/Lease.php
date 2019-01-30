@@ -36,5 +36,8 @@ class Lease extends Model
         return $this->hasMany('App\LeasePaymentInvoice','lease_id', 'id');
     }
 
+    public function modifyLeaseApplication(){
+        return $this->hasMany('App\ModifyLeaseApplication', 'lease_id', 'id');
+    }
 
 }

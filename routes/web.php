@@ -62,7 +62,7 @@ Route::middleware('auth')->group(function(){
          * Fair Market Value Routes NL4
          */
         Route::prefix('fair-market-value')->group(function(){
-            Route::get('index/{id}', ['as' => 'addlease.fairmarketvalue.index', 'uses' => 'FairMarketValueController@index'])->middleware('checkpreviousdata:step3');
+            Route::get('index/{id}', ['as' => 'addlease.fairmarketvalue.index', 'uses' => 'FairMarketValueController@index'])->middleware('checkpreviousdata:step3, id');
             Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.fairmarketvalue.create', 'uses' => 'FairMarketValueController@create']);
             Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.fairmarketvalue.update', 'uses' => 'FairMarketValueController@update']);
         });
@@ -203,7 +203,7 @@ Route::middleware('auth')->group(function(){
          */
         Route::prefix('review-submit')->group(function(){
             Route::match(['post', 'get'], 'index/{id}', ['as' => 'addlease.reviewsubmit.index', 'uses' => 'ReviewSubmitController@index']);
-             Route::match(['post', 'get'], 'submit/{id}', ['as' => 'addlease.reviewsubmit.submit', 'uses' => 'ReviewSubmitController@submit']);
+            Route::match(['post', 'get'], 'submit/{id}', ['as' => 'addlease.reviewsubmit.submit', 'uses' => 'ReviewSubmitController@submit']);
         });
 
     });
@@ -223,8 +223,8 @@ Route::middleware('auth')->group(function(){
     */
 
     Route::namespace('Modifylease')->prefix('modify-lease')->group(function(){
-         Route::get('/', ['as' => 'modifylease.index', 'uses' => 'ModifyLeaseController@index']);
-         Route::get('fetch-lease-details', ['as' => 'modifylease.fetchleasedetails', 'uses' => 'ModifyLeaseController@fetchLeaseDetails']);
+        Route::get('/', ['as' => 'modifylease.index', 'uses' => 'ModifyLeaseController@index']);
+        Route::get('fetch-lease-details', ['as' => 'modifylease.fetchleasedetails', 'uses' => 'ModifyLeaseController@fetchLeaseDetails']);
         Route::match(['post', 'get'], 'create/{id}', ['as' => 'modifylease.create', 'uses' => 'ModifyLeaseController@create']);
         Route::match(['post', 'get'], 'update/{id}', ['as' => 'modifylease.update', 'uses' => 'ModifyLeaseController@update']);
     });

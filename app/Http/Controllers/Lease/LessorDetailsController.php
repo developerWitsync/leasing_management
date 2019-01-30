@@ -52,16 +52,20 @@ class LessorDetailsController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id = null, Request $request ){
-      
+
+        $subsequent_modify_required = false;
         if($id) {
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $request->id)->first();
             if(is_null($lease)) {
                 abort(404);
             }
+
+            //check if the Subsequent Valuation is applied for the lease modification
+            $modify_lease_data = $lease->modifyLeaseApplication->last();
+            $subsequent_modify_required = ($modify_lease_data && $modify_lease_data->valuation == "Subsequent Valuation");
         } else {
             $lease = new Lease();
         }
-    
        
         $contract_classifications = ContractClassifications::query()->select('id', 'title')->where('status', '=', '1')->get();
         $currencies = Currencies::query()->where('status', '=', '1')->get();
@@ -71,7 +75,15 @@ class LessorDetailsController extends Controller
             $reporting_currency_settings = new ReportingCurrencySettings();
         }
         $breadcrumbs = $this->breadcrumbs;
-        return view('lease.lessor-details.index', compact('breadcrumbs','contract_classifications','currencies','reporting_currency_settings','reporting_foreign_currency_transaction_settings','lease'));
+        return view('lease.lessor-details.index', compact(
+            'breadcrumbs',
+            'contract_classifications',
+            'currencies',
+            'reporting_currency_settings',
+            'reporting_foreign_currency_transaction_settings',
+            'lease',
+            'subsequent_modify_required'
+        ));
     }
 
     /**
@@ -108,9 +120,7 @@ class LessorDetailsController extends Controller
             $lease = Lease::create($data);
            
             if($lease) {
-                 $lease_id = $lease->id;
-                 $step= 'step1';
-                 $complete_step1 = confirmSteps($lease_id,$step);
+                 confirmSteps($lease->id,'step1');
 
                 if($request->has('action') && $request->action == "next") {
                     return redirect(route('addlease.leaseasset.index', ['id'=>$lease->id]))->with('status', 'Lessor Details has been updated successfully.');

@@ -34,7 +34,7 @@ class UnderlyingLeaseAssetController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id, Request $request){
-            $breadcrumbs = [
+        $breadcrumbs = [
             [
                 'link' => route('add-new-lease.index'),
                 'title' => 'Add New Lease'
@@ -245,11 +245,10 @@ class UnderlyingLeaseAssetController extends Controller
                     'breadcrumbs'
                 ));
             } else {
-                dd('ds');
                 abort(404);
             }
         } catch (\Exception $e) {
-            dd($e);
+            abort(404);
         }
     }
 

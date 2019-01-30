@@ -33,4 +33,5 @@ return [
         10,
         25
     ],
+    'date_format' => 'd-M-Y'
 ];
