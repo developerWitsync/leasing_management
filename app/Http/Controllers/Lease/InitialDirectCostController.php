@@ -43,7 +43,6 @@ class InitialDirectCostController extends Controller
      */
     public function index($id, Request $request)
     {
-
         $breadcrumbs = [
             [
                 'link' => route('add-new-lease.index'),
@@ -58,11 +57,7 @@ class InitialDirectCostController extends Controller
         if ($lease) {
             //Load the assets only lease start on or after jan 01 2019
             $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '>=', '2019-01-01')->get();
-            if (count($assets) > 0) {
-                if(!checkPreviousSteps($id,'step13')){
-                     return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
-                 }
-            }
+            
             return view('lease.initial-direct-cost.index', compact(
                 'assets',
                 'breadcrumbs',

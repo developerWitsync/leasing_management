@@ -48,12 +48,7 @@ class FairMarketValueController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id, Request $request){
-
-            if(!checkPreviousSteps($id,'step3')){
-               return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
-            }
-
-            $breadcrumbs = [
+                $breadcrumbs = [
                 [
                     'link' => route('add-new-lease.index'),
                     'title' => 'Add New Lease'
@@ -85,8 +80,7 @@ class FairMarketValueController extends Controller
             $lease = $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
             if($lease) {
 
-
-                $model = FairMarketValue::query()->where('asset_id', '=', $id)->first();
+            $model = FairMarketValue::query()->where('asset_id', '=', $id)->first();
                 $model = new FairMarketValue();
 
                 if($request->isMethod('post')) {
@@ -112,9 +106,7 @@ class FairMarketValueController extends Controller
                     if($market_value){
 
                         // complete Step
-                        $lease_id = $lease->id;
-                        $step= 'step4';
-                        $complete_step4 = confirmSteps($lease_id,$step);
+                         $complete_step4 = confirmSteps($lease->id,'step4');
 
                         return redirect(route('addlease.fairmarketvalue.index',['id' => $lease->id]))->with('status', 'Fair Market has been added successfully.');
                     }

@@ -32,10 +32,7 @@ class EscalationController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id){
-        if(!checkPreviousSteps($id,'step9')){
-                return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
-        }
-        try{
+       try{
 
             $breadcrumbs = [
                 [
@@ -69,13 +66,11 @@ class EscalationController extends Controller
                         }
                     }
                 }
-
                 if($lease->escalation_clause_applicable == "yes") {
                     if($required_escalations == $completed_escalations){
                         $show_next = true;
                     }
                 }
-
 
                 return view('lease.escalation.index', compact(
                     'lease',

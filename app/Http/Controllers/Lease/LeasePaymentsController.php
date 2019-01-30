@@ -61,11 +61,6 @@ class LeasePaymentsController extends Controller
      */
     public function index($id)
     {
-
-//        if (!checkPreviousSteps($id, 'step2')) {
-//            return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
-//        }
-
         $breadcrumbs = [
             [
                 'link' => route('add-new-lease.index'),

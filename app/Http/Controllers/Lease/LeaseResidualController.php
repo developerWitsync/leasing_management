@@ -53,9 +53,6 @@ class LeaseResidualController extends Controller
      */
     public function index($id, Request $request)
     {
-        if (!checkPreviousSteps($id, 'step4')) {
-            return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
-        }
         $breadcrumbs = [
             [
                 'link' => route('add-new-lease.index'),
@@ -67,13 +64,15 @@ class LeaseResidualController extends Controller
             ],
         ];
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->with('leaseType')->with('assets')->first();
+
         if ($lease) {
             return view('lease.residual-value-gurantee.index', compact(
                 'breadcrumbs',
                 'lease'
             ));
         } else {
-            abort(404);
+             dd('hi');
+            //abort(404);
         }
     }
 
@@ -134,9 +133,7 @@ class LeaseResidualController extends Controller
 
                     if ($residual_value) {
                         // complete Step
-                        $lease_id = $lease->id;
-                        $step = 'step5';
-                        $complete_step5 = confirmSteps($lease_id, $step);
+                        $complete_step5 = confirmSteps($lease->id, 'step5');
 
                         return redirect(route('addlease.residual.index', ['id' => $lease->id]))->with('status', 'Residual value Gurantee has been added successfully.');
                     }

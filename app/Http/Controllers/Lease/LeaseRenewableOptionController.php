@@ -33,11 +33,6 @@ class LeaseRenewableOptionController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id){
-
-        if(!checkPreviousSteps($id,'step6')){
-             return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
-        }
-
         $breadcrumbs = [
             [
                 'link' => route('add-new-lease.index'),
@@ -58,13 +53,11 @@ class LeaseRenewableOptionController extends Controller
             })->get();
        
             if(count($assets) > 0) {
-                 if(!checkPreviousSteps($id,'step6')){
-                 return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
-                }
-             }
-             else{
+                
+            }
+            else{
                 return redirect(route('addlease.durationclassified.index', ['id' => $id]));
-             }
+            }
            
 
             return view('lease.lease-renewable-option.index', compact(
@@ -124,9 +117,7 @@ class LeaseRenewableOptionController extends Controller
                     if($renewable_value){
 
                          // complete Step
-                        $lease_id = $lease->id;
-                        $step= 'step7';
-                        $complete_step7 = confirmSteps($lease_id,$step);
+                         $complete_step7 = confirmSteps($lease->id,'step7');
                         
                         return redirect(route('addlease.renewable.index',['id' => $lease->id]))->with('status', 'Renewable Option has been added successfully.');
                     }

@@ -30,12 +30,6 @@ class ReviewSubmitController extends Controller
      */
     public function index($id, Request $request)
     {
-
-        if (!checkPreviousSteps($id, 'step17')) {
-            //check lease incentives
-            return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
-        }
-
         $breadcrumbs = [
             [
                 'link' => route('add-new-lease.index'),
@@ -73,13 +67,13 @@ class ReviewSubmitController extends Controller
   {
     if ($request->isMethod('post')) {
 
-                $model = Lease::query()->where('id', '=', $id)->first();
-                $model->status = "1";
-                $model->save();
-                // complete Step
-                confirmSteps($id, 'step18');
-                return redirect(route('addlease.reviewsubmit.index', ['id' => $id]))->with('status', 'Lease Information has been Submitted successfully.');
-     }
+        $model = Lease::query()->where('id', '=', $id)->first();
+        $model->status = "1";
+        $model->save();
+        // complete Step
+        confirmSteps($id, 'step18');
+        return redirect(route('addlease.reviewsubmit.index', ['id' => $id]))->with('status', 'Lease Information has been Submitted successfully.');
+    }
 
   }
 }

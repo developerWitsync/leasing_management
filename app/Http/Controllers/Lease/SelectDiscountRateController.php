@@ -127,9 +127,7 @@ class SelectDiscountRateController extends Controller
                     if($select_discount_value){
 
                         // complete Step
-                        $lease_id = $asset->lease->id;
-                        $step= 'step12';
-                        $complete_step12 = confirmSteps($lease_id,$step);
+                       $complete_step12 = confirmSteps($asset->lease->id,'step12');
 
                         return redirect(route('addlease.discountrate.index',['id' => $lease->id]))->with('status', 'Select Discount Rate has been added successfully.');
                     }
