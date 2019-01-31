@@ -40,7 +40,7 @@
                             <div class="form-group{{ $errors->has('country_id') ? ' has-error' : '' }} required">
                                 <label for="country" class="col-lg-4 col-md-6 control-label">Country</label>
                                 <div class="col-lg-4 col-md-6">
-                                    <select name="country_id" class="form-control">
+                                    <select name="country_id" class="form-control" @if($subsequent_modify_required) disabled="disabled" @endif>
                                         <option value="">--Select Country--</option>
                                         @foreach($countries as $country)
                                             <option value="{{ $country->id }}" @if(old('country_id', $asset->country_id) == $country->id) selected="selected" @endif>{{ $country->name }}</option>
@@ -52,6 +52,11 @@
                                             <strong>{{ $errors->first('country_id') }}</strong>
                                         </span>
                                     @endif
+
+                                    @if($subsequent_modify_required)
+                                        <input type="hidden" name="country_id"  value="{{ $asset->country_id }}"/>
+                                    @endif
+
                                 </div>
                             </div>
 
@@ -137,11 +142,15 @@
                             <div class="form-group{{ $errors->has('lease_start_date') ? ' has-error' : '' }} required">
                                 <label for="lease_start_date" class="col-lg-4 col-md-6 control-label">Lease Start Date</label>
                                 <div class="col-lg-4 col-md-6">
-                                    <input id="lease_start_date" type="text" placeholder="Lease Start Date" class="form-control" name="lease_start_date" value="{{ old('lease_start_date', ($asset->lease_start_date)?(\Carbon\Carbon::parse($asset->lease_start_date)->format('d-M-Y')):'') }}" autocomplete="off">
+                                    <input id="lease_start_date" type="text" placeholder="Lease Start Date" class="form-control" name="lease_start_date" value="{{ old('lease_start_date', ($asset->lease_start_date)?(\Carbon\Carbon::parse($asset->lease_start_date)->format(config('settings.date_format'))):'') }}" autocomplete="off" @if($subsequent_modify_required) disabled="disabled" @endif>
                                     @if ($errors->has('lease_start_date'))
                                         <span class="help-block">
                                             <strong>{{ $errors->first('lease_start_date') }}</strong>
                                         </span>
+                                    @endif
+
+                                    @if($subsequent_modify_required)
+                                        <input type="hidden" name="lease_start_date" value="{{ \Carbon\Carbon::parse($asset->lease_start_date)->format(config('settings.date_format')) }}" />
                                     @endif
                                 </div>
                             </div>
@@ -149,11 +158,14 @@
                             <div class="form-group{{ $errors->has('lease_free_period') ? ' has-error' : '' }} required">
                                 <label for="lease_free_period" class="col-lg-4 col-md-6 control-label">Initial Lease Free Period, If any(In Days)</label>
                                 <div class="col-lg-4 col-md-6">
-                                    <input id="lease_free_period" type="text" placeholder="Number of Days" class="form-control" name="lease_free_period" value="{{ old('lease_free_period', $asset->lease_free_period) }}" >
+                                    <input id="lease_free_period" type="text" placeholder="Number of Days" class="form-control" name="lease_free_period" value="{{ old('lease_free_period', $asset->lease_free_period) }}" @if($subsequent_modify_required) disabled="disabled" @endif>
                                     @if ($errors->has('lease_free_period'))
                                         <span class="help-block">
                                             <strong>{{ $errors->first('lease_free_period') }}</strong>
                                         </span>
+                                    @endif
+                                    @if($subsequent_modify_required)
+                                        <input type="hidden" name="lease_free_period" value="{{ $asset->lease_free_period }}" />
                                     @endif
                                 </div>
                             </div>
@@ -161,12 +173,17 @@
                             <div class="form-group{{ $errors->has('accural_period') ? ' has-error' : '' }} required">
                                 <label for="accural_period" class="col-lg-4 col-md-6 control-label">Start Date of Lease Payment / Accrual Period</label>
                                 <div class="col-lg-4 col-md-6">
-                                    <input id="accural_period" type="text" placeholder="Start Date of Lease Payment / Accrual Period" class="form-control" name="accural_period" value="{{ old('accural_period',($asset->accural_period)?(\Carbon\Carbon::parse($asset->accural_period)->format('d-M-Y')):'') }}" readonly="readonly" style="pointer-events: none">
+                                    <input id="accural_period" type="text" placeholder="Start Date of Lease Payment / Accrual Period" class="form-control" name="accural_period" value="{{ old('accural_period',($asset->accural_period)?(\Carbon\Carbon::parse($asset->accural_period)->format(config('settings.date_format'))):'') }}" readonly="readonly" style="pointer-events: none" @if($subsequent_modify_required) disabled="disabled" @endif>
                                     @if ($errors->has('accural_period'))
                                         <span class="help-block">
                                             <strong>{{ $errors->first('accural_period') }}</strong>
                                         </span>
                                     @endif
+
+                                    @if($subsequent_modify_required)
+                                        <input type="hidden" name="accural_period" value="{{ \Carbon\Carbon::parse($asset->accural_period)->format(config('settings.date_format')) }}" />
+                                    @endif
+
                                 </div>
                             </div>
 
@@ -201,7 +218,7 @@
                             <div class="form-group{{ $errors->has('accounting_treatment') ? ' has-error' : '' }} required">
                                 <label for="accounting_treatment" class="col-lg-4 col-md-6 control-label">Lease Asset Accounting Treatment Followed Upto 2018</label>
                                 <div class="col-lg-4 col-md-6">
-                                    <select name="accounting_treatment" class="form-control" id="accounting_treatment">
+                                    <select name="accounting_treatment" class="form-control" id="accounting_treatment" @if($subsequent_modify_required) disabled="disabled" @endif>
                                         <option value="">--Lease Accounting Treatment--</option>
                                             @foreach($accounting_terms as $accounting_term)
                                                 <option value="{{ $accounting_term['id']}}" @if(old('accounting_treatment', $asset->accounting_treatment) == $accounting_term['id']) selected="selected" @endif>{{ $accounting_term['title'] }}</option>
@@ -213,6 +230,12 @@
                                             <strong>{{ $errors->first('accounting_treatment') }}</strong>
                                         </span>
                                     @endif
+
+
+                                    @if($subsequent_modify_required)
+                                        <input type="hidden" name="accounting_treatment" value="{{ $asset->accounting_treatment }}"/>
+                                    @endif
+
                                 </div>
                             </div>
 

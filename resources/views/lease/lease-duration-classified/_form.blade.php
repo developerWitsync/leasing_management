@@ -5,7 +5,7 @@
         <label for="name" class="col-md-4 control-label">Lease Start Date</label>
         <div class="col-md-6 form-check form-check-inline" required>
             <input class="form-control" name="lease_start_date" id="lease_start_date" type="text" autocomplete="off"
-                   value="{{old('lease_start_date', $asset->lease_start_date)}}" readonly="off">
+                   value="{{ \Carbon\Carbon::parse(old('lease_start_date', $asset->lease_start_date))->format(config('settings.date_format'))}}" readonly="off">
             @if ($errors->has('lease_start_date'))
                 <span class="help-block">
                     <strong>{{ $errors->first('lease_start_date') }}</strong>
@@ -17,7 +17,7 @@
         <label for="name" class="col-md-4 control-label">Lease End Date</label>
         <div class="col-md-6 form-check form-check-inline" required>
             <input class="form-control" name="lease_end_date" id="lease_end_date" type="text" autocomplete="off"
-                   value="{{old('lease_end_date', $model->lease_end_date)}}" readonly="off">
+                   value="{{ \Carbon\Carbon::parse(old('lease_end_date', $model->lease_end_date))->format(config('settings.date_format'))}}" readonly="off">
             @if ($errors->has('lease_end_date'))
                 <span class="help-block">
                     <strong>{{ $errors->first('lease_end_date') }}</strong>

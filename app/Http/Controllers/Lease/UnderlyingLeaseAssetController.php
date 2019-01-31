@@ -156,6 +156,9 @@ class UnderlyingLeaseAssetController extends Controller
                 ->with('assets')
                 ->first();
 
+            //check if the Subsequent Valuation is applied for the lease modification
+            $subsequent_modify_required = $lease->isSubsequentModification();
+
             $asset = LeaseAssets::query()->where('lease_id', '=', $lease_id)->where('id', '=', $asset_id)->first();
             if($lease && $asset) {
                 if($request->isMethod('post')) {
@@ -179,10 +182,10 @@ class UnderlyingLeaseAssetController extends Controller
                         'specific_use'  => 'required|exists:lease_asset_use_master,id',
                         'use_of_asset'  => 'required_if:specific_use,1',
                         'expected_life' => 'required|exists:expected_useful_life_of_asset,id',
-                        'lease_start_date' => 'required|date',
+                        'lease_start_date' => 'required|date|date_format:d-M-Y',
                         'lease_free_period' => 'numeric',
-                        'accural_period'    => 'required|date',
-                        'lease_end_date'    => 'required|date|after:accural_period',
+                        'accural_period'    => 'required|date|date_format:d-M-Y',
+                        'lease_end_date'    => 'required|date|date_format:d-M-Y|after:accural_period',
                         'lease_term'        => 'required',
                         'accounting_treatment' => 'required_if_prior_to_date:'.$request->accural_period,
                     ];
@@ -201,20 +204,20 @@ class UnderlyingLeaseAssetController extends Controller
                         'lease_end_date.date'          =>   'The Lease End Date field must be a valid date.',
                         'accounting_treatment.required_if_prior_to_date'   => 'The accounting period is required when Start Date of Lease Payment / Accrual Period is prior to Jan 01, 2019.'
                     ];
+
                     if(date('Y-m-d',strtotime($request->accural_period)) < date('Y-m-d', strtotime('2019-01-01'))){
                         $rules['using_lease_payment'] = 'required';
                     }
+
                     $validator = Validator::make($request->except('_token'),$rules, $messages);
 
-                    if($validator->fails()) {
-                      
+                    if($validator->fails()) {  
                         return redirect()->back()->withErrors($validator->errors())->withInput($request->except('_token'));
                     }
-
                     $data = $request->except('_token');
-                    $data['lease_start_date'] = date('Y-m-d', strtotime($request->lease_start_date));
-                    $data['accural_period'] = date('Y-m-d', strtotime($request->accural_period));
                     $data['lease_end_date'] = date('Y-m-d', strtotime($request->lease_end_date));
+                    $data['accural_period'] = date('Y-m-d', strtotime($request->accural_period));
+                    $data['lease_start_date'] = date('Y-m-d', strtotime($request->lease_start_date));
                     $data['is_details_completed']  = '1';
                     $asset->setRawAttributes($data);
                     $asset->save();
@@ -243,7 +246,8 @@ class UnderlyingLeaseAssetController extends Controller
                     'expected_life_of_assets',
                     'accounting_terms',
                     'settings',
-                    'breadcrumbs'
+                    'breadcrumbs',
+                    'subsequent_modify_required'
                 ));
             } else {
                 abort(404);

@@ -54,7 +54,7 @@
                                     <td>
                                         {{ $asset->subcategory->title }}
                                     </td>
-                                    <td>{{ $asset->lease_start_date}}</td>
+                                    <td>{{ \Carbon\Carbon::parse($asset->lease_start_date)->format(config('settings.date_format'))}}</td>
                                     <td>
                                         @if($asset->leaseDurationClassified)
                                             @php

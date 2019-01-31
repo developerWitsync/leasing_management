@@ -32,6 +32,9 @@ class CheckPreviousData
             if($lease->assets->count() == 0){
                 abort(403, config('settings.complete_previous_steps_error_message'));
             }
+            if($lease->status == 1){
+                abort(403, config('settings.lease_already_submitted'));
+            }
         }
 
         if($step == 'step8') {
