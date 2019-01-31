@@ -10,6 +10,7 @@ class LeaseAssetCategories extends Model
 
     protected $fillable = [
         'title',
+        'is_capitalized',
         'status',
         'created_at',
         'updated_at'

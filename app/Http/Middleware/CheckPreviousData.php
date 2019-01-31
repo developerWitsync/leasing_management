@@ -15,6 +15,7 @@ class CheckPreviousData
      */
     public function handle($request, Closure $next , $step, $param_type, $param)
     {
+     // dd($step);
         if($param_type =='asset_id'){
 
             $asset_id = $request->route($param);

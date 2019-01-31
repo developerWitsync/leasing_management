@@ -242,7 +242,6 @@ class UnderlyingLeaseAssetController extends Controller
                     'breadcrumbs'
                 ));
             } else {
-                dd('ds');
                 abort(404);
             }
         } catch (\Exception $e) {

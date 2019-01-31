@@ -234,6 +234,23 @@ Route::middleware('auth')->group(function(){
         Route::match(['post', 'get'], 'update/{id}', ['as' => 'modifylease.update', 'uses' => 'ModifyLeaseController@update']);
     });
 
+    /*
+    * Lease Valuation Routes
+    */
+
+    Route::namespace('Leasevaluation')->prefix('lease-valuation')->group(function(){
+
+         Route::prefix('capitalized')->group(function(){
+           
+            Route::get('/', ['as' => 'leasevaluation.index', 'uses' => 'LeaseValuationController@index']);
+        });
+         Route::prefix('noncapitalized')->group(function(){
+
+         Route::get('/', ['as' => 'leasevaluation.noncapitalized', 'uses' => 'LeaseValuationController@noncapitalized']);
+        });
+       
+    });
+
 
     Route::namespace('Settings')->middleware(['permission:settings'])->prefix('settings')->group(function(){
 
