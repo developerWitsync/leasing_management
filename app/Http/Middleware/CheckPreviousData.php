@@ -29,7 +29,9 @@ class CheckPreviousData
 
         if ($lease_id) {
             $lease = Lease::query()->findOrFail($lease_id);
-            if($lease->assets->count() == 0){abort(403);}
+            if($lease->assets->count() == 0){
+                abort(403, config('settings.complete_previous_steps_error_message'));
+            }
         }
 
         if($step == 'step8') {
@@ -164,7 +166,7 @@ class CheckPreviousData
         \Log::info('Checking ----- '. $step. ' On URL ------- '. $request->route()->getName());
 
         if(!$this->verifyStep($step, $lease_id)){
-            abort(403);
+            abort(403, config('settings.complete_previous_steps_error_message'));
         }
 
         return $next($request);
