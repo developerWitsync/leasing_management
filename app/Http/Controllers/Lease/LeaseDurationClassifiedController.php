@@ -55,14 +55,15 @@ class LeaseDurationClassifiedController extends Controller
             })->get();
             
             if (count($assets) > 0) {
-               
                 $back_button = route('addlease.leaseterminationoption.index', ['id' => $lease->id]);
             }
+
             return view('lease.lease-duration-classified.index', compact('breadcrumbs',
                 'lease',
                 'back_button',
                 'breadcrumbs'
             ));
+
         } else {
             abort(404);
         }

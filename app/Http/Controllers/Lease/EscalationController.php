@@ -57,6 +57,7 @@ class EscalationController extends Controller
                 $required_escalations = 0;
                 $completed_escalations = 0;
                 if($lease->escalation_clause_applicable == "no") {
+                    confirmSteps($lease->id,'step10');
                     $show_next = true;
                 } else {
                     foreach ($payments as $payment){
@@ -105,6 +106,12 @@ class EscalationController extends Controller
                 }
 
                 $lease->escalation_clause_applicable = $request->escalation_clause_applicable;
+
+                if($request->escalation_clause_applicable == "no"){
+                    confirmSteps($lease->id,'step10');
+                } else {
+                    \App\LeaseCompletedSteps::query()->where('lease_id', '=',$lease->id)->where('completed_step', '=', 'step10')->delete();
+                }
 
                 if($lease->save()){
                     return redirect()->back()->with('status', 'Escalation Clause has been saved. Please proceed further and provide the details for the escalations.');
@@ -244,9 +251,7 @@ class EscalationController extends Controller
                             }
                         }
                         // complete Step
-                        $lease_id = $lease->id;
-                        $step = 'step10';
-                        confirmSteps($lease_id,$step);
+                        confirmSteps($lease->id,'step10');
 
                         return redirect()->back()->with('status', 'Escalation Details has been saved sucessfully.');
                     }
@@ -292,7 +297,7 @@ class EscalationController extends Controller
                 abort(404);
             }
         } catch (\Exception $e) {
-            dd($e);
+            abort(404);
         }
     }
 

@@ -61,8 +61,7 @@ class LessorDetailsController extends Controller
             }
 
             //check if the Subsequent Valuation is applied for the lease modification
-            $modify_lease_data = $lease->modifyLeaseApplication->last();
-            $subsequent_modify_required = ($modify_lease_data && $modify_lease_data->valuation == "Subsequent Valuation");
+            $subsequent_modify_required = $lease->isSubsequentModification();
         } else {
             $lease = new Lease();
         }

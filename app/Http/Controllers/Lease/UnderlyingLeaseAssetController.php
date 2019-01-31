@@ -49,6 +49,9 @@ class UnderlyingLeaseAssetController extends Controller
          
         if($lease) {
 
+            //check if the Subsequent Valuation is applied for the lease modification
+            $subsequent_modify_required = $lease->isSubsequentModification();
+
             $lease_assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->get()->toArray();
 
             if($request->isMethod('post')) {
@@ -119,7 +122,8 @@ class UnderlyingLeaseAssetController extends Controller
                 'numbers_of_lease_assets',
                 'lease_assets_categories',
                 'la_similar_charac_number',
-                'lease_assets'
+                'lease_assets',
+                'subsequent_modify_required'
             ));
         } else {
             abort(404);
