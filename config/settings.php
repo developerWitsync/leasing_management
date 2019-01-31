@@ -33,4 +33,6 @@ return [
         10,
         25
     ],
+    'date_format' => 'd-M-Y',
+    'complete_previous_steps_error_message' => "You haven't completed the previos steps for the lease, please complete the previous steps first."
 ];

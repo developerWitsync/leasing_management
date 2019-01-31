@@ -18,18 +18,12 @@ use Validator;
 
 class ModifyLeaseController extends Controller
 {
-     protected function validationRules(){
-        return [
-            'valuation'   => 'required',
-            'effective_from' => 'required_if:valuation,Subsequent Valuation',
-            'reason'   => 'required'
-        ];
-    }
-	/**
+    /**
      * Render the table for all the leases
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index(){
+    public function index()
+    {
         return view('modifylease.index');
     }
 
@@ -39,61 +33,78 @@ class ModifyLeaseController extends Controller
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
 
-    public function fetchLeaseDetails(Request $request){
-        try{
+    public function fetchLeaseDetails(Request $request)
+    {
+        try {
             if ($request->ajax()) {
-              return datatables()->eloquent(Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('status', '=', '1')->with('leaseType'))->toJson();
+                return datatables()->eloquent(Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('status', '=', '1')->with('leaseType'))->toJson();
             } else {
                 return redirect()->back();
             }
         } catch (\Exception $e) {
-            dd($e);
+            abort(404);
         }
     }
-     /**
+
+    /**
      * Create  modify lease application
      * @param $id
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function create($id, Request $request){
-        try{
+    public function create($id, Request $request)
+    {
+        try {
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
-             
+
             $lase_modification = LeaseModificationReason::query()->get();
-            if($lease) {
+            if ($lease) {
 
                 $model = Lease::query()->where('id', '=', $id)->first();
-                
 
-                if($request->isMethod('post')) {
+
+                if ($request->isMethod('post')) {
                     $validator = Validator::make($request->except('_token'), $this->validationRules());
 
-                    if($validator->fails()){
+                    if ($validator->fails()) {
                         return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
                     }
 
                     $data = $request->except('_token');
-                    $data['lease_id']   = $id;
-                   if($request->effective_from)
-                   {
-                     $data['effective_from'] = date('Y-m-d', strtotime($request->effective_from));
-                   }
-                    $modify_lease = ModifyLeaseApplication::create($data);
 
+                    $data['lease_id'] = $id;
+
+                    if ($request->effective_from) {
+                        $data['effective_from'] = date('Y-m-d', strtotime($request->effective_from));
+                    }
+
+                    $data['business_account_id'] = auth()->user()->id;
+
+                    ModifyLeaseApplication::create($data);
+
+                    //update the lease status back to 0 so that it will appear in the Drafts untill the user will submit the lease back
                     $data1['status'] = '0';
                     $model->setRawAttributes($data1);
                     $model->save();
 
-                    return redirect(route('modifylease.create',['id' => $id]))->with('status', 'Modify Lease has been Created successfully.');
-                    
+                    return redirect(route('modifylease.create', ['id' => $id]))->with('status', 'Modify Lease has been Created successfully.');
+
                 }
-                return view('modifylease.create',compact('lease','lase_modification'));
+                return view('modifylease.create', compact('lease', 'lase_modification'));
             } else {
                 abort(404);
             }
         } catch (\Exception $e) {
-           abort(404);
+            abort(404);
         }
     }
- }
+
+    protected function validationRules()
+    {
+        return [
+            'valuation' => 'required',
+            'effective_from' => 'required_if:valuation,Subsequent Valuation',
+            'reason' => 'required'
+        ];
+    }
+}

@@ -1,3 +1,4 @@
+
 <a href="/home" class="list-group-item @if(request()->segment('1') == 'home') active @endif"><i class="fa fa-dashboard"></i> <span>Dashboard</span>
 <small class="fa fa-angle-right" aria-hidden="true"></small>
 </a>
@@ -35,3 +36,5 @@
 <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="list-group-item"><i class="fa fa-sign-out"></i> <span>Logout</span>
 <small class="fa fa-angle-right" aria-hidden="true"></small>
 </a>
+
+

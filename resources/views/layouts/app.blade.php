@@ -95,7 +95,7 @@
                         @if(isset($breadcrumbs ))
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
-                                    {{--<li class="breadcrumb-item"><a href="/home">Dashboard</a></li>--}}
+                                        {{--<li class="breadcrumb-item"><a href="/home">Dashboard</a></li>--}}
                                         @foreach($breadcrumbs as $breadcrumb)
                                             <li class="breadcrumb-item"><a href="{{ $breadcrumb['link'] }}">{{ $breadcrumb['title'] }}</a></li>
                                         @endforeach

@@ -171,6 +171,17 @@ $(function(){
         $(this).children('i').toggleClass('fa-minus-square');
         $(this).parent('td').parent('tr').next('tr.sub_table').toggle('500');
     });
+
+    $('.sub-menu').on('click', function(){
+        $(this).next('ul').toggle('slideUp');
+    });
+
+    $('.treeview').each(function(){
+        if($(this).hasClass('active')){
+            $(this).children('.treeview-menu').show();
+        }
+    });
+
 });
 
 

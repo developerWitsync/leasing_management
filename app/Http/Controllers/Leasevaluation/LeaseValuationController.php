@@ -25,110 +25,180 @@ class LeaseValuationController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(Request $request){
-     // dd($request->all());
-         $leases = Lease::query()->whereIn('business_account_id', getDependentUserIds());
+       $leases = Lease::query()->whereIn('business_account_id', getDependentUserIds());
 
          if($request->has('id')) {
             $category_id = $request->id;
             $leases = $leases->whereHas('assets' , function($query) use ($category_id){
                 $query->where('category_id',$category_id);
             });
-             //dd($leases->category_id);
          }
+          $lease_id = $leases->get()->pluck('id')->toArray();
+          if($request->has('capitalized')) {
+                $capitalized = $request->capitalized;
+            }
+        if(count($lease_id)>0) {
 
-         //dd($leases->get());
-        if($leases) {
-            //Load the assets only which will  not in is_classify_under_low_value = Yes in NL10 (Lease Select Low Value)and will not in very short tem/short term lease in NL 8.1(lease_contract_duration table) and not in intengible under license arrangements and biological assets (lease asset categories)
-            //Capitalized Lease Assets
-            if(!$request->has('id')){
-               foreach ($leases as $key => $lease) {
-               $own_assets_capitalized = LeaseAssets::query()->where('lease_id', '=', $lease->id)
+         //Load the assets only which will  not in is_classify_under_low_value = Yes in NL10 (Lease Select Low Value)and will not in very short tem/short term lease in NL 8.1(lease_contract_duration table) and not in intengible under license arrangements and biological assets (lease asset categories)
+            
+           if(!$request->has('id') && !$request->has('capitalized')){
+            
+                $category_id = 'null';
+                $capitalized = 'null';
+                $own_assets_capitalized = LeaseAssets::query()->whereIn('lease_id', $lease_id)
                     ->where('specific_use',1)
                     ->whereHas('leaseSelectLowValue',  function($query){
-                    $query->where('is_classify_under_low_value', '=', 'no');
+                      $query->where('is_classify_under_low_value', '=', 'no');
                     })->whereHas('leaseDurationClassified',  function($query){
-                    $query->where('lease_contract_duration_id', '=', '3');
+                      $query->where('lease_contract_duration_id', '=', '3');
                     })->whereNotIn('category_id',[5,8])->get();
 
 
-                    $sublease_assets_capitalized = LeaseAssets::query()->where('lease_id', '=', $lease->id)
+                    $sublease_assets_capitalized = LeaseAssets::query()->whereIn('lease_id', $lease_id)
                     ->where('specific_use',2)
                     ->whereHas('leaseSelectLowValue',  function($query){
-                    $query->where('is_classify_under_low_value', '=', 'no');
+                      $query->where('is_classify_under_low_value', '=', 'no');
                     })->whereHas('leaseDurationClassified',  function($query){
-                    $query->where('lease_contract_duration_id', '=', '3');
+                      $query->where('lease_contract_duration_id', '=', '3');
                     })->whereNotIn('category_id',[5,8])->get(); 
-                }
+               
             }
-            else{
-
+        else{
                 $category_id = $request->id;
-                foreach ($leases as $key => $lease) {
-
-                    $own_assets_capitalized = LeaseAssets::query()->where('lease_id', '=', $lease->id)
+                $capitalized = $request->capitalized;
+                $own_assets_capitalized = LeaseAssets::query()->whereIn('lease_id', $lease_id)
                     ->where('specific_use',1)
                     ->where('category_id',$category_id)
                     ->whereHas('leaseSelectLowValue',  function($query){
-                    $query->where('is_classify_under_low_value', '=', 'no');
+                      $query->where('is_classify_under_low_value', '=', 'no');
                     })->whereHas('leaseDurationClassified',  function($query){
-                    $query->where('lease_contract_duration_id', '=', '3');
+                      $query->where('lease_contract_duration_id', '=', '3');
                     })->get();
 
-                    $sublease_assets_capitalized = LeaseAssets::query()->where('lease_id', '=', $lease->id)
+                    $sublease_assets_capitalized = LeaseAssets::query()->where('lease_id', $lease_id)
                     ->where('specific_use',2)
                     ->where('category_id',$category_id)
                     ->whereHas('leaseSelectLowValue',  function($query){
-                    $query->where('is_classify_under_low_value', '=', 'no');
+                      $query->where('is_classify_under_low_value', '=', 'no');
                     })->whereHas('leaseDurationClassified',  function($query){
-                    $query->where('lease_contract_duration_id', '=', '3');
+                      $query->where('lease_contract_duration_id', '=', '3');
                     })->get();
-                
-                }
-                 //dd($own_assets_capitalized); 
             }
-           $lease_asset_categories = LeaseAssetCategories::query()->where('is_capitalized', '=', '1')->get();
+            //Non Capitalized
+        if(!$request->has('id') && $request->has('capitalized') == '0'){
+                $own_assets_capitalized = LeaseAssets::query()->whereIn('lease_id', $lease_id)
+                ->where('specific_use',1)
+                ->whereHas('leaseSelectLowValue',  function($query){
+                  $query->where('is_classify_under_low_value', '=', 'no');
+                })->whereHas('leaseDurationClassified',  function($query){
+                    $query->where('lease_contract_duration_id', '=', '3');
+                })->get();
+
+
+                $sublease_assets_capitalized = LeaseAssets::query()->where('lease_id', $lease_id)
+                  ->where('specific_use',2)
+                  ->whereHas('leaseSelectLowValue',  function($query){
+                    $query->where('is_classify_under_low_value', '=', 'no');
+                  })->whereHas('leaseDurationClassified',  function($query){
+                    $query->where('lease_contract_duration_id', '=', '3');
+                })->get();  
+            }
+        else{
+            $category_id = $request->id;
+            $own_assets_capitalized = LeaseAssets::query()->whereIn('lease_id', $lease_id)
+            ->where('specific_use',1)
+            ->where('category_id',$category_id)
+            ->whereHas('leaseSelectLowValue',  function($query){
+                $query->where('is_classify_under_low_value', '=', 'no');
+            })->whereHas('leaseDurationClassified',  function($query){
+                $query->where('lease_contract_duration_id', '=', '3');
+            })->get();
+
+            $sublease_assets_capitalized = LeaseAssets::query()->where('lease_id', $lease_id)
+            ->where('specific_use',2)
+            ->where('category_id',$category_id)
+            ->whereHas('leaseSelectLowValue',  function($query){
+                $query->where('is_classify_under_low_value', '=', 'no');
+            })->whereHas('leaseDurationClassified',  function($query){
+                $query->where('lease_contract_duration_id', '=', '3');
+            })->get();
         }
-    
-        return view('leasevaluation.index',compact('own_assets_capitalized',
-        'sublease_assets_capitalized','lease_asset_categories'
+    }
+        $lease_asset_categories = LeaseAssetCategories::query()->where('is_capitalized', '=', '1')->get();
+        $lease_asset_noncategories = LeaseAssetCategories::query()->where('is_capitalized', '=', '0')->get();
+
+    return view('leasevaluation.index',compact('own_assets_capitalized',
+        'sublease_assets_capitalized','lease_asset_categories','lease_asset_noncategories','category_id','capitalized'
      ));
     }
 
     /**
-     * fetch the lease Valuation table
+     * fetch the noncapitalized from lease Valuation table
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
 
-    public function noncapitalized(Request $request){
-        $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->get();
-         //dd($lease->id);
-        if($lease) {
-         //NOn Capitalized Lease Assets
-              foreach ($lease as $key => $lease) {
+    /*public function noncapitalized(Request $request){
+         $leases = Lease::query()->whereIn('business_account_id', getDependentUserIds());
+         if($request->has('id')) {
+            $category_id = $request->id;
+            $leases = $leases->whereHas('assets' , function($query) use ($category_id){
+                $query->where('category_id',$category_id);
+            });
+         }
 
-               //Non Capitalized Lease Assets
-            
-                $own_assets_non = LeaseAssets::query()->where('lease_id', '=', $lease->id)
-                ->where('specific_use',1)
-                ->whereHas('leaseSelectLowValue',  function($query){
-                $query->where('is_classify_under_low_value', '=', 'no');
-                })->whereHas('leaseDurationClassified',  function($query){
-                $query->where('lease_contract_duration_id', '=', '3');
-                })->get();
+            $lease_id = $leases->get()->pluck('id')->toArray();
+
+            if(count($lease_id) > 0) {
+                
+                if(!$request->has('id')){
+                 
+                   $category_id = null;
+
+                   //Non Capitalized Lease Assets
+                    $own_assets_non = LeaseAssets::query()->whereIn('lease_id', $lease_id)
+                    ->where('specific_use',1)
+                    ->whereHas('leaseSelectLowValue',  function($query){
+                      $query->where('is_classify_under_low_value', '=', 'no');
+                    })->whereHas('leaseDurationClassified',  function($query){
+                        $query->where('lease_contract_duration_id', '=', '3');
+                    })->get();
 
 
-                $sublease_assets_non = LeaseAssets::query()->where('lease_id', '=', $lease->id)
-                ->where('specific_use',2)
-                ->whereHas('leaseSelectLowValue',  function($query){
-                $query->where('is_classify_under_low_value', '=', 'no');
-                })->whereHas('leaseDurationClassified',  function($query){
-                $query->where('lease_contract_duration_id', '=', '3');
-                })->get();
-            }
-        }
-            return view('leasevaluation.noncapitalized',compact('own_assets_non','sublease_assets_non'
+                    $sublease_assets_non = LeaseAssets::query()->where('lease_id', $lease_id)
+                    ->where('specific_use',2)
+                    ->whereHas('leaseSelectLowValue',  function($query){
+                    $query->where('is_classify_under_low_value', '=', 'no');
+                    })->whereHas('leaseDurationClassified',  function($query){
+                    $query->where('lease_contract_duration_id', '=', '3');
+                    })->get();
+
+                }else{
+                    
+                    $category_id = $request->id;
+                    $own_assets_non = LeaseAssets::query()->whereIn('lease_id', $lease_id)
+                    ->where('specific_use',1)
+                    ->where('category_id',$category_id)
+                    ->whereHas('leaseSelectLowValue',  function($query){
+                        $query->where('is_classify_under_low_value', '=', 'no');
+                    })->whereHas('leaseDurationClassified',  function($query){
+                        $query->where('lease_contract_duration_id', '=', '3');
+                    })->get();
+
+                    $sublease_assets_non = LeaseAssets::query()->where('lease_id', $lease_id)
+                    ->where('specific_use',2)
+                    ->where('category_id',$category_id)
+                    ->whereHas('leaseSelectLowValue',  function($query){
+                        $query->where('is_classify_under_low_value', '=', 'no');
+                    })->whereHas('leaseDurationClassified',  function($query){
+                        $query->where('lease_contract_duration_id', '=', '3');
+                    })->get();
+                }
+             }
+             
+             $lease_asset_categories = LeaseAssetCategories::query()->where('is_capitalized', '=', '0')->get();
+            return view('leasevaluation.noncapitalized',compact('own_assets_non','sublease_assets_non','category_id','lease_asset_categories'
      ));
-    }
+    }*/
    
  }

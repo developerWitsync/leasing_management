@@ -34,7 +34,7 @@ class UnderlyingLeaseAssetController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id, Request $request){
-            $breadcrumbs = [
+        $breadcrumbs = [
             [
                 'link' => route('add-new-lease.index'),
                 'title' => 'Add New Lease'
@@ -48,6 +48,9 @@ class UnderlyingLeaseAssetController extends Controller
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->with('leaseType')->with('assets')->first();
          
         if($lease) {
+
+            //check if the Subsequent Valuation is applied for the lease modification
+            $subsequent_modify_required = $lease->isSubsequentModification();
 
             $lease_assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->get()->toArray();
 
@@ -119,7 +122,8 @@ class UnderlyingLeaseAssetController extends Controller
                 'numbers_of_lease_assets',
                 'lease_assets_categories',
                 'la_similar_charac_number',
-                'lease_assets'
+                'lease_assets',
+                'subsequent_modify_required'
             ));
         } else {
             abort(404);
@@ -245,7 +249,7 @@ class UnderlyingLeaseAssetController extends Controller
                 abort(404);
             }
         } catch (\Exception $e) {
-            dd($e);
+            abort(404);
         }
     }
 

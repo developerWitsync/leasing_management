@@ -21,10 +21,10 @@
             <ul>
               
             <li> 
-               <button type="submit" class="list-group-item @if(request()->segment('2') == 'capitalized') active @endif" onclick="location.href='{{ route('leasevaluation.index') }}'">Capitalized Lease Asset</button></a>
+               <button type="submit" class="list-group-item @if(request()->segment('2') == 'capitalized') active @endif" onclick="location.href='{{ route('leasevaluation.index',['capitalized' => 1,'id']) }}'">Capitalized Lease Asset</button></a>
               </li>
             <li>
-             <button type="submit" class="list-group-item @if(request()->segment('2') == 'noncapitalized') active @endif" onclick="location.href='{{ route('leasevaluation.noncapitalized') }}'">Non-Capitalized Lease Asset</a></button>
+             <button type="submit" class="list-group-item @if(request()->segment('2') == 'noncapitalized') active @endif" onclick="location.href='{{ route('leasevaluation.index',['capitalized' => 0,'id']) }}'">Non-Capitalized Lease Asset</a></button>
             </li>
         </ul>
         </div>
@@ -49,7 +49,7 @@
                             <div class="panel-heading">
                               Lease Valutaion
                             </div>
-                             @include('leasevaluation._capitalizedmenubar')
+                             @include('leasevaluation._menubar')
                       
                             <div class="panel-body">
                                 <div class="panel-body frmOuterBx">
@@ -73,6 +73,7 @@
                                         </tr>
                                         </thead>
                                         <tbody>
+                                            @if(isset($own_assets_capitalized))
                                 @foreach($own_assets_capitalized as $key=>$asset)
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
@@ -116,6 +117,12 @@
                                     </td>
                                 </tr>
                             @endforeach
+                            @else
+                            <tr>
+                                 <td colspan="13">
+                                        <center>No Records Exists. </center></td>
+                            </tr>
+                            @endif
                                         </tbody>
                                     </table>
                                 </div>
@@ -142,6 +149,7 @@
                                         </tr>
                                         </thead>
                                         <tbody>
+                                 @if(isset($sublease_assets_capitalized))           
                                 @foreach($sublease_assets_capitalized as $key=>$asset)
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
@@ -185,6 +193,12 @@
                                     </td>
                                 </tr>
                             @endforeach
+                            @else
+                            <tr>
+                               <td colspan="13">
+                                        <center>No Records Exists. </center></td>
+                            </tr>
+                            @endif
                         </tbody>
                                     </table>
                                 </div>

@@ -49,6 +49,7 @@ class LeaseRenewableOptionController extends Controller
         if($lease) {
             //Load the assets only for the assets where no selected at `exercise_termination_option_available` on lease termination
             $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->whereHas('terminationOption',  function($query){
+                $query->where('lease_termination_option_available', '=', 'yes');
                 $query->where('exercise_termination_option_available', '=', 'no');
             })->get();
        
@@ -117,7 +118,7 @@ class LeaseRenewableOptionController extends Controller
                     if($renewable_value){
 
                          // complete Step
-                         $complete_step7 = confirmSteps($lease->id,'step7');
+                         confirmSteps($lease->id,'step7');
                         
                         return redirect(route('addlease.renewable.index',['id' => $lease->id]))->with('status', 'Renewable Option has been added successfully.');
                     }
