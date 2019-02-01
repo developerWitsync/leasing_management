@@ -1,5 +1,4 @@
-<?php //dd()?>
-              <div class="itemTab">
+ <div class="itemTab">
                             <ul>
                                 <li><button type="submit" class="list-group-item @if($capitalized == 'null' && $category_id == 'null') active @endif" onclick="location.href='{{ route('leasevaluation.index')}}'">Consolidated</button></li>
 
@@ -22,4 +21,4 @@
                                 @endif
                               
                             </ul>
-                    </div>
+</div>
