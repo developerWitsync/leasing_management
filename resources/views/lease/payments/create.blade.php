@@ -55,9 +55,9 @@
                             <label for="no_of_lease_payments" class="col-lg-2 col-md-4 leasepayLbl">Number of Lease Payments</label>
                             <div class="col-lg-3 col-md-6">
                                 <select name="no_of_lease_payments" class="form-control">
-                                    <option value="0">--Select Number of Lease Payments--</option>
+                                    <option value="0" @if($subsequent_modify_required && $asset->total_payments > 0) disabled="disabled" @endif>--Select Number of Lease Payments--</option>
                                     @foreach($lease_asset_number_of_payments as $number_of_payment)
-                                        <option value="{{ $number_of_payment['number'] }}" @if($asset->total_payments == $number_of_payment['number']) selected="selected" @endif>{{ $number_of_payment['number'] }}</option>
+                                        <option value="{{ $number_of_payment['number'] }}" @if($asset->total_payments == $number_of_payment['number']) selected="selected" @endif @if($subsequent_modify_required && $number_of_payment['number'] < $asset->total_payments) disabled="disabled" @endif>{{ $number_of_payment['number'] }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -103,7 +103,6 @@
 @section('footer-script')
     <script src="{{ asset('assets/plugins/bootbox/bootbox.min.js') }}"></script>
     <script src="{{ asset('js/jquery-ui.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
 

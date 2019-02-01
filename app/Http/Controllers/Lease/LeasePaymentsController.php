@@ -135,7 +135,10 @@ class LeasePaymentsController extends Controller
             ];
 
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $lease_id)->first();
+
             if ($lease) {
+                //check if the Subsequent Valuation is applied for the lease modification
+                $subsequent_modify_required = $lease->isSubsequentModification();
                 $asset = LeaseAssets::query()->where('lease_id', '=', $lease_id)->where('id', '=', $asset_id)->first();
                 if ($asset) {
                     $lease_asset_number_of_payments = LeasePaymentsNumber::query()->select('id', 'number')->whereIn('business_account_id', getDependentUserIds())->get()->toArray();
@@ -143,7 +146,8 @@ class LeasePaymentsController extends Controller
                         'lease',
                         'asset',
                         'lease_asset_number_of_payments',
-                        'breadcrumbs'
+                        'breadcrumbs',
+                        'subsequent_modify_required'
                     ));
 
                 } else {
