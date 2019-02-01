@@ -46,24 +46,28 @@
 
                     <td>
                         @if(isset($lease_assets[$i]))
-                            <select name="asset_category[{{$i}}]" class="form-control asset_category" data-number="{{ $i }}">
+                            <select name="asset_category[{{$i}}]" class="form-control asset_category" data-number="{{ $i }}" @if($subsequent_modify_required) disabled="disabled" @endif>
                                 <option value="">--Select--</option>
                                 @foreach($lease_assets_categories as $category)
                                     <option value="{{ $category->id }}" @if($lease_assets[$i]['category_id'] == $category->id) selected="selected" @endif>{{ $category->title }}</option>
                                 @endforeach
                             </select>
                         @else
-                            <select name="asset_category[{{$i}}]" class="form-control asset_category" data-number="{{ $i }}">
+                            <select name="asset_category[{{$i}}]" class="form-control asset_category" data-number="{{ $i }}" @if($subsequent_modify_required) disabled="disabled" @endif>
                                 <option value="">--Select--</option>
                                 @foreach($lease_assets_categories as $category)
                                     <option value="{{ $category->id }}">{{ $category->title }}</option>
                                 @endforeach
                             </select>
                         @endif
+
+                        @if($subsequent_modify_required)
+                            <input type="hidden" name="asset_category[{{$i}}]" value="{{ $lease_assets[$i]['category_id'] }}">
+                        @endif
                     </td>
                     <td>
                         @if(isset($lease_assets[$i]))
-                            <select name="asset_sub_category[{{$i}}]" class="form-control asset_sub_category_{{$i}}">
+                            <select name="asset_sub_category[{{$i}}]" class="form-control asset_sub_category_{{$i}}" @if($subsequent_modify_required) disabled="disabled" @endif>
                                 <option value="">--Select--</option>
                                 @foreach($lease_assets_categories as $category)
                                     @if($category->id == $lease_assets[$i]['category_id'])
@@ -74,38 +78,51 @@
                                 @endforeach
                             </select>
                         @else
-                            <select name="asset_sub_category[{{$i}}]" class="form-control asset_sub_category_{{$i}}">
+                            <select name="asset_sub_category[{{$i}}]" class="form-control asset_sub_category_{{$i}}" @if($subsequent_modify_required) disabled="disabled" @endif>
                                 <option value="">--Select--</option>
                             </select>
                         @endif
-                    </td>
-                    <td>
-                        @if(isset($lease_assets[$i]))
-                            <input type="text" class="form-control" value="{{ $lease_assets[$i]['name'] }}" name="name[{{$i}}]" placeholder="Name">
-                        @else
-                            <input type="text" class="form-control" name="name[{{$i}}]" placeholder="Name">
+
+                        @if($subsequent_modify_required)
+                            <input type="hidden" name="asset_sub_category[{{$i}}]" value="{{ $lease_assets[$i]['sub_category_id'] }}">
                         @endif
                     </td>
+
                     <td>
                         @if(isset($lease_assets[$i]))
-                            <select name="similar_characteristic_items[{{$i}}]" class="form-control">
+                            <input type="text" class="form-control" value="{{ $lease_assets[$i]['name'] }}" name="name[{{$i}}]" placeholder="Name" @if($subsequent_modify_required) disabled="disabled" @endif>
+                        @else
+                            <input type="text" class="form-control" name="name[{{$i}}]" placeholder="Name" @if($subsequent_modify_required) disabled="disabled" @endif>
+                        @endif
+                        @if($subsequent_modify_required)
+                            <input type="hidden" name="name[{{$i}}]" value="{{$lease_assets[$i]['name']}}">
+                        @endif
+                    </td>
+
+                    <td>
+                        @if(isset($lease_assets[$i]))
+                            <select name="similar_characteristic_items[{{$i}}]" class="form-control" @if($subsequent_modify_required) disabled="disabled" @endif>
                                 <option value="">--Select--</option>
                                 @foreach($la_similar_charac_number as $number)
                                     <option value="{{ $number->number }}" @if($lease_assets[$i]['similar_asset_items']== $number->number) selected="selected" @endif>{{ $number->number }}</option>
                                 @endforeach
                             </select>
                         @else
-                            <select name="similar_characteristic_items[{{$i}}]" class="form-control">
+                            <select name="similar_characteristic_items[{{$i}}]" class="form-control" @if($subsequent_modify_required) disabled="disabled" @endif>
                                 <option value="">--Select--</option>
                                 @foreach($la_similar_charac_number as $number)
                                     <option value="{{ $number->number }}">{{ $number->number }}</option>
                                 @endforeach
                             </select>
                         @endif
+
+                        @if($subsequent_modify_required)
+                            <input type="hidden" name="similar_characteristic_items[{{$i}}]" value="{{$lease_assets[$i]['similar_asset_items']}}">
+                        @endif
+
                     </td>
+
                     <td>
-
-
                         @if(isset($lease_assets[$i]))
                             @if($lease_assets[$i]['is_details_completed'] == '1')
                                 <a href="{{ route('addlease.leaseasset.completedetails', ['lease' => $lease->id, 'asset' => $lease_assets[$i]['id']]) }}" class="btn btn-sm btn-primary">Modify Details</a>

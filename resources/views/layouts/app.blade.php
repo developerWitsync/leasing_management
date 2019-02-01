@@ -13,12 +13,15 @@
     <link href="{{ asset('assets/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/stylesheet.css') }}" rel="stylesheet">
     @yield('header-styles')
 </head>
 <body>
     <div id="app">
+    @if(request()->segment('1') != 'login')
         <nav class="navbar navbar-default navbar-static-top">
             <div class="hdrTop">
+                
                 <div class="navbar-header">
                     <!-- Collapsed Hamburger -->
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse" aria-expanded="false">
@@ -34,47 +37,51 @@
                     </a>
                 </div>
 
-                <div class="collapse navbar-collapse" id="app-navbar-collapse">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="nav navbar-nav">
-                        &nbsp;
-                    </ul>
 
-                    <!-- Right Side Of Navbar -->
-                    <ul class="nav navbar-nav navbar-right">
-                        <!-- Authentication Links -->
-                        @guest
-                            <li><a href="{{ route('login') }}">Login</a></li>
-                         <!--   <li><a href="{{ route('register') }}">Register</a></li>-->
-                            <li><a href="{{ route('contactus') }}">Contact us</a></li>
-                        @else
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>
-                                    {{ Auth::user()->authorised_person_name }} | {{ getParentDetails()->legal_entity_name }} <span class="caret"></span>
-                                </a>
+               
+                    <div class="collapse navbar-collapse" id="app-navbar-collapse">
+                        <!-- Left Side Of Navbar -->
+                        <ul class="nav navbar-nav">
+                            &nbsp;
+                        </ul>
 
-                                <ul class="dropdown-menu">
-                                    @if(auth()->user()->parent_id == '0')
-                                        <li> <a href="{{route('settings.profile.index')}}">My Profile</a></li>
-                                    @endif
-                                    <li>
-                                        <a href="{{ route('logout') }}"
-                                            onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                            Logout
-                                        </a>
+                        <!-- Right Side Of Navbar -->
+                        <ul class="nav navbar-nav navbar-right">
+                            <!-- Authentication Links -->
+                            @guest
+                                <li><a href="{{ route('login') }}">Login</a></li>
+                            <!--   <li><a href="{{ route('register') }}">Register</a></li>-->
+                                <li><a href="{{ route('contactus') }}">Contact us</a></li>
+                            @else
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>
+                                        {{ Auth::user()->authorised_person_name }} | {{ getParentDetails()->legal_entity_name }} <span class="caret"></span>
+                                    </a>
 
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                            {{ csrf_field() }}
-                                        </form>
-                                    </li>
-                                </ul>
-                            </li>
-                        @endguest
-                    </ul>
-                </div>
+                                    <ul class="dropdown-menu">
+                                        @if(auth()->user()->parent_id == '0')
+                                            <li> <a href="{{route('settings.profile.index')}}">My Profile</a></li>
+                                        @endif
+                                        <li>
+                                            <a href="{{ route('logout') }}"
+                                                onclick="event.preventDefault();
+                                                        document.getElementById('logout-form').submit();">
+                                                Logout
+                                            </a>
+
+                                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                                {{ csrf_field() }}
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </li>
+                            @endguest
+                        </ul>
+                    </div>
+                
             </div>
         </nav>
+        @endif
 
         @if(auth()->check())
             <div class="dashOuter clearfix">

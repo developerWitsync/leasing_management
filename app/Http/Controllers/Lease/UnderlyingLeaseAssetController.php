@@ -156,6 +156,9 @@ class UnderlyingLeaseAssetController extends Controller
                 ->with('assets')
                 ->first();
 
+            //check if the Subsequent Valuation is applied for the lease modification
+            $subsequent_modify_required = $lease->isSubsequentModification();
+
             $asset = LeaseAssets::query()->where('lease_id', '=', $lease_id)->where('id', '=', $asset_id)->first();
             if($lease && $asset) {
                 if($request->isMethod('post')) {
@@ -243,7 +246,8 @@ class UnderlyingLeaseAssetController extends Controller
                     'expected_life_of_assets',
                     'accounting_terms',
                     'settings',
-                    'breadcrumbs'
+                    'breadcrumbs',
+                    'subsequent_modify_required'
                 ));
             } else {
                 abort(404);
