@@ -102,6 +102,9 @@
             <button type="submit" class="btn btn-success">
                 Submit
             </button>
+            @if($asset->fairMarketValue)
+                <a href="{{ route('addlease.residual.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
+            @endif
         </div>
     </div>
 

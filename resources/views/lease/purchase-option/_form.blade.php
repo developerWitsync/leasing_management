@@ -90,6 +90,10 @@
             <button type="submit" class="btn btn-success">
                 Submit
             </button>
+
+            @if($asset->purchaseOption)
+                <a href="{{ route('addlease.durationclassified.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
+            @endif
         </div>
     </div>
 

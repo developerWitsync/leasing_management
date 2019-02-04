@@ -5,12 +5,17 @@
         <label for="name" class="col-md-4 control-label">Lease Start Date</label>
         <div class="col-md-6 form-check form-check-inline" required>
             <input class="form-control" name="lease_start_date" id="lease_start_date" type="text" autocomplete="off"
-                   value="{{ \Carbon\Carbon::parse(old('lease_start_date', $asset->lease_start_date))->format(config('settings.date_format'))}}" readonly="off">
+                   value="{{ \Carbon\Carbon::parse(old('lease_start_date', $asset->lease_start_date))->format(config('settings.date_format'))}}" readonly="off" @if($subsequent_modify_required) disabled="disabled" @endif>
             @if ($errors->has('lease_start_date'))
                 <span class="help-block">
                     <strong>{{ $errors->first('lease_start_date') }}</strong>
                 </span>
             @endif
+
+            @if($subsequent_modify_required)
+
+            @endif
+
         </div>
     </div>
     <div class="form-group{{ $errors->has('lease_end_date') ? ' has-error' : '' }} required">
@@ -49,6 +54,9 @@
             <button type="submit" class="btn btn-success">
                 Submit
             </button>
+            @if($asset->leaseDurationClassified)
+                <a href="{{ route('lease.escalation.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
+            @endif
         </div>
     </div>
 </form>

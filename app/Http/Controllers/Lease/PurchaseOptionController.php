@@ -35,6 +35,84 @@ class PurchaseOptionController extends Controller
     }
 
     /**
+     * create or update the single lease asset with the lease id
+     * the function has been created so that the form will appear directly when the user comes to the form
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
+    public function index_V2($id, Request $request){
+        try{
+            $breadcrumbs = [
+                [
+                    'link' => route('add-new-lease.index'),
+                    'title' => 'Add New Lease'
+                ],
+                [
+                    'link' => route('addlease.purchaseoption.create', ['id' => $id]),
+                    'title' => 'Create Purchase Option'
+                ],
+            ];
+            $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
+            if ($lease) {
+
+                $asset = $lease->assets->first();//since each lease can have only one lease asset now.
+
+                if($asset->purchaseOption){
+                    $model = $asset->purchaseOption;
+                } else {
+                    $model = new PurchaseOption();
+                }
+
+                if ($request->isMethod('post')) {
+                    $validator = Validator::make($request->except('_token'), $this->validationRules());
+
+                    if ($validator->fails()) {
+                        return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
+                    }
+
+                    $data = $request->except('_token');
+                    $data['lease_id'] = $asset->lease->id;
+                    $data['asset_id'] = $asset->id;
+                    if ($request->has('expected_purchase_date') && $data['expected_purchase_date'] != "") {
+                        $data['expected_purchase_date'] = Carbon::parse($data['expected_purchase_date'])->format('Y-m-d');
+                    }
+
+                    if ($request->has('expected_lease_end_date') && $data['expected_lease_end_date'] != "") {
+                        $data['expected_lease_end_date'] = Carbon::parse($data['expected_lease_end_date'])->format('Y-m-d');
+                    }
+
+                    if ($request->has('purchase_option_exerecisable') && $data['purchase_option_exerecisable'] == 'no') {
+                        $data['expected_purchase_date'] = null;
+                        $data['expected_lease_end_date'] = null;
+                        $data['currency'] = null;
+                        $data['purchase_price'] = null;
+                    }
+
+                    $model->setRawAttributes($data);
+
+                    if ($model->save()) {
+                        // complete Step
+                        confirmSteps($lease->id, 'step8');
+                        return redirect(route('addlease.purchaseoption.index', ['id' => $lease->id]))->with('status', 'Lease Termination Option Details has been added successfully.');
+                    }
+                }
+
+                return view('lease.purchase-option.create', compact(
+                    'model',
+                    'lease',
+                    'asset',
+                    'breadcrumbs'
+                ));
+            } else {
+                abort(404);
+            }
+        } catch (\Exception $e){
+            abort(404, $e->getMessage());
+        }
+    }
+
+    /**
      * renders the table to list all the lease assets.
      * @param $id Primary key for the lease
      * @param Request $request

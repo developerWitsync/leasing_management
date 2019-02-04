@@ -56,12 +56,11 @@ class LessorDetailsController extends Controller
         $subsequent_modify_required = false;
         if($id) {
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $request->id)->first();
+            //check if the Subsequent Valuation is applied for the lease modification
+            $subsequent_modify_required = $lease->isSubsequentModification();
             if(is_null($lease)) {
                 abort(404);
             }
-
-            //check if the Subsequent Valuation is applied for the lease modification
-            $subsequent_modify_required = $lease->isSubsequentModification();
         } else {
             $lease = new Lease();
         }
@@ -99,7 +98,6 @@ class LessorDetailsController extends Controller
             $validator = Validator::make($request->except("_token"), $this->validationRules());
 
             if($validator->fails()){
-                
                 return redirect()->back()->withErrors($validator->errors())->withInput($request->except("_token"));
             }
 
@@ -116,6 +114,7 @@ class LessorDetailsController extends Controller
             $data['lease_code'] = time().'-'.mt_rand();
             $data['file'] = $uniqueFileName;
             $data['status'] = '0';
+            $data['total_assets'] = 1; //since every lease can now have only one lease asset.
             $lease = Lease::create($data);
            
             if($lease) {
@@ -129,7 +128,6 @@ class LessorDetailsController extends Controller
             }
 
          } catch (\Exception $e){
-            //dd($e->getMessage());
             abort(404);
         }
     }
@@ -168,6 +166,7 @@ class LessorDetailsController extends Controller
                 $data['lease_code'] = time().'-'.mt_rand();
                 $data['file'] = $uniqueFileName;
                 $data['status'] = '0';
+                $data['total_assets'] = 1; //since every lease can now have only one lease asset.
                 $lease->setRawAttributes($data);
                 if($lease->save()) {
                     if($request->has('action') && $request->action == "next") {

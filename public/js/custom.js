@@ -205,7 +205,7 @@ $(document).ready(function(){
 function dateDiff(start_date, end_date) {
     var year = end_date.getFullYear();
     var month = end_date.getMonth() + 1;
-    var day = end_date.getDate();
+    var day = end_date.getDate() + 1;
 
     var yy = start_date.getFullYear();
     var mm = start_date.getMonth() + 1;

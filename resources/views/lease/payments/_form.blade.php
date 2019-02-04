@@ -5,11 +5,15 @@
         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }} required">
             <label for="name" class="col-lg-4 col-md-5 control-label">Name of Lease Payment</label>
             <div class="col-lg-5 col-md-6">
-                <input id="name" type="text" placeholder="Name" class="form-control" name="name" value="{{ old('name', $payment->name) }}">
+                <input id="name" type="text" placeholder="Name" class="form-control" name="name" value="{{ old('name', $payment->name) }}" @if($subsequent_modify_required) disabled="disabled" @endif>
                 @if ($errors->has('name'))
                     <span class="help-block">
                         <strong>{{ $errors->first('name') }}</strong>
                     </span>
+                @endif
+
+                @if($subsequent_modify_required)
+                    <input type="hidden" name="name" value="{{$payment->name}}">
                 @endif
             </div>
         </div>
@@ -17,7 +21,7 @@
         <div class="form-group{{ $errors->has('type') ? ' has-error' : '' }} required">
             <label for="type" class="col-lg-4 col-md-5 control-label">Type of Lease Payment</label>
             <div class="col-lg-5 col-md-6">
-                <select name="type" class="form-control">
+                <select name="type" class="form-control" @if($subsequent_modify_required) disabled="disabled" @endif>
                     <option value="">--Select Lease Payment Type--</option>
                     @foreach($lease_payments_types as $lease_payments_type)
                         <option value="{{ $lease_payments_type->id }}" @if(old('type', $payment->type) == $lease_payments_type->id) selected="selected" @endif>{{ $lease_payments_type->title }}</option>
@@ -28,13 +32,18 @@
                         <strong>{{ $errors->first('type') }}</strong>
                     </span>
                 @endif
+
+                @if($subsequent_modify_required)
+                    <input type="hidden" name="type" value="{{$payment->type}}">
+                @endif
+
             </div>
         </div>
 
         <div class="form-group{{ $errors->has('nature') ? ' has-error' : '' }} required">
             <label for="type" class="col-lg-4 col-md-5 control-label">Nature of Lease Payment</label>
             <div class="col-lg-5 col-md-6">
-                <select name="nature" class="form-control">
+                <select name="nature" class="form-control" @if($subsequent_modify_required) disabled="disabled" @endif>
                     <option value="">--Select Lease Payment Nature--</option>
                     @foreach($lease_payments_nature as $nature)
                         <option value="{{ $nature->id}}" @if(old('nature',$payment->nature) == $nature->id) selected="selected" @endif>{{ $nature->title }}</option>
@@ -45,6 +54,11 @@
                         <strong>{{ $errors->first('nature') }}</strong>
                     </span>
                 @endif
+
+                @if($subsequent_modify_required)
+                    <input type="hidden" name="nature" value="{{$payment->nature}}">
+                @endif
+
             </div>
         </div>
 
@@ -152,12 +166,17 @@
         <div class="form-group{{ $errors->has('first_payment_start_date') ? ' has-error' : '' }} required">
             <label for="first_payment_start_date" class="col-lg-4 col-md-5 control-label">First Lease Payment Start Date</label>
             <div class="col-lg-5 col-md-6">
-                <input id="first_payment_start_date" type="text" placeholder="First Lease Payment Start Date" class="form-control" name="first_payment_start_date" value="{{ old('first_payment_start_date',$payment->first_payment_start_date) }}">
+                <input id="first_payment_start_date" type="text" placeholder="First Lease Payment Start Date" class="form-control" name="first_payment_start_date" value="{{ old('first_payment_start_date',$payment->first_payment_start_date) }}" @if($subsequent_modify_required) disabled="disabled" @endif>
                 @if ($errors->has('first_payment_start_date'))
                     <span class="help-block">
                         <strong>{{ $errors->first('first_payment_start_date') }}</strong>
                     </span>
                 @endif
+
+                @if($subsequent_modify_required)
+                    <input type="hidden" name="first_payment_start_date" value="{{$payment->first_payment_start_date}}">
+                @endif
+
             </div>
         </div>
 
@@ -201,24 +220,34 @@
         <div class="form-group{{ $errors->has('payment_currency') ? ' has-error' : '' }} required">
             <label for="payment_currency" class="col-lg-4 col-md-5 control-label">Lease Payment Currency</label>
             <div class="col-lg-5 col-md-6">
-                <input id="payment_currency" type="text" placeholder="Lease Payment Currency" class="form-control" name="payment_currency" value="{{ $lease->lease_contract_id }}" readonly="readonly">
+                <input id="payment_currency" type="text" placeholder="Lease Payment Currency" class="form-control" name="payment_currency" value="{{ $lease->lease_contract_id }}" readonly="readonly" @if($subsequent_modify_required) disabled="disabled" @endif>
                 @if ($errors->has('payment_currency'))
                     <span class="help-block">
                         <strong>{{ $errors->first('payment_currency') }}</strong>
                     </span>
                 @endif
+
+                @if($subsequent_modify_required)
+                    <input type="hidden" name="payment_currency" value="{{ $lease->lease_contract_id }}">
+                @endif
+
             </div>
         </div>
 
         <div class="form-group{{ $errors->has('similar_chateristics_assets') ? ' has-error' : '' }} required">
             <label for="similar_chateristics_assets" class="col-lg-4 col-md-5 control-label">Number of Units of Lease Assets of Similar Characteristics</label>
             <div class="col-lg-5 col-md-6">
-                <input id="similar_chateristics_assets" type="text" placeholder="Number of Units of Lease Assets of Similar Characteristics" class="form-control" name="similar_chateristics_assets" value="{{ $asset->similar_asset_items }}" readonly="readonly">
+                <input id="similar_chateristics_assets" type="text" placeholder="Number of Units of Lease Assets of Similar Characteristics" class="form-control" name="similar_chateristics_assets" value="{{ $asset->similar_asset_items }}" readonly="readonly" @if($subsequent_modify_required) disabled="disabled" @endif>
                 @if ($errors->has('similar_chateristics_assets'))
                     <span class="help-block">
                         <strong>{{ $errors->first('similar_chateristics_assets') }}</strong>
                     </span>
                 @endif
+
+                @if($subsequent_modify_required)
+                    <input type="hidden" name="similar_chateristics_assets" value="{{ $asset->similar_asset_items }}">
+                @endif
+
             </div>
         </div>
 
@@ -238,7 +267,7 @@
         <div class="form-group{{ $errors->has('total_amount_per_interval') ? ' has-error' : '' }} required">
             <label for="total_amount_per_interval" class="col-lg-4 col-md-5 control-label">Total Lease Amount Per Interval</label>
             <div class="col-lg-5 col-md-6">
-                <input id="total_amount_per_interval" type="text" placeholder="" class="form-control" name="total_amount_per_interval" value="{{ old('total_amount_per_interval',$payment->total_amount_per_interval) }}">
+                <input id="total_amount_per_interval" type="text" placeholder="" class="form-control" name="total_amount_per_interval" value="{{ old('total_amount_per_interval',$payment->total_amount_per_interval) }}" readonly="readonly">
                 @if ($errors->has('total_amount_per_interval'))
                     <span class="help-block">
                         <strong>{{ $errors->first('total_amount_per_interval') }}</strong>

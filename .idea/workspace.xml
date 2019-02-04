@@ -2,395 +2,29 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1c290435-4779-45fe-873f-5594138f8734" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jsLinters/jshint.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/views/lease/fair-market-value/createv2.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WS04GL04.LE_V9.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/WS04GL04.LE_V9.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/CategoriesLeaseAssetExcluded.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/CategoriesLeaseAssetExcluded.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/CustomerDetails.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/CustomerDetails.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/EscalationFrequency.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/EscalationFrequency.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/FairMarketValue.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/FairMarketValue.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Drafts/IndexController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Drafts/IndexController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/EscalationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/EscalationController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/FairMarketValueController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/FairMarketValueController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/InitialDirectCostController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/InitialDirectCostController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseBalanceAsOnDecController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseBalanceAsOnDecController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseDurationClassifiedController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseDurationClassifiedController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseIncentivesController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseIncentivesController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseInvoiceController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseInvoiceController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/LeasePaymentsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/LeasePaymentsController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseRenewableOptionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseRenewableOptionController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseResidualController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseResidualController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseTerminationOptionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseTerminationOptionController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseValuationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseValuationController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/LessorDetailsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/LessorDetailsController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/PurchaseOptionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/PurchaseOptionController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/SelectDiscountRateController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/SelectDiscountRateController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/SelectLowValueController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/SelectLowValueController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/UnderlyingLeaseAssetController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/UnderlyingLeaseAssetController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Modifylease/ModifyLeaseController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Modifylease/ModifyLeaseController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Settings/ProfileController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Settings/ProfileController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Middleware/CheckPreviousData.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Middleware/CheckPreviousData.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Middleware/CheckPreviousData.php.bak" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Middleware/CheckPreviousData.php.bak" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/InitialDirectCost.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/InitialDirectCost.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/LeaseAssetPaymenetDueDate.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/LeaseAssetPaymenetDueDate.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/LeaseAssetPayments.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/LeaseAssetPayments.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/LeaseBalanceAsOnDec.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/LeaseBalanceAsOnDec.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/LeaseCompletedSteps.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/LeaseCompletedSteps.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/LeaseDurationClassified.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/LeaseDurationClassified.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/LeaseIncentives.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/LeaseIncentives.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/LeaseModificationReason.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/LeaseModificationReason.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/LeasePaymentInvoice.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/LeasePaymentInvoice.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/LeaseRenewableOption.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/LeaseRenewableOption.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/LeaseResidualValue.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/LeaseResidualValue.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/LeaseSelectDiscountRate.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/LeaseSelectDiscountRate.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/LeaseSelectLowValue.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/LeaseSelectLowValue.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/LeaseTerminationOption.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/LeaseTerminationOption.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/ModifyLeaseApplication.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/ModifyLeaseApplication.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/PaymentEscalationDates.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/PaymentEscalationDates.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/PaymentEscalationDetails.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/PaymentEscalationDetails.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/PaymentEscalationInconsistentData.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/PaymentEscalationInconsistentData.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/PurchaseOption.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/PurchaseOption.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/SupplierDetails.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/SupplierDetails.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/settings.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/settings.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2018_12_28_071043_drop_currency_column_from_users_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2018_12_28_071043_drop_currency_column_from_users_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2018_12_28_082204_create_table_fair_market_value.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2018_12_28_082204_create_table_fair_market_value.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2018_12_28_110018_create_table_lease_assets_payments.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2018_12_28_110018_create_table_lease_assets_payments.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2018_12_28_131547_add_column_total_assets_to_lease_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2018_12_28_131547_add_column_total_assets_to_lease_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2018_12_31_045537_add_column_total_payments_to_lease_assets_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2018_12_31_045537_add_column_total_payments_to_lease_assets_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2018_12_31_050409_create_residual__value_gurantee_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2018_12_31_050409_create_residual__value_gurantee_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2018_12_31_090808_add_columns_to_fair_market_vlue_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2018_12_31_090808_add_columns_to_fair_market_vlue_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2018_12_31_120010_lease_termination_option.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2018_12_31_120010_lease_termination_option.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_01_01_041733_create_lease_renewal_option_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_01_01_041733_create_lease_renewal_option_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_01_01_085419_create_table_purchase_option.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_01_01_085419_create_table_purchase_option.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_01_01_122355_create_lease_duration_classifed_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_01_01_122355_create_lease_duration_classifed_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_01_01_130717_create_table_lease_asset_payment_due_dates.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_01_01_130717_create_table_lease_asset_payment_due_dates.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_01_02_064813_add_column_to_table_lease_renewal_option.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_01_02_064813_add_column_to_table_lease_renewal_option.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_01_02_121523_add_escalation_clause_applicable_to_lease_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_01_02_121523_add_escalation_clause_applicable_to_lease_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_01_03_050308_create_lease_select_low_value_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_01_03_050308_create_lease_select_low_value_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_01_03_085843_create_lease_select_discount_rate_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_01_03_085843_create_lease_select_discount_rate_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_01_03_112355_create_lease_balance_as_on_dec_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_01_03_112355_create_lease_balance_as_on_dec_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_01_03_120220_create_table_initial_direct_cost.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_01_03_120220_create_table_initial_direct_cost.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_01_04_051022_create_lease_incentives_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_01_04_051022_create_lease_incentives_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_01_04_093246_create_table_lease_payment_invoice.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_01_04_093246_create_table_lease_payment_invoice.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_01_04_102955_create_table_supplier_details.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_01_04_102955_create_table_supplier_details.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_01_07_045446_create_trigger_on_supplier_details.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_01_07_045446_create_trigger_on_supplier_details.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_01_07_051901_create_after_delete_on_supplier_details.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_01_07_051901_create_after_delete_on_supplier_details.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_01_08_041009_create_customer_details_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_01_08_041009_create_customer_details_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_01_08_143557_create_table_payment_escalation.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_01_08_143557_create_table_payment_escalation.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_01_09_072116_create_modify_lease_applcation_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_01_09_072116_create_modify_lease_applcation_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_01_09_074544_create_table_payment_escalation_dates.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_01_09_074544_create_table_payment_escalation_dates.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_01_10_043432_create_table_escalation_frequency.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_01_10_043432_create_table_escalation_frequency.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_01_10_055757_create_lease_modification_reasons_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_01_10_055757_create_lease_modification_reasons_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_01_11_055617_create_categories_lease_asset_excluded_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_01_11_055617_create_categories_lease_asset_excluded_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_01_11_072702_create_table_payment_escalation_inconsitent_inputs.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_01_11_072702_create_table_payment_escalation_inconsitent_inputs.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_01_14_054053_add_column_reason_to_table_lease_select_low_value.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_01_14_054053_add_column_reason_to_table_lease_select_low_value.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_01_17_100420_create_lease_completed_steps_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_01_17_100420_create_lease_completed_steps_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_01_17_101947_drop_column_using_lease_payment_from_lease_assets_payments.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_01_17_101947_drop_column_using_lease_payment_from_lease_assets_payments.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_01_17_102107_add_column_using_lease_payment_to_table_lease_assets.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_01_17_102107_add_column_using_lease_payment_to_table_lease_assets.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_01_18_045931_drop_roles_name_unique_index.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_01_18_045931_drop_roles_name_unique_index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_01_18_050523_create_stored_procedure.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_01_18_050523_create_stored_procedure.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_01_22_080421_alter_table_general_settings.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_01_22_080421_alter_table_general_settings.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_01_22_090206_alter_table_lease_lock_year.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_01_22_090206_alter_table_lease_lock_year.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_01_23_105627_add_column_variable_basis_to_lease_residual_value_gurantee.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_01_23_105627_add_column_variable_basis_to_lease_residual_value_gurantee.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_01_28_105926_add_column_to_assets_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_01_28_105926_add_column_to_assets_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_01_29_085018_add_business_account_id_to_table_modify_lease_application.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_01_29_085018_add_business_account_id_to_table_modify_lease_application.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeds/EscalationFrequency.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/EscalationFrequency.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/sqls/countries.sql" beforeDir="false" afterPath="$PROJECT_DIR$/database/sqls/countries.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/sqls/currencies.sql" beforeDir="false" afterPath="$PROJECT_DIR$/database/sqls/currencies.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/sqls/email_templates.sql" beforeDir="false" afterPath="$PROJECT_DIR$/database/sqls/email_templates.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/sqls/stored_procedures.sql" beforeDir="false" afterPath="$PROJECT_DIR$/database/sqls/stored_procedures.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/images/breatcrum-icon-hover.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/images/breatcrum-icon-hover.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/images/breatcrum-icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/images/breatcrum-icon.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/images/breatcrum-icon10-hover.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/images/breatcrum-icon10-hover.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/images/breatcrum-icon10.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/images/breatcrum-icon10.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/images/breatcrum-icon11-hover.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/images/breatcrum-icon11-hover.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/images/breatcrum-icon11.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/images/breatcrum-icon11.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/images/breatcrum-icon12-hover.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/images/breatcrum-icon12-hover.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/images/breatcrum-icon12.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/images/breatcrum-icon12.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/images/breatcrum-icon13-hover.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/images/breatcrum-icon13-hover.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/images/breatcrum-icon13.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/images/breatcrum-icon13.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/images/breatcrum-icon14-hover.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/images/breatcrum-icon14-hover.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/images/breatcrum-icon14.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/images/breatcrum-icon14.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/images/breatcrum-icon15-hover.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/images/breatcrum-icon15-hover.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/images/breatcrum-icon15.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/images/breatcrum-icon15.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/images/breatcrum-icon16-hover.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/images/breatcrum-icon16-hover.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/images/breatcrum-icon16.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/images/breatcrum-icon16.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/images/breatcrum-icon17-hover.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/images/breatcrum-icon17-hover.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/images/breatcrum-icon17.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/images/breatcrum-icon17.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/images/breatcrum-icon18-hover.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/images/breatcrum-icon18-hover.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/images/breatcrum-icon18.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/images/breatcrum-icon18.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/images/breatcrum-icon2-hover.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/images/breatcrum-icon2-hover.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/images/breatcrum-icon2.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/images/breatcrum-icon2.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/images/breatcrum-icon3-hover.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/images/breatcrum-icon3-hover.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/images/breatcrum-icon3.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/images/breatcrum-icon3.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/images/breatcrum-icon4-hover.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/images/breatcrum-icon4-hover.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/images/breatcrum-icon4.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/images/breatcrum-icon4.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/images/breatcrum-icon5-hover.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/images/breatcrum-icon5-hover.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/images/breatcrum-icon5.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/images/breatcrum-icon5.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/images/breatcrum-icon6-hover.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/images/breatcrum-icon6-hover.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/images/breatcrum-icon6.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/images/breatcrum-icon6.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/images/breatcrum-icon7-hover.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/images/breatcrum-icon7-hover.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/images/breatcrum-icon7.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/images/breatcrum-icon7.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/images/breatcrum-icon8-hover.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/images/breatcrum-icon8-hover.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/images/breatcrum-icon8.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/images/breatcrum-icon8.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/images/breatcrum-icon9-hover.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/images/breatcrum-icon9-hover.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/images/breatcrum-icon9.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/images/breatcrum-icon9.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/images/logo-old.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/images/logo-old.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/images/opps-Icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/images/opps-Icon.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/pages/escalations.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/pages/escalations.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/pages/lease_valuation.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/pages/lease_valuation.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2b64df4d9befile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2b64df4d9befile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2b66e00e4cefile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2b66e00e4cefile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2b6707a5fa2file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2b6707a5fa2file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2c3265bd7fafile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2c3265bd7fafile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2c37d77970cfile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2c37d77970cfile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2c38661f437file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2c38661f437file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2c388e508fafile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2c388e508fafile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2c62d715852WebTrackQuery_20180514111246.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2c62d715852WebTrackQuery_20180514111246.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2c69920bb42WebTrackQuery_20180514111246.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2c69920bb42WebTrackQuery_20180514111246.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2c699f3c919WebTrackQuery_20180514111354.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2c699f3c919WebTrackQuery_20180514111354.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2c69b20b091WebTrackQuery_20180514111354.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2c69b20b091WebTrackQuery_20180514111354.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2c69c98c1ecWebTrackQuery_20180514111354.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2c69c98c1ecWebTrackQuery_20180514111354.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2c69d32c6e1WebTrackQuery_20180514111354.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2c69d32c6e1WebTrackQuery_20180514111354.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2c6a3b3aa6dWebTrackQuery_20180514111354.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2c6a3b3aa6dWebTrackQuery_20180514111354.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2c6ac9a10e7Report-20180510103209.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2c6ac9a10e7Report-20180510103209.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2c6ba961958Report-20180510103209.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2c6ba961958Report-20180510103209.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2c6cd98cd0cWebTrackQuery_20180514111354.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2c6cd98cd0cWebTrackQuery_20180514111354.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2c6d19899d1WebTrackQuery_20180514111354.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2c6d19899d1WebTrackQuery_20180514111354.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2c6d71a8a61WebTrackQuery_20180514111354.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2c6d71a8a61WebTrackQuery_20180514111354.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2c6da460ddfWebTrackQuery_20180514111246.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2c6da460ddfWebTrackQuery_20180514111246.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2c6e2dabdf8WebTrackQuery_20180514111246.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2c6e2dabdf8WebTrackQuery_20180514111246.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2c99ceaaf3ffile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2c99ceaaf3ffile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2c9a80c2ddcfile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2c9a80c2ddcfile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2c9afee572afile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2c9afee572afile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2c9f503f301file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2c9f503f301file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2ca2146c9a4file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2ca2146c9a4file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2ca5d15e2c7file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2ca5d15e2c7file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2ca66d9adeafile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2ca66d9adeafile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2d87c3b86c9file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2d87c3b86c9file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2d88583e32bfile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2d88583e32bfile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2d8871cb6e3file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2d8871cb6e3file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2d8f035124dWebTrackQuery_20180514111246.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2d8f035124dWebTrackQuery_20180514111246.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2d9044a6aedfile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2d9044a6aedfile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2d90f67c173file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2d90f67c173file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2d912383688file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2d912383688file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2d97816e45fWebTrackQuery_20180514111246.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2d97816e45fWebTrackQuery_20180514111246.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2d9fc2007b3WebTrackQuery_20180514111246.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2d9fc2007b3WebTrackQuery_20180514111246.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2db22cedb7cfile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2db22cedb7cfile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2db5152ec3bfile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2db5152ec3bfile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2db6eeae800file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2db6eeae800file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2dbbeec8e48WebTrackQuery_20180514111246.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2dbbeec8e48WebTrackQuery_20180514111246.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2dbe0809299WebTrackQuery_20180514111246.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2dbe0809299WebTrackQuery_20180514111246.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2dbedebeba7WebTrackQuery_20180514111354.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2dbedebeba7WebTrackQuery_20180514111354.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2dcfb2d1aeefile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2dcfb2d1aeefile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2dd0d58e803WebTrackQuery_20180514111354.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2dd0d58e803WebTrackQuery_20180514111354.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2dd15bec498file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2dd15bec498file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2dd1e8befb2file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2dd1e8befb2file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2dd20d61c6cfile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2dd20d61c6cfile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2dd2211bea3file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2dd2211bea3file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2dd230124a5file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2dd230124a5file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2de30796331WebTrackQuery_20180514111246.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2de30796331WebTrackQuery_20180514111246.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2de6316a2a2file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2de6316a2a2file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2de6ee4ca56file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2de6ee4ca56file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2de70aa661cfile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2de70aa661cfile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2de71c3e07cfile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2de71c3e07cfile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2de7278b23bfile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2de7278b23bfile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2df430e6550index.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2df430e6550index.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2e0bb1f2efcWebTrackQuery_20180514111246.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2e0bb1f2efcWebTrackQuery_20180514111246.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2ee39a1caaffile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2ee39a1caaffile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2ee3b15cfd7file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2ee3b15cfd7file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2ee41dcbfb5file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2ee41dcbfb5file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2ee43e1b127file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2ee43e1b127file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2ee4519f4b8file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2ee4519f4b8file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2ee45c87159file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2ee45c87159file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2eed42ef2d9file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2eed42ef2d9file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2ef00e94e0bfile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2ef00e94e0bfile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2ef0b61c7defile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2ef0b61c7defile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2ef0cd92b4bfile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2ef0cd92b4bfile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c2ef0d47e1fafile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c2ef0d47e1fafile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c32ca0e4433cfile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c32ca0e4433cfile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c32ca821de1dfile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c32ca821de1dfile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c32cac50ec8bfile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c32cac50ec8bfile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c32cacfe3756file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c32cacfe3756file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c32f8056f1e21 copy-2.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c32f8056f1e21 copy-2.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c32f84c7cffb1 copy-2.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c32f84c7cffb1 copy-2.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c333c5816434WebTrackQuery_20180514111354.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c333c5816434WebTrackQuery_20180514111354.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c333d0fba7d9WebTrackQuery_20180514111354.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c333d0fba7d9WebTrackQuery_20180514111354.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c33422990561WebTrackQuery_20180514111354.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c33422990561WebTrackQuery_20180514111354.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c341cfcbc341file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c341cfcbc341file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c358762dc60490214719.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c358762dc60490214719.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c35d27042a85WebTrackQuery_20180514111246.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c35d27042a85WebTrackQuery_20180514111246.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c35d407833c0WebTrackQuery_20180514111354.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c35d407833c0WebTrackQuery_20180514111354.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c35d504c2dc4WebTrackQuery_20180514111354.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c35d504c2dc4WebTrackQuery_20180514111354.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c35db00c21faReport-20180510103209.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c35db00c21faReport-20180510103209.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c35db0c5746cWebTrackQuery_20180514111354.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c35db0c5746cWebTrackQuery_20180514111354.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c35e11e7202aWebTrackQuery_20180514111354.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c35e11e7202aWebTrackQuery_20180514111354.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c36ca35cf1f0WebTrackQuery_20180514111354.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c36ca35cf1f0WebTrackQuery_20180514111354.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c36d44d42020WebTrackQuery_20180514111354.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c36d44d42020WebTrackQuery_20180514111354.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c36d97846fd8WebTrackQuery_20180514111354.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c36d97846fd8WebTrackQuery_20180514111354.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c36db30691f6file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c36db30691f6file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c36e1265eee6WebTrackQuery_20180514111354.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c36e1265eee6WebTrackQuery_20180514111354.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c36e15866f96WebTrackQuery_20180514111354.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c36e15866f96WebTrackQuery_20180514111354.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c36e44944a3ffile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c36e44944a3ffile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c36eb3d2b6c7file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c36eb3d2b6c7file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c370a58bfb73file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c370a58bfb73file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c371e5d2420fWebTrackQuery_20180514111246.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c371e5d2420fWebTrackQuery_20180514111246.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3720934d0dcWebTrackQuery_20180514111354.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3720934d0dcWebTrackQuery_20180514111354.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c37212536fd4WebTrackQuery_20180514111246.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c37212536fd4WebTrackQuery_20180514111246.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c372af324ca0file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c372af324ca0file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c372b79d4994file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c372b79d4994file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c372ba3ee441file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c372ba3ee441file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3730233e3e1file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3730233e3e1file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3812f92658dfile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3812f92658dfile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c38138daf7d2file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c38138daf7d2file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c381964e0ccbfile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c381964e0ccbfile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3846164fd9efile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3846164fd9efile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c38756e599effile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c38756e599effile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3876da81ec9file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3876da81ec9file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3876f00d5d2file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3876f00d5d2file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3c069b1a3c2file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3c069b1a3c2file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3c08205208cfile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3c08205208cfile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3c08873d19afile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3c08873d19afile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3c08a7180e6file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3c08a7180e6file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3c0e6c2aaa0WebTrackQuery_20180514111354.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3c0e6c2aaa0WebTrackQuery_20180514111354.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3c12d10f9a6file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3c12d10f9a6file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3c133490df7file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3c133490df7file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3c1627075ddWebTrackQuery_20180514111246.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3c1627075ddWebTrackQuery_20180514111246.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3c164f79404WebTrackQuery_20180514111246.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3c164f79404WebTrackQuery_20180514111246.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3c1b498581bWebTrackQuery_20180514111246.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3c1b498581bWebTrackQuery_20180514111246.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3c1c6b41a96WebTrackQuery_20180514111354.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3c1c6b41a96WebTrackQuery_20180514111354.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3c1ccbae5e7WebTrackQuery_20180514111246.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3c1ccbae5e7WebTrackQuery_20180514111246.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3c1d79b06b3file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3c1d79b06b3file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3c1dce9aaf5file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3c1dce9aaf5file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3c1ddd7461cfile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3c1ddd7461cfile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3c373f040cdWebTrackQuery_20180514111354.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3c373f040cdWebTrackQuery_20180514111354.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3c3750a8cdcWebTrackQuery_20180514111246.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3c3750a8cdcWebTrackQuery_20180514111246.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3c3782de254WebTrackQuery_20180514111246.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3c3782de254WebTrackQuery_20180514111246.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3c391b6ae06file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3c391b6ae06file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3c395a879cefile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3c395a879cefile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3c4999f18c3file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3c4999f18c3file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3c5336dc82aWebTrackQuery_20180514111246.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3c5336dc82aWebTrackQuery_20180514111246.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3c5f8ecd963file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3c5f8ecd963file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3c6617038e5file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3c6617038e5file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3c6e1666c14file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3c6e1666c14file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3c6e68d0b1dfile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3c6e68d0b1dfile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3c6e9e5e5f5file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3c6e9e5e5f5file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3d587b4bbd6file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3d587b4bbd6file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3d62bc80ca6file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3d62bc80ca6file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3d6323abf7afile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3d6323abf7afile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3d638159a1bfile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3d638159a1bfile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3d67b1911a6WebTrackQuery_20180514111354.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3d67b1911a6WebTrackQuery_20180514111354.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3d69417c1d3file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3d69417c1d3file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3d6a053ae04file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3d6a053ae04file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3d6a1c52215WebTrackQuery_20180514111246.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3d6a1c52215WebTrackQuery_20180514111246.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3d6a2d80660file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3d6a2d80660file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3d6f1986156file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3d6f1986156file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3d6f3c1d201file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3d6f3c1d201file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3d6f5c291f2file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3d6f5c291f2file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3d6f7ae6ce4file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3d6f7ae6ce4file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3d712e6e697file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3d712e6e697file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3d714c7f27cfile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3d714c7f27cfile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3d722a13218file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3d722a13218file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3d724e7c49efile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3d724e7c49efile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3d73958c7befile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3d73958c7befile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3d73b55fa9dfile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3d73b55fa9dfile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3da8a098de6os-php-designptrns-pdf.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3da8a098de6os-php-designptrns-pdf.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3dbd0ab58221 copy-2.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3dbd0ab58221 copy-2.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3eb743de0f6file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3eb743de0f6file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3eecffcd014file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3eecffcd014file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3eed273adb7file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3eed273adb7file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/5c3ef93257884file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/5c3ef93257884file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/drafts/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/drafts/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/errors/403.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/errors/403.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/errors/404.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/errors/404.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/layouts/_addlease_steps.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/_addlease_steps.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/layouts/error.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/error.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/escalation/_chart.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/escalation/_chart.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/escalation/_form.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/escalation/_form.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/escalation/_list_escalation.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/escalation/_list_escalation.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/escalation/create.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/escalation/create.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/escalation/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/escalation/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/custom.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/custom.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/lease/fair-market-value/_form.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/fair-market-value/_form.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/fair-market-value/create.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/fair-market-value/create.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/fair-market-value/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/fair-market-value/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/fair-market-value/update.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/fair-market-value/update.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/initial-direct-cost/_form.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/initial-direct-cost/_form.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/initial-direct-cost/create.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/initial-direct-cost/create.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/initial-direct-cost/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/initial-direct-cost/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/initial-direct-cost/update.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/initial-direct-cost/update.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-assets/_create_assets.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-assets/_create_assets.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-assets/_form.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-assets/_form.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-assets/completedetails.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-assets/completedetails.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-balnce-as-on-dec/_form.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-balnce-as-on-dec/_form.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-balnce-as-on-dec/create.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-balnce-as-on-dec/create.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-balnce-as-on-dec/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-balnce-as-on-dec/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-balnce-as-on-dec/update.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-balnce-as-on-dec/update.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-duration-classified/_form.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-duration-classified/_form.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-duration-classified/create.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-duration-classified/create.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-duration-classified/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-duration-classified/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-duration-classified/update.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-duration-classified/update.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-incentives/_form.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-incentives/_form.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-incentives/create.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-incentives/create.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-incentives/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-incentives/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-incentives/update.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-incentives/update.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-payment-invoice/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-payment-invoice/index.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-renewable-option/_form.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-renewable-option/_form.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-renewable-option/create.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-renewable-option/create.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-renewable-option/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-renewable-option/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-renewable-option/update.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-renewable-option/update.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-termination-option/_form.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-termination-option/_form.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-termination-option/create.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-termination-option/create.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-termination-option/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-termination-option/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-termination-option/update.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-termination-option/update.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-valuation/_cumulative_valuation.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-valuation/_cumulative_valuation.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-valuation/_equivaline_to_present_lease_liability.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-valuation/_equivaline_to_present_lease_liability.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-valuation/_form.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-valuation/_form.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-valuation/_impairment_test.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-valuation/_impairment_test.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-valuation/_lease_liability.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-valuation/_lease_liability.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-valuation/_lease_valuation.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-valuation/_lease_valuation.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-valuation/_present_value_calculus.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-valuation/_present_value_calculus.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-valuation/create.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-valuation/create.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-valuation/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-valuation/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-valuation/update.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-valuation/update.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/payments/_current_due_dates_annexure.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/payments/_current_due_dates_annexure.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/payments/_due_dates_annexure.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/payments/_due_dates_annexure.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/lease/payments/_form.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/payments/_form.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/payments/create.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/payments/create.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/payments/createpayment.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/payments/createpayment.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/payments/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/payments/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/payments/updatepayment.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/payments/updatepayment.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/lease/purchase-option/_form.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/purchase-option/_form.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/purchase-option/create.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/purchase-option/create.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/purchase-option/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/purchase-option/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/purchase-option/update.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/purchase-option/update.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/lease/residual-value-gurantee/_form.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/residual-value-gurantee/_form.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/residual-value-gurantee/create.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/residual-value-gurantee/create.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/residual-value-gurantee/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/residual-value-gurantee/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/residual-value-gurantee/update.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/residual-value-gurantee/update.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/review-submit/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/review-submit/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/select-discount-rate/_form.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/select-discount-rate/_form.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/select-discount-rate/create.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/select-discount-rate/create.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/select-discount-rate/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/select-discount-rate/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/select-discount-rate/update.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/select-discount-rate/update.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/select-low-value/_form.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/select-low-value/_form.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/select-low-value/create.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/select-low-value/create.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/select-low-value/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/select-low-value/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/select-low-value/update.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/select-low-value/update.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/modifylease/_form.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/modifylease/_form.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/modifylease/create.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/modifylease/create.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/modifylease/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/modifylease/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/modifylease/update.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/modifylease/update.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/settings/classification/_edit_lease_modification_reason.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/settings/classification/_edit_lease_modification_reason.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/settings/profile/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/settings/profile/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storage/uploads/5c24b615b9601file1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/storage/uploads/5c24b615b9601file1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storage/uploads/5c24c2d73413cfile1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/storage/uploads/5c24c2d73413cfile1.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/Feature/Auth/LoginTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/Feature/Auth/LoginTest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/witsync_lease.sql" beforeDir="false" afterPath="$PROJECT_DIR$/witsync_lease.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -398,37 +32,34 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ComposerSettings" synchronizationState="SYNCHRONIZE">
+  <component name="ComposerSettings" doNotAsk="true" synchronizationState="SYNCHRONIZE">
     <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file pinned="false" current-in-tab="false">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/routes/web.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="320">
-              <caret line="42" column="185" selection-start-line="42" selection-start-column="173" selection-end-line="42" selection-end-column="185" />
+            <state relative-caret-position="740">
+              <caret line="132" column="144" selection-start-line="132" selection-start-column="144" selection-end-line="132" selection-end-column="144" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/UnderlyingLeaseAssetController.php">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/EscalationController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="602">
-              <caret line="249" column="47" selection-start-line="249" selection-start-column="21" selection-end-line="249" selection-end-column="47" />
+            <state relative-caret-position="350">
+              <caret line="386" column="34" selection-start-line="386" selection-start-column="34" selection-end-line="386" selection-end-column="34" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-assets/completedetails.blade.php">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/LeaseAssets.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="62">
-              <caret line="235" column="133" lean-forward="true" selection-start-line="235" selection-start-column="133" selection-end-line="235" selection-end-column="133" />
-              <folding>
-                <element signature="e#11431#11459#0#HTML" expanded="true" />
-              </folding>
+            <state relative-caret-position="480">
+              <caret line="77" column="43" selection-start-line="77" selection-start-column="20" selection-end-line="77" selection-end-column="43" />
             </state>
           </provider>
         </entry>
@@ -438,10 +69,23 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>lease_payment_invoice</find>
-      <find>lease-duration-classified</find>
       <find>index</find>
       <find>complete-asset-details</find>
       <find>assetDetails</find>
+      <find>Chart.min.js</find>
+      <find>update-asset-payment</find>
+      <find>updateAssetPayments</find>
+      <find>lease-duration-classified</find>
+      <find>underlying-lease-assets</find>
+      <find>updatetotalassets</find>
+      <find>countries</find>
+      <find>use_of_lease_asset</find>
+      <find>asset_category</find>
+      <find>sub_category_id</find>
+      <find>category_id</find>
+      <find>similar_asset_items</find>
+      <find>subsequent_modify_required</find>
+      <find>computeTotalUndiscountedPayment</find>
     </findStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/database/migrations</dir>
@@ -454,13 +98,36 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/resources/views/lease/lease-duration-classified/index.blade.php" />
-        <option value="$PROJECT_DIR$/resources/views/lease/lease-duration-classified/_form.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Middleware/CheckPreviousData.php" />
         <option value="$PROJECT_DIR$/config/settings.php" />
+        <option value="$PROJECT_DIR$/resources/views/lease/lease-assets/completedetails.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/auth/login.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/lease/payments/create.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/settings/leaseassets/index.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/lease/payments/_form.blade.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/LeasePaymentsController.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/LessorDetailsController.php" />
+        <option value="$PROJECT_DIR$/resources/views/modifylease/_form.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/lease/lease-assets/_create_assets.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/lease/lease-assets/_form.blade.php" />
+        <option value="$PROJECT_DIR$/public/js/custom.js" />
+        <option value="$PROJECT_DIR$/resources/views/lease/lease-assets/indexv2.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/lease/fair-market-value/createv2.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/lease/fair-market-value/_form.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/UnderlyingLeaseAssetController.php" />
-        <option value="$PROJECT_DIR$/resources/views/lease/lease-assets/completedetails.blade.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/FairMarketValueController.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseResidualController.php" />
+        <option value="$PROJECT_DIR$/resources/views/lease/residual-value-gurantee/_form.blade.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseTerminationOptionController.php" />
+        <option value="$PROJECT_DIR$/resources/views/lease/lease-termination-option/_form.blade.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseRenewableOptionController.php" />
+        <option value="$PROJECT_DIR$/resources/views/lease/lease-renewable-option/_form.blade.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/PurchaseOptionController.php" />
+        <option value="$PROJECT_DIR$/resources/views/lease/purchase-option/_form.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/lease/lease-duration-classified/_form.blade.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseDurationClassifiedController.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/EscalationController.php" />
+        <option value="$PROJECT_DIR$/routes/web.php" />
       </list>
     </option>
   </component>
@@ -562,11 +229,18 @@
       <path value="$PROJECT_DIR$/vendor/swiftmailer/swiftmailer" />
     </include_path>
   </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="292" />
+    <option name="y" value="52" />
+    <option name="width" value="1400" />
+    <option name="height" value="1000" />
+  </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -604,7 +278,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -641,26 +314,23 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1548928104402</updated>
-      <workItem from="1548928107580" duration="5124000" />
+      <workItem from="1548928107580" duration="5729000" />
+      <workItem from="1548992986716" duration="11116000" />
+      <workItem from="1549252525691" duration="16647000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5124000" />
+    <option name="totallyTimeSpent" value="33492000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
+    <frame x="64" y="-11" width="1857" height="1092" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="npm" side_tool="true" />
-      <window_info id="Favorites" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18684356" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1912659" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Database Changes" />
-      <window_info anchor="bottom" id="Version Control" />
-      <window_info anchor="bottom" id="Terminal" />
-      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info id="npm" order="2" side_tool="true" />
+      <window_info id="Favorites" order="3" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" />
@@ -668,10 +338,15 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="right" id="Database" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="Database Changes" order="9" />
+      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
+      <window_info anchor="bottom" id="Terminal" order="11" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Database" order="3" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -682,27 +357,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="435">
           <caret line="31" column="54" selection-start-line="31" selection-start-column="54" selection-end-line="31" selection-end-column="54" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-duration-classified/_form.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="19" column="135" selection-start-line="19" selection-start-column="135" selection-end-line="19" selection-end-column="135" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-duration-classified/index.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="515">
-          <caret line="56" column="127" selection-start-line="56" selection-start-column="127" selection-end-line="56" selection-end-column="127" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseDurationClassifiedController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="591">
-          <caret line="60" column="62" selection-start-line="60" selection-start-column="31" selection-end-line="60" selection-end-column="62" />
         </state>
       </provider>
     </entry>
@@ -720,27 +374,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-assets/_form.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="528">
-          <caret line="119" column="142" selection-start-line="119" selection-start-column="142" selection-end-line="119" selection-end-column="142" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-assets/_create_assets.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="28" column="6" lean-forward="true" selection-start-line="28" selection-start-column="6" selection-end-line="28" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-assets/index.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="31" column="63" selection-start-line="31" selection-start-column="49" selection-end-line="31" selection-end-column="63" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Lease.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="645">
@@ -748,27 +381,313 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/web.php">
+    <entry file="file://$PROJECT_DIR$/resources/views/auth/login.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="320">
-          <caret line="42" column="185" selection-start-line="42" selection-start-column="173" selection-end-line="42" selection-end-column="185" />
+        <state relative-caret-position="315">
+          <caret line="21" column="64" selection-start-line="21" selection-start-column="64" selection-end-line="21" selection-end-column="64" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/UnderlyingLeaseAssetController.php">
+    <entry file="file://$PROJECT_DIR$/resources/views/settings/leaseassets/index.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="602">
-          <caret line="249" column="47" selection-start-line="249" selection-start-column="21" selection-end-line="249" selection-end-column="47" />
+        <state relative-caret-position="-186">
+          <caret line="127" column="26" selection-start-line="127" selection-start-column="26" selection-end-line="127" selection-end-column="26" />
+          <folding>
+            <element signature="e#0#6#0" expanded="true" />
+            <element signature="e#6#12#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/LeasePaymentsController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="560">
+          <caret line="278" column="5" selection-start-line="278" selection-start-column="5" selection-end-line="278" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/payments/updatepayment.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" column="50" selection-start-line="18" selection-start-column="45" selection-end-line="18" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/payments/_form.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1307">
+          <caret line="269" column="238" selection-start-line="269" selection-start-column="238" selection-end-line="269" selection-end-column="238" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/payments/create.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="104" column="58" selection-start-line="104" selection-start-column="58" selection-end-line="104" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/layouts/admin/master.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="309">
+          <caret line="84" column="67" selection-start-line="84" selection-start-column="67" selection-end-line="84" selection-end-column="67" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/lessor-details/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="660">
+          <caret line="131" column="58" lean-forward="true" selection-start-line="131" selection-start-column="58" selection-end-line="131" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-duration-classified/update.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" column="61" selection-start-line="18" selection-start-column="36" selection-end-line="18" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/modifylease/_form.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="630">
+          <caret line="42" column="23" lean-forward="true" selection-start-line="42" selection-start-column="23" selection-end-line="42" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/LeaseAssetSimilarCharacteristicSettings.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="6" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-assets/_create_assets.blade.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/LessorDetailsController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1592">
+          <caret line="168" column="97" selection-start-line="168" selection-start-column="97" selection-end-line="168" selection-end-column="97" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-assets/completedetails.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="62">
-          <caret line="235" column="133" lean-forward="true" selection-start-line="235" selection-start-column="133" selection-end-line="235" selection-end-column="133" />
+        <state relative-caret-position="2253">
+          <caret line="382" column="40" lean-forward="true" selection-start-line="382" selection-start-column="40" selection-end-line="382" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/js/custom.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="492">
+          <caret line="207" column="37" selection-start-line="207" selection-start-column="37" selection-end-line="207" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-assets/_form.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="722">
+          <caret line="149" column="18" selection-start-line="147" selection-start-column="12" selection-end-line="149" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-assets/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="630">
+          <caret line="42" column="63" selection-start-line="42" selection-start-column="63" selection-end-line="42" selection-end-column="63" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-assets/indexv2.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="617">
+          <caret line="563" selection-start-line="563" selection-end-line="563" />
           <folding>
-            <element signature="e#11431#11459#0#HTML" expanded="true" />
+            <element signature="e#585#606#0#HTML" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/fair-market-value/create.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="24" column="11" selection-end-line="24" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/fair-market-value/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="662">
+          <caret line="81" column="34" selection-start-line="79" selection-start-column="27" selection-end-line="81" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/UnderlyingLeaseAssetController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="675">
+          <caret line="166" column="48" lean-forward="true" selection-start-line="166" selection-start-column="16" selection-end-line="166" selection-end-column="48" />
+          <folding>
+            <element signature="e#133#151#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/fair-market-value/createv2.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" column="59" selection-start-line="18" selection-start-column="54" selection-end-line="18" selection-end-column="59" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/fair-market-value/_form.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" column="22" lean-forward="true" selection-start-line="1" selection-start-column="22" selection-end-line="1" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/FairMarketValueController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1845">
+          <caret line="145" column="27" lean-forward="true" selection-start-line="145" selection-start-column="27" selection-end-line="145" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/residual-value-gurantee/_form.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="555">
+          <caret line="163" column="45" selection-start-line="163" selection-start-column="45" selection-end-line="163" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/residual-value-gurantee/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="677">
+          <caret line="82" column="30" lean-forward="true" selection-start-line="82" selection-start-column="30" selection-end-line="82" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseResidualController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="765">
+          <caret line="88" column="25" selection-start-line="88" selection-start-column="25" selection-end-line="88" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Helpers/Helpers.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="448">
+          <caret line="472" column="9" selection-start-line="472" selection-start-column="9" selection-end-line="472" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-termination-option/_form.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="405">
+          <caret line="96" column="42" lean-forward="true" selection-start-line="96" selection-start-column="42" selection-end-line="96" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-termination-option/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="662">
+          <caret line="81" column="34" selection-start-line="79" selection-start-column="28" selection-end-line="81" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseTerminationOptionController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-180">
+          <caret line="51" column="52" lean-forward="true" selection-start-line="51" selection-start-column="52" selection-end-line="51" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-renewable-option/_form.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="405">
+          <caret line="69" column="18" selection-start-line="69" selection-start-column="18" selection-end-line="69" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-renewable-option/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1067">
+          <caret line="79" column="36" selection-start-line="77" selection-start-column="30" selection-end-line="79" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseRenewableOptionController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="36" column="12" lean-forward="true" selection-start-line="36" selection-start-column="12" selection-end-line="36" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/purchase-option/_form.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="303">
+          <caret line="93" column="38" selection-start-line="93" selection-start-column="38" selection-end-line="93" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/PurchaseOptionController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="570">
+          <caret line="103" column="28" lean-forward="true" selection-start-line="103" selection-start-column="28" selection-end-line="103" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/purchase-option/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="662">
+          <caret line="81" column="34" lean-forward="true" selection-start-line="79" selection-start-column="28" selection-end-line="81" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseDurationClassifiedController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="615">
+          <caret line="71" column="117" lean-forward="true" selection-start-line="71" selection-start-column="117" selection-end-line="71" selection-end-column="117" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-duration-classified/create.blade.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-duration-classified/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="662">
+          <caret line="84" column="35" selection-start-line="82" selection-start-column="28" selection-end-line="84" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-duration-classified/_form.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="723">
+          <caret line="56" column="48" selection-start-line="56" selection-start-column="48" selection-end-line="56" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/LeaseAssets.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="480">
+          <caret line="77" column="43" selection-start-line="77" selection-start-column="20" selection-end-line="77" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/EscalationController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="350">
+          <caret line="386" column="34" selection-start-line="386" selection-start-column="34" selection-end-line="386" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/web.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="740">
+          <caret line="132" column="144" selection-start-line="132" selection-start-column="144" selection-end-line="132" selection-end-column="144" />
         </state>
       </provider>
     </entry>

@@ -12,3 +12,20 @@
 input.form-control{ height: 49px; border-radius: 3px; padding: 0 10px;}
 .loginBtn {display: block; width: 100%; font-weight: 600; height: 48px; font-size: 20px; border-radius: 3px; margin-bottom: 10px;}
 .btnAlign{ text-align: center;}
+.resetPadd{ padding-top: 100px;}
+.loginpadd{ padding-top: 50px;}
+.navbar-default {background-color: #1b2d5b; border-color: #1b2d5b;}
+.navbar-brand.logoBx {padding: 9px 10px;}
+.navbar-default .navbar-nav > li > a {color: #fff !important;}
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus{ background: none !important;}
+.dashLeft {padding: 0; width: 270px; position: fixed; float: left; left: 0;	top: 50px; bottom: 0; background: #eaeaea; border-right: none;}
+.dashLeft a.list-group-item{ border:0 !important;}
+.dashLeft a.list-group-item:hover, .dashLeft a.list-group-item.active { color: #1b2d5b; background: #d7d7d7;}
+.dashLeft a.list-group-item i{ font-size: 20px; }
+.itemTab ul li a {background: none; border: none; border-radius: 0px;width:92px; height: auto; text-align: center; }
+.itemTab ul li a span{ display: block; font-size: 13px; }
+.itemTab ul li a:hover, .itemTab ul li a.active {background:none; border:none; text-decoration: none; }
+.itemTab ul li a span {display: block; position: relative; left: 0; right: 0; top: 0; width: auto; margin-left: 0; background: none; border-radius: 0;}
+.itemTab ul li a span:after{ display: none;}
+.itemTab ul li a i {display: inline-block; font-style: normal; color: #555; width: 26px; height: 26px; line-height: 23px; border: #555 solid 1px; border-radius: 50%;}
+.itemTab {padding-bottom: 20px; padding-top: 15px; border-bottom: #dadcdd solid 1px;}

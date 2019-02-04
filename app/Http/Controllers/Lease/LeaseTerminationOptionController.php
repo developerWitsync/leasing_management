@@ -44,6 +44,70 @@ class LeaseTerminationOptionController extends Controller
     }
 
     /**
+     * create or update the lease asset termination option , the form will appear directly to the  users since they can now add only a single lease asset per lease
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
+    public function index_V2($id, Request $request){
+        try{
+            $breadcrumbs = [
+                [
+                    'link' => route('add-new-lease.index'),
+                    'title' => 'Add New Lease'
+                ],
+                [
+                    'link' => route('addlease.leaseterminationoption.index',['id' => $id]),
+                    'title' => 'Termination Option'
+                ],
+            ];
+            $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
+            if($lease) {
+
+                $asset = $lease->assets->first(); //users will have only lease asset from now.
+                if($asset->terminationOption){
+                    $model = $asset->terminationOption;
+                } else {
+                    $model = new LeaseTerminationOption();
+                }
+
+                if($request->isMethod('post') ) {
+                    $validator = Validator::make($request->except('_token'), $this->validationRules());
+
+                    if($validator->fails()){
+                        return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
+                    }
+
+                    $data = $request->except('_token');
+                    if($request->lease_end_date!=""){
+                        $data['lease_end_date']  = Carbon::parse($request->lease_end_date)->format('Y-m-d');
+                    }
+                    $data['lease_id']   = $asset->lease->id;
+                    $data['asset_id']   = $asset->id;
+
+                    $model->setRawAttributes($data);
+
+                    if($model->save()){
+                        // complete Step
+                        confirmSteps($lease->id,'step6');
+                        return redirect(route('addlease.leaseterminationoption.index',['id' => $lease->id]))->with('status', 'Lease Termination Option Details has been added successfully.');
+                    }
+                }
+                return view('lease.lease-termination-option.create', compact(
+                    'model',
+                    'lease',
+                    'asset',
+                    'breadcrumbs'
+                ));
+            } else {
+                abort(404);
+            }
+        } catch (\Exception $e) {
+            abort(404);
+        }
+    }
+
+    /**
      * renders the table to list all the lease assets.
      * @param $id Primary key for the lease
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -85,14 +149,14 @@ class LeaseTerminationOptionController extends Controller
 
                 if($request->isMethod('post') ) {
                     //dd($request->all());
-                if($request->lease_termination_option_available == 'yes'){
-                    $validator = Validator::make($request->except('_token'), $this->validationRules());
+                    if($request->lease_termination_option_available == 'yes'){
+                        $validator = Validator::make($request->except('_token'), $this->validationRules());
 
-                    if($validator->fails()){
-                       // dd($validator->errors());
-                        return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
+                        if($validator->fails()){
+                           // dd($validator->errors());
+                            return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
+                        }
                     }
-                }
 
                     $data = $request->except('_token');
                     if($request->lease_end_date!=""){
@@ -104,10 +168,8 @@ class LeaseTerminationOptionController extends Controller
                     $lease_termination_option = LeaseTerminationOption::create($data);
 
                     if($lease_termination_option){
-
                          // complete Step
-                        $complete_step6 = confirmSteps($lease->id,'step6');
-
+                        confirmSteps($lease->id,'step6');
                         return redirect(route('addlease.leaseterminationoption.index',['id' => $lease->id]))->with('status', 'Lease Termination Option Details has been added successfully.');
                     }
                 }
