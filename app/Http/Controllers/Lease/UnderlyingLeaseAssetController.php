@@ -26,7 +26,161 @@ use Validator;
 
 class UnderlyingLeaseAssetController extends Controller
 {
-     
+
+    /**
+     * One Lease can have single lease asset hence show the form to provide all the details at once.
+     * Create the lease asset form
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function index_V2($id){
+        $breadcrumbs = [
+            [
+                'link' => route('add-new-lease.index'),
+                'title' => 'Add New Lease'
+            ],
+            [
+                'link' => route('addlease.leaseasset.index',['id' => $id]),
+                'title' => 'Underlying Lease Assets'
+            ],
+        ];
+
+        $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->with('leaseType')->with('assets')->first();
+
+        if($lease) {
+            if(count($lease->assets) > 0) {
+                $asset = $lease->assets->first();
+            } else {
+                $asset = new LeaseAssets();
+            }
+            //check if the Subsequent Valuation is applied for the lease modification
+            $subsequent_modify_required = $lease->isSubsequentModification();
+            $lease_assets_categories  = LeaseAssetCategories::query()->with('subcategories')->get();
+            $la_similar_charac_number = LeaseAssetSimilarCharacteristicSettings::query()
+                ->select('number')
+                ->whereIn('business_account_id', getDependentUserIds())
+                ->get();
+            $countries  = Countries::query()->where('status', '=', '1')->get();
+            $use_of_lease_asset = UseOfLeaseAsset::query()->where('status', '=', '1')->get();
+            $expected_life_of_assets = ExpectedLifeOfAsset::query()->whereIn('business_account_id', getDependentUserIds())->get();
+            $accounting_terms  = LeaseAccountingTreatment::query()->where('upto_year', '=', '2018')->get();
+
+            // get max previous year from general settings for lease start year which will be minimum year
+            $settings = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
+            return view('lease.lease-assets.indexv2', compact('breadcrumbs',
+                'lease',
+                'lease_assets_categories',
+                'la_similar_charac_number',
+                'asset',
+                'subsequent_modify_required',
+                'countries',
+                'use_of_lease_asset',
+                'expected_life_of_assets',
+                'accounting_terms',
+                'settings'
+            ));
+        } else {
+            abort(404);
+        }
+    }
+
+    /**
+     * create or update a new lease asset for the lease id within the parameter id
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function save($id, Request $request){
+        try{
+            $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->with('leaseType')->with('assets')->first();
+            if($lease) {
+
+                if(count($lease->assets) > 0) {
+                    $asset = $lease->assets->first();
+                } else {
+                    $asset = new LeaseAssets();
+                }
+
+                Validator::extend('required_if_prior_to_date', function ($attribute, $value, $parameters, $validator) {
+                    if (date('Y-m-d', strtotime($parameters['0'])) < date('Y-m-d', strtotime('2019-01-01'))) {
+                        if (is_null($value)) {
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    } else {
+                        return true;
+                    }
+                });
+
+                $rules = [
+                    'uuid' => 'required|unique:lease_assets,uuid',
+                    'category_id' => 'required|exists:lease_assets_categories,id',
+                    'sub_category_id'   => 'required|exists:lease_assets_sub_categories_settings,id',
+                    'name'  => 'required',
+                    'similar_asset_items'   =>'required|numeric',
+                    'other_details' => 'required',
+                    'country_id' => 'required|exists:countries,id',
+                    'location' => 'required',
+                    'specific_use' => 'required|exists:lease_asset_use_master,id',
+                    'use_of_asset' => 'required_if:specific_use,1',
+                    'expected_life' => 'required|exists:expected_useful_life_of_asset,id',
+                    'lease_start_date' => 'required|date|date_format:d-M-Y',
+                    'lease_free_period' => 'numeric',
+                    'accural_period' => 'required|date|date_format:d-M-Y',
+                    'lease_end_date' => 'required|date|date_format:d-M-Y|after:accural_period',
+                    'lease_term' => 'required',
+                    'accounting_treatment' => 'required_if_prior_to_date:' . $request->accural_period,
+                ];
+
+                $messages = [
+                    'country_id.required' => 'The country field is required.',
+                    'other_details.required' => 'The Other Details field is required.',
+                    'specific_use.required' => 'The Specific use of asset field is required.',
+                    'use_of_asset.required_if' => 'The Use of Asset is required if specific use of the Lease Asset is Own Use.',
+                    'expected_life.required' => 'The expected life of asset field is required.',
+                    'lease_start_date.required' => 'The Lease start date field is required.',
+                    'lease_start_date.date' => 'The Lease start date field must be a valid date.',
+                    'lease_free_period.numeric' => 'The Initial Lease Free Period field must be a numeric.',
+                    'accural_period.required' => 'The Start Date of Lease Payment / Accrual Period field is required.',
+                    'lease_end_date.required' => 'The Lease End Date field is required.',
+                    'lease_end_date.date' => 'The Lease End Date field must be a valid date.',
+                    'accounting_treatment.required_if_prior_to_date' => 'The accounting period is required when Start Date of Lease Payment / Accrual Period is prior to Jan 01, 2019.'
+                ];
+
+                if (date('Y-m-d', strtotime($request->accural_period)) < date('Y-m-d', strtotime('2019-01-01'))) {
+                    $rules['using_lease_payment'] = 'required';
+                }
+
+                $validator = Validator::make($request->except('_token'), $rules, $messages);
+
+                if ($validator->fails()) {
+                    return redirect()->back()->withErrors($validator->errors())->withInput($request->except('_token'));
+                }
+                $data = $request->except('_token');
+                $data['lease_id'] = $lease->id;
+                $data['lease_end_date'] = date('Y-m-d', strtotime($request->lease_end_date));
+                $data['accural_period'] = date('Y-m-d', strtotime($request->accural_period));
+                $data['lease_start_date'] = date('Y-m-d', strtotime($request->lease_start_date));
+                $data['is_details_completed'] = '1';
+                $asset->setRawAttributes($data);
+                $asset->save();
+
+                // make the entry to the completed steps table so that the log can be created to check the completed steps
+                confirmSteps($id, 'step2');
+
+                return redirect(
+                    route('addlease.leaseasset.index', ['id' => $lease->id])
+                )->with('status', "Asset Details has been updated successfully.");
+            }else{
+                abort(404);
+            }
+        } catch (\Exception $e){
+            dd($e);
+        }
+    }
+
     /**
      * Renders the Underlying Lease asset form for the Lease with Primary key $id
      * @param $id Primary key for the lease

@@ -28,6 +28,81 @@ class LeaseDurationClassifiedController extends Controller
         ];
     }
 
+    public function index_v2($id, Request $request){
+        try{
+            $breadcrumbs = [
+                [
+                    'link' => route('add-new-lease.index'),
+                    'title' => 'Add New Lease'
+                ],
+                [
+                    'link' => route('addlease.durationclassified.create', ['id' => $id]),
+                    'title' => 'Create Lease Duration Classified'
+                ],
+            ];
+
+            $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
+
+            if ($lease) {
+
+                //check if the Subsequent Valuation is applied for the lease modification
+                $subsequent_modify_required = $lease->isSubsequentModification();
+
+                $asset = $lease->assets->first(); //since a lease can have only one asset from now.
+
+                if($asset->leaseDurationClassified) {
+                    $model = $asset->leaseDurationClassified;
+                } else {
+                    $model = new LeaseDurationClassified();
+                }
+
+                if ($request->isMethod('post')) {
+                    $validator = Validator::make($request->except('_token'), $this->validationRules());
+
+                    if ($validator->fails()) {
+                        return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
+                    }
+
+                    $data = $request->except('_token');
+                    $data['lease_id'] = $asset->lease->id;
+                    $data['asset_id'] = $asset->id;
+                    $data['lease_start_date'] = date('Y-m-d', strtotime($request->lease_start_date));
+                    $data['lease_end_date'] = date('Y-m-d', strtotime($request->lease_end_date));
+                    $data['lease_contract_duration_id'] = $request->lease_contract_duration_id;
+//                    $data['expected_lease_end_Date'] = date('Y-m-d', strtotime($request->expected_lease_end_Date));
+
+                    $model->setRawAttributes($data);
+                    if ($model->save()) {
+                        // complete Step
+                        confirmSteps($lease->id, 'step9');
+                        return redirect(route('addlease.durationclassified.index', ['id' => $lease->id]))->with('status', 'Lease Duration Classified Value has been added successfully.');
+                    }
+                }
+
+                //find the expected values for the end date, lease classification
+                $model->lease_end_date = $model->getExpectedLeaseEndDate($asset);
+                $model->lease_contract_duration_id = $model->getLeaseAssetClassification($asset);
+
+                $lease_contract_duration = LeaseContractDuration::query()->get();
+
+                return view('lease.lease-duration-classified.create', compact(
+                    'model',
+                    'lease',
+                    'asset',
+                    'expected_lease_classification',
+                    'lease_contract_duration',
+                    'breadcrumbs',
+                    'subsequent_modify_required'
+                ));
+            } else {
+                abort(404);
+            }
+        } catch (\Exception $e){
+            dd($e);
+            abort(404, $e->getMessage());
+        }
+    }
+
     /**
      * renders the table to list all the lease assets.
      * @param $id Primary key for the lease
@@ -116,9 +191,7 @@ class LeaseDurationClassifiedController extends Controller
                     if ($duration_classified_value) {
 
                         // complete Step
-                        $lease_id = $lease->id;
-                        $step = 'step9';
-                        $complete_step9 = confirmSteps($lease_id, $step);
+                        confirmSteps($lease->id, 'step9');
 
                         return redirect(route('addlease.durationclassified.index', ['id' => $lease->id]))->with('status', 'Lease Duration Classified Value has been added successfully.');
                     }
@@ -142,7 +215,7 @@ class LeaseDurationClassifiedController extends Controller
                 abort(404);
             }
         } catch (\Exception $e) {
-            dd($e);
+            abort(404);
         }
     }
 
@@ -169,6 +242,8 @@ class LeaseDurationClassifiedController extends Controller
             $asset = LeaseAssets::query()->findOrFail($id);
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
             if ($lease) {
+                //check if the Subsequent Valuation is applied for the lease modification
+                $subsequent_modify_required = $lease->isSubsequentModification();
 
                 $model = LeaseDurationClassified::query()->where('asset_id', '=', $id)->first();
 
@@ -200,7 +275,8 @@ class LeaseDurationClassifiedController extends Controller
                     'lease',
                     'asset',
                     'lease_contract_duration',
-                    'breadcrumbs'
+                    'breadcrumbs',
+                    'subsequent_modify_required'
                 ));
             } else {
                 abort(404);

@@ -93,6 +93,10 @@
             <button type="submit" class="btn btn-success">
                 Submit
             </button>
+
+            @if($asset->terminationOption)
+                <a href="{{ route('addlease.renewable.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
+            @endif
         </div>
     </div>
 </form>

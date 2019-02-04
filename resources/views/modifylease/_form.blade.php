@@ -27,7 +27,8 @@
             @endif
         </div>
     </div>
-      <div class="form-group{{ $errors->has('reason') ? ' has-error' : '' }} required">
+
+    <div class="form-group{{ $errors->has('reason') ? ' has-error' : '' }} required">
         <label for="name" class="col-md-4 control-label">Reason For Modification</label>
         <div class="col-md-6 form-check form-check-inline" required>
              <select class="form-control" name="reason">
@@ -38,8 +39,8 @@
                 </select>
             @if ($errors->has('reason'))
                 <span class="help-block">
-                        <strong>{{ $errors->first('reason') }}</strong>
-                    </span>
+                    <strong>{{ $errors->first('reason') }}</strong>
+                </span>
             @endif
         </div>
     </div>
