@@ -26,6 +26,77 @@ class LeaseRenewableOptionController extends Controller
             'expected_lease_end_Date'   => 'required_if:is_reasonable_certainity_option,yes'
         ];
     }
+
+    /**
+     * create or update the lease asset renewal options for a single lease asset functionality
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
+    public function index_V2($id, Request $request){
+        try{
+            $breadcrumbs = [
+                [
+                    'link' => route('add-new-lease.index'),
+                    'title' => 'Add New Lease'
+                ],
+                [
+                    'link' => route('addlease.renewable.create', ['id' => $id]),
+                    'title' => 'Create Renewal Option'
+                ],
+            ];
+
+            $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
+            if($lease) {
+
+                $asset = $lease->assets->first(); //since there will only be one lease asset per lease from now.
+
+                if($asset->renewableOptionValue) {
+                    $model  = $asset->renewableOptionValue;
+                } else {
+                    $model = new LeaseRenewableOption();
+                }
+
+                if($request->isMethod('post')) {
+                    $validator = Validator::make($request->except('_token'), $this->validationRules());
+
+                    if($validator->fails()){
+                        return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
+                    }
+
+                    $data = $request->except('_token', 'submit');
+                    $data['lease_id']   = $asset->lease->id;
+                    $data['asset_id']   = $asset->id;
+                    if($request->is_reasonable_certainity_option == "yes") {
+                        $data['expected_lease_end_Date'] = Carbon::parse($request->expected_lease_end_Date)->format('Y-m-d');
+                    } else {
+                        $data['expected_lease_end_Date']  = null;
+                    }
+
+                    $model->setRawAttributes($data);
+
+                    if($model->save()){
+                        // complete Step
+                        confirmSteps($lease->id,'step7');
+                        return redirect(route('addlease.renewable.index',['id' => $lease->id]))->with('status', 'Renewable Option has been added successfully.');
+                    }
+                }
+
+                return view('lease.lease-renewable-option.create', compact(
+                    'model',
+                    'lease',
+                    'asset',
+                    'breadcrumbs'
+                ));
+
+            } else {
+                abort(404);
+            }
+        } catch (\Exception $e){
+            abort(404, $e->getMessage());
+        }
+    }
+
     /**
      * renders the table to list all the lease assets.
      * @param $id Primary key for the lease

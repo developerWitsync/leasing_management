@@ -65,6 +65,9 @@
             <button type="submit" name="submit" class="btn btn-success">
                 Submit
             </button>
+            @if($asset->renewableOptionValue)
+                <a href="{{ route('addlease.purchaseoption.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
+            @endif
         </div>
   </div>
 

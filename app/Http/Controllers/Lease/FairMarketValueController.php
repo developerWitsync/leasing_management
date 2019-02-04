@@ -42,13 +42,92 @@ class FairMarketValueController extends Controller
     }
 
     /**
+     * changes so that the users can have one lease asset per lease
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function index_V2($id, Request $request){
+        try{
+            $breadcrumbs = [
+                [
+                    'link' => route('add-new-lease.index'),
+                    'title' => 'Add New Lease'
+                ],
+                [
+                    'link' => route('addlease.fairmarketvalue.index',['id' => $id]),
+                    'title' => 'Fair Market Value'
+                ],
+            ];
+
+            $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
+            if($lease) {
+
+                $asset = $lease->assets->first(); //since once lease will now have only one lease asset
+
+                if($asset->fairMarketValue){
+                    $model = $asset->fairMarketValue;
+                } else {
+                    $model = new FairMarketValue();
+                }
+
+                if($request->isMethod('post')) {
+                    $validator = Validator::make($request->except('_token'), $this->validationRules());
+
+                    if($validator->fails()){
+                        return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
+                    }
+
+                    $data = $request->except('_token');
+                    $data['attachment'] = "";
+                    $data['lease_id']   = $asset->lease->id;
+                    $data['asset_id']   = $asset->id;
+                    if($request->hasFile('attachment')){
+                        $file = $request->file('attachment');
+                        $uniqueFileName = uniqid() . $file->getClientOriginalName();
+                        $request->file('attachment')->move('uploads', $uniqueFileName);
+                        $data['attachment'] = $uniqueFileName;
+                    }
+
+                    $market_value = $model->setRawAttributes($data);
+                    if($market_value->save()){
+                        // complete Step
+                        confirmSteps($lease->id,'step4');
+                        return redirect(route('addlease.fairmarketvalue.index',['id' => $lease->id]))->with('status', 'Fair Market has been added successfully.');
+                    }
+                }
+
+                $currencies = Currencies::query()->where('status', '=', '1')->get();
+                $reporting_currency_settings = ReportingCurrencySettings::query()->where('business_account_id', '=', auth()->user()->id)->first();
+                $reporting_foreign_currency_transaction_settings = ForeignCurrencyTransactionSettings::query()->where('business_account_id', '=', auth()->user()->id)->get();
+                if(collect($reporting_currency_settings)->isEmpty()) {
+                    $reporting_currency_settings = new ReportingCurrencySettings();
+                }
+                return view('lease.fair-market-value.createv2', compact(
+                    'model',
+                    'lease',
+                    'asset',
+                    'currencies',
+                    'reporting_foreign_currency_transaction_settings',
+                    'reporting_currency_settings',
+                    'breadcrumbs'
+                ));
+            } else {
+                abort(404);
+            }
+        } catch (\Exception $e) {
+            abort(404);
+        }
+    }
+
+    /**
      * renders the table to list all the lease assets.
      * @param $id Primary key for the lease
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id, Request $request){
-                $breadcrumbs = [
+            $breadcrumbs = [
                 [
                     'link' => route('add-new-lease.index'),
                     'title' => 'Add New Lease'
@@ -80,7 +159,6 @@ class FairMarketValueController extends Controller
             $lease = $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
             if($lease) {
 
-            $model = FairMarketValue::query()->where('asset_id', '=', $id)->first();
                 $model = new FairMarketValue();
 
                 if($request->isMethod('post')) {

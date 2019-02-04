@@ -1,18 +1,17 @@
-
 <form class="form-horizontal" method="post">
     {{ csrf_field() }}
     <div class="FrmOuterBx">
         <table class="table table-bordered table-responsive">
             <thead>
-            <tr>
-                <th width="7%">Sr. No.</th>
-                <th width="15%">Unique ULA Code</th>
-                <th width="15%">Underlying Lease Asset Category</th>
-                <th width="15%">Underlying Leased Asset Classification</th>
-                <th width="15%">Name of the Underlying Lease Asset</th>
-                <th width="20%">Number of Units of Lease Assets of Similar Characteristics</th>
-                <th width="13%">Action</th>
-            </tr>
+                <tr>
+                    <th width="7%">Sr. No.</th>
+                    <th width="15%">Unique ULA Code</th>
+                    <th width="15%">Underlying Lease Asset Category</th>
+                    <th width="15%">Underlying Leased Asset Classification</th>
+                    <th width="15%">Name of the Underlying Lease Asset</th>
+                    <th width="20%">Number of Units of Lease Assets of Similar Characteristics</th>
+                    <th width="13%">Action</th>
+                </tr>
             </thead>
             <tbody>
 
