@@ -4,8 +4,8 @@
     <div class="loginOuter">
         <div class="container">
             <div class="row">
-                <div class="col-md-8 col-md-offset-2">
-                    <div class="panel panel-default loginInnerBx">
+                <div class="col-md-12">
+                    <div class="panel panel-default loginInnerBx loginpadd">
                         <div class="loginLogo">
                             <a href="/">
                                 <img src="{{ asset('assets/images/logo.png')}}" alt="Logo">
