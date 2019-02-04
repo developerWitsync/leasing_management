@@ -29,12 +29,110 @@ class LeaseIncentivesController extends Controller
             'total_lease_incentives'  => 'required_if:is_any_lease_incentives_receivable,yes',
             'customer_name.*' => 'required_if:is_any_lease_incentives_receivable,yes|nullable',
             'description.*' => 'required_if:is_any_lease_incentives_receivable,yes|nullable',
-            'incentive_date.*' => 'required_if:is_any_lease_incentives_receivable,yes|date|nullable',
+            'incentive_date.*' => 'required_if:is_any_lease_incentives_receivable,yes|date|nullable|date_format:d-M-Y',
             'currency_id.*' => 'required_if:is_any_lease_incentives_receivable,yes|nullable',
             'amount.*' => 'required_if:is_any_lease_incentives_receivable,yes|numeric|nullable',
             'exchange_rate.*' => 'required_if:is_any_lease_incentives_receivable,yes|numeric|nullable'
           ];
     }
+
+    public function index_V2($id, Request $request){
+        try{
+            $breadcrumbs = [
+                [
+                    'link' => route('add-new-lease.index'),
+                    'title' => 'Add New Lease'
+                ],
+                [
+                    'link' => route('addlease.leaseincentives.index',['id' => $id]),
+                    'title' => 'Lease Incentives'
+                ],
+            ];
+            $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
+            if($lease){
+                $asset = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date','>=','2019-01-01')->first();
+                if($asset){
+                    $currencies = Currencies::query()->where('status', '=', '1')->get();
+                    if($asset->leaseIncentives){
+                        $model = $asset->leaseIncentives;
+                        $lease_incentive_id = $model->id;
+                    } else {
+                        $model = new LeaseIncentives();
+                        $lease_incentive_id = null;
+                    }
+
+                    if ($request->isMethod('post')) {
+
+                        if($request->has('is_any_lease_incentives_receivable') && $request->is_any_lease_incentives_receivable == "yes") {
+                            $total = 0;
+                            foreach ($request->customer_name as $key=>$customer) {
+                                $total += $request->amount[$key];
+                            }
+                            $request->request->add(['total_lease_incentives' => $total ]);
+                        }
+
+                        $validator = Validator::make($request->except('_token'), $this->validationRules(),[
+                            'customer_name.*.required_if' =>  'Customer name is required',
+                            'description.*.required_if' => 'Description is required',
+                            'incentive_date.*.required_if' => 'Incentive Date is required',
+                            'currency_id.*.required_if' => 'Currency is required',
+                            'amount.*.required_if' => 'Amount is required',
+                            'exchange_rate.*.required_if' => 'Rate is required',
+                            'incentive_date.*.date_format'  => 'Required date format is d-M-Y',
+                        ]);
+
+                        if ($validator->fails()) {
+                            return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
+                        }
+
+                        $data = $request->except('_token', 'customer_name', 'description', 'incentive_date', 'currency_id', 'amount', 'exchange_rate');
+                        $data['lease_id'] = $asset->lease->id;
+                        $data['asset_id'] = $asset->id;
+                        $model->setRawAttributes($data);
+                        if ($model->save()) {
+                            //Delete all the customer and create them again..
+                            CustomerDetails::query()->where('lease_incentive_id', '=', ($lease_incentive_id)?$lease_incentive_id:$model->id)->delete();
+                            if($request->is_any_lease_incentives_receivable == "yes") {
+                                foreach ($request->customer_name as $key=>$value){
+                                    CustomerDetails::create([
+                                        'lease_incentive_id' => ($lease_incentive_id)?$lease_incentive_id:$model->id,
+                                        'customer_name' => $value,
+                                        'description' => $request->description[$key],
+                                        'incentive_date' => date('Y-m-d', strtotime($request->incentive_date[$key])),
+                                        'currency_id' =>  $request->currency_id[$key],
+                                        'amount' => $request->amount[$key],
+                                        'exchange_rate' => $request->exchange_rate[$key]
+                                    ]);
+                                }
+                            }
+                            // complete Step
+                            confirmSteps($lease->id, 'step15');
+                            return redirect(route('addlease.leaseincentives.index',['id' => $lease->id]))->with('status', 'Lease incentive cost has been added successfully.');
+                        }
+                    }
+
+                    return view('lease.lease-incentives.create', compact(
+                        'model',
+                        'lease',
+                        'asset',
+                        'customer_model',
+                        'customer_details',
+                        'currencies',
+                        'breadcrumbs'
+                    ));
+
+                } else {
+                    //redirect user to the next step
+                    return redirect(route('addlease.leasevaluation.index', ['id' => $id]));
+                }
+            } else {
+                 abort(404);
+            }
+        } catch (\Exception $e){
+            dd($e);
+        }
+    }
+
     /**
      * renders the table to list all the lease assets.
      * @param $id Primary key for the lease

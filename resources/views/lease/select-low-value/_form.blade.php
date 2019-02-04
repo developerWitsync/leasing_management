@@ -4,7 +4,7 @@
     <div class="form-group{{ $errors->has('undiscounted_lease_payment') ? ' has-error' : '' }} required">
         <label for="name" class="col-md-4 control-label">Undiscounted Lease Payments</label>
         <div class="col-md-6 form-check form-check-inline" required>
-            <input class="form-control" name="undiscounted_lease_payment" id="yes" type="text" value="{{ getUndiscountedTotalLeasePayment($asset->id) }}" readonly="readonly" >
+            <input class="form-control" name="undiscounted_lease_payment" id="yes" type="text" value="{{ $total_undiscounted_value }}" readonly="readonly" >
              @if ($errors->has('undiscounted_lease_payment'))
                 <span class="help-block">
                     <strong>{{ $errors->first('undiscounted_lease_payment') }}</strong>
@@ -46,6 +46,9 @@
             <button type="submit" name="submit" class="btn btn-success">
                 Submit
             </button>
+            @if($asset->leaseSelectLowValue)
+                <a href="{{ route('addlease.discountrate.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
+            @endif
         </div>
   </div>
 

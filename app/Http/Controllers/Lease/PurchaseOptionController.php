@@ -56,54 +56,61 @@ class PurchaseOptionController extends Controller
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
             if ($lease) {
 
-                $asset = $lease->assets->first();//since each lease can have only one lease asset now.
+                $asset = LeaseAssets::query()->where('lease_id', '=', $id)->whereHas('terminationOption', function ($query) {
+                    $query->where('lease_termination_option_available', '=', 'yes');
+                    $query->where('exercise_termination_option_available', '=', 'no');
+                })->first(); //since there will be only one lease asset per lease
 
-                if($asset->purchaseOption){
-                    $model = $asset->purchaseOption;
+                if(count($asset) > 0) {
+                    if ($asset->purchaseOption) {
+                        $model = $asset->purchaseOption;
+                    } else {
+                        $model = new PurchaseOption();
+                    }
+
+                    if ($request->isMethod('post')) {
+                        $validator = Validator::make($request->except('_token'), $this->validationRules());
+
+                        if ($validator->fails()) {
+                            return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
+                        }
+
+                        $data = $request->except('_token');
+                        $data['lease_id'] = $asset->lease->id;
+                        $data['asset_id'] = $asset->id;
+                        if ($request->has('expected_purchase_date') && $data['expected_purchase_date'] != "") {
+                            $data['expected_purchase_date'] = Carbon::parse($data['expected_purchase_date'])->format('Y-m-d');
+                        }
+
+                        if ($request->has('expected_lease_end_date') && $data['expected_lease_end_date'] != "") {
+                            $data['expected_lease_end_date'] = Carbon::parse($data['expected_lease_end_date'])->format('Y-m-d');
+                        }
+
+                        if ($request->has('purchase_option_exerecisable') && $data['purchase_option_exerecisable'] == 'no') {
+                            $data['expected_purchase_date'] = null;
+                            $data['expected_lease_end_date'] = null;
+                            $data['currency'] = null;
+                            $data['purchase_price'] = null;
+                        }
+
+                        $model->setRawAttributes($data);
+
+                        if ($model->save()) {
+                            // complete Step
+                            confirmSteps($lease->id, 'step8');
+                            return redirect(route('addlease.purchaseoption.index', ['id' => $lease->id]))->with('status', 'Lease Termination Option Details has been added successfully.');
+                        }
+                    }
+
+                    return view('lease.purchase-option.create', compact(
+                        'model',
+                        'lease',
+                        'asset',
+                        'breadcrumbs'
+                    ));
                 } else {
-                    $model = new PurchaseOption();
+                    return redirect(route('addlease.durationclassified.index', ['id' => $id]));
                 }
-
-                if ($request->isMethod('post')) {
-                    $validator = Validator::make($request->except('_token'), $this->validationRules());
-
-                    if ($validator->fails()) {
-                        return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
-                    }
-
-                    $data = $request->except('_token');
-                    $data['lease_id'] = $asset->lease->id;
-                    $data['asset_id'] = $asset->id;
-                    if ($request->has('expected_purchase_date') && $data['expected_purchase_date'] != "") {
-                        $data['expected_purchase_date'] = Carbon::parse($data['expected_purchase_date'])->format('Y-m-d');
-                    }
-
-                    if ($request->has('expected_lease_end_date') && $data['expected_lease_end_date'] != "") {
-                        $data['expected_lease_end_date'] = Carbon::parse($data['expected_lease_end_date'])->format('Y-m-d');
-                    }
-
-                    if ($request->has('purchase_option_exerecisable') && $data['purchase_option_exerecisable'] == 'no') {
-                        $data['expected_purchase_date'] = null;
-                        $data['expected_lease_end_date'] = null;
-                        $data['currency'] = null;
-                        $data['purchase_price'] = null;
-                    }
-
-                    $model->setRawAttributes($data);
-
-                    if ($model->save()) {
-                        // complete Step
-                        confirmSteps($lease->id, 'step8');
-                        return redirect(route('addlease.purchaseoption.index', ['id' => $lease->id]))->with('status', 'Lease Termination Option Details has been added successfully.');
-                    }
-                }
-
-                return view('lease.purchase-option.create', compact(
-                    'model',
-                    'lease',
-                    'asset',
-                    'breadcrumbs'
-                ));
             } else {
                 abort(404);
             }
@@ -134,6 +141,7 @@ class PurchaseOptionController extends Controller
         if ($lease) {
             //Load the assets only for the assets where no selected at `exercise_termination_option_available` on lease termination
             $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->whereHas('terminationOption', function ($query) {
+                $query->where('lease_termination_option_available', '=', 'yes');
                 $query->where('exercise_termination_option_available', '=', 'no');
             })->get();
 

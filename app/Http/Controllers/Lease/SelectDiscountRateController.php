@@ -24,10 +24,90 @@ class SelectDiscountRateController extends Controller
             'discount_rate_to_use' => 'required|numeric|min:2'
         ];
     }
+
+    public function index_V2($id, Request $request){
+        try{
+            $breadcrumbs = [
+                [
+                    'link' => route('add-new-lease.index'),
+                    'title' => 'Add New Lease'
+                ],
+                [
+                    'link' => route('addlease.discountrate.index',['id' => $id]),
+                    'title' => 'Select Discount Rate'
+                ],
+            ];
+
+            $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
+            if($lease) {
+                $asset = LeaseAssets::query()->where('lease_id', '=', $lease->id)
+                    ->where('specific_use',1)
+                    ->whereNotIn('category_id',[8,5])
+                    ->whereHas('leaseSelectLowValue',  function($query){
+                        $query->where('is_classify_under_low_value', '=', 'no');
+                    })
+                    ->whereHas('leaseDurationClassified',  function($query){
+                        $query->where('lease_contract_duration_id', '=', '3');
+                    })->first();
+
+                if(is_null($asset)) {
+                    $asset = LeaseAssets::query()->where('lease_id', '=', $lease->id)
+                        ->where('specific_use',2)
+                        ->whereNotIn('category_id',[8,5])
+                        ->whereHas('leaseSelectLowValue',  function($query){
+                            $query->where('is_classify_under_low_value', '=', 'no');
+                        })
+                        ->whereHas('leaseDurationClassified',  function($query){
+
+                            $query->where('lease_contract_duration_id', '=', '3');
+                        })->first();
+                }
+
+                if($asset){
+                    if($asset->leaseSelectDiscountRate){
+                        $model = $asset->leaseSelectDiscountRate;
+                    } else {
+                        $model = new LeaseSelectDiscountRate();
+                    }
+
+                    if($request->isMethod('post')) {
+                        $validator = Validator::make($request->except('_token'), $this->validationRules());
+                        if($validator->fails()){
+                            return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
+                        }
+                        $data = $request->except('_token', 'submit');
+                        $data['lease_id']   = $asset->lease->id;
+                        $data['asset_id']   = $asset->id;
+                        $model->setRawAttributes($data);
+                        if($model->save()){
+                            // complete Step
+                            confirmSteps($asset->lease->id,'step12');
+                            return redirect(route('addlease.discountrate.index',['id' => $lease->id]))->with('status', 'Select Discount Rate has been added successfully.');
+                        }
+                    }
+                    return view('lease.select-discount-rate.create', compact(
+                        'model',
+                        'lease',
+                        'asset',
+                        'breadcrumbs'
+                    ));
+
+                } else {
+                    //skip the step and send the user to the next step
+                    return redirect(route('addlease.balanceasondec.index', ["id" => $id]));
+                }
+
+            } else {
+                abort(404);
+            }
+        } catch (\Exception $e){
+            abort(404, $e->getMessage());
+        }
+    }
+
     /**
      * renders the table to list all the lease assets.
      * @param $id Primary key for the lease
-     * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id){
@@ -45,7 +125,6 @@ class SelectDiscountRateController extends Controller
 
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
         if($lease) {
-            $discountrate = LeaseSelectDiscountRate::query()->where('lease_id', '=', $id)->get();
 
             $own_assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)
              ->where('specific_use',1)
@@ -59,7 +138,7 @@ class SelectDiscountRateController extends Controller
 
             $own_assets_id = $own_assets->pluck('id')->toArray();
 
-             $sublease_assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)
+            $sublease_assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)
              ->where('specific_use',2)
              ->whereNotIn('category_id',[8,5])
              ->whereHas('leaseSelectLowValue',  function($query){
@@ -75,13 +154,6 @@ class SelectDiscountRateController extends Controller
             $discountrate = LeaseSelectDiscountRate::query()->whereIn('asset_id', array_merge($own_assets_id, $sublease_assets_id))->count();
 
             $required_discount_rate =  count($own_assets_id) + count($sublease_assets_id);
-           /* if($own_assets  $sublease_assets)
-            {
-              if(!checkPreviousSteps($id,'step11')){
-                 return redirect(route('addlease.leaseasset.index', ['lease_id' => $id]))->with('status', 'Please complete the previous steps.');
-               }
-
-            }*/
 
             $show_next = ($required_discount_rate == $discountrate);
 
@@ -127,7 +199,7 @@ class SelectDiscountRateController extends Controller
                     if($select_discount_value){
 
                         // complete Step
-                       $complete_step12 = confirmSteps($asset->lease->id,'step12');
+                       confirmSteps($asset->lease->id,'step12');
 
                         return redirect(route('addlease.discountrate.index',['id' => $lease->id]))->with('status', 'Select Discount Rate has been added successfully.');
                     }

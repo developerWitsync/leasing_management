@@ -41,7 +41,7 @@
                             @php
                                 $show_next = [];
                             @endphp
-                            @foreach($lease->assets as $key=>$asset)
+                            @foreach($assets as $key=>$asset)
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td style="width: 10%">

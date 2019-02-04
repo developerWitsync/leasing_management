@@ -32,6 +32,71 @@ class LeaseBalanceAsOnDecController extends Controller
     }
 
     /**
+     * Create or update the lease asset balances , the function will now be executed as there can now be only one Lease asset per lease
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
+     */
+    public function index_V2($id, Request $request){
+        try{
+            $breadcrumbs = [
+                [
+                    'link' => route('add-new-lease.index'),
+                    'title' => 'Add New Lease'
+                ],
+                [
+                    'link' => route('addlease.balanceasondec.index', ['id' => $id]),
+                    'title' => 'Lease Balance as on 31 Dec 2018'
+                ],
+            ];
+
+            $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
+
+            if($lease){
+                $asset = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '<', '2019-01-01')->first();//since there can now only be one lease asset per lease
+                if($asset){
+                    if($asset->leaseBalanceAsOnDec){
+                        $model = $asset->leaseBalanceAsOnDec;
+                    } else {
+                        $model = new LeaseBalanceAsOnDec();
+                    }
+                    if ($request->isMethod('post')) {
+                        $validator = Validator::make($request->except('_token'), $this->validationRules());
+
+                        if ($validator->fails()) {
+                            return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
+                        }
+
+                        $data = $request->except('_token', 'submit');
+                        $data['lease_id'] = $asset->lease->id;
+                        $data['asset_id'] = $asset->id;
+
+                        $model->setRawAttributes($data);
+                        if ($model->save()) {
+                            // complete Step
+                            confirmSteps($asset->lease->id, 'step13');
+                            return redirect(route('addlease.balanceasondec.index', ['id' => $lease->id]))->with('status', 'Lease Balance as on 31 Dec 2018 has been added successfully.');
+                        }
+                    }
+                    return view('lease.lease-balnce-as-on-dec.create', compact(
+                        'model',
+                        'lease',
+                        'asset',
+                        'breadcrumbs'
+                    ));
+                } else {
+                    return redirect(route('addlease.initialdirectcost.index', ['id' => $id]));
+                }
+            } else {
+                abort(404);
+            }
+
+        } catch (\Exception $e){
+            abort(404, $e->getMessage());
+        }
+    }
+
+    /**
      * renders the table to list all the lease assets.
      * @param $id Primary key for the lease
      * @param Request $request
