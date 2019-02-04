@@ -431,3 +431,23 @@ button.btn.btn-success.close {
     background: #f5f5f5;
 }
 .totlNumbInnBx span{ display: block; padding: 10px; font-size: 14px; line-height: 20px; color: #333;}
+
+.fontsty {
+  margin-right: -15px;
+}
+
+.fontsty h2{
+  color: #6E6E6E;
+  font-size: 35px;
+  margin-top: 15px;
+  text-align: right;
+  margin-right: 30px;
+}
+
+.fontsty h4{
+  color: #6E6E6E;
+  font-size: 25px;
+  margin-top: 20px;
+  text-align: right;
+  margin-right: 30px;
+}

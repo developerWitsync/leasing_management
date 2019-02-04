@@ -20,7 +20,10 @@ Auth::routes();
 
 Route::middleware('auth')->group(function(){
 
+
+ 
     Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/home/fetch-details', ['as' => 'home.fetchdetails', 'uses' => 'HomeController@fetchDetails']);
 
     Route::namespace('Lease')->middleware(['permission:add_lease'])->prefix('lease')->group(function(){
 
