@@ -33,7 +33,7 @@
 
                     <!-- Branding Image -->
                     <a class="navbar-brand logoBx" href="{{ url('/') }}">
-                        <img src="{{ asset('assets/images/logo.png') }}" />
+                        <img src="{{ asset('assets/images/logo2.png') }}" />
                     </a>
                 </div>
 
