@@ -189,7 +189,7 @@
                         key: "Cumulative Return1",
                         values: [
                             {
-                                "label" : "Undiscounteed value",
+                                "label" : "Undiscounted value",
                                 "value" : [data.total_undiscounted_value]
                             } ,
                             {
@@ -204,19 +204,19 @@
                         key: "Cumulative Return",
                         values: [
                             {
-                                "label" : "Tengible properties" ,
+                                "label" : "Tangible properties" ,
                                 "value" : [data.total_tengible_undiscounted_value]
                             } ,
                             {
-                                "label" : "Tengible Present value" ,
+                                "label" : "Tangible Present value" ,
                                 "value" : [data.total_tengible_present_value_lease_asset]
                             } ,
                             {
-                                "label" : "Tengible Other land" ,
+                                "label" : "Tangible Other land" ,
                                 "value" : [data.total_tengible_other_undiscounted_value]
                             } ,
                             {
-                                "label" : "Tengible other than land Present value" ,
+                                "label" : "Tangible other than land Present value" ,
                                 "value" : [data.total_tengible_other_present_value_lease_asset]
                             } ,
                             {
