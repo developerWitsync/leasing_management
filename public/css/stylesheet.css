@@ -22,10 +22,32 @@ input.form-control{ height: 49px; border-radius: 3px; padding: 0 10px;}
 .dashLeft a.list-group-item{ border:0 !important;}
 .dashLeft a.list-group-item:hover, .dashLeft a.list-group-item.active { color: #1b2d5b; background: #d7d7d7;}
 .dashLeft a.list-group-item i{ font-size: 20px; }
-.itemTab ul li a {background: none; border: none; border-radius: 0px;width:92px; height: auto; text-align: center; }
+.itemTab ul li a {background: none; border: 0px; border-bottom:transparent solid 3px !important;  border-radius: 0px;width:92px;  height: auto; text-align: center; }
 .itemTab ul li a span{ display: block; font-size: 13px; }
-.itemTab ul li a:hover, .itemTab ul li a.active {background:none; border:none; text-decoration: none; }
-.itemTab ul li a span {display: block; position: relative; left: 0; right: 0; top: 0; width: auto; margin-left: 0; background: none; border-radius: 0;}
+.itemTab ul li a:hover, .itemTab ul li a.active {background:none; color: #0078d4; border: 0px; border-bottom:#0078d4 solid 3px !important; text-decoration: none; }
+.itemTab ul li a span {display: block; position: relative; min-height: 52px; font-size: 13px; line-height: 16px; color: #636c72; left: 0; right: 0; top: 0; width: auto; margin-left: 0; background: none; border-radius: 0;}
 .itemTab ul li a span:after{ display: none;}
 .itemTab ul li a i {display: inline-block; font-style: normal; color: #555; width: 26px; height: 26px; line-height: 23px; border: #555 solid 1px; border-radius: 50%;}
 .itemTab {padding-bottom: 20px; padding-top: 15px; border-bottom: #dadcdd solid 1px;}
+.itemTab ul li a:hover i, .itemTab ul li a.active i {color: #0078d4; border: #0078d4 solid 1px;}
+.itemTab ul li a:hover span, .itemTab ul li a.active span{color: #0078d4;}
+.itemTab {padding-bottom: 20px; padding-top: 15px; border-bottom: #0078d4 solid 1px;}
+input.form-control {height: 38px; border-radius: 3px; padding: 0 10px; border: #d9d9d9 solid 1px !important;box-shadow: #e5e5e5 0 2px 5px 0 !important;}
+select.form-control {height: 38px; border: #d9d9d9 solid 1px !important; border-radius: 3px;box-shadow: #e5e5e5 0 2px 5px 0 !important; appearance: none; -webkit-appearance: none; -moz-appearance: none; background-image: url(/assets/images/sel-arrow.png); background-position: right 10px center; background-repeat: no-repeat;}
+button.browseBtn {height: 38px; line-height: 38px; border-radius: 0 3px 3px 0;}
+.breadcrumb {background-color: #fff; border-bottom: #ccc solid 1px !important; padding: 8px 0; border: 0px;}
+.breadcrumb > li a {color: #636c72;}
+.breadcrumb > li + li::before{ color: #636c72;}
+.rightContainer {max-width: 965px; margin: 0 auto;}
+.owl-prev.disabled{ opacity: 0;}
+.owl-next {position: absolute; right: -10px; top: 50%; cursor: pointer; margin-top: -10px; overflow: hidden; text-indent: -200px; background:url(/assets/images/owl-arrow-right.png) left top no-repeat; width: 8px; height: 11px;}
+.owl-prev { position: absolute; left: -10px; top: 50%; cursor: pointer; margin-top: -10px; overflow: hidden; text-indent: -200px; background:url(/assets/images/owl-arrow-left.png) left top no-repeat; width: 8px; height: 11px;}
+.panel-default > .panel-heading {color: #292b2c; padding: 30px 0 10px 0; background-color: #fff; border-color: #fff; border-radius: 0; font-size: 24px; line-height: 25px;}
+.panel.panel-default {border-color: #fff;}
+.itemTab {padding-bottom: 0; padding-top: 15px; border-bottom: #dadcdd solid 1px; }
+fieldset.scheduler-border { background: #fff; border:#dadcdd solid 1px !important; padding: 0 !important;}
+.panel-body {padding: 15px 0;}
+.categoriesOuter {border: #dadcdd solid 1px; margin-bottom: 25px; border-radius: 1px;}
+.categoriesHd {background: #f8f8f8; line-height: 27px; font-size: 18px; color: #0078d4; padding: 5px 10px; margin-bottom: 20px;}
+.categoriesOuter .form-group {width: 48%; float: left; margin-left:1%; margin-right: 1%; margin-bottom:20px;}
+.categoriesOuter .form-group label{ text-align: left; font-weight: 400; padding-bottom: 5px; padding-top: 0px;}

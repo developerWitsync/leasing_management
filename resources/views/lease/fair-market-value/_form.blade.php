@@ -1,6 +1,28 @@
 <form role="form" class="form-horizontal" method="post" enctype="multipart/form-data">
     {{ csrf_field() }}
 
+    <div class="form-group required">
+        <label for="uuid" class="col-md-4 control-label">ULA Code</label>
+        <div class="col-md-4 form-check form-check-inline">
+            <input type="text" value="{{ $asset->uuid}}" class="form-control" id="uuid" name="uuid" disabled="disabled">
+        </div>
+    </div>
+
+    <div class="form-group required">
+        <label for="asset_name" class="col-md-4 control-label">Asset Name</label>
+        <div class="col-md-4 form-check form-check-inline">
+            <input type="text" value="{{ $asset->name}}" class="form-control" id="asset_name" name="asset_name" disabled="disabled">
+        </div>
+    </div>
+
+    <div class="form-group required">
+        <label for="asset_category" class="col-md-4 control-label">Lease Asset Classification</label>
+        <div class="col-md-4 form-check form-check-inline">
+            <input type="text" value="{{ $asset->category->title}}" class="form-control" id="asset_category" name="asset_category" disabled="disabled">
+        </div>
+    </div>
+
+
     <div class="form-group{{ $errors->has('is_market_value_present') ? ' has-error' : '' }} required">
         <label for="name" class="col-md-4 control-label">Is Market Value Available</label>
         <div class="col-md-6 form-check form-check-inline" required>
@@ -98,7 +120,8 @@
     <div class="form-group">
         <div class="col-md-6 col-md-offset-4">
 
-            <a href="{{ route('addlease.fairmarketvalue.index', ['id' => $lease->id]) }}" class="btn btn-danger">Cancel</a>
+            <a href="{{ route('addlease.payments.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
+            
             <button type="submit" class="btn btn-success">
                 Submit
             </button>

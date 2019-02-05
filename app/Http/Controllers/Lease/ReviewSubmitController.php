@@ -135,74 +135,71 @@ class ReviewSubmitController extends Controller
         $lease_invoice = LeasePaymentInvoice::query()->where('lease_id','=',$id)->get()->toArray();
 
         
-           //lessor-details step 1
-           $record['lessor_details'] = $lease;
+       //lessor-details step 1
+       $record['lessor_details'] = $lease;
 
-           //Underlying Assets step 2
-           $record['underlying_asset'] = $underlyning_asset;
-           
-           //Lease Asset Payments step 3
-           $record['lease_payments'] = $lease_payments;
+       //Underlying Assets step 2
+       $record['underlying_asset'] = $underlyning_asset;
+       
+       //Lease Asset Payments step 3
+       $record['lease_payments'] = $lease_payments;
 
-           // Fair market value step 4
-           $record['fair_market'] = $fair_market_value;
+       // Fair market value step 4
+       $record['fair_market'] = $fair_market_value;
 
-           //Residual Gurantee Value step 5
-           $record['residual_value'] = $residual_value;
+       //Residual Gurantee Value step 5
+       $record['residual_value'] = $residual_value;
 
-           //Lease Termination Option step 6 
-           $record['termination_option'] = $termination_option;
+       //Lease Termination Option step 6 
+       $record['termination_option'] = $termination_option;
 
-           //Renewable Option step 7
-           $record['renewal_option'] = $renewal_option;
+       //Renewable Option step 7
+       $record['renewal_option'] = $renewal_option;
 
-           //purchase option step 8
-           $record['purchase_option'] = $purchase_option;
+       //purchase option step 8
+       $record['purchase_option'] = $purchase_option;
 
-           //Duartion Classified step 9
-           $record['duration_classified'] = $duration_classified;
+       //Duartion Classified step 9
+       $record['duration_classified'] = $duration_classified;
 
-           //payment due date with asset id 
-           $payments['payment_due_dates'] =  $payment_due_dates;
+       //payment due date with asset id 
+       $payments['payment_due_dates'] =  $payment_due_dates;
 
-           //payment esclation step10
-            $esclation_payments['payment_esclation'] = $payment_esclation_details;
+       //payment esclation step10
+        $esclation_payments['payment_esclation'] = $payment_esclation_details;
 
-            //Select Low Value step 11
-            $record['low_value'] = $low_value;
+        //Select Low Value step 11
+        $record['low_value'] = $low_value;
 
-            //Select Discount Rate step 12
-            $record['discount_rate'] = $discount_rate;
+        //Select Discount Rate step 12
+        $record['discount_rate'] = $discount_rate;
 
-            //Lease Balance As on Dec Step 13
-            $record['lease_balance'] = $lease_balance;
+        //Lease Balance As on Dec Step 13
+        $record['lease_balance'] = $lease_balance;
 
-            //inital direct Cost step 14
-            $record['initial_direct_cost'] = $initial_direct_cost;
+        //inital direct Cost step 14
+        $record['initial_direct_cost'] = $initial_direct_cost;
 
-            //lease incentives step 15
-            $record['lease_incentives'] = $lease_incentives;
+        //lease incentives step 15
+        $record['lease_incentives'] = $lease_incentives;
 
-            //lease valaution step 16 is only for calacute present value lease liability
-           
-            // lessor invoice step 17
-            $record['lessor_invoice'] = $lease_invoice;
+        //lease valaution step 16 is only for calacute present value lease liability
+       
+        // lessor invoice step 17
+        $record['lessor_invoice'] = $lease_invoice;
 
-            //save the record in lease history
-             $data = $request->except('_token');
-             $data['lease_id'] = $id;
-             $data['json_data_steps'] =  json_encode($record);
-             $data['esclation_payments']   =  json_encode($esclation_payments);
-             $data['payment_anxure']   =  json_encode($payments);
-             $lease_history = LeaseHistory::create($data);
+        //save the record in lease history
+         $data = $request->except('_token');
+         $data['lease_id'] = $id;
+         $data['json_data_steps'] =  json_encode($record);
+         $data['esclation_payments']   =  json_encode($esclation_payments);
+         $data['payment_anxure']   =  json_encode($payments);
+         $lease_history = LeaseHistory::create($data);
 
-            if($lease_history){
-                  // complete Step
-                confirmSteps($id, 'step18');
-            }
-
-               // print_r($payments);die;
-
+        if($lease_history){
+              // complete Step
+            confirmSteps($id, 'step18');
+        }
 
         return redirect(route('addlease.reviewsubmit.index', ['id' => $id]))->with('status', 'Lease Information has been Submitted successfully.');
     }

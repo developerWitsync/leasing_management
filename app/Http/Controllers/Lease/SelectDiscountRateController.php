@@ -75,7 +75,7 @@ class SelectDiscountRateController extends Controller
                         if($validator->fails()){
                             return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
                         }
-                        $data = $request->except('_token', 'submit');
+                        $data = $request->except('_token','submit',  'uuid', 'asset_name', 'asset_category');
                         $data['lease_id']   = $asset->lease->id;
                         $data['asset_id']   = $asset->id;
                         $model->setRawAttributes($data);

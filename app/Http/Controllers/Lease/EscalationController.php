@@ -47,6 +47,8 @@ class EscalationController extends Controller
 
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
             if($lease){
+                //check if the Subsequent Valuation is applied for the lease modification
+                $subsequent_modify_required = $lease->isSubsequentModification();
                 //take out the payments for every lease asset
                 $payments = LeaseAssetPayments::query()->whereIn('asset_id', $lease->assets->pluck('id')->toArray())
                     ->with('asset')
@@ -76,7 +78,8 @@ class EscalationController extends Controller
                 return view('lease.escalation.index', compact(
                     'lease',
                     'show_next',
-                    'breadcrumbs'
+                    'breadcrumbs',
+                    'subsequent_modify_required'
                 ));
 
             } else {
@@ -136,6 +139,8 @@ class EscalationController extends Controller
         try{
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $lease)->first();
             if($lease) {
+                //check if the Subsequent Valuation is applied for the lease modification
+                $subsequent_modify_required = $lease->isSubsequentModification();
                 $payment = LeaseAssetPayments::query()->findOrFail($id);
                 $asset =  $payment->asset;
                 $model   =  PaymentEscalationDetails::query()->where('payment_id','=', $id)->first();
@@ -291,7 +296,8 @@ class EscalationController extends Controller
                     'years',
                     'escalation_frequency',
                     'paymentDueDates',
-                    'inconsistentDataModel'
+                    'inconsistentDataModel',
+                    'subsequent_modify_required'
                 ));
             } else {
                 abort(404);
