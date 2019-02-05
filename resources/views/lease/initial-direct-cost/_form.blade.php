@@ -1,5 +1,16 @@
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (array_unique($errors->all()) as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 <form role="form" class="form-horizontal" method="post" enctype="multipart/form-data">
     {{ csrf_field() }}
+
+    <input type="hidden" name="id" value="{{ $model->id }}">
 
     <div class="form-group{{ $errors->has('initial_direct_cost_involved') ? ' has-error' : '' }} required">
         <label for="name" class="col-md-4 control-label">Any Initial Direct Cost Involved</label>
@@ -60,13 +71,50 @@
                     <th>Action</th>
                 </thead>
                 <tbody>
+                @if(count($model->supplierDetails) > 0)
+                    @foreach($model->supplierDetails as $supplier)
+                        <tr class="clonable_row supplier">
+                            <td>
+                                <input type="text" class="form-control" name="supplier_name[]" value="{{ $supplier->supplier_name }}">
+                                 @if ($errors->has('supplier_name[]'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('supplier_name[]') }}</strong>
+                                    </span>
+                                @endif
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="direct_cost_description[]" value="{{ $supplier->direct_cost_description }}">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control expense_date" name="expense_date[]" value="{{ \Carbon\Carbon::parse($supplier->expense_date)->format(config('settings.date_format')) }}">
+                            </td>
+                            <td>
+                                <select class="form-control" name="supplier_currency[]">
+                                    <option value="">--Select Currency--</option>
+                                    @foreach($currencies as $currency)
+                                        <option value="{{ $currency->code }}" @if($currency->code == $supplier->supplier_currency) selected="selected" @endif>{{ $currency->code }}  {{ $currency->symbol }}</option>
+                                    @endforeach
+                                </select>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="amount[]" value="{{ $supplier->amount }}">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="rate[]" value="{{ $supplier->rate }}">
+                            </td>
+                            <td>
+                                <a href="javascript:void(0);" class="btn btn-sm btn-danger supplier_create_details_form_delete" onClick="javascript:removeRow(this)">Remove</a>
+                            </td>
+                        </tr>
+                    @endforeach
+                @else
                     <tr class="clonable_row supplier">
                         <td>
                             <input type="text" class="form-control" name="supplier_name[]">
-                             @if ($errors->has('supplier_name[]'))
+                            @if ($errors->has('supplier_name[]'))
                                 <span class="help-block">
-                                    <strong>{{ $errors->first('supplier_name[]') }}</strong>
-                                </span>
+                                        <strong>{{ $errors->first('supplier_name[]') }}</strong>
+                                    </span>
                             @endif
                         </td>
                         <td>
@@ -91,10 +139,11 @@
                         </td>
                         <td>
                             <a href="javascript:void(0);" class="btn btn-sm btn-danger supplier_create_details_form_delete" onClick="javascript:removeRow(this)">Remove</a>
-                            
-                            
+
+
                         </td>
                     </tr>
+                @endif
                 </tbody>
             </table>
 
@@ -110,6 +159,9 @@
             <button type="submit" class="btn btn-success">
                 Submit
             </button>
+            @if($asset->initialDirectCost)
+                <a href="{{ route('addlease.leaseincentives.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
+            @endif
         </div>
     </div>
 </form>
@@ -132,17 +184,51 @@
 
 
         $(function () {
-            $('.expense_date').datepicker();
+            $('.expense_date').datepicker({
+                dateFormat: "dd-M-yy",
+            });
         });
 
 
         function addMore(that){
-            var newRow = $('.clonable_row:eq(-1)').clone().insertAfter($('.clonable_row:last'));
+
+            var cloned_html = '<tr class="clonable_row supplier">\n' +
+                '                        <td>\n' +
+                '                            <input type="text" class="form-control" name="supplier_name[]">\n' +
+                '                        </td>\n' +
+                '                        <td>\n' +
+                '                            <input type="text" class="form-control" name="direct_cost_description[]">\n' +
+                '                        </td>\n' +
+                '                        <td>\n' +
+                '                            <input type="text" class="form-control expense_date" name="expense_date[]">\n' +
+                '                        </td>\n' +
+                '                        <td>\n' +
+                '                            <select class="form-control" name="supplier_currency[]">\n' +
+                '                                <option value="">--Select Currency--</option>\n' +
+                '                                @foreach($currencies as $currency)\n' +
+                '                                    <option value="{{ $currency->code }}">{{ $currency->code }}  {{ $currency->symbol }}</option>\n' +
+                '                                @endforeach\n' +
+                '                            </select>\n' +
+                '                        </td>\n' +
+                '                        <td>\n' +
+                '                            <input type="text" class="form-control" name="amount[]">\n' +
+                '                        </td>\n' +
+                '                        <td>\n' +
+                '                            <input type="text" class="form-control" name="rate[]">\n' +
+                '                        </td>\n' +
+                '                        <td>\n' +
+                '                            <a href="javascript:void(0);" class="btn btn-sm btn-danger supplier_create_details_form_delete" onClick="javascript:removeRow(this)">Remove</a>\n' +
+                '                            \n' +
+                '                            \n' +
+                '                        </td>\n' +
+                '                    </tr>';
+            var newRow = $(cloned_html).insertAfter($('.clonable_row:last'));
             newRow.find("input.expense_date")
                 .removeClass('hasDatepicker')
                 .removeData('datepicker')
                 .unbind()
                 .datepicker({
+                    dateFormat: "dd-M-yy",
                     beforeShow: function() {
                         setTimeout(function() {
                             $('.ui-datepicker').css('z-index', 99999999999999);
@@ -150,7 +236,6 @@
                         }, 0);
                     }
                 });
-            // initialiseDatepickers();
         }
 
         function removeRow(that){
