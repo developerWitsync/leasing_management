@@ -187,13 +187,6 @@
                 <tr>
                     <td>{{ $year }}</td>
                     <td>
-                        <select class="form-control escalation_frequency" name="inconsistent_escalation_frequency[{{$year}}][]" data-year="{{$year}}">
-                            <option value="">--Select Escalation Frequency--</option>
-                            @foreach($escalation_frequency as $frequency)
-                                <option value="{{ $frequency->frequency }}">{{ $frequency->title }}</option>
-                            @endforeach
-                        </select>
-
                         <table width="100%" cellpadding="0" cellspacing="0" border="0" class="escalation_inconsistent_table escalation_inconsistent_table_{{$year}} table table-condensed table-bordered hidden">
                             <thead class="theads_escalations">
                             </thead>
@@ -201,6 +194,13 @@
 
                             </tbody>
                         </table>
+
+                        <select class="form-control escalation_frequency" name="inconsistent_escalation_frequency[{{$year}}][]" data-year="{{$year}}" @if($subsequent_modify_required && \Carbon\Carbon::parse($lease->modifyLeaseApplication->last()->effective_from)->format('Y') > $year) readonly="readonly" @endif>
+                            <option value="">--Select Escalation Frequency--</option>
+                            @foreach($escalation_frequency as $frequency)
+                                <option value="{{ $frequency->frequency }}">{{ $frequency->title }}</option>
+                            @endforeach
+                        </select>
 
                     </td>
                 </tr>
@@ -308,6 +308,13 @@
        var _compute_escalation_url = "{{ route('lease.escalation.compute', ['id' => $payment->id]) }}";
 
        var _show_payment_annexure_url  = "{{ route('lease.escalation.showpaymentannexure', ['id' => $payment->id]) }}";
+
+       var _is_subsequent_modification = "{{ $subsequent_modify_required }}";
+
+       @if($subsequent_modify_required)
+           var _subsequent_modification_applicable_from = "{{ \Carbon\Carbon::parse($lease->modifyLeaseApplication->last()->effective_from)->format('Y-m-d') }}";
+           var _subsequent_modification_year = "{{ \Carbon\Carbon::parse($lease->modifyLeaseApplication->last()->effective_from)->format('Y') }}";
+       @endif
 
        @if($inconsistentDataModel)
             var _inconsistent_escalation_inputs = '{!! json_encode(unserialize($inconsistentDataModel->inconsistent_data)) !!}';
