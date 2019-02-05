@@ -218,8 +218,6 @@ Route::middleware('auth')->group(function(){
         Route::prefix('review-submit')->group(function(){
             Route::match(['post', 'get'], 'index/{id}', ['as' => 'addlease.reviewsubmit.index', 'uses' => 'ReviewSubmitController@index'])->middleware('checkpreviousdata:step17,lease_id,id');
             Route::match(['post', 'get'], 'submit/{id}', ['as' => 'addlease.reviewsubmit.submit', 'uses' => 'ReviewSubmitController@submit'])->middleware('checkpreviousdata:step17,lease_id,id');
-
-            Route::get('getalldata/{id}', ['as' => 'addlease.reviewsubmit.getalldata', 'uses' => 'ReviewSubmitController@getalldata']);
         });
 
     });

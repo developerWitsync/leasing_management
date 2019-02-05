@@ -531,21 +531,3 @@
         </div>
     </div>
 @endsection
-@section('footer-script')
-  <script src="{{ asset('js/jquery-ui.js') }}"></script>
-  <script type="text/javascript">
-   $(document).ready(function(){
-    
-         $.ajax({
-                url : "{{ route('addlease.reviewsubmit.getalldata',['id'=>$lease->id]) }}",
-                type : 'get',
-                dataType : 'json',
-                success: function(data) {
-                    alert(data.data[0]);
-                }
-
-        });     
-   });
-
-    </script>
-@endsection
