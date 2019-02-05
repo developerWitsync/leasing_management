@@ -1,9 +1,9 @@
         <div class="itemTab" >
-                            <ul>
+                            <ul class="ul_carousel owl-carousel ">
                                 <li>
                                     <a class="@if(request()->segment(2) == 'lessor-details') active @endif" href="#">
                                         <i>1</i>
-                                        <span>Lessor Detail</span>
+                                        <span>Lessor <br> Detail</span>
                                         <!-- <img src="{{ asset('assets/images/breatcrum-icon.png') }}" class="img" alt="" >
                                         <img src="{{ asset('assets/images/breatcrum-icon-hover.png') }}" alt="" class="over" >
                                         <span>Lessor Details</span> -->

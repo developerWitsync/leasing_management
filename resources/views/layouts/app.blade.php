@@ -14,6 +14,7 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <link href="{{ asset('css/stylesheet.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/plugins/owlcarousel/owl.carousel.css') }}" rel="stylesheet">
     @yield('header-styles')
 </head>
 <body>
@@ -99,23 +100,24 @@
                         </div>
                     </div>
                     <div class="DashRight">
-                        @if(isset($breadcrumbs ))
-                            <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb">
-                                        {{--<li class="breadcrumb-item"><a href="/home">Dashboard</a></li>--}}
-                                        @foreach($breadcrumbs as $breadcrumb)
-                                            <li class="breadcrumb-item"><a href="{{ $breadcrumb['link'] }}">{{ $breadcrumb['title'] }}</a></li>
-                                        @endforeach
-                                </ol>
-                            </nav>
-                        @endif
+                        <div class="rightContainer">
+                            @if(isset($breadcrumbs ))
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                            {{--<li class="breadcrumb-item"><a href="/home">Dashboard</a></li>--}}
+                                            @foreach($breadcrumbs as $breadcrumb)
+                                                <li class="breadcrumb-item"><a href="{{ $breadcrumb['link'] }}">{{ $breadcrumb['title'] }}</a></li>
+                                            @endforeach
+                                    </ol>
+                                </nav>
+                            @endif
 
-                        @if(request()->segment(1) == 'lease')
-                            @include('layouts._addlease_steps')
-                        @endif
+                            @if(request()->segment(1) == 'lease')
+                                @include('layouts._addlease_steps')
+                            @endif
 
-                        @yield('content')
-                        
+                            @yield('content')
+                        </div>
                     </div>
             </div>
         @else
@@ -128,16 +130,58 @@
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('assets/js/moment.min.js') }}"></script>
     <script src="{{ asset('js/custom.js') }}"></script>
-
+    <script src="{{ asset('assets/plugins/owlcarousel/owl.carousel.js') }}"></script>
     <script>
         $(document).ready(function() {
 
             $.ajaxSetup({
                 headers: { 'X-CSRF-Token' : $('meta[name=csrf-token]').attr('content') }
             });
+
+            
+
         } );
+
+        
+
     </script>
     @yield('footer-script')
     @yield('inside-script')
+    <script>
+    $('.ul_carousel').owlCarousel({
+                loop:false,
+                margin:10,
+                nav:true,
+                autoplay: false,
+                autoplayTimeout:3000,
+                smartSpeed:1500,
+                autoplayHoverPause: true,
+                items:10,
+               /*  
+                responsive : {
+                    1350 : {
+                        items:7,
+                    },
+                    1280 : {
+                        items:6,
+                    },
+                    1024 : {
+                        items:5,
+                    },
+                    768 : {
+                        items:4,
+                    },
+                    640 : {
+                        items:3,
+                    },
+                    380 : {
+                        items:2,
+                    },
+                    320 : {
+                        items:1,
+                    },
+                } */
+                
+            });</script>
 </body>
 </html>
