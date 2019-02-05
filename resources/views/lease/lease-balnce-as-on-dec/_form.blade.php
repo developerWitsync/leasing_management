@@ -92,6 +92,9 @@
             <button type="submit" name="submit" class="btn btn-success">
                 Submit
             </button>
+            @if($asset->leaseBalanceAsOnDec)
+                <a href="{{ route('addlease.initialdirectcost.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
+            @endif
         </div>
   </div>
 

@@ -25,6 +25,51 @@ class SelectLowValueController extends Controller
             'reason'  => 'required_if:is_classify_under_low_value,yes'
         ];
     }
+
+    public function index_V2($id, Request $request){
+        try{
+            $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
+            if($lease) {
+
+                $asset = $lease->assets->first();
+
+                $total_undiscounted_value = getUndiscountedTotalLeasePayment($asset->id);
+
+                if($asset->leaseSelectLowValue){
+                    $model = $asset->leaseSelectLowValue;
+                } else {
+                    $model = new LeaseSelectLowValue();
+                }
+
+                if($request->isMethod('post')) {
+                    $validator = Validator::make($request->except('_token'), $this->validationRules());
+                    if($validator->fails()){
+                        return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
+                    }
+                    $data = $request->except('_token', 'submit');
+                    $data['lease_id']   = $asset->lease->id;
+                    $data['asset_id']   = $asset->id;
+                    $model->setRawAttributes($data);
+                    if($model->save()){
+                        // complete Step
+                        confirmSteps($id,'step11');
+                        return redirect(route('addlease.lowvalue.index',['id' => $lease->id]))->with('status', 'Select Low Value has been added successfully.');
+                    }
+                }
+                return view('lease.select-low-value.create', compact(
+                    'model',
+                    'lease',
+                    'asset',
+                    'total_undiscounted_value'
+                ));
+            } else {
+                abort(404);
+            }
+        } catch (\Exception $e){
+            abort(404);
+        }
+    }
+
     /**
      * renders the table to list all the lease assets.
      * @param $id Primary key for the lease

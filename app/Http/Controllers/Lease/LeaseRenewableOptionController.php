@@ -49,45 +49,54 @@ class LeaseRenewableOptionController extends Controller
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
             if($lease) {
 
-                $asset = $lease->assets->first(); //since there will only be one lease asset per lease from now.
+                $asset = LeaseAssets::query()->where('lease_id', '=', $id)->whereHas('terminationOption',  function($query){
+                    $query->where('lease_termination_option_available', '=', 'yes');
+                    $query->where('exercise_termination_option_available', '=', 'no');
+                })->first(); //since there will be only one lease asset per lease
 
-                if($asset->renewableOptionValue) {
-                    $model  = $asset->renewableOptionValue;
-                } else {
-                    $model = new LeaseRenewableOption();
-                }
+                if(count($asset) > 0) {
 
-                if($request->isMethod('post')) {
-                    $validator = Validator::make($request->except('_token'), $this->validationRules());
-
-                    if($validator->fails()){
-                        return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
-                    }
-
-                    $data = $request->except('_token', 'submit');
-                    $data['lease_id']   = $asset->lease->id;
-                    $data['asset_id']   = $asset->id;
-                    if($request->is_reasonable_certainity_option == "yes") {
-                        $data['expected_lease_end_Date'] = Carbon::parse($request->expected_lease_end_Date)->format('Y-m-d');
+                    if($asset->renewableOptionValue) {
+                        $model  = $asset->renewableOptionValue;
                     } else {
-                        $data['expected_lease_end_Date']  = null;
+                        $model = new LeaseRenewableOption();
                     }
 
-                    $model->setRawAttributes($data);
+                    if($request->isMethod('post')) {
+                        $validator = Validator::make($request->except('_token'), $this->validationRules());
 
-                    if($model->save()){
-                        // complete Step
-                        confirmSteps($lease->id,'step7');
-                        return redirect(route('addlease.renewable.index',['id' => $lease->id]))->with('status', 'Renewable Option has been added successfully.');
+                        if($validator->fails()){
+                            return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
+                        }
+
+                        $data = $request->except('_token', 'submit');
+                        $data['lease_id']   = $asset->lease->id;
+                        $data['asset_id']   = $asset->id;
+                        if($request->is_reasonable_certainity_option == "yes") {
+                            $data['expected_lease_end_Date'] = Carbon::parse($request->expected_lease_end_Date)->format('Y-m-d');
+                        } else {
+                            $data['expected_lease_end_Date']  = null;
+                        }
+
+                        $model->setRawAttributes($data);
+
+                        if($model->save()){
+                            // complete Step
+                            confirmSteps($lease->id,'step7');
+                            return redirect(route('addlease.renewable.index',['id' => $lease->id]))->with('status', 'Renewable Option has been added successfully.');
+                        }
                     }
+
+                    return view('lease.lease-renewable-option.create', compact(
+                        'model',
+                        'lease',
+                        'asset',
+                        'breadcrumbs'
+                    ));
+
+                }else{
+                    return redirect(route('addlease.durationclassified.index', ['id' => $id]));
                 }
-
-                return view('lease.lease-renewable-option.create', compact(
-                    'model',
-                    'lease',
-                    'asset',
-                    'breadcrumbs'
-                ));
 
             } else {
                 abort(404);
@@ -126,8 +135,7 @@ class LeaseRenewableOptionController extends Controller
        
             if(count($assets) > 0) {
                 
-            }
-            else{
+            }else{
                 return redirect(route('addlease.durationclassified.index', ['id' => $id]));
             }
            

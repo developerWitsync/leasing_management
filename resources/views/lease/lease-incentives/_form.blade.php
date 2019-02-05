@@ -1,4 +1,3 @@
-
 @if ($errors->any())
     <div class="alert alert-danger">
         <ul>
@@ -62,7 +61,6 @@
                     <th>Action</th>
                 </thead>
                 <tbody>
-<?php //dd($model->customerDetails)?>
                     @if(count($model->customerDetails) > 0)
                         @foreach($model->customerDetails as $customerDetail)
                             <tr class="clonable_row customer">
@@ -73,7 +71,7 @@
                                     <input type="text" class="form-control" name="description[]" value="{{ $customerDetail->description }}">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control incentive_date" name="incentive_date[]" value="{{ \Carbon\Carbon::parse($customerDetail->incentive_date)->format('Y-m-d') }}">
+                                    <input type="text" class="form-control incentive_date" name="incentive_date[]" value="{{ \Carbon\Carbon::parse($customerDetail->incentive_date)->format(config('settings.date_format')) }}">
                                 </td>
                                 <td>
                                     <select class="form-control" name="currency_id[]">
@@ -143,18 +141,12 @@
             <button type="submit" class="btn btn-success">
                 Submit
             </button>
+            @if($asset->leaseIncentives)
+                <a href="{{ route('addlease.leasevaluation.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
+            @endif
         </div>
     </div>
 </form>
-
-<!-- Modal -->
-<div id="myModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content _form_customer_details">
-        </div>
-    </div>
-</div>
 
 @section('footer-script')
 <script src="{{ asset('assets/plugins/bootbox/bootbox.min.js') }}"></script>
@@ -171,7 +163,9 @@
             }
         });
         $(function () {
-            $('.incentive_date').datepicker();
+            $('.incentive_date').datepicker({
+                dateFormat: "dd-M-yy",
+            });
         });
 
 
@@ -213,6 +207,7 @@
                 .removeData('datepicker')
                 .unbind()
                 .datepicker({
+                    dateFormat: "dd-M-yy",
                     beforeShow: function() {
                         setTimeout(function() {
                             $('.ui-datepicker').css('z-index', 99999999999999);
