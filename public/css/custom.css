@@ -451,3 +451,11 @@ button.btn.btn-success.close {
   text-align: right;
   margin-right: 30px;
 }
+select[readonly]{
+    background: #eee;
+    cursor:no-drop;
+}
+
+select[readonly] option{
+    display:none;
+}

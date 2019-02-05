@@ -182,6 +182,7 @@
                     },
                 } */
                 
-            });</script>
+            });
+    </script>
 </body>
 </html>

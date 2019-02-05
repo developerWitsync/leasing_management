@@ -8,7 +8,7 @@
         var result = originalAddClassMethod.apply( this, arguments );
 
         // trigger a custom event
-        jQuery(this).trigger('cssClassChanged');
+        jQuery(this).trigger("cssClassChanged");
 
         // return the original result
         return result;
@@ -25,45 +25,45 @@
         var result = originalAddClassMethod.apply( this, arguments );
 
         // trigger a custom event
-        jQuery(this).trigger('cssClassChanged');
+        jQuery(this).trigger("cssClassChanged");
 
         // return the original result
         return result;
-    }
+    };
 })();
 
 // document ready function
 $(function(){
 
-    $(".amount_based_escalation_amount").bind('cssClassChanged', function(){
-        if(!$(this).hasClass('hidden')) {
-            $('.see_escalation_chart').removeClass('hidden');
+    $(".amount_based_escalation_amount").bind("cssClassChanged", function(){
+        if(!$(this).hasClass("hidden")) {
+            $(".see_escalation_chart").removeClass("hidden");
         } else {
             //check if the  total_escalation_rate is visible
-            if($('.total_escalation_rate').hasClass('hidden') && $('.inconsistently_applied').hasClass('hidden')) {
-                $('.see_escalation_chart').addClass('hidden');
+            if($(".total_escalation_rate").hasClass("hidden") && $(".inconsistently_applied").hasClass("hidden")) {
+                $(".see_escalation_chart").addClass("hidden");
             }
         }
     });
 
-    $(".total_escalation_rate").bind('cssClassChanged', function(){
-        if(!$(this).hasClass('hidden')) {
-            $('.see_escalation_chart').removeClass('hidden');
+    $("total_escalation_rate").bind("cssClassChanged", function(){
+        if(!$(this).hasClass("hidden")) {
+            $(".see_escalation_chart").removeClass("hidden");
         } else {
             //check if the  amount_based_escalation_amount is visible
-            if($('.amount_based_escalation_amount').hasClass('hidden') && $('.inconsistently_applied').hasClass('hidden')) {
-                $('.see_escalation_chart').addClass('hidden');
+            if($(".amount_based_escalation_amount").hasClass("hidden") && $(".inconsistently_applied").hasClass("hidden")) {
+                $(".see_escalation_chart").addClass("hidden");
             }
         }
     });
 
-    $(".inconsistently_applied").bind('cssClassChanged', function(){
-        if(!$(this).hasClass('hidden')) {
-            $('.see_escalation_chart').removeClass('hidden');
+    $(".inconsistently_applied").bind("cssClassChanged", function(){
+        if(!$(this).hasClass("hidden")) {
+            $(".see_escalation_chart").removeClass("hidden");
         } else {
             //check if the  amount_based_escalation_amount is visible
-            if($('.total_escalation_rate').hasClass('hidden')  && $('.amount_based_escalation_amount').hasClass('hidden')) {
-                $('.see_escalation_chart').addClass('hidden');
+            if($(".total_escalation_rate").hasClass("hidden")  && $(".amount_based_escalation_amount").hasClass("hidden")) {
+                $(".see_escalation_chart").addClass("hidden");
             }
         }
     });
@@ -73,59 +73,57 @@ $(function(){
  * Show payment Annexure in case of escalation is not applicable
  */
 
-$('.show_payment_annexure').on('click', function(){
+$(".show_payment_annexure").on("click", function(){
     $.ajax({
         url : _show_payment_annexure_url,
-        data : $('form').serialize(),
-        type : 'get',
+        data : $("form").serialize(),
+        type : "get",
         success : function(response){
             setTimeout(function () {
-                $('.escalation_chart_modal_body').html(response);
-
-                $('#myModal').modal('show');
+                $(".escalation_chart_modal_body").html(response);
+                $("#myModal").modal("show");
             }, 100);
         }
     });
 });
 
 
-$('.show_escalation_chart').on('click', function(){
+$(".show_escalation_chart").on("click", function(){
     $.ajax({
         url : _show_escalation_char_url,
-        data : $('form').serialize(),
-        type : 'get',
+        data : $("form").serialize(),
+        type : "get",
         success : function(response){
             setTimeout(function () {
-                $('.escalation_chart_modal_body').html(response);
+                $(".escalation_chart_modal_body").html(response);
 
-                $('#myModal').modal('show');
+                $("#myModal").modal("show");
             }, 100);
         }
     });
 });
 
-$('.compute_escalation').on('click', function(){
+$(".compute_escalation").on("click", function(){
     $.ajax({
         url : _compute_escalation_url,
-        data : $('form').serialize(),
-        type : 'get',
-        dataType : 'json',
+        data : $("form").serialize(),
+        type : "get",
+        dataType : "json",
         beforeSend : function(){
-            $('.error_via_ajax').remove();
-            $('.computed_fields').addClass('hidden');
+            $(".error_via_ajax").remove();
+            $(".computed_fields").addClass("hidden");
         },
         success : function(response){
-            console.log(response);
-            if(response['status']) {
+            if(response["status"]) {
 
-                $('.computed_fields').removeClass('hidden');
-                $('#computed_total').val(response['computed_total']);
+                $(".computed_fields").removeClass("hidden");
+                $("#computed_total").val(response["computed_total"]);
 
-                $('.see_escalation_chart').removeClass('hidden');
+                $(".see_escalation_chart").removeClass("hidden");
 
             } else {
-                $('.see_escalation_chart').addClass('hidden');
-                $.each(response['errors'], function (i,e) {
+                $(".see_escalation_chart").addClass("hidden");
+                $.each(response["errors"], function (i,e) {
                     if($('input[name="'+i+'"]').length ){
                         $('input[name="'+i+'"]').after('<span class="help-block error_via_ajax" style="color:red">\n' +
                             '<strong>'+e+'</strong>\n' +
@@ -234,6 +232,11 @@ $(document).ready(function () {
         var _fixed_rate_select = '';
 
         var _select_payment_dates = '<select class="form-control" name="inconsistent_effective_date[YEAR][]">\n';
+        if(_is_subsequent_modification && _current_year < _subsequent_modification_year){
+            var _select_payment_dates = '<select class="form-control" name="inconsistent_effective_date[YEAR][]" readonly="readonly">\n';
+        } else {
+            var _select_payment_dates = '<select class="form-control" name="inconsistent_effective_date[YEAR][]">\n';
+        }
 
         _select_payment_dates += '<option value="">--Select Escalation Effective On Date--</option>';
 
@@ -241,7 +244,11 @@ $(document).ready(function () {
 
         for(i = 0; i < datesArray.length; i++){
             if(datesArray[i].indexOf(_current_year) > -1) {
-                _select_payment_dates += '<option value="'+datesArray[i]+'">'+datesArray[i]+'</option>';
+                if(_is_subsequent_modification && _subsequent_modification_applicable_from >= datesArray[i]){
+                    _select_payment_dates += '<option value="'+datesArray[i]+'" disabled="disabled">'+datesArray[i]+'</option>';
+                } else {
+                    _select_payment_dates += '<option value="'+datesArray[i]+'">'+datesArray[i]+'</option>';
+                }
             }
         }
 
