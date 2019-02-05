@@ -54,7 +54,7 @@ class CheckPreviousData
         }
 
         if($step == 'step11') {
-            $category_excluded = \App\CategoriesLeaseAssetExcluded::query()->get();
+            $category_excluded = \App\CategoriesLeaseAssetExcluded::query()->where('business_account_id', getDependentUserIds())->get();
             $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
 
             $total_assets = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)->whereNotIn('specific_use', [2])

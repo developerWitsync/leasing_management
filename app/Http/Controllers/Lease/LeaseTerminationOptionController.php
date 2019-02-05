@@ -78,7 +78,7 @@ class LeaseTerminationOptionController extends Controller
                         return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
                     }
 
-                    $data = $request->except('_token');
+                    $data = $request->except('_token', 'uuid', 'asset_name', 'asset_category');
                     if($request->lease_end_date!=""){
                         $data['lease_end_date']  = Carbon::parse($request->lease_end_date)->format('Y-m-d');
                     }

@@ -75,7 +75,7 @@ class PurchaseOptionController extends Controller
                             return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
                         }
 
-                        $data = $request->except('_token');
+                        $data = $request->except('_token','submit', 'uuid', 'asset_name', 'asset_category');
                         $data['lease_id'] = $asset->lease->id;
                         $data['asset_id'] = $asset->id;
                         if ($request->has('expected_purchase_date') && $data['expected_purchase_date'] != "") {

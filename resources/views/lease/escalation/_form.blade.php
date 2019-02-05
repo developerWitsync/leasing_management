@@ -1,16 +1,19 @@
-<form role="form" class="form-horizontal" method="post" enctype="multipart/form-data">
+<form class="form-horizontal" enctype="multipart/form-data" method="post" role="form">
     {{ csrf_field() }}
     <div class="form-group{{ $errors->has('is_market_value_present') ? ' has-error' : '' }} required">
         <label for="is_escalation_applicable" class="col-md-4 control-label">Is Escalation Applicable</label>
         <div class="col-md-6 form-check form-check-inline" required>
-            <input class="form-check-input" name="is_escalation_applicable" id="yes" type="checkbox" value="yes" @if(old('is_escalation_applicable', $model->is_escalation_applicable) == "yes") checked="checked" @endif>
+            <input class="form-check-input" name="is_escalation_applicable" id="yes" type="checkbox" value="yes" @if(old('is_escalation_applicable', $model->is_escalation_applicable) == "yes") checked="checked" @endif @if($subsequent_modify_required && $model->is_escalation_applicable == "yes") disabled="disabled" @endif>
             <label class="form-check-label" for="yes" id="yes" style="vertical-align: 4px">Yes</label><br>
-            <input class="form-check-input" name="is_escalation_applicable" id="no" type="checkbox" value="no" @if(old('is_escalation_applicable', $model->is_escalation_applicable)  == "no") checked="checked" @endif>
+            <input class="form-check-input" name="is_escalation_applicable" id="no" type="checkbox" value="no" @if(old('is_escalation_applicable', $model->is_escalation_applicable)  == "no") checked="checked" @endif @if($subsequent_modify_required) disabled="disabled" @endif>
             <label class="form-check-label" for="no" id="no" style="vertical-align: 4px">No</label>
             @if ($errors->has('is_escalation_applicable'))
                 <span class="help-block">
                         <strong>{{ $errors->first('is_escalation_applicable') }}</strong>
                     </span>
+            @endif
+            @if($subsequent_modify_required && $model->is_escalation_applicable == "yes")
+                <input type="hidden" name="is_escalation_applicable" value="{{$model->is_escalation_applicable}}">
             @endif
         </div>
     </div>
@@ -26,19 +29,24 @@
         <div class="form-group{{ $errors->has('effective_from') ? ' has-error' : '' }} required">
             <label for="effective_from" class="col-md-4 control-label">Escalation Effective From</label>
             <div class="col-md-6 form-check form-check-inline">
-                <input type="text" value="{{ old('effective_from', $model->effective_from) }}" class="form-control" id="effective_from" name="effective_from">
+                <input type="text" value="{{ old('effective_from', $model->effective_from) }}" class="form-control" id="effective_from" name="effective_from" @if($subsequent_modify_required) disabled="disabled" @endif>
                 @if ($errors->has('effective_from'))
                     <span class="help-block">
                         <strong>{{ $errors->first('effective_from') }}</strong>
                     </span>
                 @endif
+
+                @if($subsequent_modify_required)
+                    <input type="hidden" value="{{ $model->effective_from }}" name="effective_from">
+                @endif
+
             </div>
         </div>
 
         <div class="form-group{{ $errors->has('escalation_basis') ? ' has-error' : '' }} required">
-            <label for="effective_from" class="col-md-4 control-label">Escalation Basis</label>
+            <label for="escalation_basis" class="col-md-4 control-label">Escalation Basis</label>
             <div class="col-md-6 form-check form-check-inline">
-                <select name="escalation_basis" class="form-control">
+                <select name="escalation_basis" class="form-control" @if($subsequent_modify_required) disabled="disabled" @endif>
                     <option value="">--Select Escalation Basis--</option>
                     @foreach($contract_escalation_basis as $basis)
                         <option value="{{ $basis->id }}" @if(old('escalation_basis', $model->escalation_basis) == $basis->id) selected="selected" @endif>{{ $basis->title }}</option>
@@ -49,13 +57,18 @@
                         <strong>{{ $errors->first('escalation_basis') }}</strong>
                     </span>
                 @endif
+
+                @if($subsequent_modify_required)
+                    <input type="hidden" name="escalation_basis" value="{{ $model->escalation_basis }}">
+                @endif
+
             </div>
         </div>
 
         <div class="form-group{{ $errors->has('escalation_rate_type') ? ' has-error' : '' }} required escalation_rate_type @if(old('escalation_basis', $model->escalation_basis) != '1') hidden @endif">
             <label for="escalation_rate_type" class="col-md-4 control-label">Escalation Rate Type</label>
             <div class="col-md-6 form-check form-check-inline">
-                <select name="escalation_rate_type" class="form-control">
+                <select name="escalation_rate_type" class="form-control" @if($subsequent_modify_required) disabled="disabled" @endif>
                     <option value="">--Select Rate Type--</option>
                     @foreach($percentage_rate_types as $type)
                         <option value="{{ $type->id }}" @if(old('escalation_rate_type', $model->escalation_rate_type) == $type->id) selected="selected" @endif>{{ $type->title }}</option>
@@ -66,6 +79,11 @@
                         <strong>{{ $errors->first('escalation_rate_type') }}</strong>
                     </span>
                 @endif
+
+                @if($subsequent_modify_required)
+                    <input type="hidden" name="escalation_rate_type" value="{{ $model->escalation_rate_type }}">
+                @endif
+
             </div>
         </div>
 
