@@ -10,7 +10,7 @@
 @endsection
 @section('content')
     <div class="panel panel-default">
-        <div class="panel-heading">Dashboard</div>
+        <div class="panel-heading dashHd">Dashboard</div>
 
         <div class="panel-body">
             @if (session('status'))
@@ -25,38 +25,25 @@
                         <!-- Icon Cards-->
                         <div class="col-lg-4 col-md-4 col-sm-6 col-12 mb-2 mt-4">
                             <div class="inforide">
-                                <div class="row">
-                                    <div class="col-lg-9 col-md-8 col-sm-8 col-8 fontsty">
-                                        <div>Total Active Lease Assets</div>
-                                        <div>{{$total_active_lease_asset}}</div>
-                                    </div>
+                                <div class="dashboxHd blueBg">Total Active Lease Assets</div>
+                                <div class="dashCounting">{{$total_active_lease_asset}}</div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-12 mb-2 mt-4">
+                            <div class="inforide">
+                                <div class="dashboxHd  redBg" >Capitalized Assets</div>
+                                <div class="dashCounting">
+                                    <span><small>Total Own Lease -</small> {{ $own_assets_capitalized }}</span>
+                                    <span><small>Total Sub Lease -</small> {{ $sublease_assets_capitalized }}</span>
                                 </div>
                             </div>
                         </div>
 
                         <div class="col-lg-4 col-md-4 col-sm-6 col-12 mb-2 mt-4">
                             <div class="inforide">
-                                <div class="row">
-                                    <div class="col-lg-9 col-md-8 col-sm-8 col-8 fontsty">
-                                        <div>Capitalized Assets</div>
-                                        <div>
-                                            <span>Total Own Lease - {{ $own_assets_capitalized }}</span><br>
-                                            <span>Total Sub Lease - {{ $sublease_assets_capitalized }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-4 col-md-4 col-sm-6 col-12 mb-2 mt-4">
-                            <div class="inforide">
-                                <div class="row">
-
-                                    <div class="col-lg-9 col-md-8 col-sm-8 col-8 fontsty">
-                                        <h4>Land</h4>
-                                        <h5>{{$total_land}}</h5>
-                                    </div>
-                                </div>
+                                <div class="dashboxHd greenBg">Land</div>
+                                <div class="dashCounting">{{$total_land}}</div>
                             </div>
                         </div>
 
@@ -70,34 +57,22 @@
                         <!-- Icon Cards-->
                         <div class="col-lg-4 col-md-4 col-sm-6 col-12 mb-2 mt-4">
                             <div class="inforide">
-                                <div class="row">
-                                    <div class="col-lg-9 col-md-8 col-sm-8 col-8 fontsty">
-                                        <h4>Other Than Land</h4>
-                                        <h5>{{$total_other_land}}</h5>
-                                    </div>
-                                </div>
+                                <div class="dashboxHd blueBg">Other Than Land</div>
+                                <div class="dashCounting">{{$total_other_land}}</div>
                             </div>
                         </div>
 
                         <div class="col-lg-4 col-md-4 col-sm-6 col-12 mb-2 mt-4">
                             <div class="inforide">
-                                <div class="row">
-                                    <div class="col-lg-9 col-md-8 col-sm-8 col-8 fontsty">
-                                        <h4>Plants & Equipments</h4>
-                                        <h5>{{ $total_plant }}</h5>
-                                    </div>
-                                </div>
+                                <div class="dashboxHd redBg">Plants & Equipments</div>
+                                <div class="dashCounting">{{ $total_plant }}</div>
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-12 mb-2 mt-4">
                             <div class="inforide">
-                                <div class="row">
-
-                                    <div class="col-lg-9 col-md-8 col-sm-8 col-8 fontsty">
-                                        <h4>Investment Properties</h4>
-                                        <h5>{{$total_investment}}</h5>
-                                    </div>
-                                </div>
+                                <div class="dashboxHd greenBg">Investment Properties</div>
+                                <div class="dashCounting">{{$total_investment}}</div>
+                                   
                             </div>
                         </div>
                     </div>
@@ -105,47 +80,34 @@
             </div>
             <!-- Graph Chart -->
             <div class="content-wrapper">
-                <div class="row">
-                    <div class="col-md-4" id="chart1">
-                        <svg></svg>
-                    </div>
-                    <div class="col-md-8" id="chart2">
-                        <svg></svg>
+                <div class="container-fluid">
+                    <div class="">
+                        <div class="col-md-12 chartBg" id="chart1">
+                            <svg></svg>
+                        </div>
+                        <div class="col-md-12 chartBg" id="chart2">
+                            <svg></svg>
+                        </div>
                     </div>
                 </div>
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-lg-4 col-md-4 col-sm-6 col-12 mb-2 mt-4">
                             <div class="inforide">
-                                <div class="row">
-
-                                    <div class="col-lg-9 col-md-8 col-sm-8 col-8 fontsty">
-                                        <h4>Short Term Lease</h4>
-                                        <h5>{{$total_short_term_lease}}</h5>
-                                    </div>
-                                </div>
+                                <div class="dashboxHd blueBg">Short Term Lease</div>
+                                <div class="dashCounting">{{$total_short_term_lease}}</div>
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-12 mb-2 mt-4">
                             <div class="inforide">
-                                <div class="row">
-
-                                    <div class="col-lg-9 col-md-8 col-sm-8 col-8 fontsty">
-                                        <h4>Low Value Lease Assets </h4>
-                                        <h5>{{$total_low_value_asset}}</h5>
-                                    </div>
-                                </div>
+                                <div class="dashboxHd redBg">Low Value Lease Assets </div>
+                                <div class="dashCounting">{{$total_low_value_asset}}</div>
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-12 mb-2 mt-4">
                             <div class="inforide">
-                                <div class="row">
-
-                                    <div class="col-lg-9 col-md-8 col-sm-8 col-8 fontsty">
-                                        <h4>Other Lease Asset</h4>
-                                        <h5>{{$total_other_lease_asset}}</h5>
-                                    </div>
-                                </div>
+                                <div class="dashboxHd greenBg">Other Lease Asset</div>
+                                <div class="dashCounting">{{$total_other_lease_asset}}</div>  
                             </div>
                         </div>
                     </div>
