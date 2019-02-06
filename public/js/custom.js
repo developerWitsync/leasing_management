@@ -135,6 +135,7 @@ $(function(){
     });
     $(document.body).on("click", ".delete_settings", function () {
          var href = $(this).data('href');
+         
         bootbox.confirm({
             message: "Are you sure that you want to delete this setting? These changes cannot be reverted.",
             buttons: {
@@ -166,7 +167,7 @@ $(function(){
 
     $(document.body).on("click", ".add_intangible_asset", function () {
          var href = $(this).data('href');
-        bootbox.confirm({
+         bootbox.confirm({
             message: "Are you sure that you want to add this setting? These changes cannot be reverted.",
             buttons: {
                 confirm: {

@@ -84,12 +84,13 @@ class LeaseClassificationController extends Controller
 
         $categories = LeaseAssetCategories::query()->select('id', 'title')->where('status', '=', '1')->get();
         
-        $category_excluded = CategoriesLeaseAssetExcluded::query()->where('status', '=', '1')->with('leaseassetcategories')->get();
+        $category_excluded = CategoriesLeaseAssetExcluded::query()->whereIn('category_id',[5,8])->where('status', '=', '1')->where('business_account_id',auth()->user()->id)->with('leaseassetcategories')->get();
+       
 
-         $category_excluded = CategoriesLeaseAssetExcluded::query()->get();
+         $category_excluded_all = CategoriesLeaseAssetExcluded::query()->get();
         
-         $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
-
+         $category_excluded_id = $category_excluded_all->pluck('category_id')->toArray();
+         
          $check_intangible_asset = LeaseAssets::query()->where('category_id',7)->get();
          
      
@@ -797,7 +798,7 @@ class LeaseClassificationController extends Controller
         try{
             if($request->ajax()) {
                 
-                $category_id = $id;
+                 $category_id = $id;
 
                 $model = CategoriesLeaseAssetExcluded::create([
                     'category_id' => $category_id,
@@ -806,7 +807,10 @@ class LeaseClassificationController extends Controller
                  ]);
 
                 if($model){
-                    return redirect()->back()->with('status', 'Categories of Lease Assets Excluded has been added successfully.');
+                  Session::flash('status', 'Setting has been added successfully.');
+                    return response()->json(['status' => true], 200);
+                } else {
+                    return response()->json(['status' => false, "message" => "Invalid request!"], 200);
                 }
             } else {
                 return redirect()->back();
@@ -824,8 +828,9 @@ class LeaseClassificationController extends Controller
      */
     public function deleteCategoriesExcluded($id, Request $request){
         try{
+
             if($request->ajax()) {
-                $categories_excluded = CategoriesLeaseAssetExcluded::query()->where('id', $id);
+                $categories_excluded = CategoriesLeaseAssetExcluded::query()->where('category_id', $id);
                 if($categories_excluded) {
                     $categories_excluded->delete();
                     Session::flash('status', 'Setting has been deleted successfully.');
