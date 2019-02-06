@@ -42,11 +42,12 @@
                                           enctype="multipart/form-data">
                                         @endif
                                         {{ csrf_field() }}
-
+                                    <div class="categoriesOuter leasedetOuter clearfix">
+                                        <div class="categoriesHd">Lessor Details</div>
                                         <div class="form-group{{ $errors->has('lessor_name') ? ' has-error' : '' }} required">
-                                            <label for="lessor_name" class="col-lg-4 col-md-5 control-label">Lessor
+                                            <label for="lessor_name" class="col-md-12 control-label">Lessor
                                                 Name</label>
-                                            <div class="col-lg-4 col-md-6">
+                                            <div class="col-md-12">
                                                 <input id="lessor_name" type="text" placeholder="Lessor Name"
                                                        class="form-control" name="lessor_name"
                                                        value="{{ old('lessor_name',$lease->lessor_name) }}"
@@ -57,15 +58,15 @@
                                                 @endif
                                                 @if ($errors->has('lessor_name'))
                                                     <span class="help-block">
-                                            <strong>{{ $errors->first('lessor_name') }}</strong>
-                                        </span>
+                                                        <strong>{{ $errors->first('lessor_name') }}</strong>
+                                                    </span>
                                                 @endif
                                             </div>
                                         </div>
                                         <div class="form-group{{ $errors->has('lease_type_id') ? ' has-error' : '' }} required">
-                                            <label for="lease_type_id" class="col-lg-4 col-md-5 control-label">Lease
+                                            <label for="lease_type_id" class="col-md-12 control-label">Lease
                                                 Type Classification</label>
-                                            <div class="col-lg-4 col-md-6">
+                                            <div class="col-md-12">
                                                 <select name="lease_type_id" class="form-control" id="lease_type_id">
                                                     <option value="">Select Lease Type Classification</option>
                                                     @php $i =1 @endphp
@@ -105,16 +106,16 @@
                                                 @if ($errors->has('lease_type_id'))
                                                     <span class="help-block">
                                             <strong>{{ $errors->first('lease_type_id') }}</strong>
-                                        </span>
+                                            </span>
                                                 @endif
                                             </div>
                                         </div>
 
                                         @if($reporting_currency_settings->is_foreign_transaction_involved == "yes")
                                             <div class="form-group{{ $errors->has('lease_contract_id') ? ' has-error' : '' }} required">
-                                                <label for="lease_contract_id" class="col-lg-4 col-md-5 control-label">Lease
+                                                <label for="lease_contract_id" class="col-md-12 control-label">Lease
                                                     Contract Currency</label>
-                                                <div class="col-lg-4 col-md-6">
+                                                <div class="col-md-12">
                                                     <select name="lease_contract_id" class="form-control"
                                                             @if($subsequent_modify_required) disabled="disabled" @endif>
                                                         <option value="">Select Lease Contract Currency</option>
@@ -142,9 +143,9 @@
 
                                         @if($reporting_currency_settings->is_foreign_transaction_involved == "no")
                                             <div class="form-group{{ $errors->has('lease_contract_id') ? ' has-error' : '' }} required">
-                                                <label for="lease_contract_id" class="col-lg-4 col-md-5 control-label">Lease
+                                                <label for="lease_contract_id" class="col-md-12 control-label">Lease
                                                     Contract Currency</label>
-                                                <div class="col-lg-4 col-md-6">
+                                                <div class="col-md-12">
                                                     <select name="lease_contract_id" class="form-control"
                                                             @if($subsequent_modify_required) disabled="disabled" @endif>
                                                         <option value="">Select Lease Contract Currency</option>
@@ -167,9 +168,9 @@
                                             </div>
                                         @endif
                                         <div class="form-group{{ $errors->has('file') ? ' has-error' : '' }} ">
-                                            <label for="file" class="col-lg-4 col-md-5 control-label">Upload a Copy of
+                                            <label for="file" class="col-md-12 control-label">Upload a Copy of
                                                 Contract Signed</label>
-                                            <div class="col-lg-4 col-md-6 frmattachFile">
+                                            <div class="col-md-12 frmattachFile">
                                                 <input type="name" id="upload" name="name" class="form-control"
                                                        disabled="disabled">
                                                 <button type="button" class="browseBtn">Browse</button>
@@ -177,7 +178,7 @@
                                                 @if ($errors->has('file'))
                                                     <span class="help-block">
                                             <strong>{{ $errors->first('file') }}</strong>
-                                        </span>
+                                                </span>
                                                 @endif
                                             </div>
                                             @if($lease->file !='')
@@ -186,8 +187,8 @@
                                             @endif
                                         </div>
 
-                                        <div class="form-group">
-                                            <div class="col-lg-4 col-md-6 col-lg-offset-4 col-md-offset-5 frmBtnBx">
+                                        <div class="leaseDetBtnBx clearfix">
+                                            <div class="col-md-12 frmBtnBx">
                                                 <a href="/home" class="btn btn-danger">Cancel</a>
 
                                                 <button type="submit" class="btn btn-success">
@@ -199,6 +200,7 @@
                                                 </button>
                                             </div>
                                         </div>
+                                    </div>
                                     </form>
                     </div>
                 </div>

@@ -157,30 +157,21 @@
                 smartSpeed:1500,
                 autoplayHoverPause: true,
                 items:10,
-               /*  
+ 
                 responsive : {
                     1350 : {
-                        items:7,
+                        items:10,
                     },
                     1280 : {
-                        items:6,
+                        items:8,
                     },
                     1024 : {
-                        items:5,
+                        items:6,
                     },
                     768 : {
                         items:4,
                     },
-                    640 : {
-                        items:3,
-                    },
-                    380 : {
-                        items:2,
-                    },
-                    320 : {
-                        items:1,
-                    },
-                } */
+                } 
                 
             });</script>
 </body>
