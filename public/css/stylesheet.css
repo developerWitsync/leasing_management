@@ -53,7 +53,13 @@ fieldset.scheduler-border { background: #fff; border:#dadcdd solid 1px !importan
 .categoriesOuter .form-group label{ text-align: left; font-weight: 400; padding-bottom: 5px; padding-top: 0px;}
 input[type="radio"], input[type="checkbox"]{ margin: 0px;}
 .leasedetOuter {width: 100%; padding-top:0px;}
-.leaseDetBtnBx {
-    padding-bottom: 20px;
-    text-align: center;
-}
+.leaseDetBtnBx {padding-bottom: 20px; text-align: center;}
+.inforide {width: 100%; background: #fff; border: #ccc solid 1px; min-height: 150px; margin-bottom: 25px; border-radius: 3px;}
+.blueBg {background: #0eaae8;}
+.redBg {background: #e20000;}
+.greenBg {background: #20aba5;}
+.dashboxHd {font-size: 18px;padding: 5px 10px;color: #fff; font-weight: 600; border-radius: 3px 3px 0 0;}
+.dashCounting {padding: 10px; font-size: 30px; font-weight: 600; line-height: 30px;}
+.dashCounting span {display: block;  padding-bottom: 10px;}
+.dashCounting span small {font-size: 16px;  line-height: 30px; display: inline-block; vertical-align: top; color: #666;}
+.chartBg {border: #ccc solid 1px; margin-bottom: 25px; border-radius: 3px;}
