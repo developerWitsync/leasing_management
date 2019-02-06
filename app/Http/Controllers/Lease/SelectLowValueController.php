@@ -46,7 +46,7 @@ class SelectLowValueController extends Controller
                         $query->whereNotIn('lease_contract_duration_id',[1,2]);
                     })->whereNotIn('category_id', $category_excluded_id)->first();
 
-                if(count($asset) > 0 ){
+                if($asset){
                     $total_undiscounted_value = getUndiscountedTotalLeasePayment($asset->id);
 
                     if($asset->leaseSelectLowValue){

@@ -32,6 +32,8 @@ use App\InitialDirectCost;
 use App\LeaseIncentives;
 use App\LeasePaymentInvoice;
 use App\LeaseHistory;
+use App\SupplierDetails;
+use App\CustomerDetails;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -77,13 +79,6 @@ class ReviewSubmitController extends Controller
         }
     }
 
-    /**
-     * Review and submit the Lease
-     * Generates the history of the lease and save the same to the lease_history table as well.
-     * @param $id
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function submit($id, Request $request)
     {
         if ($request->isMethod('post')) {
@@ -126,13 +121,28 @@ class ReviewSubmitController extends Controller
 
             $low_value = LeaseSelectLowValue::query()->where('lease_id', '=', $id)->first()->toArray();
 
+
             $discount_rate = LeaseSelectDiscountRate::query()->where('lease_id', '=', $id)->first()->toArray();
 
             $lease_balance = LeaseBalanceAsOnDec::query()->where('lease_id', '=', $id)->first()->toArray();
 
             $initial_direct_cost = InitialDirectCost::query()->where('lease_id', '=', $id)->first();
 
+
+            //get supplier details
+
+            $initial_direct_cost_id = $assets->initialDirectCost->pluck('id')->toArray();
+            $supplier_details = SupplierDetails::query()->whereIn('initial_direct_cost_id', $initial_direct_cost_id)->get()->toArray();
+            
+            $lease_incentives = LeaseIncentives::query()->where('lease_id', '=', $id)->first()->toArray();
+
             $lease_incentives = LeaseIncentives::query()->where('lease_id', '=', $id)->first();
+
+
+            //get customer details
+            $lease_incentive_id = $assets->leaseIncentiveCost->pluck('id')->toArray();
+
+            $customer_details = CustomerDetails::query()->whereIn('lease_incentive_id')->get()->toArray();
 
             $lease_invoice = LeasePaymentInvoice::query()->where('lease_id', '=', $id)->first()->toArray();
 
@@ -180,10 +190,18 @@ class ReviewSubmitController extends Controller
             $record['lease_balance'] = $lease_balance;
 
             //inital direct Cost step 14
+<<<<<<< HEAD
+            $record['initial_direct_cost'] = $initial_direct_cost;
+            
+            $record['initial_direct_cost']['supplier_details']= $supplier_details;
+=======
             $record['initial_direct_cost'] = ($initial_direct_cost)?$initial_direct_cost->toArray():[];
+>>>>>>> c452ec37419113c86eefd6d9f1fddea32637956a
 
             //lease incentives step 15
             $record['lease_incentives'] = ($lease_incentives)?$lease_incentives->toArray():[];
+
+            $record['lease_incentives']['customer_details'] = $customer_details;
 
             //lease valaution step 16 is only for calacute present value lease liability
 
