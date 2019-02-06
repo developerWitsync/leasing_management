@@ -70,3 +70,4 @@ input[type="radio"], input[type="checkbox"]{ margin: 0px;}
 .btnsubmitBx button.btn.btn-success {border: 0 !important; font-size: 16px; border-radius: 3px; padding: 10px 25px; line-height: 20px; font-weight: 600;}
 .btn-backnextBx a.btn.btn-danger {border: 0; line-height: 20px; padding: 10px 25px; border-radius: 3px; margin-right: 10px; font-size: 16px; font-weight: 600;}
 .btn-backnextBx a.btn.btn-primary { border: 0; line-height: 20px; padding: 10px 25px; border-radius: 3px; font-size: 16px; font-weight: 600;}
+.btn-backnextBx button.btn.btn-primary { border: 0; line-height: 20px; padding: 10px 25px; border-radius: 3px; font-size: 16px; font-weight: 600;}
