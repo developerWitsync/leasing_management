@@ -55,9 +55,8 @@
                                     {{ $asset->similar_asset_items }}
                                 </td>
                                 <td>
-                                    &nbsp;
                                     <a class="btn btn-sm btn-primary" href="{{ route('lease.payments.add', ['lease_id' => $lease->id, 'asset_id'=> $asset->id]) }}">Add/Modify Lease Payments</a>
-                                    <br/>
+                                   
                                     <span class="badge badge-warning exitingBtn">
                                         Existing Payments
                                         {{ count($asset->payments) }}
