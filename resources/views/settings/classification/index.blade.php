@@ -92,7 +92,7 @@
                         </div>
 
                         <div class="panel panel-info">
-                            <div class="panel-heading">Components of Lease Payments</div>
+                        <div class="panel-heading">Components of Lease Payments</div>
                             <div class="panel-body settingTble">
                                 <table class="table table-condensed">
                                     <thead>
@@ -108,7 +108,7 @@
                                             <td>{{ $value->title }}</td>
                                         </tr>
                                     @endforeach
-                                    </tbody>
+                                    </tbody>Percentage Rate Types
                                 </table>
                             </div>
                         </div>
@@ -696,11 +696,7 @@
                         <div class="panel panel-info">
                             <div class="panel-heading">
                                 Categories of Lease Assets Excluded
-                              <span>
-                                    <!-- <a href="javascript:void(0);" class="btn btn-sm btn-primary pull-right add_more" data-form="add_more_category_form">Add More</a> -->
-                                </span>
-
-                            </div>
+                              </div>
 
                             <div class="panel-body settingTble">
                                 <table class="table table-condensed">
@@ -724,47 +720,27 @@
                                           </tr>
                                     @endforeach
                                         <tr> <td>3</td>
+                                            @if(isset($category_excluded_id[2]) == 7)
                                             <td>Intengible Asset  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            @if(count($check_intengible_asset)==0)
-                                             <a data-href="{{ route('settings.leaseclassification.deletecategoriesexcluded', ['id' => 3]) }}" href="javascript:;" class="btn btn-sm btn-success delete_settings">Include</a>
-                                             @endif
-                                              <a data-href="{{ route('settings.leaseclassification.deletecategoriesexcluded', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-danger delete_settings">Exclude</a>
-
-
-
-
-                                            </td></tr>
-                                           <!--  <td>
-                                                <a data-href="{{ route('settings.leaseclassification.deletecategoriesexcluded', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-danger delete_settings">Exclude</a>
-                                            </td> -->
-                                        
-                                    <tr style=" {{ $errors->has('categories_excluded') ? ' has-error' : 'display: none' }}" class="add_more_category_form">
-                                        <td>{{ count($category_excluded) + 1 }}</td>
-                                        <td>
-
-                                            <form action="{{ route('settings.leaseclassification.addcategoriesexcluded') }}" method="POST" class="add_more_categories_excluded_form">
-                                                {{ csrf_field() }}
-                                                <div class="form-group{{ $errors->has('title') ? ' has-error' : '' }}">
-                                                    <select name="category_id" class="form-control">
-                                                        <option value="">--Please Select</option>
-                                                        @foreach($categories as $value)
-                                                        <option value="{{$value->id}}"@if(in_array($value->id,$category_excluded_id)) disabled="disabled" @endif>{{$value->title}}</option>
-                                                        @endforeach
-                                                    </select>
-                                                    @if ($errors->has('category_id'))
-                                                        <span class="help-block">
-                                                            <strong>{{ $errors->first('category_id') }}</strong>
-                                                        </span>
-                                                    @endif
-                                                </div>
-                                            </form>
-                                        </td>
-                                        <td>
-                                            <button type="button" onclick="javascript:$('.add_more_categories_excluded_form').submit();" class="btn btn-sm btn-success">Save</button>
-                                            <a href="javascript:;" class="btn btn-sm btn-danger add_more" data-form="add_more_category_form">Cancel</a>
-                                        </td>
-                                    </tr>
-                                </table>
+                                                 <input type="button" disabled class="btn btn-sm btn-success" value="Include">
+                                                   <a data-href="{{ route('settings.leaseclassification.deletecategoriesexcluded', ['id' => 7]) }}" href="javascript:;" class="btn btn-sm btn-danger delete_settings">Exclude</a>
+                                            </td>
+                                            @else
+                                             <td>Intengible Asset  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            @if(count($check_intangible_asset)==0)
+                                             <a data-href="{{ route('settings.leaseclassification.addcategoriesexcluded', ['id' => 7]) }}" href="javascript:;" class="btn btn-sm btn-success add_intangible_asset">Include</a>
+                                             @else
+                                             <input type="button" disabled class="btn btn-sm btn-success" value="Include">
+                                            @endif
+                                              @if(count($check_intangible_asset)==0)
+                                            <a data-href="{{ route('settings.leaseclassification.deletecategoriesexcluded', ['id' => 7]) }}" href="javascript:;" class="btn btn-sm btn-danger delete_settings">Exclude</a>
+                                             @else
+                                             <input type="button" disabled class="btn btn-sm btn-danger" value="Exclude">
+                                            @endif
+                                            </td>
+                                            @endif
+                                        </tr>
+                                  </table>
                             </div>
                         </div>
                     </div>

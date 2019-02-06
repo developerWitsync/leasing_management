@@ -9,6 +9,7 @@ use App\LeaseAssetCategories;
 
 class HomeController extends Controller
 {
+    public $breadcrumbs;
     /**
      * Create a new controller instance.
      *
@@ -16,6 +17,12 @@ class HomeController extends Controller
      */
     public function __construct()
     {
+        $this->breadcrumbs = [
+            [
+                'link' => route('home'),
+                'title' => 'Dashboard'
+            ]
+        ];
         $this->middleware('auth');
     }
 
@@ -26,6 +33,7 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $breadcrumbs = $this->breadcrumbs;
         $total_active_lease_asset = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('status', '=', '1')->with('assets')->count();
         
         $leases = Lease::query()->where('status','=','1')->whereIn('business_account_id', getDependentUserIds());
@@ -111,7 +119,8 @@ class HomeController extends Controller
             'total_other_land',
             'total_plant',
             'total_investment',
-            'total_undiscounted_capitalized'
+            'total_undiscounted_capitalized',
+            'breadcrumbs'
         ));
     }
 

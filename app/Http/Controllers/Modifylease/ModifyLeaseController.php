@@ -18,13 +18,28 @@ use Validator;
 
 class ModifyLeaseController extends Controller
 {
+    public $breadcrumbs;
+    public function __construct()
+    {
+        $this->breadcrumbs = [
+            [
+                'link' => route('home'),
+                'title' => 'Dashboard'
+            ],
+            [
+                'link' => route('modifylease.index'),
+                'title' => 'Modify Lease'
+            ]
+        ];
+    }
     /**
      * Render the table for all the leases
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
-        return view('modifylease.index');
+        $breadcrumbs = $this->breadcrumbs;
+        return view('modifylease.index',compact('breadcrumbs'));
     }
 
     /**
@@ -87,7 +102,7 @@ class ModifyLeaseController extends Controller
                     $model->setRawAttributes($data1);
                     $model->save();
 
-                    return redirect(route('modifylease.create', ['id' => $id]))->with('status', 'Modify Lease has been Created successfully.');
+                    return redirect(route('add-new-lease.index', ['id' => $id]))->with('status', 'Modify Lease has been Created successfully.');
 
                 }
                 return view('modifylease.create', compact('lease', 'lase_modification'));

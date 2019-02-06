@@ -85,7 +85,7 @@ class LeaseIncentivesController extends Controller
                             return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
                         }
 
-                        $data = $request->except('_token', 'customer_name', 'description', 'incentive_date', 'currency_id', 'amount', 'exchange_rate',  'uuid', 'asset_name', 'asset_category');
+                        $data = $request->except('_token', 'submit','customer_name', 'description', 'incentive_date', 'currency_id', 'amount', 'exchange_rate',  'uuid', 'asset_name', 'asset_category');
                         $data['lease_id'] = $asset->lease->id;
                         $data['asset_id'] = $asset->id;
                         $model->setRawAttributes($data);

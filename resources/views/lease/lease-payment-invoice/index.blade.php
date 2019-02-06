@@ -33,17 +33,19 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <div class="col-md-6 col-md-offset-4">
+                <div class="form-group btnMainBx">
+                    <div class="col-md-6 btn-backnextBx">
 
                         <a href="{{ route('addlease.leasepaymentinvoice.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
-                        <button type="submit" class="btn btn-success">
-                            Submit
-                        </button>
-
                         @if($model->id)
                             <a href="{{ route('addlease.reviewsubmit.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
                         @endif
+
+                    </div>
+                    <div class="col-md-6 btnsubmitBx">
+                        <button type="submit" class="btn btn-success">
+                            Save
+                        </button>
                     </div>
                 </div>
 
