@@ -173,6 +173,7 @@
                     },
                 } 
                 
-            });</script>
+            });
+    </script>
 </body>
 </html>

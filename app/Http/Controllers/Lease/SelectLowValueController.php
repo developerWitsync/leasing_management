@@ -26,42 +26,60 @@ class SelectLowValueController extends Controller
         ];
     }
 
+    /**
+     * create or update for the lease select low value, so that the forms will appear directly at the first place instead of showing the tables and than showing the forms.
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
     public function index_V2($id, Request $request){
         try{
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
             if($lease) {
 
-                $asset = $lease->assets->first();
+                $category_excluded = CategoriesLeaseAssetExcluded::query()->get();
 
-                $total_undiscounted_value = getUndiscountedTotalLeasePayment($asset->id);
+                $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
 
-                if($asset->leaseSelectLowValue){
-                    $model = $asset->leaseSelectLowValue;
+                $asset = LeaseAssets::query()->where('lease_id', '=', $lease->id)->whereNotIn('specific_use', [2])
+                    ->whereHas('leaseDurationClassified',  function($query){
+                        $query->whereNotIn('lease_contract_duration_id',[1,2]);
+                    })->whereNotIn('category_id', $category_excluded_id)->first();
+
+                if(count($asset) > 0 ){
+                    $total_undiscounted_value = getUndiscountedTotalLeasePayment($asset->id);
+
+                    if($asset->leaseSelectLowValue){
+                        $model = $asset->leaseSelectLowValue;
+                    } else {
+                        $model = new LeaseSelectLowValue();
+                    }
+
+                    if($request->isMethod('post')) {
+                        $validator = Validator::make($request->except('_token'), $this->validationRules());
+                        if($validator->fails()){
+                            return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
+                        }
+                        $data = $request->except('_token','submit',  'uuid', 'asset_name', 'asset_category');
+                        $data['lease_id']   = $asset->lease->id;
+                        $data['asset_id']   = $asset->id;
+                        $model->setRawAttributes($data);
+                        if($model->save()){
+                            // complete Step
+                            confirmSteps($id,'step11');
+                            return redirect(route('addlease.lowvalue.index',['id' => $lease->id]))->with('status', 'Select Low Value has been added successfully.');
+                        }
+                    }
+                    return view('lease.select-low-value.create', compact(
+                        'model',
+                        'lease',
+                        'asset',
+                        'total_undiscounted_value'
+                    ));
                 } else {
-                    $model = new LeaseSelectLowValue();
+                    return redirect(route('addlease.discountrate.index', ['id' => $id]));
                 }
 
-                if($request->isMethod('post')) {
-                    $validator = Validator::make($request->except('_token'), $this->validationRules());
-                    if($validator->fails()){
-                        return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
-                    }
-                    $data = $request->except('_token', 'submit');
-                    $data['lease_id']   = $asset->lease->id;
-                    $data['asset_id']   = $asset->id;
-                    $model->setRawAttributes($data);
-                    if($model->save()){
-                        // complete Step
-                        confirmSteps($id,'step11');
-                        return redirect(route('addlease.lowvalue.index',['id' => $lease->id]))->with('status', 'Select Low Value has been added successfully.');
-                    }
-                }
-                return view('lease.select-low-value.create', compact(
-                    'model',
-                    'lease',
-                    'asset',
-                    'total_undiscounted_value'
-                ));
             } else {
                 abort(404);
             }

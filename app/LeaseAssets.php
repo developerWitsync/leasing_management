@@ -195,4 +195,8 @@ class LeaseAssets extends Model
             return ['present_value_data' => $present_value_of_lease_liability, 'years' => $years, 'months' => $months];
         }
     }
+
+     public function paymentsduedate(){
+        return $this->hasMany('App\LeaseAssetPaymenetDueDate', 'asset_id', 'id');
+    }
 }

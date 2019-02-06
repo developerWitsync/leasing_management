@@ -10,13 +10,27 @@ namespace App\Http\Controllers\Lease;
 
 use App\Http\Controllers\Controller;
 use App\Lease;
-use App\LeaseSelectDiscountRate;
-use App\LeaseDurationClassified;
 use App\Countries;
 use App\ReportingCurrencySettings;
 use App\ContractClassifications;
 use App\ForeignCurrencyTransactionSettings;
 use App\LeaseAssets;
+use App\LeaseAssetPayments;
+use App\FairMarketValue;
+use App\LeaseResidualValue;
+use App\LeaseTerminationOption;
+use App\LeaseRenewableOption;
+use App\PurchaseOption;
+use App\LeaseDurationClassified;
+use App\LeaseAssetPaymenetDueDate;
+use App\PaymentEscalationDetails;
+use App\LeaseSelectLowValue;
+use App\LeaseSelectDiscountRate;
+use App\LeaseBalanceAsOnDec;
+use App\InitialDirectCost;
+use App\LeaseIncentives;
+use App\LeasePaymentInvoice;
+use App\LeaseHistory;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -70,12 +84,127 @@ class ReviewSubmitController extends Controller
         $model = Lease::query()->where('id', '=', $id)->first();
         $model->status = "1";
         $model->save();
-        // complete Step
-        confirmSteps($id, 'step18');
+      
+
+        $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first()->toArray();
+
+        $underlyning_asset = LeaseAssets::query()->where('lease_id', '=', $id)->first()->toArray();
+       
+
+        $asset_id = $underlyning_asset['id'];
+
+        $assets = LeaseAssets::query()->findOrFail($asset_id);
+        $payment_id = $assets->paymentsduedate->pluck('payment_id')->toArray();
+               
+
+        $lease_payments = LeaseAssetPayments::query()->where('asset_id','=', $asset_id)->first()->toArray();
+
+        $fair_market_value = FairMarketValue::query()->where('lease_id','=', $id)->first()->toArray();
+
+        $residual_value = LeaseResidualValue::query()->where('lease_id','=', $id)->first()->toArray();
+
+        $termination_option = LeaseTerminationOption::query()->where('lease_id', '=', $id)->first()->toArray();
+           
+        $renewal_option = LeaseRenewableOption::query()->where('lease_id','=', $id)->first()->toArray();
+
+        $purchase_option = PurchaseOption::query()->where('lease_id', '=', $id)->first()->toArray();
+
+
+        $duration_classified = LeaseDurationClassified::query()->where('lease_id', '=', $id)->first()->toArray();
+
+
+        $payment_esclation_details = PaymentEscalationDetails::query()->where('lease_id','=', $id)->first()->toArray();
+
+        // esclation Payments with due date
+        $payment_due_dates = LeaseAssetPaymenetDueDate::query()->whereIn('payment_id', $payment_id)->get()->toArray();
+
+
+        $low_value = LeaseSelectLowValue::query()->where('lease_id', '=', $id)->get()->toArray();
+         
+        $discount_rate = LeaseSelectDiscountRate::query()->where('lease_id', '=', $id)->get()->toArray();
+
+
+        $lease_balance = LeaseBalanceAsOnDec::query()->where('lease_id','=', $id)->get()->toArray();
+
+
+        $initial_direct_cost = InitialDirectCost::query()->where('lease_id','=', $id)->get()->toArray();
+
+        $lease_incentives = LeaseIncentives::query()->where('lease_id','=',$id)->get()->toArray();
+           
+
+        $lease_invoice = LeasePaymentInvoice::query()->where('lease_id','=',$id)->get()->toArray();
+
+        
+       //lessor-details step 1
+       $record['lessor_details'] = $lease;
+
+       //Underlying Assets step 2
+       $record['underlying_asset'] = $underlyning_asset;
+       
+       //Lease Asset Payments step 3
+       $record['lease_payments'] = $lease_payments;
+
+       // Fair market value step 4
+       $record['fair_market'] = $fair_market_value;
+
+       //Residual Gurantee Value step 5
+       $record['residual_value'] = $residual_value;
+
+       //Lease Termination Option step 6 
+       $record['termination_option'] = $termination_option;
+
+       //Renewable Option step 7
+       $record['renewal_option'] = $renewal_option;
+
+       //purchase option step 8
+       $record['purchase_option'] = $purchase_option;
+
+       //Duartion Classified step 9
+       $record['duration_classified'] = $duration_classified;
+
+       //payment due date with asset id 
+       $payments['payment_due_dates'] =  $payment_due_dates;
+
+       //payment esclation step10
+        $esclation_payments['payment_esclation'] = $payment_esclation_details;
+
+        //Select Low Value step 11
+        $record['low_value'] = $low_value;
+
+        //Select Discount Rate step 12
+        $record['discount_rate'] = $discount_rate;
+
+        //Lease Balance As on Dec Step 13
+        $record['lease_balance'] = $lease_balance;
+
+        //inital direct Cost step 14
+        $record['initial_direct_cost'] = $initial_direct_cost;
+
+        //lease incentives step 15
+        $record['lease_incentives'] = $lease_incentives;
+
+        //lease valaution step 16 is only for calacute present value lease liability
+       
+        // lessor invoice step 17
+        $record['lessor_invoice'] = $lease_invoice;
+
+        //save the record in lease history
+         $data = $request->except('_token');
+         $data['lease_id'] = $id;
+         $data['json_data_steps'] =  json_encode($record);
+         $data['esclation_payments']   =  json_encode($esclation_payments);
+         $data['payment_anxure']   =  json_encode($payments);
+         $lease_history = LeaseHistory::create($data);
+
+        if($lease_history){
+              // complete Step
+            confirmSteps($id, 'step18');
+        }
+
         return redirect(route('addlease.reviewsubmit.index', ['id' => $id]))->with('status', 'Lease Information has been Submitted successfully.');
     }
-
   }
-}
+
+ }   
 
     

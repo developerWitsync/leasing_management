@@ -388,9 +388,10 @@
 
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-success">Submit</button>
 
-                                <a href="{{ route('addlease.leaseasset.index', ['id' => $lease->id,'total_assets' => count($lease->assets)]) }}" class="btn btn-danger">Cancel</a>
+                                <a href="{{ route('add-new-lease.index',['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
+
+                                <button type="submit" class="btn btn-success">Submit</button>
 
                                 @if($lease->total_assets == count($lease->assets))
                                     <a href="{{ route('addlease.payments.index',['id' => $lease->id]) }}" class="btn btn-primary">Next</a>

@@ -17,6 +17,7 @@ use App\Mail\RegistrationConfirmation;
 use Mail;
 use App\LeaseAssetsNumberSettings;
 use App\LeaseAssetSimilarCharacteristicSettings;
+use App\CategoriesLeaseAssetExcluded;
 
 class UserObserver
 {
@@ -112,6 +113,16 @@ class UserObserver
             //fetch all the permissions and assign all the permissions to the super admin role created for the current user
             $permissions = Permission::query()->select('id')->get()->pluck('id')->toArray();
             $role->perms()->sync($permissions);
+
+            //category excluded
+            $category_excluded = CategoriesLeaseAssetExcluded::create([
+                'category_id' => '8',
+                'business_account_id'   => $user->id,
+            ]);
+            $category_excluded = CategoriesLeaseAssetExcluded::create([
+                'category_id' => '5',
+                'business_account_id'   => $user->id,
+            ]);
 
             return true;
         } catch (\Exception $e){
