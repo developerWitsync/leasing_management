@@ -10,6 +10,7 @@ class LeaseHistory extends Model
 
     protected $fillable = [
         'lease_id',
+        'modify_id',
         'json_data_steps',
         'esclation_payments',
         'payment_anxure',
