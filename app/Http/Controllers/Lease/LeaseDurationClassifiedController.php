@@ -72,7 +72,7 @@ class LeaseDurationClassifiedController extends Controller
                     $back_button = route('addlease.leaseterminationoption.index', ['id' => $lease->id]);
                 }
 
-                if (count($asset) > 0) {
+                if ($asset) {
                     if($asset->leaseDurationClassified) {
                         $model = $asset->leaseDurationClassified;
                     } else {

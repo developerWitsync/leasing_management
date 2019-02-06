@@ -83,3 +83,4 @@ input[type="radio"], input[type="checkbox"]{ margin: 0px;}
 .categoriesOuter {padding-top: 15px;}
 .txtareaInp{ width: 100%; height: 60px; resize: none;}
 .textareaOuter{ width: 99% !important;}
+.frmattachFile {width: 90%;}

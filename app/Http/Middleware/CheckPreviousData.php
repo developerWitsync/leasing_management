@@ -166,6 +166,15 @@ class CheckPreviousData
         }
 
 
+        if($step == 'step15'){
+            $total_assets = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)
+                ->where('lease_start_date', '>=', '2019-01-01')->count();
+            if($total_assets == 0){
+                $step = 'step13';
+            }
+        }
+
+
         \Log::info('Checking ----- '. $step. ' On URL ------- '. $request->route()->getName());
 
         if(!$this->verifyStep($step, $lease_id)){

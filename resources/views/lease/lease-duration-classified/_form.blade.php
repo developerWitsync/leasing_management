@@ -1,30 +1,30 @@
 <form role="form" class="form-horizontal" method="post">
     {{ csrf_field() }}
-
+    <div class="categoriesOuter clearfix">
     <div class="form-group required">
-        <label for="uuid" class="col-md-4 control-label">ULA Code</label>
-        <div class="col-md-4 form-check form-check-inline">
+        <label for="uuid" class="col-md-12 control-label">ULA Code</label>
+        <div class="col-md-12 form-check form-check-inline">
             <input type="text" value="{{ $asset->uuid}}" class="form-control" id="uuid" name="uuid" disabled="disabled">
         </div>
     </div>
 
     <div class="form-group required">
-        <label for="asset_name" class="col-md-4 control-label">Asset Name</label>
-        <div class="col-md-4 form-check form-check-inline">
+        <label for="asset_name" class="col-md-12 control-label">Asset Name</label>
+        <div class="col-md-12 form-check form-check-inline">
             <input type="text" value="{{ $asset->name}}" class="form-control" id="asset_name" name="asset_name" disabled="disabled">
         </div>
     </div>
 
     <div class="form-group required">
-        <label for="asset_category" class="col-md-4 control-label">Lease Asset Classification</label>
-        <div class="col-md-4 form-check form-check-inline">
+        <label for="asset_category" class="col-md-12 control-label">Lease Asset Classification</label>
+        <div class="col-md-12 form-check form-check-inline">
             <input type="text" value="{{ $asset->category->title}}" class="form-control" id="asset_category" name="asset_category" disabled="disabled">
         </div>
     </div>
 
     <div class="form-group{{ $errors->has('lease_start_date') ? ' has-error' : '' }} required">
-        <label for="name" class="col-md-4 control-label">Lease Start Date</label>
-        <div class="col-md-6 form-check form-check-inline" required>
+        <label for="name" class="col-md-12 control-label">Lease Start Date</label>
+        <div class="col-md-12 form-check form-check-inline" required>
             <input class="form-control" name="lease_start_date" id="lease_start_date" type="text" autocomplete="off"
                    value="{{ \Carbon\Carbon::parse(old('lease_start_date', $asset->lease_start_date))->format(config('settings.date_format'))}}" readonly="off" @if($subsequent_modify_required) disabled="disabled" @endif>
             @if ($errors->has('lease_start_date'))
@@ -40,8 +40,8 @@
         </div>
     </div>
     <div class="form-group{{ $errors->has('lease_end_date') ? ' has-error' : '' }} required">
-        <label for="name" class="col-md-4 control-label">Lease End Date</label>
-        <div class="col-md-6 form-check form-check-inline" required>
+        <label for="name" class="col-md-12 control-label">Lease End Date</label>
+        <div class="col-md-12 form-check form-check-inline" required>
             <input class="form-control" name="lease_end_date" id="lease_end_date" type="text" autocomplete="off"
                    value="{{ \Carbon\Carbon::parse(old('lease_end_date', $model->lease_end_date))->format(config('settings.date_format'))}}" readonly="off">
             @if ($errors->has('lease_end_date'))
@@ -53,8 +53,8 @@
     </div>
 
     <div class="form-group{{ $errors->has('lease_contract_duration_id') ? ' has-error' : '' }} required">
-        <label for="name" class="col-md-4 control-label">Lease Classified</label>
-        <div class="col-md-6 form-check form-check-inline" required>
+        <label for="name" class="col-md-12 control-label">Lease Classified</label>
+        <div class="col-md-12 form-check form-check-inline" required>
             <select name="lease_contract_duration_id" class="form-control" readonly="readonly">
                 @foreach($lease_contract_duration as $item)
                     <option value="{{ $item->id }}"
@@ -68,7 +68,7 @@
             @endif
         </div>
     </div>
-
+</div>
 
     <div class="form-group btnMainBx">
         <div class="col-md-6 btn-backnextBx">

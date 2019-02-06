@@ -27,7 +27,7 @@
                 </div>
             @endif
 
-            @if($reporting_currency_settings->is_foreign_transaction_involved == 'yes' || $reporting_currency_settings->is_foreign_transaction_involved == 'no' )
+            @if(($reporting_currency_settings->is_foreign_transaction_involved == 'yes' || $reporting_currency_settings->is_foreign_transaction_involved == 'no') && $general_settings_count > 0)
 
                 {{--@include('lease._menubar')--}}
                 <div class="tab-content" style="padding: 0px;">
@@ -207,17 +207,24 @@
                                                 </button>
                                             </div>
                                         </div>
-                                    </form>
+                                </form>
                     </div>
                 </div>
             @else
                 @if(Auth::user()->parent_id==0)
-                    <a href="{{route('settings.currencies')}}">
-                        <div class="alert alert-danger">Please change the foreign currency settings</div>
-                    </a>
+
+                        @if($general_settings_count == 0)
+                            <a href="{{route('settings.index')}}">
+                                <div class="alert alert-danger">Please create the general settings from the settings menu as well.</div>
+                            </a>
+                        @else
+                            <a href="{{route('settings.currencies')}}">
+                                <div class="alert alert-danger">Please change the foreign currency settings</div>
+                            </a>
+                        @endif
                 @else
-                    <div class="alert alert-danger">“Super Admin has not created the settings that can be utilised by
-                        you. Please contact to your Super Admin to generate the Settings. Thanks!”
+                    <div class="alert alert-danger">Super Admin has not created the settings that can be utilised by
+                        you. Please contact to your Super Admin to generate the Settings. Thanks!
                     </div>
                 @endif
             @endif

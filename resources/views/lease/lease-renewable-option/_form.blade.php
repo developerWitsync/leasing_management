@@ -1,38 +1,40 @@
 <form role="form" class="form-horizontal" method="post" enctype="multipart/form-data">
     {{ csrf_field() }}
-
+    <div class="categoriesOuter clearfix">
     <div class="form-group required">
-        <label for="uuid" class="col-md-4 control-label">ULA Code</label>
-        <div class="col-md-4 form-check form-check-inline">
+        <label for="uuid" class="col-md-12 control-label">ULA Code</label>
+        <div class="col-md-12 form-check form-check-inline">
             <input type="text" value="{{ $asset->uuid}}" class="form-control" id="uuid" name="uuid" disabled="disabled">
         </div>
     </div>
 
     <div class="form-group required">
-        <label for="asset_name" class="col-md-4 control-label">Asset Name</label>
-        <div class="col-md-4 form-check form-check-inline">
+        <label for="asset_name" class="col-md-12 control-label">Asset Name</label>
+        <div class="col-md-12 form-check form-check-inline">
             <input type="text" value="{{ $asset->name}}" class="form-control" id="asset_name" name="asset_name"
                    disabled="disabled">
         </div>
     </div>
 
     <div class="form-group required">
-        <label for="asset_category" class="col-md-4 control-label">Lease Asset Classification</label>
-        <div class="col-md-4 form-check form-check-inline">
+        <label for="asset_category" class="col-md-12 control-label">Lease Asset Classification</label>
+        <div class="col-md-12 form-check form-check-inline">
             <input type="text" value="{{ $asset->category->title}}" class="form-control" id="asset_category"
                    name="asset_category" disabled="disabled">
         </div>
     </div>
 
     <div class="form-group{{ $errors->has('is_renewal_option_under_contract') ? ' has-error' : '' }} required">
-        <label for="name" class="col-md-4 control-label">Lease Renewal Option Available Under the Contract</label>
-        <div class="col-md-6 form-check form-check-inline" required>
-            <input class="form-check-input" name="is_renewal_option_under_contract" id="yes" type="checkbox" value="yes"
+        <label for="name" class="col-md-12 control-label">Lease Renewal Option Available Under the Contract</label>
+        <div class="col-md-12 form-check form-check-inline mrktavail" required>
+            <span><input class="form-check-input" name="is_renewal_option_under_contract" id="yes" type="checkbox" value="yes"
                    @if(old('is_renewal_option_under_contract', $model->is_renewal_option_under_contract) == "yes") checked="checked" @endif>
-            <label class="form-check-label" for="yes" id="yes" style="vertical-align: 4px">Yes</label><br>
-            <input class="form-check-input" name="is_renewal_option_under_contract" id="no" type="checkbox" value="no"
+            <label class="form-check-label" for="yes" id="yes" style="vertical-align: 4px">Yes</label>
+            </span>
+            <span><input class="form-check-input" name="is_renewal_option_under_contract" id="no" type="checkbox" value="no"
                    @if(old('is_renewal_option_under_contract', $model->is_renewal_option_under_contract)  == "no") checked="checked" @endif>
             <label class="form-check-label" for="no" id="no" style="vertical-align: 4px">No</label>
+            </span>
             @if ($errors->has('is_renewal_option_under_contract'))
                 <span class="help-block">
                     <strong>{{ $errors->first('is_renewal_option_under_contract') }}</strong>
@@ -44,9 +46,9 @@
     <div class="form-group{{ $errors->has('renewal_option_not_available_reason') ? ' has-error' : '' }} required renewal_option_not_available_reason"
          @if(old('is_renewal_option_under_contract', $model->is_renewal_option_under_contract) == 'no') style="display: block;"
          @else style="display: none" @endif>
-        <label for="renewal_option_not_available_reason" class="col-md-4 control-label">Reason for Renewal Option not
+        <label for="renewal_option_not_available_reason" class="col-md-12 control-label">Reason for Renewal Option not
             Present</label>
-        <div class="col-md-6">
+        <div class="col-md-12">
             <input type="text" id="renewal_option_not_available_reason" placeholder="Reasons"
                    name="renewal_option_not_available_reason" class="form-control"
                    value="{{ old('renewal_option_not_available_reason', $model->renewal_option_not_available_reason) }}">
@@ -62,19 +64,23 @@
          @if(old('is_renewal_option_under_contract',$model->is_renewal_option_under_contract ) == "yes") style="display:block;"
          @else  style="display:none;" @endif>
         <div class="form-group{{ $errors->has('is_reasonable_certainity_option') ? ' has-error' : '' }} required">
-            <label for="type" class="col-md-4 control-label">Reasonable Certainity to Exercise Renewal Option as of
+            <label for="type" class="col-md-12 control-label">Reasonable Certainity to Exercise Renewal Option as of
                 today</label>
-            <div class="col-md-6">
-                <input class="form-check-input" name="is_reasonable_certainity_option" type="checkbox"
+            <div class="col-md-12 mrktavail">
+                <span>
+                        <input class="form-check-input" name="is_reasonable_certainity_option" type="checkbox"
                        id="is_reasonable_certainity_option_yes" value="yes"
                        @if(old('is_reasonable_certainity_option', $model->is_reasonable_certainity_option)  == "yes") checked="checked" @endif >
-                <label clas="form-check-label" for="is_reasonable_certainity_option_yes"
-                       style="vertical-align: 4px">Yes</label><br>
-                <input class="form-check-input" name="is_reasonable_certainity_option" type="checkbox"
+                        <label clas="form-check-label" for="is_reasonable_certainity_option_yes"
+                       style="vertical-align: 4px">Yes</label>
+                </span>
+                <span>
+                        <input class="form-check-input" name="is_reasonable_certainity_option" type="checkbox"
                        id="is_reasonable_certainity_option_no" value="no"
                        @if(old('is_reasonable_certainity_option', $model->is_reasonable_certainity_option)  == "no") checked="checked" @endif>
-                <label class="form-check-label" for="is_reasonable_certainity_option_no"
+                        <label class="form-check-label" for="is_reasonable_certainity_option_no"
                        style="vertical-align: 4px">No</label>
+                </span>
                 @if ($errors->has('is_reasonable_certainity_option'))
                     <span class="help-block">
                         <strong>{{ $errors->first('is_reasonable_certainity_option') }}</strong>
@@ -88,8 +94,8 @@
          @if(old('is_reasonable_certainity_option',$model->is_reasonable_certainity_option ) == "yes" && old('is_renewal_option_under_contract', $model->is_renewal_option_under_contract) == 'yes') style="display:block;"
          @else  style="display:none;" @endif>
         <div class="form-group{{ $errors->has('expected_lease_end_Date') ? ' has-error' : '' }} required">
-            <label for="expected_lease_end_Date" class="col-md-4 control-label">Expected Lease End Date</label>
-            <div class="col-md-6 form-check form-check-inline">
+            <label for="expected_lease_end_Date" class="col-md-12 control-label">Expected Lease End Date</label>
+            <div class="col-md-12 form-check form-check-inline">
                 <input type="text" class="form-control" placeholder="Expected Lease End Date"
                        id="expected_lease_end_Date" name="expected_lease_end_Date"
                        value="{{old('expected_lease_end_Date', $model->expected_lease_end_Date)}}">
@@ -101,9 +107,8 @@
             </div>
         </div>
     </div>
-
-
-    <div class="form-group btnMainBx">
+</div>
+<div class="form-group btnMainBx">
         <div class="col-md-6 btn-backnextBx">
 
             <a href="{{ route('addlease.leaseterminationoption.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
@@ -118,7 +123,7 @@
                 Save
             </button>
         </div>
-    </div>
+</div>
 
 </form>
 

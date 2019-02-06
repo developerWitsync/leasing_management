@@ -199,4 +199,5 @@ class LeaseAssets extends Model
      public function paymentsduedate(){
         return $this->hasMany('App\LeaseAssetPaymenetDueDate', 'asset_id', 'id');
     }
+    
 }

@@ -115,11 +115,12 @@ class UserObserver
             $role->perms()->sync($permissions);
 
             //category excluded
-            $category_excluded = CategoriesLeaseAssetExcluded::create([
+            CategoriesLeaseAssetExcluded::create([
                 'category_id' => '8',
                 'business_account_id'   => $user->id,
             ]);
-            $category_excluded = CategoriesLeaseAssetExcluded::create([
+
+            CategoriesLeaseAssetExcluded::create([
                 'category_id' => '5',
                 'business_account_id'   => $user->id,
             ]);

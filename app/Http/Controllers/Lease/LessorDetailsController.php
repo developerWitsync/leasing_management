@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Lease;
 
 use App\ContractClassifications;
 use App\Currencies;
+use App\GeneralSettings;
 use App\Lease;
 use App\ReportingCurrencySettings;
 use App\ForeignCurrencyTransactionSettings;
@@ -72,6 +73,7 @@ class LessorDetailsController extends Controller
         if(collect($reporting_currency_settings)->isEmpty()) {
             $reporting_currency_settings = new ReportingCurrencySettings();
         }
+        $general_settings_count = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->count();
         $breadcrumbs = $this->breadcrumbs;
         return view('lease.lessor-details.index', compact(
             'breadcrumbs',
@@ -80,7 +82,8 @@ class LessorDetailsController extends Controller
             'reporting_currency_settings',
             'reporting_foreign_currency_transaction_settings',
             'lease',
-            'subsequent_modify_required'
+            'subsequent_modify_required',
+            'general_settings_count'
         ));
     }
 

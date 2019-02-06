@@ -46,7 +46,7 @@ $(function(){
         }
     });
 
-    $("total_escalation_rate").bind("cssClassChanged", function(){
+    $(".total_escalation_rate").bind("cssClassChanged", function(){
         if(!$(this).hasClass("hidden")) {
             $(".see_escalation_chart").removeClass("hidden");
         } else {
