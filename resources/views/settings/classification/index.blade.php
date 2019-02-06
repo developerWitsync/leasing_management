@@ -697,7 +697,7 @@
                             <div class="panel-heading">
                                 Categories of Lease Assets Excluded
                               <span>
-                                    <a href="javascript:void(0);" class="btn btn-sm btn-primary pull-right add_more" data-form="add_more_category_form">Add More</a>
+                                    <!-- <a href="javascript:void(0);" class="btn btn-sm btn-primary pull-right add_more" data-form="add_more_category_form">Add More</a> -->
                                 </span>
 
                             </div>
@@ -708,8 +708,9 @@
                                     <tr>
                                         <th width="50px">Sr No.</th>
                                         <th>Title</th>
-                                        <th>Action</th>
+                                        
                                     </tr>
+
                                     </thead>
                                    
                                     <tbody>
@@ -720,11 +721,23 @@
                                             <td class="title">
                                                 {{ $value->leaseassetcategories->title }}
                                             </td>
-                                            <td>
-                                                <a data-href="{{ route('settings.leaseclassification.deletecategoriesexcluded', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-danger delete_settings">Exclude</a>
-                                            </td>
-                                        </tr>
+                                          </tr>
                                     @endforeach
+                                        <tr> <td>3</td>
+                                            <td>Intengible Asset  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            @if(count($check_intengible_asset)==0)
+                                             <a data-href="{{ route('settings.leaseclassification.deletecategoriesexcluded', ['id' => 3]) }}" href="javascript:;" class="btn btn-sm btn-success delete_settings">Include</a>
+                                             @endif
+                                              <a data-href="{{ route('settings.leaseclassification.deletecategoriesexcluded', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-danger delete_settings">Exclude</a>
+
+
+
+
+                                            </td></tr>
+                                           <!--  <td>
+                                                <a data-href="{{ route('settings.leaseclassification.deletecategoriesexcluded', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-danger delete_settings">Exclude</a>
+                                            </td> -->
+                                        
                                     <tr style=" {{ $errors->has('categories_excluded') ? ' has-error' : 'display: none' }}" class="add_more_category_form">
                                         <td>{{ count($category_excluded) + 1 }}</td>
                                         <td>
