@@ -225,7 +225,6 @@ Route::middleware('auth')->group(function(){
     /*
     * Drafts Routes
     */
-
     Route::namespace('Drafts')->prefix('drafts')->group(function(){
         Route::get('/', ['as' => 'drafts.index', 'uses' => 'IndexController@index']);
         Route::get('fetch-lease-details', ['as' => 'drafts.fetchleasedetails', 'uses' => 'IndexController@fetchLeaseDetails']);
@@ -248,7 +247,6 @@ Route::middleware('auth')->group(function(){
     */
 
     Route::namespace('Leasevaluation')->prefix('lease-valuation')->group(function(){
-
           Route::get('/', ['as' => 'leasevaluation.index', 'uses' => 'LeaseValuationController@index']);
      });
 

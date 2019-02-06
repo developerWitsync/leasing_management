@@ -11,14 +11,16 @@
     <div class="form-group required">
         <label for="asset_name" class="col-md-4 control-label">Asset Name</label>
         <div class="col-md-4 form-check form-check-inline">
-            <input type="text" value="{{ $asset->name}}" class="form-control" id="asset_name" name="asset_name" disabled="disabled">
+            <input type="text" value="{{ $asset->name}}" class="form-control" id="asset_name" name="asset_name"
+                   disabled="disabled">
         </div>
     </div>
 
     <div class="form-group required">
         <label for="asset_category" class="col-md-4 control-label">Lease Asset Classification</label>
         <div class="col-md-4 form-check form-check-inline">
-            <input type="text" value="{{ $asset->category->title}}" class="form-control" id="asset_category" name="asset_category" disabled="disabled">
+            <input type="text" value="{{ $asset->category->title}}" class="form-control" id="asset_category"
+                   name="asset_category" disabled="disabled">
         </div>
     </div>
 
@@ -62,7 +64,8 @@
         </div>
     </div>
 
-    <div class="form-group{{ $errors->has('variable_basis_id') ? ' has-error' : '' }} required hidden-fields amount_determinable" @if(old('any_residual_value_gurantee', $model->any_residual_value_gurantee) == 'yes' && old('lease_payemnt_nature_id', $model->lease_payemnt_nature_id) == '2') @else style="display: none" @endif>
+    <div class="form-group{{ $errors->has('variable_basis_id') ? ' has-error' : '' }} required hidden-fields amount_determinable"
+         @if(old('any_residual_value_gurantee', $model->any_residual_value_gurantee) == 'yes' && old('lease_payemnt_nature_id', $model->lease_payemnt_nature_id) == '2') @else style="display: none" @endif>
         <div class="form-group{{ $errors->has('variable_basis_id') ? ' has-error' : '' }} required">
             <label for="variable_basis_id" class="col-md-4 control-label">Variable Basis</label>
             <div class="col-md-4 form-check form-check-inline">
@@ -82,7 +85,8 @@
         </div>
     </div>
 
-    <div class="form-group{{ $errors->has('amount_determinable') ? ' has-error' : '' }} required hidden-fields amount_determinable" @if(old('any_residual_value_gurantee',$model->any_residual_value_gurantee ) == 'yes' && old('lease_payemnt_nature_id', $model->lease_payemnt_nature_id) == '2') @else style="display: none" @endif>
+    <div class="form-group{{ $errors->has('amount_determinable') ? ' has-error' : '' }} required hidden-fields amount_determinable"
+         @if(old('any_residual_value_gurantee',$model->any_residual_value_gurantee ) == 'yes' && old('lease_payemnt_nature_id', $model->lease_payemnt_nature_id) == '2') @else style="display: none" @endif>
         <label for="type" class="col-md-4 control-label">Amount Determinable</label>
         <div class="col-md-4">
             <input class="form-check-input" name="amount_determinable" type="checkbox" id="amount_determinable_yes"
@@ -102,7 +106,8 @@
         </div>
     </div>
 
-    <div class="hidden-group hidden-fields gg {{$model->any_residual_value_gurantee}}" @if(old('any_residual_value_gurantee',$model->any_residual_value_gurantee ) == "yes") style="display:block;"
+    <div class="hidden-group hidden-fields gg {{$model->any_residual_value_gurantee}}"
+         @if(old('any_residual_value_gurantee',$model->any_residual_value_gurantee ) == "yes") style="display:block;"
          @else  style="display:none;" @endif>
         <div class="form-group{{ $errors->has('currency') ? ' has-error' : '' }} required">
             <label for="currency" class="col-md-4 control-label">Currency</label>
@@ -175,16 +180,23 @@
         </div>
     </div>
 
-    <div class="form-group">
-        <div class="col-md-4 col-md-offset-4">
 
-            <a href="{{ route('addlease.fairmarketvalue.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
-            <button type="submit" class="btn btn-success">
-                Submit
-            </button>
+    <div class="form-group btnMainBx">
+        <div class="col-md-6 btn-backnextBx">
+
+            <a href="{{ route('addlease.fairmarketvalue.index', ['id' => $lease->id]) }}"
+               class="btn btn-danger">Back</a>
             @if($asset->residualGuranteeValue)
-                <a href="{{ route('addlease.leaseterminationoption.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
+                <a href="{{ route('addlease.leaseterminationoption.index', ['id' => $lease->id]) }}"
+                   class="btn btn-primary">Next</a>
             @endif
+
+        </div>
+        <div class="col-md-6 btnsubmitBx">
+
+            <button type="submit" class="btn btn-success">
+                Save
+            </button>
         </div>
     </div>
 

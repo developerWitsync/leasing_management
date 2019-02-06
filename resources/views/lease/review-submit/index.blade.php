@@ -465,7 +465,7 @@
                                     <a href="{{ route('addlease.durationclassified.index', ['lease' => $lease->id]) }}">
                                         <button data-toggle='tooltip' data-placement='top' title='Edit Lease Details'
                                                 type="button" class="btn btn-sm  btn-success edit_lease_detail">
-                                                <i class="fa fa-pencil-square-o fa-lg"></i>
+                                            <i class="fa fa-pencil-square-o fa-lg"></i>
                                         </button>
                                     </a>
                                 </td>
@@ -507,7 +507,8 @@
                                 <td>
                                     <a href="{{ route('addlease.leasevaluation.index', ['lease' => $lease->id]) }}">
                                         <button data-toggle='tooltip' data-placement='top' title='Edit Lease Details'
-                                                type="button" class="btn btn-sm  btn-success edit_lease_detail"><i class="fa fa-pencil-square-o fa-lg"></i>
+                                                type="button" class="btn btn-sm  btn-success edit_lease_detail"><i
+                                                    class="fa fa-pencil-square-o fa-lg"></i>
                                         </button>
                                     </a>
                                 </td>
@@ -517,17 +518,26 @@
                     </tbody>
                 </table>
             </div>
-            <div class="form-group">
-                <div class="col-md-6 col-md-offset-4">
-                    <a href="{{route('addlease.leasepaymentinvoice.index', ['id'=>$lease->id])}}" class="btn btn-danger">Back</a>
-                   <form style="display: inline-block;" action="{{route('addlease.reviewsubmit.submit', ['id'=>$lease->id])}}" method="post" > 
-                     {{ csrf_field() }}
-                 <button type="submit" class="btn btn-success">Submit</button> 
-              </form>
-                    <a href="#" class="btn btn-primary">Print</a>
-                </div>
 
+
+            <div class="form-group btnMainBx">
+                <div class="col-md-6 btn-backnextBx">
+
+                    <a href="{{route('addlease.leasepaymentinvoice.index', ['id'=>$lease->id])}}"
+                       class="btn btn-danger">Back</a>
+
+                    <a href="#" class="btn btn-primary">Print</a>
+
+                </div>
+                <div class="col-md-6 btnsubmitBx">
+                    <form style="display: inline-block;"
+                          action="{{route('addlease.reviewsubmit.submit', ['id'=>$lease->id])}}" method="post">
+                        {{ csrf_field() }}
+                        <button type="submit" class="btn btn-success">Submit</button>
+                    </form>
+                </div>
             </div>
+
         </div>
     </div>
 @endsection

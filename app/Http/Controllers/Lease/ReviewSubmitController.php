@@ -79,6 +79,13 @@ class ReviewSubmitController extends Controller
         }
     }
 
+    /**
+     * Review and submit the Lease
+     * Generates the history of the lease and save the same to the lease_history table as well.
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function submit($id, Request $request)
     {
         if ($request->isMethod('post')) {
