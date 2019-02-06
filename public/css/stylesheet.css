@@ -54,7 +54,7 @@ fieldset.scheduler-border { background: #fff; border:#dadcdd solid 1px !importan
 input[type="radio"], input[type="checkbox"]{ margin: 0px;}
 .leasedetOuter {width: 100%; padding-top:0px;}
 .leaseDetBtnBx {padding-bottom: 20px; text-align: center;}
-.inforide {width: 100%; background: #f5f5f5; border: #ccc solid 1px; min-height: 150px; margin-bottom: 25px; border-radius: 3px;}
+.inforide {width: 100%;background: #f5f5f5;border: #ccc solid 1px;min-height: 141px;margin-bottom: 25px;border-radius: 3px; text-align: right}
 .blueBg {background: #0eaae8;}
 .redBg {background: #e20000;}
 .greenBg {background: #20aba5;}
