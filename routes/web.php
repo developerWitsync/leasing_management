@@ -314,7 +314,7 @@ Route::middleware('auth')->group(function(){
             /**
              * Categories of Lease Assets Excluded
              */
-            Route::post('add-categories-excluded', ['as' => 'settings.leaseclassification.addcategoriesexcluded', 'uses' => 'LeaseClassificationController@addCategoriesExcluded']);
+            Route::post('add-categories-excluded/{id}', ['as' => 'settings.leaseclassification.addcategoriesexcluded', 'uses' => 'LeaseClassificationController@addCategoriesExcluded']);
             
             Route::delete('categories-excluded-delete/{id}', ['as' => 'settings.leaseclassification.deletecategoriesexcluded', 'uses' => 'LeaseClassificationController@deleteCategoriesExcluded']);
 

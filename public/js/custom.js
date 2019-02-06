@@ -164,6 +164,37 @@ $(function(){
         });
     });
 
+    $(document.body).on("click", ".add_intangible_asset", function () {
+         var href = $(this).data('href');
+        bootbox.confirm({
+            message: "Are you sure that you want to add this setting? These changes cannot be reverted.",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn btn-danger'
+                }
+            },
+            callback: function (result) {
+                if(result) {
+                    $.ajax({
+                        url : href,
+                        type : 'post',
+                        dataType : 'json',
+                        success : function (response) {
+                            if(response['status']) {
+                                window.location.reload();
+                            }
+                        }
+                    })
+                }
+            }
+        });
+    });
+
 
     //sub_drop sub tables
     $('.sub_drop_escalation').on('click', function(){

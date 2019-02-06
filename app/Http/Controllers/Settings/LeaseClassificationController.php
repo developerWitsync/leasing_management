@@ -90,7 +90,7 @@ class LeaseClassificationController extends Controller
         
          $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
 
-         $check_intengible_asset = LeaseAssets::query()->where('category_id',7)->get();
+         $check_intangible_asset = LeaseAssets::query()->where('category_id',7)->get();
          
      
         return view('settings.classification.index', compact('breadcrumbs',
@@ -117,7 +117,7 @@ class LeaseClassificationController extends Controller
             'categories',
             'category_excluded',
             'category_excluded_id',
-            'check_intengible_asset'
+            'check_intangible_asset'
         ));
     }
 
@@ -793,19 +793,14 @@ class LeaseClassificationController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function addCategoriesExcluded(Request $request){
+    public function addCategoriesExcluded($id,Request $request){
         try{
-            if($request->isMethod('post')) {
-                $validator = Validator::make($request->except("_token"), [
-                    'category_id' => 'required'
-                ]);
-
-                if($validator->fails()){
-                    return redirect()->back()->withErrors($validator->errors())->withInput($request->except("_token"));
-                }
+            if($request->ajax()) {
+                
+                $category_id = $id;
 
                 $model = CategoriesLeaseAssetExcluded::create([
-                    'category_id' => $request->category_id,
+                    'category_id' => $category_id,
                     'business_account_id' => auth()->user()->id,
                     'status' => '1'
                  ]);

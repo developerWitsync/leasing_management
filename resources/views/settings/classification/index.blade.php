@@ -92,7 +92,7 @@
                         </div>
 
                         <div class="panel panel-info">
-                            <div class="panel-heading">Components of Lease Payments</div>
+                        <div class="panel-heading">Components of Lease Payments</div>
                             <div class="panel-body settingTble">
                                 <table class="table table-condensed">
                                     <thead>
@@ -108,7 +108,7 @@
                                             <td>{{ $value->title }}</td>
                                         </tr>
                                     @endforeach
-                                    </tbody>
+                                    </tbody>Percentage Rate Types
                                 </table>
                             </div>
                         </div>
@@ -725,9 +725,12 @@
                                     @endforeach
                                         <tr> <td>3</td>
                                             <td>Intengible Asset  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            @if(count($check_intengible_asset)==0)
-                                             <a data-href="{{ route('settings.leaseclassification.deletecategoriesexcluded', ['id' => 3]) }}" href="javascript:;" class="btn btn-sm btn-success delete_settings">Include</a>
+                                            @if(count($check_intangible_asset)==0)
+                                             <a data-href="{{ route('settings.leaseclassification.addcategoriesexcluded', ['id' => 7]) }}" href="javascript:;" class="btn btn-sm btn-success add_intangible_asset">Include</a>
+                                            
                                              @endif
+
+
                                               <a data-href="{{ route('settings.leaseclassification.deletecategoriesexcluded', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-danger delete_settings">Exclude</a>
 
 
@@ -742,7 +745,7 @@
                                         <td>{{ count($category_excluded) + 1 }}</td>
                                         <td>
 
-                                            <form action="{{ route('settings.leaseclassification.addcategoriesexcluded') }}" method="POST" class="add_more_categories_excluded_form">
+                                            <form action="" method="POST" class="add_more_categories_excluded_form">
                                                 {{ csrf_field() }}
                                                 <div class="form-group{{ $errors->has('title') ? ' has-error' : '' }}">
                                                     <select name="category_id" class="form-control">
