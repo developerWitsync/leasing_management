@@ -32,6 +32,7 @@ use App\UseOfLeaseAsset;
 use App\LeaseModificationReason;
 use App\LeaseAssetCategories;
 use App\CategoriesLeaseAssetExcluded;
+use App\LeaseAssets;
 use Illuminate\Http\Request;
 use Validator;
 use Session;
@@ -88,6 +89,9 @@ class LeaseClassificationController extends Controller
          $category_excluded = CategoriesLeaseAssetExcluded::query()->get();
         
          $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
+
+         $check_intengible_asset = LeaseAssets::query()->where('category_id',7)->get();
+         
      
         return view('settings.classification.index', compact('breadcrumbs',
             'rates',
@@ -112,7 +116,8 @@ class LeaseClassificationController extends Controller
             'modication_reason',
             'categories',
             'category_excluded',
-            'category_excluded_id'
+            'category_excluded_id',
+            'check_intengible_asset'
         ));
     }
 

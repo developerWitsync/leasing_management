@@ -229,7 +229,7 @@ class HomeController extends Controller
                 return response()->json([ 'status' => 1,'total_undiscounted_value' => $total_undiscounted_value,'total_present_value_lease_asset' => $total_present_value_lease_asset,'total_tengible_undiscounted_value' => $total_tengible_undiscounted_value, 'total_tengible_present_value_lease_asset' => $total_tengible_present_value_lease_asset,'total_tengible_other_undiscounted_value' => $total_tengible_other_undiscounted_value, 'total_tengible_other_present_value_lease_asset' => $total_tengible_other_present_value_lease_asset,'total_plants_undiscounted' => $total_plants_undiscounted, 'total_plants_present_value' => $total_plants_present_value,'total_invest_undiscounted'=>$total_invest_undiscounted,'total_invest_present_value' => $total_invest_present_value]); } else {
                 return redirect()->back();
             }
-        } catch (\Exception $e) {
+            } catch (\Exception $e) {
             abort(404);
         }
     }

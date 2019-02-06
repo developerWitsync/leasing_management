@@ -159,29 +159,29 @@
 @section('footer-script')
     <script src="{{ asset('js/jquery-ui.js') }}"></script>
     <script type="text/javascript">
-        $(document).ready(function () {
+        $(document).ready(function(){
             var historicalBarChart1 = [];
             var historicalBarChart2 = [];
             generateFirstGraph();
             generateSecondGraph();
             $.ajax({
-                url: "{{ route('home.fetchdetails') }}",
-                type: 'get',
-                dataType: 'json',
-                success: function (data) {
-                    if (data.status) {
+                url : "{{ route('home.fetchdetails') }}",
+                type : 'get',
+                dataType : 'json',
+                success: function(data) {
+                    if(data.status){
                         historicalBarChart1 = [
                             {
                                 key: "Cumulative Return1",
                                 values: [
                                     {
-                                        "label": "Undiscounteed value",
-                                        "value": [data.total_undiscounted_value]
-                                    },
+                                        "label" : "Undiscounted value",
+                                        "value" : [data.total_undiscounted_value]
+                                    } ,
                                     {
-                                        "label": "Present value",
-                                        "value": [data.total_present_value_lease_asset]
-                                    },
+                                        "label" : "Present value" ,
+                                        "value" : [data.total_present_value_lease_asset]
+                                    } ,
                                 ]
                             }
                         ];
@@ -190,37 +190,37 @@
                                 key: "Cumulative Return",
                                 values: [
                                     {
-                                        "label": "Tengible properties",
-                                        "value": [data.total_tengible_undiscounted_value]
-                                    },
+                                        "label" : "Tangible properties" ,
+                                        "value" : [data.total_tengible_undiscounted_value]
+                                    } ,
                                     {
-                                        "label": "Tengible Present value",
-                                        "value": [data.total_tengible_present_value_lease_asset]
-                                    },
+                                        "label" : "Tangible Present value" ,
+                                        "value" : [data.total_tengible_present_value_lease_asset]
+                                    } ,
                                     {
-                                        "label": "Tengible Other land",
-                                        "value": [data.total_tengible_other_undiscounted_value]
-                                    },
+                                        "label" : "Tangible Other land" ,
+                                        "value" : [data.total_tengible_other_undiscounted_value]
+                                    } ,
                                     {
-                                        "label": "Tengible other than land Present value",
-                                        "value": [data.total_tengible_other_present_value_lease_asset]
-                                    },
+                                        "label" : "Tangible other than land Present value" ,
+                                        "value" : [data.total_tengible_other_present_value_lease_asset]
+                                    } ,
                                     {
-                                        "label": "Plant & Machineries Undiscounted",
-                                        "value": [data.total_plants_undiscounted]
-                                    },
+                                        "label" : "Plant & Machineries Undiscounted" ,
+                                        "value" : [data.total_plants_undiscounted]
+                                    } ,
                                     {
-                                        "label": "Plant & Machineries Present value",
-                                        "value": [data.total_plants_present_value]
-                                    },
+                                        "label" : "Plant & Machineries Present value" ,
+                                        "value" : [data.total_plants_present_value]
+                                    } ,
                                     {
-                                        "label": "Investment & Properties Undiscounted",
-                                        "value": [data.total_invest_undiscounted]
-                                    },
+                                        "label" : "Investment & Properties Undiscounted" ,
+                                        "value" : [data.total_invest_undiscounted]
+                                    } ,
                                     {
-                                        "label": "Investment Present value",
-                                        "value": [data.total_invest_present_value]
-                                    },
+                                        "label" : "Investment Present value" ,
+                                        "value" : [data.total_invest_present_value]
+                                    } ,
                                 ]
                             }
                         ];
@@ -230,15 +230,11 @@
                 }
             });
 
-            function generateFirstGraph() {
-                nv.addGraph(function () {
+            function generateFirstGraph(){
+                nv.addGraph(function() {
                     var chart = nv.models.discreteBarChart()
-                        .x(function (d) {
-                            return d.label
-                        })
-                        .y(function (d) {
-                            return d.value
-                        })
+                        .x(function(d) { return d.label })
+                        .y(function(d) { return d.value })
                         .staggerLabels(true)
                         //.staggerLabels(historicalBarChart[0].values.length > 8)
                         .showValues(true)
@@ -253,16 +249,11 @@
                     return chart;
                 });
             }
-
-            function generateSecondGraph() {
-                nv.addGraph(function () {
+            function generateSecondGraph(){
+                nv.addGraph(function() {
                     var chart = nv.models.discreteBarChart()
-                        .x(function (d) {
-                            return d.label
-                        })
-                        .y(function (d) {
-                            return d.value
-                        })
+                        .x(function(d) { return d.label })
+                        .y(function(d) { return d.value })
                         .staggerLabels(true)
                         //.staggerLabels(historicalBarChart[0].values.length > 8)
                         .showValues(true)
@@ -278,6 +269,7 @@
                 });
             }
         });
+
 
 
     </script>
