@@ -32,6 +32,8 @@ use App\InitialDirectCost;
 use App\LeaseIncentives;
 use App\LeasePaymentInvoice;
 use App\LeaseHistory;
+use App\SupplierDetails;
+use App\CustomerDetails;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -116,16 +118,27 @@ class ReviewSubmitController extends Controller
             $payment_due_dates = LeaseAssetPaymenetDueDate::query()->whereIn('payment_id', $payment_id)->get()->toArray();
 
             $escalation_dates = PaymentEscalationDates::query()->whereIn('payment_id', $payment_id)->get()->toArray();
-
+/*
             $low_value = LeaseSelectLowValue::query()->where('lease_id', '=', $id)->first()->toArray();
+
 
             $discount_rate = LeaseSelectDiscountRate::query()->where('lease_id', '=', $id)->first()->toArray();
 
-            $lease_balance = LeaseBalanceAsOnDec::query()->where('lease_id', '=', $id)->first()->toArray();
+            $lease_balance = LeaseBalanceAsOnDec::query()->where('lease_id', '=', $id)->first()->toArray();*/
 
             $initial_direct_cost = InitialDirectCost::query()->where('lease_id', '=', $id)->first()->toArray();
 
+            //get supplier details
+
+            $initial_direct_cost_id = $assets->initialDirectCost->pluck('id')->toArray();
+            $supplier_details = SupplierDetails::query()->whereIn('initial_direct_cost_id', $initial_direct_cost_id)->get()->toArray();
+            
             $lease_incentives = LeaseIncentives::query()->where('lease_id', '=', $id)->first()->toArray();
+
+            //get customer details
+            $lease_incentive_id = $assets->leaseIncentiveCost->pluck('id')->toArray();
+
+            $customer_details = CustomerDetails::query()->whereIn('lease_incentive_id')->get()->toArray();
 
             $lease_invoice = LeasePaymentInvoice::query()->where('lease_id', '=', $id)->first()->toArray();
 
@@ -164,19 +177,25 @@ class ReviewSubmitController extends Controller
             $record['payment_esclation'] = $payment_esclation_details;
 
             //Select Low Value step 11
-            $record['low_value'] = $low_value;
+            /*$record['low_value'] = $low_value;
 
             //Select Discount Rate step 12
             $record['discount_rate'] = $discount_rate;
 
             //Lease Balance As on Dec Step 13
-            $record['lease_balance'] = $lease_balance;
+            $record['lease_balance'] = $lease_balance;*/
 
             //inital direct Cost step 14
             $record['initial_direct_cost'] = $initial_direct_cost;
+            
+            $record['initial_direct_cost']['supplier_details']= $supplier_details;
+
+            
 
             //lease incentives step 15
             $record['lease_incentives'] = $lease_incentives;
+
+            $record['lease_incentives']['customer_details'] = $customer_details;
 
             //lease valaution step 16 is only for calacute present value lease liability
 
