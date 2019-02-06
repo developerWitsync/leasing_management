@@ -6,9 +6,8 @@
 @endsection
 @section('content')
     <div class="panel panel-default">
-        <div class="panel-heading">Create Lease Asset</div>
-
-        <div class="panel-body">
+        <div class="panel-heading clearfix">Create Lease Asset </div>
+         <div class="panel-body">
             @if (session('status'))
                 <div class="alert alert-success">
                     {{ session('status') }}
@@ -386,17 +385,18 @@
                         </div>
 
 
-                        <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
+                        <div class="form-group btnMainBx">
+                            <div class="col-md-6 btn-backnextBx">
 
                                 <a href="{{ route('add-new-lease.index',['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
-
-                                <button type="submit" class="btn btn-success">Submit</button>
-
                                 @if($lease->total_assets == count($lease->assets))
                                     <a href="{{ route('addlease.payments.index',['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
                                 @endif
-
+                                
+                                    </div>
+                                <div class="col-md-6 btnsubmitBx">           
+                                
+                                <button type="submit" class="btn btn-success">Submit</button>
                             </div>
                         </div>
 
