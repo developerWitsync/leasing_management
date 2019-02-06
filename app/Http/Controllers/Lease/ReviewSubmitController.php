@@ -130,9 +130,9 @@ class ReviewSubmitController extends Controller
 
             $lease_balance = LeaseBalanceAsOnDec::query()->where('lease_id', '=', $id)->first()->toArray();
 
-            $initial_direct_cost = InitialDirectCost::query()->where('lease_id', '=', $id)->first()->toArray();
+            $initial_direct_cost = InitialDirectCost::query()->where('lease_id', '=', $id)->first();
 
-            $lease_incentives = LeaseIncentives::query()->where('lease_id', '=', $id)->first()->toArray();
+            $lease_incentives = LeaseIncentives::query()->where('lease_id', '=', $id)->first();
 
             $lease_invoice = LeasePaymentInvoice::query()->where('lease_id', '=', $id)->first()->toArray();
 
@@ -180,10 +180,10 @@ class ReviewSubmitController extends Controller
             $record['lease_balance'] = $lease_balance;
 
             //inital direct Cost step 14
-            $record['initial_direct_cost'] = $initial_direct_cost;
+            $record['initial_direct_cost'] = ($initial_direct_cost)?$initial_direct_cost->toArray():[];
 
             //lease incentives step 15
-            $record['lease_incentives'] = $lease_incentives;
+            $record['lease_incentives'] = ($lease_incentives)?$lease_incentives->toArray():[];
 
             //lease valaution step 16 is only for calacute present value lease liability
 

@@ -4,7 +4,7 @@
     <div class="form-group{{ $errors->has('valuation') ? ' has-error' : '' }} required">
         <label for="name" class="col-md-4 control-label">Valuation</label>
         <div class="col-md-6 form-check form-check-inline" required>
-            <input class="form-check-input" name="valuation" id="yes" type="checkbox" value="Modify Initial Valuation">
+            <input class="form-check-input" name="valuation" id="yes" type="checkbox" value="Modify Initial Valuation" @if($disable_initial) disabled="disabled" @endif>
             <label class="form-check-label" for="yes" id="modify" style="vertical-align: 4px">Modify Initial Valuation</label><br>
             <input class="form-check-input" name="valuation" id="no" type="checkbox" value="Subsequent Valuation">
             <label class="form-check-label" for="no" id="no" style="vertical-align: 4px">Subsequent Valuation</label>

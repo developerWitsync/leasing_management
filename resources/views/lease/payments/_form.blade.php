@@ -303,16 +303,16 @@
     </fieldset>
 
 
-    <div class="form-group">
-        <div class="col-lg-5 col-md-6 col-md-offset-5">
+    <div class="form-group btnMainBx">
+        <div class="col-md-6 btn-backnextBx">
             <a href="{{ route('addlease.payments.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
+        </div>
+        <div class="col-md-6 btnsubmitBx">
 
-            <button type="submit" class="btn btn-success" name="submit" value="save">
+            <button type="submit" class="btn btn-success">
                 Save
             </button>
-
         </div>
-
     </div>
 
 
