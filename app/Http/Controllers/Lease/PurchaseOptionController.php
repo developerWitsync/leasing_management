@@ -59,9 +59,10 @@ class PurchaseOptionController extends Controller
                 $asset = LeaseAssets::query()->where('lease_id', '=', $id)->whereHas('terminationOption', function ($query) {
                     $query->where('lease_termination_option_available', '=', 'yes');
                     $query->where('exercise_termination_option_available', '=', 'no');
-                })->first(); //since there will be only one lease asset per lease
-
-                if(count($asset) > 0) {
+                })->first(); 
+                //since there will be only one lease asset per lease
+                
+                if($asset) {
                     if ($asset->purchaseOption) {
                         $model = $asset->purchaseOption;
                     } else {

@@ -53,8 +53,9 @@ class LeaseRenewableOptionController extends Controller
                     $query->where('lease_termination_option_available', '=', 'yes');
                     $query->where('exercise_termination_option_available', '=', 'no');
                 })->first(); //since there will be only one lease asset per lease
-            //dd($asset->renewableOptionValue);
-                if(count($asset) > 0) {
+
+
+                if($asset) {
 
                     if($asset->renewableOptionValue) {
                         $model  = $asset->renewableOptionValue;
@@ -103,7 +104,6 @@ class LeaseRenewableOptionController extends Controller
                 abort(404);
             }
         } catch (\Exception $e){
-            dd($e->getMessage());
             abort(404, $e->getMessage());
         }
     }

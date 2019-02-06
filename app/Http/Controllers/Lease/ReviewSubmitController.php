@@ -79,13 +79,6 @@ class ReviewSubmitController extends Controller
         }
     }
 
-    /**
-     * Review and submit the Lease
-     * Generates the history of the lease and save the same to the lease_history table as well.
-     * @param $id
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function submit($id, Request $request)
     {
         if ($request->isMethod('post')) {
@@ -125,13 +118,13 @@ class ReviewSubmitController extends Controller
             $payment_due_dates = LeaseAssetPaymenetDueDate::query()->whereIn('payment_id', $payment_id)->get()->toArray();
 
             $escalation_dates = PaymentEscalationDates::query()->whereIn('payment_id', $payment_id)->get()->toArray();
-/*
+
             $low_value = LeaseSelectLowValue::query()->where('lease_id', '=', $id)->first()->toArray();
 
 
             $discount_rate = LeaseSelectDiscountRate::query()->where('lease_id', '=', $id)->first()->toArray();
 
-            $lease_balance = LeaseBalanceAsOnDec::query()->where('lease_id', '=', $id)->first()->toArray();*/
+            $lease_balance = LeaseBalanceAsOnDec::query()->where('lease_id', '=', $id)->first()->toArray();
 
             $initial_direct_cost = InitialDirectCost::query()->where('lease_id', '=', $id)->first()->toArray();
 
@@ -184,20 +177,18 @@ class ReviewSubmitController extends Controller
             $record['payment_esclation'] = $payment_esclation_details;
 
             //Select Low Value step 11
-            /*$record['low_value'] = $low_value;
+            $record['low_value'] = $low_value;
 
             //Select Discount Rate step 12
             $record['discount_rate'] = $discount_rate;
 
             //Lease Balance As on Dec Step 13
-            $record['lease_balance'] = $lease_balance;*/
+            $record['lease_balance'] = $lease_balance;
 
             //inital direct Cost step 14
             $record['initial_direct_cost'] = $initial_direct_cost;
             
             $record['initial_direct_cost']['supplier_details']= $supplier_details;
-
-            
 
             //lease incentives step 15
             $record['lease_incentives'] = $lease_incentives;
