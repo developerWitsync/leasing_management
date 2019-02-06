@@ -15,12 +15,27 @@ use App\LeaseAssets;
 
 class IndexController extends Controller
 {
+    public $breadcrumbs;
+    public function __construct()
+    {
+        $this->breadcrumbs = [
+            [
+                'link' => route('home'),
+                'title' => 'Dashboard'
+            ],
+            [
+                'link' => route('drafts.index'),
+                'title' => 'Drafts'
+            ]
+        ];
+    }
 	/**
      * Render the table for all the leases
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(){
-            return view('drafts.index');
+        $breadcrumbs = $this->breadcrumbs; 
+        return view('drafts.index',compact('breadcrumbs'));
     }
 
     /**

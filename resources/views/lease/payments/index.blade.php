@@ -68,21 +68,23 @@
                         </tbody>
                     </table>
 
-                    
+
                 </div>
-                <div class="form-group">
 
-                        <div class="col-md-6 col-md-offset-4">
+                <div class="form-group btnMainBx">
+                    <div class="col-md-6 btn-backnextBx">
 
-                            <a href="{{ route('addlease.leaseasset.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
-
-                            @if($show_next)
-                                <a href="{{ route('addlease.fairmarketvalue.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
-                            @endif
-
-                        </div>
+                        <a href="{{ route('addlease.leaseasset.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
+                        @if($show_next)
+                            <a href="{{ route('addlease.fairmarketvalue.index', ['id' => $lease->id]) }}"
+                               class="btn btn-primary">Next</a>
+                        @endif
 
                     </div>
+                    <div class="col-md-6 btnsubmitBx">
+                        &nbsp;
+                    </div>
+                </div>
 
             </div>
 

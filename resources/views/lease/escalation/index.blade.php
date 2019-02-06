@@ -50,11 +50,10 @@
                         @include('lease.escalation._list_escalation')
                     @endif
 
-                    <div class="form-group">
+                    <div class="form-group btnMainBx">
+                        <div class="col-md-6 btn-backnextBx">
 
-                        <div class="col-md-6 col-md-offset-4">
                             <a href="{{ route('addlease.durationclassified.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
-
                             @if($lease->escalation_clause_applicable == 'no')
                                 <a href="{{ route('addlease.lowvalue.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
                             @elseif($show_next)
@@ -62,7 +61,9 @@
                             @endif
 
                         </div>
-
+                        <div class="col-md-6 btnsubmitBx">
+                           &nbsp;
+                        </div>
                     </div>
 
                 </div>

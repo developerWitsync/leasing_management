@@ -19,12 +19,27 @@ use Validator;
 
 class LeaseValuationController extends Controller
 {
+    public $breadcrumbs;
+    public function __construct()
+    {
+        $this->breadcrumbs = [
+            [
+                'link' => route('home'),
+                'title' => 'Dashboard'
+            ],
+            [
+                'link' => route('leasevaluation.index'),
+                'title' => 'Lease Valuation'
+            ]
+        ];
+    }
      
 	/**
     * Render the table for all the leases
     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
   */
     public function index(Request $request){
+       $breadcrumbs = $this->breadcrumbs;
        $leases = Lease::query()->whereIn('business_account_id', getDependentUserIds());
 
          if($request->has('id')) {
@@ -129,7 +144,7 @@ class LeaseValuationController extends Controller
         $lease_asset_noncategories = LeaseAssetCategories::query()->where('is_capitalized', '=', '0')->get();
 
     return view('leasevaluation.index',compact('own_assets_capitalized',
-        'sublease_assets_capitalized','lease_asset_categories','lease_asset_noncategories','category_id','capitalized'
+        'sublease_assets_capitalized','lease_asset_categories','lease_asset_noncategories','category_id','capitalized','breadcrumbs'
      ));
     }
 

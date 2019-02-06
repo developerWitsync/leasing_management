@@ -16,13 +16,13 @@
             @endif
 
             @if($subsequent_modify_required)
-                <div class="row">
-                    <div class="col-md-4">&nbsp;</div>
-                    <div class="col-md-8">
-                        <div class="col-md-4">
+                <div class="clearfix">
+                    <div class="col-md-12 subsmentBx">
+                        <div class="col-md-6" style="padding: 0">
                             Subsequent Remeasurement Effective From
                         </div>
-                        <div class="col-md-4">{{ \Carbon\Carbon::parse($lease->modifyLeaseApplication->last()->effective_from)->format(config('settings.date_format')) }}</div>
+                        <div class="col-md-6"
+                             style="padding: 0;text-align: right">{{ \Carbon\Carbon::parse($lease->modifyLeaseApplication->last()->effective_from)->format(config('settings.date_format')) }}</div>
                     </div>
                 </div>
             @endif
@@ -42,165 +42,171 @@
                                           enctype="multipart/form-data">
                                         @endif
                                         {{ csrf_field() }}
-                                    <div class="categoriesOuter leasedetOuter clearfix">
-                                        <div class="categoriesHd">Lessor Details</div>
-                                        <div class="form-group{{ $errors->has('lessor_name') ? ' has-error' : '' }} required">
-                                            <label for="lessor_name" class="col-md-12 control-label">Lessor
-                                                Name</label>
-                                            <div class="col-md-12">
-                                                <input id="lessor_name" type="text" placeholder="Lessor Name"
-                                                       class="form-control" name="lessor_name"
-                                                       value="{{ old('lessor_name',$lease->lessor_name) }}"
-                                                       @if($subsequent_modify_required) disabled="disabled" @endif>
-                                                @if($subsequent_modify_required)
-                                                    <input type="hidden" name="lessor_name"
-                                                           value="{{ old('lessor_name', $lease->lessor_name) }}">
-                                                @endif
-                                                @if ($errors->has('lessor_name'))
-                                                    <span class="help-block">
+                                        <div class="categoriesOuter leasedetOuter clearfix">
+                                            <div class="categoriesHd">Lessor Details</div>
+                                            <div class="form-group{{ $errors->has('lessor_name') ? ' has-error' : '' }} required">
+                                                <label for="lessor_name" class="col-md-12 control-label">Lessor
+                                                    Name</label>
+                                                <div class="col-md-12">
+                                                    <input id="lessor_name" type="text" placeholder="Lessor Name"
+                                                           class="form-control" name="lessor_name"
+                                                           value="{{ old('lessor_name',$lease->lessor_name) }}"
+                                                           @if($subsequent_modify_required) disabled="disabled" @endif>
+                                                    @if($subsequent_modify_required)
+                                                        <input type="hidden" name="lessor_name"
+                                                               value="{{ old('lessor_name', $lease->lessor_name) }}">
+                                                    @endif
+                                                    @if ($errors->has('lessor_name'))
+                                                        <span class="help-block">
                                                         <strong>{{ $errors->first('lessor_name') }}</strong>
                                                     </span>
-                                                @endif
+                                                    @endif
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group{{ $errors->has('lease_type_id') ? ' has-error' : '' }} required">
-                                            <label for="lease_type_id" class="col-md-12 control-label">Lease
-                                                Type Classification</label>
-                                            <div class="col-md-12">
-                                                <select name="lease_type_id" class="form-control" id="lease_type_id">
-                                                    <option value="">Select Lease Type Classification</option>
-                                                    @php $i =1 @endphp
-                                                    @foreach($contract_classifications as $classification)
-                                                        @if($subsequent_modify_required)
+                                            <div class="form-group{{ $errors->has('lease_type_id') ? ' has-error' : '' }} required">
+                                                <label for="lease_type_id" class="col-md-12 control-label">Lease
+                                                    Type Classification</label>
+                                                <div class="col-md-12">
+                                                    <select name="lease_type_id" class="form-control"
+                                                            id="lease_type_id">
+                                                        <option value="">Select Lease Type Classification</option>
+                                                        @php $i =1 @endphp
+                                                        @foreach($contract_classifications as $classification)
+                                                            @if($subsequent_modify_required)
 
-                                                            @if(in_array($classification->id, [1, 3]) && in_array($lease->lease_type_id, [1,3]))
-                                                                <option class="cla-{{$i}}"
-                                                                        value="{{ $classification->id }}"
-                                                                        @if(old('lease_type_id',$lease->lease_type_id) == $classification->id) selected="selected" @endif>
-                                                                    {{ $classification->title }}
-                                                                </option>
-                                                            @elseif(in_array($classification->id, [2, 4]) && in_array($lease->lease_type_id, [2,4]))
-                                                                <option class="cla-{{$i}}"
-                                                                        value="{{ $classification->id }}"
-                                                                        @if(old('lease_type_id',$lease->lease_type_id) == $classification->id) selected="selected" @endif>
-                                                                    {{ $classification->title }}
-                                                                </option>
+                                                                @if(in_array($classification->id, [1, 3]) && in_array($lease->lease_type_id, [1,3]))
+                                                                    <option class="cla-{{$i}}"
+                                                                            value="{{ $classification->id }}"
+                                                                            @if(old('lease_type_id',$lease->lease_type_id) == $classification->id) selected="selected" @endif>
+                                                                        {{ $classification->title }}
+                                                                    </option>
+                                                                @elseif(in_array($classification->id, [2, 4]) && in_array($lease->lease_type_id, [2,4]))
+                                                                    <option class="cla-{{$i}}"
+                                                                            value="{{ $classification->id }}"
+                                                                            @if(old('lease_type_id',$lease->lease_type_id) == $classification->id) selected="selected" @endif>
+                                                                        {{ $classification->title }}
+                                                                    </option>
+                                                                @else
+                                                                    <option class="cla-{{$i}}"
+                                                                            value="{{ $classification->id }}"
+                                                                            @if(old('lease_type_id',$lease->lease_type_id) == $classification->id) selected="selected"
+                                                                            @endif disabled="disabled">
+                                                                        {{ $classification->title }}
+                                                                    </option>
+                                                                @endif
+
                                                             @else
                                                                 <option class="cla-{{$i}}"
                                                                         value="{{ $classification->id }}"
-                                                                        @if(old('lease_type_id',$lease->lease_type_id) == $classification->id) selected="selected"
-                                                                        @endif disabled="disabled">
+                                                                        @if(old('lease_type_id',$lease->lease_type_id) == $classification->id) selected="selected" @endif>
                                                                     {{ $classification->title }}
                                                                 </option>
                                                             @endif
-
-                                                        @else
-                                                            <option class="cla-{{$i}}" value="{{ $classification->id }}"
-                                                                    @if(old('lease_type_id',$lease->lease_type_id) == $classification->id) selected="selected" @endif>
-                                                                {{ $classification->title }}
-                                                            </option>
-                                                        @endif
-                                                        @php $i++ @endphp
-                                                    @endforeach
-                                                </select>
-                                                @if ($errors->has('lease_type_id'))
-                                                    <span class="help-block">
-                                            <strong>{{ $errors->first('lease_type_id') }}</strong>
-                                            </span>
-                                                @endif
-                                            </div>
-                                        </div>
-
-                                        @if($reporting_currency_settings->is_foreign_transaction_involved == "yes")
-                                            <div class="form-group{{ $errors->has('lease_contract_id') ? ' has-error' : '' }} required">
-                                                <label for="lease_contract_id" class="col-md-12 control-label">Lease
-                                                    Contract Currency</label>
-                                                <div class="col-md-12">
-                                                    <select name="lease_contract_id" class="form-control"
-                                                            @if($subsequent_modify_required) disabled="disabled" @endif>
-                                                        <option value="">Select Lease Contract Currency</option>
-
-                                                        @foreach($reporting_foreign_currency_transaction_settings as $currencies)
-                                                            <option value="{{ $currencies->foreign_exchange_currency }}"
-                                                                    @if(old('lease_contract_id', $lease->lease_contract_id) == $currencies->foreign_exchange_currency) selected="selected" @endif>
-                                                                {{ $currencies->foreign_exchange_currency }}</option>
+                                                            @php $i++ @endphp
                                                         @endforeach
                                                     </select>
-
-                                                    @if($subsequent_modify_required)
-                                                        <input type="hidden" name="lease_contract_id"
-                                                               value="{{$lease->lease_contract_id}}"/>
-                                                    @endif
-
-                                                    @if ($errors->has('lease_contract_id'))
+                                                    @if ($errors->has('lease_type_id'))
                                                         <span class="help-block">
+                                            <strong>{{ $errors->first('lease_type_id') }}</strong>
+                                            </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+
+                                            @if($reporting_currency_settings->is_foreign_transaction_involved == "yes")
+                                                <div class="form-group{{ $errors->has('lease_contract_id') ? ' has-error' : '' }} required">
+                                                    <label for="lease_contract_id" class="col-md-12 control-label">Lease
+                                                        Contract Currency</label>
+                                                    <div class="col-md-12">
+                                                        <select name="lease_contract_id" class="form-control"
+                                                                @if($subsequent_modify_required) disabled="disabled" @endif>
+                                                            <option value="">Select Lease Contract Currency</option>
+
+                                                            @foreach($reporting_foreign_currency_transaction_settings as $currencies)
+                                                                <option value="{{ $currencies->foreign_exchange_currency }}"
+                                                                        @if(old('lease_contract_id', $lease->lease_contract_id) == $currencies->foreign_exchange_currency) selected="selected" @endif>
+                                                                    {{ $currencies->foreign_exchange_currency }}</option>
+                                                            @endforeach
+                                                        </select>
+
+                                                        @if($subsequent_modify_required)
+                                                            <input type="hidden" name="lease_contract_id"
+                                                                   value="{{$lease->lease_contract_id}}"/>
+                                                        @endif
+
+                                                        @if ($errors->has('lease_contract_id'))
+                                                            <span class="help-block">
                                                     <strong>{{ $errors->first('lease_contract_id') }}</strong>
                                                 </span>
-                                                    @endif
+                                                        @endif
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        @endif
+                                            @endif
 
-                                        @if($reporting_currency_settings->is_foreign_transaction_involved == "no")
-                                            <div class="form-group{{ $errors->has('lease_contract_id') ? ' has-error' : '' }} required">
-                                                <label for="lease_contract_id" class="col-md-12 control-label">Lease
-                                                    Contract Currency</label>
-                                                <div class="col-md-12">
-                                                    <select name="lease_contract_id" class="form-control"
-                                                            @if($subsequent_modify_required) disabled="disabled" @endif>
-                                                        <option value="">Select Lease Contract Currency</option>
-                                                        <option value="{{ $reporting_currency_settings->currency_for_lease_reports }}"
-                                                                @if(old('lease_contract_id', $lease->lease_contract_id) == $reporting_currency_settings->currency_for_lease_reports) selected="selected" @endif >
-                                                            {{ $reporting_currency_settings->currency_for_lease_reports }}</option>
-                                                    </select>
+                                            @if($reporting_currency_settings->is_foreign_transaction_involved == "no")
+                                                <div class="form-group{{ $errors->has('lease_contract_id') ? ' has-error' : '' }} required">
+                                                    <label for="lease_contract_id" class="col-md-12 control-label">Lease
+                                                        Contract Currency</label>
+                                                    <div class="col-md-12">
+                                                        <select name="lease_contract_id" class="form-control"
+                                                                @if($subsequent_modify_required) disabled="disabled" @endif>
+                                                            <option value="">Select Lease Contract Currency</option>
+                                                            <option value="{{ $reporting_currency_settings->currency_for_lease_reports }}"
+                                                                    @if(old('lease_contract_id', $lease->lease_contract_id) == $reporting_currency_settings->currency_for_lease_reports) selected="selected" @endif >
+                                                                {{ $reporting_currency_settings->currency_for_lease_reports }}</option>
+                                                        </select>
 
-                                                    @if($subsequent_modify_required)
-                                                        <input type="hidden" name="lease_contract_id"
-                                                               value="{{$lease->lease_contract_id}}"/>
-                                                    @endif
+                                                        @if($subsequent_modify_required)
+                                                            <input type="hidden" name="lease_contract_id"
+                                                                   value="{{$lease->lease_contract_id}}"/>
+                                                        @endif
 
-                                                    @if ($errors->has('lease_contract_id'))
-                                                        <span class="help-block">
+                                                        @if ($errors->has('lease_contract_id'))
+                                                            <span class="help-block">
                                                         <strong>{{ $errors->first('lease_contract_id') }}</strong>
                                                     </span>
-                                                    @endif
+                                                        @endif
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        @endif
-                                        <div class="form-group{{ $errors->has('file') ? ' has-error' : '' }} ">
-                                            <label for="file" class="col-md-12 control-label">Upload a Copy of
-                                                Contract Signed</label>
-                                            <div class="col-md-12 frmattachFile">
-                                                <input type="name" id="upload" name="name" class="form-control"
-                                                       disabled="disabled">
-                                                <button type="button" class="browseBtn">Browse</button>
-                                                <input type="file" id="file-name" name="file" class="fileType">
-                                                @if ($errors->has('file'))
-                                                    <span class="help-block">
+                                            @endif
+                                            <div class="form-group{{ $errors->has('file') ? ' has-error' : '' }} ">
+                                                <label for="file" class="col-md-12 control-label">Upload a Copy of
+                                                    Contract Signed</label>
+                                                <div class="col-md-12 frmattachFile">
+                                                    <input type="name" id="upload" name="name" class="form-control"
+                                                           disabled="disabled">
+                                                    <button type="button" class="browseBtn">Browse</button>
+                                                    <input type="file" id="file-name" name="file" class="fileType">
+                                                    @if ($errors->has('file'))
+                                                        <span class="help-block">
                                             <strong>{{ $errors->first('file') }}</strong>
                                                 </span>
+                                                    @endif
+                                                </div>
+                                                @if($lease->file !='')
+                                                    <a href="{{asset('uploads/'.$lease->file)}}" class="downloadIcon"
+                                                       target="_blank"><i class="fa fa-download"></i></a>
                                                 @endif
                                             </div>
-                                            @if($lease->file !='')
-                                                <a href="{{asset('uploads/'.$lease->file)}}" class="downloadIcon"
-                                                   target="_blank"><i class="fa fa-download"></i></a>
-                                            @endif
+
+
                                         </div>
+                                        <div class="form-group btnMainBx">
+                                            <div class="col-md-6 btn-backnextBx">
 
-                                        <div class="leaseDetBtnBx clearfix">
-                                            <div class="col-md-12 frmBtnBx">
                                                 <a href="/home" class="btn btn-danger">Cancel</a>
-
-                                                <button type="submit" class="btn btn-success">
-                                                    Save As Draft
-                                                </button>
-
                                                 <button type="submit" class="btn btn-primary next_submit">
                                                     Next
                                                 </button>
+
+                                            </div>
+                                            <div class="col-md-6 btnsubmitBx">
+
+                                                <button type="submit" class="btn btn-success">
+                                                    Save
+                                                </button>
                                             </div>
                                         </div>
-                                    </div>
                                     </form>
                     </div>
                 </div>
