@@ -367,12 +367,12 @@
 
                                     <div class="col-md-12 form-check form-check-inline">
                                         <input class="form-check-input" name="using_lease_payment" type="checkbox" id="yes" value="1" @if(old('using_lease_payment' ,$asset->using_lease_payment) == "1") checked="checked" @endif>
-                                        <label class="form-check-label" for="1" style="vertical-align: 4px">Current Lease Payment as on Jan 01, 2019</label>
+                                        <label for="yes" class="form-check-label" for="1" style="vertical-align: 2px">Current Lease Payment as on Jan 01, 2019</label>
                                     </div>
 
                                     <div class=" col-md-12 form-check form-check-inline">
                                         <input class="form-check-input" name="using_lease_payment" type="checkbox" id="no" value="2" @if(old('using_lease_payment',$asset->using_lease_payment) == "2") checked="checked" @endif>
-                                        <label class="form-check-label" for="2" style="vertical-align: 4px">Initial Lease Payment as on First Lease Start</label>
+                                        <label for="no" class="form-check-label" for="2" style="vertical-align: 2px">Initial Lease Payment as on First Lease Start</label>
                                     </div>
                                     @if ($errors->has('using_lease_payment'))
                                         <span class="help-block">
