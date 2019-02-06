@@ -327,10 +327,10 @@
            maxDate : new Date('{{ $lease_end_date }}'),
            @if($payment->asset->using_lease_payment == '1')
            //1 => Current Lease Payment as on Jan 01, 2019
-           yearRange : '2019:{{ \Carbon\Carbon::parse($lease_end_date)->format('Y') }}'
+            yearRange : '2019:{{ \Carbon\Carbon::parse($lease_end_date)->format('Y') }}',
            @else
            //2=> Initial Lease Payment as on First Lease Start
-           minDate : new Date('{{ $payment->asset->accural_period }}')
+            minDate : new Date('{{ $payment->asset->accural_period }}'),
            @endif
        };
 

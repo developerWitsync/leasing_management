@@ -75,14 +75,22 @@ class ModifyLeaseController extends Controller
             $lase_modification = LeaseModificationReason::query()->get();
             if ($lease) {
 
+                $disable_initial = false;
+                $subsequent_modifications_for_lease = ModifyLeaseApplication::query()->where('lease_id', '=', $id)->where('valuation', '=', 'Subsequent Valuation')->count();
+                if($subsequent_modifications_for_lease > 0){
+                    $disable_initial = true;
+                }
+
                 $model = Lease::query()->where('id', '=', $id)->first();
-
-
                 if ($request->isMethod('post')) {
                     $validator = Validator::make($request->except('_token'), $this->validationRules());
 
                     if ($validator->fails()) {
                         return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
+                    }
+
+                    if($disable_initial && trim($request->valuation) != "Subsequent Valuation"){
+                        return redirect()->back()->with('error', 'Incorrect option selected, you can only select Subsequent Valuation.');
                     }
 
                     $data = $request->except('_token');
@@ -101,11 +109,10 @@ class ModifyLeaseController extends Controller
                     $data1['status'] = '0';
                     $model->setRawAttributes($data1);
                     $model->save();
-
                     return redirect(route('add-new-lease.index', ['id' => $id]))->with('status', 'Modify Lease has been Created successfully.');
-
                 }
-                return view('modifylease.create', compact('lease', 'lase_modification'));
+
+                return view('modifylease.create', compact('lease', 'lase_modification', 'disable_initial'));
             } else {
                 abort(404);
             }
