@@ -117,7 +117,7 @@
 
             <a href="{{ route('addlease.renewable.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
             @if($asset->purchaseOption)
-                <a href="{{ route('addlease.durationclassified.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
+                <a href="{{ route('addlease.payments.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
             @endif
 
         </div>

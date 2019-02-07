@@ -142,7 +142,7 @@
     <div class="form-group btnMainBx">
         <div class="col-md-6 btn-backnextBx">
 
-            <a href="{{ route('addlease.residual.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
+            <a href="{{ route('addlease.leaseasset.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
             @if($asset->terminationOption)
                 <a href="{{ route('addlease.renewable.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
             @endif

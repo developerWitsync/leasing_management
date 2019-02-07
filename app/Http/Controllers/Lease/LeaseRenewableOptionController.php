@@ -84,7 +84,7 @@ class LeaseRenewableOptionController extends Controller
 
                         if($model->save()){
                             // complete Step
-                            confirmSteps($lease->id,'step7');
+                            confirmSteps($lease->id,'step4');
                             return redirect(route('addlease.renewable.index',['id' => $lease->id]))->with('status', 'Renewable Option has been added successfully.');
                         }
                     }
@@ -199,7 +199,7 @@ class LeaseRenewableOptionController extends Controller
                     if($renewable_value){
 
                          // complete Step
-                         confirmSteps($lease->id,'step7');
+                         confirmSteps($lease->id,'step4');
                         
                         return redirect(route('addlease.renewable.index',['id' => $lease->id]))->with('status', 'Renewable Option has been added successfully.');
                     }

@@ -190,7 +190,7 @@
             <a href="{{ route('addlease.fairmarketvalue.index', ['id' => $lease->id]) }}"
                class="btn btn-danger">Back</a>
             @if($asset->residualGuranteeValue)
-                <a href="{{ route('addlease.leaseterminationoption.index', ['id' => $lease->id]) }}"
+                <a href="{{ route('addlease.durationclassified.index', ['id' => $lease->id]) }}"
                    class="btn btn-primary">Next</a>
             @endif
 

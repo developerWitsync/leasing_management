@@ -74,7 +74,7 @@
                 <div class="form-group btnMainBx clearfix">
                     <div class="col-md-6 btn-backnextBx">
 
-                        <a href="{{ route('addlease.leaseasset.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
+                        <a href="{{ route('addlease.purchaseoption.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
                         @if($show_next)
                             <a href="{{ route('addlease.fairmarketvalue.index', ['id' => $lease->id]) }}"
                                class="btn btn-primary">Next</a>

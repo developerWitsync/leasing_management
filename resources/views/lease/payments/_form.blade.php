@@ -302,7 +302,7 @@
 
     <div class="form-group btnMainBx">
         <div class="col-md-6 btn-backnextBx">
-            <a href="{{ route('addlease.payments.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
+            <a href="{{ route('addlease.purchaseoption.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
         </div>
         <div class="col-md-6 btnsubmitBx">
             <button type="submit" class="btn btn-success" name="submit" value="save">Save</button>

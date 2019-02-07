@@ -17,33 +17,9 @@
                                         <span>Underlying Lease Asset</span>
                                     </a>
                                 </li>
-                                <li>
-                                    <a class="@if(request()->segment(2) == 'payments') active @endif" href="{{route('addlease.payments.index',['id'=>$lease->id])}}">
-                                        <i>3</i>
-                                        <!-- <img src="{{ asset('assets/images/breatcrum-icon3.png') }}" class="img" alt="" >
-                                        <img src="{{ asset('assets/images/breatcrum-icon3-hover.png') }}" alt="" class="over" > -->
-                                        <span>Add Lease Payments</span>
-                                    </a>
-                                </li>
                                  <li>
-                                    <a  class="@if(request()->segment(2) == 'fair-market-value') active @endif" href="{{route('addlease.fairmarketvalue.index',['id'=>$lease->id])}}">
-                                        <i>4</i>
-                                        <!-- <img src="{{ asset('assets/images/breatcrum-icon4.png') }}" class="img" alt="" >
-                                        <img src="{{ asset('assets/images/breatcrum-icon4-hover.png') }}" alt="" class="over" > -->
-                                        <span>Fair Market Value</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a  class="@if(request()->segment(2) == 'residual-value-gurantee') active @endif" href="{{route('addlease.residual.index',['id'=>$lease->id])}}">
-                                        <i>5</i>
-                                        <!-- <img src="{{ asset('assets/images/breatcrum-icon5.png') }}" class="img" alt="" >
-                                        <img src="{{ asset('assets/images/breatcrum-icon5-hover.png') }}" alt="" class="over" > -->
-                                        <span>Residual Value Guarantee</span>
-                                    </a>
-                                </li>
-                                <li>
                                     <a class="@if(request()->segment(2) == 'lease-termination-option') active @endif" href="{{route('addlease.leaseterminationoption.index',['id'=>$lease->id])}}">
-                                        <i>6</i>
+                                        <i>3</i>
                                         <!-- <img src="{{ asset('assets/images/breatcrum-icon6.png') }}" class="img" alt="" >
                                         <img src="{{ asset('assets/images/breatcrum-icon6-hover.png') }}" alt="" class="over" > -->
                                         <span>Termination Option</span>
@@ -51,7 +27,7 @@
                                 </li>
                                 <li>
                                     <a  class="@if(request()->segment(2) == 'lease-renewal-option') active @endif" href="{{route('addlease.renewable.index',['id'=>$lease->id])}}">
-                                        <i>7</i>
+                                        <i>4</i>
                                         <!-- <img src="{{ asset('assets/images/breatcrum-icon7.png') }}" class="img" alt="" >
                                         <img src="{{ asset('assets/images/breatcrum-icon7-hover.png') }}" alt="" class="over" > -->
                                         <span>Renewal Option</span>
@@ -59,12 +35,37 @@
                                 </li>
                                 <li>
                                     <a class="@if(request()->segment(2) == 'purchase-option') active @endif"  href="{{route('addlease.purchaseoption.index',['id'=>$lease->id])}}">
-                                        <i>8</i>
+                                        <i>5</i>
                                         <!-- <img src="{{ asset('assets/images/breatcrum-icon8.png') }}" class="img" alt="" >
                                         <img src="{{ asset('assets/images/breatcrum-icon8-hover.png') }}" alt="" class="over" > -->
                                         <span>Purchase Option</span>
                                     </a>
                                 </li>
+                                <li>
+                                    <a class="@if(request()->segment(2) == 'payments') active @endif" href="{{route('addlease.payments.index',['id'=>$lease->id])}}">
+                                        <i>6</i>
+                                        <!-- <img src="{{ asset('assets/images/breatcrum-icon3.png') }}" class="img" alt="" >
+                                        <img src="{{ asset('assets/images/breatcrum-icon3-hover.png') }}" alt="" class="over" > -->
+                                        <span>Add Lease Payments</span>
+                                    </a>
+                                </li>
+                                 <li>
+                                    <a  class="@if(request()->segment(2) == 'fair-market-value') active @endif" href="{{route('addlease.fairmarketvalue.index',['id'=>$lease->id])}}">
+                                        <i>7</i>
+                                        <!-- <img src="{{ asset('assets/images/breatcrum-icon4.png') }}" class="img" alt="" >
+                                        <img src="{{ asset('assets/images/breatcrum-icon4-hover.png') }}" alt="" class="over" > -->
+                                        <span>Fair Market Value</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a  class="@if(request()->segment(2) == 'residual-value-gurantee') active @endif" href="{{route('addlease.residual.index',['id'=>$lease->id])}}">
+                                        <i>8</i>
+                                        <!-- <img src="{{ asset('assets/images/breatcrum-icon5.png') }}" class="img" alt="" >
+                                        <img src="{{ asset('assets/images/breatcrum-icon5-hover.png') }}" alt="" class="over" > -->
+                                        <span>Residual Value Guarantee</span>
+                                    </a>
+                                </li>
+                               
                                 <li>
                                     <a class="@if(request()->segment(2) == 'lease-duration-classified') active @endif" href="{{route('addlease.durationclassified.index',['id'=>$lease->id])}}">
                                         <i>9</i>

@@ -54,16 +54,16 @@ class LeaseDurationClassifiedController extends Controller
                 //check if the Subsequent Valuation is applied for the lease modification
                 $subsequent_modify_required = $lease->isSubsequentModification();
 
-                $back_button = route('addlease.purchaseoption.index', ['id' => $lease->id]);
+                $back_button = route('addlease.residual.index', ['id' => $lease->id]);
 
                 $category_excluded = \App\CategoriesLeaseAssetExcluded::query()->where('business_account_id', getDependentUserIds())->get();
                 $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
 
                 $asset = LeaseAssets::query()->where('lease_id', '=', $id)
                     ->whereNotIn('category_id', $category_excluded_id)->first();
-
+                    
                 //check for getting the back step from the lease duration classified
-                $total_assets_on_termination = LeaseAssets::query()->where('lease_id', '=', $lease->id)->whereHas('terminationOption', function ($query) {
+               /* $total_assets_on_termination = LeaseAssets::query()->where('lease_id', '=', $lease->id)->whereHas('terminationOption', function ($query) {
                     $query->where('lease_termination_option_available', '=', 'no');
                 })->count();
 
@@ -71,7 +71,7 @@ class LeaseDurationClassifiedController extends Controller
                     //cannot go back to the purchase options
                     $back_button = route('addlease.leaseterminationoption.index', ['id' => $lease->id]);
                 }
-
+                */
                 if ($asset) {
                     if($asset->leaseDurationClassified) {
                         $model = $asset->leaseDurationClassified;

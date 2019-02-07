@@ -107,7 +107,7 @@ class LeaseResidualController extends Controller
 
                     if ($residual_value->save()) {
                         // complete Step
-                        confirmSteps($lease->id, 'step5');
+                        confirmSteps($lease->id, 'step8');
                         return redirect(route('addlease.residual.index', ['id' => $lease->id]))->with('status', 'Residual value Gurantee has been added successfully.');
                     }
                 }
@@ -227,7 +227,7 @@ class LeaseResidualController extends Controller
 
                     if ($residual_value) {
                         // complete Step
-                        $complete_step5 = confirmSteps($lease->id, 'step5');
+                        $complete_step8 = confirmSteps($lease->id, 'step8');
 
                         return redirect(route('addlease.residual.index', ['id' => $lease->id]))->with('status', 'Residual value Gurantee has been added successfully.');
                     }
