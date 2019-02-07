@@ -98,6 +98,7 @@ class LeaseValuationController extends Controller
                 abort(404);
             }
         } catch (\Exception $e){
+            dd($e->getMessage());
             abort(404);
         }
     }

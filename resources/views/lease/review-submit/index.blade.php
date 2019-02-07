@@ -521,7 +521,7 @@
 
 
             <div class="form-group btnMainBx">
-                <div class="col-md-6 btn-backnextBx">
+                <div class="col-md-6 col-sm-6 btn-backnextBx">
 
                     <a href="{{route('addlease.leasepaymentinvoice.index', ['id'=>$lease->id])}}"
                        class="btn btn-danger">Back</a>
@@ -529,7 +529,7 @@
                     <a href="#" class="btn btn-primary">Print</a>
 
                 </div>
-                <div class="col-md-6 btnsubmitBx">
+                <div class="col-md-6 col-sm-6 btnsubmitBx">
                     <form style="display: inline-block;"
                           action="{{route('addlease.reviewsubmit.submit', ['id'=>$lease->id])}}" method="post">
                         {{ csrf_field() }}

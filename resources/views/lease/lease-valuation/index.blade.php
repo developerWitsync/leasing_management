@@ -13,13 +13,13 @@
     @include('lease.lease-valuation._impairment_test')
 
     <div class="form-group btnMainBx">
-        <div class="col-md-6 btn-backnextBx">
+        <div class="col-md-6 col-sm-6 btn-backnextBx">
 
             <a href="{{ route('addlease.leaseincentives.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
             <a href="{{ route('addlease.leasepaymentinvoice.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
 
         </div>
-        <div class="col-md-6 btnsubmitBx">
+        <div class="col-md-6 col-sm-6 btnsubmitBx">
             &nbsp;
         </div>
     </div>

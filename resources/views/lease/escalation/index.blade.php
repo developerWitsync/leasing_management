@@ -51,7 +51,7 @@
                     @endif
 
                     <div class="form-group btnMainBx">
-                        <div class="col-md-6 btn-backnextBx">
+                        <div class="col-md-6 col-sm-6 btn-backnextBx">
 
                             <a href="{{ route('addlease.durationclassified.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
                             @if($lease->escalation_clause_applicable == 'no')
@@ -61,7 +61,7 @@
                             @endif
 
                         </div>
-                        <div class="col-md-6 btnsubmitBx">
+                        <div class="col-md-6 col-sm-6 btnsubmitBx">
                            &nbsp;
                         </div>
                     </div>

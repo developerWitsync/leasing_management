@@ -17,4 +17,8 @@ class LeaseHistory extends Model
         'created_at',
         'updated_at'
     ];
+
+    protected function leaseModification(){
+        return $this->hasOne('App\ModifyLeaseApplication', 'id','modify_id');
+    }
 }

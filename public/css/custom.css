@@ -467,5 +467,12 @@ select[readonly] option{
     border: #e5e5e5 solid 1px;
     padding: 10px;
     font-weight: 600;
+}
 
+td.details-control {
+    background: url('../images/details_open.png') no-repeat center center;
+    cursor: pointer;
+}
+tr.shown td.details-control {
+    background: url('../images/details_close.png') no-repeat center center;
 }

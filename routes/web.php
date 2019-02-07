@@ -248,6 +248,7 @@ Route::middleware('auth')->group(function(){
 
     Route::namespace('Leasevaluation')->prefix('lease-valuation')->group(function(){
           Route::get('/', ['as' => 'leasevaluation.index', 'uses' => 'LeaseValuationController@index']);
+          Route::get('assets/{category_id}/{capitalized}', ['as' => 'leasevaluation.fetchassets', 'uses' => 'LeaseValuationController@fetchAssets']);
      });
 
 
