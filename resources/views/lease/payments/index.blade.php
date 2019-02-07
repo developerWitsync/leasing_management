@@ -55,11 +55,8 @@
                                     {{ $asset->similar_asset_items }}
                                 </td>
                                 <td>
-                                    &nbsp;
-                                    <a class="btn btn-sm btn-primary"
-                                       href="{{ route('lease.payments.add', ['lease_id' => $lease->id, 'asset_id'=> $asset->id]) }}">Add/Modify
-                                        Lease Payments</a>
-                                    <br/>
+                                    <a class="btn btn-sm btn-primary" href="{{ route('lease.payments.add', ['lease_id' => $lease->id, 'asset_id'=> $asset->id]) }}">Add/Modify Lease Payments</a>
+                                   
                                     <span class="badge badge-warning exitingBtn">
                                         Existing Payments
                                         {{ count($asset->payments) }}
@@ -74,7 +71,7 @@
 
                 </div>
 
-                <div class="form-group btnMainBx">
+                <div class="form-group btnMainBx clearfix">
                     <div class="col-md-6 btn-backnextBx">
 
                         <a href="{{ route('addlease.leaseasset.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>

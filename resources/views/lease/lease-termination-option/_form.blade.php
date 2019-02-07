@@ -1,39 +1,42 @@
 <form role="form" class="form-horizontal" method="post" enctype="multipart/form-data">
     {{ csrf_field() }}
-
+    <div class="categoriesOuter clearfix">
     <div class="form-group required">
-        <label for="uuid" class="col-md-4 control-label">ULA Code</label>
-        <div class="col-md-4 form-check form-check-inline">
+        <label for="uuid" class="col-md-12 control-label">ULA Code</label>
+        <div class="col-md-12 form-check form-check-inline">
             <input type="text" value="{{ $asset->uuid}}" class="form-control" id="uuid" name="uuid" disabled="disabled">
         </div>
     </div>
 
     <div class="form-group required">
-        <label for="asset_name" class="col-md-4 control-label">Asset Name</label>
-        <div class="col-md-4 form-check form-check-inline">
+        <label for="asset_name" class="col-md-12 control-label">Asset Name</label>
+        <div class="col-md-12 form-check form-check-inline">
             <input type="text" value="{{ $asset->name}}" class="form-control" id="asset_name" name="asset_name"
                    disabled="disabled">
         </div>
     </div>
 
     <div class="form-group required">
-        <label for="asset_category" class="col-md-4 control-label">Lease Asset Classification</label>
-        <div class="col-md-4 form-check form-check-inline">
+        <label for="asset_category" class="col-md-12 control-label">Lease Asset Classification</label>
+        <div class="col-md-12 form-check form-check-inline">
             <input type="text" value="{{ $asset->category->title}}" class="form-control" id="asset_category"
                    name="asset_category" disabled="disabled">
         </div>
     </div>
 
     <div class="form-group{{ $errors->has('lease_termination_option_available') ? ' has-error' : '' }} required">
-        <label for="name" class="col-md-4 control-label">Lease Termination Option Available Under the Contract</label>
-        <div class="col-md-6 form-check form-check-inline" required>
-            <input class="form-check-input" name="lease_termination_option_available" id="yes" type="checkbox"
+        <label for="name" class="col-md-12 control-label">Lease Termination Option Available Under the Contract</label>
+        <div class="col-md-12 form-check form-check-inline mrktavail" required>
+            <span><input class="form-check-input" name="lease_termination_option_available" id="yes" type="checkbox"
                    value="yes"
                    @if(old('lease_termination_option_available', $model->lease_termination_option_available) == "yes") checked="checked" @endif>
-            <label class="form-check-label" for="yes" id="yes" style="vertical-align: 4px">Yes</label><br>
+            <label class="form-check-label" for="yes" id="yes" style="vertical-align: 4px">Yes</label>
+            </span>
+            <span>
             <input class="form-check-input" name="lease_termination_option_available" id="no" type="checkbox" value="no"
                    @if(old('lease_termination_option_available', $model->lease_termination_option_available)  == "no") checked="checked" @endif>
             <label class="form-check-label" for="no" id="no" style="vertical-align: 4px">No</label>
+            </span>
             @if ($errors->has('lease_termination_option_available'))
                 <span class="help-block">
                     <strong>{{ $errors->first('lease_termination_option_available') }}</strong>
@@ -46,18 +49,21 @@
          @if(old('lease_termination_option_available', $model->lease_termination_option_available) == "yes") style="display:block;"
          @else  style="display:none;" @endif>
         <div class="form-group{{ $errors->has('exercise_termination_option_available') ? ' has-error' : '' }} required">
-            <label for="name" class="col-md-4 control-label">Reasonable Certainity to Exercise Termination Option as of
+            <label for="name" class="col-md-12 control-label">Reasonable Certainity to Exercise Termination Option as of
                 today</label>
-            <div class="col-md-6 form-check form-check-inline" required>
-                <input class="form-check-input" name="exercise_termination_option_available" id="yes" type="checkbox"
+            <div class="col-md-12 form-check form-check-inline mrktavail" required>
+                <span><input class="form-check-input" name="exercise_termination_option_available" id="yes" type="checkbox"
                        value="yes"
                        @if(old('exercise_termination_option_available', $model->exercise_termination_option_available) == "yes") checked="checked" @endif>
-                <label class="form-check-label" for="yes" id="yes" style="vertical-align: 4px">Yes</label><br>
-                <input class="form-check-input" name="exercise_termination_option_available" id="no" type="checkbox"
+                <label class="form-check-label" for="yes" id="yes" style="vertical-align: 4px">Yes</label>
+                </span>
+                <span>
+                    <input class="form-check-input" name="exercise_termination_option_available" id="no" type="checkbox"
                        value="no"
                        @if(old('exercise_termination_option_available', $model->exercise_termination_option_available)  == "no") checked="checked" @endif>
-                <label class="form-check-label" for="no" id="no" style="vertical-align: 4px">No</label>
-                @if ($errors->has('exercise_termination_option_available'))
+                    <label class="form-check-label" for="no" id="no" style="vertical-align: 4px">No</label>
+                </span>
+                    @if ($errors->has('exercise_termination_option_available'))
                     <span class="help-block">
                         <strong>{{ $errors->first('exercise_termination_option_available') }}</strong>
                     </span>
@@ -70,8 +76,8 @@
          @if(old('exercise_termination_option_available',$model->exercise_termination_option_available) == "yes" && old('lease_termination_option_available', $model->lease_termination_option_available) == "yes") style="display:block;"
          @else  style="display:none;" @endif>
         <div class="form-group{{ $errors->has('lease_end_date') ? ' has-error' : '' }} required">
-            <label for="lease_end_date" class="col-md-4 control-label">Expected Lease End Date</label>
-            <div class="col-md-6">
+            <label for="lease_end_date" class="col-md-12 control-label">Expected Lease End Date</label>
+            <div class="col-md-12">
                 <input type="text" placeholder="Expected Lease End Date" class="form-control" id="lease_end_date"
                        name="lease_end_date" value="{{ old('lease_end_date', $model->lease_end_date) }}">
                 @if ($errors->has('lease_end_date'))
@@ -83,15 +89,17 @@
         </div>
 
         <div class="form-group{{ $errors->has('termination_penalty_applicable') ? ' has-error' : '' }} required">
-            <label for="name" class="col-md-4 control-label">Termination Penalty Applicable</label>
-            <div class="col-md-6 form-check form-check-inline" required>
-                <input class="form-check-input" name="termination_penalty_applicable" id="yes" type="checkbox"
+            <label for="name" class="col-md-12 control-label">Termination Penalty Applicable</label>
+            <div class="col-md-12 form-check form-check-inline mrktavail" required>
+                <span><input class="form-check-input" name="termination_penalty_applicable" id="yes" type="checkbox"
                        value="yes"
                        @if(old('termination_penalty_applicable', $model->termination_penalty_applicable) == "yes") checked="checked" @endif>
-                <label class="form-check-label" for="yes" id="yes" style="vertical-align: 4px">Yes</label><br>
-                <input class="form-check-input" name="termination_penalty_applicable" id="no" type="checkbox" value="no"
+                <label class="form-check-label" for="yes" id="yes" style="vertical-align: 4px">Yes</label>
+                </span>
+                <span><input class="form-check-input" name="termination_penalty_applicable" id="no" type="checkbox" value="no"
                        @if(old('termination_penalty_applicable', $model->termination_penalty_applicable)  == "no") checked="checked" @endif>
                 <label class="form-check-label" for="no" id="no" style="vertical-align: 4px">No</label>
+                </span>
                 @if ($errors->has('termination_penalty_applicable'))
                     <span class="help-block">
                         <strong>{{ $errors->first('termination_penalty_applicable') }}</strong>
@@ -104,8 +112,8 @@
          @if(old('termination_penalty_applicable',$model->termination_penalty_applicable) == "yes" && old('exercise_termination_option_available',$model->exercise_termination_option_available ) == "yes" && old('lease_termination_option_available', $model->lease_termination_option_available) == "yes") style="display:block;"
          @else  style="display:none;" @endif>
         <div class="form-group{{ $errors->has('currency') ? ' has-error' : '' }} required">
-            <label for="currency" class="col-md-4 control-label">Currency</label>
-            <div class="col-md-4 form-check form-check-inline">
+            <label for="currency" class="col-md-12 control-label">Currency</label>
+            <div class="col-md-12 form-check form-check-inline">
                 <input type="text" value="{{ $lease->lease_contract_id }}" class="form-control" id="currency"
                        name="currency" readonly="readonly">
                 @if ($errors->has('currency'))
@@ -117,8 +125,8 @@
         </div>
 
         <div class="form-group{{ $errors->has('termination_penalty') ? ' has-error' : '' }} required">
-            <label for="termination_penalty" class="col-md-4 control-label">Termination Penalty</label>
-            <div class="col-md-4 form-check form-check-inline">
+            <label for="termination_penalty" class="col-md-12 control-label">Termination Penalty</label>
+            <div class="col-md-12 form-check form-check-inline">
                 <input type="text" class="form-control" id="termination_penalty" name="termination_penalty"
                        value="{{ old('termination_penalty', $model->termination_penalty) }}">
                 @if ($errors->has('termination_penalty'))
@@ -129,7 +137,7 @@
             </div>
         </div>
     </div>
-
+</div>
 
     <div class="form-group btnMainBx">
         <div class="col-md-6 btn-backnextBx">
