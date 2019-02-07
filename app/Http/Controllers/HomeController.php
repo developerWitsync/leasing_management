@@ -82,6 +82,16 @@ class HomeController extends Controller
            $query->where('id',6);
          })->whereIn('lease_id', $lease_id)->count();
 
+        //Intangible Assets
+         $total_intangible = LeaseAssets::query()->whereHas('category', function ($query) {
+           $query->where('id',7);
+         })->whereIn('lease_id', $lease_id)->count();
+
+         //Agricultural Assets 
+         $total_agricultural = LeaseAssets::query()->whereHas('category', function ($query) {
+           $query->where('id',4);
+         })->whereIn('lease_id', $lease_id)->count();
+
         //Short Term Lease
         $total_short_term_lease = LeaseAssets::query()->whereIn('lease_id', $lease_id)
         ->whereHas('leaseDurationClassified',  function($query){
@@ -94,11 +104,10 @@ class HomeController extends Controller
             $query->where('is_classify_under_low_value', '=', 'yes');
         })->count();
         
-        //other lease asset
-        $total_other_lease_asset = LeaseAssets::query()->whereIn('lease_id', $lease_id)
-        ->whereHas('leaseSelectLowValue',  function($query){
-            $query->where('is_classify_under_low_value', '=', 'no');
-        })->count();
+        //other lease asset combining together intangible and biological
+        $total_other_lease_asset = LeaseAssets::query()->whereHas('category', function ($query) {
+           $query->where('id',5)->where('id',8);
+         })->whereIn('lease_id', $lease_id)->count();
 
         //undiscounted lease assets
         $total_undiscounted_capitalized = LeaseAssets::query()->whereIn('lease_id', $lease_id)
@@ -120,6 +129,8 @@ class HomeController extends Controller
             'total_plant',
             'total_investment',
             'total_undiscounted_capitalized',
+            'total_intangible',
+            'total_agricultural',
             'breadcrumbs'
         ));
     }

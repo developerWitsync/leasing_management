@@ -9,24 +9,24 @@
 @endif
 <form role="form" class="form-horizontal" method="post" enctype="multipart/form-data">
     {{ csrf_field() }}
-
+    <div class="categoriesOuter clearfix">
     <div class="form-group required">
-        <label for="uuid" class="col-md-4 control-label">ULA Code</label>
-        <div class="col-md-4 form-check form-check-inline">
+        <label for="uuid" class="col-md-12 control-label">ULA Code</label>
+        <div class="col-md-12 form-check form-check-inline">
             <input type="text" value="{{ $asset->uuid}}" class="form-control" id="uuid" name="uuid" disabled="disabled">
         </div>
     </div>
 
     <div class="form-group required">
-        <label for="asset_name" class="col-md-4 control-label">Asset Name</label>
-        <div class="col-md-4 form-check form-check-inline">
+        <label for="asset_name" class="col-md-12 control-label">Asset Name</label>
+        <div class="col-md-12 form-check form-check-inline">
             <input type="text" value="{{ $asset->name}}" class="form-control" id="asset_name" name="asset_name" disabled="disabled">
         </div>
     </div>
 
     <div class="form-group required">
-        <label for="asset_category" class="col-md-4 control-label">Lease Asset Classification</label>
-        <div class="col-md-4 form-check form-check-inline">
+        <label for="asset_category" class="col-md-12 control-label">Lease Asset Classification</label>
+        <div class="col-md-12 form-check form-check-inline">
             <input type="text" value="{{ $asset->category->title}}" class="form-control" id="asset_category" name="asset_category" disabled="disabled">
         </div>
     </div>
@@ -34,14 +34,18 @@
     <input type="hidden" name="id" value="{{ $model->id }}">
 
     <div class="form-group{{ $errors->has('initial_direct_cost_involved') ? ' has-error' : '' }} required">
-        <label for="name" class="col-md-4 control-label">Any Initial Direct Cost Involved</label>
-        <div class="col-md-6 form-check form-check-inline" required>
-            <input class="form-check-input" name="initial_direct_cost_involved" id="yes" type="checkbox" value="yes"
+        <label for="name" class="col-md-12 control-label">Any Initial Direct Cost Involved</label>
+        <div class="col-md-12 form-check form-check-inline mrktavail" required>
+            <span>
+                <input class="form-check-input" name="initial_direct_cost_involved" id="yes" type="checkbox" value="yes"
                    @if(old('initial_direct_cost_involved', $model->initial_direct_cost_involved) == "yes") checked="checked" @endif>
-            <label class="form-check-label" for="yes" id="yes" style="vertical-align: 4px">Yes</label><br>
-            <input class="form-check-input" name="initial_direct_cost_involved" id="no" type="checkbox" value="no"
+                <label class="form-check-label" for="yes" id="yes" style="vertical-align: 4px">Yes</label>
+            </span>
+            <span>
+                <input class="form-check-input" name="initial_direct_cost_involved" id="no" type="checkbox" value="no"
                    @if(old('initial_direct_cost_involved', $model->initial_direct_cost_involved)  == "no") checked="checked" @endif>
-            <label class="form-check-label" for="no" id="no" style="vertical-align: 4px">No</label>
+                <label class="form-check-label" for="no" id="no" style="vertical-align: 4px">No</label>
+            </span>
             @if ($errors->has('initial_direct_cost_involved'))
                 <span class="help-block">
                         <strong>{{ $errors->first('initial_direct_cost_involved') }}</strong>
@@ -53,8 +57,8 @@
          @if(old('initial_direct_cost_involved',$model->initial_direct_cost_involved ) == "yes") style="display:block;"
          @else  style="display:none;" @endif>
         <div class="form-group{{ $errors->has('currency') ? ' has-error' : '' }} required">
-            <label for="currency" class="col-md-4 control-label">Currency</label>
-            <div class="col-md-6 form-check form-check-inline">
+            <label for="currency" class="col-md-12 control-label">Currency</label>
+            <div class="col-md-12 form-check form-check-inline">
                 <input type="text" value="{{ $lease->lease_contract_id }}" class="form-control" id="currency"
                        name="currency" readonly="readonly">
                 @if ($errors->has('currency'))
@@ -67,8 +71,8 @@
 
 
         <div class="form-group{{ $errors->has('total_initial_direct_cost') ? ' has-error' : '' }} required">
-            <label for="total_initial_direct_cost" class="col-md-4 control-label">Total Initial Direct Cost</label>
-            <div class="col-md-6 form-check form-check-inline">
+            <label for="total_initial_direct_cost" class="col-md-12 control-label">Total Initial Direct Cost</label>
+            <div class="col-md-12 form-check form-check-inline">
                 <input type="text" value="{{ old('total_initial_direct_cost', $model->total_initial_direct_cost)}}"
                        class="form-control" id="total_initial_direct_cost" name="total_initial_direct_cost"
                        readonly="readonly">
@@ -81,6 +85,7 @@
         </div>
 
         <div class="row">
+            <div class="col-md-12 directcostTble">
             <table class="table table-bordered table-condensed add_more_table">
                 <thead>
                     <th>Supplier Name</th>
@@ -167,12 +172,12 @@
                 @endif
                 </tbody>
             </table>
-
             <a href="javascript:void(0)" onclick="javascript:addMore(this)" class="btn btn-sm right btn-success add_more"><i class="fa fa-plus-square"></i> Add More</a>
+            </div>
         </div>
 
     </div>
-
+    </div>
     <div class="form-group btnMainBx">
         <div class="col-md-6 col-sm-6 btn-backnextBx">
 

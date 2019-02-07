@@ -35,14 +35,16 @@
         </div>
     </div>
    
-  <div class="form-group">
-        <div class="col-md-6 col-md-offset-4">
+    <div class="form-group btnMainBx clerfix">
+        <div class="col-md-6 col-sm-6 btn-backnextBx">
             <a href="{{ route('addlease.renewable.index', ['id' => $lease->id]) }}" class="btn btn-danger">Cancel</a>
+        </div>
+        <div class="col-md-6 col-sm-6 btnsubmitBx">
             <button type="submit" name="submit" class="btn btn-success">
                 Submit
             </button>
         </div>
-  </div>
+    </div>
 
 </form>
 

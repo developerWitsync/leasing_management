@@ -21,6 +21,7 @@ use App\LeaseAssetsNumberSettings;
 use App\LeaseAssetSubCategorySetting;
 use App\UseOfLeaseAsset;
 use App\GeneralSettings;
+use App\LeaseCompletedSteps;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -68,6 +69,8 @@ class UnderlyingLeaseAssetController extends Controller
 
             // get max previous year from general settings for lease start year which will be minimum year
             $settings = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
+            $get_steps= LeaseCompletedSteps::query()->where('lease_id','=',$id)->where('completed_step','step2')->first();
+            //dd($get_steps->completed_step);
             return view('lease.lease-assets.indexv2', compact('breadcrumbs',
                 'lease',
                 'lease_assets_categories',
@@ -78,7 +81,8 @@ class UnderlyingLeaseAssetController extends Controller
                 'use_of_lease_asset',
                 'expected_life_of_assets',
                 'accounting_terms',
-                'settings'
+                'settings',
+                'get_steps'
             ));
         } else {
             abort(404);

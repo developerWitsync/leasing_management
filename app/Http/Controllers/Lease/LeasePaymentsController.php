@@ -242,8 +242,8 @@ class LeasePaymentsController extends Controller
 
                     // complete Step
                     $lease_id = $asset->lease->id;
-                    $step = 'step3';
-                    $complete_step3 = confirmSteps($lease_id, $step);
+                    $step = 'step6';
+                    $complete_step6 = confirmSteps($lease_id, $step);
 
                     return redirect(route('lease.payments.add', ['lease_id' => $asset->lease->id, 'asset_id' => $asset->id]))->with('status', 'Lease Asset Payments has been added successfully.');
                 } else {

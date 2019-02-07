@@ -17,14 +17,18 @@
 
             <form role="form" class="form-horizontal" enctype="multipart/form-data" method="POST" action="{{ route('addlease.leasepaymentinvoice.index', ['id' => $lease->id]) }}">
             {{ csrf_field() }}
-
+            <div class="categoriesOuter clearfix">
                 <div class="form-group{{ $errors->has('lease_payment_invoice_received') ? ' has-error' : '' }} required">
-                    <label for="name" class="col-md-4 control-label">Any Lease Payment Invoice Received from Lessor</label>
-                    <div class="col-md-6 form-check form-check-inline" required>
-                        <input class="form-check-input" name="lease_payment_invoice_received" id="yes" type="checkbox" value = "yes" @if(old('lease_payment_invoice_received', $model->lease_payment_invoice_received) == "yes") checked="checked" @endif>
-                        <label class="form-check-label" for="yes" id="yes" style="vertical-align: 4px">Yes</label><br>
-                        <input class="form-check-input" name="lease_payment_invoice_received" id="no" type="checkbox" value = "no" @if(old('lease_payment_invoice_received', $model->lease_payment_invoice_received)  == "no") checked="checked" @endif>
-                        <label class="form-check-label" for="no" id="no" style="vertical-align: 4px">No</label>
+                    <label for="name" class="col-md-12 control-label">Any Lease Payment Invoice Received from Lessor</label>
+                    <div class="col-md-12 form-check form-check-inline  mrktavail" required>
+                        <span>
+                            <input class="form-check-input" name="lease_payment_invoice_received" id="yes" type="checkbox" value = "yes" @if(old('lease_payment_invoice_received', $model->lease_payment_invoice_received) == "yes") checked="checked" @endif>
+                            <label class="form-check-label" for="yes" id="yes" style="vertical-align: 4px">Yes</label>
+                        </span>
+                        <span>
+                            <input class="form-check-input" name="lease_payment_invoice_received" id="no" type="checkbox" value = "no" @if(old('lease_payment_invoice_received', $model->lease_payment_invoice_received)  == "no") checked="checked" @endif>
+                            <label class="form-check-label" for="no" id="no" style="vertical-align: 4px">No</label>
+                        </span>
                         @if ($errors->has('lease_payment_invoice_received'))
                             <span class="help-block">
                                     <strong>{{ $errors->first('lease_payment_invoice_received') }}</strong>
@@ -32,7 +36,7 @@
                         @endif
                     </div>
                 </div>
-
+            </div>
                 <div class="form-group btnMainBx">
                     <div class="col-md-6 col-sm-6 btn-backnextBx">
 

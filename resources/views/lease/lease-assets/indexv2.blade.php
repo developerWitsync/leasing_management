@@ -457,7 +457,7 @@
                                 <a href="{{ route('add-new-lease.index',['id' => $lease->id]) }}"
                                    class="btn btn-danger">Back</a>
                                 @if($lease->total_assets == count($lease->assets))
-                                    <a href="{{ route('addlease.payments.index',['id' => $lease->id]) }}"
+                                    <a href="{{ route('addlease.leaseterminationoption.index',['id' => $lease->id]) }}"
                                        class="btn btn-primary">Next</a>
                                 @endif
 

@@ -520,7 +520,9 @@
             </div>
 
 
-            <div class="form-group btnMainBx">
+
+            <div class="form-group btnMainBx clearfix">
+
                 <div class="col-md-6 col-sm-6 btn-backnextBx">
 
                     <a href="{{route('addlease.leasepaymentinvoice.index', ['id'=>$lease->id])}}"

@@ -145,8 +145,9 @@
                 Submit
             </button>
 
+            
             @if($lease->total_assets == $completed_asset_details)
-                <a href="{{ route('addlease.payments.index',['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
+                <a href="{{ route('addlease.leaseterminationoption.index',['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
             @endif
         </div>
     </div>

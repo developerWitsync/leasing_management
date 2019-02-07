@@ -1,10 +1,10 @@
 <form role="form" class="form-horizontal" method="post" enctype="multipart/form-data">
     {{ csrf_field() }}
-    <fieldset class="scheduler-border">
-        <legend class="scheduler-border">Type of Lease Payments</legend>
+    <div class="categoriesOuter clearfix">
+        <div class="categoriesHd">Type of Lease Payments</div>
         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }} required">
-            <label for="name" class="col-lg-4 col-md-5 control-label">Name of Lease Payment</label>
-            <div class="col-lg-5 col-md-6">
+            <label for="name" class="col-md-12 control-label">Name of Lease Payment</label>
+            <div class="col-md-12">
                 <input id="name" type="text" placeholder="Name" class="form-control" name="name" value="{{ old('name', $payment->name) }}" @if($subsequent_modify_required) disabled="disabled" @endif>
                 @if ($errors->has('name'))
                     <span class="help-block">
@@ -19,8 +19,8 @@
         </div>
 
         <div class="form-group{{ $errors->has('type') ? ' has-error' : '' }} required">
-            <label for="type" class="col-lg-4 col-md-5 control-label">Type of Lease Payment</label>
-            <div class="col-lg-5 col-md-6">
+            <label for="type" class="col-md-12 control-label">Type of Lease Payment</label>
+            <div class="col-md-12">
                 <select name="type" class="form-control" @if($subsequent_modify_required) disabled="disabled" @endif>
                     <option value="">--Select Lease Payment Type--</option>
                     @foreach($lease_payments_types as $lease_payments_type)
@@ -41,8 +41,8 @@
         </div>
 
         <div class="form-group{{ $errors->has('nature') ? ' has-error' : '' }} required">
-            <label for="type" class="col-lg-4 col-md-5 control-label">Nature of Lease Payment</label>
-            <div class="col-lg-5 col-md-6">
+            <label for="type" class="col-md-12 control-label">Nature of Lease Payment</label>
+            <div class="col-md-12">
                 <select name="nature" class="form-control" @if($subsequent_modify_required) disabled="disabled" @endif>
                     <option value="">--Select Lease Payment Nature--</option>
                     @foreach($lease_payments_nature as $nature)
@@ -63,8 +63,8 @@
         </div>
 
         <div class="form-group{{ $errors->has('variable_basis') ? ' has-error' : '' }} required variable_basis" style="display: none">
-            <label for="variable_basis" class="col-lg-4 col-md-5 control-label">Variable Basis</label>
-            <div class="col-lg-5 col-md-6">
+            <label for="variable_basis" class="col-md-12 control-label">Variable Basis</label>
+            <div class="col-md-12">
                 <input id="variable_basis" type="text" placeholder="Name" class="form-control" name="variable_basis" value="{{ old('variable_basis',$payment->variable_basis) }}">
                 @if ($errors->has('variable_basis'))
                     <span class="help-block">
@@ -75,8 +75,8 @@
         </div>
 
         <div class="form-group{{ $errors->has('variable_amount_determinable') ? ' has-error' : '' }} required variable_basis" style="display: none">
-            <label for="variable_amount_determinable" class="col-lg-4 col-md-5 control-label">Variable Amount Determinable</label>
-            <div class="col-lg-5 col-md-6">
+            <label for="variable_amount_determinable" class="col-md-12 control-label">Variable Amount Determinable</label>
+            <div class="col-md-12">
 
                 <div class="col-md-12 form-check form-check-inline">
                     <input class="form-check-input" name="variable_amount_determinable" type="checkbox" id="yes" value="yes" @if(old('variable_amount_determinable',$payment->variable_amount_determinable) == "yes") checked="checked" @endif>
@@ -91,8 +91,8 @@
         </div>
 
         <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
-            <label for="description" class="col-lg-4 col-md-5 control-label">Any Other Description</label>
-            <div class="col-lg-5 col-md-6">
+            <label for="description" class="col-md-12 control-label">Any Other Description</label>
+            <div class="col-md-12">
                 <input id="description" type="text" placeholder="Description" class="form-control" name="description" value="{{ old('description',$payment->description) }}">
                 @if ($errors->has('description'))
                     <span class="help-block">
@@ -102,13 +102,13 @@
             </div>
         </div>
 
-    </fieldset>
+</div>
 
-    <fieldset class="scheduler-border">
-        <legend class="scheduler-border">Lease Payment Periods</legend>
+    <div class="categoriesOuter clearfix">
+        <div class="categoriesHd">Lease Payment Periods</div>
         <div class="form-group{{ $errors->has('payment_interval') ? ' has-error' : '' }} required">
-            <label for="payment_interval" class="col-lg-4 col-md-5 control-label">Lease Payment Interval</label>
-            <div class="col-lg-5 col-md-6">
+            <label for="payment_interval" class="col-md-12 control-label">Lease Payment Interval</label>
+            <div class="col-md-12">
                 <select name="payment_interval" class="form-control">
                     <option value="">--Select Payment Interval--</option>
                     @foreach($payments_frequencies as $frequency)
@@ -147,8 +147,8 @@
         </div>
 
         <div class="form-group{{ $errors->has('payout_time') ? ' has-error' : '' }} required">
-            <label for="payout_time" class="col-lg-4 col-md-5 control-label">Lease Payment Payout Time</label>
-            <div class="col-lg-5 col-md-6">
+            <label for="payout_time" class="col-md-12 control-label">Lease Payment Payout Time</label>
+            <div class="col-md-12">
                 <select name="payout_time" class="form-control">
                     <option value="">--Select Payment Payout Time--</option>
                     @foreach($payments_payout_times as $payout_time)
@@ -164,8 +164,8 @@
         </div>
 
         <div class="form-group{{ $errors->has('first_payment_start_date') ? ' has-error' : '' }} required">
-            <label for="first_payment_start_date" class="col-lg-4 col-md-5 control-label">First Lease Payment Start Date</label>
-            <div class="col-lg-5 col-md-6">
+            <label for="first_payment_start_date" class="col-md-12 control-label">First Lease Payment Start Date</label>
+            <div class="col-md-12">
                 <input id="first_payment_start_date" type="text" placeholder="First Lease Payment Start Date" class="form-control" name="first_payment_start_date" value="{{ old('first_payment_start_date',$payment->first_payment_start_date) }}" @if($subsequent_modify_required) disabled="disabled" @endif>
                 @if ($errors->has('first_payment_start_date'))
                     <span class="help-block">
@@ -181,8 +181,8 @@
         </div>
 
         <div class="form-group{{ $errors->has('last_payment_end_date') ? ' has-error' : '' }} required">
-            <label for="last_payment_end_date" class="col-lg-4 col-md-5 control-label">Last Lease Payment End Date</label>
-            <div class="col-lg-5 col-md-6">
+            <label for="last_payment_end_date" class="col-md-12 control-label">Last Lease Payment End Date</label>
+            <div class="col-md-12">
                 <input id="last_payment_end_date" type="text" placeholder="Last Lease Payment End Date" class="form-control" name="last_payment_end_date" value="{{ old('last_payment_end_date',$payment->last_payment_end_date) }}">
                 @if ($errors->has('last_payment_end_date'))
                     <span class="help-block">
@@ -193,8 +193,7 @@
         </div>
 
         <div class="form-group{{ $errors->has('altered_payment_due_date.0') || $errors->has('due_dates_confirmed') ? ' has-error' : '' }} show_annexure">
-            <div class="col-lg-4 col-md-5">&nbsp;</div>
-            <div class="col-lg-5 col-md-6">
+            <div class="col-md-12">
                 <a href="javascript:void(0);" class="btn btn-primary confirm_lease_payment_due_dates">Confirm Lease Payment Due Dates</a>
                 @if($payment->payment_interval == 6)
                     <a href="javascript:void(0);" class="btn btn-warning view_current_lease_payment_due_dates">View Current Dates</a>
@@ -212,14 +211,13 @@
                 @endif
             </div>
         </div>
+    </div>
 
-    </fieldset>
-
-    <fieldset class="scheduler-border">
-        <legend class="scheduler-border">Lease Payments</legend>
+    <div class="categoriesOuter clearfix">
+        <div class="categoriesHd">Lease Payments</div>
         <div class="form-group{{ $errors->has('payment_currency') ? ' has-error' : '' }} required">
-            <label for="payment_currency" class="col-lg-4 col-md-5 control-label">Lease Payment Currency</label>
-            <div class="col-lg-5 col-md-6">
+            <label for="payment_currency" class="col-md-12 control-label">Lease Payment Currency</label>
+            <div class="col-md-12">
                 <input id="payment_currency" type="text" placeholder="Lease Payment Currency" class="form-control" name="payment_currency" value="{{ $lease->lease_contract_id }}" readonly="readonly" @if($subsequent_modify_required) disabled="disabled" @endif>
                 @if ($errors->has('payment_currency'))
                     <span class="help-block">
@@ -235,8 +233,8 @@
         </div>
 
         <div class="form-group{{ $errors->has('similar_chateristics_assets') ? ' has-error' : '' }} required">
-            <label for="similar_chateristics_assets" class="col-lg-4 col-md-5 control-label">Number of Units of Lease Assets of Similar Characteristics</label>
-            <div class="col-lg-5 col-md-6">
+            <label for="similar_chateristics_assets" class="col-md-12 control-label">Number of Units of Lease Assets of Similar Characteristics</label>
+            <div class="col-md-12">
                 <input id="similar_chateristics_assets" type="text" placeholder="Number of Units of Lease Assets of Similar Characteristics" class="form-control" name="similar_chateristics_assets" value="{{ $asset->similar_asset_items }}" readonly="readonly" @if($subsequent_modify_required) disabled="disabled" @endif>
                 @if ($errors->has('similar_chateristics_assets'))
                     <span class="help-block">
@@ -253,8 +251,8 @@
 
 
         <div class="form-group{{ $errors->has('payment_per_interval_per_unit') ? ' has-error' : '' }} required">
-            <label for="payment_per_interval_per_unit" class="col-lg-4 col-md-5 control-label">Lease Payment Per Interval Per Unit</label>
-            <div class="col-lg-5 col-md-6">
+            <label for="payment_per_interval_per_unit" class="col-md-12 control-label">Lease Payment Per Interval Per Unit</label>
+            <div class="col-md-12">
                 <input id="payment_per_interval_per_unit" type="text" placeholder="" class="form-control" name="payment_per_interval_per_unit" value="{{ old('payment_per_interval_per_unit',$payment->payment_per_interval_per_unit) }}">
                 @if ($errors->has('payment_per_interval_per_unit'))
                     <span class="help-block">
@@ -265,8 +263,8 @@
         </div>
 
         <div class="form-group{{ $errors->has('total_amount_per_interval') ? ' has-error' : '' }} required">
-            <label for="total_amount_per_interval" class="col-lg-4 col-md-5 control-label">Total Lease Amount Per Interval</label>
-            <div class="col-lg-5 col-md-6">
+            <label for="total_amount_per_interval" class="col-md-12 control-label">Total Lease Amount Per Interval</label>
+            <div class="col-md-12">
                 <input id="total_amount_per_interval" type="text" placeholder="" class="form-control" name="total_amount_per_interval" value="{{ old('total_amount_per_interval',$payment->total_amount_per_interval) }}" readonly="readonly">
                 @if ($errors->has('total_amount_per_interval'))
                     <span class="help-block">
@@ -277,8 +275,8 @@
         </div>
 
         <div class="form-group{{ $errors->has('attachment') ? ' has-error' : '' }}">
-            <label for="workings_doc" class="col-lg-4 col-md-5 control-label">Upload Any Workings</label>
-            <div class="col-lg-5 col-md-6 frmattachFile">
+            <label for="workings_doc" class="col-md-12 control-label">Upload Any Workings</label>
+            <div class="col-md-12 frmattachFile">
                 <input type="name" id="upload" name="name" class="form-control" disabled="disabled">
                 <button type="button" class="browseBtn">Browse</button>
                 <input id="workings_doc" type="file" placeholder="" class="fileType" name="attachment">
@@ -299,19 +297,16 @@
                 <input type="hidden" class="altered_payment_due_date" name="altered_payment_due_date[]" value="">
             @endif
         </span>
-
-    </fieldset>
+    </div>
 
 
     <div class="form-group btnMainBx">
-        <div class="col-md-6 col-sm-6 btn-backnextBx">
-            <a href="{{ route('addlease.payments.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
-        </div>
-        <div class="col-md-6 col-sm-6 btnsubmitBx">
 
-            <button type="submit" class="btn btn-success">
-                Save
-            </button>
+        <div class="col-md-6 col-sm-6 btn-backnextBx">
+            <a href="{{ route('addlease.purchaseoption.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
+        </div>
+        <div class="col-md-6 btnsubmitBx">
+            <button type="submit" class="btn btn-success" name="submit" value="save">Save</button>
         </div>
     </div>
 

@@ -1,34 +1,38 @@
 <form role="form" class="form-horizontal" method="post" enctype="multipart/form-data">
     {{ csrf_field() }}
-
+    <div class="categoriesOuter clearfix">
     <div class="form-group required">
-        <label for="uuid" class="col-md-4 control-label">ULA Code</label>
-        <div class="col-md-4 form-check form-check-inline">
+        <label for="uuid" class="col-md-12 control-label">ULA Code</label>
+        <div class="col-md-12 form-check form-check-inline">
             <input type="text" value="{{ $asset->uuid}}" class="form-control" id="uuid" name="uuid" disabled="disabled">
         </div>
     </div>
 
     <div class="form-group required">
-        <label for="asset_name" class="col-md-4 control-label">Asset Name</label>
-        <div class="col-md-4 form-check form-check-inline">
+        <label for="asset_name" class="col-md-12 control-label">Asset Name</label>
+        <div class="col-md-12 form-check form-check-inline">
             <input type="text" value="{{ $asset->name}}" class="form-control" id="asset_name" name="asset_name" disabled="disabled">
         </div>
     </div>
 
     <div class="form-group required">
-        <label for="asset_category" class="col-md-4 control-label">Lease Asset Classification</label>
-        <div class="col-md-4 form-check form-check-inline">
+        <label for="asset_category" class="col-md-12 control-label">Lease Asset Classification</label>
+        <div class="col-md-12 form-check form-check-inline">
             <input type="text" value="{{ $asset->category->title}}" class="form-control" id="asset_category" name="asset_category" disabled="disabled">
         </div>
     </div>
 
     <div class="form-group{{ $errors->has('purchase_option_clause') ? ' has-error' : '' }} required">
-        <label for="name" class="col-md-4 control-label">Purchase Option Clause in the Contract</label>
-        <div class="col-md-6 form-check form-check-inline" required>
-            <input class="form-check-input" name="purchase_option_clause" id="yes" type="checkbox" value="yes" @if(old('purchase_option_clause', $model->purchase_option_clause) == "yes") checked="checked" @endif>
-            <label class="form-check-label" for="yes" id="yes" style="vertical-align: 4px">Yes</label><br>
-            <input class="form-check-input" name="purchase_option_clause" id="no" type="checkbox" value="no" @if(old('purchase_option_clause', $model->purchase_option_clause)  == "no") checked="checked" @endif>
-            <label class="form-check-label" for="no" id="no" style="vertical-align: 4px">No</label>
+        <label for="name" class="col-md-12 control-label">Purchase Option Clause in the Contract</label>
+        <div class="col-md-12 form-check form-check-inline mrktavail" required>
+            <span>
+                <input class="form-check-input" name="purchase_option_clause" id="yes" type="checkbox" value="yes" @if(old('purchase_option_clause', $model->purchase_option_clause) == "yes") checked="checked" @endif>
+                <label class="form-check-label" for="yes" id="yes" style="vertical-align: 4px">Yes</label>
+            </span>
+            <span>
+                <input class="form-check-input" name="purchase_option_clause" id="no" type="checkbox" value="no" @if(old('purchase_option_clause', $model->purchase_option_clause)  == "no") checked="checked" @endif>
+                <label class="form-check-label" for="no" id="no" style="vertical-align: 4px">No</label>
+            </span>
             @if ($errors->has('purchase_option_clause'))
                 <span class="help-block">
                         <strong>{{ $errors->first('purchase_option_clause') }}</strong>
@@ -39,12 +43,16 @@
 
     <div class="hidden-group" id="hidden-field" @if(old('purchase_option_clause', $model->purchase_option_clause) == "yes") style="display:block;" @else  style="display:none;" @endif>
         <div class="form-group{{ $errors->has('purchase_option_exerecisable') ? ' has-error' : '' }} required">
-            <label for="name" class="col-md-4 control-label">Is the Purchase Option Exercisable</label>
-            <div class="col-md-6 form-check form-check-inline" required>
-                <input class="form-check-input" name="purchase_option_exerecisable" id="yes" type="checkbox" value="yes" @if(old('purchase_option_exerecisable', $model->purchase_option_exerecisable) == "yes") checked="checked" @endif>
-                <label class="form-check-label" for="yes" id="yes" style="vertical-align: 4px">Yes</label><br>
-                <input class="form-check-input" name="purchase_option_exerecisable" id="no" type="checkbox" value="no" @if(old('purchase_option_exerecisable', $model->purchase_option_exerecisable)  == "no") checked="checked" @endif>
-                <label class="form-check-label" for="no" id="no" style="vertical-align: 4px">No</label>
+            <label for="name" class="col-md-12 control-label">Is the Purchase Option Exercisable</label>
+            <div class="col-md-12 form-check form-check-inline mrktavail" required>
+                <span>
+                    <input class="form-check-input" name="purchase_option_exerecisable" id="yes" type="checkbox" value="yes" @if(old('purchase_option_exerecisable', $model->purchase_option_exerecisable) == "yes") checked="checked" @endif>
+                    <label class="form-check-label" for="yes" id="yes" style="vertical-align: 4px">Yes</label>
+                </span>
+                <span>
+                    <input class="form-check-input" name="purchase_option_exerecisable" id="no" type="checkbox" value="no" @if(old('purchase_option_exerecisable', $model->purchase_option_exerecisable)  == "no") checked="checked" @endif>
+                    <label class="form-check-label" for="no" id="no" style="vertical-align: 4px">No</label>
+                </span>
                 @if ($errors->has('purchase_option_exerecisable'))
                     <span class="help-block">
                             <strong>{{ $errors->first('purchase_option_exerecisable') }}</strong>
@@ -56,8 +64,8 @@
 
      <div class="hidden-group" id="hidden-elements" @if(old('purchase_option_exerecisable', $model->purchase_option_exerecisable) == "yes" && old('purchase_option_clause',$model->purchase_option_clause) == "yes") style="display:block;" @else  style="display:none;" @endif>
         <div class="form-group{{ $errors->has('expected_purchase_date') ? ' has-error' : '' }} required">
-            <label for="expected_purchase_date" class="col-md-4 control-label">Expected Purchase Date</label>
-            <div class="col-md-6">
+            <label for="expected_purchase_date" class="col-md-12 control-label">Expected Purchase Date</label>
+            <div class="col-md-12">
                 <input type="text" placeholder="Expected Purchase Date" class="form-control" id="expected_purchase_date" name="expected_purchase_date" value="{{ old('expected_purchase_date', $model->expected_purchase_date) }}">
                 @if ($errors->has('expected_purchase_date'))
                     <span class="help-block">
@@ -68,8 +76,8 @@
         </div>
 
          <div class="form-group{{ $errors->has('expected_lease_end_date') ? ' has-error' : '' }} required">
-            <label for="expected_lease_end_date" class="col-md-4 control-label">Expected Lease End Date</label>
-            <div class="col-md-6">
+            <label for="expected_lease_end_date" class="col-md-12 control-label">Expected Lease End Date</label>
+            <div class="col-md-12">
                 <input type="text" placeholder="Expected Lease End Date" class="form-control" id="expected_lease_end_date" name="expected_lease_end_date" value="{{ old('expected_lease_end_date', $model->expected_lease_end_date) }}">
                 @if ($errors->has('expected_lease_end_date'))
                     <span class="help-block">
@@ -80,8 +88,8 @@
         </div>
 
         <div class="form-group{{ $errors->has('currency') ? ' has-error' : '' }} required">
-            <label for="currency" class="col-md-4 control-label">Purchase Currency</label>
-            <div class="col-md-6 form-check form-check-inline">
+            <label for="currency" class="col-md-12 control-label">Purchase Currency</label>
+            <div class="col-md-12 form-check form-check-inline">
                 <input type="text" value="{{ $lease->lease_contract_id }}" class="form-control" id="currency" name="currency" readonly="readonly">
                 @if ($errors->has('currency'))
                     <span class="help-block">
@@ -92,8 +100,8 @@
         </div>
 
          <div class="form-group{{ $errors->has('purchase_price') ? ' has-error' : '' }} required">
-            <label for="purchase_price" class="col-md-4 control-label">Anticipated Purchase Price</label>
-            <div class="col-md-6 form-check form-check-inline">
+            <label for="purchase_price" class="col-md-12 control-label">Anticipated Purchase Price</label>
+            <div class="col-md-12 form-check form-check-inline">
                 <input type="text" class="form-control" id="purchase_price" name="purchase_price" value="{{ old('purchase_price', $model->purchase_price) }}">
                 @if ($errors->has('purchase_price'))
                     <span class="help-block">
@@ -103,13 +111,13 @@
             </div>
         </div>
     </div>
-
+</div>
     <div class="form-group btnMainBx">
         <div class="col-md-6 col-sm-6 btn-backnextBx">
 
             <a href="{{ route('addlease.renewable.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
             @if($asset->purchaseOption)
-                <a href="{{ route('addlease.durationclassified.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
+                <a href="{{ route('addlease.payments.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
             @endif
 
         </div>

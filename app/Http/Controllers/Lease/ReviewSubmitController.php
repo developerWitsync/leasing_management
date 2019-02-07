@@ -225,12 +225,17 @@ class ReviewSubmitController extends Controller
             
             $record['initial_direct_cost']['supplier_details']= $supplier_details;
 
+            $record['initial_direct_cost'] = $initial_direct_cost;
+            
+            $record['initial_direct_cost']['supplier_details']= $supplier_details;
+
+            $record['initial_direct_cost'] = ($initial_direct_cost)?$initial_direct_cost->toArray():[];
             //lease incentives step 15
             $record['lease_incentives'] = ($lease_incentives)?$lease_incentives->toArray():[];
 
             $record['lease_incentives']['customer_details'] = $customer_details;
 
-            //lease valaution step 16 is only for calacute present value lease liability
+            //lease valaution step 16 is only for caculate present value lease liability
 
             // lessor invoice step 17
             $record['lessor_invoice'] = $lease_invoice;

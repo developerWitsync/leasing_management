@@ -8,7 +8,7 @@
     bottom: 9px;
     left: 1px;
 }
-
+.rgt { float: right !important; }
 .list-group {
     padding-left: 15px !important;
 }

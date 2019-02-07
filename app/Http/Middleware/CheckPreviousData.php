@@ -37,18 +37,18 @@ class CheckPreviousData
             }
         }
 
-        if($step == 'step8') {
+        if($step == 'step5') {
             $total_assets_termination_no = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)->whereHas('terminationOption', function ($query) {
                 $query->where('lease_termination_option_available', '=', 'yes');
                 $query->where('exercise_termination_option_available', '=', 'no');
             })->count();
 
             if($total_assets_termination_no == 0){
-                $step = 'step6';
+                $step = 'step3';
             } else {
-                $step = 'step7';
+                $step = 'step4';
                 if($this->verifyStep($step, $lease_id)){
-                    $step = 'step8';
+                    $step = 'step5';
                 }
             }
         }
@@ -67,8 +67,8 @@ class CheckPreviousData
             }
         }
 
-
         if($step == 'step12') {
+            
             //Checking Assets for Select Discount Rate
             $own_assets = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)
                 ->where('specific_use', 1)

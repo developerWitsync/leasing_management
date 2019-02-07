@@ -70,4 +70,21 @@ input[type="radio"], input[type="checkbox"]{ margin: 0px;}
 .btnsubmitBx button.btn.btn-success {border: 0 !important; font-size: 16px; border-radius: 3px; padding: 10px 25px; line-height: 20px; font-weight: 600;}
 .btn-backnextBx a.btn.btn-danger {border: 0; line-height: 20px; padding: 10px 25px; border-radius: 3px; margin-right: 10px; font-size: 16px; font-weight: 600;}
 .btn-backnextBx a.btn.btn-primary { border: 0; line-height: 20px; padding: 10px 25px; border-radius: 3px; font-size: 16px; font-weight: 600;}
+.table > thead > tr > th { vertical-align: top; background: #f8f8f8; color: #333; font-size: 15px; font-weight: 600; line-height: 20px;border: 0;border-right: #dadcdd solid 1px; border-bottom: #dadcdd solid 1px;}
+.table > tbody > tr > td {font-size: 14px; color: #666; border: 0; border-right: #dadcdd solid 1px; border-bottom: #dadcdd solid 1px;}
 .btn-backnextBx button.btn.btn-primary { border: 0; line-height: 20px; padding: 10px 25px; border-radius: 3px; font-size: 16px; font-weight: 600;}
+.panel{ box-shadow: none !important;}
+.exitingBtn{ margin-left: 0px; width: 220px; border-radius: 3px; }
+.btn-primary{ border-radius:3px;}
+.addpayTbleOuter {padding: 0 15px;}
+.DashRight .panel-body {padding: 0 0 15px 0;}
+.mrktavail {padding-top: 6px;}
+.mrktavail span{ display: inline-block; margin-right: 10px;}
+.categoriesOuter {padding-top: 15px;}
+.txtareaInp{ width: 100%; height: 60px; resize: none;}
+.textareaOuter{ width: 99% !important;}
+.frmattachFile {width: 90%;}
+.btn.btn-success {border-radius: 3px; font-size: 16px;}
+.directcostTble {padding: 0 40px 20px 40px;}
+.btn {border-radius: 3px; font-size: 16px; font-weight: 600;}
+.panel-body.frmOuterBx {padding: 15px;}

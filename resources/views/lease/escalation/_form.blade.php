@@ -1,12 +1,16 @@
 <form class="form-horizontal" enctype="multipart/form-data" method="post" role="form">
     {{ csrf_field() }}
+    <div class="categoriesOuter clearfix">
     <div class="form-group{{ $errors->has('is_market_value_present') ? ' has-error' : '' }} required">
-        <label for="is_escalation_applicable" class="col-md-4 control-label">Is Escalation Applicable</label>
-        <div class="col-md-6 form-check form-check-inline" required>
+        <label for="is_escalation_applicable" class="col-md-12 control-label">Is Escalation Applicable</label>
+        <div class="col-md-12 form-check form-check-inline mrktavail" required>
+            <span>
             <input class="form-check-input" name="is_escalation_applicable" id="yes" type="checkbox" value="yes" @if(old('is_escalation_applicable', $model->is_escalation_applicable) == "yes") checked="checked" @endif @if($subsequent_modify_required && $model->is_escalation_applicable == "yes") disabled="disabled" @endif>
-            <label class="form-check-label" for="yes" id="yes" style="vertical-align: 4px">Yes</label><br>
-            <input class="form-check-input" name="is_escalation_applicable" id="no" type="checkbox" value="no" @if(old('is_escalation_applicable', $model->is_escalation_applicable)  == "no") checked="checked" @endif @if($subsequent_modify_required) disabled="disabled" @endif>
+            <label class="form-check-label" for="yes" id="yes" style="vertical-align: 4px">Yes</label>
+            </span>
+            <span><input class="form-check-input" name="is_escalation_applicable" id="no" type="checkbox" value="no" @if(old('is_escalation_applicable', $model->is_escalation_applicable)  == "no") checked="checked" @endif @if($subsequent_modify_required) disabled="disabled" @endif>
             <label class="form-check-label" for="no" id="no" style="vertical-align: 4px">No</label>
+            </span>
             @if ($errors->has('is_escalation_applicable'))
                 <span class="help-block">
                         <strong>{{ $errors->first('is_escalation_applicable') }}</strong>
@@ -18,17 +22,17 @@
         </div>
     </div>
 
-    <div class="form-group @if(old('is_escalation_applicable', $model->is_escalation_applicable) == 'yes') hidden @endif see_payment_annexure">
-        <div class="col-md-6 col-md-offset-4">
-            <a href="javascript:void(0);" class="btn btn-info show_payment_annexure">See Lease Payment Annexure</a>
+    <div class="form-group textareaOuter @if(old('is_escalation_applicable', $model->is_escalation_applicable) == 'yes') hidden @endif see_payment_annexure">
+        <div class="col-md-12">
+            <a href="javascript:void(0);" class="btn btn-primary show_payment_annexure">See Lease Payment Annexure</a>
         </div>
     </div>
 
 
     <div class="@if(old('is_escalation_applicable', $model->is_escalation_applicable) != 'yes')) hidden @endif hidden_fields">
         <div class="form-group{{ $errors->has('effective_from') ? ' has-error' : '' }} required">
-            <label for="effective_from" class="col-md-4 control-label">Escalation Effective From</label>
-            <div class="col-md-6 form-check form-check-inline">
+            <label for="effective_from" class="col-md-12 control-label">Escalation Effective From</label>
+            <div class="col-md-12 form-check form-check-inline">
                 <input type="text" value="{{ old('effective_from', $model->effective_from) }}" class="form-control" id="effective_from" name="effective_from" @if($subsequent_modify_required) disabled="disabled" @endif>
                 @if ($errors->has('effective_from'))
                     <span class="help-block">
@@ -44,8 +48,8 @@
         </div>
 
         <div class="form-group{{ $errors->has('escalation_basis') ? ' has-error' : '' }} required">
-            <label for="escalation_basis" class="col-md-4 control-label">Escalation Basis</label>
-            <div class="col-md-6 form-check form-check-inline">
+            <label for="escalation_basis" class="col-md-12 control-label">Escalation Basis</label>
+            <div class="col-md-12 form-check form-check-inline">
                 <select name="escalation_basis" class="form-control" @if($subsequent_modify_required) disabled="disabled" @endif>
                     <option value="">--Select Escalation Basis--</option>
                     @foreach($contract_escalation_basis as $basis)
@@ -66,8 +70,8 @@
         </div>
 
         <div class="form-group{{ $errors->has('escalation_rate_type') ? ' has-error' : '' }} required escalation_rate_type @if(old('escalation_basis', $model->escalation_basis) != '1') hidden @endif">
-            <label for="escalation_rate_type" class="col-md-4 control-label">Escalation Rate Type</label>
-            <div class="col-md-6 form-check form-check-inline">
+            <label for="escalation_rate_type" class="col-md-12 control-label">Escalation Rate Type</label>
+            <div class="col-md-12 form-check form-check-inline">
                 <select name="escalation_rate_type" class="form-control" @if($subsequent_modify_required) disabled="disabled" @endif>
                     <option value="">--Select Rate Type--</option>
                     @foreach($percentage_rate_types as $type)
@@ -88,12 +92,16 @@
         </div>
 
         <div class="form-group{{ $errors->has('is_escalation_applied_annually_consistently') ? ' has-error' : '' }} required">
-            <label for="is_escalation_applied_annually_consistently" class="col-md-4 control-label">Escalation Consistently Annually Applied ?</label>
-            <div class="col-md-6 form-check form-check-inline" required>
-                <input class="form-check-input" name="is_escalation_applied_annually_consistently" id="yes" type="checkbox" value="yes" @if(old('is_escalation_applied_annually_consistently', $model->is_escalation_applied_annually_consistently) == "yes") checked="checked" @endif>
-                <label class="form-check-label" for="yes" id="yes" style="vertical-align: 4px">Yes</label><br>
-                <input class="form-check-input" name="is_escalation_applied_annually_consistently" id="no" type="checkbox" value="no" @if(old('is_escalation_applied_annually_consistently', $model->is_escalation_applied_annually_consistently)  == "no") checked="checked" @endif>
-                <label class="form-check-label" for="no" id="no" style="vertical-align: 4px">No</label>
+            <label for="is_escalation_applied_annually_consistently" class="col-md-12 control-label">Escalation Consistently Annually Applied ?</label>
+            <div class="col-md-12 form-check form-check-inline mrktavail" required>
+                <span>
+                    <input class="form-check-input" name="is_escalation_applied_annually_consistently" id="yes" type="checkbox" value="yes" @if(old('is_escalation_applied_annually_consistently', $model->is_escalation_applied_annually_consistently) == "yes") checked="checked" @endif>
+                    <label class="form-check-label" for="yes" id="yes" style="vertical-align: 4px">Yes</label><br>
+                </span>
+                <span>
+                    <input class="form-check-input" name="is_escalation_applied_annually_consistently" id="no" type="checkbox" value="no" @if(old('is_escalation_applied_annually_consistently', $model->is_escalation_applied_annually_consistently)  == "no") checked="checked" @endif>
+                    <label class="form-check-label" for="no" id="no" style="vertical-align: 4px">No</label>
+                </span>
                 @if ($errors->has('is_escalation_applied_annually_consistently'))
                     <span class="help-block">
                         <strong>{{ $errors->first('is_escalation_applied_annually_consistently') }}</strong>
@@ -103,8 +111,8 @@
         </div>
 
         <div class="form-group{{ $errors->has('fixed_rate') ? ' has-error' : '' }} required @if(old('is_escalation_applied_annually_consistently', $model->is_escalation_applied_annually_consistently) == 'yes' && old('escalation_basis', $model->escalation_basis) == '1' && (old('escalation_rate_type', $model->escalation_rate_type) == '1' || old('escalation_rate_type', $model->escalation_rate_type) == '3'))  @else hidden @endif is_j_12_y_e_s_fixed_rate">
-            <label for="fixed_rate" class="col-md-4 control-label">Specify Fixed Rate</label>
-            <div class="col-md-6 form-check form-check-inline">
+            <label for="fixed_rate" class="col-md-12 control-label">Specify Fixed Rate</label>
+            <div class="col-md-12 form-check form-check-inline">
                 <select class="form-control" name="fixed_rate">
                     <option value="">--Select Fixed Rate Percentage--</option>
                     @foreach($escalation_percentage_settings as $setting)
@@ -120,8 +128,8 @@
         </div>
 
         <div class="form-group{{ $errors->has('current_variable_rate') ? ' has-error' : '' }} required @if(old('is_escalation_applied_annually_consistently', $model->is_escalation_applied_annually_consistently)  == 'yes' && old('escalation_basis', $model->escalation_basis) == '1' && (old('escalation_rate_type', $model->escalation_rate_type) == '2' || old('escalation_rate_type', $model->escalation_rate_type) == '3'))  @else hidden @endif is_j_12_y_e_s_variable_rate">
-            <label for="current_variable_rate" class="col-md-4 control-label">Specify the Current Variable Rate</label>
-            <div class="col-md-6 form-check form-check-inline">
+            <label for="current_variable_rate" class="col-md-12 control-label">Specify the Current Variable Rate</label>
+            <div class="col-md-12 form-check form-check-inline">
                 <select class="form-control" name="current_variable_rate">
                     <option value="">--Select Current Variable Rate--</option>
                     @foreach($escalation_percentage_settings as $setting)
@@ -137,8 +145,8 @@
         </div>
 
         <div class="form-group{{ $errors->has('total_escalation_rate') ? ' has-error' : '' }} required total_escalation_rate @if(old('is_escalation_applied_annually_consistently', $model->is_escalation_applied_annually_consistently)  == 'yes' && old('escalation_basis', $model->escalation_basis) == '1')  @else hidden @endif">
-            <label for="total_escalation_rate" class="col-md-4 control-label">Total Escalation Rate</label>
-            <div class="col-md-6 form-check form-check-inline">
+            <label for="total_escalation_rate" class="col-md-12 control-label">Total Escalation Rate</label>
+            <div class="col-md-12 form-check form-check-inline">
                 <input type="text" class="form-control" placeholder="Total Escalation Rate" name="total_escalation_rate" value="{{ old('total_escalation_rate', $model->total_escalation_rate) }}">
                 @if ($errors->has('total_escalation_rate'))
                     <span class="help-block">
@@ -149,8 +157,8 @@
         </div>
 
         <div class="form-group{{ $errors->has('amount_based_currency') ? ' has-error' : '' }} required @if(old('escalation_basis', $model->escalation_basis) == '1' || old('is_escalation_applied_annually_consistently', $model->is_escalation_applied_annually_consistently) == 'no') hidden @endif amount_based_fields">
-            <label for="amount_based_currency" class="col-md-4 control-label">Currency</label>
-            <div class="col-md-6 form-check form-check-inline">
+            <label for="amount_based_currency" class="col-md-12 control-label">Currency</label>
+            <div class="col-md-12 form-check form-check-inline">
                 <input type="text" class="form-control" placeholder="Currency" name="amount_based_currency" value="{{ $lease->lease_contract_id }}" readonly="readonly">
                 @if ($errors->has('amount_based_currency'))
                     <span class="help-block">
@@ -161,8 +169,8 @@
         </div>
 
         <div class="form-group{{ $errors->has('escalated_amount') ? ' has-error' : '' }} required @if(old('escalation_basis', $model->escalation_basis) == '1' || old('is_escalation_applied_annually_consistently', $model->is_escalation_applied_annually_consistently) == 'no') hidden @endif amount_based_escalation_amount">
-            <label for="escalated_amount" class="col-md-4 control-label">Enter Amount of Increase</label>
-            <div class="col-md-6 form-check form-check-inline">
+            <label for="escalated_amount" class="col-md-12 control-label">Enter Amount of Increase</label>
+            <div class="col-md-12 form-check form-check-inline">
                 <input type="text" class="form-control" placeholder="Enter Amount of Increase" name="escalated_amount" value="{{ old('escalated_amount', $model->escalated_amount) }}" >
                 @if ($errors->has('escalated_amount'))
                     <span class="help-block">
@@ -215,14 +223,14 @@
     <!-- will be visible when wither the "amount_based_escalation_amount" or "total_escalation_rate" is visible -->
 
     <div class="form-group see_escalation_chart @if(old('escalation_basis', $model->escalation_basis) != '' && old('is_escalation_applicable', $model->is_escalation_applicable) == 'yes') @else hidden @endif hidden_fields">
-        <div class="col-md-6 col-md-offset-4">
+        <div class="col-md-12">
             <a href="javascript:void(0);" class="btn btn-primary compute_escalation">Compute</a>
         </div>
     </div>
 
     <div class="form-group{{ $errors->has('escalation_currency') ? ' has-error' : '' }} required @if(old('escalation_basis', $model->escalation_basis) != '' && old('is_escalation_applicable', $model->is_escalation_applicable) == 'yes') @else hidden @endif computed_fields hidden_fields">
-        <label for="amount_based_currency" class="col-md-4 control-label">Currency</label>
-        <div class="col-md-6 form-check form-check-inline">
+        <label for="amount_based_currency" class="col-md-12 control-label">Currency</label>
+        <div class="col-md-12 form-check form-check-inline">
             <input type="text" class="form-control" placeholder="Escalation Currency" name="escalation_currency" value="{{ $lease->lease_contract_id }}" readonly="readonly">
             @if ($errors->has('escalation_currency'))
                 <span class="help-block">
@@ -233,8 +241,8 @@
     </div>
 
     <div class="form-group{{ $errors->has('total_undiscounted_lease_payment_amount') ? ' has-error' : '' }} required @if(old('escalation_basis', $model->escalation_basis) != '' && old('is_escalation_applicable', $model->is_escalation_applicable) == 'yes') @else hidden @endif computed_fields hidden_fields">
-        <label for="escalated_amount" class="col-md-4 control-label">Total Undiscounted Lease Payments</label>
-        <div class="col-md-6 form-check form-check-inline">
+        <label for="escalated_amount" class="col-md-12 control-label">Total Undiscounted Lease Payments</label>
+        <div class="col-md-12 form-check form-check-inline">
             <input type="text" class="form-control" placeholder="Total Undiscounted Lease Payments" name="total_undiscounted_lease_payment_amount" value="{{ old('total_undiscounted_lease_payment_amount', $model->total_undiscounted_lease_payment_amount) }}" id="computed_total" readonly="readonly">
             @if ($errors->has('total_undiscounted_lease_payment_amount'))
                 <span class="help-block">

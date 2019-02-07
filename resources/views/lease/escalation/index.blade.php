@@ -50,7 +50,7 @@
                         @include('lease.escalation._list_escalation')
                     @endif
 
-                    <div class="form-group btnMainBx">
+     <div class="form-group btnMainBx clearfix">
                         <div class="col-md-6 col-sm-6 btn-backnextBx">
 
                             <a href="{{ route('addlease.durationclassified.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
