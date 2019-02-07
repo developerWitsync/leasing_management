@@ -10,7 +10,9 @@
 @endsection
 @section('content')
     <div class="panel panel-default">
-        <div class="panel-heading dashHd">Dashboard</div>
+        <div class="panel-heading clearfix dashHd">Dashboard   
+         <span class="rgt"><h4>Current Date -  @php echo date("d.m.Y  h:i:s"); @endphp </h4></span>
+     </div>
 
         <div class="panel-body">
             @if (session('status'))
