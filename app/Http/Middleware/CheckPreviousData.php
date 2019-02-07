@@ -37,7 +37,8 @@ class CheckPreviousData
             }
         }
 
-        if($step == 'step5') {
+
+        if($step == 'step5' || $step == 'step4') {
             $total_assets_termination_no = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)->whereHas('terminationOption', function ($query) {
                 $query->where('lease_termination_option_available', '=', 'yes');
                 $query->where('exercise_termination_option_available', '=', 'no');
@@ -46,10 +47,23 @@ class CheckPreviousData
             if($total_assets_termination_no == 0){
                 $step = 'step3';
             } else {
-                $step = 'step4';
+                $step = ($step == 'step5')?'step4':'step3';
                 if($this->verifyStep($step, $lease_id)){
-                    $step = 'step5';
+                    $step = ($step == 'step5')?'step4':'step3';
                 }
+            }
+        }
+
+        if($step == 'step9'){
+            //check if assets exists on lease duration classified, if no than check for step
+            $category_excluded = \App\CategoriesLeaseAssetExcluded::query()->where('business_account_id', getDependentUserIds())->get();
+            $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
+
+            $asset = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)
+                ->whereNotIn('category_id', $category_excluded_id)->count();
+
+            if($asset == 0){
+                $step = 'step8';
             }
         }
 
