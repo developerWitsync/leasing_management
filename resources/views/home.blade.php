@@ -75,6 +75,18 @@
                                    
                             </div>
                         </div>
+                         <div class="col-lg-4 col-md-4 col-sm-6 col-12 mb-2 mt-4">
+                            <div class="inforide">
+                                <div class="dashboxHd blueBg">Intangible Assets</div>
+                                <div class="dashCounting">{{$total_intangible}}</div>
+                             </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-12 mb-2 mt-4">
+                            <div class="inforide">
+                                <div class="dashboxHd redBg">Agricultural Assets</div>
+                                <div class="dashCounting">{{$total_agricultural}}</div>
+                             </div>
+                        </div>
                     </div>
                 </div>
             </div>
