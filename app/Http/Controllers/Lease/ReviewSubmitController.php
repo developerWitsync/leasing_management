@@ -190,6 +190,11 @@ class ReviewSubmitController extends Controller
             $record['lease_balance'] = $lease_balance;
 
             //inital direct Cost step 14
+<<<<<<< HEAD
+            $record['initial_direct_cost'] = $initial_direct_cost;
+            
+            $record['initial_direct_cost']['supplier_details']= $supplier_details;
+=======
 
             $record['initial_direct_cost'] = $initial_direct_cost;
             
@@ -197,6 +202,7 @@ class ReviewSubmitController extends Controller
 
             $record['initial_direct_cost'] = ($initial_direct_cost)?$initial_direct_cost->toArray():[];
 
+>>>>>>> 298b2c4e5986d5cc03bcf4958ea2f66040d7be35
 
             //lease incentives step 15
             $record['lease_incentives'] = ($lease_incentives)?$lease_incentives->toArray():[];

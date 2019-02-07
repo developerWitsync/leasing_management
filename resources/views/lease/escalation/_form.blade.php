@@ -22,9 +22,9 @@
         </div>
     </div>
 
-    <div class="form-group @if(old('is_escalation_applicable', $model->is_escalation_applicable) == 'yes') hidden @endif see_payment_annexure">
-        <div class="col-md-6 col-md-offset-4">
-            <a href="javascript:void(0);" class="btn btn-info show_payment_annexure">See Lease Payment Annexure</a>
+    <div class="form-group textareaOuter @if(old('is_escalation_applicable', $model->is_escalation_applicable) == 'yes') hidden @endif see_payment_annexure">
+        <div class="col-md-12">
+            <a href="javascript:void(0);" class="btn btn-primary show_payment_annexure">See Lease Payment Annexure</a>
         </div>
     </div>
 

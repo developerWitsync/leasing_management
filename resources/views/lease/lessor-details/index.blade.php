@@ -107,8 +107,8 @@
                                                     </select>
                                                     @if ($errors->has('lease_type_id'))
                                                         <span class="help-block">
-                                            <strong>{{ $errors->first('lease_type_id') }}</strong>
-                                            </span>
+                                                            <strong>{{ $errors->first('lease_type_id') }}</strong>
+                                                        </span>
                                                     @endif
                                                 </div>
                                             </div>
