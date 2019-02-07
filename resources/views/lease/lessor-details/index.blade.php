@@ -192,7 +192,7 @@
 
                                         </div>
                                         <div class="form-group btnMainBx">
-                                            <div class="col-md-6 btn-backnextBx">
+                                            <div class="col-md-6 col-sm-6 btn-backnextBx">
 
                                                 <a href="/home" class="btn btn-danger">Cancel</a>
                                                 <button type="submit" class="btn btn-primary next_submit">
@@ -200,7 +200,7 @@
                                                 </button>
 
                                             </div>
-                                            <div class="col-md-6 btnsubmitBx">
+                                            <div class="col-md-6 col-sm-6 btnsubmitBx">
 
                                                 <button type="submit" class="btn btn-success">
                                                     Save

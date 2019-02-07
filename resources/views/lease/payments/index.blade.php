@@ -72,7 +72,7 @@
                 </div>
 
                 <div class="form-group btnMainBx clearfix">
-                    <div class="col-md-6 btn-backnextBx">
+                    <div class="col-md-6 col-sm-6 btn-backnextBx">
 
                         <a href="{{ route('addlease.purchaseoption.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
                         @if($show_next)
@@ -81,7 +81,7 @@
                         @endif
 
                     </div>
-                    <div class="col-md-6 btnsubmitBx">
+                    <div class="col-md-6 col-sm-6 btnsubmitBx">
                         &nbsp;
                     </div>
                 </div>

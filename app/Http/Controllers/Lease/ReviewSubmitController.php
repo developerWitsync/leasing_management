@@ -79,6 +79,13 @@ class ReviewSubmitController extends Controller
         }
     }
 
+    /**
+     * submit the lease here.
+     * generate the lease history data and save the details lease_history table...
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function submit($id, Request $request)
     {
         if ($request->isMethod('post')) {
@@ -106,43 +113,66 @@ class ReviewSubmitController extends Controller
 
             $termination_option = LeaseTerminationOption::query()->where('lease_id', '=', $id)->first()->toArray();
 
-            $renewal_option = LeaseRenewableOption::query()->where('lease_id', '=', $id)->first()->toArray();
+            $renewal_option = LeaseRenewableOption::query()->where('lease_id', '=', $id)->first();
+            if($renewal_option) {
+                $renewal_option = $renewal_option->toArray();
+            }
 
-            $purchase_option = PurchaseOption::query()->where('lease_id', '=', $id)->first()->toArray();
+            $purchase_option = PurchaseOption::query()->where('lease_id', '=', $id)->first();
+            if($purchase_option) {
+                $purchase_option = $purchase_option->toArray();
+            }
 
-            $duration_classified = LeaseDurationClassified::query()->where('lease_id', '=', $id)->first()->toArray();
+            $duration_classified = LeaseDurationClassified::query()->where('lease_id', '=', $id)->first();
+            if($duration_classified) {
+                $duration_classified = $duration_classified->toArray();
+            }
 
-            $payment_esclation_details = PaymentEscalationDetails::query()->where('lease_id', '=', $id)->first()->toArray();
+            $payment_esclation_details = PaymentEscalationDetails::query()->where('lease_id', '=', $id)->first();
+            if($payment_esclation_details) {
+                $payment_esclation_details = $payment_esclation_details->toArray();
+            }
 
             // esclation Payments with due date
             $payment_due_dates = LeaseAssetPaymenetDueDate::query()->whereIn('payment_id', $payment_id)->get()->toArray();
 
             $escalation_dates = PaymentEscalationDates::query()->whereIn('payment_id', $payment_id)->get()->toArray();
 
-            $low_value = LeaseSelectLowValue::query()->where('lease_id', '=', $id)->first()->toArray();
+            $low_value = LeaseSelectLowValue::query()->where('lease_id', '=', $id)->first();
+            if($low_value) {
+                $low_value = $low_value->toArray();
+            }
 
+            $discount_rate = LeaseSelectDiscountRate::query()->where('lease_id', '=', $id)->first();
+            if($discount_rate){
+                $discount_rate = $discount_rate->toArray();
+            }
 
-            $discount_rate = LeaseSelectDiscountRate::query()->where('lease_id', '=', $id)->first()->toArray();
-
-            $lease_balance = LeaseBalanceAsOnDec::query()->where('lease_id', '=', $id)->first()->toArray();
+            $lease_balance = LeaseBalanceAsOnDec::query()->where('lease_id', '=', $id)->first();
+            if($lease_balance){
+                $lease_balance = $lease_balance->toArray();
+            }
 
             $initial_direct_cost = InitialDirectCost::query()->where('lease_id', '=', $id)->first();
 
-
             //get supplier details
-
-            $initial_direct_cost_id = $assets->initialDirectCost->pluck('id')->toArray();
-            $supplier_details = SupplierDetails::query()->whereIn('initial_direct_cost_id', $initial_direct_cost_id)->get()->toArray();
-            
-            $lease_incentives = LeaseIncentives::query()->where('lease_id', '=', $id)->first()->toArray();
+            if($initial_direct_cost){
+                $initial_direct_cost_id = $assets->initialDirectCost->pluck('id')->toArray();
+                $supplier_details = SupplierDetails::query()->whereIn('initial_direct_cost_id', $initial_direct_cost_id)->get()->toArray();
+            } else {
+                $supplier_details = [];
+            }
 
             $lease_incentives = LeaseIncentives::query()->where('lease_id', '=', $id)->first();
 
+            if($lease_incentives){
+                //get customer details
+                $lease_incentive_id = $assets->leaseIncentiveCost->pluck('id')->toArray();
 
-            //get customer details
-            $lease_incentive_id = $assets->leaseIncentiveCost->pluck('id')->toArray();
-
-            $customer_details = CustomerDetails::query()->whereIn('lease_incentive_id')->get()->toArray();
+                $customer_details = CustomerDetails::query()->whereIn('lease_incentive_id', $lease_incentive_id)->get()->toArray();
+            } else {
+                $customer_details = [];
+            }
 
             $lease_invoice = LeasePaymentInvoice::query()->where('lease_id', '=', $id)->first()->toArray();
 
@@ -198,8 +228,6 @@ class ReviewSubmitController extends Controller
 
             $record['initial_direct_cost'] = ($initial_direct_cost)?$initial_direct_cost->toArray():[];
 
-
-
             //lease incentives step 15
             $record['lease_incentives'] = ($lease_incentives)?$lease_incentives->toArray():[];
 
@@ -216,14 +244,26 @@ class ReviewSubmitController extends Controller
             $data['json_data_steps'] = json_encode($record);
             $data['esclation_payments'] = json_encode($escalation_dates);
             $data['payment_anxure'] = json_encode($payments);
+
             if(count($model->modifyLeaseApplication) > 0){
                 $data['modify_id'] = $model->modifyLeaseApplication->last()->id;
             }
-            $lease_history = LeaseHistory::create($data);
-            if($lease_history) {
+
+            if(count($model->modifyLeaseApplication) > 0 && $model->modifyLeaseApplication->last()->valuation == "Modify Initial Valuation"){
+                //fetch the current history and update the same..
+                $lease_history = LeaseHistory::query()->where('lease_id', '=', $id)->first();
+                unset($data['modify_id']);
+                $lease_history->setRawAttributes($data);
+                $lease_history->save();
+            } else {
+                $lease_history = LeaseHistory::create($data);
+            }
+
+            if ($lease_history) {
                 // complete Step
                 confirmSteps($id, 'step18');
             }
+
             return redirect(route('modifylease.index'))->with('status', 'Lease Information has been Submitted successfully.');
         }
     }

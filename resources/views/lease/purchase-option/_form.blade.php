@@ -113,7 +113,7 @@
     </div>
 </div>
     <div class="form-group btnMainBx">
-        <div class="col-md-6 btn-backnextBx">
+        <div class="col-md-6 col-sm-6 btn-backnextBx">
 
             <a href="{{ route('addlease.renewable.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
             @if($asset->purchaseOption)
@@ -121,7 +121,7 @@
             @endif
 
         </div>
-        <div class="col-md-6 btnsubmitBx">
+        <div class="col-md-6 col-sm-6 btnsubmitBx">
 
             <button type="submit" class="btn btn-success">
                 Save

@@ -50,10 +50,12 @@
     </div>
     </div>
     <div class="form-group btnMainBx">
+
         <div class="col-md-6 col-sm-12 btn-backnextBx">
             <a href="{{ route('addlease.fairmarketvalue.index', ['id' => $lease->id]) }}" class="btn btn-danger">Cancel</a>
         </div>
         <div class="col-md-6 col-sm-12 btnsubmitBx">
+
             <button type="submit" class="btn btn-success">
                 Submit
             </button>

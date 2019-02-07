@@ -96,10 +96,10 @@ class LeaseRenewableOptionController extends Controller
                         'breadcrumbs'
                     ));
 
-                }else{
+                }/*else{
                     return redirect(route('addlease.durationclassified.index', ['id' => $id]));
                 }
-
+*/
             } else {
                 abort(404);
             }

@@ -181,8 +181,10 @@ class LeaseAssets extends Model
                 //need to call a procedure from here that can return the value of the lease liablity for all the payments of the asset
                 foreach ($this->payments as $payment){
                     $data = DB::select('call present_value_of_lease_liability(?, ?, ?, ?, ?)',[$start_year, $k_m, $base_date, $this->id, $payment->id]);
-                    $total_lease_liability = $total_lease_liability + $data[0]->lease_liability;
-                    $present_value_of_lease_liability[$start_year][$month]["payment_".$payment->id] = $data;
+                    if(count($data) > 0){
+                        $total_lease_liability = $total_lease_liability + $data[0]->lease_liability;
+                        $present_value_of_lease_liability[$start_year][$month]["payment_".$payment->id] = $data;
+                    }
                 }
 
             }

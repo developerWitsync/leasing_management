@@ -301,7 +301,8 @@
 
 
     <div class="form-group btnMainBx">
-        <div class="col-md-6 btn-backnextBx">
+
+        <div class="col-md-6 col-sm-6 btn-backnextBx">
             <a href="{{ route('addlease.purchaseoption.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
         </div>
         <div class="col-md-6 btnsubmitBx">
