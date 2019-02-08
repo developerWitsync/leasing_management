@@ -10,9 +10,9 @@
 @endsection
 @section('content')
     <div class="panel panel-default">
-        <div class="panel-heading clearfix dashHd">Dashboard   
-         <span class="rgt"><h4>Current Date -  @php echo date("d.m.Y  h:i:s"); @endphp </h4></span>
-     </div>
+        <div class="panel-heading clearfix dashHd">Dashboard
+            <span class="rgt badge badge-info">{{ \Carbon\Carbon::today()->format(config('settings.date_format')) }}</span>
+        </div>
 
         <div class="panel-body">
             @if (session('status'))
@@ -22,7 +22,7 @@
             @endif
 
             <div class="content-wrapper">
-                <div class="container-fluid">
+                <div class="">
                     <div class="row">
                         <!-- Icon Cards-->
                         <div class="col-lg-4 col-md-4 col-sm-6 col-12 mb-2 mt-4">
@@ -53,7 +53,7 @@
                 </div>
             </div>
             <div class="content-wrapper">
-                <div class="container-fluid">
+                <div class="">
                     <div class="row">
 
                         <!-- Icon Cards-->
@@ -94,7 +94,7 @@
             </div>
             <!-- Graph Chart -->
             <div class="content-wrapper">
-                <div class="container-fluid">
+                <div class="">
                     <div class="">
                         <div class="col-md-12 chartBg" id="chart1">
                             <svg></svg>
