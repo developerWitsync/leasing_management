@@ -50,8 +50,13 @@ class LeaseRenewableOptionController extends Controller
             if($lease) {
 
                 $asset = LeaseAssets::query()->where('lease_id', '=', $id)->whereHas('terminationOption',  function($query){
-                    $query->where('lease_termination_option_available', '=', 'yes');
-                    $query->where('exercise_termination_option_available', '=', 'no');
+                    $query->where(function($query){
+                        $query->where('lease_termination_option_available', '=', 'yes');
+                        $query->where('exercise_termination_option_available', '=', 'no');
+                    })
+                    ->orWhere(function($query){
+                        $query->where('lease_termination_option_available', '=', 'no');
+                    });
                 })->first(); //since there will be only one lease asset per lease
 
 

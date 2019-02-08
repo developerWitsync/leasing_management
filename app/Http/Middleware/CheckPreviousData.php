@@ -40,8 +40,13 @@ class CheckPreviousData
 
         if($step == 'step5' || $step == 'step4') {
             $total_assets_termination_no = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)->whereHas('terminationOption', function ($query) {
-                $query->where('lease_termination_option_available', '=', 'yes');
-                $query->where('exercise_termination_option_available', '=', 'no');
+                $query->where(function($query){
+                    $query->where('lease_termination_option_available', '=', 'yes');
+                    $query->where('exercise_termination_option_available', '=', 'no');
+                })
+                ->orWhere(function($query){
+                    $query->where('lease_termination_option_available', '=', 'no');
+                });
             })->count();
 
             if($total_assets_termination_no == 0){

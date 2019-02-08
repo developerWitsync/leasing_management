@@ -476,3 +476,11 @@ td.details-control {
 tr.shown td.details-control {
     background: url('../images/details_close.png') no-repeat center center;
 }
+.initial_valuation{
+    text-align: center;
+    /*background-color: #cbe199e6 !important;*/
+}
+.subsequent_valuation{
+    text-align: center;
+    /*background-color: #cbe199e6 !important;*/
+}

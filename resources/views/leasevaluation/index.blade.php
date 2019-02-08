@@ -39,17 +39,32 @@
                         <div class="col-md-12 col-sm-12">
                             <table id="lease_valuation" class="table table-condensed table-bordered">
                                 <thead>
-                                    <th>&nbsp;</th>
-                                    <th>Reference No.</th>
-                                    <th>Lessor</th>
-                                    <th>Lease Asset</th>
-                                    <th>Type</th>
-                                    <th>Purpose</th>
-                                    <th>Country</th>
-                                    <th>Location</th>
-                                    <th>Lease Start Date</th>
-                                    <th>Remaining Lease Term</th>
-                                    <th>Discount Rate</th>
+                                    <tr>
+                                        <th colspan="10"></th>
+                                        <th colspan="4" class="initial_valuation">Initial Valuation</th>
+                                        <th colspan="3" class="subsequent_valuation">Subsequent Valuation</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Reference No.</th>
+                                        <th>Lessor</th>
+                                        <th>Lease Asset</th>
+                                        <th>Type</th>
+                                        <th>Purpose</th>
+                                        <th>Country</th>
+                                        <th>Location</th>
+                                        <th>Lease Start Date</th>
+                                        <th>Remaining Lease Term</th>
+                                        <th>Discount Rate</th>
+
+                                        <th class="initial_valuation">Lease Currency</th>
+                                        <th class="initial_valuation">Undiscounted Lease Liability</th>
+                                        <th class="initial_valuation">Present Value of Lease Liability</th>
+                                        <th class="initial_valuation">Value of Lease Asset</th>
+
+                                        <th class="subsequent_valuation">Undiscounted Lease Liability</th>
+                                        <th class="subsequent_valuation">Present Value of Lease Liability</th>
+                                        <th class="subsequent_valuation">Value of Lease Asset</th>
+                                    </tr>
                                 </thead>
                             </table>
                         </div>
