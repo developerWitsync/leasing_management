@@ -49,7 +49,7 @@ class LeaseDurationClassified extends Model
         $lease_start_date = Carbon::parse($asset->lease_start_date);
         $base_date = Carbon::create(2019, 01,01);
 
-        $end_date = Carbon::parse($this->expected_lease_date);
+        $end_date = Carbon::parse($this->getExpectedLeaseEndDate($asset));
 
         if($lease_start_date->lessThan($base_date)) {
             //means that the lease start date is prior to base date

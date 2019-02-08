@@ -81,7 +81,7 @@ class LeaseDurationClassifiedController extends Controller
                         $data['asset_id'] = $asset->id;
                         $data['lease_start_date'] = date('Y-m-d', strtotime($request->lease_start_date));
                         $data['lease_end_date'] = date('Y-m-d', strtotime($request->lease_end_date));
-                        $data['lease_contract_duration_id'] = $request->lease_contract_duration_id;
+                        $data['lease_contract_duration_id'] = $model->getLeaseAssetClassification($asset); //we will calculate and save the same...
 
                         $model->setRawAttributes($data);
                         if ($model->save()) {
@@ -113,11 +113,9 @@ class LeaseDurationClassifiedController extends Controller
 
 
             } else {
-                dd("asdfasdf");
                 abort(404);
             }
         } catch (\Exception $e){
-            dd($e);
             abort(404, $e->getMessage());
         }
     }
