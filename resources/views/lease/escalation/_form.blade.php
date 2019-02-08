@@ -29,7 +29,7 @@
     </div>
 
 
-    <div class="@if(old('is_escalation_applicable', $model->is_escalation_applicable) != 'yes')) hidden @endif hidden_fields">
+    <div class="@if(old('is_escalation_applicable', $model->is_escalation_applicable) != 'yes') hidden @endif hidden_fields">
         <div class="form-group{{ $errors->has('effective_from') ? ' has-error' : '' }} required">
             <label for="effective_from" class="col-md-12 control-label">Escalation Effective From</label>
             <div class="col-md-12 form-check form-check-inline">
