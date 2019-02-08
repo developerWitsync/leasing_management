@@ -37,7 +37,7 @@ class SelectLowValueController extends Controller
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
             if($lease) {
 
-                $category_excluded = CategoriesLeaseAssetExcluded::query()->get();
+                $category_excluded = CategoriesLeaseAssetExcluded::query()->whereIn('business_account_id', getDependentUserIds())->get();
 
                 $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
 
