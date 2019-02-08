@@ -25,6 +25,12 @@ class SelectDiscountRateController extends Controller
         ];
     }
 
+    /**
+     * create or update the data for the discount rates.
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
+     */
     public function index_V2($id, Request $request){
         try{
             $breadcrumbs = [

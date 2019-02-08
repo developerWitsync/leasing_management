@@ -1,5 +1,10 @@
 @extends('layouts.app')
-
+@section('header-styles')
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui.css') }}">
+    <!-- BEGIN CSS for this page -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/datatables/dataTables.bootstrap4.min.css') }}"/>
+    <!-- END CSS for this page -->
+@endsection
 @section('content')
     <div class="panel panel-default">
         <div class="panel-heading">Lease Valuation</div>
@@ -31,14 +36,36 @@
                 <div role="tabpanel" class="tab-pane active">
                     @include('leasevaluation._menubar')
                     <div class="row">
-                        @if($capitalized == '1')
-                            @include('leasevaluation._capitalized_assets')
-                        @else
-                            @include('leasevaluation._non_capitalized_assets')
-                        @endif
+                        <div class="col-md-12 col-sm-12">
+                            <table id="lease_valuation" class="table table-condensed table-bordered">
+                                <thead>
+                                    <th>&nbsp;</th>
+                                    <th>Reference No.</th>
+                                    <th>Lessor</th>
+                                    <th>Lease Asset</th>
+                                    <th>Type</th>
+                                    <th>Purpose</th>
+                                    <th>Country</th>
+                                    <th>Location</th>
+                                    <th>Lease Start Date</th>
+                                    <th>Remaining Lease Term</th>
+                                    <th>Discount Rate</th>
+                                </thead>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+@endsection
+@section('footer-script')
+    <script src="{{ asset('assets/plugins/bootbox/bootbox.min.js') }}"></script>
+    <script src="{{ asset('js/jquery-ui.js') }}"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+    <script src="{{ asset('js/pages/valuation_main.js') }}"></script>
+    <script>
+        var _data_table_url = "{{ route('leasevaluation.fetchassets',['capitalized' => $capitalized, 'category_id' => (request()->has('id'))?request()->id:'all']) }}";
+    </script>
 @endsection
