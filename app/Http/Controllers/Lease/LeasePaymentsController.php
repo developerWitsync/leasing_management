@@ -96,9 +96,21 @@ class LeasePaymentsController extends Controller
 
                 $show_next = $required_payments == $completed_payments;
 
+                //find the back button URL for the lease payments step
+                $asset_on_purchase_option_and_renewal = LeaseAssets::query()->where('lease_id', '=', $id)->whereHas('terminationOption', function ($query) {
+                    $query->where('lease_termination_option_available', '=', 'yes');
+                    $query->where('exercise_termination_option_available', '=', 'no');
+                })->count();
+
+                if($asset_on_purchase_option_and_renewal){
+                    $back_url = route('addlease.purchaseoption.index', ['id' => $id]);
+                } else {
+                    $back_url = route('addlease.leaseterminationoption.index', ['id' => $id]);
+                }
                 return view('lease.payments.index', compact('breadcrumbs',
                     'lease',
-                    'show_next'
+                    'show_next',
+                    'back_url'
                 ));
             } else {
                 abort(404);

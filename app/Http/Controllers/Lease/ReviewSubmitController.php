@@ -263,7 +263,6 @@ class ReviewSubmitController extends Controller
                 // complete Step
                 confirmSteps($id, 'step18');
             }
-
             return redirect(route('modifylease.index'))->with('status', 'Lease Information has been Submitted successfully.');
         }
     }

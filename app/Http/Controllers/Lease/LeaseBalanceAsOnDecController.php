@@ -12,6 +12,7 @@ use App\Http\Controllers\Controller;
 use App\Lease;
 use App\LeaseBalanceAsOnDec;
 use App\LeaseAssets;
+use App\CategoriesLeaseAssetExcluded;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -78,11 +79,59 @@ class LeaseBalanceAsOnDecController extends Controller
                             return redirect(route('addlease.balanceasondec.index', ['id' => $lease->id]))->with('status', 'Lease Balance as on 31 Dec 2018 has been added successfully.');
                         }
                     }
+                    $category_excluded = CategoriesLeaseAssetExcluded::query()->get();
+                    $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
+                    $asset_on_discount = LeaseAssets::query()->where('lease_id', '=', $lease->id)
+                            ->where('specific_use',1)
+                            ->whereNotIn('category_id', $category_excluded_id)
+                            ->whereHas('leaseSelectLowValue',  function($query){
+                                $query->where('is_classify_under_low_value', '=', 'no');
+                            })
+                            ->whereHas('leaseDurationClassified',  function($query){
+                                $query->where('lease_contract_duration_id', '=', '3');
+                            })->count();
+
+                if(is_null($asset_on_discount)) {
+                    $asset_on_discount = LeaseAssets::query()->where('lease_id', '=', $lease->id)
+                        ->where('specific_use',2)
+                        ->whereNotIn('category_id', $category_excluded_id)
+                        ->whereHas('leaseSelectLowValue',  function($query){
+                            $query->where('is_classify_under_low_value', '=', 'no');
+                        })
+                        ->whereHas('leaseDurationClassified',  function($query){
+
+                            $query->where('lease_contract_duration_id', '=', '3');
+                        })->count();
+                }
+                if($asset_on_discount >0){
+                     $back_url = route('addlease.discountrate.index', ['id' => $id]);
+                }
+                 else{
+                         $category_excluded = CategoriesLeaseAssetExcluded::query()->get();
+                         $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
+
+                         $asset_on_low  = LeaseAssets::query()->where('lease_id', '=', $lease->id)->whereNotIn('specific_use', [2])
+                        ->whereHas('leaseDurationClassified',  function($query){
+                            $query->whereNotIn('lease_contract_duration_id',[1,2]);
+                        })->whereNotIn('category_id', $category_excluded_id)->count();
+                        if($asset_on_low >0){
+                            
+                            $back_url = route('addlease.lowvalue.index', ['id' => $id]);  
+                        }
+                        else{
+                                $back_url = route('lease.escalation.index', ['id' => $id]);
+                        }
+                    }
+
+                 
+
+
                     return view('lease.lease-balnce-as-on-dec.create', compact(
                         'model',
                         'lease',
                         'asset',
-                        'breadcrumbs'
+                        'breadcrumbs',
+                        'back_url'
                     ));
                 } else {
                     return redirect(route('addlease.initialdirectcost.index', ['id' => $id]));

@@ -37,7 +37,8 @@ class CheckPreviousData
             }
         }
 
-        if($step == 'step5') {
+
+        if($step == 'step5' || $step == 'step4') {
             $total_assets_termination_no = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)->whereHas('terminationOption', function ($query) {
                 $query->where('lease_termination_option_available', '=', 'yes');
                 $query->where('exercise_termination_option_available', '=', 'no');
@@ -46,10 +47,23 @@ class CheckPreviousData
             if($total_assets_termination_no == 0){
                 $step = 'step3';
             } else {
-                $step = 'step4';
+                $step = ($step == 'step5')?'step4':'step3';
                 if($this->verifyStep($step, $lease_id)){
-                    $step = 'step5';
+                    $step = ($step == 'step5')?'step4':'step3';
                 }
+            }
+        }
+
+        if($step == 'step9'){
+            //check if assets exists on lease duration classified, if no than check for step
+            $category_excluded = \App\CategoriesLeaseAssetExcluded::query()->where('business_account_id', getDependentUserIds())->get();
+            $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
+
+            $asset = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)
+                ->whereNotIn('category_id', $category_excluded_id)->count();
+
+            if($asset == 0){
+                $step = 'step8';
             }
         }
 
@@ -162,6 +176,45 @@ class CheckPreviousData
                 ->where('lease_start_date', '>=', '2019-01-01')->count();
             if($total_assets == 0){
                 $step = 'step13';
+                $total_assets = \App\LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '<', '2019-01-01')->count();
+                 if($total_assets == 0){
+
+                    $step = 'step12';
+                    $total_assets = \App\LeaseAssets::query()->where('lease_id', '=', $lease->id)
+                    ->where('specific_use',1)
+                    ->whereNotIn('category_id', $category_excluded_id)
+                    ->whereHas('leaseSelectLowValue',  function($query){
+                        $query->where('is_classify_under_low_value', '=', 'no');
+                    })
+                    ->whereHas('leaseDurationClassified',  function($query){
+                        $query->where('lease_contract_duration_id', '=', '3');
+                    })->count();
+
+                    if($total_assets == 0) {
+                        $step = 'step11';
+                        $total_assets = \App\LeaseAssets::query()->where('lease_id', '=', $lease->id)
+                            ->where('specific_use',2)
+                            ->whereNotIn('category_id', $category_excluded_id)
+                            ->whereHas('leaseSelectLowValue',  function($query){
+                                $query->where('is_classify_under_low_value', '=', 'no');
+                            })
+                            ->whereHas('leaseDurationClassified',  function($query){
+
+                                $query->where('lease_contract_duration_id', '=', '3');
+                            })->count();
+                            
+                     }
+                   
+                    if($total_assets == 0){
+                        $step = 'step10';
+                        $total_assets = \App\LeaseAssets::query()->where('lease_id', '=', $lease->id)->whereNotIn('specific_use', [2])
+                    ->whereHas('leaseDurationClassified',  function($query){
+                        $query->whereNotIn('lease_contract_duration_id',[1,2]);
+                    })->whereNotIn('category_id', $category_excluded_id)->count();
+                   
+
+                }
+                }
             }
         }
 
@@ -171,6 +224,20 @@ class CheckPreviousData
                 ->where('lease_start_date', '>=', '2019-01-01')->count();
             if($total_assets == 0){
                 $step = 'step13';
+            }
+        }
+        if($step == 'step16'){
+            $asset_on_lease_incentives = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)->where('lease_start_date','>=','2019-01-01')->count();
+            if($asset_on_lease_incentives == 0){
+                $step = 'step15';
+                 $asset_on_initial = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)->where('lease_start_date', '>=', '2019-01-01')->count();
+                 if($asset_on_initial == 0){
+                    $step = 'step14';
+                    $asset_on_balence = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)->where('lease_start_date', '<', '2019-01-01')->count();
+                    if($asset_on_balence ==0){
+                         $step = 'step13';   
+                    }
+                 }
             }
         }
 

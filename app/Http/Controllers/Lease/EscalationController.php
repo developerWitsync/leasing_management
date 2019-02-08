@@ -69,17 +69,32 @@ class EscalationController extends Controller
                         }
                     }
                 }
+
                 if($lease->escalation_clause_applicable == "yes") {
                     if($required_escalations == $completed_escalations){
                         $show_next = true;
                     }
                 }
 
+                //find the back_url and have to check if there were any assets on the lease duration classified
+                $category_excluded = \App\CategoriesLeaseAssetExcluded::query()->where('business_account_id', getDependentUserIds())->get();
+                $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
+
+                $asset_on_duration_classified = \App\LeaseAssets::query()->where('lease_id', '=', $id)
+                    ->whereNotIn('category_id', $category_excluded_id)->count();
+
+                if($asset_on_duration_classified > 0){
+                    $back_url = route('addlease.durationclassified.index', ['id' => $id]);
+                } else {
+                    $back_url = route('addlease.residual.index', ['id' => $id]);
+                }
+
                 return view('lease.escalation.index', compact(
                     'lease',
                     'show_next',
                     'breadcrumbs',
-                    'subsequent_modify_required'
+                    'subsequent_modify_required',
+                    'back_url'
                 ));
 
             } else {

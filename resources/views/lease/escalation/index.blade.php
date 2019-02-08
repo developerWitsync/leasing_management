@@ -53,7 +53,7 @@
      <div class="form-group btnMainBx clearfix">
                         <div class="col-md-6 col-sm-6 btn-backnextBx">
 
-                            <a href="{{ route('addlease.durationclassified.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
+                            <a href="{{ $back_url }}" class="btn btn-danger">Back</a>
                             @if($lease->escalation_clause_applicable == 'no')
                                 <a href="{{ route('addlease.lowvalue.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
                             @elseif($show_next)

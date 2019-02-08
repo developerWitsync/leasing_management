@@ -40,7 +40,7 @@
                 <div class="form-group btnMainBx">
                     <div class="col-md-6 col-sm-6 btn-backnextBx">
 
-                        <a href="{{ route('addlease.leasepaymentinvoice.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
+                        <a href="{{ route('addlease.leasevaluation.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
                         @if($model->id)
                             <a href="{{ route('addlease.reviewsubmit.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
                         @endif

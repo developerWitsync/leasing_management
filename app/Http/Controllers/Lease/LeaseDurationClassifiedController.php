@@ -61,17 +61,7 @@ class LeaseDurationClassifiedController extends Controller
 
                 $asset = LeaseAssets::query()->where('lease_id', '=', $id)
                     ->whereNotIn('category_id', $category_excluded_id)->first();
-                    
-                //check for getting the back step from the lease duration classified
-               /* $total_assets_on_termination = LeaseAssets::query()->where('lease_id', '=', $lease->id)->whereHas('terminationOption', function ($query) {
-                    $query->where('lease_termination_option_available', '=', 'no');
-                })->count();
 
-                if($total_assets_on_termination > 0){
-                    //cannot go back to the purchase options
-                    $back_button = route('addlease.leaseterminationoption.index', ['id' => $lease->id]);
-                }
-                */
                 if ($asset) {
                     if($asset->leaseDurationClassified) {
                         $model = $asset->leaseDurationClassified;
