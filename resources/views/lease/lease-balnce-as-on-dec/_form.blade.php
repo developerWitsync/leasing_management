@@ -110,7 +110,7 @@
     <div class="form-group btnMainBx">
         <div class="col-md-6 col-sm-6 btn-backnextBx">
 
-            <a href="{{ route('addlease.discountrate.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
+            <a href="{{ $back_url }}" class="btn btn-danger">Back</a>
             @if($asset->leaseBalanceAsOnDec)
                 <a href="{{ route('addlease.initialdirectcost.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
             @endif

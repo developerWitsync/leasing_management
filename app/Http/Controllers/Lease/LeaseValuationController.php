@@ -64,12 +64,30 @@ class LeaseValuationController extends Controller
 
              // complete Step
             confirmSteps($lease->id,'step16');
+
+             $asset_on_lease_incentives = LeaseAssets::query()->where('lease_id', '=', $id)->where('lease_start_date','>=','2019-01-01')->count();
+             if($asset_on_lease_incentives >0){
+                $back_url =  route('addlease.leaseincentives.index', ['id' => $id]);  
+             }
+             else{
+                $asset_on_inital = LeaseAssets::query()->where('lease_id', '=', $id)->where('lease_start_date', '>=', '2019-01-01')->count();
+                if($asset_on_inital >0){
+                    $back_url =  route('addlease.initialdirectcost.index', ['id' => $id]);
+                }
+                else{
+                     $back_url =  route('addlease.balanceasondec.index', ['id' => $id]);
+                }
+            }
+
+
+
            
             return view('lease.lease-valuation.index', compact(
                 'lease',
                 'own_assets',
                 'sublease_assets',
-                'breadcrumbs'
+                'breadcrumbs',
+                'back_url'
             ));
         } else {
             abort(404);

@@ -12,6 +12,7 @@ use App\Http\Controllers\Controller;
 use App\Lease;
 use App\LeaseSelectDiscountRate;
 use App\LeaseAssets;
+use App\CategoriesLeaseAssetExcluded;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -32,6 +33,7 @@ class SelectDiscountRateController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
      */
     public function index_V2($id, Request $request){
+
         try{
             $breadcrumbs = [
                 [
@@ -46,9 +48,13 @@ class SelectDiscountRateController extends Controller
 
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
             if($lease) {
+                 $category_excluded = CategoriesLeaseAssetExcluded::query()->get();
+
+                 $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
+
                 $asset = LeaseAssets::query()->where('lease_id', '=', $lease->id)
                     ->where('specific_use',1)
-                    ->whereNotIn('category_id',[8,5])
+                    ->whereNotIn('category_id', $category_excluded_id)
                     ->whereHas('leaseSelectLowValue',  function($query){
                         $query->where('is_classify_under_low_value', '=', 'no');
                     })
@@ -59,7 +65,7 @@ class SelectDiscountRateController extends Controller
                 if(is_null($asset)) {
                     $asset = LeaseAssets::query()->where('lease_id', '=', $lease->id)
                         ->where('specific_use',2)
-                        ->whereNotIn('category_id',[8,5])
+                        ->whereNotIn('category_id', $category_excluded_id)
                         ->whereHas('leaseSelectLowValue',  function($query){
                             $query->where('is_classify_under_low_value', '=', 'no');
                         })
@@ -68,14 +74,14 @@ class SelectDiscountRateController extends Controller
                             $query->where('lease_contract_duration_id', '=', '3');
                         })->first();
                 }
-
-                if($asset){
+                 if($asset){
                     if($asset->leaseSelectDiscountRate){
                         $model = $asset->leaseSelectDiscountRate;
                     } else {
                         $model = new LeaseSelectDiscountRate();
                     }
 
+                    
                     if($request->isMethod('post')) {
                         $validator = Validator::make($request->except('_token'), $this->validationRules());
                         if($validator->fails()){
@@ -91,11 +97,23 @@ class SelectDiscountRateController extends Controller
                             return redirect(route('addlease.discountrate.index',['id' => $lease->id]))->with('status', 'Select Discount Rate has been added successfully.');
                         }
                     }
+               
+                /* $asset_on_low_value = $asset = LeaseAssets::query()->where('lease_id', '=', $lease->id)->whereNotIn('specific_use', [2])
+                    ->whereHas('leaseDurationClassified',  function($query){
+                    $query->whereNotIn('lease_contract_duration_id',[1,2]);
+                    })->whereNotIn('category_id', $category_excluded_id)->count();
+                    if($asset_on_low_value > 0){
+                    $back_url = route('addlease.lowvalue.index', ['id' => $lease->id]);
+                    } else {
+                    $back_url = route('lease.escalation.index', ['id' => $lease->id]);
+                    }*/
+
                     return view('lease.select-discount-rate.create', compact(
                         'model',
                         'lease',
                         'asset',
-                        'breadcrumbs'
+                        'breadcrumbs',
+                        'back_url'
                     ));
 
                 } else {
@@ -185,6 +203,7 @@ class SelectDiscountRateController extends Controller
     public function create($id, Request $request){
         try{
             $asset = LeaseAssets::query()->findOrFail($id);
+
             $lease = $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
             if($lease) {
 

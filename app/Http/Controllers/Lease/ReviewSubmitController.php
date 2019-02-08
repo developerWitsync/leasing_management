@@ -221,15 +221,13 @@ class ReviewSubmitController extends Controller
 
             //inital direct Cost step 14
 
-            $record['initial_direct_cost'] = ($initial_direct_cost)?$initial_direct_cost->toArray():[];
-            
-            $record['initial_direct_cost']['supplier_details']= $supplier_details;
-
+           
             $record['initial_direct_cost'] = $initial_direct_cost;
             
             $record['initial_direct_cost']['supplier_details']= $supplier_details;
 
             $record['initial_direct_cost'] = ($initial_direct_cost)?$initial_direct_cost->toArray():[];
+
             //lease incentives step 15
             $record['lease_incentives'] = ($lease_incentives)?$lease_incentives->toArray():[];
 
@@ -265,7 +263,6 @@ class ReviewSubmitController extends Controller
                 // complete Step
                 confirmSteps($id, 'step18');
             }
-
             return redirect(route('modifylease.index'))->with('status', 'Lease Information has been Submitted successfully.');
         }
     }

@@ -15,6 +15,7 @@ use App\LeaseAssets;
 use App\InitialDirectCost;
 use App\SupplierDetails;
 use App\Currencies;
+use App\CategoriesLeaseAssetExcluded;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Validator;
@@ -116,14 +117,66 @@ class InitialDirectCostController extends Controller
                             return redirect(route('addlease.initialdirectcost.index', ['id' => $lease->id]))->with('status', 'Initial Direct Cost has been added successfully.');
                         }
                     }
+                $asset_on_balence = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '<', '2019-01-01')->count();
+                if($asset_on_balence > 0){
+                    $back_url = route('addlease.balanceasondec.index', ['id' => $id]);
+                } 
+                else {
+                    $category_excluded = CategoriesLeaseAssetExcluded::query()->get();
+                    $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
 
+                    $asset_on_discount = LeaseAssets::query()->where('lease_id', '=', $lease->id)
+                            ->where('specific_use',1)
+                            ->whereNotIn('category_id', $category_excluded_id)
+                            ->whereHas('leaseSelectLowValue',  function($query){
+                                $query->where('is_classify_under_low_value', '=', 'no');
+                            })
+                            ->whereHas('leaseDurationClassified',  function($query){
+                                $query->where('lease_contract_duration_id', '=', '3');
+                            })->count();
+
+                    if(is_null($asset_on_discount)) {
+                    $asset_on_discount = LeaseAssets::query()->where('lease_id', '=', $lease->id)
+                        ->where('specific_use',2)
+                        ->whereNotIn('category_id', $category_excluded_id)
+                        ->whereHas('leaseSelectLowValue',  function($query){
+                            $query->where('is_classify_under_low_value', '=', 'no');
+                        })
+                        ->whereHas('leaseDurationClassified',  function($query){
+
+                            $query->where('lease_contract_duration_id', '=', '3');
+                        })->count();
+                    }
+                    if($asset_on_discount >0){
+                         $back_url = route('addlease.discountrate.index', ['id' => $id]);
+                    }
+                    else{
+                        //$back_url = route('addlease.lowvalue.index', ['id' => $id]);
+                        $category_excluded = CategoriesLeaseAssetExcluded::query()->get();
+
+                        $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
+
+                        $asset_on_low = LeaseAssets::query()->where('lease_id', '=', $lease->id)->whereNotIn('specific_use', [2])
+                            ->whereHas('leaseDurationClassified',  function($query){
+                                $query->whereNotIn('lease_contract_duration_id',[1,2]);
+                            })->whereNotIn('category_id', $category_excluded_id)->count();
+                            
+                            if($asset_on_low >0){
+                              $back_url = route('addlease.lowvalue.index', ['id' => $id]);  
+                            }
+                            else{
+                                $back_url = route('lease.escalation.index', ['id' => $id]);
+                            }
+                    }
+                } 
                     return view('lease.initial-direct-cost.create', compact(
                         'model',
                         'lease',
                         'asset',
                         'supplier_model',
                         'currencies',
-                        'breadcrumbs'
+                        'breadcrumbs',
+                        'back_url'
                     ));
 
                 } else {
@@ -249,6 +302,12 @@ class InitialDirectCostController extends Controller
                 }
 
                 $supplier_details = [];
+                 $asset_on_balence = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '<', '2019-01-01')->first();
+                if($asset_on_balence > 0){
+                    $back_url = route('addlease.balanceasondec.index', ['id' => $id]);
+                } else {
+                    $back_url = route('addlease.discountrate.index', ['id' => $id]);
+                }
 
                 return view('lease.initial-direct-cost.create', compact(
                     'model',
@@ -257,7 +316,8 @@ class InitialDirectCostController extends Controller
                     'supplier_model',
                     'supplier_details',
                     'currencies',
-                    'breadcrumbs'
+                    'breadcrumbs',
+                    'back_url'
                 ));
             } else {
                 abort(404);
