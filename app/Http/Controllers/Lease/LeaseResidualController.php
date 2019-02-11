@@ -107,7 +107,7 @@ class LeaseResidualController extends Controller
 
                     if ($residual_value->save()) {
                         // complete Step
-                        confirmSteps($lease->id, 'step8');
+                        confirmSteps($lease->id, 8);
                         return redirect(route('addlease.residual.index', ['id' => $lease->id]))->with('status', 'Residual value Gurantee has been added successfully.');
                     }
                 }
@@ -120,6 +120,10 @@ class LeaseResidualController extends Controller
                     $reporting_currency_settings = new ReportingCurrencySettings();
                 }
                 $payment_lease_basis = LeasePaymentsBasis::query()->whereIn('business_account_id', getDependentUserIds())->get();
+
+                //to get current step for steps form
+                $current_step = 8;
+
                 return view('lease.residual-value-gurantee.create', compact(
                     'model',
                     'lease',
@@ -129,7 +133,8 @@ class LeaseResidualController extends Controller
                     'reporting_foreign_currency_transaction_settings',
                     'reporting_currency_settings',
                     'breadcrumbs',
-                    'payment_lease_basis'
+                    'payment_lease_basis',
+                    'current_step'
                 ));
             } else {
                 abort(404);
@@ -227,7 +232,7 @@ class LeaseResidualController extends Controller
 
                     if ($residual_value) {
                         // complete Step
-                        $complete_step8 = confirmSteps($lease->id, 'step8');
+                        $complete_step8 = confirmSteps($lease->id, 8);
 
                         return redirect(route('addlease.residual.index', ['id' => $lease->id]))->with('status', 'Residual value Gurantee has been added successfully.');
                     }

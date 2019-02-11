@@ -113,7 +113,7 @@ class InitialDirectCostController extends Controller
                                 }
                             }
                             // complete Step
-                            confirmSteps($lease->id, 'step14');
+                            confirmSteps($lease->id, 14);
                             return redirect(route('addlease.initialdirectcost.index', ['id' => $lease->id]))->with('status', 'Initial Direct Cost has been added successfully.');
                         }
                     }
@@ -169,6 +169,10 @@ class InitialDirectCostController extends Controller
                             }
                     }
                 } 
+
+                    //to get current step for steps form
+                    $current_step = 14;
+
                     return view('lease.initial-direct-cost.create', compact(
                         'model',
                         'lease',
@@ -176,7 +180,8 @@ class InitialDirectCostController extends Controller
                         'supplier_model',
                         'currencies',
                         'breadcrumbs',
-                        'back_url'
+                        'back_url',
+                        'current_step'
                     ));
 
                 } else {
@@ -296,7 +301,7 @@ class InitialDirectCostController extends Controller
                             }
                         }
                         // complete Step
-                        confirmSteps($lease->id, 'step14');
+                        confirmSteps($lease->id, 14);
                         return redirect(route('addlease.initialdirectcost.index', ['id' => $lease->id]))->with('status', 'Initial Direct Cost has been added successfully.');
                     }
                 }

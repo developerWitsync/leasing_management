@@ -476,6 +476,15 @@ td.details-control {
 tr.shown td.details-control {
     background: url('../images/details_close.png') no-repeat center center;
 }
+
+li.disabled{
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+li.disabled a{
+    cursor: not-allowed !important;
+
 .initial_valuation{
     text-align: center;
     /*background-color: #cbe199e6 !important;*/
@@ -486,4 +495,5 @@ tr.shown td.details-control {
 }
 table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td {
     border-bottom-width: 1px !important;
+
 }

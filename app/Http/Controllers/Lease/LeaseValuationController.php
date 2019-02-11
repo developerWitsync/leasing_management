@@ -63,7 +63,7 @@ class LeaseValuationController extends Controller
             })->whereNotIn('category_id',[5,8])->get();
 
              // complete Step
-            confirmSteps($lease->id,'step16');
+            confirmSteps($lease->id,16);
 
              $asset_on_lease_incentives = LeaseAssets::query()->where('lease_id', '=', $id)->where('lease_start_date','>=','2019-01-01')->count();
              if($asset_on_lease_incentives >0){
@@ -79,15 +79,17 @@ class LeaseValuationController extends Controller
                 }
             }
 
-
-
+            //to get current step for steps form
+            $current_step = 16;
            
             return view('lease.lease-valuation.index', compact(
                 'lease',
                 'own_assets',
                 'sublease_assets',
                 'breadcrumbs',
-                'back_url'
+                'back_url',
+                'lessor_invoice',
+                'current_step'
             ));
         } else {
             abort(404);

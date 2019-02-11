@@ -75,6 +75,10 @@ class LessorDetailsController extends Controller
         }
         $general_settings_count = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->count();
         $breadcrumbs = $this->breadcrumbs;
+
+        //to get current step for steps form
+        $current_step = 1;
+        
         return view('lease.lessor-details.index', compact(
             'breadcrumbs',
             'contract_classifications',
@@ -83,7 +87,8 @@ class LessorDetailsController extends Controller
             'reporting_foreign_currency_transaction_settings',
             'lease',
             'subsequent_modify_required',
-            'general_settings_count'
+            'general_settings_count',
+            'current_step'
         ));
     }
 
@@ -121,7 +126,7 @@ class LessorDetailsController extends Controller
             $lease = Lease::create($data);
            
             if($lease) {
-                 confirmSteps($lease->id,'step1');
+                 confirmSteps($lease->id,1);
 
                 if($request->has('action') && $request->action == "next") {
                     return redirect(route('addlease.leaseasset.index', ['id'=>$lease->id]))->with('status', 'Lessor Details has been updated successfully.');

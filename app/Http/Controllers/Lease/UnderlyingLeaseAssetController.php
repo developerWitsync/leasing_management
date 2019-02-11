@@ -69,8 +69,13 @@ class UnderlyingLeaseAssetController extends Controller
 
             // get max previous year from general settings for lease start year which will be minimum year
             $settings = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
-            $get_steps= LeaseCompletedSteps::query()->where('lease_id','=',$id)->where('completed_step','step2')->first();
-            //dd($get_steps->completed_step);
+            $get_steps= LeaseCompletedSteps::query()->where('lease_id','=',$id)->where('completed_step',2)->first();
+
+             //to get current step for steps form
+           // $current_step = isEnabled($id,2);
+            $current_step = 2;
+
+            
             return view('lease.lease-assets.indexv2', compact('breadcrumbs',
                 'lease',
                 'lease_assets_categories',
@@ -82,7 +87,8 @@ class UnderlyingLeaseAssetController extends Controller
                 'expected_life_of_assets',
                 'accounting_terms',
                 'settings',
-                'get_steps'
+                'get_steps',
+                'current_step'
             ));
         } else {
             abort(404);
@@ -172,7 +178,7 @@ class UnderlyingLeaseAssetController extends Controller
                 $asset->save();
 
                 // make the entry to the completed steps table so that the log can be created to check the completed steps
-                confirmSteps($id, 'step2');
+                confirmSteps($id, 2);
 
                 return redirect(
                     route('addlease.leaseasset.index', ['id' => $lease->id])
@@ -381,7 +387,7 @@ class UnderlyingLeaseAssetController extends Controller
                     $asset->save();
 
                     // make the entry to the completed steps table so that the log can be created to check the completed steps
-                    confirmSteps($lease_id,'step2');
+                    confirmSteps($lease_id,2);
                     
                     return redirect(
                         route('addlease.leaseasset.index', ['id' => $lease->id,'total_assets' => count($lease->assets)])

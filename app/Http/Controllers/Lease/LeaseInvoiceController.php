@@ -63,14 +63,15 @@ class LeaseInvoiceController extends Controller
 
                     if($model->save()){
                         // complete Step
-                        confirmSteps($lease->id,'step17');
+                        confirmSteps($lease->id,17);
                         return redirect(route('addlease.leasepaymentinvoice.update',['id' => $lease->id]))->with('status', 'Lease Payment Invoice details has been updated successfully.');
                     }
                 }
-
+                $current_step = 17;
                 return view('lease.lease-payment-invoice.index', compact('breadcrumbs',
                     'lease',
-                'model'
+                'model',
+                'current_step'
                 ));
             } else {
                 abort(404);

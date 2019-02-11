@@ -34,8 +34,8 @@ class CheckPreviousData
             }
 
 
-            if($step == 'step6') {
-                $total_assets_termination_yes = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)->whereHas('terminationOption', function ($query) {
+            if($step == 6) {
+               $total_assets_termination_yes = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)->whereHas('terminationOption', function ($query) {
                     $query->where('exercise_termination_option_available', '=', 'yes');
                 })->count();
 
@@ -49,7 +49,7 @@ class CheckPreviousData
                     $this->setRedirect($total_assets_termination_no, $step, $lease_id, $next, $request);
                 }
 
-            } elseif ($step == 'step11') {
+            } elseif ($step == 11) {
                 //Checking Assets for Select Low Value From
                 $category_excluded = \App\CategoriesLeaseAssetExcluded::query()->get();
                 $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
@@ -60,7 +60,7 @@ class CheckPreviousData
                     })->whereNotIn('category_id', $category_excluded_id)->count();
 
                 $this->setRedirect($total_assets, $step, $lease_id, $next, $request);
-            } elseif ($step == 'step12') {
+            } elseif ($step == 12) {
                 //Checking Assets for Select Discount Rate
                 $own_assets = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)
                     ->where('specific_use', 1)
@@ -87,7 +87,7 @@ class CheckPreviousData
 
                 $this->setRedirect($total_assets, $step, $lease_id, $next, $request);
 
-            } elseif ($step == 'step13' || $step == 'step14') {
+            } elseif ($step == 13 || $step == 14) {
                 //Checking Assets for Laese Balence on Dec
 
                 $total_assets = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)->where('lease_start_date', '<', '2019-01-01')->count();
@@ -95,12 +95,12 @@ class CheckPreviousData
                 $this->setRedirect($total_assets, $step, $lease_id, $next, $request);
 
 
-            } elseif ($step == 'step15') {
+            } elseif ($step == 15) {
                 //Checking Assets for lease incentives
                 $total_assets = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)
                     ->where('lease_start_date', '>=', '2019-01-01')->count();
                 $this->setRedirect($total_assets, $step, $lease_id, $next, $request);
-            } elseif ($step == 'step16') {
+            } elseif ($step == 16) {
                 //Checking Assets for lease valuation
                 $own_assets = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)
                     ->where('specific_use', 1)
@@ -119,7 +119,7 @@ class CheckPreviousData
                     })->whereNotIn('category_id', [5, 8])->get();
                 $total_assets = count($own_assets) + count($sublease_assets);
                 $this->setRedirect($total_assets, $step, $lease_id, $next, $request);
-            } elseif ($step == 'step17') {
+            } elseif ($step == 17) {
 
                 //Checking Assets for lease valuation
                 $own_assets = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)

@@ -66,16 +66,22 @@ class SelectLowValueController extends Controller
                         $data['asset_id']   = $asset->id;
                         $model->setRawAttributes($data);
                         if($model->save()){
+
                             // complete Step
-                            confirmSteps($id,'step11');
+                            confirmSteps($id,11);
                             return redirect(route('addlease.lowvalue.index',['id' => $lease->id]))->with('status', 'Select Low Value has been added successfully.');
                         }
                     }
+
+                    //to get current step for steps form
+                    $current_step = 11;
+
                     return view('lease.select-low-value.create', compact(
                         'model',
                         'lease',
                         'asset',
-                        'total_undiscounted_value'
+                        'total_undiscounted_value',
+                        'current_step'
                     ));
                 } else {
                     return redirect(route('addlease.discountrate.index', ['id' => $id]));
@@ -162,8 +168,7 @@ class SelectLowValueController extends Controller
                         
                         // complete Step
                         $lease_id = $asset->lease->id;
-                        $step= 'step11';
-                        $complete_step11 = confirmSteps($lease_id,$step);
+                        $complete_step11 = confirmSteps($lease_id,11);
 
                         return redirect(route('addlease.lowvalue.index',['id' => $lease->id]))->with('status', 'Select Low Value has been added successfully.');
                     }
