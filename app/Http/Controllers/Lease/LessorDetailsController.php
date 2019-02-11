@@ -121,7 +121,7 @@ class LessorDetailsController extends Controller
             $lease = Lease::create($data);
            
             if($lease) {
-                 confirmSteps($lease->id,'step1');
+                 confirmSteps($lease->id,'1');
 
                 if($request->has('action') && $request->action == "next") {
                     return redirect(route('addlease.leaseasset.index', ['id'=>$lease->id]))->with('status', 'Lessor Details has been updated successfully.');

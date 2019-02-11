@@ -66,7 +66,7 @@ class SelectLowValueController extends Controller
                         $model->setRawAttributes($data);
                         if($model->save()){
                             // complete Step
-                            confirmSteps($id,'step11');
+                            confirmSteps($id,'11');
                             return redirect(route('addlease.lowvalue.index',['id' => $lease->id]))->with('status', 'Select Low Value has been added successfully.');
                         }
                     }
@@ -161,7 +161,7 @@ class SelectLowValueController extends Controller
                         
                         // complete Step
                         $lease_id = $asset->lease->id;
-                        $step= 'step11';
+                        $step= '11';
                         $complete_step11 = confirmSteps($lease_id,$step);
 
                         return redirect(route('addlease.lowvalue.index',['id' => $lease->id]))->with('status', 'Select Low Value has been added successfully.');

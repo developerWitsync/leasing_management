@@ -87,7 +87,7 @@ class SelectDiscountRateController extends Controller
                         $model->setRawAttributes($data);
                         if($model->save()){
                             // complete Step
-                            confirmSteps($asset->lease->id,'step12');
+                            confirmSteps($asset->lease->id,'12');
                             return redirect(route('addlease.discountrate.index',['id' => $lease->id]))->with('status', 'Select Discount Rate has been added successfully.');
                         }
                     }
@@ -218,7 +218,7 @@ class SelectDiscountRateController extends Controller
                     if($select_discount_value){
 
                         // complete Step
-                       confirmSteps($asset->lease->id,'step12');
+                       confirmSteps($asset->lease->id,'12');
 
                         return redirect(route('addlease.discountrate.index',['id' => $lease->id]))->with('status', 'Select Discount Rate has been added successfully.');
                     }

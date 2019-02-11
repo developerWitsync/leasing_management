@@ -261,7 +261,7 @@ class ReviewSubmitController extends Controller
 
             if ($lease_history) {
                 // complete Step
-                confirmSteps($id, 'step18');
+                confirmSteps($id, '18');
             }
             return redirect(route('modifylease.index'))->with('status', 'Lease Information has been Submitted successfully.');
         }

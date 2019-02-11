@@ -92,7 +92,7 @@ class FairMarketValueController extends Controller
                     $market_value = $model->setRawAttributes($data);
                     if($market_value->save()){
                         // complete Step
-                        confirmSteps($lease->id,'step7');
+                        confirmSteps($lease->id,'7');
                         return redirect(route('addlease.fairmarketvalue.index',['id' => $lease->id]))->with('status', 'Fair Market has been added successfully.');
                     }
                 }
@@ -184,7 +184,7 @@ class FairMarketValueController extends Controller
                     if($market_value){
 
                         // complete Step
-                         $complete_step7 = confirmSteps($lease->id,'step7');
+                         $complete_step7 = confirmSteps($lease->id,'7');
 
                         return redirect(route('addlease.fairmarketvalue.index',['id' => $lease->id]))->with('status', 'Fair Market has been added successfully.');
                     }

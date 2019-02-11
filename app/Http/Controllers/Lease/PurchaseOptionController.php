@@ -98,7 +98,7 @@ class PurchaseOptionController extends Controller
 
                         if ($model->save()) {
                             // complete Step
-                            confirmSteps($lease->id, 'step5');
+                            confirmSteps($lease->id, '5');
                             return redirect(route('addlease.purchaseoption.index', ['id' => $lease->id]))->with('status', 'Lease Termination Option Details has been added successfully.');
                         }
                     }
@@ -211,7 +211,7 @@ class PurchaseOptionController extends Controller
                     if ($purchase_option) {
 
                         // complete Step
-                        $complete_step5 = confirmSteps($lease->id, 'step5');
+                        $complete_step5 = confirmSteps($lease->id, '5');
 
                         return redirect(route('addlease.purchaseoption.index', ['id' => $lease->id]))->with('status', 'Lease Termination Option Details has been added successfully.');
                     }

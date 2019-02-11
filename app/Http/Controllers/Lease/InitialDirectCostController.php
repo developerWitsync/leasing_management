@@ -113,7 +113,7 @@ class InitialDirectCostController extends Controller
                                 }
                             }
                             // complete Step
-                            confirmSteps($lease->id, 'step14');
+                            confirmSteps($lease->id, '14');
                             return redirect(route('addlease.initialdirectcost.index', ['id' => $lease->id]))->with('status', 'Initial Direct Cost has been added successfully.');
                         }
                     }
@@ -296,7 +296,7 @@ class InitialDirectCostController extends Controller
                             }
                         }
                         // complete Step
-                        confirmSteps($lease->id, 'step14');
+                        confirmSteps($lease->id, '14');
                         return redirect(route('addlease.initialdirectcost.index', ['id' => $lease->id]))->with('status', 'Initial Direct Cost has been added successfully.');
                     }
                 }

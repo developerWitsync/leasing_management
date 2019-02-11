@@ -496,3 +496,4 @@ function checkPreviousSteps($lease_id,$complete_step){
     }
    return false;
 }
+

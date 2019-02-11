@@ -63,7 +63,7 @@ class LeaseValuationController extends Controller
             })->whereNotIn('category_id',[5,8])->get();
 
              // complete Step
-            confirmSteps($lease->id,'step16');
+            confirmSteps($lease->id,'16');
 
              $asset_on_lease_incentives = LeaseAssets::query()->where('lease_id', '=', $id)->where('lease_start_date','>=','2019-01-01')->count();
              if($asset_on_lease_incentives >0){

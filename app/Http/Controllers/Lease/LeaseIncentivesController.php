@@ -106,7 +106,7 @@ class LeaseIncentivesController extends Controller
                                 }
                             }
                             // complete Step
-                            confirmSteps($lease->id, 'step15');
+                            confirmSteps($lease->id, '15');
                             return redirect(route('addlease.leaseincentives.index',['id' => $lease->id]))->with('status', 'Lease incentive cost has been added successfully.');
                         }
                     }
@@ -239,7 +239,7 @@ class LeaseIncentivesController extends Controller
                             }
                         }
                         // complete Step
-                        confirmSteps($lease->id, 'step15');
+                        confirmSteps($lease->id, '15');
                         return redirect(route('addlease.leaseincentives.index',['id' => $lease->id]))->with('status', 'Lease incentive cost has been added successfully.');
                     }
                 }

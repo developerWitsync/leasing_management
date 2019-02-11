@@ -86,7 +86,7 @@ class LeaseDurationClassifiedController extends Controller
                         $model->setRawAttributes($data);
                         if ($model->save()) {
                             // complete Step
-                            confirmSteps($lease->id, 'step9');
+                            confirmSteps($lease->id, '9');
                             return redirect(route('addlease.durationclassified.index', ['id' => $lease->id]))->with('status', 'Lease Duration Classified Value has been added successfully.');
                         }
                     }
@@ -210,7 +210,7 @@ class LeaseDurationClassifiedController extends Controller
                     if ($duration_classified_value) {
 
                         // complete Step
-                        confirmSteps($lease->id, 'step9');
+                        confirmSteps($lease->id, '9');
 
                         return redirect(route('addlease.durationclassified.index', ['id' => $lease->id]))->with('status', 'Lease Duration Classified Value has been added successfully.');
                     }
