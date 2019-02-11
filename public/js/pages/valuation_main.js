@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-    let columns = [
+    var columns = [
         { "data" : "uuid"},
         { "data" : "lease.lessor_name", "sortable": false},
         { "data" : "name"},
@@ -24,11 +24,39 @@ $(document).ready(function () {
 
     $("#lease_valuation").DataTable({
         responsive: true,
+        "columnDefs" : [{
+            "targets" : 14,
+            "render" : function( data, type, row ){
+                if(row['has_subsequent_modifications']){
+                    return row["lease_select_low_value"]["undiscounted_lease_payment"];
+                } else {
+                    return "N/A";
+                }
+            }
+        },{
+            "targets" : 15,
+            "render" : function( data, type, row ){
+                if(row['has_subsequent_modifications']){
+                    return row["lease_liablity_value"];
+                } else {
+                    return "N/A";
+                }
+            }
+        },{
+            "targets" : 16,
+            "render" : function( data, type, row ){
+                if(row['has_subsequent_modifications']){
+                    return row["value_of_lease_asset"];
+                } else {
+                    return "N/A";
+                }
+            }
+        }],
         "scrollX": true,
         "columns": columns,
         "processing": true,
         "serverSide": true,
-        "ajax": _data_table_url
+        "ajax": _data_table_url,
     });
 
 });
