@@ -48,7 +48,7 @@ class FairMarketValueController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index_V2($id, Request $request){
-        try{
+         try{
             $breadcrumbs = [
                 [
                     'link' => route('add-new-lease.index'),
@@ -92,7 +92,7 @@ class FairMarketValueController extends Controller
                     $market_value = $model->setRawAttributes($data);
                     if($market_value->save()){
                         // complete Step
-                        confirmSteps($lease->id,'7');
+                        confirmSteps($lease->id,7);
                         return redirect(route('addlease.fairmarketvalue.index',['id' => $lease->id]))->with('status', 'Fair Market has been added successfully.');
                     }
                 }
@@ -100,9 +100,14 @@ class FairMarketValueController extends Controller
                 $currencies = Currencies::query()->where('status', '=', '1')->get();
                 $reporting_currency_settings = ReportingCurrencySettings::query()->where('business_account_id', '=', auth()->user()->id)->first();
                 $reporting_foreign_currency_transaction_settings = ForeignCurrencyTransactionSettings::query()->where('business_account_id', '=', auth()->user()->id)->get();
+
                 if(collect($reporting_currency_settings)->isEmpty()) {
                     $reporting_currency_settings = new ReportingCurrencySettings();
                 }
+
+               //to get current step for steps form
+                $current_step = 7;
+
                 return view('lease.fair-market-value.createv2', compact(
                     'model',
                     'lease',
@@ -110,7 +115,8 @@ class FairMarketValueController extends Controller
                     'currencies',
                     'reporting_foreign_currency_transaction_settings',
                     'reporting_currency_settings',
-                    'breadcrumbs'
+                    'breadcrumbs',
+                    'current_step'
                 ));
             } else {
                 abort(404);
@@ -184,7 +190,7 @@ class FairMarketValueController extends Controller
                     if($market_value){
 
                         // complete Step
-                         $complete_step7 = confirmSteps($lease->id,'7');
+                         $complete_step7 = confirmSteps($lease->id,7);
 
                         return redirect(route('addlease.fairmarketvalue.index',['id' => $lease->id]))->with('status', 'Fair Market has been added successfully.');
                     }

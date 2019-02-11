@@ -491,9 +491,10 @@ function confirmSteps($lease_id,$complete_step){
 function checkPreviousSteps($lease_id,$complete_step){
     if($lease_id)
     {
-        $confrim_steps = \App\LeaseCompletedSteps::query()->where('lease_id', '=', $lease_id)->where('completed_step','=', $complete_step)->get();
+        $confrim_steps = \App\LeaseCompletedSteps::query()->where('lease_id', '=', $lease_id)->where('completed_step', $complete_step)->get();
         return (count($confrim_steps) > 0);
     }
    return false;
 }
+
 

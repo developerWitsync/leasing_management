@@ -106,10 +106,13 @@ class LeaseIncentivesController extends Controller
                                 }
                             }
                             // complete Step
-                            confirmSteps($lease->id, '15');
+                            confirmSteps($lease->id, 15);
                             return redirect(route('addlease.leaseincentives.index',['id' => $lease->id]))->with('status', 'Lease incentive cost has been added successfully.');
                         }
                     }
+
+                    //to get current step for steps form
+                    $current_step = 15;
 
                     return view('lease.lease-incentives.create', compact(
                         'model',
@@ -118,7 +121,8 @@ class LeaseIncentivesController extends Controller
                         'customer_model',
                         'customer_details',
                         'currencies',
-                        'breadcrumbs'
+                        'breadcrumbs',
+                        'current_step'
                     ));
 
                 } else {
@@ -239,7 +243,7 @@ class LeaseIncentivesController extends Controller
                             }
                         }
                         // complete Step
-                        confirmSteps($lease->id, '15');
+                        confirmSteps($lease->id, 15);
                         return redirect(route('addlease.leaseincentives.index',['id' => $lease->id]))->with('status', 'Lease incentive cost has been added successfully.');
                     }
                 }

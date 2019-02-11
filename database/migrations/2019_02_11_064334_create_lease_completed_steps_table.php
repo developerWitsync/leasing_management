@@ -14,11 +14,11 @@ class CreateLeaseCompletedStepsTable extends Migration
     public function up()
     {
         Schema::create('lease_completed_steps', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('lease_id');
-            $table->foreign('lease_id')->references('id')->on('lease')->onDelete('cascade');
-             $table->string('completed_step');
-            $table->timestamps();
+        $table->increments('id');
+        $table->unsignedInteger('lease_id');
+        $table->foreign('lease_id')->references('id')->on('lease')->onDelete('cascade');
+        $table->unsignedInteger('completed_step');
+        $table->timestamps();
         });
     }
 

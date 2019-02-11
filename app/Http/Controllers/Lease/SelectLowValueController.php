@@ -37,11 +37,12 @@ class SelectLowValueController extends Controller
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
             if($lease) {
 
-                $category_excluded = CategoriesLeaseAssetExcluded::query()->get();
+                $category_excluded = CategoriesLeaseAssetExcluded::query()->whereIn('business_account_id', getDependentUserIds())->get();
 
                 $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
 
-                $asset = LeaseAssets::query()->where('lease_id', '=', $lease->id)->whereNotIn('specific_use', [2])
+                $asset = LeaseAssets::query()->where('lease_id', '=', $lease->id)
+                    ->whereNotIn('specific_use', [2])
                     ->whereHas('leaseDurationClassified',  function($query){
                         $query->whereNotIn('lease_contract_duration_id',[1,2]);
                     })->whereNotIn('category_id', $category_excluded_id)->first();
@@ -65,16 +66,22 @@ class SelectLowValueController extends Controller
                         $data['asset_id']   = $asset->id;
                         $model->setRawAttributes($data);
                         if($model->save()){
+
                             // complete Step
-                            confirmSteps($id,'11');
+                            confirmSteps($id,11);
                             return redirect(route('addlease.lowvalue.index',['id' => $lease->id]))->with('status', 'Select Low Value has been added successfully.');
                         }
                     }
+
+                    //to get current step for steps form
+                    $current_step = 11;
+
                     return view('lease.select-low-value.create', compact(
                         'model',
                         'lease',
                         'asset',
-                        'total_undiscounted_value'
+                        'total_undiscounted_value',
+                        'current_step'
                     ));
                 } else {
                     return redirect(route('addlease.discountrate.index', ['id' => $id]));
@@ -161,8 +168,7 @@ class SelectLowValueController extends Controller
                         
                         // complete Step
                         $lease_id = $asset->lease->id;
-                        $step= '11';
-                        $complete_step11 = confirmSteps($lease_id,$step);
+                        $complete_step11 = confirmSteps($lease_id,11);
 
                         return redirect(route('addlease.lowvalue.index',['id' => $lease->id]))->with('status', 'Select Low Value has been added successfully.');
                     }

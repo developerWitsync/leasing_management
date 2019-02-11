@@ -89,15 +89,18 @@ class LeaseTerminationOptionController extends Controller
 
                     if($model->save()){
                         // complete Step
-                        confirmSteps($lease->id,'3');
+                        confirmSteps($lease->id,3);
                         return redirect(route('addlease.leaseterminationoption.index',['id' => $lease->id]))->with('status', 'Lease Termination Option Details has been added successfully.');
                     }
                 }
+                 //to get current step for steps form
+                $current_step = 3;
                 return view('lease.lease-termination-option.create', compact(
                     'model',
                     'lease',
                     'asset',
-                    'breadcrumbs'
+                    'breadcrumbs',
+                    'current_step'
                 ));
             } else {
                 abort(404);
@@ -169,7 +172,7 @@ class LeaseTerminationOptionController extends Controller
 
                     if($lease_termination_option){
                          // complete Step
-                        confirmSteps($lease->id,'3');
+                        confirmSteps($lease->id,3);
                         return redirect(route('addlease.leaseterminationoption.index',['id' => $lease->id]))->with('status', 'Lease Termination Option Details has been added successfully.');
                     }
                 }

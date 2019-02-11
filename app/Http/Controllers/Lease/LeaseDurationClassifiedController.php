@@ -81,12 +81,12 @@ class LeaseDurationClassifiedController extends Controller
                         $data['asset_id'] = $asset->id;
                         $data['lease_start_date'] = date('Y-m-d', strtotime($request->lease_start_date));
                         $data['lease_end_date'] = date('Y-m-d', strtotime($request->lease_end_date));
-                        $data['lease_contract_duration_id'] = $request->lease_contract_duration_id;
+                        $data['lease_contract_duration_id'] = $model->getLeaseAssetClassification($asset); //we will calculate and save the same...
 
                         $model->setRawAttributes($data);
                         if ($model->save()) {
                             // complete Step
-                            confirmSteps($lease->id, '9');
+                            confirmSteps($lease->id, 9);
                             return redirect(route('addlease.durationclassified.index', ['id' => $lease->id]))->with('status', 'Lease Duration Classified Value has been added successfully.');
                         }
                     }
@@ -97,6 +97,9 @@ class LeaseDurationClassifiedController extends Controller
 
                     $lease_contract_duration = LeaseContractDuration::query()->get();
 
+                    //to get current step for steps form
+                    $current_step = 9;
+
                     return view('lease.lease-duration-classified.create', compact(
                         'model',
                         'lease',
@@ -105,7 +108,8 @@ class LeaseDurationClassifiedController extends Controller
                         'lease_contract_duration',
                         'breadcrumbs',
                         'subsequent_modify_required',
-                        'back_button'
+                        'back_button',
+                        'current_step'
                     ));
                 } else {
                     return redirect(route('lease.escalation.index', ['id'=>$id]));
@@ -113,11 +117,9 @@ class LeaseDurationClassifiedController extends Controller
 
 
             } else {
-                dd("asdfasdf");
                 abort(404);
             }
         } catch (\Exception $e){
-            dd($e);
             abort(404, $e->getMessage());
         }
     }
@@ -210,7 +212,7 @@ class LeaseDurationClassifiedController extends Controller
                     if ($duration_classified_value) {
 
                         // complete Step
-                        confirmSteps($lease->id, '9');
+                        confirmSteps($lease->id, 9);
 
                         return redirect(route('addlease.durationclassified.index', ['id' => $lease->id]))->with('status', 'Lease Duration Classified Value has been added successfully.');
                     }

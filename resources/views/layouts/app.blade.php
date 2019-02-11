@@ -18,7 +18,7 @@
     @yield('header-styles')
 </head>
 <body>
-    <div id="app">
+    <div>
     @if(request()->segment('1') != 'login')
         <nav class="navbar navbar-default navbar-static-top">
             <div class="hdrTop">

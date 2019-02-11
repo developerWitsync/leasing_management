@@ -64,6 +64,8 @@ class ReviewSubmitController extends Controller
             $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->get();
             $contract_classifications = ContractClassifications::query()->select('id', 'title')->where('status', '=', '1')->get();
 
+            //to get current step for steps form
+            $current_step = 18;
 
             return view('lease.review-submit.index', compact(
                 'lease',
@@ -71,7 +73,8 @@ class ReviewSubmitController extends Controller
                 'breadcrumbs',
                 'reporting_currency_settings',
                 'contract_classifications',
-                'reporting_foreign_currency_transaction_settings'
+                'reporting_foreign_currency_transaction_settings',
+                'current_step'
             ));
 
         } else {
@@ -261,7 +264,7 @@ class ReviewSubmitController extends Controller
 
             if ($lease_history) {
                 // complete Step
-                confirmSteps($id, '18');
+                confirmSteps($id, 18);
             }
             return redirect(route('modifylease.index'))->with('status', 'Lease Information has been Submitted successfully.');
         }

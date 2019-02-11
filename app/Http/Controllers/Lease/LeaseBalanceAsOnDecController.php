@@ -75,7 +75,7 @@ class LeaseBalanceAsOnDecController extends Controller
                         $model->setRawAttributes($data);
                         if ($model->save()) {
                             // complete Step
-                            confirmSteps($asset->lease->id, '13');
+                            confirmSteps($asset->lease->id, 13);
                             return redirect(route('addlease.balanceasondec.index', ['id' => $lease->id]))->with('status', 'Lease Balance as on 31 Dec 2018 has been added successfully.');
                         }
                     }
@@ -123,15 +123,16 @@ class LeaseBalanceAsOnDecController extends Controller
                         }
                     }
 
-                 
-
+                    //to get current step for steps form
+                    $current_step = 13;
 
                     return view('lease.lease-balnce-as-on-dec.create', compact(
                         'model',
                         'lease',
                         'asset',
                         'breadcrumbs',
-                        'back_url'
+                        'back_url',
+                        'current_step'
                     ));
                 } else {
                     return redirect(route('addlease.initialdirectcost.index', ['id' => $id]));
@@ -211,7 +212,7 @@ class LeaseBalanceAsOnDecController extends Controller
                     if ($select_discount_value) {
 
                         // complete Step
-                       $complete_step13 = confirmSteps($asset->lease->id, '13');
+                       $complete_step13 = confirmSteps($asset->lease->id, 13);
 
                         return redirect(route('addlease.balanceasondec.index', ['id' => $lease->id]))->with('status', 'Lease Balance as on 31 Dec 2018 has been added successfully.');
                     }

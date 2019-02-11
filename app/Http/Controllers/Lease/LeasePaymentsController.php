@@ -107,10 +107,15 @@ class LeasePaymentsController extends Controller
                 } else {
                     $back_url = route('addlease.leaseterminationoption.index', ['id' => $id]);
                 }
+
+                //to get current step for steps form
+                $current_step = 6;
+
                 return view('lease.payments.index', compact('breadcrumbs',
                     'lease',
                     'show_next',
-                    'back_url'
+                    'back_url',
+                    'current_step'
                 ));
             } else {
                 abort(404);
@@ -154,12 +159,14 @@ class LeasePaymentsController extends Controller
                 $asset = LeaseAssets::query()->where('lease_id', '=', $lease_id)->where('id', '=', $asset_id)->first();
                 if ($asset) {
                     $lease_asset_number_of_payments = LeasePaymentsNumber::query()->select('id', 'number')->whereIn('business_account_id', getDependentUserIds())->get()->toArray();
+                     $current_step = 6;
                     return view('lease.payments.create', compact(
                         'lease',
                         'asset',
                         'lease_asset_number_of_payments',
                         'breadcrumbs',
-                        'subsequent_modify_required'
+                        'subsequent_modify_required',
+                        'current_step'
                     ));
 
                 } else {
@@ -254,8 +261,7 @@ class LeasePaymentsController extends Controller
 
                     // complete Step
                     $lease_id = $asset->lease->id;
-                    $step = '6';
-                    $complete_step6 = confirmSteps($lease_id, $step);
+                    $complete_step6 = confirmSteps($lease_id, 6);
 
                     return redirect(route('lease.payments.add', ['lease_id' => $asset->lease->id, 'asset_id' => $asset->id]))->with('status', 'Lease Asset Payments has been added successfully.');
                 } else {
@@ -270,6 +276,8 @@ class LeasePaymentsController extends Controller
             $lease_span_time_in_days = Carbon::parse($asset->lease_end_date)->diffInMonths(Carbon::parse($asset->accural_period));
 
             $payout_due_dates = [];
+            
+            $current_step = 6;
 
             return view('lease.payments.createpayment', compact(
                 'asset',
@@ -282,7 +290,8 @@ class LeasePaymentsController extends Controller
                 'payout_due_dates',
                 'breadcrumbs',
                 'lease_span_time_in_days',
-                'subsequent_modify_required'
+                'subsequent_modify_required',
+                'current_step'
             ));
 
         } catch (\Exception $e) {

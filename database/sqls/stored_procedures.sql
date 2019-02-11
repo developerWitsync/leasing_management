@@ -38,24 +38,28 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `present_value_of_lease_liability` (
         where `lease_asset_payment_dates`.`payment_id` = payment_id AND DATE_FORMAT(`lease_asset_payment_dates`.`date`,'%m') = payment_month and DATE_FORMAT(`lease_asset_payment_dates`.`date`,'%Y') = payment_year;
         
     END IF;
-	
+
+	IF total_amount_payable IS NOT NULL THEN
     
-     #calculate the difference of number of days to do the same we need to have the payment_date 
-     #for current year and month
-     select `date` into payment_date from `lease_asset_payment_dates` where 
-     `payment_id` = payment_id AND DATE_FORMAT(`lease_asset_payment_dates`.`date`,'%m') = payment_month and DATE_FORMAT(`lease_asset_payment_dates`.`date`,'%Y') = payment_year order by `date` desc limit 0,1;
+    #calculate the difference of number of days to do the same we need to have the payment_date
+    #for current year and month
+    select `date` into payment_date from `lease_asset_payment_dates` where
+    `payment_id` = payment_id AND DATE_FORMAT(`lease_asset_payment_dates`.`date`,'%m') = payment_month and DATE_FORMAT(`lease_asset_payment_dates`.`date`,'%Y') = payment_year order by `date` desc limit 0,1;
      
-     set days_diff = datediff(payment_date, base_date);
+    set days_diff = datediff(payment_date, base_date);
      
-     #select the discount rate for the current asset 
-     select `discount_rate_to_use` into discount_rate from `lease_select_discount_rate` 
-     where `asset_id` = asset_id;
+    #select the discount rate for the current asset
+    select `discount_rate_to_use` into discount_rate from `lease_select_discount_rate`
+    where `lease_select_discount_rate`.`asset_id` = asset_id;
+
+    #now need to calculate the lease_liability here
      
-     #now need to calculate the lease_liability here
+    set lease_liability = total_amount_payable / POWER(( 1 + ( (discount_rate / 100) / 365 )), days_diff);
      
-     set lease_liability = total_amount_payable / POWER(( 1 + ( (discount_rate / 100) / 365 )), days_diff);
-     
-     select payment_id,payment_name, total_amount_payable, discount_rate, lease_liability, payment_year, payment_month, is_escalation_applicable,days_diff;
+    select payment_id,payment_name, total_amount_payable, discount_rate, lease_liability, payment_year, payment_month, is_escalation_applicable,days_diff;
+
+  END IF;
+
 END;
 
 -- --------------------------------------------------------

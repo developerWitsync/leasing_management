@@ -57,8 +57,13 @@ class PurchaseOptionController extends Controller
             if ($lease) {
 
                 $asset = LeaseAssets::query()->where('lease_id', '=', $id)->whereHas('terminationOption', function ($query) {
-                    $query->where('lease_termination_option_available', '=', 'yes');
-                    $query->where('exercise_termination_option_available', '=', 'no');
+                    $query->where(function($query){
+                        $query->where('lease_termination_option_available', '=', 'yes');
+                        $query->where('exercise_termination_option_available', '=', 'no');
+                    })
+                    ->orWhere(function($query){
+                        $query->where('lease_termination_option_available', '=', 'no');
+                    });
                 })->first(); 
                 //since there will be only one lease asset per lease
                 
@@ -98,16 +103,20 @@ class PurchaseOptionController extends Controller
 
                         if ($model->save()) {
                             // complete Step
-                            confirmSteps($lease->id, '5');
+                            confirmSteps($lease->id, 5);
                             return redirect(route('addlease.purchaseoption.index', ['id' => $lease->id]))->with('status', 'Lease Termination Option Details has been added successfully.');
                         }
                     }
+
+                    //to get current step for steps form
+                    $current_step = 5;
 
                     return view('lease.purchase-option.create', compact(
                         'model',
                         'lease',
                         'asset',
-                        'breadcrumbs'
+                        'breadcrumbs',
+                        'current_step'
                     ));
                 } else {
                     return redirect(route('addlease.payments.index', ['id' => $id]));
@@ -211,7 +220,7 @@ class PurchaseOptionController extends Controller
                     if ($purchase_option) {
 
                         // complete Step
-                        $complete_step5 = confirmSteps($lease->id, '5');
+                        $complete_step5 = confirmSteps($lease->id, 5);
 
                         return redirect(route('addlease.purchaseoption.index', ['id' => $lease->id]))->with('status', 'Lease Termination Option Details has been added successfully.');
                     }

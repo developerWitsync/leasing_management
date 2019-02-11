@@ -77,9 +77,14 @@ class LeaseValuationController extends Controller
     {
         try {
             if ($request->ajax()) {
-                $leases = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('status', '=', '1');
+                $leases = Lease::query()
+                    ->whereIn('business_account_id', getDependentUserIds())->where('status', '=', '1');
+
                 //fetch the data that needs to be listed on the Lease Valuation
-                $assets = LeaseAssets::query()->whereIn('lease_id', $leases->get()->pluck('id')->toArray())
+                $assets = LeaseAssets::query()
+                    ->select('*')
+                    ->selectRaw('IF(current_date() > lease_end_date, datediff(current_date(), lease_end_date), datediff(lease_end_date, current_date())) as remaining_term')
+                    ->whereIn('lease_id', $leases->get()->pluck('id')->toArray())
                     ->with('lease')
                     ->with('category')
                     ->with('specificUse')
@@ -100,6 +105,7 @@ class LeaseValuationController extends Controller
                 });
 
                 return datatables()->eloquent($assets)
+
                     ->filter(function ($query) use ($request){
                         if ($request->has('search') && trim($request->search["value"])!="") {
                             $query->where('name', 'like', "%" . $request->search["value"] . "%");
@@ -110,13 +116,6 @@ class LeaseValuationController extends Controller
                             return Carbon::create(2019, 1, 1)->format(config('settings.date_format'));
                         } else {
                             return Carbon::parse($data->accural_period)->format(config('settings.date_format'));
-                        }
-                    })
-                    ->addColumn('remaining_lease_term', function ($data) {
-                        if (Carbon::today()->greaterThan(Carbon::parse($data->lease_end_date))) {
-                            return Carbon::today()->diffInDays(Carbon::parse($data->lease_end_date));
-                        } else {
-                            return Carbon::parse($data->lease_end_date)->diffInDays(Carbon::today());
                         }
                     })
                     ->addColumn('initial_lease_currency', function($data){

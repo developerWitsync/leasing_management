@@ -26,6 +26,12 @@ class SelectDiscountRateController extends Controller
         ];
     }
 
+    /**
+     * create or update the data for the discount rates.
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
+     */
     public function index_V2($id, Request $request){
 
         try{
@@ -87,27 +93,21 @@ class SelectDiscountRateController extends Controller
                         $model->setRawAttributes($data);
                         if($model->save()){
                             // complete Step
-                            confirmSteps($asset->lease->id,'12');
+                            confirmSteps($asset->lease->id,12);
                             return redirect(route('addlease.discountrate.index',['id' => $lease->id]))->with('status', 'Select Discount Rate has been added successfully.');
                         }
                     }
                
-                /* $asset_on_low_value = $asset = LeaseAssets::query()->where('lease_id', '=', $lease->id)->whereNotIn('specific_use', [2])
-                    ->whereHas('leaseDurationClassified',  function($query){
-                    $query->whereNotIn('lease_contract_duration_id',[1,2]);
-                    })->whereNotIn('category_id', $category_excluded_id)->count();
-                    if($asset_on_low_value > 0){
-                    $back_url = route('addlease.lowvalue.index', ['id' => $lease->id]);
-                    } else {
-                    $back_url = route('lease.escalation.index', ['id' => $lease->id]);
-                    }*/
+                    //to get current step for steps form
+                    $current_step = 12;
 
                     return view('lease.select-discount-rate.create', compact(
                         'model',
                         'lease',
                         'asset',
                         'breadcrumbs',
-                        'back_url'
+                        'back_url',
+                        'current_step'
                     ));
 
                 } else {
@@ -218,7 +218,7 @@ class SelectDiscountRateController extends Controller
                     if($select_discount_value){
 
                         // complete Step
-                       confirmSteps($asset->lease->id,'12');
+                       confirmSteps($asset->lease->id,12);
 
                         return redirect(route('addlease.discountrate.index',['id' => $lease->id]))->with('status', 'Select Discount Rate has been added successfully.');
                     }

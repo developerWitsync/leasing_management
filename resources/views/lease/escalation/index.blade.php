@@ -50,7 +50,7 @@
                         @include('lease.escalation._list_escalation')
                     @endif
 
-     <div class="form-group btnMainBx clearfix">
+                    <div class="form-group btnMainBx clearfix">
                         <div class="col-md-6 col-sm-6 btn-backnextBx">
 
                             <a href="{{ $back_url }}" class="btn btn-danger">Back</a>

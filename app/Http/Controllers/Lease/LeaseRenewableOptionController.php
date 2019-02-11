@@ -50,8 +50,13 @@ class LeaseRenewableOptionController extends Controller
             if($lease) {
 
                 $asset = LeaseAssets::query()->where('lease_id', '=', $id)->whereHas('terminationOption',  function($query){
-                    $query->where('lease_termination_option_available', '=', 'yes');
-                    $query->where('exercise_termination_option_available', '=', 'no');
+                    $query->where(function($query){
+                        $query->where('lease_termination_option_available', '=', 'yes');
+                        $query->where('exercise_termination_option_available', '=', 'no');
+                    })
+                    ->orWhere(function($query){
+                        $query->where('lease_termination_option_available', '=', 'no');
+                    });
                 })->first(); //since there will be only one lease asset per lease
 
 
@@ -84,16 +89,20 @@ class LeaseRenewableOptionController extends Controller
 
                         if($model->save()){
                             // complete Step
-                            confirmSteps($lease->id,'4');
+                            confirmSteps($lease->id,4);
                             return redirect(route('addlease.renewable.index',['id' => $lease->id]))->with('status', 'Renewable Option has been added successfully.');
                         }
                     }
+
+                    //to get current step for steps form
+                    $current_step = 4;
 
                     return view('lease.lease-renewable-option.create', compact(
                         'model',
                         'lease',
                         'asset',
-                        'breadcrumbs'
+                        'breadcrumbs',
+                        'current_step'
                     ));
 
                 }else{
@@ -200,7 +209,7 @@ class LeaseRenewableOptionController extends Controller
                     if($renewable_value){
 
                          // complete Step
-                         confirmSteps($lease->id,'4');
+                         confirmSteps($lease->id,4);
                         
                         return redirect(route('addlease.renewable.index',['id' => $lease->id]))->with('status', 'Renewable Option has been added successfully.');
                     }
