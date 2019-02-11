@@ -113,7 +113,7 @@
                                        value="{{ \Carbon\Carbon::parse($customerDetail->incentive_date)->format(config('settings.date_format')) }}">
                             </td>
                             <td>
-                                <select class="form-control" name="currency_id[]">
+                                <select class="form-control customer_currency" name="currency_id[]">
                                     <option value="">--Select Currency--</option>
                                     @foreach($currencies as $currency)
                                         <option value="{{ $currency->code }}"
@@ -126,7 +126,7 @@
                                        value="{{ $customerDetail->amount }}">
                             </td>
                             <td>
-                                <input type="text" class="form-control" name="exchange_rate[]"
+                                <input type="text" class="form-control rate" name="exchange_rate[]"
                                        value="{{ $customerDetail->exchange_rate }}">
                             </td>
                             <td>
@@ -153,7 +153,7 @@
                             <input type="text" class="form-control incentive_date" name="incentive_date[]">
                         </td>
                         <td>
-                            <select class="form-control" name="currency_id[]">
+                            <select class="form-control customer_currency" name="currency_id[]">
                                 <option value="">--Select Currency--</option>
                                 @foreach($currencies as $currency)
                                     <option value="{{ $currency->code }}">{{ $currency->code }}  {{ $currency->symbol }}</option>
@@ -164,7 +164,7 @@
                             <input type="text" class="form-control" name="amount[]">
                         </td>
                         <td>
-                            <input type="text" class="form-control" name="exchange_rate[]">
+                            <input type="text" class="form-control rate" name="exchange_rate[]">
                         </td>
                         <td>
                             <a href="javascript:void(0);"
@@ -235,7 +235,7 @@
                 '                    <input type="text" class="form-control cale_n_dar" name="incentive_date[]">\n' +
                 '                </td>\n' +
                 '                <td>\n' +
-                '                    <select class="form-control" name="currency_id[]">\n' +
+                '                    <select class="form-control customer_currency" name="currency_id[]">\n' +
                 '                        <option value="">--Select Currency--</option>\n' +
                 '                        @foreach($currencies as $currency)\n' +
                 '                            <option value="{{ $currency->code }}">{{ $currency->code }}  {{ $currency->symbol }}</option>\n' +
@@ -246,7 +246,7 @@
                 '                    <input type="text" class="form-control" name="amount[]">\n' +
                 '                </td>\n' +
                 '                <td>\n' +
-                '                    <input type="text" class="form-control" name="exchange_rate[]">\n' +
+                '                    <input type="text" class="form-control rate" name="exchange_rate[]">\n' +
                 '                </td>\n' +
                 '                <td>\n' +
                 '                    <a href="javascript:void(0);" class="btn btn-sm btn-danger customer_create_details_form_delete" onClick="javascript:removeRow(this)">Remove</a>\n' +
@@ -293,6 +293,29 @@
                 $(that).parent('td').parent('tr').remove();
             }
         }
+
+        /**
+         * fetches the currency rates from the Currency API
+         */
+        $(document.body).on('change', '.customer_currency', function(){
+            var selected_currency = $(this).val();
+            var base_currency = '{{ $lease->lease_contract_id }}';
+            var that = $(this);
+            // set endpoint and your access key
+            var endpoint = 'live';
+            var access_key = '{{ env("CURRENCY_API_ACCESS_KEY") }}';
+            // get the most recent exchange rates via the "live" endpoint:
+            $.ajax({
+                url: 'http://apilayer.net/api/' + endpoint + '?access_key=' + access_key + '&source='+base_currency+'&currencies='+selected_currency,
+                dataType: 'jsonp',
+                success: function(result) {
+                    if(result.success) {
+                        var rate = result['quotes'][base_currency+selected_currency];
+                        $(that).parent('td').parent('tr').find('input.rate').val(rate);
+                    }
+                }
+            });
+        });
 
     </script>
 @endsection
