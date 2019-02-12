@@ -192,23 +192,30 @@
 
 
                                         </div>
+
+
                                         <div class="form-group btnMainBx">
-                                            <div class="col-md-6 col-sm-6 btn-backnextBx">
+                                            <div class="col-md-4 col-sm-4 btn-backnextBx">
 
-                                                <a href="/home" class="btn btn-danger">{{ env('CANCEL_LABEL') }}</a>
-                                                 <button type="submit" class="btn btn-success">
-                                                    {{ env('SAVE_LABEL') }}
-                                                </button>
-                                                
+                                                <a href="/home"
+                                                   class="btn btn-danger">
+                                                     {{ env('CANCEL_LABEL')}}</a>
 
                                             </div>
-                                            <div class="col-md-6 col-sm-6 btnsubmitBx">
-                                            <button type="submit" class="btn btn-primary next_submit">
-                                                    {{ env('NEXT_LABEL') }}
-                                                </button>
-                                               
+                                            <div class="col-md-4 col-sm-4 btnsubmitBx aligncenter">
+
+                                                <button type="submit" class="btn btn-success">
+                                                    {{ env('SAVE_LABEL') }} <i class="fa fa-download"></i></button>
                                             </div>
+
+                                            <div class="col-md-4 col-sm-4 btn-backnextBx rightlign ">
+                                                <button type="submit" class="btn btn-primary next_submit">
+                                                     {{ env('NEXT_LABEL') }} <i class="fa fa-arrow-right"></i>
+                                                </button>
+                                            </div>
+
                                         </div>
+
                                 </form>
                     </div>
                 </div>

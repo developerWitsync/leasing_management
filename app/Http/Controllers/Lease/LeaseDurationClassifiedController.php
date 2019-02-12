@@ -20,6 +20,7 @@ use Validator;
 class LeaseDurationClassifiedController extends Controller
 {
     private $current_step = 9;
+
     protected function validationRules()
     {
         return [
@@ -35,8 +36,9 @@ class LeaseDurationClassifiedController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index_v2($id, Request $request){
-        try{
+    public function index_v2($id, Request $request)
+    {
+        try {
             $breadcrumbs = [
                 [
                     'link' => route('add-new-lease.index'),
@@ -64,7 +66,7 @@ class LeaseDurationClassifiedController extends Controller
                     ->whereNotIn('category_id', $category_excluded_id)->first();
 
                 if ($asset) {
-                    if($asset->leaseDurationClassified) {
+                    if ($asset->leaseDurationClassified) {
                         $model = $asset->leaseDurationClassified;
                     } else {
                         $model = new LeaseDurationClassified();
@@ -77,7 +79,7 @@ class LeaseDurationClassifiedController extends Controller
                             return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
                         }
 
-                        $data = $request->except('_token', 'uuid', 'asset_name', 'asset_category','action');
+                        $data = $request->except('_token', 'uuid', 'asset_name', 'asset_category', 'action');
                         $data['lease_id'] = $asset->lease->id;
                         $data['asset_id'] = $asset->id;
                         $data['lease_start_date'] = date('Y-m-d', strtotime($request->lease_start_date));
@@ -88,14 +90,12 @@ class LeaseDurationClassifiedController extends Controller
                         if ($model->save()) {
                             // complete Step
                             confirmSteps($lease->id, 9);
-                            if($request->has('action') && $request->action == "next") {
-                            return redirect(route('addlease.leasevaluation.index',['id' => $lease->id]));
-                        } else {
+                            if ($request->has('action') && $request->action == "next") {
+                                return redirect(route('lease.escalation.index', ['id' => $lease->id]));
+                            } else {
+                                return redirect(route('addlease.durationclassified.index', ['id' => $lease->id]))->with('status', 'Lease Duration Classified Value has been added successfully.');
+                            }
 
-                             return redirect(route('addlease.durationclassified.index', ['id' => $lease->id]))->with('status', 'Lease Duration Classified Value has been added successfully.');
-
-                        }
-                           
                         }
                     }
 
@@ -120,14 +120,14 @@ class LeaseDurationClassifiedController extends Controller
                         'current_step'
                     ));
                 } else {
-                    return redirect(route('lease.escalation.index', ['id'=>$id]));
+                    return redirect(route('lease.escalation.index', ['id' => $id]));
                 }
 
 
             } else {
                 abort(404);
             }
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             abort(404, $e->getMessage());
         }
     }

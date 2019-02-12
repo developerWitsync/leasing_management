@@ -130,7 +130,7 @@ class LeaseResidualController extends Controller
                 $payment_lease_basis = LeasePaymentsBasis::query()->whereIn('business_account_id', getDependentUserIds())->get();
 
                 //to get current step for steps form
-                $current_step = $his->current_step;
+                $current_step = $this->current_step;
 
                 return view('lease.residual-value-gurantee.create', compact(
                     'model',
