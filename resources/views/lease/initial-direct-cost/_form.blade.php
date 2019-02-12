@@ -115,7 +115,7 @@
                                 <input type="text" class="form-control expense_date" name="expense_date[]" value="{{ \Carbon\Carbon::parse($supplier->expense_date)->format(config('settings.date_format')) }}">
                             </td>
                             <td>
-                                <select class="form-control" name="supplier_currency[]">
+                                <select class="form-control supplier_currency" name="supplier_currency[]">
                                     <option value="">--Select Currency--</option>
                                     @foreach($currencies as $currency)
                                         <option value="{{ $currency->code }}" @if($currency->code == $supplier->supplier_currency) selected="selected" @endif>{{ $currency->code }}  {{ $currency->symbol }}</option>
@@ -126,7 +126,7 @@
                                 <input type="text" class="form-control" name="amount[]" value="{{ $supplier->amount }}">
                             </td>
                             <td>
-                                <input type="text" class="form-control" name="rate[]" value="{{ $supplier->rate }}">
+                                <input type="text" class="form-control rate" name="rate[]" value="{{ $supplier->rate }}">
                             </td>
                             <td>
                                 <a href="javascript:void(0);" class="btn btn-sm btn-danger supplier_create_details_form_delete" onClick="javascript:removeRow(this)">Remove</a>
@@ -150,7 +150,7 @@
                             <input type="text" class="form-control expense_date" name="expense_date[]">
                         </td>
                         <td>
-                            <select class="form-control" name="supplier_currency[]">
+                            <select class="form-control supplier_currency" name="supplier_currency[]">
                                 <option value="">--Select Currency--</option>
                                 @foreach($currencies as $currency)
                                     <option value="{{ $currency->code }}">{{ $currency->code }}  {{ $currency->symbol }}</option>
@@ -161,7 +161,7 @@
                             <input type="text" class="form-control" name="amount[]">
                         </td>
                         <td>
-                            <input type="text" class="form-control" name="rate[]">
+                            <input type="text" class="form-control rate" name="rate[]">
                         </td>
                         <td>
                             <a href="javascript:void(0);" class="btn btn-sm btn-danger supplier_create_details_form_delete" onClick="javascript:removeRow(this)">Remove</a>
@@ -232,7 +232,7 @@
                 '                            <input type="text" class="form-control expense_date" name="expense_date[]">\n' +
                 '                        </td>\n' +
                 '                        <td>\n' +
-                '                            <select class="form-control" name="supplier_currency[]">\n' +
+                '                            <select class="form-control supplier_currency" name="supplier_currency[]">\n' +
                 '                                <option value="">--Select Currency--</option>\n' +
                 '                                @foreach($currencies as $currency)\n' +
                 '                                    <option value="{{ $currency->code }}">{{ $currency->code }}  {{ $currency->symbol }}</option>\n' +
@@ -243,7 +243,7 @@
                 '                            <input type="text" class="form-control" name="amount[]">\n' +
                 '                        </td>\n' +
                 '                        <td>\n' +
-                '                            <input type="text" class="form-control" name="rate[]">\n' +
+                '                            <input type="text" class="form-control rate" name="rate[]">\n' +
                 '                        </td>\n' +
                 '                        <td>\n' +
                 '                            <a href="javascript:void(0);" class="btn btn-sm btn-danger supplier_create_details_form_delete" onClick="javascript:removeRow(this)">Remove</a>\n' +
@@ -251,6 +251,7 @@
                 '                            \n' +
                 '                        </td>\n' +
                 '                    </tr>';
+
             var newRow = $(cloned_html).insertAfter($('.clonable_row:last'));
             newRow.find("input.expense_date")
                 .removeClass('hasDatepicker')
@@ -261,33 +262,31 @@
                     beforeShow: function() {
                         setTimeout(function() {
                             $('.ui-datepicker').css('z-index', 99999999999999);
-
                         }, 0);
                     }
                 });
         }
 
         function removeRow(that){
-        var rowCount =  $('tr.supplier').length;
+            var rowCount =  $('tr.supplier').length;
             if(rowCount == 1){
                 var modal = bootbox.dialog({
                 message: 'You can not delete this detail to do this you have to Select No Initial direct cost',
                 buttons: [
-                {
-                    label: "OK",
-                    className: "btn btn-success pull-left",
-                    callback: function() {
+                    {
+                        label: "OK",
+                        className: "btn btn-success pull-left",
+                        callback: function() {
+                        }
                     }
-                }
                 ],
-                    show: false,
+                show: false,
                     onEscape: function() {
                     modal.modal("hide");
                     }
                 });
                     modal.modal("show");
-            }
-            else {
+            } else {
                $(that).parent('td').parent('tr').remove();
             }
         }
@@ -297,5 +296,29 @@
                 $('input[name="action"]').val('next');
                 $('#lease_initial').submit();
         });
+
+        /**
+         * fetches the currency rates from the Currency API
+         */
+        $(document.body).on('change', '.supplier_currency', function(){
+            var selected_currency = $(this).val();
+            var base_currency = '{{ $lease->lease_contract_id }}';
+            var that = $(this);
+            // set endpoint and your access key
+            var endpoint = 'live';
+            var access_key = '{{ env("CURRENCY_API_ACCESS_KEY") }}';
+            // get the most recent exchange rates via the "live" endpoint:
+            $.ajax({
+                url: 'http://apilayer.net/api/' + endpoint + '?access_key=' + access_key + '&source='+base_currency+'&currencies='+selected_currency,
+                dataType: 'jsonp',
+                success: function(result) {
+                    if(result.success) {
+                        var rate = result['quotes'][base_currency+selected_currency];
+                        $(that).parent('td').parent('tr').find('input.rate').val(rate);
+                    }
+                }
+            });
+        });
+
     </script>
 @endsection

@@ -2,35 +2,37 @@
 
 namespace Tests\Feature\Auth;
 
-use App\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-
+use App\User;
 class LoginTest extends TestCase
 {
-
-    public function test_user_can_login_with_correct_credentials()
+    /**
+     * test remember me functionality
+     * @throws \Exception
+     */
+    public function test_remember_me_functionality()
     {
-//        $user = User::query()->where('email','=' , 'himanshu_rajput@seologistics.com')->first();
-
         $user = factory(User::class)->create([
-            'password' => bcrypt('123456'),
+            'id' => random_int(1, 100),
+            'password' => bcrypt($password = 'i-love-laravel'),
         ]);
 
-        $response = $this->from('/login')->post('/login', [
+        $response = $this->post('/login', [
             'email' => $user->email,
-            'password' => '123456',
+            'password' => $password,
+            'remember' => 'on',
         ]);
-
 
         $response->assertRedirect('/home');
-
-        $this->assertAuthenticated('web');
-
+        // cookie assertion goes here
         $this->assertAuthenticatedAs($user);
     }
 
+    /**
+     * test so that the user cannot login with incorrect password
+     */
     public function test_user_cannot_login_with_incorrect_password()
     {
         $user = factory(User::class)->create([
@@ -49,27 +51,39 @@ class LoginTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_user_can_view_a_login_form()
+    /**
+     * test user can login with correct credentials.
+     */
+    public function test_user_can_login_with_correct_credentials()
     {
-        $response = $this->get('/login');
-        $response->assertSuccessful();
-        $response->assertViewIs('auth.login');
+        $user = factory(User::class)->create([
+            'password' => bcrypt($password = 'i-love-laravel'),
+        ]);
+        $response = $this->post('/login', [
+            'email' => $user->email,
+            'password' => $password,
+        ]);
+        $response->assertRedirect('/home');
+        $this->assertAuthenticatedAs($user);
     }
 
+    /**
+     * test user cannot view a login form once logged in
+     */
     public function test_user_cannot_view_a_login_form_when_authenticated()
     {
-        $user = factory(\App\User::class)->make();
+        $user = factory(User::class)->make();
         $response = $this->actingAs($user)->get('/login');
         $response->assertRedirect('/home');
     }
 
     /**
-     * A basic test example.
-     *
-     * @return void
+     * Test user can view a login form if not authenticated
      */
-    public function testExample()
+    public function test_user_can_view_a_login_form()
     {
-        $this->assertTrue(true);
+        $response = $this->get('/login');
+        $response->assertSuccessful();
+        $response->assertViewIs('auth.login');
     }
 }

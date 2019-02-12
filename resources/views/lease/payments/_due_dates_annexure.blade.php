@@ -42,7 +42,8 @@
                                 <td class="success">
                                     @foreach($final_payout_dates[$year][$month] as $date)
                                         <span class="alter_due_dates_info">
-                                            {{ \Carbon\Carbon::parse($date)->format('l jS \of F Y') }}
+                                            <!-- {{ \Carbon\Carbon::parse($date)->format('l jS \of F Y') }} -->
+                                            {{ \Carbon\Carbon::parse($date)->format(config('settings.date_format')) }}
                                         </span><br/>
                                         <input type="text" data-month="{{ $key }}" data-year="{{ $year }}" class="form-control alter_due_dates_input hidden" name="altered_payment_due_date[]" value="{{ $date }}">
                                     @endforeach

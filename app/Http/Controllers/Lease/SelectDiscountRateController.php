@@ -22,8 +22,7 @@ class SelectDiscountRateController extends Controller
     protected function validationRules(){
         return [
           
-            'annual_average_esclation_rate' => 'required',
-            'discount_rate_to_use' => 'required|numeric|min:2'
+           'discount_rate_to_use' => 'required|numeric|min:2'
         ];
     }
 
