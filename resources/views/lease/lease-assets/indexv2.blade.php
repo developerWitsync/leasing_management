@@ -17,11 +17,11 @@
             <div class="tab-content" style="padding: 0px;">
                 <div role="tabpanel" class="tab-pane active">
                     <form class="form-horizontal" method="POST"
-                          action="{{ route('addlease.leaseasset.saveasset', ['id' => $lease->id]) }}">
+                          action="{{ route('addlease.leaseasset.saveasset', ['id' => $lease->id]) }}" id="lease_asset">
                         {{ csrf_field() }}
 
                         <div class="categoriesOuter clearfix">
-                            <div class="categoriesHd">Lease Asset Categorisation</div>
+                            <div class="categoriesHd">Lease Asset Categorization</div>
                             <div class="form-group{{ $errors->has('uuid') ? ' has-error' : '' }} required">
                                 <label for="uuid" class="col-md-12 control-label">ULA CODE</label>
                                 <div class="col-md-12">
@@ -216,7 +216,7 @@
                         <div class="categoriesOuter clearfix">
                             <div class="categoriesHd">Purpose of the Underlying Lease Asset</div>
                             <div class="form-group{{ $errors->has('specific_use') ? ' has-error' : '' }} required">
-                                <label for="specific_use" class="col-md-12 control-label">Useful Life of the Lease
+                                <label for="specific_use" class="col-md-12 control-label">Specific Use of the Lease
                                     Asset</label>
                                 <div class="col-md-12">
                                     <select name="specific_use" class="form-control">
@@ -257,8 +257,11 @@
                         <div class="categoriesOuter clearfix">
                             <div class="categoriesHd">Expected Useful Life of the Underlying Lease Asset</div>
                             <div class="form-group{{ $errors->has('expected_life') ? ' has-error' : '' }} required">
-                                <label for="expected_life" class="col-md-12 control-label">Specific Use of the Lease
-                                    Asset</label>
+                                <label for="expected_life" class="col-md-12 control-label">
+
+                                    Useful Life of the Lease
+                                    Asset
+                                    </label>
                                 <div class="col-md-12">
                                     <select name="expected_life" class="form-control">
                                         <option value="">--Expected Life Of Lease Asset--</option>
@@ -452,20 +455,23 @@
 
 
                         <div class="form-group btnMainBx">
-                            <div class="col-md-6 col-sm-6 btn-backnextBx">
+                            <div class="col-md-4 col-sm-4 btn-backnextBx">
 
                                 <a href="{{ route('add-new-lease.index',['id' => $lease->id]) }}"
-                                   class="btn btn-danger">Back</a>
-                                @if($lease->total_assets == count($lease->assets))
-                                    <a href="{{ route('addlease.leaseterminationoption.index',['id' => $lease->id]) }}"
-                                       class="btn btn-primary">Next</a>
-                                @endif
-
+                                   class="btn btn-danger">
+                                   <i class="fa fa-arrow-left"></i> {{ env('BACK_LABEL')}}</a>
+                              
                             </div>
-                            <div class="col-md-6 col-sm-6 btnsubmitBx">
+                            <div class="col-md-4 col-sm-4 btnsubmitBx aligncenter">
 
-                                <button type="submit" class="btn btn-success">Submit</button>
+                                <button type="submit" class="btn btn-success"> 
+                                {{ env('SAVE_LABEL') }} <i class="fa fa-download"></i></button>
                             </div>
+                             <div class="col-md-4 col-sm-4 btn-backnextBx rightlign ">
+                                <input type="hidden" name="action" value="">
+                                <a href="javascript:void(0);" class="btn btn-primary save_next"> {{ env('NEXT_LABEL') }} <i class="fa fa-arrow-right"></i></a>
+                             </div>
+                            
                         </div>
 
                     </form>
@@ -641,5 +647,10 @@
                 }
             });
         });
+     $('.save_next').on('click', function (e) {
+                e.preventDefault();
+                $('input[name="action"]').val('next');
+                $('#lease_asset').submit();
+            });
     </script>
 @endsection

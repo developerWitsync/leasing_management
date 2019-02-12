@@ -5,7 +5,7 @@
 
 @section('content')
     <div class="panel panel-default">
-        <div class="panel-heading">Add Lease Duration Classified Value  for the asset - {{ $asset->name }}</div>
+        <div class="panel-heading">Lease Duration Classified </div>
 
         <div class="panel-body">
             @if (session('status'))

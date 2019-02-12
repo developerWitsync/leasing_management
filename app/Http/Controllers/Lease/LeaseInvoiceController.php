@@ -16,6 +16,7 @@ use Validator;
 
 class LeaseInvoiceController extends Controller
 {
+    private $current_step = 17;
     protected function validationRules(){
         return [
             'lease_payment_invoice_received'   => 'required'
@@ -56,7 +57,7 @@ class LeaseInvoiceController extends Controller
                         return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
                     }
 
-                    $data = $request->except('_token');
+                    $data = $request->except('_token','action');
                     $data['lease_id']   = $id;
 
                     $model->setRawAttributes($data);
@@ -64,10 +65,17 @@ class LeaseInvoiceController extends Controller
                     if($model->save()){
                         // complete Step
                         confirmSteps($lease->id,17);
-                        return redirect(route('addlease.leasepaymentinvoice.update',['id' => $lease->id]))->with('status', 'Lease Payment Invoice details has been updated successfully.');
+                       if($request->has('action') && $request->action == "next") {
+                            return redirect(route('addlease.reviewsubmit.index',['id' => $lease->id]));
+                        } else {
+
+                              return redirect(route('addlease.leasepaymentinvoice.update',['id' => $lease->id]))->with('status', 'Lease Payment Invoice details has been updated successfully.');
+
+                        }
+                       
                     }
                 }
-                $current_step = 17;
+                $current_step = $this->current_step;
                 return view('lease.lease-payment-invoice.index', compact('breadcrumbs',
                     'lease',
                 'model',

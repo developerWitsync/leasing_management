@@ -7,7 +7,7 @@
         </ul>
     </div>
 @endif
-<form role="form" class="form-horizontal" method="post" enctype="multipart/form-data">
+<form role="form" class="form-horizontal" method="post" enctype="multipart/form-data" id="lease_incentive">
     {{ csrf_field() }}
     <div class="categoriesOuter clearfix">
     <div class="form-group required">
@@ -182,7 +182,20 @@
         </div>
     </div>
 </div>
-    <div class="form-group btnMainBx">
+<div class="form-group btnMainBx">
+ <div class="col-md-4 col-sm-4 btn-backnextBx">
+        <a href="{{ route('addlease.initialdirectcost.index', ['id' => $lease->id]) }}" class="btn btn-danger"><i class="fa fa-arrow-left"></i> {{ env('BACK_LABEL')}}</a>
+    </div>
+    <div class="col-md-4 col-sm-4 btnsubmitBx aligncenter">
+        <button type="submit" class="btn btn-success"> 
+        {{ env('SAVE_LABEL') }} <i class="fa fa-download"></i></button>
+    </div>
+    <div class="col-md-4 col-sm-4 btn-backnextBx rightlign ">
+        <input type="hidden" name="action" value="">
+        <a href="javascript:void(0);" class="btn btn-primary save_next"> {{ env('NEXT_LABEL') }} <i class="fa fa-arrow-right"></i></a>
+    </div>
+</div>
+    <!-- <div class="form-group btnMainBx">
         <div class="col-md-6 col-sm-6 btn-backnextBx">
 
             <a href="{{ route('addlease.initialdirectcost.index', ['id' => $lease->id]) }}"
@@ -197,7 +210,7 @@
                 Save
             </button>
         </div>
-    </div>
+    </div> -->
 
 </form>
 
@@ -293,6 +306,11 @@
                 $(that).parent('td').parent('tr').remove();
             }
         }
+         $('.save_next').on('click', function (e) {
+                e.preventDefault();
+                $('input[name="action"]').val('next');
+                $('#lease_incentive').submit();
+        });
 
     </script>
 @endsection

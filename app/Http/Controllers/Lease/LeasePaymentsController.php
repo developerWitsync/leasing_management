@@ -25,7 +25,7 @@ use Validator;
 
 class LeasePaymentsController extends Controller
 {
-
+    private $current_step = 6;
     /**
      * validation rules for the create and update payments
      * @return array
@@ -109,7 +109,7 @@ class LeasePaymentsController extends Controller
                 }
 
                 //to get current step for steps form
-                $current_step = 6;
+                $current_step = $this->current_step;
 
                 return view('lease.payments.index', compact('breadcrumbs',
                     'lease',
@@ -159,7 +159,7 @@ class LeasePaymentsController extends Controller
                 $asset = LeaseAssets::query()->where('lease_id', '=', $lease_id)->where('id', '=', $asset_id)->first();
                 if ($asset) {
                     $lease_asset_number_of_payments = LeasePaymentsNumber::query()->select('id', 'number')->whereIn('business_account_id', getDependentUserIds())->get()->toArray();
-                     $current_step = 6;
+                     $current_step = $this->current_step;
                     return view('lease.payments.create', compact(
                         'lease',
                         'asset',
@@ -277,7 +277,7 @@ class LeasePaymentsController extends Controller
 
             $payout_due_dates = [];
             
-            $current_step = 6;
+            $current_step = $this->current_step;
 
             return view('lease.payments.createpayment', compact(
                 'asset',
@@ -368,7 +368,7 @@ class LeasePaymentsController extends Controller
                 $payout_due_dates = $payment->paymentDueDates->pluck('date')->toArray();
 
                 $lease_span_time_in_days = Carbon::parse($asset->lease_end_date)->diffInMonths(Carbon::parse($asset->accural_period));
-
+                $current_step = $this->current_step;
                 return view('lease.payments.updatepayment', compact(
                     'asset',
                     'lease',
@@ -379,7 +379,8 @@ class LeasePaymentsController extends Controller
                     'payments_payout_times',
                     'payout_due_dates',
                     'lease_span_time_in_days',
-                    'subsequent_modify_required'
+                    'subsequent_modify_required',
+                    'current_step'
                 ));
             } else {
                 abort(404);

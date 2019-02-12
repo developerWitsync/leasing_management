@@ -5,7 +5,7 @@
 
 @section('content')
     <div class="panel panel-default">
-        <div class="panel-heading">Add Renewable Option Value  for the asset - {{ $asset->name }}</div>
+        <div class="panel-heading">Lease Renewal Option </div>
 
         <div class="panel-body">
             @if (session('status'))

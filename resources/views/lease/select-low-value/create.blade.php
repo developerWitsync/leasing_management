@@ -5,7 +5,7 @@
 
 @section('content')
     <div class="panel panel-default">
-        <div class="panel-heading">Add Select Low Value  for the asset - {{ $asset->name }}</div>
+        <div class="panel-heading">Select Low Value </div>
 
         <div class="panel-body">
             @if (session('status'))

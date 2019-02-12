@@ -5,7 +5,7 @@
 
 @section('content')
     <div class="panel panel-default">
-        <div class="panel-heading">Edit Existing Purchase Option for the asset - {{ $asset->name }}</div>
+        <div class="panel-heading">Edit Purchase Option </div>
 
         <div class="panel-body">
             @if (session('status'))

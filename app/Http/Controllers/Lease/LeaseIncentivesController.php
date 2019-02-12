@@ -22,6 +22,7 @@ use Validator;
 
 class LeaseIncentivesController extends Controller
 {
+    private $current_step = 15;
     protected function validationRules(){
         return [
             'is_any_lease_incentives_receivable' => 'required',
@@ -85,7 +86,7 @@ class LeaseIncentivesController extends Controller
                             return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
                         }
 
-                        $data = $request->except('_token', 'submit','customer_name', 'description', 'incentive_date', 'currency_id', 'amount', 'exchange_rate',  'uuid', 'asset_name', 'asset_category');
+                        $data = $request->except('_token', 'submit','customer_name', 'description', 'incentive_date', 'currency_id', 'amount', 'exchange_rate',  'uuid', 'asset_name', 'asset_category','action');
                         $data['lease_id'] = $asset->lease->id;
                         $data['asset_id'] = $asset->id;
                         $model->setRawAttributes($data);
@@ -107,12 +108,19 @@ class LeaseIncentivesController extends Controller
                             }
                             // complete Step
                             confirmSteps($lease->id, 15);
-                            return redirect(route('addlease.leaseincentives.index',['id' => $lease->id]))->with('status', 'Lease incentive cost has been added successfully.');
+                            if($request->has('action') && $request->action == "next") {
+                            return redirect(route('addlease.leasevaluation.index',['id' => $lease->id]));
+                        } else {
+
+                           return redirect(route('addlease.leaseincentives.index',['id' => $lease->id]))->with('status', 'Lease incentive cost has been added successfully.');
+
+                        }
+                            
                         }
                     }
 
                     //to get current step for steps form
-                    $current_step = 15;
+                    $current_step = $this->current_step;
 
                     return view('lease.lease-incentives.create', compact(
                         'model',

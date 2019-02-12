@@ -80,6 +80,8 @@
                             @if(!in_array(false, $show_next))
                                 <a href="{{ route('addlease.renewable.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
                             @endif
+
+                            
                         </div>
 
                     </div>

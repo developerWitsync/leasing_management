@@ -30,6 +30,7 @@ use Validator;
 
 class FairMarketValueController extends Controller
 {
+    private $current_step = 7;
     protected function validationRules(){
         return [
             'is_market_value_present'   => 'required',
@@ -78,7 +79,7 @@ class FairMarketValueController extends Controller
                         return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
                     }
 
-                    $data = $request->except('_token', 'uuid', 'asset_name', 'asset_category');
+                    $data = $request->except('_token', 'uuid', 'asset_name', 'asset_category','action');
                     $data['attachment'] = "";
                     $data['lease_id']   = $asset->lease->id;
                     $data['asset_id']   = $asset->id;
@@ -93,7 +94,14 @@ class FairMarketValueController extends Controller
                     if($market_value->save()){
                         // complete Step
                         confirmSteps($lease->id,7);
-                        return redirect(route('addlease.fairmarketvalue.index',['id' => $lease->id]))->with('status', 'Fair Market has been added successfully.');
+                         if($request->has('action') && $request->action == "next") {
+                            return redirect(route('addlease.residual.index',['id' => $lease->id]));
+                        } else {
+
+                             return redirect(route('addlease.fairmarketvalue.index',['id' => $lease->id]))->with('status', 'Fair Market has been added successfully.');
+
+                        }
+                        
                     }
                 }
 
@@ -106,7 +114,7 @@ class FairMarketValueController extends Controller
                 }
 
                //to get current step for steps form
-                $current_step = 7;
+                $current_step = $this->current_step;
 
                 return view('lease.fair-market-value.createv2', compact(
                     'model',

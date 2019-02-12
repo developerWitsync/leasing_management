@@ -18,6 +18,7 @@ use Validator;
 
 class LeaseRenewableOptionController extends Controller
 {
+    private $current_step = 4;
     protected function validationRules(){
         return [
             'is_renewal_option_under_contract'   => 'required',
@@ -76,7 +77,7 @@ class LeaseRenewableOptionController extends Controller
                             return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
                         }
 
-                        $data = $request->except('_token','submit', 'uuid', 'asset_name', 'asset_category');
+                        $data = $request->except('_token','submit', 'uuid', 'asset_name', 'asset_category','action');
                         $data['lease_id']   = $asset->lease->id;
                         $data['asset_id']   = $asset->id;
                         if($request->is_reasonable_certainity_option == "yes") {
@@ -90,12 +91,18 @@ class LeaseRenewableOptionController extends Controller
                         if($model->save()){
                             // complete Step
                             confirmSteps($lease->id,4);
-                            return redirect(route('addlease.renewable.index',['id' => $lease->id]))->with('status', 'Renewable Option has been added successfully.');
+                            if($request->has('action') && $request->action == "next") {
+                            return redirect(route('addlease.purchaseoption.index',['id' => $lease->id]));
+                        } else {
+
+                             return redirect(route('addlease.renewable.index',['id' => $lease->id]))->with('status', 'Renewable Option has been added successfully.');
+
                         }
                     }
+                }
 
                     //to get current step for steps form
-                    $current_step = 4;
+                    $current_step = $this->current_step;
 
                     return view('lease.lease-renewable-option.create', compact(
                         'model',

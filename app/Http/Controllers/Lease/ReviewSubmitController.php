@@ -39,6 +39,7 @@ use Validator;
 
 class ReviewSubmitController extends Controller
 {
+    private $current_step = 18;
     /**
      * renders the table to list all the lease assets.
      * @param $id Primary key for the lease
@@ -65,7 +66,7 @@ class ReviewSubmitController extends Controller
             $contract_classifications = ContractClassifications::query()->select('id', 'title')->where('status', '=', '1')->get();
 
             //to get current step for steps form
-            $current_step = 18;
+            $current_step = $this->current_step;
 
             return view('lease.review-submit.index', compact(
                 'lease',

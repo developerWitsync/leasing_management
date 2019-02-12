@@ -9,17 +9,38 @@ class ContractClassifications extends Seeder
      *
      * @return void
      */
-    protected $values = "Single Lease Contract, Multiple Leases Contract, Single Lease & Non-Lease Contract,Multiple Leases & Non-Lease Contract";
+    protected $values = [
+        [
+            'title' => 'Single Lease Contract',
+            'status'    => '1'
+        ],
+        [
+            'title' => 'Multiple Leases Contract',
+            'status'    => '0'
+        ],
+        [
+            'title' => 'Single Lease & Non-Lease Contract',
+            'status'    => '1'
+        ],
+        [
+            'title' => 'Multiple Leases & Non-Lease Contract',
+            'status'    => '0'
+        ]
+    ];
 
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
     public function run()
     {
-        foreach (explode(',',$this->values) as $title) {
-            DB::table('contract_classifications')->insert([
-                'title' => $string = trim(preg_replace('/\s\s+/', ' ', $title)),
-                'status' => '1',
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s')
-            ]);
+        foreach ($this->values as $value) {
+            $value['created_at'] = date('Y-m-d H:i:s');
+            $value['updated_at'] = date('Y-m-d H:i:s');
+            DB::table('contract_classifications')->insert($value);
         }
     }
+
+
 }

@@ -27,7 +27,7 @@ use Validator;
 
 class UnderlyingLeaseAssetController extends Controller
 {
-
+    private $current_step = 2; 
     /**
      * One Lease can have single lease asset hence show the form to provide all the details at once.
      * Create the lease asset form
@@ -58,6 +58,7 @@ class UnderlyingLeaseAssetController extends Controller
             //check if the Subsequent Valuation is applied for the lease modification
             $subsequent_modify_required = $lease->isSubsequentModification();
             $lease_assets_categories  = LeaseAssetCategories::query()->with('subcategories')->get();
+           
             $la_similar_charac_number = LeaseAssetSimilarCharacteristicSettings::query()
                 ->select('number')
                 ->whereIn('business_account_id', getDependentUserIds())
@@ -73,7 +74,7 @@ class UnderlyingLeaseAssetController extends Controller
 
              //to get current step for steps form
            // $current_step = isEnabled($id,2);
-            $current_step = 2;
+            $current_step = $this->current_step;
 
             
             return view('lease.lease-assets.indexv2', compact('breadcrumbs',
@@ -168,7 +169,7 @@ class UnderlyingLeaseAssetController extends Controller
                 if ($validator->fails()) {
                     return redirect()->back()->withErrors($validator->errors())->withInput($request->except('_token'));
                 }
-                $data = $request->except('_token');
+                $data = $request->except('_token', 'action');
                 $data['lease_id'] = $lease->id;
                 $data['lease_end_date'] = date('Y-m-d', strtotime($request->lease_end_date));
                 $data['accural_period'] = date('Y-m-d', strtotime($request->accural_period));
@@ -180,9 +181,19 @@ class UnderlyingLeaseAssetController extends Controller
                 // make the entry to the completed steps table so that the log can be created to check the completed steps
                 confirmSteps($id, 2);
 
-                return redirect(
-                    route('addlease.leaseasset.index', ['id' => $lease->id])
-                )->with('status', "Asset Details has been updated successfully.");
+                if($request->has('action') && $request->action == "next") {
+                    return redirect(
+                        route('addlease.leaseterminationoption.index',['id' => $lease->id])
+                    )->with('status', "Asset Details has been updated successfully.");
+
+                } else {
+
+                    return redirect(
+                        route('addlease.leaseasset.index', ['id' => $lease->id])
+                    )->with('status', "Asset Details has been updated successfully.");
+
+                }
+
             }else{
                 abort(404);
             }

@@ -18,6 +18,7 @@ use Validator;
 
 class SelectLowValueController extends Controller
 {
+    private $current_step = 11;
     protected function validationRules(){
         return [
             'undiscounted_lease_payment'   => 'required',
@@ -61,7 +62,7 @@ class SelectLowValueController extends Controller
                         if($validator->fails()){
                             return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
                         }
-                        $data = $request->except('_token','submit',  'uuid', 'asset_name', 'asset_category');
+                        $data = $request->except('_token','submit',  'uuid', 'asset_name', 'asset_category','action');
                         $data['lease_id']   = $asset->lease->id;
                         $data['asset_id']   = $asset->id;
                         $model->setRawAttributes($data);
@@ -69,12 +70,19 @@ class SelectLowValueController extends Controller
 
                             // complete Step
                             confirmSteps($id,11);
-                            return redirect(route('addlease.lowvalue.index',['id' => $lease->id]))->with('status', 'Select Low Value has been added successfully.');
+                        if($request->has('action') && $request->action == "next") {
+                            return redirect(route('addlease.discountrate.index',['id' => $lease->id]));
+                        } else {
+
+                             return redirect(route('addlease.lowvalue.index',['id' => $lease->id]))->with('status', 'Select Low Value has been added successfully.');
+
+                        }
+                           
                         }
                     }
 
                     //to get current step for steps form
-                    $current_step = 11;
+                    $current_step = $this->current_step;
 
                     return view('lease.select-low-value.create', compact(
                         'model',

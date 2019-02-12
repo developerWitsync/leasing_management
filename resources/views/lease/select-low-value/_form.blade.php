@@ -1,4 +1,4 @@
-<form role="form"  class="form-horizontal" method="post" enctype="multipart/form-data">
+<form role="form"  class="form-horizontal" id="lease_low" method="post" enctype="multipart/form-data">
     {{ csrf_field() }}
 
     <div class="form-group required">
@@ -62,24 +62,21 @@
         </div>
     </div>
 </div>
-
-    <div class="form-group btnMainBx">
-        <div class="col-md-6 col-sm-6 btn-backnextBx">
-
-            <a href="{{ route('lease.escalation.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
-            @if($asset->leaseSelectLowValue)
-                <a href="{{ route('addlease.discountrate.index', ['id' => $lease->id]) }}"
-                   class="btn btn-primary">Next</a>
-            @endif
-
-        </div>
-        <div class="col-md-6 col-sm-6 btnsubmitBx">
-            <button type="submit" name="submit" class="btn btn-success">
-                Save
-            </button>
-        </div>
+<div class="form-group btnMainBx">
+ <div class="col-md-4 col-sm-4 btn-backnextBx">
+        <a href="{{ route('lease.escalation.index', ['id' => $lease->id]) }}" class="btn btn-danger"><i class="fa fa-arrow-left"></i> {{ env('BACK_LABEL')}}</a>
     </div>
-
+    <div class="col-md-4 col-sm-4 btnsubmitBx aligncenter">
+        <button type="submit" class="btn btn-success"> 
+        {{ env('SAVE_LABEL') }} <i class="fa fa-download"></i></button>
+    </div>
+    <div class="col-md-4 col-sm-4 btn-backnextBx rightlign ">
+        <input type="hidden" name="action" value="">
+        <a href="javascript:void(0);" class="btn btn-primary save_next"> {{ env('NEXT_LABEL') }} <i class="fa fa-arrow-right"></i></a>
+    </div>
+ 
+</div>
+  
 </form>
 
 @section('footer-script')
@@ -114,6 +111,11 @@
             }
 
             
+        });
+          $('.save_next').on('click', function (e) {
+                e.preventDefault();
+                $('input[name="action"]').val('next');
+                $('#lease_low').submit();
         });
 </script>
 

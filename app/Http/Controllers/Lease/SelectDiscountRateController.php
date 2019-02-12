@@ -18,9 +18,10 @@ use Validator;
 
 class SelectDiscountRateController extends Controller
 {
+    private $current_step = 12;
     protected function validationRules(){
         return [
-            'interest_rate'   => 'required',
+          
             'annual_average_esclation_rate' => 'required',
             'discount_rate_to_use' => 'required|numeric|min:2'
         ];
@@ -87,19 +88,26 @@ class SelectDiscountRateController extends Controller
                         if($validator->fails()){
                             return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
                         }
-                        $data = $request->except('_token','submit',  'uuid', 'asset_name', 'asset_category');
+                        $data = $request->except('_token','submit',  'uuid', 'asset_name', 'asset_category','action');
                         $data['lease_id']   = $asset->lease->id;
                         $data['asset_id']   = $asset->id;
                         $model->setRawAttributes($data);
                         if($model->save()){
                             // complete Step
                             confirmSteps($asset->lease->id,12);
-                            return redirect(route('addlease.discountrate.index',['id' => $lease->id]))->with('status', 'Select Discount Rate has been added successfully.');
+                        if($request->has('action') && $request->action == "next") {
+                            return redirect(route('addlease.balanceasondec.index',['id' => $lease->id]));
+                        } else {
+
+                              return redirect(route('addlease.discountrate.index',['id' => $lease->id]))->with('status', 'Select Discount Rate has been added successfully.');
+
+                        }
+                           
                         }
                     }
                
                     //to get current step for steps form
-                    $current_step = 12;
+                    $current_step = $this->current_step;
 
                     return view('lease.select-discount-rate.create', compact(
                         'model',

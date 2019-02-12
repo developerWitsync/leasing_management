@@ -1,4 +1,4 @@
-<form role="form" class="form-horizontal" method="post" enctype="multipart/form-data">
+<form role="form" class="form-horizontal" action="{{ route('addlease.leaseterminationoption.index', ['id' => $lease->id]) }}" id="lease_termination" method="post" enctype="multipart/form-data">
     {{ csrf_field() }}
     <div class="categoriesOuter clearfix">
     <div class="form-group required">
@@ -139,27 +139,31 @@
     </div>
 </div>
 
-    <div class="form-group btnMainBx">
-        <div class="col-md-6 col-sm-6 btn-backnextBx">
-
-            <a href="{{ route('addlease.leaseasset.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
-            @if($asset->terminationOption)
-                <a href="{{ route('addlease.renewable.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
-            @endif
-
+        <div class="form-group btnMainBx">
+            <div class="col-md-4 col-sm-4 btn-backnextBx">
+                <a href="{{ route('addlease.leaseasset.index', ['id' => $lease->id]) }}" class="btn btn-danger"><i class="fa fa-arrow-left"></i> {{ env('BACK_LABEL')}}</a>
+            </div>
+            <div class="col-md-4 col-sm-4 btnsubmitBx aligncenter">
+                <button type="submit" class="btn btn-success"> 
+                {{ env('SAVE_LABEL') }} <i class="fa fa-download"></i></button>
+            </div>
+            <div class="col-md-4 col-sm-4 btn-backnextBx rightlign ">
+                <input type="hidden" name="action" value="">
+                <a href="javascript:void(0);" class="btn btn-primary save_next"> {{ env('NEXT_LABEL') }} <i class="fa fa-arrow-right"></i></a>
+             </div>
         </div>
-        <div class="col-md-6 col-sm-6 btnsubmitBx">
-
-            <button type="submit" class="btn btn-success">
-                Save
-            </button>
-        </div>
-    </div>
 </form>
 
 @section('footer-script')
     <script src="{{ asset('js/jquery-ui.js') }}"></script>
     <script type="text/javascript">
+
+         $('.save_next').on('click', function (e) {
+           
+                e.preventDefault();
+                $('input[name="action"]').val('next');
+                $('#lease_termination').submit();
+            });
 
         $(document).ready(function () {
 

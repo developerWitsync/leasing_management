@@ -17,7 +17,7 @@
 
             <div class="tab-content" style="padding: 0px;">
                 <div role="tabpanel" class="tab-pane active">
-                    <form role="form" action="{{ route('lease.esacalation.applicablestatus', ['id' => $lease->id]) }}" class="form-horizontal" method="post" enctype="multipart/form-data">
+                    <form role="form" action="{{ route('lease.esacalation.applicablestatus', ['id' => $lease->id]) }}" class="form-horizontal" method="post" enctype="multipart/form-data" id="lease_esclation">
                         {{ csrf_field() }}
                         <div class="form-group{{ $errors->has('escalation_clause_applicable') ? ' has-error' : '' }} required">
                             <label for="escalation_clause_applicable" class="col-md-4 control-label">Any Escalation Clause Applicable</label>
@@ -50,27 +50,25 @@
                         @include('lease.escalation._list_escalation')
                     @endif
 
-                    <div class="form-group btnMainBx clearfix">
-                        <div class="col-md-6 col-sm-6 btn-backnextBx">
+<div class="form-group btnMainBx clearfix">
+ <div class="col-md-4 col-sm-4 btn-backnextBx">
+        <a href="{{ $back_url }}" class="btn btn-danger"><i class="fa fa-arrow-left"></i> {{ env('BACK_LABEL')}}</a>
+</div>
 
-                            <a href="{{ $back_url }}" class="btn btn-danger">Back</a>
-                            @if($lease->escalation_clause_applicable == 'no')
-                                <a href="{{ route('addlease.lowvalue.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
-                            @elseif($show_next)
-                                <a href="{{ route('addlease.lowvalue.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
-                            @endif
+<div class="col-md-4 col-sm-4 btn-backnextBx rightlign ">
+@if($lease->escalation_clause_applicable == 'no')
+<a href="{{ route('addlease.lowvalue.index', ['id' => $lease->id]) }}" class="btn btn-primary">{{ env('NEXT_LABEL') }} <i class="fa fa-arrow-right"></i></a>
+@elseif($show_next)
+<a href="{{ route('addlease.lowvalue.index', ['id' => $lease->id]) }}" class="btn btn-primary">{{ env('NEXT_LABEL') }} <i class="fa fa-arrow-right"></i></a>
+@endif
 
-                        </div>
-                        <div class="col-md-6 col-sm-6 btnsubmitBx">
-                           &nbsp;
-                        </div>
-                    </div>
+</div>
+ </div>
+
+
 
                 </div>
-
-
-
-            </div>
+         </div>
         </div>
     </div>
 @endsection
@@ -81,5 +79,6 @@
                 $('input[type="checkbox"]').not(this).prop('checked', false);
             });
         });
+       
     </script>
 @endsection

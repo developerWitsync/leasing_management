@@ -33,6 +33,7 @@ use Validator;
 
 class LeaseResidualController extends Controller
 {
+    private $current_step = 8;
     protected function validationRules()
     {
         return [
@@ -92,7 +93,7 @@ class LeaseResidualController extends Controller
                         return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
                     }
 
-                    $data = $request->except('_token', 'uuid', 'asset_name', 'asset_category');
+                    $data = $request->except('_token', 'uuid', 'asset_name', 'asset_category','action');
                     $data['attachment'] = "";
                     $data['lease_id'] = $asset->lease->id;
                     $data['asset_id'] = $asset->id;
@@ -108,7 +109,14 @@ class LeaseResidualController extends Controller
                     if ($residual_value->save()) {
                         // complete Step
                         confirmSteps($lease->id, 8);
-                        return redirect(route('addlease.residual.index', ['id' => $lease->id]))->with('status', 'Residual value Gurantee has been added successfully.');
+                        if($request->has('action') && $request->action == "next") {
+                            return redirect(route('addlease.durationclassified.index',['id' => $lease->id]));
+                        } else {
+
+                            return redirect(route('addlease.residual.index', ['id' => $lease->id]))->with('status', 'Residual value Gurantee has been added successfully.');
+
+                        }
+                        
                     }
                 }
 
@@ -122,7 +130,7 @@ class LeaseResidualController extends Controller
                 $payment_lease_basis = LeasePaymentsBasis::query()->whereIn('business_account_id', getDependentUserIds())->get();
 
                 //to get current step for steps form
-                $current_step = 8;
+                $current_step = $his->current_step;
 
                 return view('lease.residual-value-gurantee.create', compact(
                     'model',

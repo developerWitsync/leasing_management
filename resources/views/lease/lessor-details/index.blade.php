@@ -177,6 +177,7 @@
                                                            disabled="disabled">
                                                     <button type="button" class="browseBtn">Browse</button>
                                                     <input type="file" id="file-name" name="file" class="fileType">
+                                                   <h6 class="disabled">Only Doc,Pdf,Docx,Zip with 2MB size of files are allowed.</h6>
                                                     @if ($errors->has('file'))
                                                         <span class="help-block">
                                             <strong>{{ $errors->first('file') }}</strong>
@@ -194,17 +195,18 @@
                                         <div class="form-group btnMainBx">
                                             <div class="col-md-6 col-sm-6 btn-backnextBx">
 
-                                                <a href="/home" class="btn btn-danger">Cancel</a>
-                                                <button type="submit" class="btn btn-primary next_submit">
-                                                    Next
+                                                <a href="/home" class="btn btn-danger">{{ env('CANCEL_LABEL') }}</a>
+                                                 <button type="submit" class="btn btn-success">
+                                                    {{ env('SAVE_LABEL') }}
                                                 </button>
+                                                
 
                                             </div>
                                             <div class="col-md-6 col-sm-6 btnsubmitBx">
-
-                                                <button type="submit" class="btn btn-success">
-                                                    Save
+                                            <button type="submit" class="btn btn-primary next_submit">
+                                                    {{ env('NEXT_LABEL') }}
                                                 </button>
+                                               
                                             </div>
                                         </div>
                                 </form>
@@ -293,6 +295,7 @@
 
             $('.next_submit').on('click', function (e) {
                 e.preventDefault();
+               // alert('dfdsf');
                 var next_url = $('#add-new-lease-form').attr('action') + "?action=next";
                 $('#add-new-lease-form').attr('action', next_url);
                 // alert(next_url);

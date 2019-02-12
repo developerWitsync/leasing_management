@@ -18,6 +18,7 @@ use Validator;
 
 class LeaseValuationController extends Controller
 {
+    private $current_step = 16;
     protected function validationRules(){
         return [
             'interest_rate'   => 'required',
@@ -80,7 +81,7 @@ class LeaseValuationController extends Controller
             }
 
             //to get current step for steps form
-            $current_step = 16;
+            $current_step = $this->current_step;
            
             return view('lease.lease-valuation.index', compact(
                 'lease',

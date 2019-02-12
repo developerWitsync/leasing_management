@@ -95,7 +95,7 @@
                             <div class="menuHd">
                                 <a class="dash_navicon" href="javascript:void(0)">
                                     <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-                                    <span><i class="fa fa-angle-double-left" aria-hidden="true"></i> Collapse sidebar</span></a>
+                                    <span><i class="fa fa-angle-double-left" aria-hidden="true"></i>Move sidebar</span></a>
                             </div>
                         </div>
                     </div>

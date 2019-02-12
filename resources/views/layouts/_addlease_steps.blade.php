@@ -1,4 +1,3 @@
-        <!-- @if(!checkPreviousSteps($lease->id, 'step4'))  class="disabled" @endif -->
         <div class="itemTab" >
                             <ul class="ul_carousel owl-carousel ">
                                 <li @if(1 <= $current_step) class="active" @else class="disabled" @endif>

@@ -22,7 +22,7 @@ use Validator;
 
 class LessorDetailsController extends Controller
 {
-
+    private $current_step = 1;
     protected function validationRules(){
         return [
             'lessor_name' => 'required',
@@ -77,7 +77,7 @@ class LessorDetailsController extends Controller
         $breadcrumbs = $this->breadcrumbs;
 
         //to get current step for steps form
-        $current_step = 1;
+        $current_step = $this->current_step;
         
         return view('lease.lessor-details.index', compact(
             'breadcrumbs',
@@ -126,7 +126,7 @@ class LessorDetailsController extends Controller
             $lease = Lease::create($data);
            
             if($lease) {
-                 confirmSteps($lease->id,1);
+                 confirmSteps($lease->id,'1');
 
                 if($request->has('action') && $request->action == "next") {
                     return redirect(route('addlease.leaseasset.index', ['id'=>$lease->id]))->with('status', 'Lessor Details has been updated successfully.');

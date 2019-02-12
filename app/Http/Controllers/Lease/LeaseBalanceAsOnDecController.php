@@ -18,6 +18,7 @@ use Validator;
 
 class LeaseBalanceAsOnDecController extends Controller
 {
+    private $current_step = 13;
     protected function validationRules()
     {
         return [
@@ -39,7 +40,7 @@ class LeaseBalanceAsOnDecController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
      */
     public function index_V2($id, Request $request){
-        try{
+         try{
             $breadcrumbs = [
                 [
                     'link' => route('add-new-lease.index'),
@@ -68,7 +69,7 @@ class LeaseBalanceAsOnDecController extends Controller
                             return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
                         }
 
-                        $data = $request->except('_token','submit',  'uuid', 'asset_name', 'asset_category');
+                        $data = $request->except('_token','submit',  'uuid', 'asset_name', 'asset_category','action');
                         $data['lease_id'] = $asset->lease->id;
                         $data['asset_id'] = $asset->id;
 
@@ -76,7 +77,13 @@ class LeaseBalanceAsOnDecController extends Controller
                         if ($model->save()) {
                             // complete Step
                             confirmSteps($asset->lease->id, 13);
+                        if($request->has('action') && $request->action == "next") {
+                            return redirect(route('addlease.initialdirectcost.index',['id' => $lease->id]));
+                        } else {
+
                             return redirect(route('addlease.balanceasondec.index', ['id' => $lease->id]))->with('status', 'Lease Balance as on 31 Dec 2018 has been added successfully.');
+
+                        }
                         }
                     }
                     $category_excluded = CategoriesLeaseAssetExcluded::query()->get();
@@ -124,7 +131,7 @@ class LeaseBalanceAsOnDecController extends Controller
                     }
 
                     //to get current step for steps form
-                    $current_step = 13;
+                    $current_step = $this->current_step;
 
                     return view('lease.lease-balnce-as-on-dec.create', compact(
                         'model',

@@ -19,6 +19,7 @@ use Validator;
 
 class LeaseDurationClassifiedController extends Controller
 {
+    private $current_step = 9;
     protected function validationRules()
     {
         return [
@@ -76,7 +77,7 @@ class LeaseDurationClassifiedController extends Controller
                             return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
                         }
 
-                        $data = $request->except('_token', 'uuid', 'asset_name', 'asset_category');
+                        $data = $request->except('_token', 'uuid', 'asset_name', 'asset_category','action');
                         $data['lease_id'] = $asset->lease->id;
                         $data['asset_id'] = $asset->id;
                         $data['lease_start_date'] = date('Y-m-d', strtotime($request->lease_start_date));
@@ -87,7 +88,14 @@ class LeaseDurationClassifiedController extends Controller
                         if ($model->save()) {
                             // complete Step
                             confirmSteps($lease->id, 9);
-                            return redirect(route('addlease.durationclassified.index', ['id' => $lease->id]))->with('status', 'Lease Duration Classified Value has been added successfully.');
+                            if($request->has('action') && $request->action == "next") {
+                            return redirect(route('addlease.leasevaluation.index',['id' => $lease->id]));
+                        } else {
+
+                             return redirect(route('addlease.durationclassified.index', ['id' => $lease->id]))->with('status', 'Lease Duration Classified Value has been added successfully.');
+
+                        }
+                           
                         }
                     }
 
@@ -98,7 +106,7 @@ class LeaseDurationClassifiedController extends Controller
                     $lease_contract_duration = LeaseContractDuration::query()->get();
 
                     //to get current step for steps form
-                    $current_step = 9;
+                    $current_step = $this->current_step;
 
                     return view('lease.lease-duration-classified.create', compact(
                         'model',

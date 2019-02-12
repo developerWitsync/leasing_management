@@ -26,6 +26,7 @@ use Validator;
 
 class EscalationController extends Controller
 {
+    private $current_step = 10;
     /**
      * Renders the index view for the Lease Escalation Clause
      * @param $id
@@ -90,7 +91,7 @@ class EscalationController extends Controller
                 }
 
                 //to get current step for steps form
-                $current_step = 10;
+                $current_step = $this->current_step;
 
                 return view('lease.escalation.index', compact(
                     'lease',

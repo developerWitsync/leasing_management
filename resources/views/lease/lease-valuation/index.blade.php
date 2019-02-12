@@ -12,18 +12,21 @@
 
     @include('lease.lease-valuation._impairment_test')
 
-    <div class="form-group btnMainBx">
-        <div class="col-md-6 col-sm-6 btn-backnextBx">
-
-            <a href="{{ $back_url }}" class="btn btn-danger">Back</a>
-            <a href="{{ route('addlease.leasepaymentinvoice.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
-
-        </div>
-        <div class="col-md-6 col-sm-6 btnsubmitBx">
-            &nbsp;
-        </div>
+<div class="form-group btnMainBx">
+ <div class="col-md-4 col-sm-4 btn-backnextBx">
+        <a href="{{ $back_url }}" class="btn btn-danger"><i class="fa fa-arrow-left"></i> {{ env('BACK_LABEL')}}</a>
     </div>
-
+    <div class="col-md-4 col-sm-4 btnsubmitBx aligncenter">
+       
+        &nbsp;</button>
+    </div>
+    <div class="col-md-4 col-sm-4 btn-backnextBx rightlign ">
+        <input type="hidden" name="action" value="">
+        <a href="{{ route('addlease.leasepaymentinvoice.index', ['id' => $lease->id]) }}" class="btn btn-primary save_next"> {{ env('NEXT_LABEL') }} <i class="fa fa-arrow-right"></i></a>
+    </div>
+ 
+</div>
+    
     <!--Lease Liability Calculus -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="dialog">

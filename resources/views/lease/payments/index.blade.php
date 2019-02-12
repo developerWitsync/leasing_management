@@ -71,21 +71,17 @@
 
                 </div>
 
-                <div class="form-group btnMainBx clearfix">
-                    <div class="col-md-6 col-sm-6 btn-backnextBx">
+<div class="form-group btnMainBx">
 
-                        <a href="{{ $back_url }}" class="btn btn-danger">Back</a>
-                        @if($show_next)
-                            <a href="{{ route('addlease.fairmarketvalue.index', ['id' => $lease->id]) }}"
-                               class="btn btn-primary">Next</a>
-                        @endif
-
-                    </div>
-                    <div class="col-md-6 col-sm-6 btnsubmitBx">
-                        &nbsp;
-                    </div>
-                </div>
-
+    <div class="col-md-4 col-sm-4 btn-backnextBx">
+        <a href="{{ $back_url }}" class="btn btn-danger"><i class="fa fa-arrow-left"></i> {{ env('BACK_LABEL')}}</a>
+    </div>
+    
+    <div class="col-md-6 col-sm-6 btn-backnextBx rightlign ">
+        <a href="{{ route('addlease.fairmarketvalue.index', ['id' => $lease->id]) }}" class="btn btn-primary save_next"> {{ env('NEXT_LABEL') }} <i class="fa fa-arrow-right"></i></a>
+    </div>
+ 
+</div>
             </div>
 
         </div>

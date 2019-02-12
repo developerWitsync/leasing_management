@@ -32,6 +32,7 @@ use Validator;
 
 class LeaseTerminationOptionController extends Controller
 {
+    private $current_step = 3;
     protected function validationRules(){
         return [
             'lease_termination_option_available'   => 'required',
@@ -50,6 +51,7 @@ class LeaseTerminationOptionController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
     public function index_V2($id, Request $request){
+
         try{
             $breadcrumbs = [
                 [
@@ -72,13 +74,14 @@ class LeaseTerminationOptionController extends Controller
                 }
 
                 if($request->isMethod('post') ) {
+                    
                     $validator = Validator::make($request->except('_token'), $this->validationRules());
 
                     if($validator->fails()){
                         return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
                     }
 
-                    $data = $request->except('_token', 'uuid', 'asset_name', 'asset_category');
+                    $data = $request->except('_token', 'uuid', 'asset_name', 'asset_category','action');
                     if($request->lease_end_date!=""){
                         $data['lease_end_date']  = Carbon::parse($request->lease_end_date)->format('Y-m-d');
                     }
@@ -90,11 +93,18 @@ class LeaseTerminationOptionController extends Controller
                     if($model->save()){
                         // complete Step
                         confirmSteps($lease->id,3);
-                        return redirect(route('addlease.leaseterminationoption.index',['id' => $lease->id]))->with('status', 'Lease Termination Option Details has been added successfully.');
+                         if($request->has('action') && $request->action == "next") {
+                            return redirect(route('addlease.renewable.index',['id' => $lease->id]));
+                        } else {
+
+                             return redirect(route('addlease.leaseterminationoption.index',['id' => $lease->id]))->with('status', 'Lease Termination Option Details has been added successfully.');
+
+                        }
+                       
                     }
                 }
                  //to get current step for steps form
-                $current_step = 3;
+                $current_step = $this->current_step;
                 return view('lease.lease-termination-option.create', compact(
                     'model',
                     'lease',
@@ -173,7 +183,8 @@ class LeaseTerminationOptionController extends Controller
                     if($lease_termination_option){
                          // complete Step
                         confirmSteps($lease->id,3);
-                        return redirect(route('addlease.leaseterminationoption.index',['id' => $lease->id]))->with('status', 'Lease Termination Option Details has been added successfully.');
+
+                       
                     }
                 }
                 return view('lease.lease-termination-option.create', compact(

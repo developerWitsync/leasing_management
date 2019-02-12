@@ -6,7 +6,7 @@
 @endsection
 @section('content')
     <div class="panel panel-default">
-        <div class="panel-heading">Lease Payment Invoice from Lessor</div>
+        <div class="panel-heading">Lease Payment Invoice </div>
 
         <div class="panel-body">
             @if (session('status'))
@@ -15,7 +15,7 @@
                 </div>
             @endif
 
-            <form role="form" class="form-horizontal" enctype="multipart/form-data" method="POST" action="{{ route('addlease.leasepaymentinvoice.index', ['id' => $lease->id]) }}">
+            <form role="form" class="form-horizontal" id="lease_payment" enctype="multipart/form-data" method="POST" action="{{ route('addlease.leasepaymentinvoice.index', ['id' => $lease->id]) }}">
             {{ csrf_field() }}
             <div class="categoriesOuter clearfix">
                 <div class="form-group{{ $errors->has('lease_payment_invoice_received') ? ' has-error' : '' }} required">
@@ -37,22 +37,21 @@
                     </div>
                 </div>
             </div>
-                <div class="form-group btnMainBx">
-                    <div class="col-md-6 col-sm-6 btn-backnextBx">
-
-                        <a href="{{ route('addlease.leasevaluation.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
-                        @if($model->id)
-                            <a href="{{ route('addlease.reviewsubmit.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
-                        @endif
-
-                    </div>
-                    <div class="col-md-6 col-sm-6 btnsubmitBx">
-                        <button type="submit" class="btn btn-success">
-                            Save
-                        </button>
-                    </div>
-                </div>
-
+<div class="form-group btnMainBx">
+ <div class="col-md-4 col-sm-4 btn-backnextBx">
+        <a href="{{ route('addlease.leasevaluation.index', ['id' => $lease->id]) }}" class="btn btn-danger"><i class="fa fa-arrow-left"></i> {{ env('BACK_LABEL')}}</a>
+    </div>
+    <div class="col-md-4 col-sm-4 btnsubmitBx aligncenter">
+        <button type="submit" class="btn btn-success"> 
+        {{ env('SAVE_LABEL') }} <i class="fa fa-download"></i></button>
+    </div>
+    <div class="col-md-4 col-sm-4 btn-backnextBx rightlign ">
+        <input type="hidden" name="action" value="">
+        <a href="javascript:void(0);" class="btn btn-primary save_next"> {{ env('NEXT_LABEL') }} <i class="fa fa-arrow-right"></i></a>
+    </div>
+ 
+</div>
+              
             </form>
         </div>
     </div>
@@ -62,6 +61,11 @@
     <script type="text/javascript">
         $(document).on('click', 'input[type="checkbox"]', function() {
             $('input[type="checkbox"]').not(this).prop('checked', false);
+        });
+         $('.save_next').on('click', function (e) {
+                e.preventDefault();
+                $('input[name="action"]').val('next');
+                $('#lease_payment').submit();
         });
     </script>
 @endsection

@@ -5,7 +5,7 @@
 
 @section('content')
     <div class="panel panel-default">
-        <div class="panel-heading">Edit Existing Select Discount Rate for the asset - {{ $asset->name }}</div>
+        <div class="panel-heading">Edit Select Discount Rate </div>
 
         <div class="panel-body">
             @if (session('status'))

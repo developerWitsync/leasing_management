@@ -22,6 +22,7 @@ use Validator;
 
 class InitialDirectCostController extends Controller
 {
+    private $current_step = 14;
     protected function validationRules()
     {
         return [
@@ -35,8 +36,9 @@ class InitialDirectCostController extends Controller
             'amount.*' => 'required_if:initial_direct_cost_involved,yes|numeric|nullable',
             'rate.*' => 'required_if:initial_direct_cost_involved,yes|numeric|nullable'
         ];
+       
     }
-
+     
     /**
      * Create or update the details for the Single Lease asset..
      * @param $id
@@ -44,7 +46,7 @@ class InitialDirectCostController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
      */
     public function index_V2($id, Request $request){
-        try{
+         try{
             $breadcrumbs = [
                 [
                     'link' => route('add-new-lease.index'),
@@ -90,7 +92,8 @@ class InitialDirectCostController extends Controller
                             return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
                         }
 
-                        $data = $request->except('_token', 'submit','supplier_name', 'direct_cost_description', 'expense_date', 'supplier_currency', 'amount', 'rate', 'id', 'uuid', 'asset_name', 'asset_category');
+                        $data = $request->except('_token', 'submit','supplier_name', 'direct_cost_description', 'expense_date', 'supplier_currency', 'amount', 'rate', 'id', 'uuid', 'asset_name', 'asset_category','action');
+                       // dd($request->all());
                         $data['lease_id'] = $asset->lease->id;
                         $data['asset_id'] = $asset->id;
                         $model->setRawAttributes($data);
@@ -114,7 +117,14 @@ class InitialDirectCostController extends Controller
                             }
                             // complete Step
                             confirmSteps($lease->id, 14);
-                            return redirect(route('addlease.initialdirectcost.index', ['id' => $lease->id]))->with('status', 'Initial Direct Cost has been added successfully.');
+                            if($request->has('action') && $request->action == "next") {
+                               
+                            return redirect(route('addlease.leaseincentives.index',['id' => $lease->id]));
+                        } else {
+
+                           return redirect(route('addlease.initialdirectcost.index', ['id' => $lease->id]))->with('status', 'Initial Direct Cost has been added successfully.');
+                        }
+                            
                         }
                     }
                 $asset_on_balence = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '<', '2019-01-01')->count();
@@ -171,7 +181,8 @@ class InitialDirectCostController extends Controller
                 } 
 
                     //to get current step for steps form
-                    $current_step = 14;
+                    $current_step = $this->current_step;
+
 
                     return view('lease.initial-direct-cost.create', compact(
                         'model',

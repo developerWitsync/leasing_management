@@ -22,6 +22,7 @@ use Validator;
 
 class PurchaseOptionController extends Controller
 {
+    private $current_step = 5;
     protected function validationRules()
     {
         return [
@@ -81,7 +82,7 @@ class PurchaseOptionController extends Controller
                             return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
                         }
 
-                        $data = $request->except('_token','submit', 'uuid', 'asset_name', 'asset_category');
+                        $data = $request->except('_token','submit', 'uuid', 'asset_name', 'asset_category','action');
                         $data['lease_id'] = $asset->lease->id;
                         $data['asset_id'] = $asset->id;
                         if ($request->has('expected_purchase_date') && $data['expected_purchase_date'] != "") {
@@ -102,14 +103,22 @@ class PurchaseOptionController extends Controller
                         $model->setRawAttributes($data);
 
                         if ($model->save()) {
-                            // complete Step
-                            confirmSteps($lease->id, 5);
-                            return redirect(route('addlease.purchaseoption.index', ['id' => $lease->id]))->with('status', 'Lease Termination Option Details has been added successfully.');
+                        
+                        // complete Step
+                         confirmSteps($lease->id, 5);
+                        if($request->has('action') && $request->action == "next") {
+                            return redirect(route('addlease.payments.index',['id' => $lease->id]));
+                        } else {
+
+                             return redirect(route('addlease.purchaseoption.index', ['id' => $lease->id]))->with('status', 'Lease Purchase Option Details has been added successfully.');
+
+                        }
+                            
                         }
                     }
 
                     //to get current step for steps form
-                    $current_step = 5;
+                    $current_step = $this->current_step;
 
                     return view('lease.purchase-option.create', compact(
                         'model',

@@ -1,4 +1,4 @@
-<form role="form" class="form-horizontal" method="post" enctype="multipart/form-data">
+<form role="form" class="form-horizontal" method="post" enctype="multipart/form-data" id="lease_renewable" action="{{ route('addlease.renewable.index', ['id' => $lease->id]) }}">
     {{ csrf_field() }}
     <div class="categoriesOuter clearfix">
     <div class="form-group required">
@@ -25,7 +25,7 @@
     </div>
 
     <div class="form-group{{ $errors->has('is_renewal_option_under_contract') ? ' has-error' : '' }} required">
-        <label for="name" class="col-md-12 control-label">Lease Renewal Option Available Under the Contract</label>
+        <label for="name" class="col-md-12 control-label">Lease Payment</label>
         <div class="col-md-12 form-check form-check-inline mrktavail" required>
             <span><input class="form-check-input" name="is_renewal_option_under_contract" id="yes" type="checkbox" value="yes"
                    @if(old('is_renewal_option_under_contract', $model->is_renewal_option_under_contract) == "yes") checked="checked" @endif>
@@ -110,20 +110,19 @@
 
 </div>
 <div class="form-group btnMainBx">
-        <div class="col-md-6 col-sm-6 btn-backnextBx">
 
-            <a href="{{ route('addlease.leaseterminationoption.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
-            @if($asset->renewableOptionValue)
-                <a href="{{ route('addlease.purchaseoption.index', ['id' => $lease->id]) }}" class="btn btn-primary">Next</a>
-            @endif
-
-        </div>
-        <div class="col-md-6 col-sm-6 btnsubmitBx">
-
-            <button type="submit" class="btn btn-success">
-                Save
-            </button>
-        </div>
+    <div class="col-md-4 col-sm-4 btn-backnextBx">
+        <a href="{{ route('addlease.leaseterminationoption.index', ['id' => $lease->id]) }}" class="btn btn-danger"><i class="fa fa-arrow-left"></i> {{ env('BACK_LABEL')}}</a>
+    </div>
+    <div class="col-md-4 col-sm-4 btnsubmitBx aligncenter">
+        <button type="submit" class="btn btn-success"> 
+        {{ env('SAVE_LABEL') }} <i class="fa fa-download"></i></button>
+    </div>
+    <div class="col-md-4 col-sm-4 btn-backnextBx rightlign ">
+        <input type="hidden" name="action" value="">
+        <a href="javascript:void(0);" class="btn btn-primary save_next"> {{ env('NEXT_LABEL') }} <i class="fa fa-arrow-right"></i></a>
+    </div>
+ 
 </div>
 
 </form>
@@ -214,6 +213,12 @@
             modal.modal("show");
         });
 
+        $('.save_next').on('click', function (e) {
+           
+                e.preventDefault();
+                $('input[name="action"]').val('next');
+                $('#lease_renewable').submit();
+        });
     </script>
 
 @endsection

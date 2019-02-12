@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableSupplierDetails extends Migration
+class CreateSupplierDetailsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -22,8 +22,8 @@ class CreateTableSupplierDetails extends Migration
             $table->text('direct_cost_description');
             $table->date('expense_date');
             $table->string('supplier_currency');
-            $table->decimal('amount', 12, 2);
-            $table->decimal('rate', 12, 2);
+            $table->decimal('amount', 12, 8);
+            $table->decimal('rate', 12, 8);
             $table->timestamps();
         });
     }

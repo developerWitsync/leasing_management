@@ -88,3 +88,6 @@ input[type="radio"], input[type="checkbox"]{ margin: 0px;}
 .directcostTble {padding: 0 40px 20px 40px;}
 .btn {border-radius: 3px; font-size: 16px; font-weight: 600;}
 .panel-body.frmOuterBx {padding: 15px;}
+
+.aligncenter{ text-align: center !important; }
+.rightlign{ text-align: right !important; }

@@ -5,7 +5,7 @@
 
 @section('content')
     <div class="panel panel-default">
-        <div class="panel-heading">Lease Asset Payment Escalation Clause For {{ $payment->name }}</div>
+        <div class="panel-heading">Lease Asset Payment Escalation</div>
 
         <div class="panel-body">
             @if (session('status'))

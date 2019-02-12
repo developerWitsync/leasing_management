@@ -17,7 +17,7 @@
 
 @section('content')
     <div class="panel panel-default">
-        <div class="panel-heading">Add Lease Payments for asset - {{ $asset->name }}</div>
+        <div class="panel-heading">Lease Payments</div>
 
         <div class="panel-body">
 

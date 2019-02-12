@@ -5,7 +5,7 @@
 
 @section('content')
     <div class="panel panel-default">
-        <div class="panel-heading">Add Initial Direct Cost for the asset - {{ $asset->name }}</div>
+        <div class="panel-heading"> Initial Direct Cost </div>
 
         <div class="panel-body">
             @if (session('status'))
