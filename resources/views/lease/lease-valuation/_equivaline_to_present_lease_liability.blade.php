@@ -21,8 +21,8 @@
                         <tr>
                             <td class="load_lease_liability" data-asset_id="{{ $asset->id }}"></td>
                             @if($asset->leaseBalanceAsOnDec)
-                                <td>{{ number_format($asset->leaseBalanceAsOnDec->prepaid_lease_payment_balance, 2) }}</td>
-                                <td>{{ number_format($asset->leaseBalanceAsOnDec->accrued_lease_payment_balance, 2) }}</td>
+                                <td>{{ number_format($asset->leaseBalanceAsOnDec->prepaid_lease_payment_balance *  $asset->leaseBalanceAsOnDec->exchange_rate, 2) }}</td>
+                                <td>{{ number_format($asset->leaseBalanceAsOnDec->accrued_lease_payment_balance *  $asset->leaseBalanceAsOnDec->exchange_rate, 2) }}</td>
                             @else
                                 <td>0</td>
                                 <td>0</td>

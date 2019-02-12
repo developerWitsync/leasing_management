@@ -26,10 +26,13 @@
         <label for="name" class="col-md-4 control-label">Reporting Currency</label>
         <div class="col-md-6 form-check form-check-inline" required>
             <select  class="form-control" name="reporting_currency">
-                <option value="">--Please Select</option>
+                <option value="">--Please Select--</option>
                 <option value="1" @if(old('reporting_currency', $model->reporting_currency) == "1") selected="selected" @endif>Statutory</option>
                 <option value="2" @if(old('reporting_currency', $model->reporting_currency) == "2") selected="selected" @endif>Internal Currency</option>
+                <option value="3" @if(old('reporting_currency', $model->reporting_currency) == "3") selected="selected" @endif>Lease Contract Currency</option>
             </select>
+            <span class="badge badge-info selected_currency_option" style="display:none;">USD</span>
+            <input type="hidden" name="reporting_currency_selected" value="{{ old('reporting_currency_selected', $model->reporting_currency_selected) }}"/>
             @if ($errors->has('reporting_currency'))
                 <span class="help-block">
                     <strong>{{ $errors->first('reporting_currency') }}</strong>
@@ -37,11 +40,24 @@
             @endif
         </div>
     </div>
+
+    <div class="form-group {{ $errors->has('exchange_rate') ? ' has-error' : '' }} required">
+        <label for="exchange_rate" class="col-md-4 control-label">Exchange Rate (as on 31 Dec 2018)</label>
+        <div class="col-md-4 form-check form-check-inline">
+            <input type="text" value="{{ old('exchange_rate', $model->exchange_rate) }}" class="form-control" id="exchange_rate" name="exchange_rate">
+            @if ($errors->has('exchange_rate'))
+                <span class="help-block">
+                    <strong>{{ $errors->first('exchange_rate') }}</strong>
+                </span>
+            @endif
+        </div>
+    </div>
+
     @if($asset->accounting_treatment =='2')
     <div class="form-group{{ $errors->has('carrying_amount') ? ' has-error' : '' }} ">
         <label for="name" class="col-md-4 control-label">Carrying Amount</label>
         <div class="col-md-6 form-check form-check-inline" required>
-            <input class="form-control" name="carrying_amount"  type="text" value="{{ old('carrying_amount', $model->carrying_amount) }}" >
+            <input class="form-control" name="carrying_amount"  type="text" value="{{ old('carrying_amount', $model->carrying_amount) }}">
              @if ($errors->has('carrying_amount'))
                 <span class="help-block">
                     <strong>{{ $errors->first('carrying_amount') }}</strong>
@@ -53,7 +69,7 @@
      <div class="form-group{{ $errors->has('liability_balance') ? ' has-error' : '' }} ">
         <label for="name" class="col-md-4 control-label">Liability Balance</label>
         <div class="col-md-6 form-check form-check-inline" required>
-            <input class="form-control" name="liability_balance" id="yes" type="text" value="{{ old('liability_balance', $model->liability_balance) }}" >
+            <input class="form-control" name="liability_balance" id="yes" type="text" value="{{ old('liability_balance', $model->liability_balance) }}">
              @if ($errors->has('liability_balance'))
                 <span class="help-block">
                     <strong>{{ $errors->first('liability_balance') }}</strong>
@@ -130,7 +146,6 @@
 
         </div>
         <div class="col-md-6 col-sm-6 btnsubmitBx">
-
             <button type="submit" class="btn btn-success">
                 Save
             </button>
@@ -148,5 +163,41 @@
                 $('input[name="action"]').val('next');
                 $('#lease_balence').submit();
         });
+<script>
+    $('select[name="reporting_currency"]').on('change', function () {
+        var _return_currency = '';
+        var access_key = '{{ env("CURRENCY_API_ACCESS_KEY") }}';
+        var base_date = '2018-12-31';
+        var base = '{{ $currency_settings->statutory_financial_reporting_currency }}';
+        var element_selector = 'input[name="exchange_rate"]';
+        switch ($(this).val()) {
+            case '1' :
+                _return_currency = '{{ $currency_settings->statutory_financial_reporting_currency }}';
+                $('.selected_currency_option').html(_return_currency).show();
+                $('input[name="reporting_currency_selected"]').val(_return_currency);
+                //call the exchange APIs from here to get the exchange rates
+                fetchExchangeRate(base,_return_currency,base_date, access_key, element_selector);
+                break;
+            case '2' :
+                _return_currency = '{{ $currency_settings->internal_company_financial_reporting_currency }}';
+                $('.selected_currency_option').html(_return_currency).show();
+                $('input[name="reporting_currency_selected"]').val(_return_currency);
+                fetchExchangeRate(base,_return_currency,base_date, access_key, element_selector);
+                break;
+            case '3' :
+                _return_currency = '{{ $currency_settings->currency_for_lease_reports }}';
+                $('.selected_currency_option').html(_return_currency).show();
+                $('input[name="reporting_currency_selected"]').val(_return_currency);
+                fetchExchangeRate(base,_return_currency,base_date, access_key, element_selector);
+                break;
+            default :
+                $('.selected_currency_option').html(_return_currency).hide();
+                $('input[name="reporting_currency_selected"]').val(_return_currency);
+                break;
+        }
+    });
+
+
+
 </script>
 @endsection

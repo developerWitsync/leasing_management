@@ -26,35 +26,36 @@ class LeaseIncentivesController extends Controller
     protected function validationRules(){
         return [
             'is_any_lease_incentives_receivable' => 'required',
-            'currency' =>'required_if:is_any_lease_incentives_receivable,yes',
-            'total_lease_incentives'  => 'required_if:is_any_lease_incentives_receivable,yes',
+            'currency' => 'required_if:is_any_lease_incentives_receivable,yes',
+            'total_lease_incentives' => 'required_if:is_any_lease_incentives_receivable,yes',
             'customer_name.*' => 'required_if:is_any_lease_incentives_receivable,yes|nullable',
             'description.*' => 'required_if:is_any_lease_incentives_receivable,yes|nullable',
             'incentive_date.*' => 'required_if:is_any_lease_incentives_receivable,yes|date|nullable|date_format:d-M-Y',
             'currency_id.*' => 'required_if:is_any_lease_incentives_receivable,yes|nullable',
             'amount.*' => 'required_if:is_any_lease_incentives_receivable,yes|numeric|nullable',
             'exchange_rate.*' => 'required_if:is_any_lease_incentives_receivable,yes|numeric|nullable'
-          ];
+        ];
     }
 
-    public function index_V2($id, Request $request){
-        try{
+    public function index_V2($id, Request $request)
+    {
+        try {
             $breadcrumbs = [
                 [
                     'link' => route('add-new-lease.index'),
                     'title' => 'Add New Lease'
                 ],
                 [
-                    'link' => route('addlease.leaseincentives.index',['id' => $id]),
+                    'link' => route('addlease.leaseincentives.index', ['id' => $id]),
                     'title' => 'Lease Incentives'
                 ],
             ];
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
-            if($lease){
-                $asset = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date','>=','2019-01-01')->first();
-                if($asset){
+            if ($lease) {
+                $asset = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '>=', '2019-01-01')->first();
+                if ($asset) {
                     $currencies = Currencies::query()->where('status', '=', '1')->get();
-                    if($asset->leaseIncentives){
+                    if ($asset->leaseIncentives) {
                         $model = $asset->leaseIncentives;
                         $lease_incentive_id = $model->id;
                     } else {
@@ -64,22 +65,22 @@ class LeaseIncentivesController extends Controller
 
                     if ($request->isMethod('post')) {
 
-                        if($request->has('is_any_lease_incentives_receivable') && $request->is_any_lease_incentives_receivable == "yes") {
+                        if ($request->has('is_any_lease_incentives_receivable') && $request->is_any_lease_incentives_receivable == "yes") {
                             $total = 0;
-                            foreach ($request->customer_name as $key=>$customer) {
-                                $total += $request->amount[$key];
+                            foreach ($request->customer_name as $key => $customer) {
+                                $total += ($request->amount[$key] * $request->exchange_rate[$key]);
                             }
-                            $request->request->add(['total_lease_incentives' => $total ]);
+                            $request->request->add(['total_lease_incentives' => $total]);
                         }
 
-                        $validator = Validator::make($request->except('_token'), $this->validationRules(),[
-                            'customer_name.*.required_if' =>  'Customer name is required',
+                        $validator = Validator::make($request->except('_token'), $this->validationRules(), [
+                            'customer_name.*.required_if' => 'Customer name is required',
                             'description.*.required_if' => 'Description is required',
                             'incentive_date.*.required_if' => 'Incentive Date is required',
                             'currency_id.*.required_if' => 'Currency is required',
                             'amount.*.required_if' => 'Amount is required',
                             'exchange_rate.*.required_if' => 'Rate is required',
-                            'incentive_date.*.date_format'  => 'Required date format is d-M-Y',
+                            'incentive_date.*.date_format' => 'Required date format is d-M-Y',
                         ]);
 
                         if ($validator->fails()) {
@@ -92,15 +93,15 @@ class LeaseIncentivesController extends Controller
                         $model->setRawAttributes($data);
                         if ($model->save()) {
                             //Delete all the customer and create them again..
-                            CustomerDetails::query()->where('lease_incentive_id', '=', ($lease_incentive_id)?$lease_incentive_id:$model->id)->delete();
-                            if($request->is_any_lease_incentives_receivable == "yes") {
-                                foreach ($request->customer_name as $key=>$value){
+                            CustomerDetails::query()->where('lease_incentive_id', '=', ($lease_incentive_id) ? $lease_incentive_id : $model->id)->delete();
+                            if ($request->is_any_lease_incentives_receivable == "yes") {
+                                foreach ($request->customer_name as $key => $value) {
                                     CustomerDetails::create([
-                                        'lease_incentive_id' => ($lease_incentive_id)?$lease_incentive_id:$model->id,
+                                        'lease_incentive_id' => ($lease_incentive_id) ? $lease_incentive_id : $model->id,
                                         'customer_name' => $value,
                                         'description' => $request->description[$key],
                                         'incentive_date' => date('Y-m-d', strtotime($request->incentive_date[$key])),
-                                        'currency_id' =>  $request->currency_id[$key],
+                                        'currency_id' => $request->currency_id[$key],
                                         'amount' => $request->amount[$key],
                                         'exchange_rate' => $request->exchange_rate[$key]
                                     ]);
@@ -138,9 +139,9 @@ class LeaseIncentivesController extends Controller
                     return redirect(route('addlease.leasevaluation.index', ['id' => $id]));
                 }
             } else {
-                 abort(404);
+                abort(404);
             }
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             dd($e);
         }
     }
@@ -151,23 +152,24 @@ class LeaseIncentivesController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index($id){
+    public function index($id)
+    {
         $breadcrumbs = [
             [
                 'link' => route('add-new-lease.index'),
                 'title' => 'Add New Lease'
             ],
             [
-                'link' => route('addlease.leaseincentives.index',['id' => $id]),
+                'link' => route('addlease.leaseincentives.index', ['id' => $id]),
                 'title' => 'Lease Incentives'
             ],
         ];
 
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
-        if($lease) {
+        if ($lease) {
             //Load the assets only lease start on or after jan 01 2019
-             
-            $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date','>=','2019-01-01')->get();
+
+            $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '>=', '2019-01-01')->get();
             return view('lease.lease-incentives.index', compact(
                 'lease',
                 'assets',
@@ -186,13 +188,13 @@ class LeaseIncentivesController extends Controller
      */
     public function create($id, Request $request)
     {
-          $breadcrumbs = [
+        $breadcrumbs = [
             [
                 'link' => route('add-new-lease.index'),
                 'title' => 'Add New Lease'
             ],
             [
-                'link' => route('addlease.leaseincentives.index',['id' => $id]),
+                'link' => route('addlease.leaseincentives.index', ['id' => $id]),
                 'title' => 'Lease Incentives'
             ],
         ];
@@ -209,16 +211,16 @@ class LeaseIncentivesController extends Controller
 
                 if ($request->isMethod('post')) {
 
-                    if($request->has('is_any_lease_incentives_receivable') && $request->is_any_lease_incentives_receivable == "yes") {
+                    if ($request->has('is_any_lease_incentives_receivable') && $request->is_any_lease_incentives_receivable == "yes") {
                         $total = 0;
-                        foreach ($request->customer_name as $key=>$customer) {
+                        foreach ($request->customer_name as $key => $customer) {
                             $total += $request->amount[$key];
                         }
-                        $request->request->add(['total_lease_incentives' => $total ]);
+                        $request->request->add(['total_lease_incentives' => $total]);
                     }
 
-                    $validator = Validator::make($request->except('_token'), $this->validationRules(),[
-                        'customer_name.*.required_if' =>  'Customer name is required',
+                    $validator = Validator::make($request->except('_token'), $this->validationRules(), [
+                        'customer_name.*.required_if' => 'Customer name is required',
                         'description.*.required_if' => 'Description is required',
                         'incentive_date.*.required_if' => 'Incentive Date is required',
                         'currency_id.*.required_if' => 'Currency is required',
@@ -237,22 +239,22 @@ class LeaseIncentivesController extends Controller
                     $lease_incentive_cost = LeaseIncentives::create($data);
 
                     if ($lease_incentive_cost) {
-                        if($request->is_any_lease_incentives_receivable == "yes") {
-                            foreach ($request->customer_name as $key=>$value){
+                        if ($request->is_any_lease_incentives_receivable == "yes") {
+                            foreach ($request->customer_name as $key => $value) {
                                 CustomerDetails::create([
-                                'lease_incentive_id' => $lease_incentive_cost->id,
-                                'customer_name' => $value,
-                                'description' => $request->description[$key],
-                                'incentive_date' => date('Y-m-d', strtotime($request->incentive_date[$key])),
-                                'currency_id' =>  $request->currency_id[$key],
-                                'amount' => $request->amount[$key],
-                                'exchange_rate' => $request->exchange_rate[$key]
+                                    'lease_incentive_id' => $lease_incentive_cost->id,
+                                    'customer_name' => $value,
+                                    'description' => $request->description[$key],
+                                    'incentive_date' => date('Y-m-d', strtotime($request->incentive_date[$key])),
+                                    'currency_id' => $request->currency_id[$key],
+                                    'amount' => $request->amount[$key],
+                                    'exchange_rate' => $request->exchange_rate[$key]
                                 ]);
                             }
                         }
                         // complete Step
                         confirmSteps($lease->id, 15);
-                        return redirect(route('addlease.leaseincentives.index',['id' => $lease->id]))->with('status', 'Lease incentive cost has been added successfully.');
+                        return redirect(route('addlease.leaseincentives.index', ['id' => $lease->id]))->with('status', 'Lease incentive cost has been added successfully.');
                     }
                 }
 
@@ -275,7 +277,8 @@ class LeaseIncentivesController extends Controller
             abort(404);
         }
     }
-     /**
+
+    /**
      * edit existing lease Incentive value details for an asset
      * @param $id
      * @param Request $request
@@ -295,16 +298,16 @@ class LeaseIncentivesController extends Controller
 
                 if ($request->isMethod('post')) {
 
-                    if($request->has('is_any_lease_incentives_receivable') && $request->is_any_lease_incentives_receivable == "yes") {
+                    if ($request->has('is_any_lease_incentives_receivable') && $request->is_any_lease_incentives_receivable == "yes") {
                         $total = 0;
-                        foreach ($request->customer_name as $key=>$customer) {
+                        foreach ($request->customer_name as $key => $customer) {
                             $total += $request->amount[$key];
                         }
-                        $request->request->add(['total_lease_incentives' => $total ]);
+                        $request->request->add(['total_lease_incentives' => $total]);
                     }
 
-                    $validator = Validator::make($request->except('_token'), $this->validationRules(),[
-                        'customer_name.*.required_if' =>  'Customer name is required',
+                    $validator = Validator::make($request->except('_token'), $this->validationRules(), [
+                        'customer_name.*.required_if' => 'Customer name is required',
                         'description.*.required_if' => 'Description is required',
                         'incentive_date.*.required_if' => 'Incentive Date is required',
                         'currency_id.*.required_if' => 'Currency is required',
@@ -323,25 +326,25 @@ class LeaseIncentivesController extends Controller
                     if ($request->initial_direct_cost_involved == 'no') {
                         $data['total_lease_incentives'] = 0;
                     }
-                     $model->setRawAttributes($data);
+                    $model->setRawAttributes($data);
 
                     if ($model->save()) {
                         //Delete all the customer and create them again..
                         CustomerDetails::query()->where('lease_incentive_id', '=', $lease_incentive_id)->delete();
-                        if($request->is_any_lease_incentives_receivable == "yes") {
-                            foreach ($request->customer_name as $key=>$value){
+                        if ($request->is_any_lease_incentives_receivable == "yes") {
+                            foreach ($request->customer_name as $key => $value) {
                                 CustomerDetails::create([
                                     'lease_incentive_id' => $lease_incentive_id,
                                     'customer_name' => $value,
                                     'description' => $request->description[$key],
                                     'incentive_date' => date('Y-m-d', strtotime($request->incentive_date[$key])),
-                                    'currency_id' =>  $request->currency_id[$key],
+                                    'currency_id' => $request->currency_id[$key],
                                     'amount' => $request->amount[$key],
                                     'exchange_rate' => $request->exchange_rate[$key]
                                 ]);
                             }
                         }
-                        return redirect(route('addlease.leaseincentives.index',['id' => $lease->id]))->with('status', 'Lease Incentives has been updated successfully.');
+                        return redirect(route('addlease.leaseincentives.index', ['id' => $lease->id]))->with('status', 'Lease Incentives has been updated successfully.');
                     }
                 }
                 return view('lease.lease-incentives.update', compact(
@@ -358,6 +361,6 @@ class LeaseIncentivesController extends Controller
             abort(404);
         }
     }
-   
-  
+
+
 }

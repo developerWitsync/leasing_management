@@ -453,14 +453,21 @@ Route::namespace('Admin')->prefix('admin')->group(function () {
             Route::post('updatestatus', ['as' => 'admin.countries.updatestatus', 'uses' => 'CountriesController@changeStatus']);
 
         });
+
         Route::prefix('contactus')->group(function(){
 
             Route::get('/', ['as' => 'admin.contactus.index', 'uses' => 'ContactusController@index']);
 
-           Route::get('fetch', ['as' => 'admin.contactus.fetch', 'uses' => 'ContactusController@fetch']);
+            Route::get('fetch', ['as' => 'admin.contactus.fetch', 'uses' => 'ContactusController@fetch']);
 
-           Route::match(['get', 'post'],'preview/{id}', ['as' => 'admin.contactus.preview', 'uses' => 'ContactusController@preview']);
-         });
+            Route::match(['get', 'post'],'preview/{id}', ['as' => 'admin.contactus.preview', 'uses' => 'ContactusController@preview']);
+        });
+
+        Route::prefix('subscription-plans')->group(function (){
+            Route::get('/', ['as' => 'admin.subscriptionplans.index', 'uses' => 'SubscriptionPlansController@index']);
+            Route::get('fetch', ['as' => 'admin.subscriptionplans.fetch', 'uses' => 'SubscriptionPlansController@fetch']);
+            Route::match(['get', 'post'], 'create', ['as' => 'admin.subscriptionplans.create', 'uses' => 'SubscriptionPlansController@create']);
+        });
 
     });
 });

@@ -28,6 +28,7 @@ class LeasePaymentsController extends Controller
     private $current_step = 6;
     /**
      * validation rules for the create and update payments
+     * @param bool $create
      * @return array
      */
     protected function validationRules($create = true)
@@ -261,7 +262,7 @@ class LeasePaymentsController extends Controller
 
                     // complete Step
                     $lease_id = $asset->lease->id;
-                    $complete_step6 = confirmSteps($lease_id, 6);
+                    confirmSteps($lease_id, $this->current_step);
 
                     return redirect(route('lease.payments.add', ['lease_id' => $asset->lease->id, 'asset_id' => $asset->id]))->with('status', 'Lease Asset Payments has been added successfully.');
                 } else {
@@ -276,7 +277,6 @@ class LeasePaymentsController extends Controller
             $lease_span_time_in_days = Carbon::parse($asset->lease_end_date)->diffInMonths(Carbon::parse($asset->accural_period));
 
             $payout_due_dates = [];
-            
             $current_step = $this->current_step;
 
             return view('lease.payments.createpayment', compact(
@@ -355,6 +355,10 @@ class LeasePaymentsController extends Controller
 
                         }
 
+                        // complete Step
+                        $lease_id = $asset->lease->id;
+                        confirmSteps($lease_id, $this->current_step);
+
                         return redirect(route('lease.payments.add', ['lease_id' => $asset->lease->id, 'asset_id' => $asset->id]))->with('status', 'Lease Asset Payments has been updated successfully.');
                     } else {
                         return redirect()->back()->with('error', 'Something went wrong. Please try again.')->withInput($request->except('_token'));
@@ -368,7 +372,9 @@ class LeasePaymentsController extends Controller
                 $payout_due_dates = $payment->paymentDueDates->pluck('date')->toArray();
 
                 $lease_span_time_in_days = Carbon::parse($asset->lease_end_date)->diffInMonths(Carbon::parse($asset->accural_period));
+
                 $current_step = $this->current_step;
+
                 return view('lease.payments.updatepayment', compact(
                     'asset',
                     'lease',
