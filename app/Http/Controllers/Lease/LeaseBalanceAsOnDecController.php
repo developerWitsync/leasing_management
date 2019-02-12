@@ -13,6 +13,7 @@ use App\Lease;
 use App\LeaseBalanceAsOnDec;
 use App\LeaseAssets;
 use App\CategoriesLeaseAssetExcluded;
+use App\ReportingCurrencySettings;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -28,7 +29,8 @@ class LeaseBalanceAsOnDecController extends Controller
             'prepaid_lease_payment_balance' => 'required|numeric',
             'accrued_lease_payment_balance' => 'required|numeric',
             'outstanding_lease_payment_balance' => 'required|numeric',
-            'any_provision_for_onerous_lease' => 'required|numeric'
+            'any_provision_for_onerous_lease' => 'required|numeric',
+            'exchange_rate' => 'required|numeric'
         ];
     }
 
@@ -38,8 +40,9 @@ class LeaseBalanceAsOnDecController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
      */
-    public function index_V2($id, Request $request){
-        try{
+    public function index_V2($id, Request $request)
+    {
+        try {
             $breadcrumbs = [
                 [
                     'link' => route('add-new-lease.index'),
@@ -53,10 +56,10 @@ class LeaseBalanceAsOnDecController extends Controller
 
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
 
-            if($lease){
+            if ($lease) {
                 $asset = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '<', '2019-01-01')->first();//since there can now only be one lease asset per lease
-                if($asset){
-                    if($asset->leaseBalanceAsOnDec){
+                if ($asset) {
+                    if ($asset->leaseBalanceAsOnDec) {
                         $model = $asset->leaseBalanceAsOnDec;
                     } else {
                         $model = new LeaseBalanceAsOnDec();
@@ -68,7 +71,7 @@ class LeaseBalanceAsOnDecController extends Controller
                             return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
                         }
 
-                        $data = $request->except('_token','submit',  'uuid', 'asset_name', 'asset_category');
+                        $data = $request->except('_token', 'submit', 'uuid', 'asset_name', 'asset_category');
                         $data['lease_id'] = $asset->lease->id;
                         $data['asset_id'] = $asset->id;
 
@@ -82,49 +85,49 @@ class LeaseBalanceAsOnDecController extends Controller
                     $category_excluded = CategoriesLeaseAssetExcluded::query()->get();
                     $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
                     $asset_on_discount = LeaseAssets::query()->where('lease_id', '=', $lease->id)
-                            ->where('specific_use',1)
-                            ->whereNotIn('category_id', $category_excluded_id)
-                            ->whereHas('leaseSelectLowValue',  function($query){
-                                $query->where('is_classify_under_low_value', '=', 'no');
-                            })
-                            ->whereHas('leaseDurationClassified',  function($query){
-                                $query->where('lease_contract_duration_id', '=', '3');
-                            })->count();
-
-                if(is_null($asset_on_discount)) {
-                    $asset_on_discount = LeaseAssets::query()->where('lease_id', '=', $lease->id)
-                        ->where('specific_use',2)
+                        ->where('specific_use', 1)
                         ->whereNotIn('category_id', $category_excluded_id)
-                        ->whereHas('leaseSelectLowValue',  function($query){
+                        ->whereHas('leaseSelectLowValue', function ($query) {
                             $query->where('is_classify_under_low_value', '=', 'no');
                         })
-                        ->whereHas('leaseDurationClassified',  function($query){
-
+                        ->whereHas('leaseDurationClassified', function ($query) {
                             $query->where('lease_contract_duration_id', '=', '3');
                         })->count();
-                }
-                if($asset_on_discount >0){
-                     $back_url = route('addlease.discountrate.index', ['id' => $id]);
-                }
-                 else{
-                         $category_excluded = CategoriesLeaseAssetExcluded::query()->get();
-                         $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
 
-                         $asset_on_low  = LeaseAssets::query()->where('lease_id', '=', $lease->id)->whereNotIn('specific_use', [2])
-                        ->whereHas('leaseDurationClassified',  function($query){
-                            $query->whereNotIn('lease_contract_duration_id',[1,2]);
-                        })->whereNotIn('category_id', $category_excluded_id)->count();
-                        if($asset_on_low >0){
-                            
-                            $back_url = route('addlease.lowvalue.index', ['id' => $id]);  
-                        }
-                        else{
-                                $back_url = route('lease.escalation.index', ['id' => $id]);
+                    if (is_null($asset_on_discount)) {
+                        $asset_on_discount = LeaseAssets::query()->where('lease_id', '=', $lease->id)
+                            ->where('specific_use', 2)
+                            ->whereNotIn('category_id', $category_excluded_id)
+                            ->whereHas('leaseSelectLowValue', function ($query) {
+                                $query->where('is_classify_under_low_value', '=', 'no');
+                            })
+                            ->whereHas('leaseDurationClassified', function ($query) {
+
+                                $query->where('lease_contract_duration_id', '=', '3');
+                            })->count();
+                    }
+                    if ($asset_on_discount > 0) {
+                        $back_url = route('addlease.discountrate.index', ['id' => $id]);
+                    } else {
+                        $category_excluded = CategoriesLeaseAssetExcluded::query()->get();
+                        $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
+
+                        $asset_on_low = LeaseAssets::query()->where('lease_id', '=', $lease->id)->whereNotIn('specific_use', [2])
+                            ->whereHas('leaseDurationClassified', function ($query) {
+                                $query->whereNotIn('lease_contract_duration_id', [1, 2]);
+                            })->whereNotIn('category_id', $category_excluded_id)->count();
+                        if ($asset_on_low > 0) {
+
+                            $back_url = route('addlease.lowvalue.index', ['id' => $id]);
+                        } else {
+                            $back_url = route('lease.escalation.index', ['id' => $id]);
                         }
                     }
 
                     //to get current step for steps form
                     $current_step = 13;
+
+                    $currency_settings =  ReportingCurrencySettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
 
                     return view('lease.lease-balnce-as-on-dec.create', compact(
                         'model',
@@ -132,7 +135,8 @@ class LeaseBalanceAsOnDecController extends Controller
                         'asset',
                         'breadcrumbs',
                         'back_url',
-                        'current_step'
+                        'current_step',
+                        'currency_settings'
                     ));
                 } else {
                     return redirect(route('addlease.initialdirectcost.index', ['id' => $id]));
@@ -141,7 +145,7 @@ class LeaseBalanceAsOnDecController extends Controller
                 abort(404);
             }
 
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             abort(404, $e->getMessage());
         }
     }
@@ -212,7 +216,7 @@ class LeaseBalanceAsOnDecController extends Controller
                     if ($select_discount_value) {
 
                         // complete Step
-                       $complete_step13 = confirmSteps($asset->lease->id, 13);
+                        $complete_step13 = confirmSteps($asset->lease->id, 13);
 
                         return redirect(route('addlease.balanceasondec.index', ['id' => $lease->id]))->with('status', 'Lease Balance as on 31 Dec 2018 has been added successfully.');
                     }

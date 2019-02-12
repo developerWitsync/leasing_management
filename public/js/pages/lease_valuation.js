@@ -50,9 +50,7 @@ $(function(){
         var asset_id = $(this).data('asset_id');
 
         if(typeof (lease_valuation_array[asset_id])!="undefined"){
-
             $(this).text(lease_valuation_array[asset_id].toFixed(2));
-
         } else {
             var that = $(this);
             $.ajax({

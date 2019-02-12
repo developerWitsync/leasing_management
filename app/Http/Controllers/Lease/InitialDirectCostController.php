@@ -43,8 +43,9 @@ class InitialDirectCostController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
      */
-    public function index_V2($id, Request $request){
-        try{
+    public function index_V2($id, Request $request)
+    {
+        try {
             $breadcrumbs = [
                 [
                     'link' => route('add-new-lease.index'),
@@ -56,11 +57,11 @@ class InitialDirectCostController extends Controller
                 ],
             ];
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
-            if($lease){
+            if ($lease) {
                 $asset = LeaseAssets::query()->where('lease_id', '=', $id)->where('lease_start_date', '>=', '2019-01-01')->first(); //since there can be only one lease asset per lease
-                if($asset){
+                if ($asset) {
                     $currencies = Currencies::query()->where('status', '=', '1')->get();
-                    if($asset->initialDirectCost){
+                    if ($asset->initialDirectCost) {
                         $model = $asset->initialDirectCost;
                     } else {
                         $model = new InitialDirectCost();
@@ -68,19 +69,19 @@ class InitialDirectCostController extends Controller
 
                     if ($request->isMethod('post')) {
 
-                        if($request->has('initial_direct_cost_involved') && $request->initial_direct_cost_involved == "yes") {
+                        if ($request->has('initial_direct_cost_involved') && $request->initial_direct_cost_involved == "yes") {
                             $total = 0;
-                            foreach ($request->supplier_name as $key=>$supplier) {
-                                $total += $request->amount[$key];
+                            foreach ($request->supplier_name as $key => $supplier) {
+                                $total += ($request->amount[$key] * $request->rate[$key]);
                             }
-                            $request->request->add(['total_initial_direct_cost' => $total ]);
+                            $request->request->add(['total_initial_direct_cost' => $total]);
                         }
 
-                        $validator = Validator::make($request->except('_token'), $this->validationRules(),[
-                            'supplier_name.*.required_if' =>  'Supplier name is required',
+                        $validator = Validator::make($request->except('_token'), $this->validationRules(), [
+                            'supplier_name.*.required_if' => 'Supplier name is required',
                             'direct_cost_description.*.required_if' => 'Direct Cost Description is required',
                             'expense_date.*.required_if' => 'Expense Date is required',
-                            'expense_date.*.date_format'  => 'Required date format is d-M-Y',
+                            'expense_date.*.date_format' => 'Required date format is d-M-Y',
                             'supplier_currency.*.required_if' => 'Currency is required',
                             'amount.*.required_if' => 'Amount is required',
                             'rate.*.required_if' => 'Rate is required'
@@ -90,23 +91,22 @@ class InitialDirectCostController extends Controller
                             return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
                         }
 
-                        $data = $request->except('_token', 'submit','supplier_name', 'direct_cost_description', 'expense_date', 'supplier_currency', 'amount', 'rate', 'id', 'uuid', 'asset_name', 'asset_category');
+                        $data = $request->except('_token', 'submit', 'supplier_name', 'direct_cost_description', 'expense_date', 'supplier_currency', 'amount', 'rate', 'id', 'uuid', 'asset_name', 'asset_category');
                         $data['lease_id'] = $asset->lease->id;
                         $data['asset_id'] = $asset->id;
                         $model->setRawAttributes($data);
-
                         $initial_direct_cost = $model->save();
                         if ($initial_direct_cost) {
                             //Delete all the suppliers and create them again..
-                            SupplierDetails::query()->where('initial_direct_cost_id', '=', ($request->has('id') && $request->id)?$request->id:$model->id)->delete();
-                            if($request->initial_direct_cost_involved == "yes") {
-                                foreach ($request->supplier_name as $key=>$value){
+                            SupplierDetails::query()->where('initial_direct_cost_id', '=', ($request->has('id') && $request->id) ? $request->id : $model->id)->delete();
+                            if ($request->initial_direct_cost_involved == "yes") {
+                                foreach ($request->supplier_name as $key => $value) {
                                     SupplierDetails::create([
-                                        'initial_direct_cost_id' => ($request->has('id') && $request->id)?$request->id:$model->id,
+                                        'initial_direct_cost_id' => ($request->has('id') && $request->id) ? $request->id : $model->id,
                                         'supplier_name' => $value,
                                         'direct_cost_description' => $request->direct_cost_description[$key],
                                         'expense_date' => date('Y-m-d', strtotime($request->expense_date[$key])),
-                                        'supplier_currency' =>  $request->supplier_currency[$key],
+                                        'supplier_currency' => $request->supplier_currency[$key],
                                         'amount' => $request->amount[$key],
                                         'rate' => $request->rate[$key]
                                     ]);
@@ -117,58 +117,55 @@ class InitialDirectCostController extends Controller
                             return redirect(route('addlease.initialdirectcost.index', ['id' => $lease->id]))->with('status', 'Initial Direct Cost has been added successfully.');
                         }
                     }
-                $asset_on_balence = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '<', '2019-01-01')->count();
-                if($asset_on_balence > 0){
-                    $back_url = route('addlease.balanceasondec.index', ['id' => $id]);
-                } 
-                else {
-                    $category_excluded = CategoriesLeaseAssetExcluded::query()->get();
-                    $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
+                    $asset_on_balence = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '<', '2019-01-01')->count();
+                    if ($asset_on_balence > 0) {
+                        $back_url = route('addlease.balanceasondec.index', ['id' => $id]);
+                    } else {
+                        $category_excluded = CategoriesLeaseAssetExcluded::query()->get();
+                        $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
 
-                    $asset_on_discount = LeaseAssets::query()->where('lease_id', '=', $lease->id)
-                            ->where('specific_use',1)
+                        $asset_on_discount = LeaseAssets::query()->where('lease_id', '=', $lease->id)
+                            ->where('specific_use', 1)
                             ->whereNotIn('category_id', $category_excluded_id)
-                            ->whereHas('leaseSelectLowValue',  function($query){
+                            ->whereHas('leaseSelectLowValue', function ($query) {
                                 $query->where('is_classify_under_low_value', '=', 'no');
                             })
-                            ->whereHas('leaseDurationClassified',  function($query){
+                            ->whereHas('leaseDurationClassified', function ($query) {
                                 $query->where('lease_contract_duration_id', '=', '3');
                             })->count();
 
-                    if(is_null($asset_on_discount)) {
-                    $asset_on_discount = LeaseAssets::query()->where('lease_id', '=', $lease->id)
-                        ->where('specific_use',2)
-                        ->whereNotIn('category_id', $category_excluded_id)
-                        ->whereHas('leaseSelectLowValue',  function($query){
-                            $query->where('is_classify_under_low_value', '=', 'no');
-                        })
-                        ->whereHas('leaseDurationClassified',  function($query){
+                        if (is_null($asset_on_discount)) {
+                            $asset_on_discount = LeaseAssets::query()->where('lease_id', '=', $lease->id)
+                                ->where('specific_use', 2)
+                                ->whereNotIn('category_id', $category_excluded_id)
+                                ->whereHas('leaseSelectLowValue', function ($query) {
+                                    $query->where('is_classify_under_low_value', '=', 'no');
+                                })
+                                ->whereHas('leaseDurationClassified', function ($query) {
 
-                            $query->where('lease_contract_duration_id', '=', '3');
-                        })->count();
-                    }
-                    if($asset_on_discount >0){
-                         $back_url = route('addlease.discountrate.index', ['id' => $id]);
-                    }
-                    else{
-                        //$back_url = route('addlease.lowvalue.index', ['id' => $id]);
-                        $category_excluded = CategoriesLeaseAssetExcluded::query()->get();
+                                    $query->where('lease_contract_duration_id', '=', '3');
+                                })->count();
+                        }
+                        if ($asset_on_discount > 0) {
+                            $back_url = route('addlease.discountrate.index', ['id' => $id]);
+                        } else {
+                            //$back_url = route('addlease.lowvalue.index', ['id' => $id]);
+                            $category_excluded = CategoriesLeaseAssetExcluded::query()->get();
 
-                        $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
+                            $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
 
-                        $asset_on_low = LeaseAssets::query()->where('lease_id', '=', $lease->id)->whereNotIn('specific_use', [2])
-                            ->whereHas('leaseDurationClassified',  function($query){
-                                $query->whereNotIn('lease_contract_duration_id',[1,2]);
-                            })->whereNotIn('category_id', $category_excluded_id)->count();
-                            
-                            if($asset_on_low >0){
-                              $back_url = route('addlease.lowvalue.index', ['id' => $id]);  
-                            }
-                            else{
+                            $asset_on_low = LeaseAssets::query()->where('lease_id', '=', $lease->id)->whereNotIn('specific_use', [2])
+                                ->whereHas('leaseDurationClassified', function ($query) {
+                                    $query->whereNotIn('lease_contract_duration_id', [1, 2]);
+                                })->whereNotIn('category_id', $category_excluded_id)->count();
+
+                            if ($asset_on_low > 0) {
+                                $back_url = route('addlease.lowvalue.index', ['id' => $id]);
+                            } else {
                                 $back_url = route('lease.escalation.index', ['id' => $id]);
                             }
+                        }
                     }
-                } 
 
                     //to get current step for steps form
                     $current_step = 14;
@@ -191,7 +188,7 @@ class InitialDirectCostController extends Controller
             } else {
                 abort(404);
             }
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             abort(404);
         }
     }
@@ -237,7 +234,7 @@ class InitialDirectCostController extends Controller
      */
     public function create($id, Request $request)
     {
-          $breadcrumbs = [
+        $breadcrumbs = [
             [
                 'link' => route('add-new-lease.index'),
                 'title' => 'Add New Lease'
@@ -260,16 +257,16 @@ class InitialDirectCostController extends Controller
 
                 if ($request->isMethod('post')) {
 
-                    if($request->has('initial_direct_cost_involved') && $request->initial_direct_cost_involved == "yes") {
+                    if ($request->has('initial_direct_cost_involved') && $request->initial_direct_cost_involved == "yes") {
                         $total = 0;
-                        foreach ($request->supplier_name as $key=>$supplier) {
+                        foreach ($request->supplier_name as $key => $supplier) {
                             $total += $request->amount[$key];
                         }
-                        $request->request->add(['total_initial_direct_cost' => $total ]);
+                        $request->request->add(['total_initial_direct_cost' => $total]);
                     }
 
-                    $validator = Validator::make($request->except('_token'), $this->validationRules(),[
-                        'supplier_name.*.required_if' =>  'Supplier name is required',
+                    $validator = Validator::make($request->except('_token'), $this->validationRules(), [
+                        'supplier_name.*.required_if' => 'Supplier name is required',
                         'direct_cost_description.*.required_if' => 'Direct Cost Description is required',
                         'expense_date.*.required_if' => 'Expense Date is required',
                         'supplier_currency.*.required_if' => 'Currency is required',
@@ -287,14 +284,14 @@ class InitialDirectCostController extends Controller
                     $initial_direct_cost = InitialDirectCost::create($data);
 
                     if ($initial_direct_cost) {
-                        if($request->initial_direct_cost_involved == "yes") {
-                            foreach ($request->supplier_name as $key=>$value){
+                        if ($request->initial_direct_cost_involved == "yes") {
+                            foreach ($request->supplier_name as $key => $value) {
                                 SupplierDetails::create([
                                     'initial_direct_cost_id' => $initial_direct_cost->id,
                                     'supplier_name' => $value,
                                     'direct_cost_description' => $request->direct_cost_description[$key],
                                     'expense_date' => date('Y-m-d', strtotime($request->expense_date[$key])),
-                                    'supplier_currency' =>  $request->supplier_currency[$key],
+                                    'supplier_currency' => $request->supplier_currency[$key],
                                     'amount' => $request->amount[$key],
                                     'rate' => $request->rate[$key]
                                 ]);
@@ -307,8 +304,8 @@ class InitialDirectCostController extends Controller
                 }
 
                 $supplier_details = [];
-                 $asset_on_balence = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '<', '2019-01-01')->first();
-                if($asset_on_balence > 0){
+                $asset_on_balence = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '<', '2019-01-01')->first();
+                if ($asset_on_balence > 0) {
                     $back_url = route('addlease.balanceasondec.index', ['id' => $id]);
                 } else {
                     $back_url = route('addlease.discountrate.index', ['id' => $id]);
@@ -331,6 +328,7 @@ class InitialDirectCostController extends Controller
             abort(404);
         }
     }
+
     /**
      * edit existing InitiaLdirectCost Controller details for an asset
      * @param $id
@@ -351,16 +349,16 @@ class InitialDirectCostController extends Controller
 
                 if ($request->isMethod('post')) {
 
-                    if($request->has('initial_direct_cost_involved') && $request->initial_direct_cost_involved == "yes") {
+                    if ($request->has('initial_direct_cost_involved') && $request->initial_direct_cost_involved == "yes") {
                         $total = 0;
-                        foreach ($request->supplier_name as $key=>$supplier) {
+                        foreach ($request->supplier_name as $key => $supplier) {
                             $total += $request->amount[$key];
                         }
-                        $request->request->add(['total_initial_direct_cost' => $total ]);
+                        $request->request->add(['total_initial_direct_cost' => $total]);
                     }
 
-                    $validator = Validator::make($request->except('_token'), $this->validationRules(),[
-                        'supplier_name.*.required_if' =>  'Supplier name is required',
+                    $validator = Validator::make($request->except('_token'), $this->validationRules(), [
+                        'supplier_name.*.required_if' => 'Supplier name is required',
                         'direct_cost_description.*.required_if' => 'Direct Cost Description is required',
                         'expense_date.*.required_if' => 'Expense Date is required',
                         'supplier_currency.*.required_if' => 'Currency is required',
@@ -385,14 +383,14 @@ class InitialDirectCostController extends Controller
                     if ($model->save()) {
                         //Delete all the suppliers and create them again..
                         SupplierDetails::query()->where('initial_direct_cost_id', '=', $initial_direct_cost_id)->delete();
-                        if($request->initial_direct_cost_involved == "yes") {
-                            foreach ($request->supplier_name as $key=>$value){
+                        if ($request->initial_direct_cost_involved == "yes") {
+                            foreach ($request->supplier_name as $key => $value) {
                                 SupplierDetails::create([
                                     'initial_direct_cost_id' => $initial_direct_cost_id,
                                     'supplier_name' => $value,
                                     'direct_cost_description' => $request->direct_cost_description[$key],
                                     'expense_date' => date('Y-m-d', strtotime($request->expense_date[$key])),
-                                    'supplier_currency' =>  $request->supplier_currency[$key],
+                                    'supplier_currency' => $request->supplier_currency[$key],
                                     'amount' => $request->amount[$key],
                                     'rate' => $request->rate[$key]
                                 ]);

@@ -12,6 +12,8 @@ class LeaseBalanceAsOnDec extends Model
         'asset_id',
         'lease_id',
         'reporting_currency',
+        'exchange_rate',
+        'reporting_currency_selected',
         'carrying_amount',
         'liability_balance',
         'prepaid_lease_payment_balance',
