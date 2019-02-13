@@ -25,7 +25,7 @@
                     <div role="tabpanel" class="tab-pane active">
                         <form class="form-horizontal" method="POST" action="{{ route('settings.index.save') }}">
                             {{ csrf_field() }}
-                            <div class="form-group{{ $errors->has('annual_year_end_on') ? ' has-error' : '' }} required">
+                           <!--  <div class="form-group{{ $errors->has('annual_year_end_on') ? ' has-error' : '' }} required">
                                 <label for="annual_year_end_on" class="col-md-4 control-label">Annual Reporting Period</label>
                                 <div class="col-md-6">
                                     <div class="input-group">
@@ -40,8 +40,15 @@
                                         </span>
                                     @endif
                                 </div>
-                            </div>
+                            </div> -->
 
+ <!--  <div role="tabpanel" class="tab-pane active">
+                    <div class="panel panel-info">
+                     <div class="panel-heading">Date of Initial Application of the New Leasing Standard
+
+                     </div>
+                 </div>
+             </div> -->
 
                             <div class="form-group{{ $errors->has('date_of_initial_application') ? ' has-error' : '' }} required">
                                 <label for="annual_year_end_on" class="col-md-4 control-label">Date of Initial Application of the New Leasing Standard</label>

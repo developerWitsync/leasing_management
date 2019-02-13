@@ -1,23 +1,34 @@
 <div class="panel panel-default">
-    <div class="panel-heading">Impairement Test</div>
+    <div class="panel-heading">Impairement Test Of Lease Asset</div>
+
     <div class="panel-body">
-        <table class="table table-bordered table-responsive">
-            <thead>
-                <tr>
+        @if (session('status'))
+            <div class="alert alert-success">
+                {{ session('status') }}
+            </div>
+        @endif
+
+        <div class="tab-content" style="padding: 0px;">
+            <div role="tabpanel" class="tab-pane active">
+                <div class="panel panel-info">
+                    <div class="panel-heading">Impairement Test Of Lease Asset</div>
+                    <table class="table table-bordered table-responsive">
+                        <thead>
+                        <tr>
                     <th>Sr. No.</th>
                     <th>Unique ULA Code</th>
-                    <th>Name of the Underlying Lease Asset</th>
-                    <th>Underlying Lease Asset Classification</th>
+                    <th> Lease Asset Name</th>
+                    <th> Lease Asset Classification</th>
                     <th>Value of Lease Asset</th>
                     <th> Fair Market Value of Lease Asset</th>
                     <th>Impairment, if any</th>
-                </tr>
-            </thead>
-            <tbody>
+                        </tr>
+                        </thead>
+                       <tbody>
             @php
                 $show_next = [];
             @endphp
-            @foreach($own_assets as $key=>$asset)
+            @foreach($assets as $key=>$asset)
                 <tr>
                     <td>{{ $key + 1 }}</td>
                     <td style="width: 10%">
@@ -43,6 +54,11 @@
                 </tr>
             @endforeach
             </tbody>
-        </table>
+                    </table>
+                </div>
+
+               
+            </div>
+        </div>
     </div>
 </div>

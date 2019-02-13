@@ -21,22 +21,22 @@
         <div class="tab-content" style="padding: 0px;">
             <div role="tabpanel" class="tab-pane active">
                 <div class="panel panel-info">
-                    <div class="panel-heading">Section A: Leases for own use lease</div>
+                    <div class="panel-heading"> Present Value of Lease Liability</div>
                     <table class="table table-bordered table-responsive">
                         <thead>
                         <tr>
                             <th>Sr. No.</th>
                             <th>Unique ULA Code</th>
-                            <th>Name of the Underlying Lease Asset</th>
-                            <th>Underlying Lease Asset Classification</th>
+                            <th> Lease Asset Name</th>
+                            <th>Lease Asset Classification</th>
                             <th>Currency</th>
                             <th>Present Value of Lease Liability</th>
                             <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
-                        @if(count($own_assets) > 0)
-                            @foreach($own_assets as $key=>$asset)
+                        @if(count($assets) > 0)
+                            @foreach($assets as $key=>$asset)
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td style="width: 10%">
@@ -67,47 +67,7 @@
                     </table>
                 </div>
 
-                <div class="panel panel-info">
-                    <div class="panel-heading">Section B: Leases for sub leases use</div>
-                    <table class="table table-bordered table-responsive">
-                        <thead>
-                        <tr>
-                            <th>Sr. No.</th>
-                            <th>Unique ULA Code</th>
-                            <th>Name of the Underlying Lease Asset</th>
-                            <th>Underlying Lease Asset Classification</th>
-                            <th>Currency</th>
-
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @if(count($sublease_assets) > 0)
-                            @foreach($sublease_assets as $key=>$asset)
-                                <tr>
-                                    <td>{{ $key + 1 }}</td>
-                                    <td style="width: 10%">
-                                        {{ $asset->uuid}}
-                                    </td>
-                                    <td>
-                                        {{ $asset->name }}
-                                    </td>
-                                    <td>
-                                        {{ $asset->subcategory->title }}
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @else
-                            <tr>
-                                <td colspan="6">
-                                    <center>
-                                        No Records exists.
-                                    </center>
-                                </td>
-                            </tr>
-                        @endif
-                        </tbody>
-                    </table>
-                </div>
+                
             </div>
         </div>
     </div>

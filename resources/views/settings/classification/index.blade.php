@@ -198,7 +198,7 @@
                             <div class="panel-heading">
                                 Number of Underlying Lease Assets
                                 <span>
-                                    <a href="javascript:void(0);" class="btn btn-sm btn-primary pull-right add_more" data-form="add_more_no_of_underlying_asset">Add More</a>
+                                    <a href="javascript:void(0);" class="btn btn-sm btn-primary pull-right add_more disabled" data-form="add_more_no_of_underlying_asset" >Add More</a>
                                 </span>
                             </div>
                             <div class="panel-body settingTble">
@@ -695,7 +695,7 @@
 
                         <div class="panel panel-info">
                             <div class="panel-heading">
-                                Categories of Lease Assets Excluded
+                                Categories of Lease Assets Excluded from Valuation
                               </div>
 
                             <div class="panel-body settingTble">
@@ -726,14 +726,14 @@
                                                    <a data-href="{{ route('settings.leaseclassification.deletecategoriesexcluded', ['id' => 7]) }}" href="javascript:;" class="btn btn-sm btn-danger delete_settings">Exclude</a>
                                             </td>
                                             @else
-                                             <td>Intengible Asset  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                             <td>Intangible Asset  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             @if(count($check_intangible_asset)==0)
-                                             <a data-href="{{ route('settings.leaseclassification.addcategoriesexcluded', ['id' => 7]) }}" href="javascript:;" class="btn btn-sm btn-success add_intangible_asset">Include</a>
+                                             <a data-href="{{ route('settings.leaseclassification.addcategoriesexcluded', ['id' => 7]) }}" href="javascript:;" class="btn btn-sm btn-success add_intangible_asset">Include in Valuation</a>
                                              @else
                                              <input type="button" disabled class="btn btn-sm btn-success" value="Include">
                                             @endif
                                               @if(count($check_intangible_asset)==0)
-                                            <a data-href="{{ route('settings.leaseclassification.deletecategoriesexcluded', ['id' => 7]) }}" href="javascript:;" class="btn btn-sm btn-danger delete_settings">Exclude</a>
+                                            <a data-href="{{ route('settings.leaseclassification.deletecategoriesexcluded', ['id' => 7]) }}" href="javascript:;" class="btn btn-sm btn-danger delete_settings">Exclude in Valuation</a>
                                              @else
                                              <input type="button" disabled class="btn btn-sm btn-danger" value="Exclude">
                                             @endif

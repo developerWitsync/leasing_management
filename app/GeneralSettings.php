@@ -10,7 +10,6 @@ class GeneralSettings extends Model
 
     protected $fillable = [
         'business_account_id',
-        'annual_year_end_on',
         'date_of_initial_application',
         'date_of_initial_application_earlier_date',
         'min_previous_first_lease_start_year',

@@ -54,6 +54,7 @@ class LeaseResidualController extends Controller
      */
     public function create_V2($id, Request $request)
     {
+       // dd($request);
         try {
             $breadcrumbs = [
                 [
@@ -148,6 +149,7 @@ class LeaseResidualController extends Controller
                 abort(404);
             }
         } catch (\Exception $e) {
+          
             abort(404, $e->getMessage());
         }
     }

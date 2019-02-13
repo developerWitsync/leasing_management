@@ -90,11 +90,13 @@ class LeaseDurationClassifiedController extends Controller
                         if ($model->save()) {
                             // complete Step
                             confirmSteps($lease->id, 9);
+
                             if ($request->has('action') && $request->action == "next") {
                                 return redirect(route('lease.escalation.index', ['id' => $lease->id]));
                             } else {
                                 return redirect(route('addlease.durationclassified.index', ['id' => $lease->id]))->with('status', 'Lease Duration Classified Value has been added successfully.');
                             }
+
 
                         }
                     }
