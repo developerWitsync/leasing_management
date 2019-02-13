@@ -17,7 +17,6 @@ class CheckPreviousData
      */
     public function handle($request, Closure $next, $step, $param_type, $param)
     {
-
         \Log::info('Checking ----- '. $step. ' On URL ------- '. $request->route()->getName());
         if ($param_type == 'asset_id') {
             $asset_id = $request->route($param);
@@ -231,6 +230,7 @@ class CheckPreviousData
                 $step = 13;
             }
         }
+
         if($step == 16){
             $asset_on_lease_incentives = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)->where('lease_start_date','>=','2019-01-01')->count();
             if($asset_on_lease_incentives == 0){
@@ -245,7 +245,6 @@ class CheckPreviousData
                  }
             }
         }
-
 
         \Log::info('Checking ----- '. $step. ' On URL ------- '. $request->route()->getName());
 

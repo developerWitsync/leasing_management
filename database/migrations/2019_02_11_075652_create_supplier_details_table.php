@@ -22,8 +22,8 @@ class CreateSupplierDetailsTable extends Migration
             $table->text('direct_cost_description');
             $table->date('expense_date');
             $table->string('supplier_currency');
-            $table->decimal('amount', 12, 8);
-            $table->decimal('rate', 12, 8);
+            $table->decimal('amount', 12, 4);
+            $table->decimal('rate', 12, 4);
             $table->timestamps();
         });
     }

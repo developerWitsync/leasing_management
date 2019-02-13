@@ -21,8 +21,8 @@ class CreateCustomerDetailsTable extends Migration
             $table->string('description')->nullable();
             $table->date('incentive_date')->nullable();
             $table->string('currency_id')->nullable();
-             $table->decimal('amount', 12, 8)->nullable();
-            $table->decimal('exchange_rate', 12, 8)->nullable();
+             $table->decimal('amount', 12, 4)->nullable();
+            $table->decimal('exchange_rate', 12, 4)->nullable();
             $table->timestamps();
         });
     }
