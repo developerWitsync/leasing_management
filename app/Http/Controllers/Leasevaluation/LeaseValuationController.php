@@ -57,8 +57,7 @@ class LeaseValuationController extends Controller
             $categories = LeaseAssetCategories::query()->where('is_capitalized', '=', $capitalized)->get();
 
             return view('leasevaluation.index', compact(
-                'breadcrumbs',
-                'capitalized',
+                 'capitalized',
                 'categories'
             ));
         } catch (\Exception $e) {

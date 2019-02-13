@@ -578,6 +578,7 @@
                 function calculateLeaseTerm() {
                     var date_diff = dateDiff($('#accural_period').datepicker('getDate'), $('#lease_end_date').datepicker('getDate'));
                     var difference_string = date_diff.years + " years " + date_diff.months + " months " + date_diff.days + " days";
+                    alert(difference_string);
                     $("#lease_term").val(difference_string);
                 }
 

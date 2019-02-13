@@ -159,11 +159,12 @@
 <script type="text/javascript">
        
           $('.save_next').on('click', function (e) {
+            alert('hi');
                 e.preventDefault();
                 $('input[name="action"]').val('next');
                 $('#lease_balence').submit();
         });
-<script>
+
     $('select[name="reporting_currency"]').on('change', function () {
         var _return_currency = '';
         var access_key = '{{ env("CURRENCY_API_ACCESS_KEY") }}';

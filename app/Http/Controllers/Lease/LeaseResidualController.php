@@ -54,6 +54,7 @@ class LeaseResidualController extends Controller
      */
     public function create_V2($id, Request $request)
     {
+       // dd($request);
         try {
             $breadcrumbs = [
                 [
@@ -130,7 +131,7 @@ class LeaseResidualController extends Controller
                 $payment_lease_basis = LeasePaymentsBasis::query()->whereIn('business_account_id', getDependentUserIds())->get();
 
                 //to get current step for steps form
-                $current_step = $his->current_step;
+                $current_step = $this->current_step;
 
                 return view('lease.residual-value-gurantee.create', compact(
                     'model',
@@ -148,6 +149,7 @@ class LeaseResidualController extends Controller
                 abort(404);
             }
         } catch (\Exception $e) {
+          
             abort(404, $e->getMessage());
         }
     }

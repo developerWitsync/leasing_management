@@ -66,11 +66,10 @@
                     <thead>
                     <tr>
                         <th>Sr. No.</th>
-                        <th>Unique ULA Code</th>
-                        <th>Underlying Lease Asset Category</th>
-                        <th>Underlying Lease Asset Classification</th>
-                        <th>Name of the Underlying Lease Asset</th>
-                        <th>Number of Units of Lease Assets of Similar Characteristics</th>
+                        <th> Lease Asset Category</th>
+                        <th>Lease Asset Classification</th>
+                        <th>Lease Asset Name</th>
+                        <th>Lease Assets of Similar Characteristics</th>
                         <th>Action</th>
                     </tr>
                     </thead>
@@ -79,13 +78,7 @@
                         @foreach($assets as $key=>$asset)
                             <tr>
                                 <td>{{ $key + 1 }}</td>
-                                @if(isset($asset->uuid))
-                                    <td style="width: 10%">
-                                        {{ $asset->uuid}}
-                                    </td>
-                                @else
-                                    <td>-</td>
-                                @endif
+                               
                                 @if(isset($asset->category->title))
                                     <td>
                                         {{ $asset->category->title }}
@@ -131,7 +124,6 @@
                     <thead>
                     <tr>
                         <th>Sr. No.</th>
-                        <th>Unique ULA Code</th>
                         <th>Country of the Lease Asset</th>
                         <th>Place</th>
                         <th>Specific Use of the Lease Asset</th>
@@ -144,13 +136,7 @@
                         @foreach($assets as $key=>$asset)
                             <tr>
                                 <td>{{ $key + 1 }}</td>
-                                @if(isset($asset->uuid))
-                                    <td style="width: 10%">
-                                        {{ $asset->uuid}}
-                                    </td>
-                                @else
-                                    <td>-</td>
-                                @endif
+                                
                                 @if(isset($asset->country->name))
                                     <td>
                                         {{ $asset->country->name }}
@@ -197,7 +183,7 @@
                     <thead>
                     <tr>
                         <th>Sr. No.</th>
-                        <th>Unique ULA Code</th>
+                     
                         <th>Lease Start Date</th>
                         <th>Initial Lease Free Period, If any</th>
                         <th>Start Date of Lease Payment/Accrual Period</th>
@@ -211,13 +197,7 @@
                         @foreach($assets as $key=>$asset)
                             <tr>
                                 <td>{{ $key + 1 }}</td>
-                                @if(isset($asset->uuid))
-                                    <td style="width: 10%">
-                                        {{ $asset->uuid}}
-                                    </td>
-                                @else
-                                    <td>-</td>
-                                @endif
+                               
                                 @if(isset($asset->lease_start_date))
                                     <td>
                                         {{date('d-m-Y', strtotime($asset->lease_start_date))}}
@@ -327,8 +307,7 @@
                     <thead>
                     <tr>
                         <th>Sr. No.</th>
-                        <th>Unique ULA Code</th>
-                        <th>Total FMV</th>
+                         <th>Total FMV</th>
                         <th>Total Residual Guarantee Value</th>
                         <th>Termination Penalty</th>
                         <th>Anticipated Purchase Price</th>
@@ -341,13 +320,7 @@
                         @foreach($assets as $key=>$asset)
                             <tr>
                                 <td>{{ $key + 1 }}</td>
-                                @if(isset($asset->uuid))
-                                    <td style="width: 10%">
-                                        {{ $asset->uuid}}
-                                    </td>
-                                @else
-                                    <td>-</td>
-                                @endif
+                               
                                 @if(isset($asset->fairMarketValue->total_units))
                                     <td>
                                         {{ $asset->fairMarketValue->total_units }}
@@ -402,7 +375,6 @@
                     <thead>
                     <tr>
                         <th>Sr. No.</th>
-                        <th>Unique ULA Code</th>
                         <th>Lease Classified</th>
                         <th>Classify under Low Value Lease Asset</th>
                         <th>Discount Rates</th>
@@ -416,13 +388,7 @@
                         @foreach($assets as $key=>$asset)
                             <tr>
                                 <td>{{ $key + 1 }}</td>
-                                @if(isset($asset->uuid))
-                                    <td style="width: 10%">
-                                        {{ $asset->uuid}}
-                                    </td>
-                                @else
-                                    <td>-</td>
-                                @endif
+                                
                                 @if(isset($asset->leaseDurationClassified->getLeaseClassification->title))
                                     <td>
                                         {{ $asset->leaseDurationClassified->getLeaseClassification->title}}
@@ -481,7 +447,6 @@
                     <thead>
                     <tr>
                         <th>Sr. No.</th>
-                        <th>Unique ULA Code</th>
                         <th>Present Value of Lease Liability</th>
                         <th>Value of a Lease Asset</th>
                         <th>Adjustment to Equity</th>
@@ -493,13 +458,7 @@
                         @foreach($assets as $key=>$asset)
                             <tr>
                                 <td>{{ $key + 1 }}</td>
-                                @if(isset($asset->uuid))
-                                    <td style="width: 10%">
-                                        {{ $asset->uuid}}
-                                    </td>
-                                @else
-                                    <td>-</td>
-                                @endif
+                               
 
                                 <td>{{ is_null($asset->lease_liablity_value)?'-':$asset->lease_liablity_value }}</td>
                                 <td>{{ is_null($asset->value_of_lease_asset)?'-':$asset->value_of_lease_asset }}</td>

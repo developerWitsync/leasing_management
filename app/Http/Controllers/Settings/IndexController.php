@@ -54,7 +54,6 @@ class IndexController extends Controller
         try{
 
             $validator = Validator::make($request->except("_token"), [
-                'annual_year_end_on' => 'required|date',
                 'date_of_initial_application'   => 'required',
                 'min_previous_first_lease_start_year' => 'required',
                 'max_lease_end_year' => 'required'
@@ -68,7 +67,7 @@ class IndexController extends Controller
             $settings = GeneralSettings::query()->where('business_account_id', '=', auth()->user()->id)->first();
 
             $data = $request->except('_token');
-            $data['annual_year_end_on'] = date('Y-m-d', strtotime($request->annual_year_end_on));
+            
            if(isset($settings)) {
                 $settings->setRawAttributes($data);
                 $settings->save();

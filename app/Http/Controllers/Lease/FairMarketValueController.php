@@ -89,12 +89,13 @@ class FairMarketValueController extends Controller
                         $request->file('attachment')->move('uploads', $uniqueFileName);
                         $data['attachment'] = $uniqueFileName;
                     }
-
+                    //dd('fdfdg');
                     $market_value = $model->setRawAttributes($data);
                     if($market_value->save()){
                         // complete Step
                         confirmSteps($lease->id,7);
                          if($request->has('action') && $request->action == "next") {
+                             
                             return redirect(route('addlease.residual.index',['id' => $lease->id]));
                         } else {
 
