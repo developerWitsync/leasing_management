@@ -41,8 +41,17 @@
                                 <thead>
                                     <tr>
                                         <th colspan="10"></th>
+                                        <th colspan="7" class="initial_valuation">In Lease Foreign Currency</th>
+                                        <th colspan="7" class="initial_valuation">In Reporting Currency</th>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="10"></th>
                                         <th colspan="4" class="initial_valuation">Initial Valuation</th>
                                         <th colspan="3" class="subsequent_valuation">Subsequent Valuation</th>
+
+                                        <th colspan="4" class="initial_valuation">Initial Valuation</th>
+                                        <th colspan="3" class="subsequent_valuation">Subsequent Valuation</th>
+
                                     </tr>
                                     <tr>
                                         <th>Reference No.</th>
@@ -55,6 +64,16 @@
                                         <th>Lease Start Date</th>
                                         <th>Remaining Lease Term</th>
                                         <th>Discount Rate</th>
+
+                                        <th class="initial_valuation">Lease Currency</th>
+                                        <th class="initial_valuation">Undiscounted Lease Liability</th>
+                                        <th class="initial_valuation">Present Value of Lease Liability</th>
+                                        <th class="initial_valuation">Value of Lease Asset</th>
+
+                                        <th class="subsequent_valuation">Undiscounted Lease Liability</th>
+                                        <th class="subsequent_valuation">Present Value of Lease Liability</th>
+                                        <th class="subsequent_valuation">Value of Lease Asset</th>
+
 
                                         <th class="initial_valuation">Lease Currency</th>
                                         <th class="initial_valuation">Undiscounted Lease Liability</th>
@@ -77,8 +96,8 @@
 @section('footer-script')
     <script src="{{ asset('assets/plugins/bootbox/bootbox.min.js') }}"></script>
     <script src="{{ asset('js/jquery-ui.js') }}"></script>
-    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+    <script src="{{ asset('assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('js/pages/valuation_main.js') }}"></script>
     <script>
         var _data_table_url = "{{ route('leasevaluation.fetchassets',['capitalized' => $capitalized, 'category_id' => (request()->has('id'))?request()->id:'all']) }}";

@@ -482,18 +482,17 @@ li.disabled{
     pointer-events: none;
 }
 
-li.disabled a{
+li.disabled a {
     cursor: not-allowed !important;
-
+}
 .initial_valuation{
-    text-align: center;
+    text-align: center !important;
     /*background-color: #cbe199e6 !important;*/
 }
 .subsequent_valuation{
-    text-align: center;
+    text-align: center !important;
     /*background-color: #cbe199e6 !important;*/
 }
 table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td {
     border-bottom-width: 1px !important;
-
 }

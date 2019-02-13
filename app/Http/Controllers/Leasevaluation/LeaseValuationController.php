@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Leasevaluation;
 
 use App\Http\Controllers\Controller;
 use App\LeaseHistory;
+use App\ReportingCurrencySettings;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Lease;
@@ -104,11 +105,69 @@ class LeaseValuationController extends Controller
                     $query->where('is_capitalized', '=', $capitalized);
                 });
 
+                $is_foreign_currency_applied = ReportingCurrencySettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
+                if($is_foreign_currency_applied) {
+                    $is_foreign_currency_applied = $is_foreign_currency_applied->is_foreign_transaction_involved;
+                } else {
+                    $is_foreign_currency_applied = 'no';
+                }
+
                 return datatables()->eloquent($assets)
 
                     ->filter(function ($query) use ($request){
                         if ($request->has('search') && trim($request->search["value"])!="") {
                             $query->where('name', 'like', "%" . $request->search["value"] . "%");
+                        }
+                    })
+                    ->addColumn('is_foreign_transaction_involved', function() use ($is_foreign_currency_applied){
+                        return $is_foreign_currency_applied;
+                    })
+                    ->addColumn('foreign_initial_lease_currency', function($data) use ($is_foreign_currency_applied){
+                        if($is_foreign_currency_applied == "yes"){
+                            $initial_currency = LeaseHistory::query()
+                                ->select('json_data_steps->lessor_details->lease_contract_id as initial_lease_currency')
+                                ->where('lease_id', '=', $data->lease->id)
+                                ->whereRaw('modify_id IS NULL')
+                                ->first();
+                            return str_replace('"', '', $initial_currency->initial_lease_currency);
+                        } else {
+                            return 'N/A';
+                        }
+                    })
+                    ->addColumn('foreign_initial_undiscounted_lease_liability', function($data) use ($is_foreign_currency_applied){
+                        if($is_foreign_currency_applied == "yes"){
+                            $initial_undiscounted_lease_liability = LeaseHistory::query()
+                                ->select('json_data_steps->low_value->undiscounted_lease_payment as initial_undiscounted_lease_liability')
+                                ->where('lease_id', '=', $data->lease->id)
+                                ->whereRaw('modify_id IS NULL')
+                                ->first();
+                            return str_replace('"', '', $initial_undiscounted_lease_liability->initial_undiscounted_lease_liability);
+                        } else {
+                            return 'N/A';
+                        }
+                    })
+                    ->addColumn('foreign_initial_present_value_of_lease_liability', function($data) use ($is_foreign_currency_applied){
+                        if($is_foreign_currency_applied == "yes"){
+                            $initial_present_value_of_lease_liability = LeaseHistory::query()
+                                ->select('json_data_steps->underlying_asset->lease_liablity_value as initial_present_value_of_lease_liability')
+                                ->where('lease_id', '=', $data->lease->id)
+                                ->whereRaw('modify_id IS NULL')
+                                ->first();
+                            return str_replace('"', '', $initial_present_value_of_lease_liability->initial_present_value_of_lease_liability);
+                        } else {
+                            return 'N/A';
+                        }
+                    })
+                    ->addColumn('foreign_initial_value_of_lease_asset', function($data) use ($is_foreign_currency_applied){
+                        if($is_foreign_currency_applied == "yes"){
+                            $initial_value_of_lease_asset = LeaseHistory::query()
+                                ->select('json_data_steps->underlying_asset->value_of_lease_asset as initial_value_of_lease_asset')
+                                ->where('lease_id', '=', $data->lease->id)
+                                ->whereRaw('modify_id IS NULL')
+                                ->first();
+                            return str_replace('"', '', $initial_value_of_lease_asset->initial_value_of_lease_asset);
+                        } else {
+                            return 'N/A';
                         }
                     })
                     ->addColumn('start_date', function ($data) {
