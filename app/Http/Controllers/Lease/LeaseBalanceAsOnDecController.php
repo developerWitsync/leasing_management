@@ -76,9 +76,9 @@ class LeaseBalanceAsOnDecController extends Controller
                         $data['asset_id'] = $asset->id;
 
                         $model->setRawAttributes($data);
-                        dd($data);
+
                        if($model->save()) {
-                            dd('hi');
+                            
                             // complete Step
                             confirmSteps($asset->lease->id, 13);
                         if($request->has('action') && $request->action == "next") {

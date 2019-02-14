@@ -513,7 +513,7 @@ function createUlaCode(){
       return $string;
 }
 
- * fetch the currency exchange rates as from the server end
+/* fetch the currency exchange rates as from the server end
  * @param null $date
  * @param $source
  * @param $target

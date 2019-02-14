@@ -373,7 +373,7 @@
                         //means selected option is monthly
                         @php
                             $lease_end_date = \Carbon\Carbon::parse($asset->lease_end_date);
-                            $calculated_date = $lease_end_date->subMonth(1)->format('D M d Y');
+                            $calculated_date = $lease_end_date;
                         @endphp
                             _calculated_last_payment_date = new Date("{{ $calculated_date }}");
                         break;
@@ -431,12 +431,14 @@
                         _calculated_first_payment_date = _end_date;
                         break;
                     case 2:
-                        //means selected option is monthly
+                        //means selected option is monthly.
                         @php
                             $accural_date = \Carbon\Carbon::parse($asset->accural_period);
+
                             $calculated_date = $accural_date->addMonth(1)->format('D M d Y');
                         @endphp
                             _calculated_first_payment_date = new Date("{{ $calculated_date }}");
+                            alert(_calculated_first_payment_date);
                         break;
                     case 3:
                         //means selected option is Quarterly
