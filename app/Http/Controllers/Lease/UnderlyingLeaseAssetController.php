@@ -23,6 +23,7 @@ use App\UseOfLeaseAsset;
 use App\GeneralSettings;
 use App\LeaseCompletedSteps;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use Validator;
 
 class UnderlyingLeaseAssetController extends Controller
@@ -75,7 +76,9 @@ class UnderlyingLeaseAssetController extends Controller
              //to get current step for steps form
            // $current_step = isEnabled($id,2);
             $current_step = $this->current_step;
-
+            
+            $ulacode = createUlaCode();
+            
             
             return view('lease.lease-assets.indexv2', compact('breadcrumbs',
                 'lease',
@@ -89,7 +92,8 @@ class UnderlyingLeaseAssetController extends Controller
                 'accounting_terms',
                 'settings',
                 'get_steps',
-                'current_step'
+                'current_step',
+                'ulacode'
             ));
         } else {
             abort(404);
@@ -126,7 +130,7 @@ class UnderlyingLeaseAssetController extends Controller
                 });
 
                 $rules = [
-                    'uuid' => 'required|unique:lease_assets,uuid',
+                    'uuid' => 'required',
                     'category_id' => 'required|exists:lease_assets_categories,id',
                     'sub_category_id'   => 'required|exists:lease_assets_sub_categories_settings,id',
                     'name'  => 'required',
@@ -447,6 +451,27 @@ class UnderlyingLeaseAssetController extends Controller
             }
             return response()->json([
                 'html' => $html
+            ], 200);
+        } else {
+            abort(404);
+        }
+    }
+
+    /**
+     * fetch the subcategories for a particular selected category on NL2 sheet
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getDateDifference(Request $request){
+        if($request->ajax()) {
+
+            $accural_period = Carbon::parse($request->accural_period);
+            $lease_end_date = Carbon::parse($request->lease_end_date);
+           
+            $date_diff = $lease_end_date->diffForHumans($accural_period, true, false, 4); 
+            return response()->json([
+                'html' => $date_diff
             ], 200);
         } else {
             abort(404);

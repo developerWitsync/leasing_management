@@ -166,7 +166,7 @@
         <div class="form-group{{ $errors->has('first_payment_start_date') ? ' has-error' : '' }} required">
             <label for="first_payment_start_date" class="col-md-12 control-label">First Lease Payment Start Date</label>
             <div class="col-md-12">
-                <input id="first_payment_start_date" type="text" placeholder="First Lease Payment Start Date" class="form-control" name="first_payment_start_date" value="{{ old('first_payment_start_date',$payment->first_payment_start_date) }}" @if($subsequent_modify_required) disabled="disabled" @endif>
+                <input id="first_payment_start_date" type="text" placeholder="First Lease Payment Start Date" class="form-control" name="first_payment_start_date" value="{{ old('first_payment_start_date',$payment->first_payment_start_date) }}" @if($subsequent_modify_required) disabled="disabled" @endif autocomplete="off">
                 @if ($errors->has('first_payment_start_date'))
                     <span class="help-block">
                         <strong>{{ $errors->first('first_payment_start_date') }}</strong>
@@ -183,7 +183,7 @@
         <div class="form-group{{ $errors->has('last_payment_end_date') ? ' has-error' : '' }} required">
             <label for="last_payment_end_date" class="col-md-12 control-label">Last Lease Payment End Date</label>
             <div class="col-md-12">
-                <input id="last_payment_end_date" type="text" placeholder="Last Lease Payment End Date" class="form-control" name="last_payment_end_date" value="{{ old('last_payment_end_date',$payment->last_payment_end_date) }}">
+                <input id="last_payment_end_date" type="text" placeholder="Last Lease Payment End Date" class="form-control" name="last_payment_end_date" value="{{ old('last_payment_end_date',$payment->last_payment_end_date) }}" autocomplete="off">
                 @if ($errors->has('last_payment_end_date'))
                     <span class="help-block">
                         <strong>{{ $errors->first('last_payment_end_date') }}</strong>
@@ -330,10 +330,14 @@
 
         $("#first_payment_start_date").datepicker({
             dateFormat: "dd-M-yy",
+            changeYear: true,
+            changeMonth:true,
         });
 
         $("#last_payment_end_date").datepicker({
             dateFormat: "dd-M-yy",
+            changeYear: true,
+            changeMonth:true,
         });
 
 

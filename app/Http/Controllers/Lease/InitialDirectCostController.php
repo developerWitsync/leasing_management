@@ -118,7 +118,7 @@ class InitialDirectCostController extends Controller
                             confirmSteps($lease->id, 14);
                             if($request->has('action') && $request->action == "next") {
                                
-                            return redirect(route('addlease.leaseincentives.index',['id' => $lease->id]));
+                            return redirect(route('addlease.leaseincentives.index',['id' => $lease->id]))->with('status', 'Initial Direct Cost has been added successfully.');
                         } else {
 
                            return redirect(route('addlease.initialdirectcost.index', ['id' => $lease->id]))->with('status', 'Initial Direct Cost has been added successfully.');

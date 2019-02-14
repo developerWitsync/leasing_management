@@ -159,7 +159,7 @@
 <script type="text/javascript">
        
           $('.save_next').on('click', function (e) {
-            alert('hi');
+            
                 e.preventDefault();
                 $('input[name="action"]').val('next');
                 $('#lease_balence').submit();

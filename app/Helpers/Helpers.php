@@ -8,6 +8,7 @@
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\DB;
 
 /**
  * upload the images to the path passed and create the thumnail if required
@@ -497,4 +498,17 @@ function checkPreviousSteps($lease_id,$complete_step){
    return false;
 }
 
+/**
+ * Create a ula code LA001/001/2019 when lease is created
+ * @return string
+ */
+function createUlaCode(){
+
+      $current_year = date("Y");
+      $first_param  = \App\Lease::query()->count();
+      $second_param = \App\Lease::query()->whereRaw("YEAR(created_at) =  '$current_year'")->count();
+
+      $string = "LA".str_pad($first_param, 3, 0, STR_PAD_LEFT).'/'.str_pad($second_param, 3, 0, STR_PAD_LEFT).'/'.$current_year;
+      return $string;
+}
 

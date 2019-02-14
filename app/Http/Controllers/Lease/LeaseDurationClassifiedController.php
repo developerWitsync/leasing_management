@@ -92,7 +92,7 @@ class LeaseDurationClassifiedController extends Controller
                             confirmSteps($lease->id, 9);
 
                             if ($request->has('action') && $request->action == "next") {
-                                return redirect(route('lease.escalation.index', ['id' => $lease->id]));
+                                return redirect(route('lease.escalation.index', ['id' => $lease->id]))->with('status', 'Lease Duration Classified Value has been added successfully.');
                             } else {
                                 return redirect(route('addlease.durationclassified.index', ['id' => $lease->id]))->with('status', 'Lease Duration Classified Value has been added successfully.');
                             }

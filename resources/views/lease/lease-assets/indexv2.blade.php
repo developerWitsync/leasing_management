@@ -25,14 +25,9 @@
                             <div class="form-group{{ $errors->has('uuid') ? ' has-error' : '' }} required">
                                 <label for="uuid" class="col-md-12 control-label">ULA CODE</label>
                                 <div class="col-md-12">
-                                    @php
-                                        $ula_code = \Webpatser\Uuid\Uuid::generate(1);
-                                        if($asset->ula_code){
-                                            $ula_code = $asset->ula_code;
-                                        }
-                                    @endphp
+                                   
                                     <input id="uuid" type="text" placeholder="ULA Code" class="form-control" name="uuid"
-                                           value="{{ old('ula_code', $ula_code) }}" readonly="readonly">
+                                           value="{{ old('ula_code', $ulacode) }}" readonly="readonly">
                                     @if ($errors->has('uuid'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('uuid') }}</strong>
@@ -575,12 +570,20 @@
                     }
                 });
 
-                function calculateLeaseTerm() {
-                    var date_diff = dateDiff($('#accural_period').datepicker('getDate'), $('#lease_end_date').datepicker('getDate'));
-                    var difference_string = date_diff.years + " years " + date_diff.months + " months " + date_diff.days + " days";
-                    alert(difference_string);
-                    $("#lease_term").val(difference_string);
-                }
+    function calculateLeaseTerm() {
+        $.ajax({
+        url : "{{route('addlease.leaseasset.getdatedifference')}}",
+        data : {
+        accural_period : $('#accural_period').val(),
+        lease_end_date : $('#lease_end_date').val()
+           
+        },
+        type : 'get',
+        success : function (response) {
+          $("#lease_term").val(response.html);
+        }
+    });
+    }
 
                 $('#accural_period').datepicker({
                     dateFormat: "dd-M-yy",

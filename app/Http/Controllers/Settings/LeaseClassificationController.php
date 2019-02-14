@@ -805,6 +805,10 @@ class LeaseClassificationController extends Controller
                     'business_account_id' => auth()->user()->id,
                     'status' => '1'
                  ]);
+                $model1 = LeaseAssetCategories::query()->where('id', '=', $category_id)->first();
+                $data['is_capitalized'] ='1';
+                $model1->setRawAttributes($data);
+                $model1->save();
 
                 if($model){
                   Session::flash('status', 'Setting has been added successfully.');
@@ -831,6 +835,12 @@ class LeaseClassificationController extends Controller
 
             if($request->ajax()) {
                 $categories_excluded = CategoriesLeaseAssetExcluded::query()->where('category_id', $id);
+
+                $model1 = LeaseAssetCategories::query()->where('id', '=', $id)->first();
+                $data['is_capitalized'] ='0';
+                $model1->setRawAttributes($data);
+                $model1->save();
+
                 if($categories_excluded) {
                     $categories_excluded->delete();
                     Session::flash('status', 'Setting has been deleted successfully.');

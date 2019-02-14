@@ -71,7 +71,7 @@ class SelectLowValueController extends Controller
                             // complete Step
                             confirmSteps($id,11);
                         if($request->has('action') && $request->action == "next") {
-                            return redirect(route('addlease.discountrate.index',['id' => $lease->id]));
+                            return redirect(route('addlease.discountrate.index',['id' => $lease->id]))->with('status', 'Select Low Value has been added successfully.');
                         } else {
 
                              return redirect(route('addlease.lowvalue.index',['id' => $lease->id]))->with('status', 'Select Low Value has been added successfully.');

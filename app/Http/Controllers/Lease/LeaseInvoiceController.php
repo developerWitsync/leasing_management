@@ -66,7 +66,7 @@ class LeaseInvoiceController extends Controller
                         // complete Step
                         confirmSteps($lease->id,17);
                        if($request->has('action') && $request->action == "next") {
-                            return redirect(route('addlease.reviewsubmit.index',['id' => $lease->id]));
+                            return redirect(route('addlease.reviewsubmit.index',['id' => $lease->id]))->with('status', 'Lease Payment Invoice details has been updated successfully.');
                         } else {
 
                               return redirect(route('addlease.leasepaymentinvoice.update',['id' => $lease->id]))->with('status', 'Lease Payment Invoice details has been updated successfully.');

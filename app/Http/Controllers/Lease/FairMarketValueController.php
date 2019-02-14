@@ -96,7 +96,7 @@ class FairMarketValueController extends Controller
                         confirmSteps($lease->id,7);
                          if($request->has('action') && $request->action == "next") {
                              
-                            return redirect(route('addlease.residual.index',['id' => $lease->id]));
+                            return redirect(route('addlease.residual.index',['id' => $lease->id]))->with('status', 'Fair Market has been added successfully.');
                         } else {
 
                              return redirect(route('addlease.fairmarketvalue.index',['id' => $lease->id]))->with('status', 'Fair Market has been added successfully.');
