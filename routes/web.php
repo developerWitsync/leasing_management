@@ -16,7 +16,11 @@
 //    return view('welcome');
 //});
 
-Route::get('/', 'IndexController@index');
+Route::get('/', 'Master\IndexController@index');
+Route::namespace('Master')->prefix('leasing-software')->group(function(){
+    Route::get('IND-AS-116', ['as' => 'master.leasingsoftware.index', 'uses' => 'LeasingSoftwareController@index']);
+    Route::get('IFRS-16', ['as' => 'master.leasingsoftware.ifrs', 'uses' => 'LeasingSoftwareController@IFRS']);
+});
 
 Auth::routes();
 

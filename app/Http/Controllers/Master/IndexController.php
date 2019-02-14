@@ -6,8 +6,10 @@
  * Time: 3:06 PM
  */
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Master;
 
+
+use App\Http\Controllers\Controller;
 
 class IndexController extends Controller
 {
