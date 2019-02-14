@@ -21,22 +21,22 @@
 
                 <div class="form-group col-md-6">
                     <label for="hosting_type">Select Plan Price Type(required)</label>
-                    <select class="form-control @if($errors->has('plan_price_type')) is-invalid @endif" name="plan_price_type">
+                    <select class="form-control @if($errors->has('price_plan_type')) is-invalid @endif" name="price_plan_type">
                         <option value="">--Select Plan Price Type--</option>
-                        <option value="1">Non-Customizable</option>
-                        <option value="2">Customizable</option>
+                        <option value="1" @if(old('price_plan_type', $model->price_plan_type) == '1') selected="selected" @endif>Non-Customizable</option>
+                        <option value="2" @if(old('price_plan_type', $model->price_plan_type) == '2') selected="selected" @endif>Customizable</option>
                     </select>
 
-                    @if ($errors->has('plan_price_type'))
+                    @if ($errors->has('price_plan_type'))
                         <div class="invalid-feedback">
-                            <strong>{{ $errors->first('plan_price_type') }}</strong>
+                            <strong>{{ $errors->first('price_plan_type') }}</strong>
                         </div>
                     @endif
                 </div>
 
 
 
-                <div class="form-group col-md-6 plan_price" style="display: none">
+                <div class="form-group col-md-6 plan_price" @if(old('price_plan_type', $model->price_plan_type) == '1') style="display: block" @else style="display: none" @endif>
                     <label for="price">Plan Price(Leave Blank in case of Free)</label>
                     <input id="price" type="text"
                            class="form-control @if($errors->has('price')) is-invalid @endif"
@@ -87,11 +87,11 @@
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="hosting_type">Hosting Type(required)</label>
-                    <select class="form-control @if($errors->has('username')) is-invalid @endif" name="hosting_type">
+                    <select class="form-control @if($errors->has('hosting_type')) is-invalid @endif" name="hosting_type">
                         <option value="">--Select Hosting Type--</option>
-                        <option value="cloud">Cloud Hosting</option>
-                        <option value="on-premise">On Premises</option>
-                        <option value="both">Both</option>
+                        <option value="cloud" @if(old('hosting_type', $model->hosting_type) == 'cloud') selected="selected" @endif>Cloud Hosting</option>
+                        <option value="on-premise" @if(old('hosting_type', $model->hosting_type) == 'on-premise') selected="selected" @endif>On Premises</option>
+                        <option value="both" @if(old('hosting_type', $model->hosting_type) == 'both') selected="selected" @endif>Both</option>
                     </select>
 
                     @if ($errors->has('hosting_type'))
@@ -126,7 +126,7 @@
 </form>
 @section('footer-script')
     <script>
-        $('select[name="plan_price_type"]').on('change', function(){
+        $('select[name="price_plan_type"]').on('change', function(){
             var selected_value = $(this).val();
             if(selected_value == '1'){
                 $('.plan_price').show();

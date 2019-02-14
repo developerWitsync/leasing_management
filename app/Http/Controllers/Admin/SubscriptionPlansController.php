@@ -58,6 +58,7 @@ class SubscriptionPlansController extends Controller
             if($request->isMethod('post')){
                 $validator = Validator::make($request->all(), [
                     'title' => 'required|unique:subscription_plans,title',
+                    'price_plan_type'   => 'required',
                     'price' => 'numeric|min:1|nullable',
                     'available_leases' => 'numeric|min:1|nullable',
                     'available_users' =>  'numeric|min:1|nullable',
@@ -79,6 +80,43 @@ class SubscriptionPlansController extends Controller
             ));
         }catch (\Exception $exception){
             abort(404);
+        }
+    }
+
+    /**
+     * Update an existing Subscription Plan
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
+    public function update($id, Request $request){
+        try{
+            $model = SubscriptionPlans::query()->findOrFail($id);
+            if($request->isMethod('post')){
+                $validator = Validator::make($request->all(), [
+                    'title' => 'required|unique:subscription_plans,title,'.$id,
+                    'price_plan_type'   => 'required',
+                    'price' => 'numeric|min:1|nullable',
+                    'available_leases' => 'numeric|min:1|nullable',
+                    'available_users' =>  'numeric|min:1|nullable',
+                    'hosting_type' => 'required',
+                    'validity' => 'numeric|min:1|nullable'
+                ]);
+
+                if($validator->fails()){
+                    return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
+                }
+
+                $model->setRawAttributes($request->except('_token'));
+                if($model->save()) {
+                    return redirect(route('admin.subscriptionplans.index'))->with('success', 'Subscription Plan has been updated successfully.');
+                }
+            }
+            return view('admin.subscription-plans.update', compact(
+                'model'
+            ));
+        } catch (\Exception $e){
+            dd($e);
         }
     }
 }

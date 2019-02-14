@@ -12,9 +12,11 @@
 */
 
 
-Route::get('/', function () {
-    return view('welcome');
-});
+//Route::get('/', function () {
+//    return view('welcome');
+//});
+
+Route::get('/', 'IndexController@index');
 
 Auth::routes();
 
@@ -467,6 +469,7 @@ Route::namespace('Admin')->prefix('admin')->group(function () {
             Route::get('/', ['as' => 'admin.subscriptionplans.index', 'uses' => 'SubscriptionPlansController@index']);
             Route::get('fetch', ['as' => 'admin.subscriptionplans.fetch', 'uses' => 'SubscriptionPlansController@fetch']);
             Route::match(['get', 'post'], 'create', ['as' => 'admin.subscriptionplans.create', 'uses' => 'SubscriptionPlansController@create']);
+            Route::match(['get', 'post'], 'update/{id}', ['as' => 'admin.subscriptionplans.update', 'uses' => 'SubscriptionPlansController@update']);
         });
 
     });

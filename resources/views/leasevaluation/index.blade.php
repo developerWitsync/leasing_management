@@ -2,7 +2,8 @@
 @section('header-styles')
     <link rel="stylesheet" href="{{ asset('css/jquery-ui.css') }}">
     <!-- BEGIN CSS for this page -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/datatables/dataTables.bootstrap4.min.css') }}"/>
+    <link rel="stylesheet" type="text/css"
+          href="{{ asset('assets/plugins/datatables/dataTables.bootstrap4.min.css') }}"/>
     <!-- END CSS for this page -->
 @endsection
 @section('content')
@@ -38,7 +39,8 @@
                     <div class="row">
                         <div class="col-md-12 col-sm-12">
                             <table id="lease_valuation" class="table table-condensed table-bordered">
-                                <thead>
+                                @if($capitalized == '1')
+                                    <thead>
                                     <tr>
                                         <th colspan="10"></th>
                                         <th colspan="7" class="foriegn initial_valuation">In Lease Foreign Currency</th>
@@ -74,7 +76,6 @@
                                         <th class="foriegn subsequent_valuation">Present Value of Lease Liability</th>
                                         <th class="foriegn subsequent_valuation">Value of Lease Asset</th>
 
-
                                         <th class="reporting initial_valuation">Exchange Rate</th>
                                         <th class="reporting initial_valuation">Undiscounted Lease Liability</th>
                                         <th class="reporting initial_valuation">Present Value of Lease Liability</th>
@@ -86,7 +87,50 @@
                                         <th class="reporting subsequent_valuation">Present Value of Lease Liability</th>
                                         <th class="reporting subsequent_valuation">Value of Lease Asset</th>
                                     </tr>
-                                </thead>
+                                    </thead>
+                                @else
+                                    <thead>
+                                        <tr>
+                                            <th colspan="10"></th>
+                                            <th colspan="3" class="foriegn initial_valuation">In Lease Foreign Currency</th>
+                                            <th colspan="5" class="reporting initial_valuation">In Reporting Currency</th>
+                                        </tr>
+                                        <tr>
+                                            <th colspan="10"></th>
+                                            <th colspan="2" class="foriegn initial_valuation">Initial Valuation</th>
+                                            <th colspan="1" class="foriegn subsequent_valuation">Subsequent Valuation</th>
+
+                                            <th colspan="2" class="reporting initial_valuation">Initial Valuation</th>
+                                            <th colspan="3" class="reporting subsequent_valuation">Subsequent Valuation</th>
+
+                                        </tr>
+                                        <tr>
+                                            <th>Reference No.</th>
+                                            <th>Lessor</th>
+                                            <th>Lease Asset</th>
+                                            <th>Type</th>
+                                            <th>Purpose</th>
+                                            <th>Country</th>
+                                            <th>Location</th>
+                                            <th>Lease Start Date</th>
+                                            <th>Remaining Lease Term</th>
+                                            <th>Discount Rate</th>
+
+                                            <th class="foriegn initial_valuation">Lease Currency</th>
+                                            <th class="foriegn initial_valuation">Undiscounted Lease Liability</th>
+
+                                            <th class="foriegn subsequent_valuation">Undiscounted Lease Liability</th>
+
+
+                                            <th class="reporting initial_valuation">Exchange Rate</th>
+                                            <th class="reporting initial_valuation">Undiscounted Lease Liability</th>
+
+                                            <th class="reporting subsequent_valuation">Effective Date</th>
+                                            <th class="reporting subsequent_valuation">Exchange Rate</th>
+                                            <th class="reporting subsequent_valuation">Undiscounted Lease Liability</th>
+                                        </tr>
+                                    </thead>
+                                @endif
                             </table>
                         </div>
                     </div>
@@ -103,5 +147,10 @@
     <script src="{{ asset('js/pages/valuation_main.js') }}"></script>
     <script>
         var _data_table_url = "{{ route('leasevaluation.fetchassets',['capitalized' => $capitalized, 'category_id' => (request()->has('id'))?request()->id:'all']) }}";
+                @if($capitalized == '1')
+        var _is_capitalized = true;
+                @else
+        var _is_capitalized = false;
+        @endif
     </script>
 @endsection
