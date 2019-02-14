@@ -104,12 +104,16 @@ class LeaseValuationController extends Controller
                     $query->where('is_capitalized', '=', $capitalized);
                 });
 
+                $reporting_currency = '';
                 $is_foreign_currency_applied = ReportingCurrencySettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
                 if($is_foreign_currency_applied) {
+                    $reporting_currency = $is_foreign_currency_applied->internal_company_financial_reporting_currency;
                     $is_foreign_currency_applied = $is_foreign_currency_applied->is_foreign_transaction_involved;
                 } else {
                     $is_foreign_currency_applied = 'no';
                 }
+
+
 
                 return datatables()->eloquent($assets)
 
@@ -215,12 +219,59 @@ class LeaseValuationController extends Controller
                             ->count();
                         return ($subsequent_modifications_count > 0);
                     })
+                    ->addColumn('exchange_rate', function($data) use ($is_foreign_currency_applied, $reporting_currency){
+                        if($is_foreign_currency_applied == "yes") {
+                            if(Carbon::parse($data->accural_period)->greaterThan(Carbon::create(2019,1,1))){
+                                $date = Carbon::parse($data->accural_period)->format('Y-m-d');
+                            } else {
+                                $date = '2019-01-01';
+                            }
+                            $initial_currency = LeaseHistory::query()
+                                ->select('json_data_steps->lessor_details->lease_contract_id as initial_currency')
+                                ->where('lease_id', '=', $data->lease->id)
+                                ->whereRaw('modify_id IS NULL')
+                                ->first();
+
+                            $source = str_replace('"', '', $initial_currency->initial_currency);
+                            return fetchCurrencyExchangeRate($date, $source, $reporting_currency);
+                        } else {
+                            return 1;
+                        }
+                    })
+                    ->addColumn('subsequent_modification_effective_date', function($data){
+                        $subsequent_modification = ModifyLeaseApplication::query()
+                            ->where('lease_id', '=', $data->lease->id)
+                            ->where('valuation', '=', 'Subsequent Valuation')
+                            ->orderBy('created_at', 'desc')->first();
+                        if($subsequent_modification) {
+                            return $subsequent_modification->effective_from;
+                        } else {
+                            return "N/A";
+                        }
+
+                    })
+                    ->addColumn('subsequent_modification_exchange_rate', function($data) use ($reporting_currency){
+
+                        $subsequent_modification = ModifyLeaseApplication::query()
+                            ->where('lease_id', '=', $data->lease->id)
+                            ->where('valuation', '=', 'Subsequent Valuation')
+                            ->orderBy('created_at', 'desc')->first();
+                        if($subsequent_modification) {
+                            $date = Carbon::parse($subsequent_modification->effective_from)->format('Y-m-d');
+                            $source = $source = $data->lease->lease_contract_id;
+                            return fetchCurrencyExchangeRate($date, $source, $reporting_currency);
+                        } else {
+                            return "N/A";
+                        }
+
+                    })
                     ->toJson();
 
             } else {
                 return redirect(route('leasevaluation.index'));
             }
         } catch (\Exception $exception) {
+            dd($exception);
             abort(404);
         }
     }

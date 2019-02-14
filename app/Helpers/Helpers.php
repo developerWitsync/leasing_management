@@ -497,4 +497,38 @@ function checkPreviousSteps($lease_id,$complete_step){
    return false;
 }
 
+/**
+ * fetch the currency exchange rates as from the server end
+ * @param null $date
+ * @param $source
+ * @param $target
+ * @return int
+ */
+function fetchCurrencyExchangeRate($date = null, $source, $target){
+    // set API Endpoint and access key (and any options of your choice)
+    $endpoint = 'live';
+    $access_key = env('CURRENCY_API_ACCESS_KEY');
 
+    $url = 'http://apilayer.net/api/' . $endpoint . '?access_key=' . $access_key . '&source='.$source.'&currencies='.$target;
+    if($date) {
+        $url .= '&date='.$date;
+    }
+
+    // Initialize CURL:
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+    // Store the data:
+    $json = curl_exec($ch);
+    curl_close($ch);
+
+    // Decode JSON response:
+    $exchangeRates = json_decode($json, true);
+
+    if($exchangeRates['success']){
+        $index = $source.$target;
+        return $exchangeRates['quotes'][$index];
+    } else {
+        return 1; // will return 1 in case the currency rate is not found.
+    }
+}

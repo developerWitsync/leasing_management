@@ -41,16 +41,16 @@
                                 <thead>
                                     <tr>
                                         <th colspan="10"></th>
-                                        <th colspan="7" class="initial_valuation">In Lease Foreign Currency</th>
-                                        <th colspan="7" class="initial_valuation">In Reporting Currency</th>
+                                        <th colspan="7" class="foriegn initial_valuation">In Lease Foreign Currency</th>
+                                        <th colspan="9" class="reporting initial_valuation">In Reporting Currency</th>
                                     </tr>
                                     <tr>
                                         <th colspan="10"></th>
-                                        <th colspan="4" class="initial_valuation">Initial Valuation</th>
-                                        <th colspan="3" class="subsequent_valuation">Subsequent Valuation</th>
+                                        <th colspan="4" class="foriegn initial_valuation">Initial Valuation</th>
+                                        <th colspan="3" class="foriegn subsequent_valuation">Subsequent Valuation</th>
 
-                                        <th colspan="4" class="initial_valuation">Initial Valuation</th>
-                                        <th colspan="3" class="subsequent_valuation">Subsequent Valuation</th>
+                                        <th colspan="4" class="reporting initial_valuation">Initial Valuation</th>
+                                        <th colspan="5" class="reporting subsequent_valuation">Subsequent Valuation</th>
 
                                     </tr>
                                     <tr>
@@ -65,24 +65,26 @@
                                         <th>Remaining Lease Term</th>
                                         <th>Discount Rate</th>
 
-                                        <th class="initial_valuation">Lease Currency</th>
-                                        <th class="initial_valuation">Undiscounted Lease Liability</th>
-                                        <th class="initial_valuation">Present Value of Lease Liability</th>
-                                        <th class="initial_valuation">Value of Lease Asset</th>
+                                        <th class="foriegn initial_valuation">Lease Currency</th>
+                                        <th class="foriegn initial_valuation">Undiscounted Lease Liability</th>
+                                        <th class="foriegn initial_valuation">Present Value of Lease Liability</th>
+                                        <th class="foriegn initial_valuation">Value of Lease Asset</th>
 
-                                        <th class="subsequent_valuation">Undiscounted Lease Liability</th>
-                                        <th class="subsequent_valuation">Present Value of Lease Liability</th>
-                                        <th class="subsequent_valuation">Value of Lease Asset</th>
+                                        <th class="foriegn subsequent_valuation">Undiscounted Lease Liability</th>
+                                        <th class="foriegn subsequent_valuation">Present Value of Lease Liability</th>
+                                        <th class="foriegn subsequent_valuation">Value of Lease Asset</th>
 
 
-                                        <th class="initial_valuation">Lease Currency</th>
-                                        <th class="initial_valuation">Undiscounted Lease Liability</th>
-                                        <th class="initial_valuation">Present Value of Lease Liability</th>
-                                        <th class="initial_valuation">Value of Lease Asset</th>
+                                        <th class="reporting initial_valuation">Exchange Rate</th>
+                                        <th class="reporting initial_valuation">Undiscounted Lease Liability</th>
+                                        <th class="reporting initial_valuation">Present Value of Lease Liability</th>
+                                        <th class="reporting initial_valuation">Value of Lease Asset</th>
 
-                                        <th class="subsequent_valuation">Undiscounted Lease Liability</th>
-                                        <th class="subsequent_valuation">Present Value of Lease Liability</th>
-                                        <th class="subsequent_valuation">Value of Lease Asset</th>
+                                        <th class="reporting subsequent_valuation">Effective Date</th>
+                                        <th class="reporting subsequent_valuation">Exchange Rate</th>
+                                        <th class="reporting subsequent_valuation">Undiscounted Lease Liability</th>
+                                        <th class="reporting subsequent_valuation">Present Value of Lease Liability</th>
+                                        <th class="reporting subsequent_valuation">Value of Lease Asset</th>
                                     </tr>
                                 </thead>
                             </table>

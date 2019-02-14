@@ -1,5 +1,13 @@
 $(document).ready(function () {
 
+    function convertToExchangeRate(data, type, exchange_rate){
+        if(exchange_rate != 1){
+            return parseFloat(exchange_rate) * parseFloat(data);
+        } else {
+            return data;
+        }
+    }
+
     var columns = [
         { "data" : "uuid"},
         { "data" : "lease.lessor_name", "sortable": false},
@@ -23,16 +31,57 @@ $(document).ready(function () {
         { "data" : "value_of_lease_asset", "sortable": false },
 
 
-        { "data" : "initial_lease_currency", "sortable": false},
-        { "data" : "initial_undiscounted_lease_liability", "sortable": false },
-        { "data" : "initial_present_value_of_lease_liability", "sortable": false },
-        { "data" : "initial_value_of_lease_asset", "sortable": false },
-
-        { "data" : "lease_select_low_value.undiscounted_lease_payment", "sortable": false },
-        { "data" : "lease_liablity_value", "sortable": false },
-        { "data" : "value_of_lease_asset", "sortable": false }
-
-
+        {
+            "data" : "exchange_rate", "sortable": false
+        }, //reporting currency should be 1 in case the foreign currency is not applied
+        {
+            "data" : "initial_undiscounted_lease_liability", "sortable": false , "render" : function (data, type, row) {
+                return convertToExchangeRate(data, type, row['exchange_rate']);
+            }
+        }, //reporting currency
+        {
+            "data" : "initial_present_value_of_lease_liability", "sortable": false , "render" : function (data, type, row) {
+                return convertToExchangeRate(data, type, row['exchange_rate']);
+            }
+        }, //reporting currency
+        {
+            "data" : "initial_value_of_lease_asset", "sortable": false , "render" : function (data, type, row) {
+                return convertToExchangeRate(data, type, row['exchange_rate']);
+            }
+        }, //reporting currency
+        {
+            "data" : "subsequent_modification_effective_date", "sortable" : false //Effective Date
+        },
+        {
+            "data" : "subsequent_modification_exchange_rate", "sortable" : false //Exchange Rate
+        },
+        {
+            "data" : "lease_select_low_value.undiscounted_lease_payment", "sortable": false, "render" : function (data, type, row) {
+                if(row['has_subsequent_modifications']){
+                    return convertToExchangeRate(data, type, row['subsequent_modification_exchange_rate']);
+                } else {
+                    return "N/A";
+                }
+            }
+        }, //reporting currency
+        {
+            "data" : "lease_liablity_value", "sortable": false, "render" : function (data, type, row) {
+                if(row['has_subsequent_modifications']){
+                    return convertToExchangeRate(data, type, row['subsequent_modification_exchange_rate']);
+                } else {
+                    return "N/A";
+                }
+            }
+        }, //reporting currency
+        {
+            "data" : "value_of_lease_asset", "sortable": false, "render" : function (data, type, row) {
+                if(row['has_subsequent_modifications']){
+                    return convertToExchangeRate(data, type, row['subsequent_modification_exchange_rate']);
+                } else {
+                    return "N/A";
+                }
+            }
+        } //reporting currency
 
     ];
 

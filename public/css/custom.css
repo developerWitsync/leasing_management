@@ -487,7 +487,7 @@ li.disabled a {
 }
 .initial_valuation{
     text-align: center !important;
-    /*background-color: #cbe199e6 !important;*/
+
 }
 .subsequent_valuation{
     text-align: center !important;
@@ -495,4 +495,11 @@ li.disabled a {
 }
 table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td {
     border-bottom-width: 1px !important;
+}
+.reporting{
+    background-color: #55ce174d !important;
+}
+
+.foriegn {
+    background-color: #cbe199e6 !important;
 }
