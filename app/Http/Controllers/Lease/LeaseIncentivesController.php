@@ -110,7 +110,7 @@ class LeaseIncentivesController extends Controller
                             // complete Step
                             confirmSteps($lease->id, 15);
                             if($request->has('action') && $request->action == "next") {
-                            return redirect(route('addlease.leasevaluation.index',['id' => $lease->id]));
+                            return redirect(route('addlease.leasevaluation.index',['id' => $lease->id]))->with('status', 'Lease incentive cost has been added successfully.');
                         } else {
 
                            return redirect(route('addlease.leaseincentives.index',['id' => $lease->id]))->with('status', 'Lease incentive cost has been added successfully.');

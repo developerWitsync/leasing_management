@@ -51,7 +51,7 @@ class HomeController extends Controller
         
         $own_assets_capitalized = LeaseAssets::query()->whereIn('lease_id', $lease_id)
         ->where('specific_use',1)
-        ->where('category_id',$category_id)
+        ->whereIn('category_id',$category_id)
         ->whereHas('leaseSelectLowValue',  function($query){
             $query->where('is_classify_under_low_value', '=', 'no');
         })->whereHas('leaseDurationClassified',  function($query){
@@ -60,7 +60,7 @@ class HomeController extends Controller
 
         $sublease_assets_capitalized = LeaseAssets::query()->where('lease_id', $lease_id)
         ->where('specific_use',2)
-        ->where('category_id',$category_id)
+        ->whereIn('category_id',$category_id)
         ->whereHas('leaseSelectLowValue',  function($query){
             $query->where('is_classify_under_low_value', '=', 'no');
         })->whereHas('leaseDurationClassified',  function($query){

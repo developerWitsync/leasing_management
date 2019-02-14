@@ -94,7 +94,7 @@ class LeaseTerminationOptionController extends Controller
                         // complete Step
                         confirmSteps($lease->id,3);
                          if($request->has('action') && $request->action == "next") {
-                            return redirect(route('addlease.renewable.index',['id' => $lease->id]));
+                            return redirect(route('addlease.renewable.index',['id' => $lease->id]))->with('status', 'Lease Termination Option Details has been added successfully.');
                         } else {
 
                              return redirect(route('addlease.leaseterminationoption.index',['id' => $lease->id]))->with('status', 'Lease Termination Option Details has been added successfully.');

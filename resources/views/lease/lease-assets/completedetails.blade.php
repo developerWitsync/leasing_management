@@ -336,6 +336,7 @@
                 $("#lease_start_date").datepicker({
                     dateFormat: "dd-M-yy",
                     changeYear : true,
+                    changeMonth : true,
                     yearRange : '{{ $settings->min_previous_first_lease_start_year }}:{{$settings->max_lease_end_year}}',
                     onSelect: function () {
                         var dt2 = $('#lease_end_date');

@@ -107,7 +107,7 @@ class PurchaseOptionController extends Controller
                         // complete Step
                          confirmSteps($lease->id, 5);
                         if($request->has('action') && $request->action == "next") {
-                            return redirect(route('addlease.payments.index',['id' => $lease->id]));
+                            return redirect(route('addlease.payments.index',['id' => $lease->id]))->with('status', 'Lease Purchase Option Details has been added successfully.');
                         } else {
 
                              return redirect(route('addlease.purchaseoption.index', ['id' => $lease->id]))->with('status', 'Lease Purchase Option Details has been added successfully.');

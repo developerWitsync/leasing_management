@@ -722,20 +722,20 @@
                                         <tr> <td>3</td>
                                             @if(isset($category_excluded_id[2]) == 7)
                                             <td>Intengible Asset  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                 <input type="button" disabled class="btn btn-sm btn-success" value="Include">
-                                                   <a data-href="{{ route('settings.leaseclassification.deletecategoriesexcluded', ['id' => 7]) }}" href="javascript:;" class="btn btn-sm btn-danger delete_settings">Exclude</a>
+                                                 <input type="button" disabled class="btn btn-sm btn-success" value="Include in Valuation">
+                                                   <a data-href="{{ route('settings.leaseclassification.deletecategoriesexcluded', ['id' => 7]) }}" href="javascript:;" class="btn btn-sm btn-danger delete_settings">Exclude in Valuation</a>
                                             </td>
                                             @else
                                              <td>Intangible Asset  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             @if(count($check_intangible_asset)==0)
                                              <a data-href="{{ route('settings.leaseclassification.addcategoriesexcluded', ['id' => 7]) }}" href="javascript:;" class="btn btn-sm btn-success add_intangible_asset">Include in Valuation</a>
                                              @else
-                                             <input type="button" disabled class="btn btn-sm btn-success" value="Include">
+                                             <input type="button" disabled class="btn btn-sm btn-success" value="Include in valuation">
                                             @endif
                                               @if(count($check_intangible_asset)==0)
                                             <a data-href="{{ route('settings.leaseclassification.deletecategoriesexcluded', ['id' => 7]) }}" href="javascript:;" class="btn btn-sm btn-danger delete_settings">Exclude in Valuation</a>
                                              @else
-                                             <input type="button" disabled class="btn btn-sm btn-danger" value="Exclude">
+                                             <input type="button" disabled class="btn btn-sm btn-danger" value="Exclude in valuation">
                                             @endif
                                             </td>
                                             @endif

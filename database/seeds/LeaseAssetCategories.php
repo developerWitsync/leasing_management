@@ -36,7 +36,7 @@ class LeaseAssetCategories extends Seeder
         ],
         [
                 'title' => 'Intangible Assets',
-                'is_capitalized' => '1'
+                'is_capitalized' => '0'
         ],
         [
                 'title' => 'Intangible Assets under Licensing Arrangement',

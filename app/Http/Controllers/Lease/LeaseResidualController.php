@@ -111,7 +111,7 @@ class LeaseResidualController extends Controller
                         // complete Step
                         confirmSteps($lease->id, 8);
                         if($request->has('action') && $request->action == "next") {
-                            return redirect(route('addlease.durationclassified.index',['id' => $lease->id]));
+                            return redirect(route('addlease.durationclassified.index',['id' => $lease->id]))->with('status', 'Residual value Gurantee has been added successfully.');
                         } else {
 
                             return redirect(route('addlease.residual.index', ['id' => $lease->id]))->with('status', 'Residual value Gurantee has been added successfully.');

@@ -95,7 +95,7 @@ class SelectDiscountRateController extends Controller
                             // complete Step
                             confirmSteps($asset->lease->id,12);
                         if($request->has('action') && $request->action == "next") {
-                            return redirect(route('addlease.balanceasondec.index',['id' => $lease->id]));
+                            return redirect(route('addlease.balanceasondec.index',['id' => $lease->id]))->with('status', 'Select Discount Rate has been added successfully.');
                         } else {
 
                               return redirect(route('addlease.discountrate.index',['id' => $lease->id]))->with('status', 'Select Discount Rate has been added successfully.');

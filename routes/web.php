@@ -48,6 +48,7 @@ Route::middleware('auth')->group(function(){
             Route::get('fetch-sub-categories/{id}', ['as'=> 'addlease.leaseasset.fetchsubcategories', 'uses' => 'UnderlyingLeaseAssetController@fetchSubCategories']);
             Route::match(['post', 'get'],'complete-asset-details/{lease}/{asset}', ['as' => 'addlease.leaseasset.completedetails', 'uses' => 'UnderlyingLeaseAssetController@assetDetails']);
             Route::post('save/{id}', ['as' => 'addlease.leaseasset.saveasset', 'uses' => 'UnderlyingLeaseAssetController@save']);
+            Route::match(['post', 'get'],'getdatedifference', ['as'=> 'addlease.leaseasset.getdatedifference', 'uses' => 'UnderlyingLeaseAssetController@getDateDifference']);
         });
          /*
          * Lease Termination Options Routes NL6
