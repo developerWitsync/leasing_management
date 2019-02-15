@@ -47,7 +47,7 @@ class LeasePaymentsController extends Controller
             'similar_chateristics_assets' => 'required|numeric',
             'payment_per_interval_per_unit' => 'required|numeric',
             'total_amount_per_interval' => 'required|numeric',
-            'attachment' => 'file|mimes:doc,pdf,docx,zip|max:'.config('settings.file_size_limits.max_size_in_kbs').'|nullable',
+            'attachment' => config('settings.file_size_limits.file_rule'),
             'due_dates_confirmed' => 'in:1',
             'altered_payment_due_date.*' => 'required|date'
         ];

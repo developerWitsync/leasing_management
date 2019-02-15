@@ -28,13 +28,14 @@ class LessorDetailsController extends Controller
             'lessor_name' => 'required',
             'lease_type_id' => 'required',
             'lease_contract_id' => 'required',
-            'file' => 'file|mimes:doc,pdf,docx,zip|max:'.config('settings.file_size_limits.max_size_in_kbs').'|nullable'
+            'file' => config('settings.file_size_limits.file_rule')
         ];
     }
 
     public $breadcrumbs;
     public function __construct()
     {
+        
         $this->breadcrumbs = [
             [
                 'link' => route('add-new-lease.index'),

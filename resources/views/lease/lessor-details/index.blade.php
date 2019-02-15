@@ -179,11 +179,11 @@
                                                 <label for="file" class="col-md-12 control-label">Upload a Copy of
                                                     Contract Signed</label>
                                                 <div class="col-md-12 frmattachFile">
-                                                    <input type="name" id="upload" name="name" class="form-control"
+                                         <input type="name" id="upload" name="name" class="form-control"
                                                            disabled="disabled">
-                                                    <button type="button" class="browseBtn">Browse</button>
-                                                    <input type="file" id="file-name" name="file" class="fileType">
-                                                   <h6 class="disabled">Only Doc,Pdf,Docx,Zip with 2MB size of files are allowed.</h6>
+                                        <button type="button" class="browseBtn">Browse</button>
+                                        <input type="file" id="file-name" name="file" class="fileType">
+                                        <h6 class="disabled">{{ config('settings.file_size_limits.file_validation') }}</h6>
                                                     @if ($errors->has('file'))
                                                         <span class="help-block">
                                             <strong>{{ $errors->first('file') }}</strong>
