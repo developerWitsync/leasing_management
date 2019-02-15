@@ -1,0 +1,102 @@
+<section id="bottom" class="bottom">
+    <div class="container wow fadeInDown animated" data-wow-duration="1000ms" data-wow-delay="600ms" style="visibility: visible; animation-duration: 1000ms; animation-delay: 600ms; animation-name: fadeInDown;">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="widget">
+                    <h3>About Us</h3>
+                    <p>Building Intangible Excellence landscape in Education, Information Advisory and Business Support Function globally using advanced unique innovative technological features.</p>
+                    <!-- <ul>
+                        <li><a href="javascript:void(0);">About us</a></li>
+                        <li><a href="javascript:void(0);">We are hiring</a></li>
+                        <li><a href="javascript:void(0);">Meet the team</a></li>
+                        <li><a href="javascript:void(0);">Copyright</a></li>
+                        <li><a href="javascript:void(0);">Terms of use</a></li>
+                        <li><a href="javascript:void(0);">Privacy policy</a></li>
+                        <li><a href="javascript:void(0);">Contact us</a></li>
+                    </ul> -->
+                </div>
+            </div>
+
+            <div class="col-md-3 col-xs-12">
+                <div class="widget">
+                    <h3>Featured Links</h3>
+                    <ul class="ft-link">
+                        <li><a href="javascript:void(0);"><i class="fa fa-angle-right"></i> About Us</a></li>
+                        <li><a href="javascript:void(0);"><i class="fa fa-angle-right"></i> Services</a></li>
+                        <li><a href="javascript:void(0);"><i class="fa fa-angle-right"></i> E-Learning</a></li>
+                        <li><a href="javascript:void(0);"><i class="fa fa-angle-right"></i> Contact Us</a></li>
+                    </ul>
+
+                </div>
+            </div>
+
+            <div class="col-md-3 col-xs-12">
+                <div class="widget">
+                    <h3>Information</h3>
+                    <ul class="">
+                        <li><a href="javascript:void(0);"><i class="fa fa-envelope-o"></i> info@witsync.co</a></li>
+                    </ul>
+                    <br>
+                    <h3>Newsletter</h3>
+                    <form role="form">
+                        <input type="email" class="form-control" autocomplete="off" placeholder="Enter your e-mail here">
+                        <button type="submit" class="btn bt"><i class="fa fa-paper-plane-o"></i></button>
+                    </form>
+                    <!-- <ul class="f-social">
+                        <li><a href="javascript:void(0);"><i class="fa fa-facebook"></i> Facebook</a></li>
+                        <li><a href="javascript:void(0);"><i class="fa fa-twitter"></i> Twitter</a></li>
+                        <li><a href="javascript:void(0);"><i class="fa fa-instagram"></i> Instagram</a></li>
+                        <li><a href="javascript:void(0);"><i class="fa fa-linkedin"></i> Linkedin</a></li>
+                    </ul> -->
+
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="widget">
+                    <h3>Get in Touch with Us</h3>
+                    <form>
+                        <input type="name" name="" class="form-control" required placeholder="Name">
+                        <input type="email" name="" class="form-control" required placeholder="E-mail">
+                        <input type="number" name="" class="form-control" required placeholder="Mo. number">
+                        <textarea class="form-control" placeholder="Message"></textarea>
+                        <button type="submit" class="btn submit">SEND MESSAGE</button>
+
+                    </form>
+                </div>
+            </div>
+
+
+
+
+        </div>
+    </div>
+</section>
+
+<footer id="footer" class="midnight-blue text-center">
+    <div class="container">
+        <div class="row">
+            <!-- <div class="col-md-6 text-left">
+                <ul class="f-social">
+                    <li><a href="javascript:void(0);"><i class="fa fa-facebook"></i></a></li>
+                    <li><a href="javascript:void(0);"><i class="fa fa-twitter"></i></a></li>
+                    <li><a href="javascript:void(0);"><i class="fa fa-instagram"></i></a></li>
+                    <li><a href="javascript:void(0);"><i class="fa fa-linkedin"></i></a></li>
+                </ul>
+            </div> -->
+            <div class="col-md-6 text-left">&copy; Copyright @ 2019. All Rights Reserved.</div>
+            <div class="col-md-6 text-right">
+                <ul class="">
+                    <li><a href="javascript:void(0);">Disclaimer</a></li>
+                    <li><a href="javascript:void(0);">Code of Conduct</a></li>
+                    <li><a href="javascript:void(0);">Privacy</a></li>
+                    <li><a href="javascript:void(0);">Terms of Use</a></li>
+                </ul>
+            </div>
+            <!-- <hr> -->
+        </div>
+    </div>
+</footer><!--/#footer-->
+
+<div class="gototop" id="gototop" style=""><i class="fa fa-angle-up"></i></div>
+

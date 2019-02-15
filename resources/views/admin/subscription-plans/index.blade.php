@@ -72,6 +72,14 @@
     <script>
         $(document).ready(function () {
 
+            function checkForUnlimited(data, type, row){
+                if(data){
+                    return data;
+                } else {
+                    return "Unlimited";
+                }
+            }
+
             var plans_table = $('#plans_table').DataTable({
                 responsive: true,
                 "columns": [
@@ -82,11 +90,36 @@
                         }
                     },
                     { "data": "title" },
-                    { "data": "price" },
-                    { "data": "available_leases"},
-                    { "data": "available_users"},
+                    { "data": "price" , "render": function (data, type, row) {
+                            if(row['price_plan_type'] == '1'){
+                                //Non-Customizable
+                                if(data){
+                                    return "$ "+data;
+                                } else {
+                                    return "Free";
+                                }
+                            } else {
+                                //Customizable
+                                return "N/A";
+                            }
+                        }
+                    },
+                    {
+                        "data": "available_leases", render : function(data, type, row){
+                            return checkForUnlimited(data, type, row);
+                        }
+                    },
+                    {
+                        "data": "available_users" , render : function(data, type, row){
+                            return checkForUnlimited(data, type, row);
+                        }
+                    },
                     { "data" : "hosting_type"},
-                    { "data" : "validity"},
+                    {
+                        "data" : "validity", render : function(data, type, row){
+                            return checkForUnlimited(data, type, row);
+                        }
+                    },
                     { "data": "id" }
                 ],
                 "columnDefs": [
@@ -111,8 +144,7 @@
                         "orderable": false,
                         "className" : "text-center",
                         "render" : function(data, type, full, meta) {
-                            var html = "<button  data-toggle='tooltip' data-placement='top' title='Edit Email Template' type=\"button\" data-template='"+full['id']+"' class=\"btn btn-success edit_template\">Edit</button>";
-                            html += "&nbsp;<button  data-toggle='tooltip' data-placement='top' title='Preview Email Template' type=\"button\" data-template='"+full['template_code']+"' class=\"btn btn-primary preview_template\">Preview</button>"
+                            var html = "<button  data-toggle='tooltip' data-placement='top' title='Edit Subscription Plan' type=\"button\" data-plan='"+full['id']+"' class=\"btn btn-success edit_plan\">Edit</button>";
                             return html;
                         }
                     }
@@ -123,12 +155,8 @@
 
             });
 
-            $(document.body).on("click", ".preview_template", function () {
-                window.open("/admin/email-templates-preview/"+$(this).data('template').toLowerCase());
-            });
-
-            $(document.body).on("click", ".edit_template", function () {
-                location.href = "/admin/email-template-edit/"+$(this).data('template');
+            $(document.body).on("click", ".edit_plan", function () {
+                location.href = "/admin/subscription-plans/update/"+$(this).data('plan');
             });
         });
     </script>

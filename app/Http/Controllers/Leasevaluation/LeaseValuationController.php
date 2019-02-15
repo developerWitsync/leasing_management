@@ -47,7 +47,6 @@ class LeaseValuationController extends Controller
     {
         try {
             $breadcrumbs = $this->breadcrumbs;
-            $leases = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('status', '=', '1');
 
             if ($request->has('capitalized')) {
                 $capitalized = $request->capitalized;
@@ -59,7 +58,8 @@ class LeaseValuationController extends Controller
 
             return view('leasevaluation.index', compact(
                  'capitalized',
-                'categories'
+                'categories',
+                'breadcrumbs'
             ));
         } catch (\Exception $e) {
             abort(404);
@@ -271,7 +271,6 @@ class LeaseValuationController extends Controller
                 return redirect(route('leasevaluation.index'));
             }
         } catch (\Exception $exception) {
-            dd($exception);
             abort(404);
         }
     }
