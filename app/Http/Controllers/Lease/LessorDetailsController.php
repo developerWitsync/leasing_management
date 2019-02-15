@@ -167,7 +167,7 @@ class LessorDetailsController extends Controller
                     return redirect()->back()->withErrors($validator->errors())->withInput($request->except("_token"));
                 }
 
-                $uniqueFileName = '';
+                $uniqueFileName = $lease->file;
 
                 if($request->hasFile('file')){
                     $file = $request->file('file');
