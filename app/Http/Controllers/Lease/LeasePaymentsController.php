@@ -47,7 +47,7 @@ class LeasePaymentsController extends Controller
             'similar_chateristics_assets' => 'required|numeric',
             'payment_per_interval_per_unit' => 'required|numeric',
             'total_amount_per_interval' => 'required|numeric',
-            'attachment' => 'file|mimes:jpeg,pdf,doc',
+            'attachment' => 'file|mimes:doc,pdf,docx,zip|max:'.config('settings.file_size_limits.max_size_in_kbs').'|nullable',
             'due_dates_confirmed' => 'in:1',
             'altered_payment_due_date.*' => 'required|date'
         ];
@@ -189,6 +189,7 @@ class LeasePaymentsController extends Controller
      */
     public function createAssetPayments($id, Request $request)
     {
+
         try {
 
             $asset = LeaseAssets::query()->findOrFail($id);
@@ -226,18 +227,23 @@ class LeasePaymentsController extends Controller
             if ($request->isMethod('post')) {
                 $validator = Validator::make($request->except('_token'), $this->validationRules(), [
                     'altered_payment_due_date.*.required' => 'Please confirm the payment due dates by clicking on the Confirm Payment Due Dates.',
-                    'due_dates_confirmed.in' => 'Please confirm the payment due dates by clicking on the Confirm Payment Due Dates.'
+                    'due_dates_confirmed.in' => 'Please confirm the payment due dates by clicking on the Confirm Payment Due Dates.',
+                    'attachment.max' => 'Maximum file size can be '.config('settings.file_size_limits.max_size_in_mbs').'.',
+                    'attachment.uploaded' => 'Maximum file size can be '.config('settings.file_size_limits.max_size_in_mbs').'.'
                 ]);
 
                 if ($validator->fails()) {
+                   // dd($validator->errors());
                     return redirect()->back()->withErrors($validator->errors())->withInput($request->except('_token'));
                 }
                 $data = $request->except('_token', 'similar_chateristics_assets', 'step', 'submit', 'altered_payment_due_date', 'due_dates_confirmed');
                 $data['first_payment_start_date'] = Carbon::parse($request->first_payment_start_date)->format('Y-m-d');
                 $data['last_payment_end_date'] = Carbon::parse($request->last_payment_end_date)->format('Y-m-d');
+
                 $data['attachment'] = "";
                 $data['asset_id'] = $asset->id;
                 if ($request->hasFile('attachment')) {
+
                     $file = $request->file('attachment');
                     $uniqueFileName = uniqid() . $file->getClientOriginalName();
                     $request->file('attachment')->move('uploads', $uniqueFileName);
@@ -295,6 +301,7 @@ class LeasePaymentsController extends Controller
             ));
 
         } catch (\Exception $e) {
+            //dd($e->getMessage());
             abort(404, $e->getMessage());
         }
     }
@@ -319,7 +326,9 @@ class LeasePaymentsController extends Controller
 
                     $validator = Validator::make($request->except('_token'), $this->validationRules(false), [
                         'altered_payment_due_date.*.required' => 'Please confirm the payment due dates by clicking on the Confirm Payment Due Dates.',
-                        'due_dates_confirmed.in' => 'Please confirm the payment due dates by clicking on the Confirm Payment Due Dates.'
+                        'due_dates_confirmed.in' => 'Please confirm the payment due dates by clicking on the Confirm Payment Due Dates.',
+                    'file.max' => 'Maximum file size can be '.config('settings.file_size_limits.max_size_in_mbs').'.',
+                    'file.uploaded' => 'Maximum file size can be '.config('settings.file_size_limits.max_size_in_mbs').'.'
                     ]);
 
                     if ($validator->fails()) {

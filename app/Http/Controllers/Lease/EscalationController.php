@@ -305,6 +305,7 @@ class EscalationController extends Controller
                 $escalation_percentage_settings = EscalationPercentageSettings::query()->whereIn('business_account_id', getDependentUserIds())->where('number', '<>', '0')->get();
                 $escalation_frequency = EscalationFrequency::all();
                 $paymentDueDates = $payment->paymentDueDates->pluck('date')->toArray();
+                 $current_step = $this->current_step;
                 return view('lease.escalation.create', compact(
                     'payment',
                     'lease',
@@ -317,7 +318,8 @@ class EscalationController extends Controller
                     'escalation_frequency',
                     'paymentDueDates',
                     'inconsistentDataModel',
-                    'subsequent_modify_required'
+                    'subsequent_modify_required',
+                    'current_step'
                 ));
             } else {
                 abort(404);

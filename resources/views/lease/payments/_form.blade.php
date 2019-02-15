@@ -280,6 +280,7 @@
                 <input type="name" id="upload" name="name" class="form-control" disabled="disabled">
                 <button type="button" class="browseBtn">Browse</button>
                 <input id="workings_doc" type="file" placeholder="" class="fileType" name="attachment">
+                <h6 class="disabled">Only Doc,Pdf,Docx,Zip with 2MB size of files are allowed.</h6>
                 @if ($errors->has('attachment'))
                     <span class="help-block">
                         <strong>{{ $errors->first('attachment') }}</strong>
@@ -438,7 +439,7 @@
                             $calculated_date = $accural_date->addMonth(1)->format('D M d Y');
                         @endphp
                             _calculated_first_payment_date = new Date("{{ $calculated_date }}");
-                            alert(_calculated_first_payment_date);
+                            //alert(_calculated_first_payment_date);
                         break;
                     case 3:
                         //means selected option is Quarterly

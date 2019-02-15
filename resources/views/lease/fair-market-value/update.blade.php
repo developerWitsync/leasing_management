@@ -13,6 +13,11 @@
                     {{ session('status') }}
                 </div>
             @endif
+            @if (session('error'))
+                <div class="alert alert-danger">
+                    {{ session('error') }}
+                </div>
+            @endif
 
             <div class="tab-content" style="padding: 0px;">
                 <div role="tabpanel" class="tab-pane active">

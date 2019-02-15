@@ -38,7 +38,7 @@ class FairMarketValueController extends Controller
             'similar_asset_items'   => 'required_if:is_market_value_present,yes',
             'unit'  => 'required_if:is_market_value_present,yes',
             'total_units'  => 'required_if:is_market_value_present,yes',
-            'attachment'                  => 'file|mimes:jpeg,pdf,doc'
+            'attachment' => 'file|mimes:doc,pdf,docx,zip|max:'.config('settings.file_size_limits.max_size_in_kbs').'|nullable'
         ];
     }
 
@@ -73,7 +73,10 @@ class FairMarketValueController extends Controller
                 }
 
                 if($request->isMethod('post')) {
-                    $validator = Validator::make($request->except('_token'), $this->validationRules());
+                    $validator = Validator::make($request->except('_token'), $this->validationRules(), [
+                'attachment.max' => 'Maximum file size can be '.config('settings.file_size_limits.max_size_in_mbs').'.',
+                'attachment.uploaded' => 'Maximum file size can be '.config('settings.file_size_limits.max_size_in_mbs').'.'
+            ]);
 
                     if($validator->fails()){
                         return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
@@ -177,7 +180,10 @@ class FairMarketValueController extends Controller
                 $model = new FairMarketValue();
 
                 if($request->isMethod('post')) {
-                    $validator = Validator::make($request->except('_token'), $this->validationRules());
+                    $validator = Validator::make($request->except('_token'), $this->validationRules(),[
+                    'attachment.max' => 'Maximum file size can be '.config('settings.file_size_limits.max_size_in_mbs').'.',
+                    'attachment.uploaded' => 'Maximum file size can be '.config('settings.file_size_limits.max_size_in_mbs').'.'
+              ]);
 
                     if($validator->fails()){
                         return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
@@ -243,7 +249,10 @@ class FairMarketValueController extends Controller
                 $model = FairMarketValue::query()->where('asset_id', '=', $id)->first();
 
                 if($request->isMethod('post')) {
-                    $validator = Validator::make($request->except('_token'), $this->validationRules());
+                    $validator = Validator::make($request->except('_token'), $this->validationRules(),[
+                        'attachment.max' => 'Maximum file size can be '.config('settings.file_size_limits.max_size_in_mbs').'.',
+                        'attachment.uploaded' => 'Maximum file size can be '.config('settings.file_size_limits.max_size_in_mbs').'.'
+                    ]);
 
                     if($validator->fails()){
                         return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
