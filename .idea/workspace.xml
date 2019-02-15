@@ -2,11 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1c290435-4779-45fe-873f-5594138f8734" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Exceptions/Handler.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Exceptions/Handler.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/LessorDetailsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/LessorDetailsController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Kernel.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Kernel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/lessor-details/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lessor-details/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/settings.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/settings.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -22,8 +19,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/LessorDetailsController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1734">
-              <caret line="107" column="30" selection-start-line="107" selection-start-column="22" selection-end-line="107" selection-end-column="30" />
+            <state relative-caret-position="544">
+              <caret line="163" column="17" selection-start-line="163" selection-start-column="17" selection-end-line="163" selection-end-column="17" />
               <folding>
                 <element signature="e#129#161#0#PHP" expanded="true" />
               </folding>
@@ -32,13 +29,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/vendor/laravel/framework/src/Illuminate/Validation/Validator.php">
+        <entry file="file://$PROJECT_DIR$/config/settings.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="342" column="58" selection-start-line="342" selection-start-column="50" selection-end-line="342" selection-end-column="58" />
-              <folding>
-                <element signature="e#41#62#0#PHP" expanded="true" />
-              </folding>
+            <state relative-caret-position="680">
+              <caret line="40" column="24" selection-start-line="40" selection-start-column="9" selection-end-line="40" selection-end-column="24" />
             </state>
           </provider>
         </entry>
@@ -123,7 +117,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/.env" />
         <option value="$PROJECT_DIR$/database/factories/UserFactory.php" />
         <option value="$PROJECT_DIR$/tests/Feature/Auth/LoginTest.php" />
         <option value="$PROJECT_DIR$/resources/views/layouts/admin/_sidebar.blade.php" />
@@ -173,6 +166,7 @@
         <option value="$PROJECT_DIR$/resources/views/lease/lessor-details/index.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Kernel.php" />
         <option value="$PROJECT_DIR$/app/Exceptions/Handler.php" />
+        <option value="$PROJECT_DIR$/config/settings.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/LessorDetailsController.php" />
       </list>
     </option>
@@ -389,12 +383,12 @@
       <workItem from="1549944755050" duration="24050000" />
       <workItem from="1550032071559" duration="21065000" />
       <workItem from="1550119882676" duration="17362000" />
-      <workItem from="1550205861241" duration="3677000" />
+      <workItem from="1550205861241" duration="3899000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="219245000" />
+    <option name="totallyTimeSpent" value="219467000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -487,13 +481,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/Http/Middleware/CheckPreviousData.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="646">
-          <caret line="247" selection-start-line="247" selection-end-line="247" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseDurationClassifiedController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="459">
@@ -594,13 +581,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="610">
           <caret line="313" column="43" lean-forward="true" selection-start-line="313" selection-start-column="43" selection-end-line="313" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.env">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="770">
-          <caret line="53" column="23" selection-start-line="53" selection-end-line="53" selection-end-column="23" />
         </state>
       </provider>
     </entry>
@@ -851,10 +831,24 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/.env">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="770">
+          <caret line="53" column="56" lean-forward="true" selection-start-line="53" selection-start-column="56" selection-end-line="53" selection-end-column="56" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/settings.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="680">
+          <caret line="40" column="24" selection-start-line="40" selection-start-column="9" selection-end-line="40" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/LessorDetailsController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1734">
-          <caret line="107" column="30" selection-start-line="107" selection-start-column="22" selection-end-line="107" selection-end-column="30" />
+        <state relative-caret-position="544">
+          <caret line="163" column="17" selection-start-line="163" selection-start-column="17" selection-end-line="163" selection-end-column="17" />
           <folding>
             <element signature="e#129#161#0#PHP" expanded="true" />
           </folding>

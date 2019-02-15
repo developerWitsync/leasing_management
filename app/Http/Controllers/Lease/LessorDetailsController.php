@@ -28,7 +28,7 @@ class LessorDetailsController extends Controller
             'lessor_name' => 'required',
             'lease_type_id' => 'required',
             'lease_contract_id' => 'required',
-            'file' => 'file|mimes:doc,pdf,docx,zip|max:2000|nullable'
+            'file' => 'file|mimes:doc,pdf,docx,zip|max:'.config('settings.file_size_limits.max_size_in_kbs').'|nullable'
         ];
     }
 
@@ -104,8 +104,8 @@ class LessorDetailsController extends Controller
         try{
 
             $validator = Validator::make($request->except("_token"), $this->validationRules(), [
-                'file.max' => 'Maximum file size can be 2MB.',
-                'file.uploaded' => 'Maximum file size can be 2MB.'
+                'file.max' => 'Maximum file size can be '.config('settings.file_size_limits.max_size_in_mbs').'.',
+                'file.uploaded' => 'Maximum file size can be '.config('settings.file_size_limits.max_size_in_mbs').'.'
             ]);
 
             if($validator->fails()){
@@ -159,8 +159,8 @@ class LessorDetailsController extends Controller
             if($lease) {
                 $rules = $this->validationRules();
                 $validator = Validator::make($request->except("_token"),$rules , [
-                    'file.max' => 'Maximum file size can be 2MB.',
-                    'file.uploaded' => 'Maximum file size can be 2MB.'
+                    'file.max' => 'Maximum file size can be '.config('settings.file_size_limits.max_size_in_mbs').'.',
+                    'file.uploaded' => 'Maximum file size can be '.config('settings.file_size_limits.max_size_in_mbs').'.'
                 ]);
 
                 if($validator->fails()){
