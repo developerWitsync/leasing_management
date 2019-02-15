@@ -52,12 +52,12 @@
                                                     $month_total = 0;
                                                 @endphp
                                                 @foreach($liability_caclulus_data[$year][$month] as $key=>$current_data)
-                                                    <td>{{ $current_data[0]->lease_liability}}</td>
+                                                    <td>{{ round($current_data[0]->lease_liability,2)}}</td>
                                                     @php
                                                         $month_total = $month_total + $current_data[0]->lease_liability;
                                                     @endphp
                                                 @endforeach
-                                                <td>{{ $month_total }}</td>
+                                                <td>{{ number_format($month_total, 2)}}  </td>
                                                 @php
                                                     $year_total = $year_total + $month_total;
                                                 @endphp

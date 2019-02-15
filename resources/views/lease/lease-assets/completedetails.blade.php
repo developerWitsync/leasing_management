@@ -6,7 +6,7 @@
 @endsection
 @section('content')
     <div class="panel panel-default">
-        <div class="panel-heading">Underlying Lease Asset Complete Details</div>
+        <div class="panel-heading"> Lease Asset Complete Details</div>
 
         <div class="panel-body">
             @if (session('status'))
@@ -21,7 +21,7 @@
                         {{ csrf_field() }}
 
                         <fieldset class="scheduler-border">
-                            <legend class="scheduler-border">Basic Details of the Underlying Lease Asset</legend>
+                            <legend class="scheduler-border"> Details of the Lease Asset</legend>
                             <div class="form-group{{ $errors->has('other_details') ? ' has-error' : '' }} required">
                                 <label for="other_details" class="col-lg-4 col-md-6 control-label">Any other Details of the Underlying Lease Asset</label>
                                 <div class="col-lg-4 col-md-6">
