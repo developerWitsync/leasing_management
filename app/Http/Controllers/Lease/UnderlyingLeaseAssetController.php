@@ -58,7 +58,9 @@ class UnderlyingLeaseAssetController extends Controller
             }
             //check if the Subsequent Valuation is applied for the lease modification
             $subsequent_modify_required = $lease->isSubsequentModification();
-            $lease_assets_categories  = LeaseAssetCategories::query()->with('subcategories')->get();
+            $lease_assets_categories  = LeaseAssetCategories::query()->with(['subcategories'=>function($query){
+                $query->whereIn('business_account_id', getDependentUserIds());
+            }])->get();
            
             $la_similar_charac_number = LeaseAssetSimilarCharacteristicSettings::query()
                 ->select('number')

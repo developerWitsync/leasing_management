@@ -499,7 +499,6 @@ function checkPreviousSteps($lease_id,$complete_step){
 }
 
 /**
-<<<<<<< HEAD
  * Create a ula code LA001/001/2019 when lease is created
  * @return string
  */

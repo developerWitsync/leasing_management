@@ -43,14 +43,12 @@ class HomeController extends Controller
         $total_land = LeaseAssets::query()->whereHas('category', function ($query) {
            $query->where('id',1);
          })->whereIn('lease_id', $lease_id)->count();
-       
 
         $lease_asset_categories = LeaseAssetCategories::query()->where('is_capitalized', '=', '1')->get();
         $category_id = $lease_asset_categories->pluck('id')->toArray();
         
-        
         $own_assets_capitalized = LeaseAssets::query()->whereIn('lease_id', $lease_id)
-        ->where('specific_use',1)
+        ->where('specific_use','=', 1)
         ->whereIn('category_id',$category_id)
         ->whereHas('leaseSelectLowValue',  function($query){
             $query->where('is_classify_under_low_value', '=', 'no');
@@ -58,8 +56,10 @@ class HomeController extends Controller
             $query->where('lease_contract_duration_id', '=', '3');
         })->count();
 
-        $sublease_assets_capitalized = LeaseAssets::query()->where('lease_id', $lease_id)
-        ->where('specific_use',2)
+
+
+        $sublease_assets_capitalized = LeaseAssets::query()->whereIn('lease_id', $lease_id)
+        ->where('specific_use','=' ,2)
         ->whereIn('category_id',$category_id)
         ->whereHas('leaseSelectLowValue',  function($query){
             $query->where('is_classify_under_low_value', '=', 'no');
