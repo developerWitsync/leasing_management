@@ -28,7 +28,7 @@ class LessorDetailsController extends Controller
             'lessor_name' => 'required',
             'lease_type_id' => 'required',
             'lease_contract_id' => 'required',
-            'file' => 'mimes:doc,pdf,docx,zip'
+            'file' => 'file|mimes:doc,pdf,docx,zip|max:2000|nullable'
         ];
     }
 
@@ -103,7 +103,10 @@ class LessorDetailsController extends Controller
     public function save(Request $request){
         try{
 
-            $validator = Validator::make($request->except("_token"), $this->validationRules());
+            $validator = Validator::make($request->except("_token"), $this->validationRules(), [
+                'file.max' => 'Maximum file size can be 2MB.',
+                'file.uploaded' => 'Maximum file size can be 2MB.'
+            ]);
 
             if($validator->fails()){
                 return redirect()->back()->withErrors($validator->errors())->withInput($request->except("_token"));
@@ -154,10 +157,13 @@ class LessorDetailsController extends Controller
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
 
             if($lease) {
-                $validator = Validator::make($request->except("_token"), $this->validationRules());
+                $rules = $this->validationRules();
+                $validator = Validator::make($request->except("_token"),$rules , [
+                    'file.max' => 'Maximum file size can be 2MB.',
+                    'file.uploaded' => 'Maximum file size can be 2MB.'
+                ]);
 
                 if($validator->fails()){
-
                     return redirect()->back()->withErrors($validator->errors())->withInput($request->except("_token"));
                 }
 

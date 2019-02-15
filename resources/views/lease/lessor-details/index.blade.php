@@ -15,6 +15,12 @@
                 </div>
             @endif
 
+            @if (session('error'))
+                <div class="alert alert-danger">
+                    {{ session('error') }}
+                </div>
+            @endif
+
             @if($subsequent_modify_required)
                 <div class="clearfix">
                     <div class="col-md-12 subsmentBx">
