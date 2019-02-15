@@ -1,31 +1,33 @@
+
+
 <form role="form" class="form-horizontal" method="post" enctype="multipart/form-data" id="lease_fair">
     {{ csrf_field() }}
     <div class="categoriesOuter clearfix">
         <div class="form-group required">
-            <label for="uuid" class="col-md-4 control-label">ULA Code</label>
-            <div class="col-md-6 form-check form-check-inline">
+            <label for="uuid" class="col-md-12 control-label">ULA Code</label>
+            <div class="col-md-12 form-check form-check-inline">
                 <input type="text" value="{{ $asset->uuid}}" class="form-control" id="uuid" name="uuid" disabled="disabled">
             </div>
         </div>
 
         <div class="form-group required">
-            <label for="asset_name" class="col-md-4 control-label">Asset Name</label>
-            <div class="col-md-6 form-check form-check-inline">
+            <label for="asset_name" class="col-md-12 control-label">Asset Name</label>
+            <div class="col-md-12 form-check form-check-inline">
                 <input type="text" value="{{ $asset->name}}" class="form-control" id="asset_name" name="asset_name" disabled="disabled">
             </div>
         </div>
 
         <div class="form-group required">
-            <label for="asset_category" class="col-md-4 control-label">Lease Asset Classification</label>
-            <div class="col-md-6 form-check form-check-inline">
+            <label for="asset_category" class="col-md-12 control-label">Lease Asset Classification</label>
+            <div class="col-md-12 form-check form-check-inline">
                 <input type="text" value="{{ $asset->category->title}}" class="form-control" id="asset_category" name="asset_category" disabled="disabled">
             </div>
         </div>
 
 
         <div class="form-group{{ $errors->has('is_market_value_present') ? ' has-error' : '' }} required">
-            <label for="name" class="col-md-4 control-label">Is Market Value Available</label>
-            <div class="col-md-6 form-check form-check-inline mrktavail " required>
+            <label for="name" class="col-md-12 control-label">Is Market Value Available</label>
+            <div class="col-md-12 form-check form-check-inline mrktavail " required>
                 <span><input class="form-check-input" name="is_market_value_present" id="yes" type="checkbox" value="yes" @if(old('is_market_value_present', $model->is_market_value_present) == "yes") checked="checked" @endif>
                 <label class="form-check-label" for="yes" id="yes" style="vertical-align: 4px">Yes</label></span>
                 <span><input class="form-check-input" name="is_market_value_present" id="no" type="checkbox" value="no" @if(old('is_market_value_present', $model->is_market_value_present)  == "no") checked="checked" @endif>
@@ -40,8 +42,8 @@
 
         <div class="hidden-group" id="hidden-fields" @if(old('is_market_value_present',$model->is_market_value_present ) == "yes") style="display:block;" @else  style="display:none;" @endif>
             <div class="form-group{{ $errors->has('currency') ? ' has-error' : '' }} required">
-                <label for="currency" class="col-md-4 control-label">Currency</label>
-                <div class="col-md-6 form-check form-check-inline">
+                <label for="currency" class="col-md-12 control-label">Currency</label>
+                <div class="col-md-12 form-check form-check-inline">
                     <input type="text" value="{{ $lease->lease_contract_id }}" class="form-control" id="currency" name="currency" readonly="readonly">
                     @if ($errors->has('currency'))
                         <span class="help-block">
@@ -53,8 +55,8 @@
 
 
             <div class="form-group{{ $errors->has('similar_asset_items') ? ' has-error' : '' }} required">
-                <label for="similar_asset_items" class="col-md-4 control-label">Number of Units of Lease Assets of Similar Characteristics</label>
-                <div class="col-md-6 form-check form-check-inline">
+                <label for="similar_asset_items" class="col-md-12 control-label">Number of Units of Lease Assets of Similar Characteristics</label>
+                <div class="col-md-12 form-check form-check-inline">
                     <input type="text" value="{{ $asset->similar_asset_items }}" class="form-control" id="similar_asset_items" name="similar_asset_items" readonly="readonly">
                     @if ($errors->has('similar_asset_items'))
                         <span class="help-block">
@@ -66,8 +68,8 @@
 
 
             <div class="form-group{{ $errors->has('unit') ? ' has-error' : '' }} required">
-                <label for="unit" class="col-md-4 control-label">Enter FMV Per Unit</label>
-                <div class="col-md-6">
+                <label for="unit" class="col-md-12 control-label">Enter FMV Per Unit</label>
+                <div class="col-md-12">
                     <input type="text" placeholder="Units" class="form-control" id="unit" name="unit" value="{{ old('unit', $model->unit) }}">
                     @if ($errors->has('unit'))
                         <span class="help-block">
@@ -78,8 +80,8 @@
             </div>
 
             <div class="form-group{{ $errors->has('total_units') ? ' has-error' : '' }} required">
-                <label for="total_units" class="col-md-4 control-label">Total FMV</label>
-                <div class="col-md-6">
+                <label for="total_units" class="col-md-12 control-label">Total FMV</label>
+                <div class="col-md-12">
                     <input type="text" name="total_units" for="type" class="form-control" id="total_units" value="{{ old('total_units', $model->total_units) }}">
                     @if ($errors->has('total_units'))
                         <span class="help-block">
@@ -91,8 +93,8 @@
         </div>
 
         <div class="form-group{{ $errors->has('source') ? ' has-error' : '' }}">
-            <label for="source" class="col-md-4 control-label">Enter SOURCE OF FMV</label>
-            <div class="col-md-6">
+            <label for="source" class="col-md-12 control-label">Enter SOURCE OF FMV</label>
+            <div class="col-md-12">
                 <input id="source" type="text" placeholder="Source" class="form-control" name="source" value="{{ old('source', $model->source) }}">
                 @if ($errors->has('source'))
                     <span class="help-block">
@@ -103,8 +105,8 @@
         </div>
 
         <div class="form-group{{ $errors->has('attachment') ? ' has-error' : '' }}">
-            <label for="workings_doc" class="col-md-4 control-label">Upload</label>
-            <div class="col-md-6">
+            <label for="workings_doc" class="col-md-12 control-label">Upload</label>
+            <div class="col-md-12">
                 <input type="name" id="upload2" name="name" class="form-control" disabled="disabled">
                 <button type="button" class="browseBtn">Browse</button>
                 <!-- <input type="file" id="file-name" name="file" class=""> -->
@@ -177,3 +179,4 @@
         });
     </script>
 @endsection
+
