@@ -38,7 +38,7 @@ class FairMarketValueController extends Controller
             'similar_asset_items'   => 'required_if:is_market_value_present,yes',
             'unit'  => 'required_if:is_market_value_present,yes',
             'total_units'  => 'required_if:is_market_value_present,yes',
-            'attachment' => 'file|mimes:doc,pdf,docx,zip|max:'.config('settings.file_size_limits.max_size_in_kbs').'|nullable'
+            'attachment' => config('settings.file_size_limits.file_rule')
         ];
     }
 

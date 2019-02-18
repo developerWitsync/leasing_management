@@ -109,6 +109,7 @@
                 <button type="button" class="browseBtn">Browse</button>
                 <!-- <input type="file" id="file-name" name="file" class=""> -->
                 <input id="workings_doc" type="file" placeholder="" class="form-control fileType" name="attachment">
+                 <h6 class="disabled">{{ config('settings.file_size_limits.file_validation') }}</h6>
                 @if ($errors->has('attachment'))
                     <span class="help-block">
                             <strong>{{ $errors->first('attachment') }}</strong>

@@ -280,7 +280,7 @@
                 <input type="name" id="upload" name="name" class="form-control" disabled="disabled">
                 <button type="button" class="browseBtn">Browse</button>
                 <input id="workings_doc" type="file" placeholder="" class="fileType" name="attachment">
-                <h6 class="disabled">Only Doc,Pdf,Docx,Zip with 2MB size of files are allowed.</h6>
+                 <h6 class="disabled">{{ config('settings.file_size_limits.file_validation') }}</h6>
                 @if ($errors->has('attachment'))
                     <span class="help-block">
                         <strong>{{ $errors->first('attachment') }}</strong>
