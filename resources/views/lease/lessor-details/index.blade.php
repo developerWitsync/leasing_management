@@ -160,6 +160,11 @@
                                                             <option value="{{ $reporting_currency_settings->currency_for_lease_reports }}"
                                                                     @if(old('lease_contract_id', $lease->lease_contract_id) == $reporting_currency_settings->currency_for_lease_reports) selected="selected" @endif >
                                                                 {{ $reporting_currency_settings->currency_for_lease_reports }}</option>
+                                                            @if($reporting_currency_settings->currency_for_lease_reports != $reporting_currency_settings->statutory_financial_reporting_currency)
+                                                                <option value="{{ $reporting_currency_settings->statutory_financial_reporting_currency }}"
+                                                                    @if(old('lease_contract_id', $lease->lease_contract_id) == $reporting_currency_settings->statutory_financial_reporting_currency) selected="selected" @endif >
+                                                                    {{ $reporting_currency_settings->statutory_financial_reporting_currency }}</option>
+                                                            @endif
                                                         </select>
 
                                                         @if($subsequent_modify_required)
