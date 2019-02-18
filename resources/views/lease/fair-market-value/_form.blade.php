@@ -1,5 +1,3 @@
-
-
 <form role="form" class="form-horizontal" method="post" enctype="multipart/form-data" id="lease_fair">
     {{ csrf_field() }}
     <div class="categoriesOuter clearfix">

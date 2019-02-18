@@ -38,6 +38,6 @@ return [
     'lease_already_submitted'   => 'This Lease has been already submitted. Please go to Modify Lease in case of any modifications if required.',
     'file_size_limits' => [
         'max_size_in_kbs' => '2000',
-        'max_size_in_mbs' => '2MB'
+        'max_size_in_mbs' => '2MB',
     ]
 ];
