@@ -468,7 +468,7 @@ class UnderlyingLeaseAssetController extends Controller
         if($request->ajax()) {
 
             $accural_period = Carbon::parse($request->accural_period);
-            $lease_end_date = Carbon::parse($request->lease_end_date);
+            $lease_end_date = Carbon::parse($request->lease_end_date)->addDay(1);
            
             $date_diff = $lease_end_date->diffForHumans($accural_period, true, false, 4); 
             return response()->json([
