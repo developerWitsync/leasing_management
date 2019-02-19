@@ -1,13 +1,7 @@
 <form role="form" class="form-horizontal" method="post" enctype="multipart/form-data" id="lease_purchase">
     {{ csrf_field() }}
     <div class="categoriesOuter clearfix">
-    <div class="form-group required">
-        <label for="uuid" class="col-md-12 control-label">ULA Code</label>
-        <div class="col-md-12 form-check form-check-inline">
-            <input type="text" value="{{ $asset->uuid}}" class="form-control" id="uuid" name="uuid" disabled="disabled">
-        </div>
-    </div>
-
+   
     <div class="form-group required">
         <label for="asset_name" class="col-md-12 control-label">Asset Name</label>
         <div class="col-md-12 form-check form-check-inline">
@@ -66,7 +60,7 @@
         <div class="form-group{{ $errors->has('expected_purchase_date') ? ' has-error' : '' }} required">
             <label for="expected_purchase_date" class="col-md-12 control-label">Expected Purchase Date</label>
             <div class="col-md-12">
-                <input type="text" placeholder="Expected Purchase Date" class="form-control" id="expected_purchase_date" name="expected_purchase_date" value="{{ old('expected_purchase_date', $model->expected_purchase_date) }}">
+                <input type="text" placeholder="Expected Purchase Date" class="form-control lease_period1" id="expected_purchase_date" name="expected_purchase_date" value="{{ old('expected_purchase_date', $model->expected_purchase_date) }}" autocomplete="off">
                 @if ($errors->has('expected_purchase_date'))
                     <span class="help-block">
                         <strong>{{ $errors->first('expected_purchase_date') }}</strong>
@@ -78,7 +72,7 @@
          <div class="form-group{{ $errors->has('expected_lease_end_date') ? ' has-error' : '' }} required">
             <label for="expected_lease_end_date" class="col-md-12 control-label">Expected Lease End Date</label>
             <div class="col-md-12">
-                <input type="text" placeholder="Expected Lease End Date" class="form-control" id="expected_lease_end_date" name="expected_lease_end_date" value="{{ old('expected_lease_end_date', $model->expected_lease_end_date) }}">
+                <input type="text" placeholder="Expected Lease End Date" class="form-control lease_period2" id="expected_lease_end_date" name="expected_lease_end_date" value="{{ old('expected_lease_end_date', $model->expected_lease_end_date) }}" autocomplete="off">
                 @if ($errors->has('expected_lease_end_date'))
                     <span class="help-block">
                         <strong>{{ $errors->first('expected_lease_end_date') }}</strong>
@@ -133,6 +127,7 @@
 
 @section('footer-script')
     <script src="{{ asset('js/jquery-ui.js') }}"></script>
+    <script src="{{ asset('assets/plugins/bootbox/bootbox.min.js') }}"></script>
     <script type="text/javascript">
         $(document).on('click', 'input[name="purchase_option_clause"]', function() {
             $('input[name="purchase_option_clause"]').not(this).prop('checked', false);
@@ -168,8 +163,14 @@
         $(document).ready(function(){
             $("#expected_purchase_date").datepicker({
                 dateFormat: "dd-M-yy",
+                changeMonth:true,
+                changeYear:true,
                 maxDate : new Date('{{ ($asset->renewableOptionValue->is_reasonable_certainity_option == "yes")?$asset->renewableOptionValue->expected_lease_end_Date:$asset->lease_end_date }}'),
-                onSelect: function () {
+                onSelect: function (date, instance) {
+
+                    var _ajax_url = '{{route("lease.checklockperioddate")}}';
+                    checklockperioddate(date, instance, _ajax_url);
+
                     var expectedPurchaseDate = $(this).datepicker('getDate');
                     var expectedLeaseEndDate = $('#expected_lease_end_date');
 
@@ -188,6 +189,12 @@
 
             $("#expected_lease_end_date").datepicker({
                 dateFormat: "dd-M-yy",
+                changeMonth:true,
+                changeYear:true,
+                onSelect: function (date, instance) {
+                        var _ajax_url = '{{route("lease.checklockperioddate")}}';
+                        checklockperioddate(date, instance, _ajax_url);
+                    }
             });
         });
         $('.save_next').on('click', function (e) {

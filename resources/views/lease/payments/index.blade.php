@@ -31,10 +31,9 @@
                         <thead>
                         <tr>
                             <th>Sr. No.</th>
-                            <th>Unique ULA Code</th>
-                            <th>Underlying Leased Asset Classification</th>
-                            <th>Name of the Underlying Lease Asset</th>
-                            <th>Number of Units of Lease Assets of Similar Characteristics</th>
+                            <th>Lease Asset Classification</th>
+                            <th> Lease Asset</th>
+                            <th>Lease Assets of Similar Characteristics Units</th>
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -42,9 +41,7 @@
                         @foreach($lease->assets as $key=>$asset)
                             <tr>
                                 <td>{{ $key + 1 }}</td>
-                                <td style="width: 10%">
-                                    {{ $asset->uuid}}
-                                </td>
+                               
                                 <td>
                                     {{ $asset->subcategory->title }}
                                 </td>

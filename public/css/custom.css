@@ -503,3 +503,12 @@ table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td
 .foriegn {
     background-color: #cbe199e6 !important;
 }
+.setting{
+    padding: 20px;
+}
+
+.form-group.inconsistently_applied {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 10px;
+}

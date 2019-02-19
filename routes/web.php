@@ -33,6 +33,9 @@ Route::middleware('auth')->group(function(){
 
     Route::namespace('Lease')->middleware(['permission:add_lease'])->prefix('lease')->group(function(){
 
+        // To check Lock Period Date
+       Route::get('checklockperioddate', ['as' => 'lease.checklockperioddate', 'uses' => 'IndexController@checkLockPeriodDate']);
+       
         /**
          * Lessor Details Routes NL1
          */
@@ -248,7 +251,11 @@ Route::middleware('auth')->group(function(){
         Route::get('fetch-lease-details', ['as' => 'modifylease.fetchleasedetails', 'uses' => 'ModifyLeaseController@fetchLeaseDetails']);
         Route::match(['post', 'get'], 'create/{id}', ['as' => 'modifylease.create', 'uses' => 'ModifyLeaseController@create']);
         Route::match(['post', 'get'], 'update/{id}', ['as' => 'modifylease.update', 'uses' => 'ModifyLeaseController@update']);
+
+        Route::get('checklockdate', ['as' => 'modifylease.checklockdate', 'uses' => 'ModifyLeaseController@checkLockDate']);
+
     });
+
 
     /*
     * Lease Valuation Routes
@@ -265,9 +272,14 @@ Route::middleware('auth')->group(function(){
         Route::prefix('general')->group(function(){
             Route::get('/', ['as' => 'settings.index', 'uses' => 'IndexController@index']);
             Route::post('save', ['as' => 'settings.index.save', 'uses' => 'IndexController@save']);
-            Route::post('add-lease-lock-year', ['as' => 'settings.leaselockyear.addleaselockyear', 'uses' => 'LeaseLockYearController@addLeaseLockYear']);
-            Route::match(['get', 'post'], '/edit-lease-lock-year/{id}', ['as' => 'settings.leaselockyear.editleaselockyear', 'uses' => 'LeaseLockYearController@editLeaseLockYear']);
-            Route::delete('delete-lease-lock-nyear/{id}', ['as' => 'settings.leaselockyear.deleteleaselockyear', 'uses' => 'LeaseLockYearController@deleteLeaseLockYear']);
+
+            Route::post('leaselockyear/add', ['as' => 'settings.leaselockyear.addleaselockyear', 'uses' => 'LeaseLockYearController@addLeaseLockYear']);
+
+            Route::match(['get', 'post'], '/editleaselockyear/{id}', ['as' => 'settings.leaselockyear.editleaselockyear', 'uses' => 'LeaseLockYearController@editLeaseLockYear']);
+
+            Route::delete('deleteleaselockyear/{id}', ['as' => 'settings.leaselockyear.deleteleaselockyear', 'uses' => 'LeaseLockYearController@deleteLeaseLockYear']);
+
+             Route::get('changestatus', ['as' => 'settings.leaselockyear.changestatus', 'uses' => 'LeaseLockYearController@changeStatus']);
         });
 
         Route::prefix('lease-classification')->group(function (){
@@ -459,6 +471,23 @@ Route::namespace('Admin')->prefix('admin')->group(function () {
 
             Route::post('updatestatus', ['as' => 'admin.countries.updatestatus', 'uses' => 'CountriesController@changeStatus']);
 
+        });
+
+        Route::prefix('cms')->group(function(){
+
+            Route::get('/', ['as' => 'admin.cms.index', 'uses' => 'CmsController@index']);
+
+            Route::match(['get', 'post'], 'create', ['as' => 'admin.cms.create', 'uses' => 'CmsController@create']);
+
+            Route::get('fetch', ['as' => 'admin.cms.fetch', 'uses' => 'CmsController@fetch']);
+
+            Route::match(['get', 'post'],'update/{id}', ['as' => 'admin.cms.update', 'uses' => 'CmsController@update']);
+
+            Route::delete('delete/{id}', ['as' => 'admin.cms.delete', 'uses' => 'CmsController@delete']);
+
+            Route::post('updatestatus', ['as' => 'admin.cms.updatestatus', 'uses' => 'CmsController@changeStatus']);
+
+        
         });
 
         Route::prefix('contactus')->group(function(){

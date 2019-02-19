@@ -12,7 +12,7 @@
                     <table class="table table-bordered table-responsive">
                         <thead>
                         <th>Carrying Amount of a Lease Asset as on Jan 01, 2019</th>
-                        <th>Present Value of Lease Liability</th>
+                        <th>PV Lease Liability</th>
                         <th>Adjustment to Equity</th>
                         <th>Action</th>
                         </thead>

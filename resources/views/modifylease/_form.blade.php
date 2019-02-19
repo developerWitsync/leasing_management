@@ -23,7 +23,7 @@
     <div class="form-group{{ $errors->has('effective_from') ? ' has-error' : '' }} effctive required" style="display: none;">
         <label for="name" class="col-md-12 control-label">Effective From</label>
         <div class="col-md-12 form-check form-check-inline" required>
-            <input type="text" class="form-control" name="effective_from" id="effective_from"> 
+            <input type="text" class="form-control lease_period" name="effective_from" id="effective_from" autocomplete="off"> 
             @if ($errors->has('effective_from'))
                 <span class="help-block">
                         <strong>{{ $errors->first('effective_from') }}</strong>
@@ -69,7 +69,13 @@
  <script src="{{ asset('assets/plugins/bootbox/bootbox.min.js') }}"></script>
     <script type="text/javascript">
      $('#effective_from').datepicker({
-         dateFormat: "dd-M-yy"
+         dateFormat: "dd-M-yy",
+         changeYear: true,
+         changeMonth:true,
+          onSelect: function(date, instance){
+            var _ajax_url = '{{route("lease.checklockperioddate")}}';
+            checklockperioddate(date, instance, _ajax_url);
+          }
      })
  </script>
   <script type="text/javascript">

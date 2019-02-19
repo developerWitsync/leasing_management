@@ -132,8 +132,7 @@ class UnderlyingLeaseAssetController extends Controller
                 });
 
                 $rules = [
-                    'uuid' => 'required',
-                    'category_id' => 'required|exists:lease_assets_categories,id',
+                     'category_id' => 'required|exists:lease_assets_categories,id',
                     'sub_category_id'   => 'required|exists:lease_assets_sub_categories_settings,id',
                     'name'  => 'required',
                     'similar_asset_items'   =>'required|numeric',

@@ -9,7 +9,7 @@
             <strong>Note!</strong> The below information is generated on the basis of the current inputs.
         </div>
 
-        <div class="row" style="width: 2500px;">
+        <div class="row" style="width: 2000px;">
             <div class="col-md-12">
                 <table class="table table-bordered">
                     <thead>
@@ -28,7 +28,7 @@
                     @endphp
                     @foreach($years as $year)
                         <tr>
-                            <td>
+                            <td width="100px">
                                 <strong>
                                     {{ $year }}
                                 </strong>

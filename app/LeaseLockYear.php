@@ -12,7 +12,7 @@ class LeaseLockYear extends Model
     	'id',
         'business_account_id',
         'start_date',
-        'end_date',
+        'status',
         'created_at',
         'updated_at'
     ];

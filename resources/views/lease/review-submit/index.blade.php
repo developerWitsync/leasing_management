@@ -32,9 +32,9 @@
                     <thead>
                     <tr>
                         <th>Sr. No</th>
-                        <th>Lessor Name</th>
-                        <th>Lease Type Classification</th>
-                        <th>Lease Contract Currency</th>
+                        <th>Lessor</th>
+                        <th>Lease Classification</th>
+                        <th>Lease Currency</th>
                         <th>Action</th>
 
                     </tr>
@@ -66,10 +66,10 @@
                     <thead>
                     <tr>
                         <th>Sr. No.</th>
-                        <th> Lease Asset Category</th>
-                        <th>Lease Asset Classification</th>
-                        <th>Lease Asset Name</th>
-                        <th>Lease Assets of Similar Characteristics</th>
+                        <th>LA Category</th>
+                        <th>LA Classification</th>
+                        <th>Lease Asset</th>
+                        <th>LA of Similar Characteristics</th>
                         <th>Action</th>
                     </tr>
                     </thead>
@@ -124,7 +124,7 @@
                     <thead>
                     <tr>
                         <th>Sr. No.</th>
-                        <th>Country of the Lease Asset</th>
+                        <th>LA Country</th>
                         <th>Place</th>
                         <th>Specific Use of the Lease Asset</th>
                         <th>Expected Remaining Useful Life of the Underlying</th>
@@ -252,15 +252,14 @@
                     <thead>
                     <tr>
                         @foreach($lease->assets as $asset)
-                            <td>Unique ULA Code</td>
-                            <td colspan="10">{{ $asset->uuid }}</td>
+                            
                     </thead>
 
                     <thead>
                     <tr>
-                        <th>Name of Lease Payment</th>
-                        <th>Type of Lease Payment</th>
-                        <th>Nature of Lease Payment</th>
+                        <th>Lease Payment Name</th>
+                        <th>Lease Payment Type</th>
+                        <th>Lease Payment Nature</th>
                         <th>Lease Payment Interval</th>
                         <th>Lease Payment Payout Time</th>
                         <th>First Lease Payment Start Date</th>
@@ -307,8 +306,9 @@
                     <thead>
                     <tr>
                         <th>Sr. No.</th>
-                         <th>Total FMV</th>
+                        <th>Total FMV</th>
                         <th>Total Residual Guarantee Value</th>
+                        <th> Residual Guarantee Value Description</th>
                         <th>Termination Penalty</th>
                         <th>Anticipated Purchase Price</th>
                         <th>Expected Purchse Date</th>
@@ -335,6 +335,14 @@
                                 @else
                                     <td>-</td>
                                 @endif
+
+                            @if(isset($asset->residualGuranteeValue->other_desc))
+                            <td>{{ $asset->residualGuranteeValue->other_desc }}</td>
+
+                             @else
+                                    <td>-</td>
+                                @endif
+                                
                                 @if(isset($asset->terminationOption->termination_penalty))
                                     <td>
                                         {{ $asset->terminationOption->termination_penalty }}
@@ -376,7 +384,7 @@
                     <tr>
                         <th>Sr. No.</th>
                         <th>Lease Classified</th>
-                        <th>Classify under Low Value Lease Asset</th>
+                        <th>Classify under Low Value LA</th>
                         <th>Discount Rates</th>
                         <th>Total Initial Direct Cost</th>
                         <th>Total Lease Incentive</th>
@@ -447,7 +455,7 @@
                     <thead>
                     <tr>
                         <th>Sr. No.</th>
-                        <th>Present Value of Lease Liability</th>
+                        <th>PV of Lease Liability</th>
                         <th>Value of a Lease Asset</th>
                         <th>Adjustment to Equity</th>
                         <th>Action</th>

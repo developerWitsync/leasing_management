@@ -267,7 +267,13 @@ class ReviewSubmitController extends Controller
                 // complete Step
                 confirmSteps($id, 18);
             }
-            return redirect(route('modifylease.index'))->with('status', 'Lease Information has been Submitted successfully.');
+            
+            $ulacode = createUlaCode();
+            $uid['uuid'] = $ulacode;
+            $assets->setRawAttributes($uid);
+            $assets->save();
+
+            return redirect(route('leasevaluation.index'))->with('status', 'Lease Information has been Submitted successfully.Ula Code is-'.$ulacode);
         }
     }
 

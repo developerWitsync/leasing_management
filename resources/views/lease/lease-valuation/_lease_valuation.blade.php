@@ -2,9 +2,9 @@
     <div class="panel-heading">Valuation Of Lease Asset</div>
 
     <div class="panel-body">
-        @if (session('status'))
+        @if (session('status1'))
             <div class="alert alert-success">
-                {{ session('status') }}
+                {{ session('status1') }}
             </div>
         @endif
 
@@ -16,9 +16,8 @@
                         <thead>
                         <tr>
                             <th>Sr. No.</th>
-                            <th>Unique ULA Code</th>
-                            <th>Lease Asset Name</th>
-                            <th>Lease Asset Classification</th>
+                            <th>Lease Asset</th>
+                            <th>LA Classification</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -26,9 +25,7 @@
                                 @foreach($assets as $key=>$asset)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
-                                        <td style="width: 10%">
-                                            {{ $asset->uuid }}
-                                        </td>
+                                       
                                         <td>
                                             {{ $asset->name }}
                                         </td>

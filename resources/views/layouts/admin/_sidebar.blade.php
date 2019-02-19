@@ -39,6 +39,17 @@
                     </ul>
                 </li>
 
+                 <li class="submenu">
+                    <a href="#" class="@if(request()->segment('2') == 'cms') active @endif"><i
+                                class="fa fa-fw fa-table"></i> <span> CMS </span> <span class="menu-arrow"></span></a>
+                    <ul class="list-unstyled">
+                        <li class="@if(request()->segment('3') == '') active @endif"><a
+                                    href="{{ route('admin.cms.index') }}">Manage Cms</a></li>
+                        <li class="@if(request()->segment('3') == 'create') active @endif"><a
+                                    href="{{ route('admin.cms.create') }}">Add Cms</a></li>
+                    </ul>
+                </li>
+
                 <li class="submenu">
                     <a href="#" class="@if(request()->segment('2') == 'subscription-plans') active @endif"><i
                                 class="fa fa-fw fa-table"></i> <span> Subscription Plans </span> <span class="menu-arrow"></span></a>

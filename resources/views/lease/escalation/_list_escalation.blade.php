@@ -2,9 +2,8 @@
     <thead>
     <tr>
         <th>Sr. No.</th>
-        <th>Unique ULA Code</th>
-        <th>Name of the Underlying Lease Asset</th>
-        <th>Underlying Lease Asset Classification</th>
+        <th>Lease Asset</th>
+        <th>Lease Asset Classification</th>
         <th>Action</th>
     </tr>
     </thead>
@@ -12,9 +11,7 @@
         @foreach($lease->assets as $key=>$asset)
             <tr>
                 <td>{{ $key + 1 }}</td>
-                <td style="width: 10%">
-                    {{ $asset->uuid}}
-                </td>
+               
                 <td>
                     {{ $asset->name }}
                 </td>
@@ -29,10 +26,10 @@
                 <td colspan="5" class="tableInner">
                     <table class="table table-bordered table-responsive">
                         <tr>
-                            <th>Number of Lease Payment</th>
-                            <th>Name of Lease Payment</th>
-                            <th>Type of Lease Payment</th>
-                            <th>Nature of Lease Payment</th>
+                            <th>No of Lease Payment</th>
+                            <th>Lease Payment Name</th>
+                            <th>Lease Payment Type</th>
+                            <th>Lease Payment Nature</th>
                             <th>Action</th>
                         </tr>
                         @foreach($asset->payments as $payment)

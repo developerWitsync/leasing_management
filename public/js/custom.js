@@ -281,4 +281,39 @@ function fetchExchangeRate(base, target, base_date, access_key, element_selector
             }
         }
     });
+
+}
+function checklockperioddate(date, instance, _ajax_url) {
+
+    $.ajax
+    ({
+          type: "get",
+          url: _ajax_url,
+          data: "date="+date,
+          success: function(response)
+          {
+           var modal = bootbox.dialog({
+                message: response.status,
+                 buttons: [
+                    {
+                        label: "OK",
+                        className: "btn btn-success pull-left",
+                        callback: function () {
+                            $('.lease_period').val('');
+                            $('.lease_period1').val('');
+                            $('.lease_period2').val('');
+
+                        }
+                    },
+
+                ],
+                show: false,
+                onEscape: function () {
+                    modal.modal("hide");
+                }
+            });
+
+            modal.modal("show");
+          }
+     });  
 }

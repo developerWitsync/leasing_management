@@ -40,9 +40,7 @@
                         <div>
                             Asset Name : <span class="badge badge-success">{{ $asset->name }}</span>
                         </div>
-                        <div>
-                            Unique ULA Code : <span class="badge badge-primary">{{ $asset->uuid }}</span>
-                        </div>
+                       
                         <div>
                             Lease Start Date(Including Free Period) : <span class="badge badge-warning">{{ date('F,d Y', strtotime($asset->accural_period)) }}</span>
                         </div>

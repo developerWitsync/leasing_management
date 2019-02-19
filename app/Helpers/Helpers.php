@@ -547,3 +547,14 @@ function fetchCurrencyExchangeRate($date = null, $source, $target){
         return 1; // will return 1 in case the currency rate is not found.
     }
 }
+
+/**
+ * get the parent user get lease lock year when will stored in settings
+ * render the lease lock year when user add in user settings
+ * @return [type] [description]
+ */
+function getLockYearDetails(){
+   
+return \App\LeaseLockYear::query()->where('business_account_id', '=', auth()->user()->id)->where('status','1')->first();
+  
+}
