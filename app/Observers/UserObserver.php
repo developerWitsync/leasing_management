@@ -30,7 +30,7 @@ class UserObserver
     public function created(User $user)
     {
         //send the confirm acount email to the user from here
-        Mail::to($user)->queue(new RegistrationConfirmation($user));
+        //Mail::to($user)->queue(new RegistrationConfirmation($user));
 
         if($user->parent_id == '0') {
             //generate the default settings for the registered user

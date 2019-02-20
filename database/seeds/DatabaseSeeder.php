@@ -37,6 +37,10 @@ class DatabaseSeeder extends Seeder
         DB::unprepared(file_get_contents($path));
         $this->command->info('Email Templates table seeded!');
 
+        $path = 'database/sqls/states.sql';
+        DB::unprepared(file_get_contents($path));
+        $this->command->info('States table seeded!');
+
 		$this->call(AdminUsers::class);
 		$this->call(ContractClassifications::class);
 		$this->call(ContractEscalationBasis::class);

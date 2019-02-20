@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Master;
 
 
 use App\Http\Controllers\Controller;
+use App\SubscriptionPlans;
 
 class LeasingSoftwareController extends Controller
 {
@@ -23,7 +24,10 @@ class LeasingSoftwareController extends Controller
     }
 
     public function IFRS(){
-        return view('leasing-software.ifrs-16');
+        $subscription_plans = SubscriptionPlans::all();
+        return view('leasing-software.ifrs-16', compact(
+            'subscription_plans'
+        ));
     }
 
 }

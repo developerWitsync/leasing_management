@@ -21,8 +21,8 @@ class User extends Authenticatable
     protected $fillable = [
         'type','email','phone','username', 'password', 'remember_token','created_at', 'updated_at',
         'authorised_person_name', 'authorised_person_designation','authorised_person_dob','legal_entity_name',
-        'industry_type','applicable_gaap','legal_status','country','currency','gender','annual_reporting_period',
-        'email_verification_code','is_verified','parent_id'
+        'applicable_gaap','country','state','gender',
+        'email_verification_code','is_verified','parent_id', 'account_id', 'raw_password'
     ];
 
     /**
@@ -70,5 +70,9 @@ class User extends Authenticatable
 
     public function childrens(){
         return $this->hasMany(self::class, 'parent_id');
+    }
+
+    public function userSubscription(){
+        return $this->hasMany('App\UserSubscription', 'user_id', 'id');
     }
 }

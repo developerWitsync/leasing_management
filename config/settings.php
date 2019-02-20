@@ -40,6 +40,7 @@ return [
         'max_size_in_kbs' => '2000',
         'max_size_in_mbs' => '2MB',
         'file_validation' => 'Only Doc,Pdf,Docx,Zip with 2MB size of files are allowed.',
-        'file_rule'       =>  'file|mimes:doc,pdf,docx,zip|max:2000|nullable'
+        'file_rule'       =>  'file|mimes:doc,pdf,docx,zip|max:2000|nullable',
+        'certificates'       =>  'file|required|mimes:doc,pdf,docx,zip|max:2000'
     ]
 ];

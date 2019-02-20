@@ -19,7 +19,7 @@
 </head>
 <body>
     <div>
-    @if(request()->segment('1') != 'login')
+    @if(request()->segment('1') != 'login' && request()->segment('1') != 'register')
         <nav class="navbar navbar-default navbar-static-top">
             <div class="hdrTop">
                 

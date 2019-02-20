@@ -10,11 +10,13 @@ class SubscriptionPlans extends Model
 
     protected $fillable = [
         'title',
+        'slug',
         'price',
         'available_leases',
         'available_users',
         'hosting_type',
         'validity',
+        'most_popular',
         'created_at',
         'updated_at'
     ];

@@ -70,6 +70,8 @@ class SubscriptionPlansController extends Controller
                     return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
                 }
 
+                $request->request->add(['slug' => str_slug($request->title)]);
+
                 $model->setRawAttributes($request->except('_token'));
                 if($model->save()) {
                     return redirect(route('admin.subscriptionplans.index'))->with('success', 'Subscription Plan has been created successfully.');
@@ -106,6 +108,8 @@ class SubscriptionPlansController extends Controller
                 if($validator->fails()){
                     return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
                 }
+
+                $request->request->add(['slug' => str_slug($request->title)]);
 
                 $model->setRawAttributes($request->except('_token'));
                 if($model->save()) {

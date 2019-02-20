@@ -22,10 +22,21 @@ Route::namespace('Master')->prefix('leasing-software')->group(function(){
     Route::get('IFRS-16', ['as' => 'master.leasingsoftware.ifrs', 'uses' => 'LeasingSoftwareController@IFRS']);
 });
 
+Route::get('register/{package}', ['as' => 'register.index', 'uses' => 'RegisterController@index']);
+Route::post('create-account', ['as' => 'register.create', 'uses' => 'RegisterController@register']);
+Route::get('fetch-states/{country_id}', ['as' => 'register.fetch.states', 'uses' => 'RegisterController@fetchStates']);
+
+Route::get('send-to-paypal/{payment_id}', ['as' => 'payment.index', 'uses' => 'PaymentsController@index']);
+
+Route::prefix('payment')->group(function(){
+    Route::any('success', ['as' => 'payment.success', 'uses' => 'PaymentController@success']);
+    Route::any('cancel', ['as' => 'payment.cancel', 'uses' => 'PaymentController@cancel']);
+    Route::any('notify', ['as' => 'payment.cancel', 'uses' => 'PaymentController@notify']);
+});
+
 Auth::routes();
 
 Route::middleware('auth')->group(function(){
-
 
  
     Route::get('/home', 'HomeController@index')->name('home');

@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\DB;
+use Srmklive\PayPal\Services\ExpressCheckout;
 
 /**
  * upload the images to the path passed and create the thumnail if required
@@ -546,4 +547,52 @@ function fetchCurrencyExchangeRate($date = null, $source, $target){
     } else {
         return 1; // will return 1 in case the currency rate is not found.
     }
+}
+
+/**
+ * genreate the account id for the user based upon the user id..
+ * @param $user
+ * @return string
+ */
+function generateWitsyncAccountID($user){
+    return 'WSUID'.str_pad($user->id, 5, '0', STR_PAD_LEFT);
+}
+
+/**
+ * genrate the Paypal redirect link and returns the string
+ * @param \App\SubscriptionPlans $package
+ * @param \App\UserSubscription $subscription
+ * @return mixed
+ * @throws Exception
+ */
+function generatePaypalExpressCheckoutLink(\App\SubscriptionPlans $package, \App\UserSubscription $subscription){
+    $provider = new ExpressCheckout();
+    $data = [];
+    $data['items'] = [
+        [
+            'name' => $package->title,
+            'price' => $package->price,
+            'qty' => 1
+        ]
+    ];
+
+    $data['invoice_id'] = $subscription->id;
+    $data['invoice_description'] = "Order #{$data['invoice_id']} Invoice";
+    $data['return_url'] = url('/payment/success');
+    $data['cancel_url'] = url('/payment/cancel');
+
+    $total = 0;
+    foreach($data['items'] as $item) {
+        $total += $item['price']*$item['qty'];
+    }
+    $data['total'] = $total;
+    //give a discount of 10% of the order amount
+    //$data['shipping_discount'] = round((10 / 100) * $total, 2);
+
+
+    //save all the details to the user_subscription for the details so that these can be used for the doExpressCheckout
+    $subscription->purchased_items = json_encode($data);
+    $subscription->save();
+    $response = $provider->setExpressCheckout($data);
+    return $response['paypal_link'];
 }

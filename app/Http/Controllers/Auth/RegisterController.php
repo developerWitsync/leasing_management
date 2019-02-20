@@ -2,11 +2,18 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Mail\RegistrationCredentials;
+use App\UserSubscription;
+use Mail;
+use App\Mail\RegistrationConfirmation;
 use App\Currencies;
 use App\IndustryTypes;
+use App\SubscriptionPayments;
+use App\SubscriptionPlans;
 use App\User;
 use App\Countries;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
@@ -50,70 +57,116 @@ class RegisterController extends Controller
      */
     public function showRegistrationForm()
     {
-        $countries = Countries::query()->where('status','=', '1')->where('trash', '=', '0')->get();
-        $industry_types = IndustryTypes::query()->where('status', '=', '1')->get();
-        $currencies = Currencies::query()->where('status', '=', '1')->get();
-        return view('auth.register', compact('countries', 'industry_types', 'currencies'));
+        abort(404);
     }
 
     /**
      * Get a validator for an incoming registration request.
      *
-     * @param  array  $data
+     * @param  array $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'country' => 'required|exists:countries,id',
-            'legal_status' => 'required',
+            'country' => 'required|exists:countries,name',
+            'state' => 'required_if:country,India|exists:states,state_name|nullable',
+            'gstin' => 'required_if:country,India|min:15|nullable',
             'applicable_gaap' => 'required',
-            'industry_type' => 'required|exists:industry_type,id',
             'legal_entity_name' => 'required',
             'authorised_person_name' => 'required|string|max:255',
-            'authorised_person_dob'     => 'required|date',
-            'gender'    => 'required',
+            'authorised_person_dob' => 'required|date|before:-18 years',
+            'gender' => 'required',
             'authorised_person_designation' => 'required',
-            'username' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
-            'phone' => 'required',
-            'annual_reporting_period'   => 'required'
+            'admin_rights' => 'required',
+            'declaration' => 'required',
+            'terms_and_condition' => 'required',
+            'certificates' => config('settings.file_size_limits.certificates')
+        ], [
+            'declaration.required' => 'Please accept the declaration.',
+            'terms_and_condition.required' => 'Please accept Terms and Conditions.',
+            'authorised_person_dob.before' => 'The authorised person must be atleast 18 years old.'
         ]);
     }
 
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param  array  $data
+     * @param  array $data
      * @return \App\User
      */
     protected function create(array $data)
     {
         $data['type'] = '0';
-        $data['password'] = bcrypt($data['password']);
         $data['authorised_person_dob'] = date('Y-m-d', strtotime($data['authorised_person_dob']));
         $data['email_verification_code'] = md5(time());
         $data['is_verified'] = '0';
         $data['parent_id'] = 0;
+        $data['raw_password'] = $data['password'];
+        $data['password'] = bcrypt($data['password']);
 
-        unset($data['password_confirmation']);
         unset($data['_token']);
         return User::create($data);
     }
 
     /**
-     * Handle a registration request for the application.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * registration process for the users
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @throws \Exception
      */
     public function register(Request $request)
     {
+        $package = SubscriptionPlans::query()->findOrFail($request->selected_plan);
         $this->validator($request->all())->validate();
-        $user = $this->create($request->all());
-        if($user) {
-            return redirect('/login')->with('success', 'Your account has been registered. Please check your email inbox to proceed furhter.');
+        $userData = $request->all();
+        $userData['password'] = str_random(8);
+        $user = $this->create($userData);
+        if ($user) {
+
+            //generate the account id for the user and update the user with the same as well...
+            $user->setAttribute('account_id', generateWitsyncAccountID($user));
+            $user->save();
+
+            //need to create an entry to the user_subscription table...
+            if (!is_null($package->validity)) {
+                //this means that the plan is trial plan
+                $expiry_date = Carbon::today()->addDays($package->validity)->format('Y-m-d');
+            } else {
+                //will expires after 1 year
+                $expiry_date = Carbon::today()->addYear(1)->format('Y-m-d');
+            }
+
+            $renewal_date = Carbon::parse($expiry_date)->addDays(1)->format('Y-m-d');
+            $user_subscription = UserSubscription::create([
+                'plan_id' => $request->selected_plan,
+                'user_id' => $user->id,
+                'paid_amount' => $package->price,
+                'subscription_expire_at' => $expiry_date,
+                'subscription_renewal_at' => $renewal_date,
+                'payment_status' => 'pending'
+            ]);
+
+            //need to redirect the user to the paypal for generating the payment, before that need to create a transaction to the subscription_payments with
+            //the pending status
+            if ($package->price_plan_type == '1' && is_null($package->price)) {
+                $user_subscription->payment_status = "Completed";
+                $user_subscription->save();
+                //send confirmation email from here
+                Mail::to($user)->queue(new RegistrationConfirmation($user));
+                //need to send the user credentials email to the user
+                Mail::to($user)->queue(new RegistrationCredentials($user, $package, $user_subscription));
+                return redirect('/login')->with('success', 'Your account has been registered. Please check your email inbox to proceed further.');
+            } elseif ($package->price_plan_type == '1' && !is_null($package->price)) {
+                //the selected plan is not a free plan and the user will have to pay here...
+                //need to send the user to the express checkout
+                $link = generatePaypalExpressCheckoutLink($package, $user_subscription);
+                return redirect($link);
+            } else {
+                // the selected plan is enterprise plan and the user will have to communicate with the admin,,,,
+
+            }
         }
     }
 }
