@@ -156,7 +156,14 @@
                         "className" : "text-center",
                         "render" : function(data, type, full, meta) {
                             var html = "<button  data-toggle='tooltip' data-placement='top' title='Edit Country' type=\"button\" data-currency='"+full['id']+"' class=\"btn btn-sm btn-success edit_currency\"><i class=\"fa fa-pencil-square-o fa-lg\"></i></button>";
-                            html += "&nbsp;&nbsp;<button  data-toggle='tooltip' data-placement='top' title='Delete Country' type=\"button\" data-currency='"+full['id']+"' class=\"btn btn-sm btn-danger delete_currency\">  <i class=\"fa fa-trash-o fa-lg\"></i></button>"
+
+                           
+                            if(full['is_used'] == 0){
+
+                                html += "&nbsp;&nbsp;<button  data-toggle='tooltip' data-placement='top' title='Delete Currency' type=\"button\" data-currency='"+full['id']+"' class=\"btn btn-sm btn-danger delete_currency\">  <i class=\"fa fa-trash-o fa-lg\"></i></button>"
+
+                            }
+
                             return html;
                         }
                     }

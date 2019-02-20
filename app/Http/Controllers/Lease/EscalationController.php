@@ -20,6 +20,7 @@ use App\PaymentEscalationDetails;
 use App\PaymentEscalationInconsistentData;
 use App\LeaseDurationClassified;
 use App\RateTypes;
+use App\LeaseAssetPaymentDates;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Validator;
@@ -306,6 +307,10 @@ class EscalationController extends Controller
                 $escalation_frequency = EscalationFrequency::all();
                 $paymentDueDates = $payment->paymentDueDates->pluck('date')->toArray();
                  $current_step = $this->current_step;
+
+                 //lease asset payment dates
+                 $payment_dates = LeaseAssetPaymentDates::query()->where('asset_id',$id)->get();
+                
                 return view('lease.escalation.create', compact(
                     'payment',
                     'lease',
@@ -319,7 +324,8 @@ class EscalationController extends Controller
                     'paymentDueDates',
                     'inconsistentDataModel',
                     'subsequent_modify_required',
-                    'current_step'
+                    'current_step',
+                    'payment_dates'
                 ));
             } else {
                 abort(404);

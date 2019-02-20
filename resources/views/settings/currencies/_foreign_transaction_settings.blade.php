@@ -11,7 +11,8 @@
                     </div>
 
                     <div class=" col-md-6 form-check form-check-inline">
-                        <input class="form-check-input" name="is_involved" @if($reporting_currency_settings->is_foreign_transaction_involved == 'no')  checked="checked" @endif type="checkbox" id="is_involved_no" value="no">
+                        <input class="form-check-input" name="is_involved" @if($reporting_currency_settings->is_foreign_transaction_involved == 'no')  checked="checked" @endif @if($exsist_froegincurrency >0)
+disabled @endif type="checkbox" id="is_involved_no" value="no">
                         <label class="form-check-label" for="is_involved_no" style="vertical-align: 4px">No</label>
                     </div>
             </div>
