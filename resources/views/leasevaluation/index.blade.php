@@ -64,27 +64,27 @@
                                         <th>Country</th>
                                         <th>Location</th>
                                         <th>Lease Start Date</th>
-                                        <th>Remaining Lease Term</th>
+                                        <th>Remaining Lease </th>
                                         <th>Discount Rate</th>
 
                                         <th class="foriegn initial_valuation">Lease Currency</th>
-                                        <th class="foriegn initial_valuation">Undiscounted Lease Liability</th>
-                                        <th class="foriegn initial_valuation">Present Value of Lease Liability</th>
+                                        <th class="foriegn initial_valuation">UD Lease Liability</th>
+                                        <th class="foriegn initial_valuation">PV Lease Liability</th>
                                         <th class="foriegn initial_valuation">Value of Lease Asset</th>
 
-                                        <th class="foriegn subsequent_valuation">Undiscounted Lease Liability</th>
-                                        <th class="foriegn subsequent_valuation">Present Value of Lease Liability</th>
+                                        <th class="foriegn subsequent_valuation">UD Lease Liability</th>
+                                        <th class="foriegn subsequent_valuation">PV Lease Liability</th>
                                         <th class="foriegn subsequent_valuation">Value of Lease Asset</th>
 
                                         <th class="reporting initial_valuation">Exchange Rate</th>
-                                        <th class="reporting initial_valuation">Undiscounted Lease Liability</th>
-                                        <th class="reporting initial_valuation">Present Value of Lease Liability</th>
+                                        <th class="reporting initial_valuation">UD Lease Liability</th>
+                                        <th class="reporting initial_valuation">PV Lease Liability</th>
                                         <th class="reporting initial_valuation">Value of Lease Asset</th>
 
                                         <th class="reporting subsequent_valuation">Effective Date</th>
                                         <th class="reporting subsequent_valuation">Exchange Rate</th>
-                                        <th class="reporting subsequent_valuation">Undiscounted Lease Liability</th>
-                                        <th class="reporting subsequent_valuation">Present Value of Lease Liability</th>
+                                        <th class="reporting subsequent_valuation">UD Lease Liability</th>
+                                        <th class="reporting subsequent_valuation">PV Lease Liability</th>
                                         <th class="reporting subsequent_valuation">Value of Lease Asset</th>
                                     </tr>
                                     </thead>
@@ -113,21 +113,21 @@
                                             <th>Country</th>
                                             <th>Location</th>
                                             <th>Lease Start Date</th>
-                                            <th>Remaining Lease Term</th>
+                                            <th>Remaining Lease </th>
                                             <th>Discount Rate</th>
 
                                             <th class="foriegn initial_valuation">Lease Currency</th>
-                                            <th class="foriegn initial_valuation">Undiscounted Lease Liability</th>
+                                            <th class="foriegn initial_valuation">Ud Lease Liability</th>
 
-                                            <th class="foriegn subsequent_valuation">Undiscounted Lease Liability</th>
+                                            <th class="foriegn subsequent_valuation">UD Lease Liability</th>
 
 
                                             <th class="reporting initial_valuation">Exchange Rate</th>
-                                            <th class="reporting initial_valuation">Undiscounted Lease Liability</th>
+                                            <th class="reporting initial_valuation">UD Lease Liability</th>
 
                                             <th class="reporting subsequent_valuation">Effective Date</th>
                                             <th class="reporting subsequent_valuation">Exchange Rate</th>
-                                            <th class="reporting subsequent_valuation">Undiscounted Lease Liability</th>
+                                            <th class="reporting subsequent_valuation">UD Lease Liability</th>
                                         </tr>
                                     </thead>
                                 @endif

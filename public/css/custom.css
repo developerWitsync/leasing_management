@@ -504,6 +504,7 @@ table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td
     background-color: #cbe199e6 !important;
 }
 
+
 .register{
     background: -webkit-linear-gradient(left, #3931af, #00c6ff);
     margin-top: 3%;
@@ -622,6 +623,15 @@ table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td
 .row.register-form {
     padding: 0 20px 0 40px;
 }
-.termsConditionParent{
+.termsConditionParent {
     padding: 0 0 0 0;
+}
+.setting{
+    padding: 20px;
+}
+
+.form-group.inconsistently_applied {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 10px;
 }

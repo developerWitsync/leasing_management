@@ -10,8 +10,8 @@ use Session;
 
 class LeaseLockYearController extends Controller
 {
-      /**
-     * Add   Lease Lock Year for the current authenticated user
+   /**
+     * Add title of Lease Lock  Year
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -19,9 +19,8 @@ class LeaseLockYearController extends Controller
         try{
             if($request->isMethod('post')) {
                 $validator = Validator::make($request->except("_token"), [
-                    'start_date' => 'required|date',
-                    'end_date' => 'required|date|after:start_date'
-              ]);
+                    'start_date' => 'required'
+                ]);
 
                 if($validator->fails()){
                     return redirect()->back()->withErrors($validator->errors())->withInput($request->except("_token"));
@@ -29,22 +28,23 @@ class LeaseLockYearController extends Controller
 
                 $model = LeaseLockYear::create([
                     'business_account_id'   =>  auth()->user()->id,
-                    'start_date' => date('Y-m-d', strtotime($request->start_date)),
-                    'end_date' => date('Y-m-d', strtotime($request->end_date))
-                ]);
+                    'start_date' => date('Y-m-d', strtotime($request->start_date))
+                 ]);
+
                 if($model){
-                    return redirect()->back()->with('status', 'Lease Lock Year has been added successfully.');
+                    return redirect()->back()->with('status', 'Lease Lock Year been added successfully.');
                 }
             } else {
                 return redirect()->back();
             }
         } catch (\Exception $e) {
-            // dd($e->getMessage());
-            abort(404,$e->getMessage());
+             abort(404);
         }
     }
+
+
     /**
-     * update an Lease Lock Year for the current authenticated user
+     * update Title of Lease Lock Year
      * @param $id
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
@@ -52,44 +52,37 @@ class LeaseLockYearController extends Controller
     public function editLeaseLockYear($id, Request $request){
         try{
             if($request->ajax()){
-                $lease_lock_year = LeaseLockYear::query()->where('id', $id)->whereIn('business_account_id', getDependentUserIds())->first();
-                //dd($lease_lock_year);
+                $lease_lock_year = LeaseLockYear::query()->where('id', $id)->first();
                 if($request->isMethod('post')) {
                     $validator = Validator::make($request->except("_token"), [
-                        'start_date' => 'required|date',
-                        'end_date' => 'required|date|after:start_date'
-              		]);
-                     
-                    
+                        'start_date' => ['required',]
+                    ]);
+
                     if($validator->fails()){
                         return response()->json([
                             'status' => false,
                             'errors' => $validator->errors()
                         ]);
                     }
-                    $lease_lock_year->business_account_id = auth()->user()->id;
-                    $lease_lock_year->start_date = date('Y-m-d', strtotime($request->start_date ));
-                    $lease_lock_year->end_date = date('Y-m-d', strtotime($request->end_date));
-                 // dd($lease_lock_year);
+
+                    $lease_lock_year->start_date = date('Y-m-d', strtotime($request->start_date));
                     $lease_lock_year->save();
                     return response()->json([
                         'status' =>true,
-                        'message' => 'Lease Lock Year has been Updated successfully.'
+                        'message' => 'Settings has been saved successfully.'
                     ]);
                 }
 
-                return view('settings.general._edit_lease_lock_year',compact(
-                    'lease_lock_year'
-                ));
+                return view('settings.general._edit_lease_lock_year', compact('lease_lock_year'));
             }
         } catch (\Exception $e){
-           dd($e->getMessage());
+            dd($e);
             abort(404);
         }
     }
 
     /**
-     * Delete aan Number of Lease Payments for the current authenticated user
+     * Delete a Title of Lease Lock Year
      * @param $id
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
@@ -97,7 +90,7 @@ class LeaseLockYearController extends Controller
     public function deleteLeaseLockYear($id, Request $request){
         try{
             if($request->ajax()) {
-                $lease_lock_year = LeaseLockYear::query()->where('id', $id)->whereIn('business_account_id', getDependentUserIds());
+                $lease_lock_year = LeaseLockYear::query()->where('id', $id);
                 if($lease_lock_year) {
                     $lease_lock_year->delete();
                     Session::flash('status', 'Setting has been deleted successfully.');
@@ -110,6 +103,36 @@ class LeaseLockYearController extends Controller
             }
         } catch (\Exception $e){
             abort(404);
+        }
+    }
+    /**
+     * updates the status of the Lease Lock year and returns the response in json format
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     */
+    public function changeStatus(Request $request){
+       
+        try{
+            if($request->ajax()){
+                $validator = Validator::make($request->all(), [
+                    'status' => 'required',
+                    'id'    => 'required'
+                ]);
+
+                if($validator->fails()) {
+                    return response()->json(['status' => false, 'errors' => $validator->errors()], 200);
+                }
+
+                $lease_lock_year = LeaseLockYear::query()->findOrFail($request->id);
+                $lease_lock_year->status = $request->status;
+                $lease_lock_year->save();
+                return response()->json(['status' => true], 200);
+            } else {
+                return redirect()->back();
+            }
+        } catch (\Exception $e) {
+         // abort('404');
+            dd($e);
         }
     }
 }

@@ -33,7 +33,14 @@
         <div class="form-group{{ $errors->has('effective_from') ? ' has-error' : '' }} required">
             <label for="effective_from" class="col-md-12 control-label">Escalation Effective From</label>
             <div class="col-md-12 form-check form-check-inline">
-                <input type="text" value="{{ old('effective_from', $model->effective_from) }}" class="form-control" id="effective_from" name="effective_from" @if($subsequent_modify_required) disabled="disabled" @endif>
+                
+                <select name="effective_from" class="form-control lease_period" id="effective_from">
+                <option value="">Please Select Date</option>
+                @foreach($payment_dates as $payments)
+
+                <option value="{{ date('d-m-Y',strtotime( $payments->date)) }}" @if($subsequent_modify_required) disabled="disabled" @endif  @if(old('effective_from', $payments->date) == $model->effective_from) selected="selected" @endif> {{ date('d-m-Y',strtotime($payments->date)) }}</option>
+                @endforeach 
+                </select>
                 @if ($errors->has('effective_from'))
                     <span class="help-block">
                         <strong>{{ $errors->first('effective_from') }}</strong>

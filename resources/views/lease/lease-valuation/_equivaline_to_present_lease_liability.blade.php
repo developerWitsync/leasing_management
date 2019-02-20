@@ -11,7 +11,7 @@
                 <td>
                     <table class="table table-bordered table-responsive">
                         <thead>
-                            <th>Present Value of Lease Liability</th>
+                            <th>PV Lease Liability</th>
                             <th>Prepaid Lease Payments</th>
                             <th>Accrued Lease Payments</th>
                             <th>Initial Direct Cost</th>

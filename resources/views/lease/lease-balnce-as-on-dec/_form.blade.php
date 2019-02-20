@@ -1,13 +1,6 @@
 <form role="form" class="form-horizontal" method="post" enctype="multipart/form-data" id="lease_balence">
     {{ csrf_field() }}
-    <div class="categoriesOuter clearfix">
-        <div class="form-group required">
-            <label for="uuid" class="col-md-12 control-label">ULA Code</label>
-            <div class="col-md-12 form-check form-check-inline">
-                <input type="text" value="{{ $asset->uuid}}" class="form-control" id="uuid" name="uuid"
-                       disabled="disabled">
-            </div>
-        </div>
+
 
         <div class="form-group required">
             <label for="asset_name" class="col-md-12 control-label">Asset Name</label>

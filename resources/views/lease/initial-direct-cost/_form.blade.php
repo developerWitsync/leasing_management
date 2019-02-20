@@ -10,15 +10,10 @@
 <form role="form" class="form-horizontal" method="post" enctype="multipart/form-data" id="lease_initial">
     {{ csrf_field() }}
     <div class="categoriesOuter clearfix">
-    <div class="form-group required">
-        <label for="uuid" class="col-md-12 control-label">ULA Code</label>
-        <div class="col-md-12 form-check form-check-inline">
-            <input type="text" value="{{ $asset->uuid}}" class="form-control" id="uuid" name="uuid" disabled="disabled">
-        </div>
-    </div>
+  
 
     <div class="form-group required">
-        <label for="asset_name" class="col-md-12 control-label">Asset Name</label>
+        <label for="asset_name" class="col-md-12 control-label">Lease Asset Name</label>
         <div class="col-md-12 form-check form-check-inline">
             <input type="text" value="{{ $asset->name}}" class="form-control" id="asset_name" name="asset_name" disabled="disabled">
         </div>
@@ -112,7 +107,7 @@
                                 <input type="text" class="form-control" name="direct_cost_description[]" value="{{ $supplier->direct_cost_description }}">
                             </td>
                             <td>
-                                <input type="text" class="form-control expense_date" name="expense_date[]" value="{{ \Carbon\Carbon::parse($supplier->expense_date)->format(config('settings.date_format')) }}">
+                                <input type="text" class="form-control lease_period expense_date" name="expense_date[]" value="{{ \Carbon\Carbon::parse($supplier->expense_date)->format(config('settings.date_format')) }}">
                             </td>
                             <td>
                                 <select class="form-control supplier_currency" name="supplier_currency[]">
@@ -147,7 +142,7 @@
                             <input type="text" class="form-control" name="direct_cost_description[]">
                         </td>
                         <td>
-                            <input type="text" class="form-control expense_date" name="expense_date[]">
+                            <input type="text" class="form-control lease_period expense_date" name="expense_date[]">
                         </td>
                         <td>
                             <select class="form-control supplier_currency" name="supplier_currency[]">
@@ -215,6 +210,12 @@
         $(function () {
             $('.expense_date').datepicker({
                 dateFormat: "dd-M-yy",
+                changeMonth:true,
+                changeYear:true,
+                onSelect: function (date, instance) {
+                        var _ajax_url = '{{route("lease.checklockperioddate")}}';
+                        checklockperioddate(date, instance, _ajax_url);
+                    }
             });
         });
 
@@ -229,7 +230,7 @@
                 '                            <input type="text" class="form-control" name="direct_cost_description[]">\n' +
                 '                        </td>\n' +
                 '                        <td>\n' +
-                '                            <input type="text" class="form-control expense_date" name="expense_date[]">\n' +
+                '                            <input type="text" class="form-control expense_date lease_period1" name="expense_date[]">\n' +
                 '                        </td>\n' +
                 '                        <td>\n' +
                 '                            <select class="form-control supplier_currency" name="supplier_currency[]">\n' +
@@ -259,6 +260,12 @@
                 .unbind()
                 .datepicker({
                     dateFormat: "dd-M-yy",
+                    changeMonth:true,
+                    changeYear:true,
+                     onSelect: function (date, instance) {
+                        var _ajax_url = '{{route("lease.checklockperioddate")}}';
+                        checklockperioddate(date, instance, _ajax_url);
+                    },
                     beforeShow: function() {
                         setTimeout(function() {
                             $('.ui-datepicker').css('z-index', 99999999999999);

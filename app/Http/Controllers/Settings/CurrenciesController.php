@@ -13,6 +13,7 @@ use App\Currencies;
 use App\ForeignCurrencyTransactionSettings;
 use App\Http\Controllers\Controller;
 use App\ReportingCurrencySettings;
+use App\Lease;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -36,16 +37,24 @@ class CurrenciesController extends Controller
 
         $currencies = Currencies::query()->where('status', '=', '1')->get();
         $reporting_currency_settings = ReportingCurrencySettings::query()->where('business_account_id', '=', auth()->user()->id)->first();
+
         if(collect($reporting_currency_settings)->isEmpty()) {
             $reporting_currency_settings = new ReportingCurrencySettings();
         }
+        $countforeign = ForeignCurrencyTransactionSettings::query()->where('business_account_id', '=', auth()->user()->id)->get();
+        $foreign_currency= $countforeign->pluck('foreign_exchange_currency')->toArray();
+
+        $exsist_froegincurrency = Lease::query()->whereIn('business_account_id', getDependentUserIds())->whereIn('lease_contract_id',$foreign_currency)->count();
+        
+
         return view('settings.currencies.index', compact(
             'breadcrumbs',
             'currencies',
             'reporting_currency_settings',
             'internal_same_as_statutory_currency',
             'currency_for_lease_reports_same_as_statutory',
-            'currency_for_lease_reports_same_as_internal'
+            'currency_for_lease_reports_same_as_internal',
+            'exsist_froegincurrency'
         ));
     }
 
@@ -176,6 +185,7 @@ class CurrenciesController extends Controller
      */
     public function fetchForeignTransactionCurrency(Request $request){
         try{
+
             if ($request->ajax()) {
                 $model = ForeignCurrencyTransactionSettings::query()->where('business_account_id', '=', auth()->user()->id);
                 return datatables()->eloquent($model)
@@ -186,6 +196,10 @@ class CurrenciesController extends Controller
                     })
                     ->addColumn('created_at', function($data){
                         return date('jS F Y h:i a', strtotime($data->created_at));
+                    })
+                    ->addColumn('is_used', function($data){
+                        $is_used = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('lease_contract_id','=',$data->foreign_exchange_currency)->count();
+                        return $is_used;
                     })
                     ->toJson();
             } else {
@@ -226,6 +240,10 @@ class CurrenciesController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
+    /*
+
+    */
+
     public function editForeignTransactionCurrency($id, Request $request){
         try{
             $currencies = Currencies::query()->where('status', '=', '1')->get();

@@ -2,9 +2,9 @@
     <div class="panel-heading">Impairement Test Of Lease Asset</div>
 
     <div class="panel-body">
-        @if (session('status'))
+        @if (session('status1'))
             <div class="alert alert-success">
-                {{ session('status') }}
+                {{ session('status1') }}
             </div>
         @endif
 
@@ -16,11 +16,10 @@
                         <thead>
                         <tr>
                     <th>Sr. No.</th>
-                    <th>Unique ULA Code</th>
-                    <th> Lease Asset Name</th>
-                    <th> Lease Asset Classification</th>
+                    <th> Lease Asset </th>
+                    <th> LA Classification</th>
                     <th>Value of Lease Asset</th>
-                    <th> Fair Market Value of Lease Asset</th>
+                    <th> FM value Lease Asset</th>
                     <th>Impairment, if any</th>
                         </tr>
                         </thead>
@@ -31,9 +30,7 @@
             @foreach($assets as $key=>$asset)
                 <tr>
                     <td>{{ $key + 1 }}</td>
-                    <td style="width: 10%">
-                        {{ $asset->uuid }}
-                    </td>
+                   
                     <td>
                         {{ $asset->name }}
                     </td>

@@ -1,15 +1,15 @@
 <form role="form" class="form-horizontal" action="{{ route('addlease.leaseterminationoption.index', ['id' => $lease->id]) }}" id="lease_termination" method="post" enctype="multipart/form-data">
     {{ csrf_field() }}
     <div class="categoriesOuter clearfix">
-    <div class="form-group required">
+<!--     <div class="form-group required">
         <label for="uuid" class="col-md-12 control-label">ULA Code</label>
         <div class="col-md-12 form-check form-check-inline">
             <input type="text" value="{{ $asset->uuid}}" class="form-control" id="uuid" name="uuid" disabled="disabled">
         </div>
-    </div>
+    </div> -->
 
     <div class="form-group required">
-        <label for="asset_name" class="col-md-12 control-label">Asset Name</label>
+        <label for="asset_name" class="col-md-12 control-label">Lease Asset Name</label>
         <div class="col-md-12 form-check form-check-inline">
             <input type="text" value="{{ $asset->name}}" class="form-control" id="asset_name" name="asset_name"
                    disabled="disabled">
@@ -78,8 +78,8 @@
         <div class="form-group{{ $errors->has('lease_end_date') ? ' has-error' : '' }} required">
             <label for="lease_end_date" class="col-md-12 control-label">Expected Lease End Date</label>
             <div class="col-md-12">
-                <input type="text" placeholder="Expected Lease End Date" class="form-control" id="lease_end_date"
-                       name="lease_end_date" value="{{ old('lease_end_date', $model->lease_end_date) }}">
+                <input type="text" placeholder="Expected Lease End Date" class="form-control lease_period" id="lease_end_date"
+                       name="lease_end_date" value="{{ old('lease_end_date', $model->lease_end_date) }}" autocomplete="off">
                 @if ($errors->has('lease_end_date'))
                     <span class="help-block">
                         <strong>{{ $errors->first('lease_end_date') }}</strong>
@@ -156,6 +156,7 @@
 
 @section('footer-script')
     <script src="{{ asset('js/jquery-ui.js') }}"></script>
+    <script src="{{ asset('assets/plugins/bootbox/bootbox.min.js') }}"></script>
     <script type="text/javascript">
 
          $('.save_next').on('click', function (e) {
@@ -176,7 +177,13 @@
             $("#lease_end_date").datepicker({
                 dateFormat: "dd-M-yy",
                 minDate: minDate,
-                maxDate: new Date('{{ $asset->lease_end_date }}')
+                changeMonth:true,
+                changeYear:true,
+                maxDate: new Date('{{ $asset->lease_end_date }}'),
+                onSelect: function (date, instance) {
+                        var _ajax_url = '{{route("lease.checklockperioddate")}}';
+                        checklockperioddate(date, instance, _ajax_url);
+                    }
             });
         });
 

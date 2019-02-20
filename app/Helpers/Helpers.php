@@ -550,6 +550,7 @@ function fetchCurrencyExchangeRate($date = null, $source, $target){
 }
 
 /**
+<<<<<<< HEAD
  * genreate the account id for the user based upon the user id..
  * @param $user
  * @return string
@@ -565,7 +566,8 @@ function generateWitsyncAccountID($user){
  * @return mixed
  * @throws Exception
  */
-function generatePaypalExpressCheckoutLink(\App\SubscriptionPlans $package, \App\UserSubscription $subscription){
+function generatePaypalExpressCheckoutLink(\App\SubscriptionPlans $package, \App\UserSubscription $subscription)
+{
     $provider = new ExpressCheckout();
     $data = [];
     $data['items'] = [
@@ -582,8 +584,8 @@ function generatePaypalExpressCheckoutLink(\App\SubscriptionPlans $package, \App
     $data['cancel_url'] = url('/payment/cancel');
 
     $total = 0;
-    foreach($data['items'] as $item) {
-        $total += $item['price']*$item['qty'];
+    foreach ($data['items'] as $item) {
+        $total += $item['price'] * $item['qty'];
     }
     $data['total'] = $total;
     //give a discount of 10% of the order amount
@@ -595,4 +597,12 @@ function generatePaypalExpressCheckoutLink(\App\SubscriptionPlans $package, \App
     $subscription->save();
     $response = $provider->setExpressCheckout($data);
     return $response['paypal_link'];
+}
+/**
+ * get the parent user get lease lock year when will stored in settings
+ * render the lease lock year when user add in user settings
+ * @return [type] [description]
+ */
+function getLockYearDetails(){
+    return \App\LeaseLockYear::query()->where('business_account_id', '=', auth()->user()->id)->where('status','1')->first();
 }

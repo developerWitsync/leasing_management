@@ -4,7 +4,7 @@
  * User: Jyoti Gupta
  * Date: 9/01/19
  * Time: 09:37 AM
- */
+ */           
 
 namespace App\Http\Controllers\Modifylease;
 
@@ -38,6 +38,7 @@ class ModifyLeaseController extends Controller
      */
     public function index()
     {
+
         $breadcrumbs = $this->breadcrumbs;
         return view('modifylease.index',compact('breadcrumbs'));
     }
@@ -129,4 +130,6 @@ class ModifyLeaseController extends Controller
             'reason' => 'required'
         ];
     }
+
+   
 }

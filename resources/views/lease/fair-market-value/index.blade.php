@@ -32,8 +32,8 @@
                         <tr>
                             <th>Sr. No.</th>
                             <th>Unique ULA Code</th>
-                            <th>Name of the Underlying Lease Asset</th>
-                            <th>Underlying Lease Asset Classification</th>
+                            <th>Lease Asset</th>
+                            <th>LA Classification</th>
                             <th>Action</th>
                         </tr>
                         </thead>

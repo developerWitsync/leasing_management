@@ -476,13 +476,15 @@ class LeaseClassificationController extends Controller
                     'lease_payments_no' => [
                         'required',
                         'numeric',
+                        'max:'.config('settings.max_lease_asset_number_of_payments').'.',
                         Rule::unique('no_of_lease_payments', 'number')->where(function ($query) use ($request) {
                             return $query->where('business_account_id', '=', auth()->user()->id);
                         })
                     ]
                 ], [
                     'lease_payments_no.numeric' => 'The number should be numeric.',
-                    'lease_payments_no.unique' => 'This number has already been added.'
+                    'lease_payments_no.unique' => 'This number has already been added.',
+                    'lease_payments_no.max' => 'This number should not be greater than 10',
                 ]);
 
                 if($validator->fails()){

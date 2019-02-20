@@ -1,9 +1,9 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: himanshu
- * Date: 14/12/18
- * Time: 10:27 AM
+ * User: Jyoti Gupta
+ * Date: 18/02/19
+ * Time: 02:06 Pm
  */
 
 namespace App\Http\Controllers\Settings;
@@ -37,9 +37,12 @@ class IndexController extends Controller
         if(is_null($settings)) {
             $settings = new GeneralSettings();
         }
+
         $lease_lock_year = LeaseLockYear::query()->where('business_account_id', '=', auth()->user()->id)->get();
+
+        // $modication_reason = LeaseLockYear::query()->select('id', 'title')->where('status', '=', '1')->get();
         
-        return view('settings.general.index', compact('breadcrumbs', 'settings','lease_lock_year'));
+        return view('settings.general.index', compact('breadcrumbs', 'settings','lease_lock_year','modication_reason'));
     }
 
     /**
@@ -81,5 +84,7 @@ class IndexController extends Controller
              abort(404);
         }
     }
+
     
+                
 }

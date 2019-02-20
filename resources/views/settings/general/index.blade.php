@@ -25,42 +25,22 @@
                     <div role="tabpanel" class="tab-pane active">
                         <form class="form-horizontal" method="POST" action="{{ route('settings.index.save') }}">
                             {{ csrf_field() }}
-                           <!--  <div class="form-group{{ $errors->has('annual_year_end_on') ? ' has-error' : '' }} required">
-                                <label for="annual_year_end_on" class="col-md-4 control-label">Annual Reporting Period</label>
-                                <div class="col-md-6">
-                                    <div class="input-group">
-                                        <input id="annual_year_end_on" type="text" placeholder="Annual Year End On" class="form-control" name="annual_year_end_on" value="{{ old('annual_year_end_on', isset($settings->annual_year_end_on)?date('m/d/Y', strtotime($settings->annual_year_end_on)):"") }}" autofocus>
-                                        <div class="btn input-group-addon" onclick="javascript:$('#annual_year_end_on').focus();">
-                                            <i class="fa fa-calendar"></i>
-                                        </div>
-                                    </div>
-                                    @if ($errors->has('annual_year_end_on'))
-                                        <span class="help-block">
-                                            <strong>{{ $errors->first('annual_year_end_on') }}</strong>
-                                        </span>
-                                    @endif
-                                </div>
-                            </div> -->
-
- <!--  <div role="tabpanel" class="tab-pane active">
-                    <div class="panel panel-info">
-                     <div class="panel-heading">Date of Initial Application of the New Leasing Standard
-
-                     </div>
-                 </div>
-             </div> -->
-
+                          
+                           <div class="panel panel-info">
+                            <div class="panel-heading">
+                              <span> Date of Initial Application of the New Leasing Standard</span>
+                          </div>
                             <div class="form-group{{ $errors->has('date_of_initial_application') ? ' has-error' : '' }} required">
-                                <label for="annual_year_end_on" class="col-md-4 control-label">Date of Initial Application of the New Leasing Standard</label>
-                                <div class="col-md-6">
-                                    <div class="input-group">
-                                        <div class="form-check">
+                               
+                                <div class="col-md-12 rightx">
+                                    <div class="input-group col-md-12">
+                                        <div class="form-check col-md-4 ">
                                             <input class="form-check-input" type="radio" @if(old('date_of_initial_application', isset($settings->date_of_initial_application)?$settings->date_of_initial_application:"") == '1') checked="checked" @endif name="date_of_initial_application" value="1" id="jan_1_2019">
                                             <label class="form-check-label" for="jan_1_2019">
                                                 January 01, 2019
                                             </label>
                                         </div>
-                                        <div class="form-check">
+                                        <div class="form-check col-md-6">
                                             <input class="form-check-input" type="radio" @if(old('date_of_initial_application', isset($settings->date_of_initial_application)?$settings->date_of_initial_application:"") == '2') checked="checked" @endif name="date_of_initial_application" value="2" id="earlier_jan_1_2019" disabled="disabled">
                                             <label class="form-check-label" for="earlier_jan_1_2019">
                                                 Prior to January 01, 2019
@@ -91,7 +71,12 @@
                                     @endif
                                 </div>
                             </div>
-
+                        </div>
+                    <div class="panel panel-info">
+                            <div class="panel-heading">
+                              <span> Control Lease Term - Maximum & Minimum</span>
+                          </div>
+                          <div class="setting">
                              <div class="form-group{{ $errors->has('min_previous_first_lease_start_year') ? ' has-error' : '' }} required">
                                 <label for="min_previous_first_lease_start_year" class="col-md-4 control-label">Minimum Previous First Lease Start Year</label>
                                 <div class="col-md-6">
@@ -141,75 +126,72 @@
                                     </button>
                                 </div>
                             </div>
+                        </div>
                             </form>
+                        </div>
                             </div>
                             <div class="panel panel-info">
                             <div class="panel-heading">
-                                Lock Your Lease Valuations with Complete Audit Year
+                                Manage Your Audit Period & Lock Your Lease Valuations
                                 <span>
-                                    <a href="javascript:void(0);" class="btn btn-sm btn-primary pull-right add_more" data-form="add_lease_lock_year">Add More</a>
+                                    <a href="javascript:void(0);" class="btn btn-sm btn-primary pull-right add_more" data-form="add_more_lease_lock_year">Add More</a>
                                 </span>
+                             
                             </div>
-                            <div class="panel-body settingTble">
-                                 <table class="table table-condensed">
-                                    <thead>
-                                    <tr>
-                                        <th>Sr No.</th>
-                                            <th>Audit Year Start On</th>
-                                            <th>Audit Year Ends On</th>
-                                        <th>Action</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                   @foreach($lease_lock_year as $key => $value)
-                                        <tr>
-                                            <td>{{ $key + 1 }}</td>
-                                            <td>{{ $value->start_date }}</td>
-                                            <td>{{ $value->end_date }}</td>
-                                            
-                                            <td>
+                 <div class="panel-body settingTble">
+                    <table class="table table-condensed" id="leaselock_table">
+                     <thead>
+                        <tr>
+                            <th width="80px">Sr No.</th>
+                            <th>Adult Year ended on</th>
+                            <th width="120px">Status</th>
 
-                                                <a data-href="{{ route('settings.leaselockyear.editleaselockyear', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-success edit_table_setting">
-                                                    <i class="fa fa-pencil-square-o"></i>
-                                                </a>
-
-                                                <a data-href="{{ route('settings.leaselockyear.deleteleaselockyear', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-danger delete_settings"><i class="fa fa-trash-o"></i></a>
-                                            </td>
+                            <th width="120px">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($lease_lock_year as $key => $value)
+                        <tr>
+                         <td>{{ $key + 1 }}</td>
+                          <td class="title">
+                                    {{ date('d-m-Y', strtotime($value->start_date)) }}
+                          </td>
+                          <td>
+                            @if($value->status ==0)
+                            <button type="button" data-id='{{ $value->id}}'  data-status="1" class="btn btn-success status-update waves-effect">Lock</button>
+                            @else
+                             <button type="button" data-id='{{ $value->id}}'  data-status="0" class="btn btn-danger status-update waves-effect">Unlock</button>
+                             @endif
+                          </td>
+                          <td>
+                            <a data-href="{{ route('settings.leaselockyear.editleaselockyear', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-success edit_table_setting"><i class="fa fa-pencil-square-o"></i></a>
+ <a data-href="{{ route('settings.leaselockyear.deleteleaselockyear', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-danger delete_settings"><i class="fa fa-trash-o"></i></a>
+                        </td>
                                         </tr>
                                     @endforeach
-                                    <tr style=" {{ $errors->has('start_date') ||  $errors->has('end_date') ? ' has-error' : 'display: none' }}" class="add_lease_lock_year">
-                                        <td></td>
+                                    <tr style=" {{ $errors->has('lease_lock_year') ? ' has-error' : 'display: none' }}" class="add_more_lease_lock_year">
+                                        <td>{{ count($lease_lock_year) + 1 }}</td>
                                         <td>
-                                            <form action="{{ route('settings.leaselockyear.addleaselockyear') }}" method="POST" class="add_lease_lock_year_form">
-                                                {{ csrf_field() }}
-                                                <div class="form-group{{ $errors->has('start_date') ? ' has-error' : '' }}">
-                                                <input type="text" value="{{ old('start_date') }}" name="start_date" placeholder="Audit Year {{ count($lease_lock_year) + 1 }} Starts On" id="start_date" class="form-control {{ $errors->has('start_date') ? ' has-error' : '' }}"/>
-                                                @if ($errors->has('start_date'))
-                                                    <span class="help-block">
-                                                        <strong>{{ $errors->first('start_date') }}</strong>
-                                                    </span>
-                                                @endif
-                                                </div>
-                                                <div class="form-group{{ $errors->has('end_date') ? ' has-error' : '' }}">
-                                                 <input type="text" value="{{ old('end_date') }}" name="end_date" placeholder="Audit Year {{ count($lease_lock_year) + 1 }} End On" id="end_date" class="form-control {{ $errors->has('end_date') ? ' has-error' : '' }}"/>
-                                                @if ($errors->has('end_date'))
-                                                    <span class="help-block">
-                                                        <strong>{{ $errors->first('end_date') }}</strong>
-                                                    </span>
-                                                @endif
+                                        <form action="{{ route('settings.leaselockyear.addleaselockyear') }}" method="POST" class="add_more_lease_lock_year_form"> {{ csrf_field() }}
+                                        <div class="form-group{{ $errors->has('start_date') ? ' has-error' : '' }}">
+                                        <input type="text" value="{{ old('start_date') }}" name="start_date" placeholder="Select Date" class="form-control {{ $errors->has('start_date') ? ' has-error' : '' }}"/ id="start_date"> 
+                                        @if ($errors->has('start_date'))
+                                        <span class="help-block">
+                                        <strong>{{ $errors->first('start_date') }}</strong>
+                                        </span>
+                                                    @endif
                                                 </div>
                                             </form>
                                         </td>
                                         <td>
-
-                                        </td>
-                                        <td>
-                                            <button type="button" onclick="javascript:$('.add_lease_lock_year_form').submit();" class="btn btn-sm btn-success">Save</button>
-                                            <a href="javascript:;" class="btn btn-sm btn-danger add_more" data-form="add_lease_lock_year">Cancel</a>
+                                            <button type="button" onclick="javascript:$('.add_more_lease_lock_year_form').submit();" class="btn btn-sm btn-success">Save</button>
+                                            <a href="javascript:;" class="btn btn-sm btn-danger add_more" data-form="add_more_lease_lock_year">Cancel</a>
                                         </td>
                                     </tr>
                                 </table>
                             </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -272,6 +254,25 @@
                     $(".date_of_initial_application_earlier_date").hide();
                 }
             })
-        })
+        });
+
+         $(document.body).on("click", ".status-update", function () {
+
+            var id = $(this).data('id');
+            var  status = $(this).data('status');
+            
+                $.ajax({
+                    url : "{{ route('settings.leaselockyear.changestatus') }}",
+                    data : {
+                        id : id,
+                        status : status
+                    },
+
+                    dataType : 'json',
+                    success : function (response) {
+                        window.location.reload();
+                    }
+                });
+            });
     </script>
 @endsection

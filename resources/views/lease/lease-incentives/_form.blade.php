@@ -10,13 +10,7 @@
 <form role="form" class="form-horizontal" method="post" enctype="multipart/form-data" id="lease_incentive">
     {{ csrf_field() }}
     <div class="categoriesOuter clearfix">
-    <div class="form-group required">
-        <label for="uuid" class="col-md-12 control-label">ULA Code</label>
-        <div class="col-md-12 form-check form-check-inline">
-            <input type="text" value="{{ $asset->uuid}}" class="form-control" id="uuid" name="uuid" disabled="disabled">
-        </div>
-    </div>
-
+    
     <div class="form-group required">
         <label for="asset_name" class="col-md-12 control-label">Asset Name</label>
         <div class="col-md-12 form-check form-check-inline">
@@ -109,7 +103,7 @@
                                        value="{{ $customerDetail->description }}">
                             </td>
                             <td>
-                                <input type="text" class="form-control incentive_date" name="incentive_date[]"
+                                <input type="text" class="form-control lease_period incentive_date" name="incentive_date[]"
                                        value="{{ \Carbon\Carbon::parse($customerDetail->incentive_date)->format(config('settings.date_format')) }}">
                             </td>
                             <td>
@@ -150,7 +144,7 @@
                             <input type="text" class="form-control" name="description[]">
                         </td>
                         <td>
-                            <input type="text" class="form-control incentive_date" name="incentive_date[]">
+                            <input type="text" class="form-control lease_period incentive_date" name="incentive_date[]" autocomplete="off">
                         </td>
                         <td>
                             <select class="form-control customer_currency" name="currency_id[]">
@@ -215,6 +209,12 @@
         $(function () {
             $('.incentive_date').datepicker({
                 dateFormat: "dd-M-yy",
+                changeMonth:true,
+                changeYear:true,
+                onSelect: function (date, instance) {
+                        var _ajax_url = '{{route("lease.checklockperioddate")}}';
+                        checklockperioddate(date, instance, _ajax_url);
+                    }
             });
         });
 
@@ -229,7 +229,7 @@
                 '                    <input type="text" class="form-control" name="description[]">\n' +
                 '                </td>\n' +
                 '                <td>\n' +
-                '                    <input type="text" class="form-control cale_n_dar" name="incentive_date[]">\n' +
+                '                    <input type="text" class="form-control cale_n_dar lease_period2" name="incentive_date[]" autocomplete="off">\n' +
                 '                </td>\n' +
                 '                <td>\n' +
                 '                    <select class="form-control customer_currency" name="currency_id[]">\n' +
@@ -258,6 +258,12 @@
                 .unbind()
                 .datepicker({
                     dateFormat: "dd-M-yy",
+                    changeYear:true,
+                    changeMonth:true,
+                     onSelect: function (date, instance) {
+                        var _ajax_url = '{{route("lease.checklockperioddate")}}';
+                        checklockperioddate(date, instance, _ajax_url);
+                    },
                     beforeShow: function () {
                         setTimeout(function () {
                             $('.ui-datepicker').css('z-index', 99999999999999);

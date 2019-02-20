@@ -21,7 +21,7 @@
                         {{ csrf_field() }}
 
                         <div class="categoriesOuter clearfix">
-                            <div class="categoriesHd">Lease Asset Categorization</div>
+                           <!--  <div class="categoriesHd">Lease Asset Categorization</div>
                             <div class="form-group{{ $errors->has('uuid') ? ' has-error' : '' }} required">
                                 <label for="uuid" class="col-md-12 control-label">ULA CODE</label>
                                 <div class="col-md-12">
@@ -34,7 +34,7 @@
                                     </span>
                                     @endif
                                 </div>
-                            </div>
+                            </div> -->
 
                             <div class="form-group{{ $errors->has('category_id') ? ' has-error' : '' }} required">
                                 <label for="category_id" class="col-md-12 control-label">Lease Asset Category</label>
@@ -98,7 +98,7 @@
 
 
                             <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }} required">
-                                <label for="name" class="col-md-12 control-label">Asset Name</label>
+                                <label for="name" class="col-md-12 control-label">Lease Asset Name</label>
                                 <div class="col-md-12">
                                     <input id="name" type="text" placeholder="Asset Name" class="form-control"
                                            name="name" value="{{ old('name', $asset->name) }}"
@@ -287,7 +287,7 @@
                                 <label for="lease_start_date" class="col-md-12 control-label">Lease Start Date</label>
                                 <div class="col-md-12">
                                     <input id="lease_start_date" type="text" placeholder="Lease Start Date"
-                                           class="form-control" name="lease_start_date"
+                                           class="form-control lease_period" name="lease_start_date"
                                            value="{{ old('lease_start_date', ($asset->lease_start_date)?(\Carbon\Carbon::parse($asset->lease_start_date)->format(config('settings.date_format'))):'') }}"
                                            autocomplete="off"
                                            @if($subsequent_modify_required) disabled="disabled" @endif>
@@ -353,7 +353,7 @@
                                     Non-Cancellable Period</label>
                                 <div class="col-md-12">
                                     <input id="lease_end_date" type="text"
-                                           placeholder="Lease End Date, Non-Cancellable Period" class="form-control"
+                                           placeholder="Lease End Date, Non-Cancellable Period" class="form-control lease_period"
                                            name="lease_end_date"
                                            value="{{ old('lease_end_date', ($asset->lease_end_date)?(\Carbon\Carbon::parse($asset->lease_end_date)->format('d-M-Y')):'') }}"
                                            autocomplete="off">
@@ -540,8 +540,13 @@
                 $("#lease_start_date").datepicker({
                     dateFormat: "dd-M-yy",
                     changeYear: true,
+                    changeMonth : true,
                     yearRange: '{{ $settings->min_previous_first_lease_start_year }}:{{$settings->max_lease_end_year}}',
-                    onSelect: function () {
+                    onSelect: function (date, instance) {
+
+                        var _ajax_url = '{{route("lease.checklockperioddate")}}';
+                        checklockperioddate(date, instance, _ajax_url);
+
                         var dt2 = $('#lease_end_date');
                         var startDate = $(this).datepicker('getDate');
                         //add 30 days to selected date
@@ -565,7 +570,10 @@
                     minDate: new Date('2019-01-30'),
                     yearRange: '{{ $settings->min_previous_first_lease_start_year }}:{{$settings->max_lease_end_year}}',
                     changeYear: true,
-                    onSelect: function () {
+                    changeMonth:true,
+                    onSelect: function (date, instance) {
+                        var _ajax_url = '{{route("lease.checklockperioddate")}}';
+                        checklockperioddate(date, instance, _ajax_url);
                         calculateLeaseTerm();
                     }
                 });
