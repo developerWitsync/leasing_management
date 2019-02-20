@@ -114,7 +114,6 @@ class LeaseValuationController extends Controller
                 }
 
 
-
                 return datatables()->eloquent($assets)
 
                     ->filter(function ($query) use ($request){
