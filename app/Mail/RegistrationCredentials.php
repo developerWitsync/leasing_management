@@ -15,23 +15,17 @@ class RegistrationCredentials extends Mailable
 {
     use Queueable, SerializesModels;
     public $user;
-    public $package;
-    public $userSubscription;
     public $html = '';
-    public $email_template_code = 'REGISTRATION_INVOICE';
+    public $email_template_code = 'REGISTRATION_CREDENTIALS';
 
     /**
      * create instance of RegistrationCredentials mail.
      * RegistrationCredentials constructor.
      * @param User $user
-     * @param SubscriptionPlans $package
-     * @param UserSubscription $userSubscription
      */
-    public function __construct(User $user, SubscriptionPlans $package, UserSubscription $userSubscription)
+    public function __construct(User $user)
     {
         $this->user = $user;
-        $this->package = $package;
-        $this->userSubscription = $userSubscription;
     }
 
     /**
@@ -48,9 +42,6 @@ class RegistrationCredentials extends Mailable
         $to_be_replaced_by_string   = [
             env('APP_NAME'),
             ucwords($this->user->authorised_person_name),
-            ucwords($this->package->title),
-            Carbon::parse($this->userSubscription->created_at)->format(config('settings.date_format')),
-            Carbon::parse($this->userSubscription->subscription_expire_at)->format(config('settings.date_format')),
             $this->user->email,
             $this->user->raw_password,
             $this->user->account_id,

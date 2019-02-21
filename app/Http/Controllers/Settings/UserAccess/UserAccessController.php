@@ -43,8 +43,7 @@ class UserAccessController extends Controller
        return view('settings.useraccess.index', ['breadcrumbs'=> $this->breadcrumbs]);
     }
     /**
-     * Fetches and returns the user 
-     * @param Request $request
+     * Fetches and returns the user
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
     public function listing(){
@@ -81,11 +80,14 @@ class UserAccessController extends Controller
             return redirect()->back();
         }
     }
-     /**
-     * add a new User to the database
+
+    /**
+     * add sub users for the current logged in business account...
      * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
     public function create(Request $request){
+        $user = new User();
         if($request->isMethod('post')) {
             $validator = Validator::make($request->except('_token'), [
                 'authorised_person_name' => 'required|string|max:255',
@@ -94,27 +96,30 @@ class UserAccessController extends Controller
                 'authorised_person_designation' => 'required',
                 'username' => 'required|string|max:255|unique:users',
                 'email' => 'required|string|email|max:255|unique:users',
-                'password' => 'required|string|min:6|confirmed',
-                'phone' => 'required'
+                'password' => 'required|string|min:6|confirmed'
             ]);
+
             if($validator->fails()){
                 return redirect()->back()->withInput($request->all())->withErrors($validator->errors());
             }
 
             $data = $request->except('_token');
             $data['type'] = '0';
-            $data['password']   = bcrypt($request->password); 
+            $data['raw_password']   = $request->password;
+            $data['password']   = bcrypt($request->password);
             $data['authorised_person_dob'] = date('Y-m-d', strtotime($request->authorised_person_dob));
             $data['email_verification_code'] = md5(time());
             $data['is_verified'] = '0';
             $data['parent_id']  = auth()->user()->id;
             $user = User::create($data);
             if($user){
-              \Mail::to($user)->queue(new UserCreateConfirmation($user));
               return redirect(route('settings.user'))->with('status', 'User has been added successfully.');
             }
         }
-        return view('settings.useraccess.user.create',['breadcrumbs'=> $this->breadcrumbs]);
+        return view('settings.useraccess.user.create',[
+            'breadcrumbs'=> $this->breadcrumbs,
+            'user' => $user
+        ]);
     }
     /**
      * Update a particular User and save the same to the database.
@@ -123,41 +128,44 @@ class UserAccessController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
     public function update($id, Request $request){
-          $user = User::query()->findOrFail($id);
-            if($request->isMethod('post')) {
-               $validator = Validator::make($request->except('_token'), [
-                    'authorised_person_name' => 'required|string|max:255',
-                    'authorised_person_dob'     => 'required|date',
-                    'gender'    => 'required',
-                    'authorised_person_designation' => 'required',
-                    'username' => 'required|string|max:255',
-                    'email' => 'required|string|email|max:255',
-                    'password' => 'required|string|min:6|confirmed',
-                    'phone' => 'required'
-                ]);
+        $user = User::query()->findOrFail($id);
+        if($request->isMethod('post')) {
+           $validator = Validator::make($request->except('_token'), [
+                'authorised_person_name' => 'required|string|max:255',
+                'authorised_person_dob'     => 'required|date',
+                'gender'    => 'required',
+                'authorised_person_designation' => 'required',
+                'username' => 'required|string|max:255|unique:users,id,'.$user->id,
+                'email' => 'required|string|email|max:255|unique:users,id,'.$user->id,
+                'password' => 'string|min:6|confirmed|nullable'
+            ]);
 
-                if($validator->fails()){
-                    return redirect()->back()->withInput($request->all())->withErrors($validator->errors());
-                }
+            if($validator->fails()){
+                return redirect()->back()->withInput($request->all())->withErrors($validator->errors());
+            }
 
-                $userdata = User::findOrFail($id);
-                $userdata->authorised_person_name = $request->authorised_person_name;
-                $userdata->authorised_person_designation = $request->authorised_person_designation;
-                $userdata->username = $request->username;
-                $userdata->phone = $request->phone;
-                $userdata->email = $request->email;
-                $userdata->type = '0';
+            $userdata = User::findOrFail($id);
+            $userdata->authorised_person_name = $request->authorised_person_name;
+            $userdata->authorised_person_designation = $request->authorised_person_designation;
+            $userdata->username = $request->username;
+            $userdata->phone = $request->phone;
+            $userdata->email = $request->email;
+            $userdata->type = '0';
+            if($request->password!=""){
                 $userdata->password = bcrypt($request->password);
-                $userdata->authorised_person_dob = date('Y-m-d', strtotime($request->authorised_person_dob));
-                $userdata->parent_id = auth()->user()->id;
-                $userdata->save();
-                if($userdata){
-                    \Mail::to($userdata)->queue(new UserCreateConfirmation($userdata));
-                    return redirect(route('settings.user'))->with('status', 'User has been updated successfully.');
-                }
-
+            }
+            $userdata->authorised_person_dob = date('Y-m-d', strtotime($request->authorised_person_dob));
+            $userdata->parent_id = auth()->user()->id;
+            $userdata->save();
+            if($userdata){
+                return redirect(route('settings.user'))->with('status', 'User has been updated successfully.');
+            }
          }
-            return view('settings.useraccess.user.update', ['breadcrumbs'=> $this->breadcrumbs,'user'=>$user]);
+
+         return view('settings.useraccess.user.update', [
+             'breadcrumbs' => $this->breadcrumbs,
+             'user' => $user
+         ]);
     }
 
     /**

@@ -17,10 +17,10 @@
 </a>
 @endif
 @if(Auth::user()->can('modify_lease')) 
-<a href="{{route('modifylease.index')}}" class="list-group-item  @if(request()->segment('1') == 'modify-lease') active @endif">
-    <i class="fa fa-sticky-note"></i> 
-    <span>Modify Lease</span>
-</a>
+    <a href="{{route('modifylease.index')}}" class="list-group-item  @if(request()->segment('1') == 'modify-lease') active @endif">
+        <i class="fa fa-sticky-note"></i>
+        <span>Modify Lease</span>
+    </a>
 @endif
 
 
@@ -43,6 +43,8 @@
 @endif
 
 <a href="#" class="list-group-item"><i class="fa fa-balance-scale"></i> <span>Resource Material</span>
+
+<a href="{{ route('plan.index') }}" class="list-group-item @if(request()->segment('1') == 'plan') active @endif"><i class="fa fa-arrow-circle-o-up"></i> <span>Upgrade</span>
 <!-- <small class="fa fa-angle-right" aria-hidden="true"></small> -->
 </a>
 <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="list-group-item"><i class="fa fa-sign-out"></i> <span>Logout</span>

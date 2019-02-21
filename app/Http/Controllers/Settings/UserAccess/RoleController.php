@@ -46,7 +46,7 @@ class RoleController extends Controller
         try{
             if ($request->ajax()) {
 
-                $model = Role::query()->with('perms');
+                $model = Role::query()->with('perms')->whereIn('business_account_id', getDependentUserIds());
 
                 return datatables()->eloquent($model)
                     ->filter(function ($query) use ($request){

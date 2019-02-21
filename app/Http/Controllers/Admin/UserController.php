@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Http\Controllers\Controller;
+use App\States;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -35,8 +36,7 @@ class UserController extends Controller
         try{
             if ($request->ajax()) {
 
-                $model = User::query()->where('type', '=','0');
-
+                $model = User::query()->where('type', '=','0')->where('parent_id', '=','0');
                 return datatables()->eloquent($model)
 
                     ->addColumn('full_name',function($data){
@@ -44,8 +44,8 @@ class UserController extends Controller
                     })
 
                     ->addColumn('profile_pic',function($data){
-                            $userImagePath = getUserProfileImageSrc($data->id, $data->profile_pic,true);
-                            return $userImagePath;
+                        $userImagePath = getUserProfileImageSrc($data->id, $data->profile_pic,true);
+                        return $userImagePath;
                     })
 
                     ->filter(function ($query) use ($request){
@@ -99,38 +99,51 @@ class UserController extends Controller
             $countries = Countries::query()->where('status','=', '1')->where('trash', '=', '0')->get();
             $industry_types = IndustryTypes::query()->where('status', '=', '1')->get();
             $currencies = Currencies::query()->where('status', '=', '1')->get();
+            $states = [];
+            $user   =  new User();
             if($request->isMethod('post')) {
                 $validator = Validator::make($request->all(), [
-                        'country' => 'required|exists:countries,id',
-                        'legal_status' => 'required',
-                        'applicable_gaap' => 'required',
-                        'industry_type' => 'required|exists:industry_type,id',
-                        'legal_entity_name' => 'required',
-                        'authorised_person_name' => 'required|string|max:255',
-                        'authorised_person_dob'     => 'required|date',
-                        'gender'    => 'required',
-                        'authorised_person_designation' => 'required',
-                        'username' => 'required|string|max:255|unique:users',
-                        'email' => 'required|string|email|max:255|unique:users',
-                        'password' => 'required|string|min:6|confirmed',
-                        'phone' => 'required',
-                        'annual_reporting_period'   => 'required'
-                    ]);
+                    'country' => 'required|exists:countries,name',
+                    'state' => 'required_if:country,India|exists:states,state_name|nullable',
+                    'gstin' => 'required_if:coun0try,India|min:15|nullable',
+                    'username' => 'required|string|max:255|unique:users',
+                    'password' => 'min:6|confirmed|nullable',
+                    'applicable_gaap' => 'required',
+                    'legal_entity_name' => 'required',
+                    'authorised_person_name' => 'required|string|max:255',
+                    'authorised_person_dob' => 'required|date|before:-18 years',
+                    'gender' => 'required',
+                    'authorised_person_designation' => 'required',
+                    'email' => 'required|string|email|max:255|unique:users'
+                ], [
+                    'authorised_person_dob.before' => 'The authorised person must be atleast 18 years old.'
+                ]);
+
                 if($validator->fails()) {
-                        return redirect()->back()->withErrors($validator->errors())->withInput($request->except("_token"));
+                    return redirect()->back()->withErrors($validator->errors())->withInput($request->except("_token"));
                 }
-                $data = $request->except('_token');
+
+                $data = $request->except('_token', 'password_confirmation');
+                $data['raw_password']   = $request->password;
                 $data['password']   = bcrypt($request->password); 
                 $data['authorised_person_dob'] = date('Y-m-d', strtotime($request->authorised_person_dob));
                 $data['parent_id'] = 0;
                 $data['email_verification_code'] = md5(time());
-                $user = User::create($data);
-                
-                if($user){
-                 return redirect(route("admin.users.index"))->with('success', 'User has been added successfully.');
-        }
 
-            }return view('admin.users.add-user',compact('countries', 'industry_types', 'currencies'));
+                $user->setRawAttributes($data);
+                if($user->save()){
+                     return redirect(route("admin.users.index"))->with('success', 'User has been added successfully.');
+                }
+
+            }
+
+            return view('admin.users.add-user',compact(
+                'countries',
+                'industry_types',
+                'currencies',
+                'user',
+                'states'
+            ));
         } catch (\Exception $e) {
             dd($e);
             abort('404');
@@ -150,29 +163,30 @@ class UserController extends Controller
             $industry_types = IndustryTypes::query()->where('status', '=', '1')->get();
             $currencies = Currencies::query()->where('status', '=', '1')->get();
             $user = User::query()->findOrFail($id);
-            //dd($user);
+            $user_country = Countries::query()->where('name', '=', $user->country)->first();
+            $states = $user_country->states()->get();
             if($user) {
                 if($request->isMethod('post')) {
 
-
-                     $validator = Validator::make($request->all(), [
-                        'country' => 'required|exists:countries,id',
-                        'legal_status' => 'required',
+                    $validator = Validator::make($request->all(), [
+                        'country' => 'required|exists:countries,name',
+                        'state' => 'required_if:country,India|exists:states,state_name|nullable',
+                        'gstin' => 'required_if:coun0try,India|min:15|nullable',
+                        'username' => 'required|string|max:255|unique:users,id,'.$user->id,
+                        'password' => 'min:6|confirmed|nullable',
                         'applicable_gaap' => 'required',
-                        'industry_type' => 'required|exists:industry_type,id',
                         'legal_entity_name' => 'required',
                         'authorised_person_name' => 'required|string|max:255',
-                        'authorised_person_dob'     => 'required|date',
-                        'gender'    => 'required',
+                        'authorised_person_dob' => 'required|date|before:-18 years',
+                        'gender' => 'required',
                         'authorised_person_designation' => 'required',
-                        'username' => 'required|string|max:255',
-                        'email' => 'required|string|email|max:255',
-                        'password' => 'min:6|confirmed|nullable',
-                        'phone' => 'required',
-                        'annual_reporting_period'   => 'required'
+                        'email' => 'required|string|email|max:255|unique:users,id,'.$user->id
+                    ], [
+                        'authorised_person_dob.before' => 'The authorised person must be atleast 18 years old.'
                     ]);
 
                     if($validator->fails()) {
+                        dd($validator->errors());
                         return redirect()->back()->withErrors($validator->errors())->withInput($request->except("_token"));
                     }
 
@@ -182,7 +196,7 @@ class UserController extends Controller
                     $user->save();
                     return redirect(route("admin.users.index"))->with('success', 'User details has been updated successfully.');
                     }
-                 return view('admin.users.update', compact('user','countries', 'industry_types', 'currencies'));
+                 return view('admin.users.update', compact('user','countries', 'industry_types', 'currencies', 'states'));
             }
     }
 
