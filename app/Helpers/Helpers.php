@@ -550,7 +550,6 @@ function fetchCurrencyExchangeRate($date = null, $source, $target){
 }
 
 /**
-<<<<<<< HEAD
  * genreate the account id for the user based upon the user id..
  * @param $user
  * @return string
