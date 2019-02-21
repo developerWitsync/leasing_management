@@ -125,10 +125,6 @@ class RegisterController extends Controller
         $user = $this->create($userData);
         if ($user) {
 
-            //generate the account id for the user and update the user with the same as well...
-            $user->setAttribute('account_id', generateWitsyncAccountID($user));
-            $user->save();
-
             //need to create an entry to the user_subscription table...
             if (!is_null($package->validity)) {
                 //this means that the plan is trial plan
@@ -153,10 +149,6 @@ class RegisterController extends Controller
             if ($package->price_plan_type == '1' && is_null($package->price)) {
                 $user_subscription->payment_status = "Completed";
                 $user_subscription->save();
-                //send confirmation email from here
-                Mail::to($user)->queue(new RegistrationConfirmation($user));
-                //need to send the user credentials email to the user
-                Mail::to($user)->queue(new RegistrationCredentials($user, $package, $user_subscription));
                 return redirect('/login')->with('success', 'Your account has been registered. Please check your email inbox to proceed further.');
             } elseif ($package->price_plan_type == '1' && !is_null($package->price)) {
                 //the selected plan is not a free plan and the user will have to pay here...

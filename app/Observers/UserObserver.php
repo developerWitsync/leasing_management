@@ -14,10 +14,12 @@ use App\Role;
 use App\User;
 use App\LeasePaymentsBasis;
 use App\Mail\RegistrationConfirmation;
+use App\UserSubscription;
 use Mail;
 use App\LeaseAssetsNumberSettings;
 use App\LeaseAssetSimilarCharacteristicSettings;
 use App\CategoriesLeaseAssetExcluded;
+use App\Mail\RegistrationCredentials;
 
 class UserObserver
 {
@@ -29,10 +31,15 @@ class UserObserver
      */
     public function created(User $user)
     {
-        //send the confirm acount email to the user from here
-        //Mail::to($user)->queue(new RegistrationConfirmation($user));
-
+        //generate the account id for the user and update the user with the same as well...
+        $user->setAttribute('account_id', generateWitsyncAccountID($user));
+        $user->save();
         if($user->parent_id == '0') {
+            //send the confirm acount email to the user from here
+            Mail::to($user)->queue(new RegistrationConfirmation($user));
+            //need to send the user credentials email to the user
+            Mail::to($user)->queue(new RegistrationCredentials($user));
+
             //generate the default settings for the registered user
             $this->generateSettings($user);
         }

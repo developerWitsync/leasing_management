@@ -70,10 +70,6 @@ class PaymentController extends Controller
             $subscription->geteway_transasction_id = $transaction_id;
             $subscription->save();
             if ($subscription->payment_status != "pending") {
-                //send confirmation email from here
-                Mail::to($subscription->user)->queue(new RegistrationConfirmation($subscription->user));
-                //need to send the user credentials email to the user
-                Mail::to($subscription->user)->queue(new RegistrationCredentials($subscription->user, $subscription->subscriptionPackage, $subscription));
                 return redirect('/login')->with('success', 'Your account has been registered. Please check your email inbox to proceed further.');
             }
             return redirect('/')->with('error', 'Error processing PayPal payment for Order ' . $subscription->id . '!');
@@ -86,6 +82,7 @@ class PaymentController extends Controller
      * cancel request when generated from paypal...
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
+     * @todo need to send the cancel email for the users...
      */
     public function cancel(Request $request){
         try{
@@ -101,10 +98,6 @@ class PaymentController extends Controller
 
             $subscription->payment_status = 'Cancelled';
             $subscription->save();
-            //send confirmation email from here
-            Mail::to($subscription->user)->queue(new RegistrationConfirmation($subscription->user));
-            //need to send the user credentials email to the user
-            Mail::to($subscription->user)->queue(new RegistrationCredentials($subscription->user, $subscription->subscriptionPackage, $subscription));
             return redirect('/login')->with('success', 'Your account has been registered. Please check your email inbox to proceed further.');
         } catch (\Exception $e){
             abort(404, $e->getMessage());
@@ -118,21 +111,21 @@ class PaymentController extends Controller
      */
     public function notify(Request $request){
         try{
-            Log::info("IPN". json_encode($request->all()));
+            Log::info("IPN". json_encode($request->all())."\n");
             $invoice_id = $request->input('invoice', false);
             if($invoice_id){
-                $subscription = UserSubscription::query()->find($invoice_id);
+                $subscription = UserSubscription::query()->findOrFail($invoice_id);
                 $subscription->payment_status = $request->payment_status;
                 $subscription->save();
+                if($request->payment_status == "Completed"){
+                    //need to send the invoice to the user for the purchase of the plan...
 
-                //send confirmation email from here
-                Mail::to($subscription->user)->queue(new RegistrationConfirmation($subscription->user));
-                //need to send the user credentials email to the user
-                Mail::to($subscription->user)->queue(new RegistrationCredentials($subscription->user, $subscription->subscriptionPackage, $subscription));
+                }
+
             }
             return response()->json(['status'=>true], 200);
         } catch (\Exception $e){
-            abort(404, $e->getMessage());
+            return response()->json(['status'=>false], 200);
         }
     }
 }

@@ -26,12 +26,10 @@ Route::get('register/{package}', ['as' => 'register.index', 'uses' => 'RegisterC
 Route::post('create-account', ['as' => 'register.create', 'uses' => 'RegisterController@register']);
 Route::get('fetch-states/{country_id}', ['as' => 'register.fetch.states', 'uses' => 'RegisterController@fetchStates']);
 
-Route::get('send-to-paypal/{payment_id}', ['as' => 'payment.index', 'uses' => 'PaymentsController@index']);
-
 Route::prefix('payment')->group(function(){
     Route::any('success', ['as' => 'payment.success', 'uses' => 'PaymentController@success']);
     Route::any('cancel', ['as' => 'payment.cancel', 'uses' => 'PaymentController@cancel']);
-    Route::any('notify', ['as' => 'payment.cancel', 'uses' => 'PaymentController@notify']);
+    Route::any('notify', ['as' => 'payment.notify', 'uses' => 'PaymentController@notify']);
 });
 
 Auth::routes();
@@ -42,11 +40,16 @@ Route::middleware('auth')->group(function(){
     Route::get('/home', 'HomeController@index')->name('home');
     Route::get('/home/fetch-details', ['as' => 'home.fetchdetails', 'uses' => 'HomeController@fetchDetails']);
 
-    Route::namespace('Lease')->middleware(['permission:add_lease'])->prefix('lease')->group(function(){
+    Route::prefix('plan')->group(function(){
+        Route::get('/', ['as' => 'plan.index', 'uses' => 'UpgradeController@index']);
+        Route::get('purchase/{plan}', ['as' => 'plan.purchase', 'uses' => 'UpgradeController@purchase']);
+        Route::get('success', ['as' => 'plan.purchase.success', 'uses'=> 'UpgradeController@success']);
+        Route::get('cancel', ['as' => 'plan.purchase.cancel', 'uses'=> 'UpgradeController@cancel']);
+    });
 
+    Route::namespace('Lease')->middleware(['permission:add_lease', 'checksubscription:add_lease'])->prefix('lease')->group(function(){
         // To check Lock Period Date
        Route::get('checklockperioddate', ['as' => 'lease.checklockperioddate', 'uses' => 'IndexController@checkLockPeriodDate']);
-       
         /**
          * Lessor Details Routes NL1
          */
@@ -384,7 +387,7 @@ Route::middleware('auth')->group(function(){
 
             Route::get('fetch', ['as' => 'settings.user.fetch', 'uses' => 'UserAccessController@fetch']);
 
-            Route::match(['get', 'post'], 'create', ['as' => 'settings.user.create', 'uses' => 'UserAccessController@create']);
+            Route::match(['get', 'post'], 'create', ['as' => 'settings.user.create', 'uses' => 'UserAccessController@create'])->middleware('checksubscription:add_sub_users');
 
             Route::post('user-status-update', ['as' => 'settings.user.updatestatus', 'uses' => 'UserAccessController@changeStatus']);
 

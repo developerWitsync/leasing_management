@@ -565,7 +565,7 @@ function generateWitsyncAccountID($user){
  * @return mixed
  * @throws Exception
  */
-function generatePaypalExpressCheckoutLink(\App\SubscriptionPlans $package, \App\UserSubscription $subscription)
+function generatePaypalExpressCheckoutLink(\App\SubscriptionPlans $package, \App\UserSubscription $subscription, $return_url = null, $cancel_url = null, $notify_url = null)
 {
     $provider = new ExpressCheckout();
     $data = [];
@@ -579,8 +579,9 @@ function generatePaypalExpressCheckoutLink(\App\SubscriptionPlans $package, \App
 
     $data['invoice_id'] = $subscription->id;
     $data['invoice_description'] = "Order #{$data['invoice_id']} Invoice";
-    $data['return_url'] = url('/payment/success');
-    $data['cancel_url'] = url('/payment/cancel');
+    $data['return_url'] = ($return_url)?$return_url:url('/payment/success');
+    $data['cancel_url'] = ($cancel_url)?$cancel_url:url('/payment/cancel');
+    $data['notify_url'] = ($notify_url)?$notify_url :url('/payment/notify');
 
     $total = 0;
     foreach ($data['items'] as $item) {
