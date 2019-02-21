@@ -54,15 +54,22 @@ fieldset.scheduler-border { background: #fff; border:#dadcdd solid 1px !importan
 input[type="radio"], input[type="checkbox"]{ margin: 0px;}
 .leasedetOuter {width: 100%; padding-top:0px;}
 .leaseDetBtnBx {padding-bottom: 20px; text-align: center;}
-.inforide {width: 100%;background: #f5f5f5;border: #ccc solid 1px;min-height: 141px;margin-bottom: 25px;border-radius: 3px; text-align: right}
-.blueBg {background: #0eaae8;}
-.redBg {background: #e20000;}
-.greenBg {background: #20aba5;}
-.dashboxHd {font-size: 18px;padding: 5px 10px;color: #fff; font-weight: 600; border-radius: 3px 3px 0 0;}
-.dashCounting {padding: 10px; font-size: 30px; font-weight: 600; line-height: 30px;}
+.inforide {width: 100%; min-height: 141px;margin-bottom: 25px;border-radius: 3px; padding:10px;}
+.blueBg {background: #64b0f2;}
+.redBg {background: #ff5d48;}
+.greenBg {background: #4bc0c0;}
+.darkyellowBg {background: #f1b53d;}
+.darkblueBg {background: #3db9dc;}
+.valletBg {background: #9966ff;}
+.lightredBg {background: #ff6384;}
+.yellowBg {background: #ffce56;}
+.panelOuter{ padding-top:30px;}
+.dashboxHd {font-size: 18px; font-weight:400; color: #fff; min-height:60px; line-height:24px;}
+.dashCounting {padding: 10px; font-size: 34px; font-weight: 600; line-height: 30px; color:#fff;}
 .dashCounting span {display: block;  padding-bottom: 10px;}
 .dashCounting span small {font-size: 16px;  line-height: 30px; display: inline-block; vertical-align: top; color: #666;}
-.chartBg {border: #ccc solid 1px; margin-bottom: 25px; border-radius: 3px;}
+.chartBg {border: #dadcdd solid 1px; margin-bottom: 25px; border-radius: 2px;}
+.chartHd {background: #f8f8f8; padding: 15px; font-size: 18px; line-height: 23px; color: #292b2c; border-bottom: #dadcdd solid 1px;}
 .viewDetBtn {float: right; font-size: 14px; color: #0078d4; border: #0078d4 solid 1px; line-height: 20px; padding: 10px 20px;  border-radius: 3px;  text-decoration: none;}
 .detailOuter {border: #dadcdd solid 1px; border-radius: 3px; padding: 25px 25px 0 25px;}
 .btnMainBx {background: #f8f8f8; padding: 15px 10px; margin: 0 !important; border-top: #d4d7d8 solid 1px;}
@@ -91,3 +98,7 @@ input[type="radio"], input[type="checkbox"]{ margin: 0px;}
 
 .aligncenter{ text-align: center !important; }
 .rightlign{ text-align: right !important; }
+
+.totalOwn {font-size: 16px;}
+.totalOwn span {font-size: 26px; display: block; font-weight: bold; line-height: 30px; color: #fff;}
+.totalOwn span small { font-weight: 400; font-size: 16px; line-height: 26px;}
