@@ -25,7 +25,7 @@ class CheckSubscription
             ->where('payment_status', '<>', 'Cancelled')
             ->orderBy('created_at', 'desc')
             ->first();
-        if(count($subscription) > 0){
+        if($subscription){
             //need to check if the purchase and active subscription have expired
             if(!Carbon::today()->lessThanOrEqualTo(Carbon::parse($subscription->subscription_expire_at))){
                 //subscription has expired need to redirect to the upgrade plan page...
