@@ -6,7 +6,7 @@
 @endsection
 @section('content')
         <div class="panel panel-default">
-            <div class="panel-heading">Lease Classifications Settings</div>
+            {{--<div class="panel-heading">Lease Classifications Settings</div>--}}
 
             <div class="panel-body">
                 @if (session('status'))
@@ -23,7 +23,7 @@
 
                 @include('settings._menubar')
 
-                <div class="tab-content">
+                <div class="">
                     <div role="tabpanel" class="tab-pane active">
                         <div class="panel panel-info">
                             <div class="panel-heading">Percentage Rate Types</div>

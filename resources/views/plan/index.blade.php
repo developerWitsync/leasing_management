@@ -56,7 +56,7 @@
                         </div>
                     </div>
 
-                    <div class="row upgradeSubscriptionPlans">
+                    <div class="row upgradeSubscriptionPlans" style="padding-left: 14px;padding-right: 12px;">
                         @php
                             $classes_array = ['panel-primary', 'panel-info', 'panel-success', 'panel-primary', 'panel-info'];
                             $current_plan_key = -1;

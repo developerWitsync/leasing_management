@@ -132,6 +132,16 @@ class CurrenciesController extends Controller
      */
     public function addForeignTransactionCurrency(Request $request){
         try{
+            $breadcrumbs = [
+                [
+                    'link' => route('settings.index'),
+                    'title' => 'Settings'
+                ],
+                [
+                    'link' => route('settings.currencies'),
+                    'title' => 'Currencies Settings'
+                ]
+            ];
             $reporting_currency_settings = ReportingCurrencySettings::query()->where('business_account_id', '=', auth()->user()->id)->first();
             if($reporting_currency_settings) {
                 $currencies = Currencies::query()->where('status', '=', '1')->get();
@@ -169,7 +179,7 @@ class CurrenciesController extends Controller
                     return redirect(route('settings.currencies'))->with('status', 'Foreign Transaction Currency has been added successfully.');
 
                 }
-                return view('settings.currencies.add-foreign-transaction-currency', compact('currencies', 'reporting_currency_settings'));
+                return view('settings.currencies.add-foreign-transaction-currency', compact('currencies', 'reporting_currency_settings', 'breadcrumbs'));
             } else {
                 return redirect(route('settings.currencies'))->with('error', 'Please create the Reporting currencies first.');
             }
@@ -246,6 +256,16 @@ class CurrenciesController extends Controller
 
     public function editForeignTransactionCurrency($id, Request $request){
         try{
+            $breadcrumbs = [
+                [
+                    'link' => route('settings.index'),
+                    'title' => 'Settings'
+                ],
+                [
+                    'link' => route('settings.currencies'),
+                    'title' => 'Currencies Settings'
+                ]
+            ];
             $currencies = Currencies::query()->where('status', '=', '1')->get();
             $reporting_currency_settings = ReportingCurrencySettings::query()->where('business_account_id', '=', auth()->user()->id)->first();
             $model = ForeignCurrencyTransactionSettings::query()->where('business_account_id', '=', auth()->user()->id)->where('id', '=', $id)->first();
@@ -285,7 +305,7 @@ class CurrenciesController extends Controller
                     return redirect(route('settings.currencies'))->with('status', 'Foreign Transaction Currency has been updated successfully.');
 
                 }
-                return view('settings.currencies.edit-foreign-transaction-currency', compact('currencies', 'reporting_currency_settings' , 'model'));
+                return view('settings.currencies.edit-foreign-transaction-currency', compact('currencies', 'reporting_currency_settings' , 'model', 'breadcrumbs'));
             } else {
                 return redirect(route('settings.currencies'))->with('error', 'Invalid request!!!');
             }

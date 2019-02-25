@@ -119,7 +119,10 @@ class RegisterController extends Controller
     public function register(Request $request)
     {
         $package = SubscriptionPlans::query()->findOrFail($request->selected_plan);
-        $this->validator($request->all())->validate();
+        $validator = $this->validator($request->all());
+        if($validator->fails()){
+            return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
+        }
         $userData = $request->all();
         $userData['password'] = str_random(8);
         $user = $this->create($userData);

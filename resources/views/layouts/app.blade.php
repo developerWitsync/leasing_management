@@ -36,6 +36,11 @@
                     <a class="navbar-brand logoBx" href="{{ url('/') }}">
                         <img src="{{ asset('assets/images/logo2.png') }}" />
                     </a>
+                    @if(auth()->check())
+                        <div style="display:inline-block; border-left: 1px #CCCCCC solid;padding:9px 0 9px 30px; ">
+                            <span class="badge badge-primary" style="padding: 10px;border-radius: 30px;">{{ auth()->user()->applicable_gaap }}</span>
+                        </div>
+                    @endif
                 </div>
 
 

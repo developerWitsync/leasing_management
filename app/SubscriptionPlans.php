@@ -18,6 +18,7 @@ class SubscriptionPlans extends Model
         'validity',
         'most_popular',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'annual_discount'
     ];
 }

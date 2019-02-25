@@ -49,7 +49,6 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        dd($exception);
         if ($exception instanceof PostTooLargeException) {
             session()->flash('error', 'You are trying to upload a large data, please check your php.ini to resolve the issue. ');
             return redirect()->back()

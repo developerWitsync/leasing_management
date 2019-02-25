@@ -167,7 +167,7 @@
 
                     <p>Stay Compliant with New Accounting Standard on leases.</p>
                     <br>
-                    <a href="leasing-software.php" class="btn btn1">View More Detail <i class="fa fa-angle-right"></i></a>
+                    <a href="javascript:void(0)" class="btn btn1">View More Detail <i class="fa fa-angle-right"></i></a>
                     <a href="javascript:void(0);" class="btn btn2">Try Now <i class="fa fa-angle-right"></i></a>
                 </div>
                 <div class="col-md-6 wow fadeInRight">

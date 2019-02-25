@@ -42,12 +42,6 @@
                         <input type="email" class="form-control" autocomplete="off" placeholder="Enter your e-mail here">
                         <button type="submit" class="btn bt"><i class="fa fa-paper-plane-o"></i></button>
                     </form>
-                    <!-- <ul class="f-social">
-                        <li><a href="javascript:void(0);"><i class="fa fa-facebook"></i> Facebook</a></li>
-                        <li><a href="javascript:void(0);"><i class="fa fa-twitter"></i> Twitter</a></li>
-                        <li><a href="javascript:void(0);"><i class="fa fa-instagram"></i> Instagram</a></li>
-                        <li><a href="javascript:void(0);"><i class="fa fa-linkedin"></i> Linkedin</a></li>
-                    </ul> -->
 
                 </div>
             </div>
@@ -55,20 +49,22 @@
             <div class="col-md-3">
                 <div class="widget">
                     <h3>Get in Touch with Us</h3>
-                    <form>
-                        <input type="name" name="" class="form-control" required placeholder="Name">
-                        <input type="email" name="" class="form-control" required placeholder="E-mail">
-                        <input type="number" name="" class="form-control" required placeholder="Mo. number">
-                        <textarea class="form-control" placeholder="Message"></textarea>
-                        <button type="submit" class="btn submit">SEND MESSAGE</button>
 
+                    <div class="alert alert-success getintouchsuccess" style="display: none;">
+
+                    </div>
+
+                    <form id="getInTouchWithUs">
+                        <input type="text" name="first_name" class="form-control" placeholder="First Name">
+                        <input type="text" name="last_name" class="form-control" placeholder="Last Name">
+                        <input type="email" name="email" class="form-control" placeholder="Business E-mail">
+                        <input type="text" name="phone" class="form-control" placeholder="Mo. number">
+                        <input type="text" name="no_of_realestate" class="form-control" placeholder="Approximate Number of Real Estate and Equipment Leases">
+                        <textarea class="form-control" name="comments" placeholder="Message"></textarea>
+                        <button type="submit" class="btn submit">SEND MESSAGE</button>
                     </form>
                 </div>
             </div>
-
-
-
-
         </div>
     </div>
 </section>
@@ -84,13 +80,15 @@
                     <li><a href="javascript:void(0);"><i class="fa fa-linkedin"></i></a></li>
                 </ul>
             </div> -->
-            <div class="col-md-6 text-left">&copy; Copyright @ 2019. All Rights Reserved.</div>
+            <div class="col-md-6 text-left">&copy; Copyright @ {{ date('Y') }}. All Rights Reserved.</div>
             <div class="col-md-6 text-right">
                 <ul class="">
-                    <li><a href="javascript:void(0);">Disclaimer</a></li>
-                    <li><a href="javascript:void(0);">Code of Conduct</a></li>
-                    <li><a href="javascript:void(0);">Privacy</a></li>
-                    <li><a href="javascript:void(0);">Terms of Use</a></li>
+                    @foreach(getInformationPage() as $page)
+                        <li><a href="{{ route('information.index',['slug'=>$page->slug]) }}">{{ $page->title }}</a></li>
+                    @endforeach
+                    {{--<li><a href="javascript:void(0);">Code of Conduct</a></li>--}}
+                    {{--<li><a href="javascript:void(0);">Privacy</a></li>--}}
+                    {{--<li><a href="javascript:void(0);">Terms of Use</a></li>--}}
                 </ul>
             </div>
             <!-- <hr> -->

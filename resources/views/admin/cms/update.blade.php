@@ -41,22 +41,12 @@
 
                              <div class="form-row">
 
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-12">
                                     <label for="title">Page Title(required)</label>
                                     <input type="text" class="form-control @if($errors->has('title')) is-invalid @endif" value="{{ old('title',$cms->title) }}" name="title" id="title" placeholder="Page Title" autocomplete="off">
                                     @if($errors->has('title'))
                                         <div class="invalid-feedback">
                                             {{ $errors->first('title') }}
-                                        </div>
-                                    @endif
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label for="slug">Page Slug(required)</label>
-                                    <input type="text" class="form-control @if($errors->has('slug')) is-invalid @endif" id="slug" placeholder="Page Slug" name="slug" value="{{ old('slug',$cms->slug) }}" autocomplete="off">
-                                    @if($errors->has('slug'))
-                                        <div class="invalid-feedback">
-                                            {{ $errors->first('slug') }}
                                         </div>
                                     @endif
                                 </div>
@@ -133,5 +123,16 @@
     </div>
 @endsection
 @section('footer-script')
-
+    <script src="https://cdn.ckeditor.com/4.10.1/standard/ckeditor.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // unless user specified own height.
+            // CKEDITOR.config.height = 150;
+            // CKEDITOR.config.width = 'auto';
+            window.CKEDITOR_BASEPATH = '{{ asset('assets/js/') }}';
+            var editorElement = CKEDITOR.document.getById( 'description' );
+            console.log(editorElement);
+            CKEDITOR.replace( 'description');
+        });
+    </script>
 @endsection

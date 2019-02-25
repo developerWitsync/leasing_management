@@ -17,6 +17,7 @@
 //});
 
 Route::get('/', 'Master\IndexController@index');
+Route::get('information/{slug}', ['as' => 'information.index', 'uses' => 'Master\IndexController@information']);
 Route::namespace('Master')->prefix('leasing-software')->group(function(){
     Route::get('IND-AS-116', ['as' => 'master.leasingsoftware.index', 'uses' => 'LeasingSoftwareController@index']);
     Route::get('IFRS-16', ['as' => 'master.leasingsoftware.ifrs', 'uses' => 'LeasingSoftwareController@IFRS']);
@@ -428,7 +429,8 @@ Route::middleware('auth')->group(function(){
 });
 
 Route::namespace('Contactus')->group(function () {
-   Route::match(['get', 'post'],'/contactus', ['as' => 'contactus', 'uses' => 'ContactusController@index']);  
+   Route::match(['get', 'post'],'/contactus', ['as' => 'contactus', 'uses' => 'ContactusController@index']);
+   Route::post('get-in-touch-with-us', ['as' => 'getintouchwithus', 'uses' => 'ContactusController@getInTouchWithUs']);
 });
 
 Route::get('email-confirmation/{verification_code}', ['as' => 'email.confirmation', 'uses' => 'Auth\LoginController@verifyEmail']);

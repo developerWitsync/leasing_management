@@ -41,22 +41,12 @@
 
                             <div class="form-row">
 
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-12">
                                     <label for="title">Page Title(required)</label>
                                     <input type="text" class="form-control @if($errors->has('title')) is-invalid @endif" value="{{ old('title') }}" name="title" id="title" placeholder="Page Title" autocomplete="off">
                                     @if($errors->has('title'))
                                         <div class="invalid-feedback">
                                             {{ $errors->first('title') }}
-                                        </div>
-                                    @endif
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label for="slug">Page Slug(required)</label>
-                                    <input type="text" class="form-control @if($errors->has('slug')) is-invalid @endif" id="slug" placeholder="Page Slug" name="slug" value="{{ old('slug') }}" autocomplete="off">
-                                    @if($errors->has('slug'))
-                                        <div class="invalid-feedback">
-                                            {{ $errors->first('slug') }}
                                         </div>
                                     @endif
                                 </div>

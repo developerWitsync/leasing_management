@@ -115,6 +115,22 @@
                 </div>
             </div>
 
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="annual_discount">Annual Discount</label>
+                    <input id="annual_discount" type="number"
+                           class="form-control @if($errors->has('annual_discount')) is-invalid @endif"
+                           name="annual_discount" value="{{ old('annual_discount', $model->annual_discount) }}" autocomplete="off">
+
+                    @if ($errors->has('annual_discount'))
+                        <div class="invalid-feedback">
+                            <strong>{{ $errors->first('annual_discount') }}</strong>
+                        </div>
+                    @endif
+                </div>
+            </div>
+
+
             <button class="btn btn-primary" type="submit">Submit</button>
             <a href="{{ route('admin.subscriptionplans.index') }}" class="btn btn-danger">Cancel</a>
 

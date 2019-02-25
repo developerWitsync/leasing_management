@@ -573,7 +573,7 @@ function generatePaypalExpressCheckoutLink(\App\SubscriptionPlans $package, \App
         [
             'name' => $package->title,
             'price' => $package->price,
-            'qty' => 1
+            'qty' => 12 // quantity is said to be 12 as the plan can only be purchased for 1 year
         ]
     ];
 
@@ -587,13 +587,20 @@ function generatePaypalExpressCheckoutLink(\App\SubscriptionPlans $package, \App
     foreach ($data['items'] as $item) {
         $total += $item['price'] * $item['qty'];
     }
-    $data['total'] = $total;
-    //give a discount of 10% of the order amount
-    //$data['shipping_discount'] = round((10 / 100) * $total, 2);
 
+    $data['total'] = $total;
+
+    //give a discount of 10% of the order amount
+    $discounted_amount = 0;
+    if($package->annual_discount > 0){
+        $discounted_amount = round(($package->annual_discount / 100) * $total, 2);
+        $data['shipping_discount'] = $discounted_amount;
+    }
 
     //save all the details to the user_subscription for the details so that these can be used for the doExpressCheckout
     $subscription->purchased_items = json_encode($data);
+    $subscription->paid_amount = $data['total'];
+    $subscription->discounted_amount = $discounted_amount;
     $subscription->save();
     $response = $provider->setExpressCheckout($data);
     return $response['paypal_link'];
@@ -605,4 +612,12 @@ function generatePaypalExpressCheckoutLink(\App\SubscriptionPlans $package, \App
  */
 function getLockYearDetails(){
     return \App\LeaseLockYear::query()->where('business_account_id', '=', auth()->user()->id)->where('status','1')->first();
+}
+
+/**
+ * return the information pages from the database...
+ * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+ */
+function getInformationPage(){
+    return \App\Cms::query()->where('status', '=', '1')->get();
 }

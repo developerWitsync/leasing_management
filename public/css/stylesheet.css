@@ -38,7 +38,7 @@ button.browseBtn {height: 38px; line-height: 38px; border-radius: 0 3px 3px 0;}
 .breadcrumb {background-color: #fff; border-bottom: #ccc solid 1px !important; padding: 8px 0; border: 0px;}
 .breadcrumb > li a {color: #636c72;}
 .breadcrumb > li + li::before{ color: #636c72;}
-.rightContainer {max-width: 965px; margin: 0 auto;}
+.rightContainer {max-width: 1250px; margin: 0 auto;}
 .owl-prev.disabled{ opacity: 0;}
 .owl-next {position: absolute; right: -10px; top: 50%; cursor: pointer; margin-top: -10px; overflow: hidden; text-indent: -200px; background:url(/assets/images/owl-arrow-right.png) left top no-repeat; width: 8px; height: 11px;}
 .owl-prev { position: absolute; left: -10px; top: 50%; cursor: pointer; margin-top: -10px; overflow: hidden; text-indent: -200px; background:url(/assets/images/owl-arrow-left.png) left top no-repeat; width: 8px; height: 11px;}

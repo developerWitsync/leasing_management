@@ -63,7 +63,8 @@ class SubscriptionPlansController extends Controller
                     'available_leases' => 'numeric|min:1|nullable',
                     'available_users' =>  'numeric|min:1|nullable',
                     'hosting_type' => 'required',
-                    'validity' => 'numeric|min:1|nullable'
+                    'validity' => 'numeric|min:1|nullable',
+                    'annual_discount' => 'numeric|max:50'
                 ]);
 
                 if($validator->fails()){
@@ -102,7 +103,8 @@ class SubscriptionPlansController extends Controller
                     'available_leases' => 'numeric|min:1|nullable',
                     'available_users' =>  'numeric|min:1|nullable',
                     'hosting_type' => 'required',
-                    'validity' => 'numeric|min:1|nullable'
+                    'validity' => 'numeric|min:1|nullable',
+                    'annual_discount' => 'numeric|max:50'
                 ]);
 
                 if($validator->fails()){
