@@ -56,19 +56,19 @@
             <div class="collapse navbar-collapse navbar-right">
                 <ul class="nav navbar-nav">
                     <li><a href="/">Home</a></li>
-                    <li><a href="aboutUs.php">About Us</a></li>
-                    <li><a href="services.php">Services</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Services</a></li>
                     <!-- <li><a href="javascript:void(0);">Leasing Software</a></li> -->
                     <li class="dropdown">
                         <!-- <a href="leasing-software.php" class="dropdown-toggle" data-toggle="dropdown">Leasing Software <i class="fa fa-angle-down"></i></a> -->
-                        <a href="leasing-software.php" class="dropdown-toggle" >Leasing Software <i class="fa fa-angle-down"></i></a>
+                        <a href="#" class="dropdown-toggle" >Leasing Software <i class="fa fa-angle-down"></i></a>
                         <ul class="dropdown-menu">
                             <li><a href="{{ route('master.leasingsoftware.ifrs') }}">IFRS 16 Leasing Software</a></li>
                             <li><a href="{{ route('master.leasingsoftware.index') }}">IND AS 116 Leasing Software</a></li>
                         </ul>
                     </li>
                     <li><a href="javascript:void(0);">E-Learning</a></li>
-                    <li><a href="contact-us.php">Contact</a></li>
+                    <li><a href="{{ route('contactus') }}">Contact</a></li>
                 </ul>
             </div>
         </div><!--/.container-->

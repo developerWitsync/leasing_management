@@ -6,7 +6,7 @@
 @endsection
 @section('content')
         <div class="panel panel-default">
-            <div class="panel-heading">Settings | User Access | Create Role</div>
+            {{--<div class="panel-heading">Settings | User Access | Create Role</div>--}}
 
             <div class="panel-body">
                 @if (session('status'))
@@ -20,16 +20,16 @@
                         {{ session('error') }}
                     </div>
                 @endif
-         <!--    @include('settings._menubar') -->
-                 <div class="tab-content">
+                @include('settings._menubar')
+                 <div class="">
                     <div role="tabpanel" class="tab-pane active">
                      <div class="panel panel-info">
                             <div class="panel-heading">
                             Add Role
                             
                              </div>
-                              <div class="panel-body">
-                             <form class="form-horizontal" method="POST" action="{{ route('settings.role.create') }}">
+                            <div class="panel-body">
+                            <form class="form-horizontal" method="POST" action="{{ route('settings.role.create') }}">
                             {{ csrf_field() }}
                             <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }} required">
                                 <label for="name" class="col-md-4 control-label">Name</label>

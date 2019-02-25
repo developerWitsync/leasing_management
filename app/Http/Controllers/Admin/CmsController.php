@@ -63,7 +63,6 @@ class CmsController extends Controller
             if($request->isMethod('post')) {
                 $validator = Validator::make($request->except('_token'), [
                     'title' => 'required|unique:cms,title,'.$id.',id',
-                    'slug' => 'required|unique:cms,slug,'.$id.',id',
                     'description' => 'required',
                     'meta_title' => 'required',
                     'meta_description' => 'required',
@@ -74,6 +73,8 @@ class CmsController extends Controller
                 if($validator->fails()){
                     return redirect()->back()->withInput($request->all())->withErrors($validator->errors());
                 }
+
+                $request->request->add(['slug' => str_slug($request->title)]);
 
                 $cms->setRawAttributes($request->except('_token'));
                 $cms->save();
@@ -95,7 +96,6 @@ class CmsController extends Controller
             if($request->isMethod('post')) {
                 $validator = Validator::make($request->except('_token'), [
                     'title' => 'required|unique:cms,title',
-                    'slug' => 'required|unique:cms,slug',
                     'description' => 'required',
                     'meta_title' => 'required',
                     'meta_description' => 'required',
@@ -106,6 +106,8 @@ class CmsController extends Controller
                 if($validator->fails()){
                     return redirect()->back()->withInput($request->all())->withErrors($validator->errors());
                 }
+
+                $request->request->add(['slug' => str_slug($request->title)]);
 
                 Cms::create($request->except('_token'));
                 return redirect(route('admin.cms.index'))->with('success', 'Cms has been added successfully.');

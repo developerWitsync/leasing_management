@@ -5,6 +5,6 @@
     <strong>404 - page not found</strong>
     <span>The page you are looking for might have been removed
         had its name changed or is temporarily unavailable.</span>
-    <a href="{{ route('home') }}">GO TO HOMEPAGE</a>
+    <a href="/">GO TO HOMEPAGE</a>
 </div>
 @endsection

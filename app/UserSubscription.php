@@ -18,6 +18,7 @@ class UserSubscription extends Model
         'subscription_renewal_at',
         'payment_status',
         'purchased_items',
+        'discounted_amount',
         'created_at',
         'updated_at'
     ];

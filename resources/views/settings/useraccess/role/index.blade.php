@@ -15,7 +15,7 @@
 @endsection
 @section('content')
         <div class="panel panel-default">
-            <div class="panel-heading">User Access | Create Role</div>
+            {{--<div class="panel-heading">User Access | Create Role</div>--}}
              <div class="panel-body">
                 @if (session('status'))
                     <div class="alert alert-success">
@@ -29,7 +29,7 @@
                     </div>
                 @endif
                 @include('settings._menubar')
-                 <div class="tab-content">
+                 <div class="">
                     <div role="tabpanel" class="tab-pane active">
                      <div class="panel panel-info">
                             <div class="panel-heading">

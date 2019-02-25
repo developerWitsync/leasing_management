@@ -16,7 +16,7 @@
 @endsection
 @section('content')
  <div class="panel panel-default">
-        <div class="panel-heading">Modify Lease</div>
+        {{--<div class="panel-heading">Modify Lease</div>--}}
 
         <div class="panel-body">
 
@@ -36,7 +36,8 @@
                 <div role="tabpanel" class="tab-pane active">
                         <div class="panel panel-info">
                             <div class="panel-heading">
-                               Modify Lease
+                                <strong>Modify Lease</strong> |
+                                <small>This section contains all the leases that has been submitted. In case any modifications are requied to any submitted lease please click on Modify Lease button for the respective lease.</small>
                             </div>
                             <div class="panel-body">
                                 <div class="panel-body frmOuterBx">

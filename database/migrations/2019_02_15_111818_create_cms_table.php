@@ -14,10 +14,10 @@ class CreateCmsTable extends Migration
     public function up()
     {
         Schema::create('cms', function (Blueprint $table) {
-             $table->increments('id');
+            $table->increments('id');
             $table->string('title')->nullable();
             $table->string('slug')->nullable();
-            $table->string('description')->nullable();
+            $table->text('description')->nullable();
             $table->string('meta_title')->nullable();
             $table->string('meta_description')->nullable();
             $table->string('meta_keyword')->nullable();

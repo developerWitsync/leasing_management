@@ -17,7 +17,7 @@
 
 @section('content')
     <div class="panel panel-default">
-        <div class="panel-heading">Drafts</div>
+        {{--<div class="panel-heading">Drafts</div>--}}
 
         <div class="panel-body">
 
@@ -37,7 +37,8 @@
                 <div role="tabpanel" class="tab-pane active">
                         <div class="panel panel-info">
                             <div class="panel-heading">
-                                Lease Drafts
+                                <strong>Lease Drafts </strong> |
+                                <small>Drafts contains all the incomplete leases that has been created. If a lease is listed in the drafts this means that the lease has not been submitted till now and making changes to the lease are allowed.</small>
                             </div>
                             <div class="panel-body">
                                 <div class="panel-body frmOuterBx">

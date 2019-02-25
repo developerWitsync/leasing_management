@@ -57,6 +57,7 @@
                                 <th>Allowed Sub-users</th>
                                 <th>Type Of Hosting</th>
                                 <th>Validity(In Days)</th>
+                                <th>Annual Discount</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
@@ -120,6 +121,11 @@
                             return checkForUnlimited(data, type, row);
                         }
                     },
+                    {
+                        "data" : "annual_discount", render : function (data, type, row) {
+                            return data+" %";
+                        }
+                    },
                     { "data": "id" }
                 ],
                 "columnDefs": [
@@ -139,7 +145,7 @@
                         }
                     },
                     {
-                        "targets" : 7,
+                        "targets" : 8,
                         "data" : null,
                         "orderable": false,
                         "className" : "text-center",

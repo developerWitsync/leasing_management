@@ -20,7 +20,10 @@ class LeasingSoftwareController extends Controller
     }
 
     public function index(){
-        return view('leasing-software.index');
+        $subscription_plans = SubscriptionPlans::all();
+        return view('leasing-software.index', compact(
+            'subscription_plans'
+        ));
     }
 
     public function IFRS(){

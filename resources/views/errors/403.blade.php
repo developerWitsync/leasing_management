@@ -9,6 +9,6 @@
         @else
             <span>{{ $exception->getMessage() }}</span>
         @endif
-        <a href="{{ route('home') }}">GO TO HOMEPAGE</a>
+        <a href="/">GO TO HOMEPAGE</a>
     </div>
 @endsection
