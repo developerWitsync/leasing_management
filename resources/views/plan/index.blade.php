@@ -144,23 +144,33 @@
                                         </tr>
                                         <tr class="@if($subscription && $subscription->plan_id == $plan->id) active @endif">
                                             <td>
-                                                ----
+                                                @if($plan->annual_discount > 0)
+                                                    {{ (int)$plan->annual_discount }}% Off on Annual Subscription
+                                                @else
+                                                    ----
+                                                @endif
                                             </td>
                                         </tr>
                                     </table>
                                 </div>
                                 <div class="panel-footer">
-                                    <a href="{{ route('plan.purchase', ['plan' => $plan->slug]) }}" class="btn btn-sm btn-success" role="button">
-                                        @if($subscription && ($subscription->plan_id == $plan->id))
+                                    @if($subscription && ($subscription->plan_id == $plan->id))
+                                        <span class="badge badge-info">
                                             Expiring on {{ \Carbon\Carbon::parse($subscription->subscription_expire_at)->format('Y-m-d') }}
-                                        @elseif($subscription && $current_plan_key > -1 && $current_plan_key < $key)
+                                        </span>
+                                    @elseif($subscription && $current_plan_key > -1 && $current_plan_key < $key)
+                                        <a href="{{ route('plan.purchase.updowninfo', ['plan' => $plan->slug]) }}" class="btn btn-sm btn-success purchase-plan" role="button">
                                             Upgrade
-                                        @elseif($subscription)
+                                        </a>
+                                    @elseif($subscription)
+                                        <a href="{{ route('plan.purchase.updowninfo', ['plan' => $plan->slug]) }}" class="btn btn-sm btn-success purchase-plan" role="button">
                                             DownGrade
-                                        @else
+                                        </a>
+                                    @else
+                                        <a href="{{ route('plan.purchase.updowninfo', ['plan' => $plan->slug]) }}" class="btn btn-sm btn-success purchase-plan" role="button">
                                             Purchase
-                                        @endif
-                                    </a>
+                                        </a>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -176,7 +186,38 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal -->
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content" id="up_down_plan">
+
+            </div>
+
+        </div>
+    </div>
+
 @endsection
 @section('footer-script')
-
+    <script>
+        $(function(){
+            $('.purchase-plan').on('click', function (e) {
+                e.preventDefault();
+                $.ajax({
+                    url : $(this).attr('href'),
+                    dataType : 'json',
+                    success : function(response){
+                        if(response['status']){
+                            $('#up_down_plan').html(response['view']);
+                            $('#myModal').modal('show');
+                        } else {
+                            alert(response['message']);
+                        }
+                    }
+                })
+            });
+        });
+    </script>
 @endsection

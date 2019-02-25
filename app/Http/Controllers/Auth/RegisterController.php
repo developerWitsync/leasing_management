@@ -118,50 +118,55 @@ class RegisterController extends Controller
      */
     public function register(Request $request)
     {
-        $package = SubscriptionPlans::query()->findOrFail($request->selected_plan);
-        $validator = $this->validator($request->all());
-        if($validator->fails()){
-            return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
-        }
-        $userData = $request->all();
-        $userData['password'] = str_random(8);
-        $user = $this->create($userData);
-        if ($user) {
-
-            //need to create an entry to the user_subscription table...
-            if (!is_null($package->validity)) {
-                //this means that the plan is trial plan
-                $expiry_date = Carbon::today()->addDays($package->validity)->format('Y-m-d');
-            } else {
-                //will expires after 1 year
-                $expiry_date = Carbon::today()->addYear(1)->format('Y-m-d');
+        try{
+            $package = SubscriptionPlans::query()->findOrFail($request->selected_plan);
+            $validator = $this->validator($request->all());
+            if($validator->fails()){
+                return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
             }
+            $userData = $request->all();
+            $userData['password'] = str_random(8);
+            $user = $this->create($userData);
+            if ($user) {
 
-            $renewal_date = Carbon::parse($expiry_date)->addDays(1)->format('Y-m-d');
-            $user_subscription = UserSubscription::create([
-                'plan_id' => $request->selected_plan,
-                'user_id' => $user->id,
-                'paid_amount' => $package->price,
-                'subscription_expire_at' => $expiry_date,
-                'subscription_renewal_at' => $renewal_date,
-                'payment_status' => 'pending'
-            ]);
+                //need to create an entry to the user_subscription table...
+                if (!is_null($package->validity)) {
+                    //this means that the plan is trial plan
+                    $expiry_date = Carbon::today()->addDays($package->validity)->format('Y-m-d');
+                } else {
+                    //will expires after 1 year
+                    $expiry_date = Carbon::today()->addYear(1)->format('Y-m-d');
+                }
 
-            //need to redirect the user to the paypal for generating the payment, before that need to create a transaction to the subscription_payments with
-            //the pending status
-            if ($package->price_plan_type == '1' && is_null($package->price)) {
-                $user_subscription->payment_status = "Completed";
-                $user_subscription->save();
-                return redirect('/login')->with('success', 'Your account has been registered. Please check your email inbox to proceed further.');
-            } elseif ($package->price_plan_type == '1' && !is_null($package->price)) {
-                //the selected plan is not a free plan and the user will have to pay here...
-                //need to send the user to the express checkout
-                $link = generatePaypalExpressCheckoutLink($package, $user_subscription);
-                return redirect($link);
-            } else {
-                // the selected plan is enterprise plan and the user will have to communicate with the admin,,,,
+                $renewal_date = Carbon::parse($expiry_date)->addDays(1)->format('Y-m-d');
+                $user_subscription = UserSubscription::create([
+                    'plan_id' => $request->selected_plan,
+                    'user_id' => $user->id,
+                    'paid_amount' => $package->price,
+                    'subscription_expire_at' => $expiry_date,
+                    'subscription_renewal_at' => $renewal_date,
+                    'payment_status' => 'pending'
+                ]);
 
+                //need to redirect the user to the paypal for generating the payment, before that need to create a transaction to the subscription_payments with
+                //the pending status
+                if ($package->price_plan_type == '1' && is_null($package->price)) {
+                    $user_subscription->payment_status = "Completed";
+                    $user_subscription->save();
+                    return redirect('/login')->with('success', 'Your account has been registered. Please check your email inbox to proceed further.');
+                } elseif ($package->price_plan_type == '1' && !is_null($package->price)) {
+                    //the selected plan is not a free plan and the user will have to pay here...
+                    //need to send the user to the express checkout
+                    $link = generatePaypalExpressCheckoutLink($package, $user_subscription);
+                    return redirect($link);
+                } else {
+                    // the selected plan is enterprise plan and the user will have to communicate with the admin,,,,
+
+                }
             }
+        } catch (\Exception $e){
+            dd($e);
         }
+
     }
 }

@@ -46,6 +46,7 @@ Route::middleware('auth')->group(function(){
         Route::get('purchase/{plan}', ['as' => 'plan.purchase', 'uses' => 'UpgradeController@purchase']);
         Route::get('success', ['as' => 'plan.purchase.success', 'uses'=> 'UpgradeController@success']);
         Route::get('cancel', ['as' => 'plan.purchase.cancel', 'uses'=> 'UpgradeController@cancel']);
+        Route::get('upgrade-downgrade-info/{plan}', ['as' => 'plan.purchase.updowninfo', 'uses' => 'UpgradeController@changePlanDetails' ]);
     });
 
     Route::namespace('Lease')->middleware(['permission:add_lease', 'checksubscription:add_lease'])->prefix('lease')->group(function(){
