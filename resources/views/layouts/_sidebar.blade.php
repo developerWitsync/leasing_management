@@ -1,4 +1,10 @@
 
+ @if(auth()->check())
+    <div class="ifrsBx" style="display:inline-block;padding:10px; ">
+        <span class="badge badge-primary" style="padding: 10px; line-height:20px; font-size:14px; border-radius: 30px;">{{ auth()->user()->applicable_gaap }}</span>
+    </div>
+@endif
+
 <a href="/home" class="list-group-item @if(request()->segment('1') == 'home') active @endif">
     <i class="fa fa-home"></i> <span>Dashboard</span>
    <!--  <small class="fa fa-angle-right" aria-hidden="true"></small> -->
