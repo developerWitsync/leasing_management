@@ -650,7 +650,6 @@ function generatePaypalExpressCheckoutLink(\App\SubscriptionPlans $package, \App
         }
     }
 
-
     $data['invoice_id'] = $subscription->id;
     $data['invoice_description'] = "Order #{$data['invoice_id']} Invoice";
     $data['return_url'] = ($return_url) ? $return_url : url('/payment/success');
@@ -711,7 +710,7 @@ function calculateCreditBalanceForUpgradeDowngrade(\App\SubscriptionPlans $packa
     $existing_plan = \App\UserSubscription::query()->whereIn('user_id', getDependentUserIds())->orderBy('id', 'desc')->where('payment_status', '=', 'Completed')->first();
     $return = [];
     $return['status'] = true;
-    if ($existing_plan) {
+    if ($existing_plan && \Carbon\Carbon::today()->lessThanOrEqualTo(\Carbon\Carbon::parse($existing_plan->subscription_expire_at))) {
 
         if ($package->price_plan_type == "1" && is_null($package->price)) {
             return ['status' => false, 'message' => 'You are not allowed to downgrade to a trial plan.', 'errorCode' => 'package_error'];
@@ -739,6 +738,7 @@ function calculateCreditBalanceForUpgradeDowngrade(\App\SubscriptionPlans $packa
             if ($package->annual_discount > 0) {
                 $new_plan_price = $new_plan_price - round(($package->annual_discount / 100) * $new_plan_price, 2);
             }
+
             if(is_null($existing_plan->subscriptionPackage->price)) {
                 $total_subscription_days = 365;
             } else {
@@ -802,6 +802,49 @@ function calculateCreditBalanceForUpgradeDowngrade(\App\SubscriptionPlans $packa
             $return['adjustable_amount'] = $old_amount_paid - $old_plan_price_levied;
 
         }
+    } else {
+
+        if($package->validity) {
+            $expiry_date = \Carbon\Carbon::today()->addDays($package->validity)->format(config('settings.date_format'));
+        } else {
+            $expiry_date = \Carbon\Carbon::today()->addYear(1)->format(config('settings.date_format'));
+        }
+
+        $new_plan_price = $package->price * 12;
+
+        if ($package->annual_discount > 0) {
+            $new_plan_price = $new_plan_price - round(($package->annual_discount / 100) * $new_plan_price, 2);
+        }
+
+        $total_subscription_days = ($package->validity)?$package->validity:365;
+
+        $new_plan_per_day_rate = $new_plan_price / $total_subscription_days;
+
+        $new_plan_subscription_days = \Carbon\Carbon::parse($expiry_date)->diffInDays(\Carbon\Carbon::today());
+
+        $return['status'] = true;
+
+        $return['new_subscription_period'] = \Carbon\Carbon::today()->format(config('settings.date_format'))." - ". $expiry_date;
+
+        $return['new_plan_price'] = $new_plan_price;
+
+        $return['new_plan_total_subscription_days'] = ($package->validity)?$package->validity:365;
+
+        $return['new_plan_per_day_rate'] = $new_plan_per_day_rate;
+
+        $return['effective_date_of_new_plan'] = \Carbon\Carbon::today()->format(config('settings.date_format'));
+
+        $return['new_plan_subscroption_days'] = $new_plan_subscription_days;
+
+        $return['new_plan_price_levied'] = 0;
+
+        $return['total_payable'] = $new_plan_price;
+
+        $return['price_paid'] = 0;
+
+        $return['final_payment_amount'] = -1 * $new_plan_price;
+
+        $return['adjustable_amount'] = 0;
     }
 
     return $return;
@@ -815,7 +858,7 @@ function calculateCreditBalanceForUpgradeDowngrade(\App\SubscriptionPlans $packa
 function getAdjustedAmountForUpgradeDownGrade(\App\SubscriptionPlans $package){
     $existing_plan = \App\UserSubscription::query()->whereIn('user_id', getDependentUserIds())->orderBy('id', 'desc')->where('payment_status', '=', 'Completed')->first();
     $final_payment_amount = [];
-    if ($existing_plan) {
+    if ($existing_plan && \Carbon\Carbon::today()->lessThanOrEqualTo(\Carbon\Carbon::parse($existing_plan->subscription_expire_at))) {
 
         if ($existing_plan->subscriptionPackage->price_plan_type == '1') {
 
@@ -882,6 +925,18 @@ function getAdjustedAmountForUpgradeDownGrade(\App\SubscriptionPlans $package){
                 'message' => 'You are trying to upgrade to the enterprise plan.'
             ];
         }
+    } else {
+        $final_payment_amount['status'] = true;
+
+        $final_payment_amount['adjusted_amount'] = 0;
+
+        $new_plan_price = $package->price * 12;
+
+        if ($package->annual_discount > 0) {
+            $new_plan_price = $new_plan_price - round(($package->annual_discount / 100) * $new_plan_price, 2);
+        }
+
+        $final_payment_amount['balance' ]  = -1 * $new_plan_price;
     }
 
     return $final_payment_amount;

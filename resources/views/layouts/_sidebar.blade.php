@@ -1,7 +1,6 @@
-
- @if(auth()->check())
+@if(auth()->check())
     <div class="ifrsBx" style="display:inline-block;padding:10px; ">
-        <span class="badge badge-primary" style="padding: 10px; line-height:20px; font-size:14px; border-radius: 30px;">{{ auth()->user()->applicable_gaap }}</span>
+        <span class="badge badge-primary" style="padding: 10px; line-height:20px; font-size:14px; border-radius: 30px;">{{ getParentDetails()->applicable_gaap }}</span>
     </div>
 @endif
 

@@ -81,7 +81,13 @@
                                     </h2>
                                 </li>
                                 <li class="s_head">Support<h2>User Guide</h2></li>
-                                <li class="s_head">Offer<h2>----</h2></li>
+                                <li class="s_head">Offer<h2>
+                                        @if($plan->annual_discount > 0)
+                                            {{ (int)$plan->annual_discount }}% Off on Annual Subscription
+                                        @else
+                                            ----
+                                        @endif
+                                    </h2></li>
                                 <li class="plan-action">
                                     <a href="{{ route('register.index', ['package'=>$plan->slug]) }}" class="btn btn-primary">Subscribe Now</a>
                                 </li>

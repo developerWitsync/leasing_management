@@ -18,7 +18,7 @@ class CreateLeaseLockYearTable extends Migration
             $table->unsignedInteger('business_account_id');
             $table->foreign('business_account_id')->references('id')->on('users')->onDelete('cascade');
             $table->date('start_date')->nullable();
-              $table->enum('status', ['0', '1'])->default('0')->nullable();
+            $table->enum('status', ['0', '1'])->default('0')->nullable();
             $table->timestamps();
         });
     }

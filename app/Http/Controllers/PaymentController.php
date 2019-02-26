@@ -8,16 +8,13 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
+use App\Mail\SubscriptionInvoice;
 use App\UserSubscription;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Srmklive\PayPal\Services\ExpressCheckout;
 use Mail;
 use Storage;
-use App\Mail\RegistrationCredentials;
-use App\Mail\RegistrationConfirmation;
 
 class PaymentController extends Controller
 {
@@ -119,7 +116,7 @@ class PaymentController extends Controller
                 $subscription->save();
                 if($request->payment_status == "Completed"){
                     //need to send the invoice to the user for the purchase of the plan...
-
+                    Mail::to($subscription->user)->queue(new SubscriptionInvoice($subscription));
                 }
 
             }

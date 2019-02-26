@@ -124,8 +124,21 @@ class RegisterController extends Controller
             if($validator->fails()){
                 return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
             }
+
             $userData = $request->all();
+
             $userData['password'] = str_random(8);
+
+            $uniqueFileName = '';
+
+            if($request->hasFile('certificates')){
+                $file = $request->file('certificates');
+                $uniqueFileName = uniqid() . $file->getClientOriginalName();
+                $request->file('certificates')->move('uploads', $uniqueFileName);
+            }
+
+            $userData['certificates'] = $uniqueFileName;
+
             $user = $this->create($userData);
             if ($user) {
 
@@ -165,8 +178,7 @@ class RegisterController extends Controller
                 }
             }
         } catch (\Exception $e){
-            dd($e);
+            abort(404);
         }
-
     }
 }

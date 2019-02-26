@@ -1,3 +1,4 @@
+<div class="categoriesOuter clearfix">
 <form role="form" class="form-horizontal" method="post" enctype="multipart/form-data" id="lease_balence">
     {{ csrf_field() }}
 
@@ -152,7 +153,7 @@
 
     </div>
 </form>
-
+</div>
 @section('footer-script')
     <script src="{{ asset('js/jquery-ui.js') }}"></script>
     <script type="text/javascript">

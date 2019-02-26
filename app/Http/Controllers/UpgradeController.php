@@ -16,6 +16,8 @@ use function GuzzleHttp\Psr7\str;
 use Illuminate\Http\Request;
 use phpDocumentor\Reflection\Types\Resource_;
 use Srmklive\PayPal\Services\ExpressCheckout;
+use Mail;
+use App\Mail\SubscriptionInvoice;
 
 class UpgradeController extends Controller
 {
@@ -41,23 +43,28 @@ class UpgradeController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(){
-        $breadcrumbs= $this->breadcrumbs;
-        //check if the logged in user have purchased a plan or not
-        $subscription = UserSubscription::query()->whereIn('user_id', getDependentUserIds())
-            ->where('payment_status', '<>', 'pending')
-            ->where('payment_status', '<>', 'Cancelled')
-            ->orderBy('created_at', 'desc')
-            ->first();
-        $already_created_leases = Lease::query()->whereIn('business_account_id', getDependentUserIds())
-            ->where('status', '=', '1')
-            ->count();
-        $plans = SubscriptionPlans::query()->get();
-        return view('plan.index', compact(
-            'breadcrumbs',
-            'subscription',
-            'already_created_leases',
-            'plans'
-        ));
+        try{
+            $breadcrumbs= $this->breadcrumbs;
+            //check if the logged in user have purchased a plan or not
+            $subscription = UserSubscription::query()->whereIn('user_id', getDependentUserIds())
+                ->where('payment_status', '<>', 'pending')
+                ->where('payment_status', '<>', 'Cancelled')
+                ->orderBy('created_at', 'desc')
+                ->first();
+
+            $already_created_leases = Lease::query()->whereIn('business_account_id', getDependentUserIds())
+                ->where('status', '=', '1')
+                ->count();
+            $plans = SubscriptionPlans::query()->get();
+            return view('plan.index', compact(
+                'breadcrumbs',
+                'subscription',
+                'already_created_leases',
+                'plans'
+            ));
+        } catch (\Exception $e){
+            dd($e);
+        }
     }
 
     /**
@@ -74,14 +81,17 @@ class UpgradeController extends Controller
                 //need to check if the user is upgrading or downgrading the plan and need to send the amount to the paypal as per the calculations...
                 $credit_or_balance = calculateCreditBalanceForUpgradeDowngrade($package);
                 if($credit_or_balance['status']){
+
                     $view = view('plan._upgrade_downgrade', compact(
                         'credit_or_balance',
                         'plan'
                     ))->render();
+
                     return response()->json([
                         'status' => true,
                         'view' => $view
                     ], 200);
+
                 } else {
                     return response()->json($credit_or_balance, 200);
                 }
@@ -115,7 +125,6 @@ class UpgradeController extends Controller
                         }
 
                     } else {
-                        dd($adjusted_amount);
                         if($credits >= (-1 * $adjusted_amount['balance'])) {
                             $send_to_paypal = false;
                         } else {
@@ -170,6 +179,7 @@ class UpgradeController extends Controller
 
                 }
         } catch (\Exception $e){
+            dd($e);
             abort(404);
         }
     }

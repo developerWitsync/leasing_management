@@ -37,6 +37,7 @@ Auth::routes();
 
 Route::middleware('auth')->group(function(){
 
+    Route::get('invoice/{id}', ['as' => 'invoice.index', 'uses' => 'InvoiceController@index']);
  
     Route::get('/home', 'HomeController@index')->name('home');
     Route::get('/home/fetch-details', ['as' => 'home.fetchdetails', 'uses' => 'HomeController@fetchDetails']);

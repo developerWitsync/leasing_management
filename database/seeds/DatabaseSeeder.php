@@ -61,5 +61,10 @@ class DatabaseSeeder extends Seeder
 		$this->call(PermissionSeeder::class);
 		$this->call(RateTypes::class);
 		$this->call(UseOfLeaseAsset::class);
+
+        $path = 'database/sqls/subscription_plans.sql';
+        DB::unprepared(file_get_contents($path));
+        $this->command->info('States table seeded!');
+
     }
 }

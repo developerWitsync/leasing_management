@@ -23,10 +23,11 @@ class CheckSubscription
         $subscription = UserSubscription::query()->whereIn('user_id', getDependentUserIds())
             ->where('payment_status', '<>', 'pending')
             ->where('payment_status', '<>', 'Cancelled')
-            ->orderBy('created_at', 'desc')
+            ->orderBy('id', 'desc')
             ->first();
         if($subscription){
             //need to check if the purchase and active subscription have expired
+
             if(!Carbon::today()->lessThanOrEqualTo(Carbon::parse($subscription->subscription_expire_at))){
                 //subscription has expired need to redirect to the upgrade plan page...
                 return redirect(route('plan.index'))->with('error', "Your subscription plan has expired. Please purchase any subscription plan.");

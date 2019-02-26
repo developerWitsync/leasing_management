@@ -201,7 +201,7 @@
 
                                             <span style="position: absolute;right: -15px; top: 0px;">
                                                 <button type="button" class="browseBtn">Browse</button>
-                                                <input type="file" id="file-name" name="certificates" class="fileType">
+                                                <input type="file" id="file-name" name="certificates" class="fileType" style="height: 39px;">
                                             </span>
 
                                             <h6 class="disabled">{{ config('settings.file_size_limits.file_validation') }}</h6>
