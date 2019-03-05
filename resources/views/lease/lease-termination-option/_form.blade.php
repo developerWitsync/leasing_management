@@ -78,8 +78,10 @@
         <div class="form-group{{ $errors->has('lease_end_date') ? ' has-error' : '' }} required">
             <label for="lease_end_date" class="col-md-12 control-label">Expected Lease End Date</label>
             <div class="col-md-12">
+
                 <input type="text" placeholder="Expected Lease End Date" class="form-control lease_period" id="lease_end_date"
-                       name="lease_end_date" value="{{ old('lease_end_date', $model->lease_end_date) }}" autocomplete="off">
+                       name="lease_end_date" value="{{ old('lease_end_date', $model->lease_end_date) }}" autocomplete="off" readonly="true">
+                
                 @if ($errors->has('lease_end_date'))
                     <span class="help-block">
                         <strong>{{ $errors->first('lease_end_date') }}</strong>
@@ -167,19 +169,18 @@
             });
 
         $(document).ready(function () {
-
-                    @if(\Carbon\Carbon::parse($asset->accural_period)->greaterThanOrEqualTo(\Carbon\Carbon::today()))
-            var minDate = new Date({{ $asset->accural_period }});
-                    @else
-            var minDate = new Date();
+            @if($subsequent_modify_required)
+                var minDate = new Date('{{ $asset->lease->modifyLeaseApplication->last()->effective_from}}');
+            @else
+                var minDate = new Date('{{ $asset->accural_period }}');
             @endif
-
             $("#lease_end_date").datepicker({
                 dateFormat: "dd-M-yy",
                 minDate: minDate,
                 changeMonth:true,
                 changeYear:true,
                 maxDate: new Date('{{ $asset->lease_end_date }}'),
+                {!!  getYearRanage() !!}
                 onSelect: function (date, instance) {
                         var _ajax_url = '{{route("lease.checklockperioddate")}}';
                         checklockperioddate(date, instance, _ajax_url);

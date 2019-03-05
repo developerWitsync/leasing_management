@@ -136,7 +136,6 @@ class UnderlyingLeaseAssetController extends Controller
                     'sub_category_id'   => 'required|exists:lease_assets_sub_categories_settings,id',
                     'name'  => 'required',
                     'similar_asset_items'   =>'required|numeric',
-                    'other_details' => 'required',
                     'country_id' => 'required|exists:countries,id',
                     'location' => 'required',
                     'specific_use' => 'required|exists:lease_asset_use_master,id',
@@ -152,7 +151,6 @@ class UnderlyingLeaseAssetController extends Controller
 
                 $messages = [
                     'country_id.required' => 'The country field is required.',
-                    'other_details.required' => 'The Other Details field is required.',
                     'specific_use.required' => 'The Specific use of asset field is required.',
                     'use_of_asset.required_if' => 'The Use of Asset is required if specific use of the Lease Asset is Own Use.',
                     'expected_life.required' => 'The expected life of asset field is required.',
@@ -356,7 +354,6 @@ class UnderlyingLeaseAssetController extends Controller
                     });
 
                     $rules = [
-                        'other_details' => 'required',
                         'country_id'   => 'required|exists:countries,id',
                         'location'  => 'required',
                         'specific_use'  => 'required|exists:lease_asset_use_master,id',
@@ -372,7 +369,6 @@ class UnderlyingLeaseAssetController extends Controller
 
                     $messages =  [
                         'country_id.required'          => 'The country field is required.',
-                        'other_details.required'       =>   'The Other Details field is required.',
                         'specific_use.required'        =>   'The Specific use of asset field is required.',
                         'use_of_asset.required_if'     =>   'The Use of Asset is required if specific use of the Lease Asset is Own Use.',
                         'expected_life.required'       =>   'The expected life of asset field is required.',

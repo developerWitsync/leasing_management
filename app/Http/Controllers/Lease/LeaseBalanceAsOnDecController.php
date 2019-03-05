@@ -57,6 +57,10 @@ class LeaseBalanceAsOnDecController extends Controller
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
 
             if ($lease) {
+
+                //check if the Subsequent Valuation is applied for the lease modification
+                $subsequent_modify_required = $lease->isSubsequentModification();
+
                 $asset = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '<', '2019-01-01')->first();//since there can now only be one lease asset per lease
                 if ($asset) {
                     if ($asset->leaseBalanceAsOnDec) {
@@ -144,7 +148,8 @@ class LeaseBalanceAsOnDecController extends Controller
                         'breadcrumbs',
                         'back_url',
                         'current_step',
-                        'currency_settings'
+                        'currency_settings',
+                        'subsequent_modify_required'
                     ));
                 } else {
                     return redirect(route('addlease.initialdirectcost.index', ['id' => $id]));

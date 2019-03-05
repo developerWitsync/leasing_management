@@ -52,6 +52,10 @@ class LeaseIncentivesController extends Controller
             ];
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
             if ($lease) {
+
+                //check if the Subsequent Valuation is applied for the lease modification
+                $subsequent_modify_required = $lease->isSubsequentModification();
+
                 $asset = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '>=', '2019-01-01')->first();
                 if ($asset) {
                     $currencies = Currencies::query()->where('status', '=', '1')->get();
@@ -131,7 +135,8 @@ class LeaseIncentivesController extends Controller
                         'customer_details',
                         'currencies',
                         'breadcrumbs',
-                        'current_step'
+                        'current_step',
+                        'subsequent_modify_required'
                     ));
 
                 } else {

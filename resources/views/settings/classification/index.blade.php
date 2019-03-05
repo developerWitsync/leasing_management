@@ -415,9 +415,9 @@
                         <div class="panel panel-info">
                             <div class="panel-heading">
                                 Number of Lease Payments
-                                <span>
-                                    <a href="javascript:void(0);" class="btn btn-sm btn-primary pull-right add_more" data-form="add_more_no_of_lease_payments">Add More</a>
-                                </span>
+                                {{--<span>--}}
+                                    {{--<a href="javascript:void(0);" class="btn btn-sm btn-primary pull-right add_more" data-form="add_more_no_of_lease_payments">Add More</a>--}}
+                                {{--</span>--}}
                             </div>
                             <div class="panel-body settingTble">
                                 <table class="table table-condensed">
@@ -425,7 +425,7 @@
                                     <tr>
                                         <th width="80px">Sr No.</th>
                                         <th>Number</th>
-                                        <th width="120px">Action</th>
+                                        {{--<th width="120px">Action</th>--}}
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -435,14 +435,14 @@
                                             <td class="title">
                                                 {{ $value->number }}
                                             </td>
-                                            <td>
+                                            {{--<td>--}}
 
-                                                <a data-href="{{ route('settings.leaseclassification.editleasepaymentsnumber', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-success edit_table_setting">
-                                                    <i class="fa fa-pencil-square-o"></i>
-                                                </a>
+                                                {{--<a data-href="{{ route('settings.leaseclassification.editleasepaymentsnumber', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-success edit_table_setting">--}}
+                                                    {{--<i class="fa fa-pencil-square-o"></i>--}}
+                                                {{--</a>--}}
 
-                                                <a data-href="{{ route('settings.leaseclassification.deleteleasepaymentsnumber', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-danger delete_settings"><i class="fa fa-trash-o"></i></a>
-                                            </td>
+                                                {{--<a data-href="{{ route('settings.leaseclassification.deleteleasepaymentsnumber', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-danger delete_settings"><i class="fa fa-trash-o"></i></a>--}}
+                                            {{--</td>--}}
                                         </tr>
                                     @endforeach
                                     <tr style=" {{ $errors->has('lease_payments_no') ? ' has-error' : 'display: none' }}" class="add_more_no_of_lease_payments">

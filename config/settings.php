@@ -20,7 +20,10 @@ return [
         1
     ],
     'no_of_lease_payments' => [
-        1
+        1,
+        2,
+        3,
+        4
     ],
     'escalation_percentage_settings' => [
         0,

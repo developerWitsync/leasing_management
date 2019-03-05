@@ -33,6 +33,8 @@
                 </div>
             @endif
 
+            @include('lease._subsequent_details')
+
             <div class="tab-content" style="padding: 0px;">
                 <div role="tabpanel" class="tab-pane active">
                     <form action="{{ route('lease.payments.savetotalpayments', ['id' => $asset->id]) }}" method="post" id="total_asset_payments">

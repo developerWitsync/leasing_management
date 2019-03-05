@@ -20,6 +20,8 @@
                 </div>
             </div>
 
+                @include('lease._subsequent_details')
+
         </div>
     </div>
 @endsection

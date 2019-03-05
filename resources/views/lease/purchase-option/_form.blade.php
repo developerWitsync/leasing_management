@@ -166,6 +166,7 @@
                 changeMonth:true,
                 changeYear:true,
                 maxDate : new Date('{{ ($asset->renewableOptionValue->is_reasonable_certainity_option == "yes")?$asset->renewableOptionValue->expected_lease_end_Date:$asset->lease_end_date }}'),
+                {!!  getYearRanage() !!}
                 onSelect: function (date, instance) {
 
                     var _ajax_url = '{{route("lease.checklockperioddate")}}';
@@ -191,6 +192,8 @@
                 dateFormat: "dd-M-yy",
                 changeMonth:true,
                 changeYear:true,
+                {!!  getYearRanage() !!}
+                maxDate : new Date('{{ ($asset->renewableOptionValue->is_reasonable_certainity_option == "yes")?$asset->renewableOptionValue->expected_lease_end_Date:$asset->lease_end_date }}'),
                 onSelect: function (date, instance) {
                         var _ajax_url = '{{route("lease.checklockperioddate")}}';
                         checklockperioddate(date, instance, _ajax_url);

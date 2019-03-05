@@ -20,14 +20,22 @@
                     {{ session('error') }}
                 </div>
             @endif
+
+            @include('settings._menubar')
+
+            <div class="tab-content" style="padding: 0px;">
+                <div role="tabpanel" class="tab-pane active">
                     <div class="panel panel-info">
                         <div class="panel-heading">
-                            Add User
+                            <strong>Create User</strong> <small>| Create a new sub-user for the business account from here. Please select the role for the user from the roles dropdown.</small>
                         </div>
                         <div class="panel-body">
                             @include('settings.useraccess.user._form')
                         </div>
                     </div>
+
+                </div>
+            </div>
 
         </div>
     </div>

@@ -59,6 +59,10 @@ class InitialDirectCostController extends Controller
             ];
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
             if ($lease) {
+
+                //check if the Subsequent Valuation is applied for the lease modification
+                $subsequent_modify_required = $lease->isSubsequentModification();
+
                 $asset = LeaseAssets::query()->where('lease_id', '=', $id)->where('lease_start_date', '>=', '2019-01-01')->first(); //since there can be only one lease asset per lease
                 if ($asset) {
                     $currencies = Currencies::query()->where('status', '=', '1')->get();
@@ -188,7 +192,8 @@ class InitialDirectCostController extends Controller
                         'currencies',
                         'breadcrumbs',
                         'back_url',
-                        'current_step'
+                        'current_step',
+                        'subsequent_modify_required'
                     ));
 
                 } else {

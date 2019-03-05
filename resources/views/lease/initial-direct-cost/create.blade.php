@@ -5,7 +5,7 @@
 
 @section('content')
     <div class="panel panel-default">
-        <div class="panel-heading"> Initial Direct Cost </div>
+        <div class="panel-heading"> Initial Direct Cost</div>
 
         <div class="panel-body">
             @if (session('status'))
@@ -13,6 +13,8 @@
                     {{ session('status') }}
                 </div>
             @endif
+
+            @include('lease._subsequent_details')
 
             <div class="tab-content" style="padding: 0px;">
                 <div role="tabpanel" class="tab-pane active">

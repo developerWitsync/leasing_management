@@ -89,7 +89,11 @@
                                         @endif
                                     </h2></li>
                                 <li class="plan-action">
-                                    <a href="{{ route('register.index', ['package'=>$plan->slug]) }}" class="btn btn-primary">Subscribe Now</a>
+                                    @if($plan->price_plan_type == 1)
+                                        <a href="{{ route('register.index', ['package'=>$plan->slug]) }}" class="btn btn-primary">Subscribe Now</a>
+                                    @else
+                                        <a href="javascript:void(0);" class="btn btn-primary">Coming Soon</a>
+                                    @endif
                                 </li>
                             </ul>
                         </div>

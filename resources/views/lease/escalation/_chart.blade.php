@@ -1,3 +1,12 @@
+<style>
+    .table > tbody > tr > td {
+        font-size: 13px;
+        color: #666;
+        border: 0;
+        border-right: #ccc solid 1px;
+        border-bottom: #ccc solid 1px;
+    }
+</style>
 <div class="modal-header">
     <h5 class="modal-title">Escalations Chart</h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -33,47 +42,47 @@
                     </tr>
                     </thead>
                     <tbody>
-                        @php
-                            $grand_total = 0;
-                        @endphp
-                        @foreach($years as $year)
-                            <tr>
-                                <td>
-                                    <strong>
-                                        {{ $year }}
-                                    </strong>
-                                </td>
-                                @php
-                                    $total = 0;
-                                @endphp
-                                @foreach($months as $month)
-                                    @if(isset($escalations[$year][$month]) && !empty($escalations[$year][$month]))
-                                        <td class="{{ $escalations[$year][$month]['current_class'] }}">
-                                            <span>
-                                                @if($requestData['is_escalation_applicable'] == 'yes')
-                                                    {{ $escalations[$year][$month]['percentage'] }} @if($requestData['escalation_basis'] == '1') % @endif / {{ $escalations[$year][$month]['amount'] }}
-                                                @elseif($requestData['is_escalation_applicable'] == 'no')
-                                                    {{ $escalations[$year][$month]['amount'] }}
-                                                @endif
-                                            </span>
-                                            @php
-                                                $total = $total + $escalations[$year][$month]['amount'];
-                                            @endphp
-                                        </td>
-                                    @else
-                                        <td class="info">&nbsp;</td>
-                                    @endif
-                                @endforeach
-                                <td>{{ $total }}</td>
-                                @php
-                                    $grand_total += $total;
-                                @endphp
-                            </tr>
-                        @endforeach
+                    @php
+                        $grand_total = 0;
+                    @endphp
+                    @foreach($years as $year)
                         <tr>
-                            <td colspan="13">TOTAL</td>
-                            <td>{{ $grand_total }}</td>
+                            <td>
+                                <strong>
+                                    {{ $year }}
+                                </strong>
+                            </td>
+                            @php
+                                $total = 0;
+                            @endphp
+                            @foreach($months as $month)
+                                @if(isset($escalations[$year][$month]) && !empty($escalations[$year][$month]))
+                                    <td class="{{ $escalations[$year][$month]['current_class'] }}" style="padding: 0">
+                                                @if($requestData['is_escalation_applicable'] == 'yes')
+                                                    <strong style="display: inline-block;border-bottom: 1px #75e344 solid;padding: 5px 10px;border-right: 1px #75e344 solid;color: #000;background-color: #75e344;">{{ $escalations[$year][$month]['percentage'] }}
+                                                        @if($requestData['escalation_basis'] == '1') % @endif </strong>
+                                                    <span style="padding: 5px 10px;display: block;">{{ $escalations[$year][$month]['amount'] }}</span>
+                                                @elseif($requestData['is_escalation_applicable'] == 'no')
+                                                    <span style="padding: 5px 10px;display: block;">{{ $escalations[$year][$month]['amount'] }}</span>
+                                                @endif
+                                        @php
+                                            $total = $total + $escalations[$year][$month]['amount'];
+                                        @endphp
+                                    </td>
+                                @else
+                                    <td class="info">&nbsp;</td>
+                                @endif
+                            @endforeach
+                            <td>{{ $total }}</td>
+                            @php
+                                $grand_total += $total;
+                            @endphp
                         </tr>
+                    @endforeach
+                    <tr>
+                        <td colspan="13">TOTAL</td>
+                        <td>{{ $grand_total }}</td>
+                    </tr>
                     </tbody>
                 </table>
             </div>

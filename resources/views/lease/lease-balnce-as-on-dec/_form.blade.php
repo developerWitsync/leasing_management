@@ -22,7 +22,7 @@
         <div class="form-group{{ $errors->has('reporting_currency') ? ' has-error' : '' }} required">
             <label for="name" class="col-md-12 control-label">Reporting Currency</label>
             <div class="col-md-12 form-check form-check-inline" required>
-                <select class="form-control" name="reporting_currency">
+                <select class="form-control" name="reporting_currency" @if($subsequent_modify_required) disabled="disabled" @endif>
                     <option value="">--Please Select--</option>
                     <option value="1"
                             @if(old('reporting_currency', $model->reporting_currency) == "1") selected="selected" @endif>
@@ -45,6 +45,11 @@
                     <strong>{{ $errors->first('reporting_currency') }}</strong>
                 </span>
                 @endif
+
+                @if($subsequent_modify_required)
+                    <input type="hidden" name="reporting_currency" value="{{ $model->reporting_currency }}"/>
+                @endif
+
             </div>
         </div>
 
@@ -52,12 +57,17 @@
             <label for="exchange_rate" class="col-md-12 control-label">Exchange Rate (as on 31 Dec 2018)</label>
             <div class="col-md-12 form-check form-check-inline">
                 <input type="text" value="{{ old('exchange_rate', $model->exchange_rate) }}" class="form-control"
-                       id="exchange_rate" name="exchange_rate">
+                       id="exchange_rate" name="exchange_rate" @if($subsequent_modify_required) disabled="disabled" @endif>
                 @if ($errors->has('exchange_rate'))
                     <span class="help-block">
                     <strong>{{ $errors->first('exchange_rate') }}</strong>
                 </span>
                 @endif
+
+                @if($subsequent_modify_required)
+                    <input type="hidden" value="{{ $model->exchange_rate }}" name="exchange_rate" />
+                @endif
+
             </div>
         </div>
 
@@ -66,12 +76,17 @@
                 <label for="name" class="col-md-12 control-label">Carrying Amount</label>
                 <div class="col-md-12 form-check form-check-inline" required>
                     <input class="form-control" name="carrying_amount" type="text"
-                           value="{{ old('carrying_amount', $model->carrying_amount) }}">
+                           value="{{ old('carrying_amount', $model->carrying_amount) }}" @if($subsequent_modify_required) disabled="disabled" @endif>
                     @if ($errors->has('carrying_amount'))
                         <span class="help-block">
                     <strong>{{ $errors->first('carrying_amount') }}</strong>
                 </span>
                     @endif
+
+                    @if($subsequent_modify_required)
+                        <input type="hidden" name="carrying_amount" value="{{ $model->carrying_amount }}" />
+                    @endif
+
                 </div>
             </div>
 
@@ -79,12 +94,17 @@
                 <label for="name" class="col-md-12 control-label">Liability Balance</label>
                 <div class="col-md-12 form-check form-check-inline" required>
                     <input class="form-control" name="liability_balance" id="yes" type="text"
-                           value="{{ old('liability_balance', $model->liability_balance) }}">
+                           value="{{ old('liability_balance', $model->liability_balance) }}" @if($subsequent_modify_required) disabled="disabled" @endif>
                     @if ($errors->has('liability_balance'))
                         <span class="help-block">
                     <strong>{{ $errors->first('liability_balance') }}</strong>
                 </span>
                     @endif
+
+                    @if($subsequent_modify_required)
+                        <input type="hidden" name="liability_balance" value="{{ $model->liability_balance }}" />
+                    @endif
+
                 </div>
             </div>
         @endif
@@ -92,48 +112,69 @@
             <label for="name" class="col-md-12 control-label">Prepaid Lease Payment Balance</label>
             <div class="col-md-12 form-check form-check-inline" required>
                 <input class="form-control" name="prepaid_lease_payment_balance" type="text"
-                       value="{{ old('prepaid_lease_payment_balance', $model->prepaid_lease_payment_balance) }}">
+                       value="{{ old('prepaid_lease_payment_balance', $model->prepaid_lease_payment_balance) }}" @if($subsequent_modify_required) disabled="disabled" @endif>
                 @if ($errors->has('prepaid_lease_payment_balance'))
                     <span class="help-block">
                     <strong>{{ $errors->first('prepaid_lease_payment_balance') }}</strong>
                 </span>
                 @endif
+
+                @if($subsequent_modify_required)
+                    <input type="hidden" name="prepaid_lease_payment_balance" value="{{ $model->prepaid_lease_payment_balance }}" />
+                @endif
+
             </div>
         </div>
         <div class="form-group{{ $errors->has('accrued_lease_payment_balance') ? ' has-error' : '' }} required">
             <label for="name" class="col-md-12 control-label">Accrued lease Payment Balance</label>
             <div class="col-md-12 form-check form-check-inline" required>
                 <input class="form-control" name="accrued_lease_payment_balance" type="text"
-                       value="{{ old('accrued_lease_payment_balance', $model->accrued_lease_payment_balance) }}">
+                       value="{{ old('accrued_lease_payment_balance', $model->accrued_lease_payment_balance) }}" @if($subsequent_modify_required) disabled="disabled" @endif>
                 @if ($errors->has('accrued_lease_payment_balance'))
                     <span class="help-block">
                     <strong>{{ $errors->first('accrued_lease_payment_balance') }}</strong>
                 </span>
                 @endif
+
+                @if($subsequent_modify_required)
+                    <input type="hidden" name="accrued_lease_payment_balance" value="{{ $model->accrued_lease_payment_balance }}" />
+                @endif
+
             </div>
         </div>
         <div class="form-group{{ $errors->has('outstanding_lease_payment_balance') ? ' has-error' : '' }} required">
             <label for="name" class="col-md-12 control-label">OutStanding Lease Payment Lease</label>
             <div class="col-md-12 form-check form-check-inline" required>
                 <input class="form-control" name="outstanding_lease_payment_balance" type="text"
-                       value="{{ old('outstanding_lease_payment_balance', $model->outstanding_lease_payment_balance) }}">
+                       value="{{ old('outstanding_lease_payment_balance', $model->outstanding_lease_payment_balance) }}" @if($subsequent_modify_required) disabled="disabled" @endif>
                 @if ($errors->has('outstanding_lease_payment_balance'))
                     <span class="help-block">
                     <strong>{{ $errors->first('outstanding_lease_payment_balance') }}</strong>
                 </span>
                 @endif
+
+                @if($subsequent_modify_required)
+                    <input type="hidden" name="outstanding_lease_payment_balance" value="{{ $model->outstanding_lease_payment_balance }}" />
+                @endif
+
             </div>
         </div>
+
         <div class="form-group{{ $errors->has('any_provision_for_onerous_lease') ? ' has-error' : '' }} required">
             <label for="name" class="col-md-12 control-label">Any Provision for Onerous Lease</label>
             <div class="col-md-12 form-check form-check-inline" required>
                 <input class="form-control" name="any_provision_for_onerous_lease" id="yes" type="text"
-                       value="{{ old('any_provision_for_onerous_lease', $model->any_provision_for_onerous_lease) }}">
+                       value="{{ old('any_provision_for_onerous_lease', $model->any_provision_for_onerous_lease) }}" @if($subsequent_modify_required) disabled="disabled" @endif>
                 @if ($errors->has('any_provision_for_onerous_lease'))
                     <span class="help-block">
                     <strong>{{ $errors->first('any_provision_for_onerous_lease') }}</strong>
                 </span>
                 @endif
+
+                @if($subsequent_modify_required)
+                    <input type="hidden" name="any_provision_for_onerous_lease" value="{{ $model->any_provision_for_onerous_lease }}" />
+                @endif
+
             </div>
         </div>
     </div>
@@ -177,19 +218,19 @@
                     $('.selected_currency_option').html(_return_currency).show();
                     $('input[name="reporting_currency_selected"]').val(_return_currency);
                     //call the exchange APIs from here to get the exchange rates
-                    fetchExchangeRate(base, _return_currency, base_date, access_key, element_selector);
+                    fetchExchangeRate(base, _return_currency, base_date, access_key, element_selector, 'historical');
                     break;
                 case '2' :
                     _return_currency = '{{ $currency_settings->internal_company_financial_reporting_currency }}';
                     $('.selected_currency_option').html(_return_currency).show();
                     $('input[name="reporting_currency_selected"]').val(_return_currency);
-                    fetchExchangeRate(base, _return_currency, base_date, access_key, element_selector);
+                    fetchExchangeRate(base, _return_currency, base_date, access_key, element_selector, 'historical');
                     break;
                 case '3' :
                     _return_currency = '{{ $currency_settings->currency_for_lease_reports }}';
                     $('.selected_currency_option').html(_return_currency).show();
                     $('input[name="reporting_currency_selected"]').val(_return_currency);
-                    fetchExchangeRate(base, _return_currency, base_date, access_key, element_selector);
+                    fetchExchangeRate(base, _return_currency, base_date, access_key, element_selector, 'historical');
                     break;
                 default :
                     $('.selected_currency_option').html(_return_currency).hide();

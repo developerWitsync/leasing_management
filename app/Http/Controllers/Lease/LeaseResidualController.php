@@ -71,6 +71,9 @@ class LeaseResidualController extends Controller
 
             if ($lease) {
 
+                //check if the Subsequent Valuation is applied for the lease modification
+                $subsequent_modify_required = $lease->isSubsequentModification();
+
                 $asset = $lease->assets->first(); //since the user will now have only one lease asset
 
                 if($asset->residualGuranteeValue){
@@ -143,7 +146,8 @@ class LeaseResidualController extends Controller
                     'reporting_currency_settings',
                     'breadcrumbs',
                     'payment_lease_basis',
-                    'current_step'
+                    'current_step',
+                    'subsequent_modify_required'
                 ));
             } else {
                 abort(404);

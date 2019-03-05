@@ -66,6 +66,9 @@ class LeaseTerminationOptionController extends Controller
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
             if($lease) {
 
+                //check if the Subsequent Valuation is applied for the lease modification
+                $subsequent_modify_required = $lease->isSubsequentModification();
+
                 $asset = $lease->assets->first(); //users will have only lease asset from now.
                 if($asset->terminationOption){
                     $model = $asset->terminationOption;
@@ -84,6 +87,9 @@ class LeaseTerminationOptionController extends Controller
                     $data = $request->except('_token', 'uuid', 'asset_name', 'asset_category','action');
                     if($request->lease_end_date!=""){
                         $data['lease_end_date']  = Carbon::parse($request->lease_end_date)->format('Y-m-d');
+                        //should also update the lease end date here..
+                        $asset->lease_end_date = $data['lease_end_date'];
+                        $asset->save();
                     }
                     $data['lease_id']   = $asset->lease->id;
                     $data['asset_id']   = $asset->id;
@@ -96,11 +102,8 @@ class LeaseTerminationOptionController extends Controller
                          if($request->has('action') && $request->action == "next") {
                             return redirect(route('addlease.renewable.index',['id' => $lease->id]))->with('status', 'Lease Termination Option Details has been added successfully.');
                         } else {
-
                              return redirect(route('addlease.leaseterminationoption.index',['id' => $lease->id]))->with('status', 'Lease Termination Option Details has been added successfully.');
-
                         }
-                       
                     }
                 }
                  //to get current step for steps form
@@ -110,12 +113,14 @@ class LeaseTerminationOptionController extends Controller
                     'lease',
                     'asset',
                     'breadcrumbs',
-                    'current_step'
+                    'current_step',
+                    'subsequent_modify_required'
                 ));
             } else {
                 abort(404);
             }
         } catch (\Exception $e) {
+            dd($e);
             abort(404);
         }
     }

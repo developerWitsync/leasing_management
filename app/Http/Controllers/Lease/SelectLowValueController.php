@@ -38,6 +38,9 @@ class SelectLowValueController extends Controller
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
             if($lease) {
 
+                //check if the Subsequent Valuation is applied for the lease modification
+                $subsequent_modify_required = $lease->isSubsequentModification();
+
                 $category_excluded = CategoriesLeaseAssetExcluded::query()->whereIn('business_account_id', getDependentUserIds())->get();
 
                 $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
@@ -89,7 +92,8 @@ class SelectLowValueController extends Controller
                         'lease',
                         'asset',
                         'total_undiscounted_value',
-                        'current_step'
+                        'current_step',
+                        'subsequent_modify_required'
                     ));
                 } else {
                     return redirect(route('addlease.discountrate.index', ['id' => $id]));

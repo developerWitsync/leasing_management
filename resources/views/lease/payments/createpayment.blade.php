@@ -20,6 +20,8 @@
                 </div>
             @endif
 
+            @include('lease._subsequent_details')
+
             <div class="tab-content" style="padding: 0px;">
                 <div role="tabpanel" class="tab-pane active">
                     @include('lease.payments._form')

@@ -15,6 +15,8 @@
                 </div>
             @endif
 
+                @include('lease._subsequent_details')
+
             <div class="tab-content" style="padding: 0px;">
                 <div role="tabpanel" class="tab-pane active">
                     <form role="form" action="{{ route('lease.esacalation.applicablestatus', ['id' => $lease->id]) }}" class="form-horizontal" method="post" enctype="multipart/form-data" id="lease_esclation">

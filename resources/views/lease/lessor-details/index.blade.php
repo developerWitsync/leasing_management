@@ -21,17 +21,7 @@
                 </div>
             @endif
 
-            @if($subsequent_modify_required)
-                <div class="clearfix">
-                    <div class="col-md-12 subsmentBx">
-                        <div class="col-md-6" style="padding: 0">
-                            Subsequent Remeasurement Effective From
-                        </div>
-                        <div class="col-md-6"
-                             style="padding: 0;text-align: right">{{ \Carbon\Carbon::parse($lease->modifyLeaseApplication->last()->effective_from)->format(config('settings.date_format')) }}</div>
-                    </div>
-                </div>
-            @endif
+            @include('lease._subsequent_details')
 
             @if(($reporting_currency_settings->is_foreign_transaction_involved == 'yes' || $reporting_currency_settings->is_foreign_transaction_involved == 'no') && $general_settings_count > 0)
 

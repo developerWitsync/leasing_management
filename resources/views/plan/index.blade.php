@@ -69,7 +69,7 @@
                                     <div class="cnrflash">
                                         <div class="cnrflash-inner">
                                             <span class="cnrflash-label">MOST<br>
-                                            POPULR</span>
+                                            POPULAR</span>
                                         </div>
                                     </div>
                                 @endif
@@ -154,22 +154,26 @@
                                     </table>
                                 </div>
                                 <div class="panel-footer">
-                                    @if($subscription && ($subscription->plan_id == $plan->id))
-                                        <span class="badge badge-info">
-                                            Expiring on {{ \Carbon\Carbon::parse($subscription->subscription_expire_at)->format('Y-m-d') }}
-                                        </span>
-                                    @elseif($subscription && $current_plan_key > -1 && $current_plan_key < $key)
-                                        <a href="{{ route('plan.purchase.updowninfo', ['plan' => $plan->slug]) }}" class="btn btn-sm btn-success purchase-plan" role="button">
-                                            Upgrade
-                                        </a>
-                                    @elseif($subscription)
-                                        <a href="{{ route('plan.purchase.updowninfo', ['plan' => $plan->slug]) }}" class="btn btn-sm btn-success purchase-plan" role="button">
-                                            DownGrade
-                                        </a>
+                                    @if($plan->price_plan_type == 1)
+                                        @if($subscription && ($subscription->plan_id == $plan->id))
+                                            <span class="badge badge-info">
+                                                Expiring on {{ \Carbon\Carbon::parse($subscription->subscription_expire_at)->format('Y-m-d') }}
+                                            </span>
+                                        @elseif($subscription && $current_plan_key > -1 && $current_plan_key < $key)
+                                            <a href="{{ route('plan.purchase.updowninfo', ['plan' => $plan->slug]) }}" class="btn btn-sm btn-success purchase-plan" role="button">
+                                                Upgrade
+                                            </a>
+                                        @elseif($subscription)
+                                            <a href="{{ route('plan.purchase.updowninfo', ['plan' => $plan->slug]) }}" class="btn btn-sm btn-success purchase-plan" role="button">
+                                                DownGrade
+                                            </a>
+                                        @else
+                                            <a href="{{ route('plan.purchase.updowninfo', ['plan' => $plan->slug]) }}" class="btn btn-sm btn-success purchase-plan" role="button">
+                                                Purchase
+                                            </a>
+                                        @endif
                                     @else
-                                        <a href="{{ route('plan.purchase.updowninfo', ['plan' => $plan->slug]) }}" class="btn btn-sm btn-success purchase-plan" role="button">
-                                            Purchase
-                                        </a>
+                                        Coming Soon
                                     @endif
                                 </div>
                             </div>

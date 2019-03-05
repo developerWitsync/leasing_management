@@ -25,7 +25,8 @@ class LeaseAssetPayments extends Model
         'total_amount_per_interval',
         'attachment',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'lease_payment_per_interval'
     ];
 
     public function category(){

@@ -62,6 +62,10 @@ class ReviewSubmitController extends Controller
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
 
         if ($lease) {
+
+            //check if the Subsequent Valuation is applied for the lease modification
+            $subsequent_modify_required = $lease->isSubsequentModification();
+
             $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->get();
             $contract_classifications = ContractClassifications::query()->select('id', 'title')->where('status', '=', '1')->get();
 
@@ -75,7 +79,8 @@ class ReviewSubmitController extends Controller
                 'reporting_currency_settings',
                 'contract_classifications',
                 'reporting_foreign_currency_transaction_settings',
-                'current_step'
+                'current_step',
+                'subsequent_modify_required'
             ));
 
         } else {

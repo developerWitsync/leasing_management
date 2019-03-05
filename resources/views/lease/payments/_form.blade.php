@@ -5,7 +5,9 @@
         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }} required">
             <label for="name" class="col-md-12 control-label">Name of Lease Payment</label>
             <div class="col-md-12">
-                <input id="name" type="text" placeholder="Name" class="form-control" name="name" value="{{ old('name', $payment->name) }}" @if($subsequent_modify_required) disabled="disabled" @endif>
+                <input id="name" type="text" placeholder="Name" class="form-control" name="name"
+                       value="{{ old('name', $payment->name) }}"
+                       @if($subsequent_modify_required) disabled="disabled" @endif>
                 @if ($errors->has('name'))
                     <span class="help-block">
                         <strong>{{ $errors->first('name') }}</strong>
@@ -24,7 +26,8 @@
                 <select name="type" class="form-control" @if($subsequent_modify_required) disabled="disabled" @endif>
                     <option value="">--Select Lease Payment Type--</option>
                     @foreach($lease_payments_types as $lease_payments_type)
-                        <option value="{{ $lease_payments_type->id }}" @if(old('type', $payment->type) == $lease_payments_type->id) selected="selected" @endif>{{ $lease_payments_type->title }}</option>
+                        <option value="{{ $lease_payments_type->id }}"
+                                @if(old('type', $payment->type) == $lease_payments_type->id) selected="selected" @endif>{{ $lease_payments_type->title }}</option>
                     @endforeach
                 </select>
                 @if ($errors->has('type'))
@@ -46,7 +49,8 @@
                 <select name="nature" class="form-control" @if($subsequent_modify_required) disabled="disabled" @endif>
                     <option value="">--Select Lease Payment Nature--</option>
                     @foreach($lease_payments_nature as $nature)
-                        <option value="{{ $nature->id}}" @if(old('nature',$payment->nature) == $nature->id) selected="selected" @endif>{{ $nature->title }}</option>
+                        <option value="{{ $nature->id}}"
+                                @if(old('nature',$payment->nature) == $nature->id) selected="selected" @endif>{{ $nature->title }}</option>
                     @endforeach
                 </select>
                 @if ($errors->has('nature'))
@@ -62,10 +66,12 @@
             </div>
         </div>
 
-        <div class="form-group{{ $errors->has('variable_basis') ? ' has-error' : '' }} required variable_basis" style="display: none">
+        <div class="form-group{{ $errors->has('variable_basis') ? ' has-error' : '' }} required variable_basis"
+             style="display: none">
             <label for="variable_basis" class="col-md-12 control-label">Variable Basis</label>
             <div class="col-md-12">
-                <input id="variable_basis" type="text" placeholder="Name" class="form-control" name="variable_basis" value="{{ old('variable_basis',$payment->variable_basis) }}">
+                <input id="variable_basis" type="text" placeholder="Name" class="form-control" name="variable_basis"
+                       value="{{ old('variable_basis',$payment->variable_basis) }}">
                 @if ($errors->has('variable_basis'))
                     <span class="help-block">
                         <strong>{{ $errors->first('variable_basis') }}</strong>
@@ -74,17 +80,23 @@
             </div>
         </div>
 
-        <div class="form-group{{ $errors->has('variable_amount_determinable') ? ' has-error' : '' }} required variable_basis" style="display: none">
-            <label for="variable_amount_determinable" class="col-md-12 control-label">Variable Amount Determinable</label>
+        <div class="form-group{{ $errors->has('variable_amount_determinable') ? ' has-error' : '' }} required variable_basis"
+             style="display: none">
+            <label for="variable_amount_determinable" class="col-md-12 control-label">Variable Amount
+                Determinable</label>
             <div class="col-md-12">
 
                 <div class="col-md-12 form-check form-check-inline">
-                    <input class="form-check-input" name="variable_amount_determinable" type="checkbox" id="yes" value="yes" @if(old('variable_amount_determinable',$payment->variable_amount_determinable) == "yes") checked="checked" @endif>
+                    <input class="form-check-input" name="variable_amount_determinable" type="checkbox" id="yes"
+                           value="yes"
+                           @if(old('variable_amount_determinable',$payment->variable_amount_determinable) == "yes") checked="checked" @endif>
                     <label class="form-check-label" for="yes" style="vertical-align: 4px">Yes</label>
                 </div>
 
                 <div class=" col-md-12 form-check form-check-inline">
-                    <input class="form-check-input" name="variable_amount_determinable" type="checkbox" id="no" value="no" @if(old('variable_amount_determinable',$payment->variable_amount_determinable) == "no") checked="checked" @endif>
+                    <input class="form-check-input" name="variable_amount_determinable" type="checkbox" id="no"
+                           value="no"
+                           @if(old('variable_amount_determinable',$payment->variable_amount_determinable) == "no") checked="checked" @endif>
                     <label class="form-check-label" for="no" style="vertical-align: 4px">No</label>
                 </div>
             </div>
@@ -93,7 +105,8 @@
         <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
             <label for="description" class="col-md-12 control-label">Any Other Description</label>
             <div class="col-md-12">
-                <input id="description" type="text" placeholder="Description" class="form-control" name="description" value="{{ old('description',$payment->description) }}">
+                <input id="description" type="text" placeholder="Description" class="form-control" name="description"
+                       value="{{ old('description',$payment->description) }}">
                 @if ($errors->has('description'))
                     <span class="help-block">
                         <strong>{{ $errors->first('description') }}</strong>
@@ -102,7 +115,7 @@
             </div>
         </div>
 
-</div>
+    </div>
 
     <div class="categoriesOuter clearfix">
         <div class="categoriesHd">Lease Payment Periods</div>
@@ -135,7 +148,8 @@
                             @endif
 
                         @endif
-                        <option {{ $disabled_option }} value="{{ $frequency->id }}" @if(old('payment_interval',$payment->payment_interval) == $frequency->id) selected="selected" @endif>{{ $frequency->title }}</option>
+                        <option {{ $disabled_option }} value="{{ $frequency->id }}"
+                                @if(old('payment_interval',$payment->payment_interval) == $frequency->id) selected="selected" @endif>{{ $frequency->title }}</option>
                     @endforeach
                 </select>
                 @if ($errors->has('payment_interval'))
@@ -152,7 +166,8 @@
                 <select name="payout_time" class="form-control">
                     <option value="">--Select Payment Payout Time--</option>
                     @foreach($payments_payout_times as $payout_time)
-                        <option value="{{ $payout_time->id }}" @if(old('payout_time',$payment->payout_time) == $payout_time->id) selected="selected" @endif>{{ $payout_time->title }}</option>
+                        <option value="{{ $payout_time->id }}"
+                                @if(old('payout_time',$payment->payout_time) == $payout_time->id) selected="selected" @endif>{{ $payout_time->title }}</option>
                     @endforeach
                 </select>
                 @if ($errors->has('payout_time'))
@@ -166,7 +181,10 @@
         <div class="form-group{{ $errors->has('first_payment_start_date') ? ' has-error' : '' }} required">
             <label for="first_payment_start_date" class="col-md-12 control-label">First Lease Payment Start Date</label>
             <div class="col-md-12">
-                <input id="first_payment_start_date" type="text" placeholder="First Lease Payment Start Date" class="form-control lease_period1" name="first_payment_start_date" value="{{ old('first_payment_start_date',$payment->first_payment_start_date) }}" @if($subsequent_modify_required) disabled="disabled" @endif autocomplete="off">
+                <input id="first_payment_start_date" type="text" placeholder="First Lease Payment Start Date"
+                       class="form-control lease_period1" name="first_payment_start_date"
+                       value="{{ old('first_payment_start_date',$payment->first_payment_start_date) }}"
+                       @if($subsequent_modify_required) disabled="disabled" @endif autocomplete="off" readonly="true">
                 @if ($errors->has('first_payment_start_date'))
                     <span class="help-block">
                         <strong>{{ $errors->first('first_payment_start_date') }}</strong>
@@ -183,7 +201,9 @@
         <div class="form-group{{ $errors->has('last_payment_end_date') ? ' has-error' : '' }} required">
             <label for="last_payment_end_date" class="col-md-12 control-label">Last Lease Payment End Date</label>
             <div class="col-md-12">
-                <input id="last_payment_end_date" type="text" placeholder="Last Lease Payment End Date" class="form-control lease_period2" name="last_payment_end_date" value="{{ old('last_payment_end_date',$payment->last_payment_end_date) }}" autocomplete="off">
+                <input id="last_payment_end_date" type="text" placeholder="Last Lease Payment End Date"
+                       class="form-control lease_period2" name="last_payment_end_date"
+                       value="{{ old('last_payment_end_date',$payment->last_payment_end_date) }}" autocomplete="off">
                 @if ($errors->has('last_payment_end_date'))
                     <span class="help-block">
                         <strong>{{ $errors->first('last_payment_end_date') }}</strong>
@@ -194,9 +214,11 @@
 
         <div class="form-group{{ $errors->has('altered_payment_due_date.0') || $errors->has('due_dates_confirmed') ? ' has-error' : '' }} show_annexure">
             <div class="col-md-12">
-                <a href="javascript:void(0);" class="btn btn-primary confirm_lease_payment_due_dates">Confirm Lease Payment Due Dates</a>
+                <a href="javascript:void(0);" class="btn btn-primary confirm_lease_payment_due_dates">Confirm Lease
+                    Payment Due Dates</a>
                 @if($payment->payment_interval == 6)
-                    <a href="javascript:void(0);" class="btn btn-warning view_current_lease_payment_due_dates">View Current Dates</a>
+                    <a href="javascript:void(0);" class="btn btn-warning view_current_lease_payment_due_dates">View
+                        Current Dates</a>
                 @endif
                 @if(!empty($payout_due_dates))
                     <input type="hidden" value="1" name="due_dates_confirmed">
@@ -218,7 +240,9 @@
         <div class="form-group{{ $errors->has('payment_currency') ? ' has-error' : '' }} required">
             <label for="payment_currency" class="col-md-12 control-label">Lease Payment Currency</label>
             <div class="col-md-12">
-                <input id="payment_currency" type="text" placeholder="Lease Payment Currency" class="form-control" name="payment_currency" value="{{ $lease->lease_contract_id }}" readonly="readonly" @if($subsequent_modify_required) disabled="disabled" @endif>
+                <input id="payment_currency" type="text" placeholder="Lease Payment Currency" class="form-control"
+                       name="payment_currency" value="{{ $lease->lease_contract_id }}" readonly="readonly"
+                       @if($subsequent_modify_required) disabled="disabled" @endif>
                 @if ($errors->has('payment_currency'))
                     <span class="help-block">
                         <strong>{{ $errors->first('payment_currency') }}</strong>
@@ -233,9 +257,13 @@
         </div>
 
         <div class="form-group{{ $errors->has('similar_chateristics_assets') ? ' has-error' : '' }} required">
-            <label for="similar_chateristics_assets" class="col-md-12 control-label">Number of Units of Lease Assets of Similar Characteristics</label>
+            <label for="similar_chateristics_assets" class="col-md-12 control-label">Number of Units of Lease Assets of
+                Similar Characteristics</label>
             <div class="col-md-12">
-                <input id="similar_chateristics_assets" type="text" placeholder="Number of Units of Lease Assets of Similar Characteristics" class="form-control" name="similar_chateristics_assets" value="{{ $asset->similar_asset_items }}" readonly="readonly" @if($subsequent_modify_required) disabled="disabled" @endif>
+                <input id="similar_chateristics_assets" type="text"
+                       placeholder="Number of Units of Lease Assets of Similar Characteristics" class="form-control"
+                       name="similar_chateristics_assets" value="{{ $asset->similar_asset_items }}" readonly="readonly"
+                       @if($subsequent_modify_required) disabled="disabled" @endif>
                 @if ($errors->has('similar_chateristics_assets'))
                     <span class="help-block">
                         <strong>{{ $errors->first('similar_chateristics_assets') }}</strong>
@@ -249,11 +277,33 @@
             </div>
         </div>
 
-
-        <div class="form-group{{ $errors->has('payment_per_interval_per_unit') ? ' has-error' : '' }} required">
-            <label for="payment_per_interval_per_unit" class="col-md-12 control-label">Lease Payment Per Interval Per Unit</label>
+        <div class="form-group{{ $errors->has('lease_payment_per_interval') ? ' has-error' : '' }} required">
+            <label for="lease_payment_per_interval" class="col-md-12 control-label">Lease Payment Per Interval</label>
             <div class="col-md-12">
-                <input id="payment_per_interval_per_unit" type="text" placeholder="" class="form-control" name="payment_per_interval_per_unit" value="{{ old('payment_per_interval_per_unit',$payment->payment_per_interval_per_unit) }}">
+
+                <select class="form-control" name="lease_payment_per_interval">
+                    <option value="">--Select Interval Nature--</option>
+                    <option value="1" @if(old('lease_payment_per_interval', $payment->lease_payment_per_interval) == '1') selected="selected" @endif>Consistent Interval To Interval</option>
+                    <option value="2" @if(old('lease_payment_per_interval', $payment->lease_payment_per_interval) == '2') selected="selected" @endif>Inconsistent Interval to Interval</option>
+                </select>
+
+                @if ($errors->has('lease_payment_per_interval'))
+                    <span class="help-block">
+                        <strong>{{ $errors->first('lease_payment_per_interval') }}</strong>
+                    </span>
+                @endif
+
+            </div>
+        </div>
+
+
+        <div class="form-group{{ $errors->has('payment_per_interval_per_unit') ? ' has-error' : '' }} cpi @if(old('lease_payment_per_interval', $payment->lease_payment_per_interval) == '1') @else hidden @endif required">
+            <label for="payment_per_interval_per_unit" class="col-md-12 control-label">Lease Payment Per Interval Per
+                Unit</label>
+            <div class="col-md-12">
+                <input id="payment_per_interval_per_unit" type="text" placeholder="" class="form-control"
+                       name="payment_per_interval_per_unit"
+                       value="{{ old('payment_per_interval_per_unit',$payment->payment_per_interval_per_unit) }}">
                 @if ($errors->has('payment_per_interval_per_unit'))
                     <span class="help-block">
                         <strong>{{ $errors->first('payment_per_interval_per_unit') }}</strong>
@@ -262,10 +312,14 @@
             </div>
         </div>
 
-        <div class="form-group{{ $errors->has('total_amount_per_interval') ? ' has-error' : '' }} required">
-            <label for="total_amount_per_interval" class="col-md-12 control-label">Total Lease Amount Per Interval</label>
+        <div class="form-group{{ $errors->has('total_amount_per_interval') ? ' has-error' : '' }} cpi @if(old('lease_payment_per_interval', $payment->lease_payment_per_interval) == '1') @else hidden @endif required">
+            <label for="total_amount_per_interval" class="col-md-12 control-label">Total Lease Amount Per
+                Interval</label>
             <div class="col-md-12">
-                <input id="total_amount_per_interval" type="text" placeholder="" class="form-control" name="total_amount_per_interval" value="{{ old('total_amount_per_interval',$payment->total_amount_per_interval) }}" readonly="readonly">
+                <input id="total_amount_per_interval" type="text" placeholder="" class="form-control"
+                       name="total_amount_per_interval"
+                       value="{{ old('total_amount_per_interval',$payment->total_amount_per_interval) }}"
+                       readonly="readonly">
                 @if ($errors->has('total_amount_per_interval'))
                     <span class="help-block">
                         <strong>{{ $errors->first('total_amount_per_interval') }}</strong>
@@ -274,13 +328,13 @@
             </div>
         </div>
 
-        <div class="form-group{{ $errors->has('attachment') ? ' has-error' : '' }}">
+        <div class="form-group{{ $errors->has('attachment') ? ' has-error' : '' }} cpi @if(old('lease_payment_per_interval', $payment->lease_payment_per_interval) == '1') @else hidden @endif">
             <label for="workings_doc" class="col-md-12 control-label">Upload Any Workings</label>
             <div class="col-md-12 frmattachFile">
                 <input type="name" id="upload" name="name" class="form-control" disabled="disabled">
                 <button type="button" class="browseBtn">Browse</button>
                 <input id="workings_doc" type="file" placeholder="" class="fileType" name="attachment">
-                 <h6 class="disabled">{{ config('settings.file_size_limits.file_validation') }}</h6>
+                <h6 class="disabled">{{ config('settings.file_size_limits.file_validation') }}</h6>
                 @if ($errors->has('attachment'))
                     <span class="help-block">
                         <strong>{{ $errors->first('attachment') }}</strong>
@@ -289,10 +343,15 @@
             </div>
         </div>
 
+        <div class="form-group incpi @if(old('lease_payment_per_interval', $payment->lease_payment_per_interval) == '2') @else hidden @endif" style="width: 98%;padding: 15px;">
+
+        </div>
+
         <span class="hidden altered_payment_due_dates">
             @if(!empty($payout_due_dates))
                 @foreach($payout_due_dates as $date)
-                    <input type="hidden" class="altered_payment_due_date" name="altered_payment_due_date[]" value="{{ $date }}">
+                    <input type="hidden" class="altered_payment_due_date" name="altered_payment_due_date[]"
+                           value="{{ $date }}">
                 @endforeach
             @else
                 <input type="hidden" class="altered_payment_due_date" name="altered_payment_due_date[]" value="">
@@ -329,20 +388,81 @@
     <script src="{{ asset('js/jquery-ui.js') }}"></script>
     <script>
 
+        $(function () {
+            $('select[name="lease_payment_per_interval"]').on('change', function () {
+                var selected_value = $(this).val();
+                if (selected_value == "1") {
+                    $('.cpi').removeClass('hidden');
+                    $('.incpi').addClass('hidden');
+                    $('.incpi').html('');
+                } else if (selected_value == "2") {
+                    $('.cpi').addClass('hidden');
+                    $('.incpi').removeClass('hidden');
+                    $('.incpi').html('');
+                    showPaymentAnnexureForUpdate();
+                } else {
+                    $('.cpi').addClass('hidden');
+                    $('.incpi').addClass('hidden');
+                    $('.incpi').html('');
+                }
+            });
+
+            function showPaymentAnnexureForUpdate() {
+                $paymentDates = $("input[name='altered_payment_due_date[]']")
+                    .map(function () {
+                        return $(this).val();
+                    }).get();
+
+
+                $asset_id = '{{ $asset->id }}';
+                $lease_id = '{{ $asset->lease->id }}';
+
+                $.ajax({
+                    url: "{{ route('addlease.payments.inconsitentperintervalannexure') }}",
+                    type: 'post',
+                    data: {
+                        paymentDates: $paymentDates,
+                        lease_id: $lease_id,
+                        asset_id: $asset_id
+                    },
+                    dataType: 'text',
+                    success: function (response) {
+                        $('.incpi').html(response);
+                    }
+                })
+            }
+
+            @if($payment->id)
+                $.ajax({
+                    url: "{{ route('addlease.payments.loadinconsistentannexure', ['payment_id' => $payment->id]) }}",
+                    type: 'get',
+                    dataType: 'text',
+                    success: function (response) {
+                        $('.incpi').html(response);
+                    }
+                });
+            @endif
+        });
+
+
         $("#first_payment_start_date").datepicker({
             dateFormat: "dd-M-yy",
             changeYear: true,
-            changeMonth:true,
+            changeMonth: true,
+            {!!  getYearRanage() !!}
             onSelect: function (date, instance) {
-                        var _ajax_url = '{{route("lease.checklockperioddate")}}';
-                        checklockperioddate(date, instance, _ajax_url);
+                var _ajax_url = '{{route("lease.checklockperioddate")}}';
+                checklockperioddate(date, instance, _ajax_url);
             }
         });
 
         $("#last_payment_end_date").datepicker({
             dateFormat: "dd-M-yy",
             changeYear: true,
-            changeMonth:true,
+            changeMonth: true,
+            minDate : new Date('{{ $asset->lease_accural_period }}'),
+            maxDate : new Date('{{ ($asset->getLeaseEndDate($asset)) }}'),
+            {!!  getYearRanage() !!}
             onSelect: function (date, instance) {
                 var _ajax_url = '{{route("lease.checklockperioddate")}}';
                 checklockperioddate(date, instance, _ajax_url);
@@ -351,24 +471,24 @@
 
 
         //If Variable Basis selected
-        $('select[name="nature"]').on('change', function(){
-            if($(this).val() == '2') {
+        $('select[name="nature"]').on('change', function () {
+            if ($(this).val() == '2') {
                 $('.variable_basis').show();
             } else {
                 $('.variable_basis').hide();
 
                 //change the values to null as well
                 $('#variable_basis').val('');
-                $('input[name="variable_amount_determinable"]').prop("checked",false);
+                $('input[name="variable_amount_determinable"]').prop("checked", false);
             }
         });
 
         //function to calculate the last lease payment end date
-        function calculateLastPaymentEndDate(that, firstPaymentStartDate){
+        function calculateLastPaymentEndDate(that, firstPaymentStartDate) {
             var _calculated_last_payment_date = new Date();
             var _selected_payment_interval = parseInt($(that).val());
             var _payout_value = parseInt($('select[name="payout_time"]').val());
-            if(_payout_value == 2) {
+            if (_payout_value == 2) {
                 @php
                     $calculated_date = \Carbon\Carbon::parse($asset->lease_end_date);
                 @endphp
@@ -418,19 +538,19 @@
         }
 
         //calculate the First Lease Payment Start Date and Last Lease Payment End Date here
-        $('select[name="payout_time"] , select[name="payment_interval"]').on('change', function(){
+        $('select[name="payout_time"] , select[name="payment_interval"]').on('change', function () {
 
             var _value = parseInt($('select[name="payout_time"]').val());
             var _selected_payment_interval = parseInt($('select[name="payment_interval"]').val());
             var _start_date = new Date("{{ date('D M d Y', strtotime($asset->accural_period)) }}");
-            var _end_date   = new Date("{{ date('D M d Y', strtotime($asset->lease_end_date)) }}");
+            var _end_date = new Date("{{ date('D M d Y', strtotime($asset->lease_end_date)) }}");
 
-            if(_value == "" || _selected_payment_interval == "") {
+            if (_value == "" || _selected_payment_interval == "") {
                 return false;
             }
 
             var _calculated_first_payment_date = new Date();
-            if(_value == 1) {
+            if (_value == 1) {
                 //means At Lease Interval Start
                 _calculated_first_payment_date = _start_date;
             } else {
@@ -447,7 +567,7 @@
                             $calculated_date = $accural_date->addMonth(1)->format('D M d Y');
                         @endphp
                             _calculated_first_payment_date = new Date("{{ $calculated_date }}");
-                            //alert(_calculated_first_payment_date);
+                        //alert(_calculated_first_payment_date);
                         break;
                     case 3:
                         //means selected option is Quarterly
@@ -485,47 +605,47 @@
         });
 
         $(document).ready(function () {
-            $("input[type='checkbox']").on('click', function(){
-                var group = "input[name='"+$(this).attr("name")+"']";
-                $(group).prop("checked",false);
-                $(this).prop("checked",true);
+            $("input[type='checkbox']").on('click', function () {
+                var group = "input[name='" + $(this).attr("name") + "']";
+                $(group).prop("checked", false);
+                $(this).prop("checked", true);
             });
 
             //calculation (total_amount_per_interval= similar_chateristics_assets*payment_per_interval_per_unit)
-             var $total = $('#total_amount_per_interval'),
+            var $total = $('#total_amount_per_interval'),
                 $value = $('#payment_per_interval_per_unit');
             $units = $("#similar_chateristics_assets").val();
-            $value.on('input', function(e) {
+            $value.on('input', function (e) {
                 var total = 0;
-                $value.each(function(index, elem) {
-                    if(!Number.isNaN(parseInt(this.value, 10)))
-                       total = $units * parseInt(this.value, 10);
+                $value.each(function (index, elem) {
+                    if (!Number.isNaN(parseInt(this.value, 10)))
+                        total = $units * parseInt(this.value, 10);
                 });
                 $total.val(total);
             });
 
             var final_payout_dates;
 
-            $('.confirm_lease_payment_due_dates').on('click', function(){
-                $start_date         = $('#first_payment_start_date').val();
-                $end_date           =    $('#last_payment_end_date').val();
-                $payment_interval   = $('select[name="payment_interval"]').val();
-                $payment_payout     = $('select[name="payout_time"]').val();
+            $('.confirm_lease_payment_due_dates').on('click', function () {
+                $start_date = $('#first_payment_start_date').val();
+                $end_date = $('#last_payment_end_date').val();
+                $payment_interval = $('select[name="payment_interval"]').val();
+                $payment_payout = $('select[name="payout_time"]').val();
                 $asset_id = '{{ $asset->id }}';
                 $lease_id = '{{ $asset->lease->id }}';
 
                 $.ajax({
-                    url : '{{ route("lease.payments.duedatesannexure") }}',
-                    data : {
-                        start_date : $start_date,
-                        end_date : $end_date,
-                        payment_interval : $payment_interval,
-                        payment_payout : $payment_payout,
-                        lease_id    : $lease_id,
-                        asset_id    : $asset_id
+                    url: '{{ route("lease.payments.duedatesannexure") }}',
+                    data: {
+                        start_date: $start_date,
+                        end_date: $end_date,
+                        payment_interval: $payment_interval,
+                        payment_payout: $payment_payout,
+                        lease_id: $lease_id,
+                        asset_id: $asset_id
                     },
-                    type : 'get',
-                    success : function (response) {
+                    type: 'get',
+                    success: function (response) {
                         setTimeout(function () {
                             $('.annexure_modal_body').html(response['html']);
 
@@ -535,17 +655,17 @@
                             $('.alter_due_dates_input').each(function () {
                                 var data_year = $(this).data('year');
                                 var data_month = $(this).data('month');
-                                var temp_date  = new Date(data_year+"-"+data_month);
+                                var temp_date = new Date(data_year + "-" + data_month);
                                 var asset_lease_start_date = new Date('{{ \Carbon\Carbon::parse($asset->accural_period)->format('Y') ."-". \Carbon\Carbon::parse($asset->accural_period)->format('m') }}');
                                 var asset_lease_end_date = new Date('{{ \Carbon\Carbon::parse($asset->lease_end_date)->format('Y')."-".\Carbon\Carbon::parse($asset->lease_end_date)->format('m') }}');
-                                if(temp_date >= asset_lease_start_date && temp_date <= asset_lease_end_date){
+                                if (temp_date >= asset_lease_start_date && temp_date <= asset_lease_end_date) {
                                     $(this).datepicker({
                                         dateFormat: "yy-mm-dd",
-                                        minDate : new Date('{{ $asset->accural_period }}'),
-                                        maxDate : new Date('{{ $asset->lease_end_date }}'),
+                                        minDate: new Date('{{ $asset->accural_period }}'),
+                                        maxDate: new Date('{{ $asset->lease_end_date }}'),
                                         stepMonths: 0
                                     });
-                                     $(this).datepicker('setDate', temp_date);
+                                    $(this).datepicker('setDate', temp_date);
                                 } else {
                                     $(this).remove();
                                 }
@@ -559,7 +679,7 @@
                 });
             });
 
-            $("#myModal").on("hidden.bs.modal", function(){
+            $("#myModal").on("hidden.bs.modal", function () {
                 $(".annexure_modal_body").html("");
             });
 
@@ -581,7 +701,7 @@
                         }
                     },
                     callback: function (result) {
-                        if(result) {
+                        if (result) {
                             //set the dropdowns to Custom here....
                             $('select[name="payment_interval"]').val(6);
                             $('select[name="payout_time"]').val(3);
@@ -603,25 +723,25 @@
                 var _last_payment_date;
                 var dates_array = new Array();
 
-                if(is_dates_edited) {
+                if (is_dates_edited) {
 
                     var html = '';
 
-                    $('.alter_due_dates_input').each(function (i,e) {
-                        if($(this).val() != ""){
+                    $('.alter_due_dates_input').each(function (i, e) {
+                        if ($(this).val() != "") {
                             dates_array.push(new Date($(this).val()));
-                            html += '<input type="hidden" class="altered_payment_due_date" name="altered_payment_due_date[]" value="'+$(this).val()+'">';
+                            html += '<input type="hidden" class="altered_payment_due_date" name="altered_payment_due_date[]" value="' + $(this).val() + '">';
                         }
                     });
 
-                    if(html==""){
+                    if (html == "") {
                         bootbox.alert('Payout dates cannot be calculated. Please check your inputs and try again.');
                         return false;
                     }
 
                     //find the first payment date and the last payment date here and fill the inputs with the values
-                    var _last_payment_date = new Date(Math.max.apply(null,dates_array));
-                    var _first_payment_date = new Date(Math.min.apply(null,dates_array));
+                    var _last_payment_date = new Date(Math.max.apply(null, dates_array));
+                    var _first_payment_date = new Date(Math.min.apply(null, dates_array));
 
                     $('#first_payment_start_date').datepicker('setDate', _first_payment_date);
 
@@ -633,15 +753,15 @@
                     var html = '';
                     //console.log(final_payout_dates);
                     for (var item in final_payout_dates) {
-                        for(var month in final_payout_dates[item]){
-                            for(payout_date in final_payout_dates[item][month]){
-                                html += '<input type="hidden" class="altered_payment_due_date" name="altered_payment_due_date[]" value="'+payout_date+'">';
+                        for (var month in final_payout_dates[item]) {
+                            for (payout_date in final_payout_dates[item][month]) {
+                                html += '<input type="hidden" class="altered_payment_due_date" name="altered_payment_due_date[]" value="' + payout_date + '">';
                             }
                         }
                     }
                 }
 
-                if(html!=""){
+                if (html != "") {
 
                     $('input[name="due_dates_confirmed"]').val('1');
 
@@ -653,7 +773,7 @@
 
                     setTimeout(function () {
                         bootbox.alert('We have captured your input dates. Please proceed further on the form.');
-                    },1000);
+                    }, 1000);
 
                 } else {
                     bootbox.alert('Unable to capture the payout dates. Please click on edit and provide custom dates.');
@@ -665,24 +785,23 @@
             /**
              * Generate the view current payment dates whent the user comes to edit payments
              */
-            $('.view_current_lease_payment_due_dates').on('click', function(){
+            $('.view_current_lease_payment_due_dates').on('click', function () {
                 $.ajax({
-                    url : '{{ route('addlease.payments.showpaymentdates', ['id' => $payment->id]) }}',
-                    type : 'get',
-                    success : function (response) {
+                    url: '{{ route('addlease.payments.showpaymentdates', ['id' => $payment->id]) }}',
+                    type: 'get',
+                    success: function (response) {
                         $('.annexure_modal_body').html(response['html']);
                         $('#myModal').modal('show');
                     }
                 });
             });
 
-            $('#workings_doc').change(function(){
+            $('#workings_doc').change(function () {
                 $('#workings_doc').show();
                 var filename = $('#workings_doc').val();
-                var or_name=filename.split("\\");
-                $('#upload').val(or_name[or_name.length-1]);
+                var or_name = filename.split("\\");
+                $('#upload').val(or_name[or_name.length - 1]);
             });
-
 
 
         });

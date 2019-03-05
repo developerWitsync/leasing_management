@@ -15,6 +15,8 @@
                 </div>
             @endif
 
+                @include('lease._subsequent_details')
+
             <form role="form" class="form-horizontal" id="lease_payment" enctype="multipart/form-data" method="POST" action="{{ route('addlease.leasepaymentinvoice.index', ['id' => $lease->id]) }}">
             {{ csrf_field() }}
             <div class="categoriesOuter clearfix">

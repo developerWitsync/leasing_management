@@ -12,6 +12,7 @@ class LeaseAssetPaymenetDueDate extends Model
         'asset_id',
         'payment_id',
         'date',
+        'total_payment_amount',
         'created_at',
         'updated_at'
     ];

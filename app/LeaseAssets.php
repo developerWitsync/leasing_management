@@ -150,7 +150,9 @@ class LeaseAssets extends Model
         $start_date =   Carbon::parse($this->accural_period);
         $base_date = Carbon::create(2019, 01, 01);
         $base_date = ($start_date->lessThan($base_date))?$base_date:$start_date;
-        $end_date = Carbon::parse($this->lease_end_date);
+        $end_date = Carbon::parse($this->getLeaseEndDate($this));
+
+//        dd($end_date);
 
         $start_year = $base_date->format('Y');
         $end_year = $end_date->format('Y');

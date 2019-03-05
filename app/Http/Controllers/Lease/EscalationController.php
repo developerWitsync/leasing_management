@@ -162,7 +162,11 @@ class EscalationController extends Controller
             if($lease) {
                 //check if the Subsequent Valuation is applied for the lease modification
                 $subsequent_modify_required = $lease->isSubsequentModification();
-                $payment = LeaseAssetPayments::query()->findOrFail($id);
+                $payment = LeaseAssetPayments::query()
+                    ->with(['paymentDueDates' => function($query){
+                        $query->where('total_payment_amount', '>', 0);
+                    }])
+                    ->findOrFail($id);
                 $asset =  $payment->asset;
                 $model   =  PaymentEscalationDetails::query()->where('payment_id','=', $id)->first();
                 if(is_null($model)) {
@@ -279,7 +283,7 @@ class EscalationController extends Controller
                         // complete Step
                         confirmSteps($lease->id,10);
 
-                        return redirect()->back()->with('status', 'Escalation Details has been saved sucessfully.');
+                        return redirect(route('lease.escalation.index', ['id' =>$lease ]))->with('status', 'Escalation Details has been saved sucessfully.');
                     }
                 }
 
@@ -306,10 +310,11 @@ class EscalationController extends Controller
                 $escalation_percentage_settings = EscalationPercentageSettings::query()->whereIn('business_account_id', getDependentUserIds())->where('number', '<>', '0')->get();
                 $escalation_frequency = EscalationFrequency::all();
                 $paymentDueDates = $payment->paymentDueDates->pluck('date')->toArray();
-                 $current_step = $this->current_step;
-
-                 //lease asset payment dates
-                 $payment_dates = LeaseAssetPaymentDates::query()->where('asset_id',$id)->get();
+                $current_step = $this->current_step;
+                //lease asset payment dates
+                $payment_dates = LeaseAssetPaymentDates::query()
+                    ->where('total_payment_amount','>', 0)
+                    ->where('asset_id',$payment->asset_id)->get();
                 
                 return view('lease.escalation.create', compact(
                     'payment',
@@ -331,6 +336,7 @@ class EscalationController extends Controller
                 abort(404);
             }
         } catch (\Exception $e) {
+            dd($e);
             abort(404);
         }
     }
@@ -385,6 +391,7 @@ class EscalationController extends Controller
                     }
                     $requestData = $request->except('_token', 'method', 'uri', 'ip');
                     $escalationData = generateEsclationChart($request->except('_token', 'method', 'uri', 'ip'), $payment, $lease, $asset);
+
                     $years = $escalationData['years'];
                     $months = $escalationData['months'];
                     $escalations = $escalationData['escalations'];

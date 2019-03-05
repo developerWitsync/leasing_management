@@ -261,8 +261,7 @@ function dateDiff(start_date, end_date) {
     return {years: years, months: months, days: days};
 }
 
-function fetchExchangeRate(base, target, base_date, access_key, element_selector){
-    var endpoint = 'live';
+function fetchExchangeRate(base, target, base_date, access_key, element_selector, endpoint = 'live'){
     var url = 'http://apilayer.net/api/' + endpoint + '?access_key=' + access_key + '&source='+base+'&currencies='+target;
     if(typeof (base_date) != "undefined" && base_date!='') {
         url += '&date='+base_date;
@@ -281,8 +280,8 @@ function fetchExchangeRate(base, target, base_date, access_key, element_selector
             }
         }
     });
-
 }
+
 function checklockperioddate(date, instance, _ajax_url) {
     $.ajax({
           type: "get",

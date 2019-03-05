@@ -21,6 +21,7 @@ use App\RoleUser;
 class UserAccessController extends Controller
 {
     public $breadcrumbs;
+
     public function __construct()
     {
         $this->breadcrumbs = [
@@ -39,36 +40,41 @@ class UserAccessController extends Controller
         ];
     }
 
-    public function index(){
-       return view('settings.useraccess.index', ['breadcrumbs'=> $this->breadcrumbs]);
+    public function index()
+    {
+        return view('settings.useraccess.index', ['breadcrumbs' => $this->breadcrumbs]);
     }
+
     /**
      * Fetches and returns the user
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function listing(){
-         return view('settings.useraccess.user.index', ['breadcrumbs'=> $this->breadcrumbs]);
+    public function listing()
+    {
+        return view('settings.useraccess.user.index', ['breadcrumbs' => $this->breadcrumbs]);
     }
+
     /**
      * Fetches and returns the json to be rendered on the datatable
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function fetch(Request $request){
-        try{
+    public function fetch(Request $request)
+    {
+        try {
             if ($request->ajax()) {
 
-                $model = User::query()->where('parent_id',auth()->user()->id);
+                $model = User::query()->where('parent_id', auth()->user()->id);
                 return datatables()->eloquent($model)
-                    ->filter(function ($query) use ($request){
-                        if ($request->has('search') && trim($request->search["value"])!="") {
+                    ->filter(function ($query) use ($request) {
+                        if ($request->has('search') && trim($request->search["value"]) != "") {
                             $query->where('name', 'like', "%" . $request->search["value"] . "%");
                         }
                     })
-                    ->addColumn('roles', function($data){
-                      return implode(' | ', $data->roles->pluck('name')->toArray());
+                    ->addColumn('roles', function ($data) {
+                        return implode(' | ', $data->roles->pluck('name')->toArray());
                     })
-                    ->addColumn('created_at', function($data){
+                    ->addColumn('created_at', function ($data) {
                         return date('jS F Y h:i a', strtotime($data->created_at));
                     })
                     ->toJson();
@@ -76,7 +82,7 @@ class UserAccessController extends Controller
             } else {
                 return redirect()->back();
             }
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             return redirect()->back();
         }
     }
@@ -86,61 +92,85 @@ class UserAccessController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
-    public function create(Request $request){
-        $user = new User();
-        if($request->isMethod('post')) {
-            $validator = Validator::make($request->except('_token'), [
-                'authorised_person_name' => 'required|string|max:255',
-                'authorised_person_dob'     => 'required|date',
-                'gender'    => 'required',
-                'authorised_person_designation' => 'required',
-                'username' => 'required|string|max:255|unique:users',
-                'email' => 'required|string|email|max:255|unique:users',
-                'password' => 'required|string|min:6|confirmed'
+    public function create(Request $request)
+    {
+        try{
+
+            $user = new User();
+            $roles = Role::query()->whereIn('business_account_id', getDependentUserIds())->get();
+            $assignedRole = [];
+            if ($request->isMethod('post')) {
+                $validator = Validator::make($request->except('_token'), [
+                    'authorised_person_name' => 'required|string|max:255',
+                    'authorised_person_dob' => 'required|date',
+                    'gender' => 'required',
+                    'authorised_person_designation' => 'required',
+                    'username' => 'required|string|max:255|unique:users',
+                    'email' => 'required|string|email|max:255|unique:users',
+                    'password' => 'required|string|min:6|confirmed',
+                    'role' =>'required|exists:roles,id'
+                ]);
+
+                if ($validator->fails()) {
+                    return redirect()->back()->withInput($request->all())->withErrors($validator->errors());
+                }
+
+                $data = $request->except('_token');
+                $data['type'] = '0';
+                $data['raw_password'] = $request->password;
+                $data['password'] = bcrypt($request->password);
+                $data['authorised_person_dob'] = date('Y-m-d', strtotime($request->authorised_person_dob));
+                $data['email_verification_code'] = md5(time());
+                $data['is_verified'] = '0';
+                $data['parent_id'] = auth()->user()->id;
+                $user = User::create($data);
+                if ($user) {
+                    $user = User::query()->find($user->id);
+                    $user->roles()->sync([]);
+                    if (!$user->roles()->get()->contains('id', $request->role)) {
+                        $user->attachRole($request->role);
+                    }
+                    return redirect(route('settings.useraccess'))->with('status', 'User has been added successfully.');
+                }
+            }
+
+            return view('settings.useraccess.user.create', [
+                'breadcrumbs' => $this->breadcrumbs,
+                'user' => $user,
+                'roles' => $roles,
+                'assignedRole' => $assignedRole
             ]);
 
-            if($validator->fails()){
-                return redirect()->back()->withInput($request->all())->withErrors($validator->errors());
-            }
-
-            $data = $request->except('_token');
-            $data['type'] = '0';
-            $data['raw_password']   = $request->password;
-            $data['password']   = bcrypt($request->password);
-            $data['authorised_person_dob'] = date('Y-m-d', strtotime($request->authorised_person_dob));
-            $data['email_verification_code'] = md5(time());
-            $data['is_verified'] = '0';
-            $data['parent_id']  = auth()->user()->id;
-            $user = User::create($data);
-            if($user){
-              return redirect(route('settings.user'))->with('status', 'User has been added successfully.');
-            }
+        } catch (\Exception $e){
+            dd($e);
         }
-        return view('settings.useraccess.user.create',[
-            'breadcrumbs'=> $this->breadcrumbs,
-            'user' => $user
-        ]);
+
     }
+
     /**
      * Update a particular User and save the same to the database.
      * @param $id
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
-    public function update($id, Request $request){
+    public function update($id, Request $request)
+    {
         $user = User::query()->findOrFail($id);
-        if($request->isMethod('post')) {
-           $validator = Validator::make($request->except('_token'), [
+        $roles = Role::query()->whereIn('business_account_id', getDependentUserIds())->get();
+        $assignedRole = RoleUser::where('user_id', $id)->get()->pluck('role_id')->toArray();
+        if ($request->isMethod('post')) {
+            $validator = Validator::make($request->except('_token'), [
                 'authorised_person_name' => 'required|string|max:255',
-                'authorised_person_dob'     => 'required|date',
-                'gender'    => 'required',
+                'authorised_person_dob' => 'required|date',
+                'gender' => 'required',
                 'authorised_person_designation' => 'required',
-                'username' => 'required|string|max:255|unique:users,id,'.$user->id,
-                'email' => 'required|string|email|max:255|unique:users,id,'.$user->id,
-                'password' => 'string|min:6|confirmed|nullable'
+                'username' => 'required|string|max:255|unique:users,id,' . $user->id,
+                'email' => 'required|string|email|max:255|unique:users,id,' . $user->id,
+                'password' => 'string|min:6|confirmed|nullable',
+                'role' =>'required|exists:roles,id'
             ]);
 
-            if($validator->fails()){
+            if ($validator->fails()) {
                 return redirect()->back()->withInput($request->all())->withErrors($validator->errors());
             }
 
@@ -151,21 +181,30 @@ class UserAccessController extends Controller
             $userdata->phone = $request->phone;
             $userdata->email = $request->email;
             $userdata->type = '0';
-            if($request->password!=""){
+            if ($request->password != "") {
                 $userdata->password = bcrypt($request->password);
             }
             $userdata->authorised_person_dob = date('Y-m-d', strtotime($request->authorised_person_dob));
             $userdata->parent_id = auth()->user()->id;
             $userdata->save();
-            if($userdata){
-                return redirect(route('settings.user'))->with('status', 'User has been updated successfully.');
-            }
-         }
+            if ($userdata) {
 
-         return view('settings.useraccess.user.update', [
-             'breadcrumbs' => $this->breadcrumbs,
-             'user' => $user
-         ]);
+                $user = User::query()->find($id);
+                $user->roles()->sync([]);
+                if (!$user->roles()->get()->contains('id', $request->role)) {
+                    $user->attachRole($request->role);
+                }
+
+                return redirect(route('settings.useraccess'))->with('status', 'User has been updated successfully.');
+            }
+        }
+
+        return view('settings.useraccess.user.update', [
+            'breadcrumbs' => $this->breadcrumbs,
+            'user' => $user,
+            'roles' => $roles,
+            'assignedRole' => $assignedRole
+        ]);
     }
 
     /**
@@ -175,105 +214,41 @@ class UserAccessController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function delete($id, Request $request) {
-         try{
-             if($request->ajax()) {
+    public function delete($id, Request $request)
+    {
+        try {
+            if ($request->ajax()) {
                 $user = User::query()->findOrFail($id);
-                
-                if($user) {
+
+                if ($user) {
                     $user->delete();
                     return response()->json(['status' => true], 200);
                 } else {
                     return response()->json(['status' => false, "message" => "Invalid request!"], 200);
                 }
             } else {
-                return response()->json(['error'    =>  '']);
+                return response()->json(['error' => '']);
             }
         } catch (\Exception $e) {
-            return response()->json(['error'    =>  $e->getMessage()]);
+            return response()->json(['error' => $e->getMessage()]);
         }
     }
-    /**
-     * AssignPermissionToRole User will assign permission to role
-     * @param string $value [AssignPermission]
-     */
-    public function assignPermissionToRole($id,Request $request)
-    {
-      $role = Role::query()->findOrFail($id);
-      $PermissionRole= PermissionRole::where('role_id',$id)->get();
-      $permission = Permission::all();
-      $PermissionRoleId = $PermissionRole->pluck('permission_id')->toArray();
-      //dd($PermissionRoleId);
-      if($request->isMethod('post')) {
-             $validator = Validator::make($request->except('_token'), [
-                'permission'  =>  'required',
-                
-                ], [
-                'permission.required'  =>  'Please select at least one Permission',
-            ]);
 
-            if($validator->fails()){
-                return redirect()->back()->withInput($request->all())->withErrors($validator->errors());
-            }
-
-            $role = Role::query()->find($request->role);
-            $role->perms()->sync([]);
-            foreach ($request->permission as $key => $permission) {
-              if (!$role->perms()->get()->contains('id', $permission)) {
-                $role->attachPermission($permission);
-              }
-            }
-            return redirect('settings/user-access/role')->with('status', 'Selected permissions have been assigned to the role.');
-      }
-
-      return view('settings.useraccess.user.permission_to_role', ['breadcrumbs'=> $this->breadcrumbs,'role'=>$role,'permission'=>$permission,'PermissionRoleId'=>$PermissionRoleId]);
-    }
-    /**
-     * [AssignRoleToUser User will assign role to permission]
-     * @param string $value [assign role]
-    */
-    public function assignRoleToUser($id,Request $request)
-    {
-      $role = Role::all();
-      $RoleUser =  RoleUser::where('user_id',$id)->get();
-      $RoleUserId = $RoleUser->pluck('role_id')->toArray();
-      $user=User::where('id',$id)->get();
-      if($request->isMethod('post')) {
-            $validator = Validator::make($request->except('_token'), [
-                'role'  =>  'required',
-                
-                ], [
-                'role.required'  =>  'Please select at least one role',
-            ]);
-              if($validator->fails()){
-                 
-                    return redirect()->back()->withInput($request->all())->withErrors($validator->errors());
-                }
-                $user = User::query()->find($request->user);
-                $user->roles()->sync([]);
-                foreach ($request->role as $key => $role) {
-                  if (!$user->roles()->get()->contains('id', $role)) {
-                   $user->attachRoles($request->role);
-                  }
-                }
-              return redirect('settings/user-access/listing')->with('status', 'Selected Users have been assigned to the role.');  
-      }
-      return view('settings.useraccess.user.role_to_user', ['breadcrumbs'=> $this->breadcrumbs,'role'=>$role,'user'=>$user,'RoleUserId'=>$RoleUserId]);
-    }
     /**
      * updates the verified status of the user and  returns the response in json format
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function changeStatus(Request $request){
-        try{
-            if($request->ajax()){
+    public function changeStatus(Request $request)
+    {
+        try {
+            if ($request->ajax()) {
                 $validator = Validator::make($request->all(), [
                     'is_verified' => 'required',
-                    'id'    => 'required|exists:users,id'
+                    'id' => 'required|exists:users,id'
                 ]);
 
-                if($validator->fails()) {
+                if ($validator->fails()) {
                     return response()->json(['status' => false, 'errors' => $validator->errors()], 200);
                 }
 

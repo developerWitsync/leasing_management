@@ -29,46 +29,7 @@
                             Add Role
                         </div>
                         <div class="panel-body">
-                            <form class="form-horizontal" method="POST" action="{{ route('settings.role.create') }}">
-                                {{ csrf_field() }}
-                                <div class="form-group{{ $errors->has('display_name') ? ' has-error' : '' }} required">
-                                    <label for="display_name" class="col-md-4 control-label">Name</label>
-                                    <div class="col-md-6">
-                                        <div class="input-group reportTble">
-                                            <input id="display_name" type="text" placeholder="Display Name"
-                                                   class="form-control" name="display_name" value="">
-                                        </div>
-                                        @if ($errors->has('display_name'))
-                                            <span class="help-block">
-                                            <strong>{{ $errors->first('display_name') }}</strong>
-                                        </span>
-                                        @endif
-                                    </div>
-                                </div>
-                                <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }} ">
-                                    <label for="description" class="col-md-4 control-label">Description</label>
-                                    <div class="col-md-6">
-                                        <div class="input-group reportTble">
-                                            <textarea id="description" placeholder="Description" class="form-control"
-                                                      name="description"></textarea>
-                                        </div>
-                                        @if ($errors->has('description'))
-                                            <span class="help-block">
-                                            <strong>{{ $errors->first('description') }}</strong>
-                                        </span>
-                                        @endif
-                                    </div>
-                                </div>
-                                <div class="form-group">
-
-                                    <div class="col-md-6 col-md-offset-4">
-                                        <a href="{{ route('settings.role') }}" class="btn btn-danger">Cancel</a>
-                                        <button type="submit" class="btn btn-success">
-                                            Submit
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
+                            @include('settings.useraccess.role._form')
                         </div>
                     </div>
 

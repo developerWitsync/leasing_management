@@ -5,83 +5,103 @@
     </button>
 </div>
 <div class="modal-body">
-        <div class="alert alert-danger">
-            <strong>Note!</strong> The below information is generated on the basis of the current inputs.
-        </div>
+    <div class="alert alert-danger">
+        <strong>Note!</strong> The below information is generated on the basis of the current inputs.
+    </div>
 
-        <div class="row" style="width: 2000px;">
-            <div class="col-md-12">
-                <table class="table table-bordered">
-                    <thead>
+    <div class="row" style="width: 2000px;">
+        <div class="col-md-12">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                    @foreach($months as $month)
+                        <th>{{ $month }}</th>
+                    @endforeach
+                    <th>Total</th>
+                </tr>
+
+                </thead>
+                <tbody>
+                @php
+                    $grand_total = 0;
+                @endphp
+                @foreach($liability_caclulus_data as $year=>$data)
                     <tr>
-                        <th>&nbsp;</th>
-
-                        @foreach($months as $month)
-                            <th>{{ $month }}</th>
-                        @endforeach
-                        <th>Total</th>
+                        @php
+                            $rowspan = 1;
+                            $allowed_payments = count($data['Jan']) + 1 + 3;
+                        @endphp
+                        <td rowspan="{{ $allowed_payments }}">
+                            {{ $year }}
+                        </td>
                     </tr>
-                    </thead>
-                    <tbody>
-                    @php
-                        $grand_total = 0;
-                    @endphp
-                    @foreach($years as $year)
+
+                    @foreach($payments as $payment)
                         <tr>
-                            <td width="100px">
-                                <strong>
-                                    {{ $year }}
-                                </strong>
-                            </td>
+                            <th>{{ $payment->name }}</th>
                             @php
-                                $year_total = 0;
+                                $sub_total = 0;
                             @endphp
                             @foreach($months as $month)
-                                @if(isset($liability_caclulus_data[$year][$month]) && !empty($liability_caclulus_data[$year][$month]))
-                                    <td>
-                                        {{--{{ json_encode($liability_caclulus_data[$year][$month]) }}--}}
-                                        <table cellspacing="0" cellpadding="0" border="1" width="100%" class="tableInnData">
-                                            <thead>
-                                                @foreach($liability_caclulus_data[$year][$month] as $key=>$current_data)
-                                                    <th>{{ $current_data[0]->payment_name }}</th>
-                                                @endforeach
-                                                <th>Total</th>
-                                            </thead>
-                                            <tr>
-                                                @php
-                                                    $month_total = 0;
-                                                @endphp
-                                                @foreach($liability_caclulus_data[$year][$month] as $key=>$current_data)
-                                                    <td>{{ round($current_data[0]->lease_liability,2)}}</td>
-                                                    @php
-                                                        $month_total = $month_total + $current_data[0]->lease_liability;
-                                                    @endphp
-                                                @endforeach
-                                                <td>{{ number_format($month_total, 2)}}  </td>
-                                                @php
-                                                    $year_total = $year_total + $month_total;
-                                                @endphp
-                                            </tr>
-                                        </table>
-                                    </td>
-                                @else
-                                    <td class="info">&nbsp;</td>
-                                @endif
+                                <td>{{ $data[$month]["payment_".$payment->id][0]->lease_liability }}</td>
+                                @php
+                                    $sub_total = $sub_total + $data[$month]["payment_".$payment->id][0]->lease_liability;
+                                @endphp
                             @endforeach
-                            <td>{{ $year_total }}</td>
+                            <td>{{$sub_total}}</td>
                             @php
-                                $grand_total = $grand_total + $year_total;
+                                $grand_total = $grand_total + $sub_total;
                             @endphp
                         </tr>
                     @endforeach
                     <tr>
-                        <td colspan="13">TOTAL</td>
-                        <td>{{ $grand_total }}</td>
+                        <th>Termination</th>
+                        @foreach($payments as $payment)
+                            @foreach($months as $month)
+                                <td>{{ $data[$month]["payment_".$payment->id][0]->termination_penalty }}</td>
+                            @endforeach
+                            @php
+                                break;
+                            @endphp
+
+                        @endforeach
+                        <td>&nbsp;</td>
                     </tr>
-                    </tbody>
-                </table>
-            </div>
+                    <tr>
+                        <th>Residual</th>
+                        @foreach($payments as $payment)
+                            @foreach($months as $month)
+                                <td>{{ $data[$month]["payment_".$payment->id][0]->residual_value_gurantee_value }}</td>
+                            @endforeach
+                            @php
+                                break;
+                            @endphp
+                        @endforeach
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <th>Purchase</th>
+                        @foreach($payments as $payment)
+                            @foreach($months as $month)
+                                <td>{{ $data[$month]["payment_".$payment->id][0]->purchase_option_price }}</td>
+                            @endforeach
+                            @php
+                                break;
+                            @endphp
+                        @endforeach
+                        <td>&nbsp;</td>
+                    </tr>
+                @endforeach
+                <tr>
+                    <th colspan="14">Grand Total</th>
+                    <td>{{ $grand_total }}</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
+    </div>
 
 </div>
 <div class="modal-footer">

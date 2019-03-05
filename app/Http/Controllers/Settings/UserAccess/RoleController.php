@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Settings\UserAccess;
 
+use App\Permission;
+use App\PermissionRole;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Validator;
@@ -76,12 +78,15 @@ class RoleController extends Controller
     /**
      * add a new Role to the database
      * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
     public function create(Request $request)
     {
+        $model = new Role();
         if ($request->isMethod('post')) {
             $validator = Validator::make($request->except('_token'), [
                 'display_name' => 'required|unique:roles',
+                'permission' => 'required'
             ]);
 
             if ($validator->fails()) {
@@ -91,10 +96,25 @@ class RoleController extends Controller
             $request->request->add(['business_account_id' => auth()->user()->id, 'name' => str_slug($request->display_name)]);
             $role = Role::create($request->except('_token'));
             if ($role) {
-                return redirect(route('settings.role'))->with('status', 'Role has been added successfully.');
+
+                $role = Role::query()->find($role->id);
+                $role->perms()->sync([]);
+                foreach ($request->permission as $key => $permission) {
+                    if (!$role->perms()->get()->contains('id', $permission)) {
+                        $role->attachPermission($permission);
+                    }
+                }
+
+                return redirect(route('settings.useraccess'))->with('status', 'Role has been added successfully.');
             }
         }
-        return view('settings.useraccess.role.create', ['breadcrumbs' => $this->breadcrumbs]);
+        $permissions = Permission::all();
+        return view('settings.useraccess.role.create', [
+            'breadcrumbs' => $this->breadcrumbs,
+            'model' => $model,
+            'permissions' => $permissions,
+            'assignedPermissions' => []
+        ]);
     }
 
     /**
@@ -105,25 +125,47 @@ class RoleController extends Controller
      */
     public function update($id, Request $request)
     {
-        $role = Role::query()->findOrFail($id);
-        if ($request->isMethod('post')) {
-            $validator = Validator::make($request->except('_token'), [
-                'display_name' => 'required',
-            ]);
+        try{
+            $model = Role::query()->findOrFail($id);
+            $assignedPermissions = PermissionRole::where('role_id',$id)->get()->pluck('permission_id')->toArray();
+            if ($request->isMethod('post')) {
+                $validator = Validator::make($request->except('_token'), [
+                    'display_name' => 'required',
+                    'permission' => 'required'
+                ], [
+                    'permission.required' => 'Please select at lease one permission.'
+                ]);
 
-            if ($validator->fails()) {
-                return redirect()->back()->withInput($request->all())->withErrors($validator->errors());
+                if ($validator->fails()) {
+                    return redirect()->back()->withInput($request->all())->withErrors($validator->errors());
+                }
+
+                $request->request->add(['name' => str_slug($request->display_name)]);
+
+                $model->setRawAttributes($request->except('_token', 'permission'));
+
+                $model->save();
+
+                $role = Role::query()->find($id);
+                $role->perms()->sync([]);
+                foreach ($request->permission as $key => $permission) {
+                    if (!$role->perms()->get()->contains('id', $permission)) {
+                        $role->attachPermission($permission);
+                    }
+                }
+
+                return redirect(route('settings.useraccess'))->with('status', 'Role has been updated successfully.');
             }
-
-            $request->request->add(['name' => str_slug($request->display_name)]);
-
-            $role->setRawAttributes($request->except('_token'));
-
-            $role->save();
-
-            return redirect(route('settings.role'))->with('status', 'Role has been updated successfully.');
+            $permissions = Permission::all();
+            return view('settings.useraccess.role.update', [
+                'breadcrumbs' => $this->breadcrumbs,
+                'model' => $model,
+                'permissions' => $permissions,
+                'assignedPermissions' => $assignedPermissions
+            ]);
+        } catch (\Exception $e){
+            dd($e);
         }
-        return view('settings.useraccess.role.update', ['breadcrumbs' => $this->breadcrumbs, 'role' => $role]);
     }
 
     /**

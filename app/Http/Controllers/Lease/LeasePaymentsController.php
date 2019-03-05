@@ -21,6 +21,7 @@ use App\LeasePaymentsNumber;
 use App\LeasePaymentComponents;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Validator;
 
 class LeasePaymentsController extends Controller
@@ -45,11 +46,13 @@ class LeasePaymentsController extends Controller
             'last_payment_end_date' => 'required|date',
             'payment_currency' => 'required',
             'similar_chateristics_assets' => 'required|numeric',
-            'payment_per_interval_per_unit' => 'required|numeric',
-            'total_amount_per_interval' => 'required|numeric',
+            'payment_per_interval_per_unit' => 'numeric|required_if:lease_payment_per_interval,1|nullable',
+            'total_amount_per_interval' => 'numeric|required_if:lease_payment_per_interval,1|nullable',
             'attachment' => config('settings.file_size_limits.file_rule'),
             'due_dates_confirmed' => 'in:1',
-            'altered_payment_due_date.*' => 'required|date'
+            'lease_payment_per_interval' => 'required',
+            'altered_payment_due_date.*' => 'required|date',
+            'inconsistent_date_payment.*' => 'required_if:lease_payment_per_interval,2|numeric'
         ];
 
         return $rules;
@@ -82,6 +85,9 @@ class LeasePaymentsController extends Controller
 
 
             if ($lease) {
+                //check if the Subsequent Valuation is applied for the lease modification
+                $subsequent_modify_required = $lease->isSubsequentModification();
+
                 $show_next = false;
                 $completed_payments = 0;
                 $required_payments = 0;
@@ -116,7 +122,8 @@ class LeasePaymentsController extends Controller
                     'lease',
                     'show_next',
                     'back_url',
-                    'current_step'
+                    'current_step',
+                    'subsequent_modify_required'
                 ));
             } else {
                 abort(404);
@@ -189,7 +196,6 @@ class LeasePaymentsController extends Controller
      */
     public function createAssetPayments($id, Request $request)
     {
-
         try {
 
             $asset = LeaseAssets::query()->findOrFail($id);
@@ -225,6 +231,7 @@ class LeasePaymentsController extends Controller
             }
 
             if ($request->isMethod('post')) {
+
                 $validator = Validator::make($request->except('_token'), $this->validationRules(), [
                     'altered_payment_due_date.*.required' => 'Please confirm the payment due dates by clicking on the Confirm Payment Due Dates.',
                     'due_dates_confirmed.in' => 'Please confirm the payment due dates by clicking on the Confirm Payment Due Dates.',
@@ -233,35 +240,53 @@ class LeasePaymentsController extends Controller
                 ]);
 
                 if ($validator->fails()) {
-                   // dd($validator->errors());
                     return redirect()->back()->withErrors($validator->errors())->withInput($request->except('_token'));
                 }
-                $data = $request->except('_token', 'similar_chateristics_assets', 'step', 'submit', 'altered_payment_due_date', 'due_dates_confirmed');
+
+                $data = $request->except('_token', 'similar_chateristics_assets', 'step', 'submit', 'altered_payment_due_date', 'due_dates_confirmed', 'inconsistent_date_payment');
                 $data['first_payment_start_date'] = Carbon::parse($request->first_payment_start_date)->format('Y-m-d');
                 $data['last_payment_end_date'] = Carbon::parse($request->last_payment_end_date)->format('Y-m-d');
 
                 $data['attachment'] = "";
                 $data['asset_id'] = $asset->id;
                 if ($request->hasFile('attachment')) {
-
                     $file = $request->file('attachment');
                     $uniqueFileName = uniqid() . $file->getClientOriginalName();
                     $request->file('attachment')->move('uploads', $uniqueFileName);
                     $data['attachment'] = $uniqueFileName;
                 }
+
                 $payment->setRawAttributes($data);
+
                 if ($payment->save()) {
                     //code to create the due dates for the payment
                     LeaseAssetPaymenetDueDate::query()->where('asset_id', '=', $id)->where('payment_id', '=', $payment->id)->delete();
-                    if ($request->has('altered_payment_due_date') && !empty($request->altered_payment_due_date)) {
-                        //create new dates here from the posted dates
-                        foreach ($request->altered_payment_due_date as $date) {
-                            if ($date) {
-                                LeaseAssetPaymenetDueDate::create([
-                                    'asset_id' => $id,
-                                    'payment_id' => $payment->id,
-                                    'date' => Carbon::parse($date)->format('Y-m-d')
-                                ]);
+                    if($request->lease_payment_per_interval == '1') {
+                        if ($request->has('altered_payment_due_date') && !empty($request->altered_payment_due_date)) {
+                            //create new dates here from the posted dates
+                            foreach ($request->altered_payment_due_date as $date) {
+                                if ($date) {
+                                    LeaseAssetPaymenetDueDate::create([
+                                        'asset_id' => $id,
+                                        'payment_id' => $payment->id,
+                                        'date' => Carbon::parse($date)->format('Y-m-d'),
+                                        'total_payment_amount' => $request->total_amount_per_interval
+                                    ]);
+                                }
+                            }
+                        }
+                    } else {
+                        if ($request->has('altered_payment_due_date') && !empty($request->altered_payment_due_date)) {
+                            //create new dates here from the posted dates
+                            foreach ($request->altered_payment_due_date as $date) {
+                                if (isset($request->inconsistent_date_payment[Carbon::parse($date)->format('Y-m-d')])) {
+                                    LeaseAssetPaymenetDueDate::create([
+                                        'asset_id' => $id,
+                                        'payment_id' => $payment->id,
+                                        'date' => Carbon::parse($date)->format('Y-m-d'),
+                                        'total_payment_amount' => $request->inconsistent_date_payment[Carbon::parse($date)->format('Y-m-d')]
+                                    ]);
+                                }
                             }
                         }
                     }
@@ -301,7 +326,7 @@ class LeasePaymentsController extends Controller
             ));
 
         } catch (\Exception $e) {
-            //dd($e->getMessage());
+            dd($e->getMessage());
             abort(404, $e->getMessage());
         }
     }
@@ -335,7 +360,7 @@ class LeasePaymentsController extends Controller
                         return redirect()->back()->withErrors($validator->errors())->withInput($request->except('_token'));
                     }
 
-                    $data = $request->except('_token', 'similar_chateristics_assets', 'step', 'submit', 'altered_payment_due_date', 'due_dates_confirmed');
+                    $data = $request->except('_token', 'similar_chateristics_assets', 'step', 'submit', 'altered_payment_due_date', 'due_dates_confirmed', 'inconsistent_date_payment');
                     $data['first_payment_start_date'] = Carbon::parse($request->first_payment_start_date)->format('Y-m-d');
                     $data['last_payment_end_date'] = Carbon::parse($request->last_payment_end_date)->format('Y-m-d');
                     $data['attachment'] = "";
@@ -350,19 +375,37 @@ class LeasePaymentsController extends Controller
                     if ($payment->save()) {
                         //code to create the due dates for the payment
                         LeaseAssetPaymenetDueDate::query()->where('asset_id', '=', $id)->where('payment_id', '=', $payment_id)->delete();
-                        if ($request->has('altered_payment_due_date') && !empty($request->altered_payment_due_date)) {
-                            //create new dates here from the posted dates
-                            foreach ($request->altered_payment_due_date as $date) {
-                                if ($date) {
-                                    LeaseAssetPaymenetDueDate::create([
-                                        'asset_id' => $id,
-                                        'payment_id' => $payment_id,
-                                        'date' => Carbon::parse($date)->format('Y-m-d')
-                                    ]);
+
+                        if($request->lease_payment_per_interval == '1') {
+                            if ($request->has('altered_payment_due_date') && !empty($request->altered_payment_due_date)) {
+                                //create new dates here from the posted dates
+                                foreach ($request->altered_payment_due_date as $date) {
+                                    if ($date) {
+                                        LeaseAssetPaymenetDueDate::create([
+                                            'asset_id' => $id,
+                                            'payment_id' => $payment_id,
+                                            'date' => Carbon::parse($date)->format('Y-m-d'),
+                                            'total_payment_amount' => $request->total_amount_per_interval
+                                        ]);
+                                    }
                                 }
                             }
-
+                        } else {
+                            if ($request->has('altered_payment_due_date') && !empty($request->altered_payment_due_date)) {
+                                //create new dates here from the posted dates
+                                foreach ($request->altered_payment_due_date as $date) {
+                                    if (isset($request->inconsistent_date_payment[Carbon::parse($date)->format('Y-m-d')])) {
+                                        LeaseAssetPaymenetDueDate::create([
+                                            'asset_id' => $id,
+                                            'payment_id' => $payment_id,
+                                            'date' => Carbon::parse($date)->format('Y-m-d'),
+                                            'total_payment_amount' => $request->inconsistent_date_payment[Carbon::parse($date)->format('Y-m-d')]
+                                        ]);
+                                    }
+                                }
+                            }
                         }
+
 
                         // complete Step
                         $lease_id = $asset->lease->id;
@@ -452,7 +495,8 @@ class LeasePaymentsController extends Controller
     /**
      * Calculates all the payment due dates provided the first payment start date and the last payment end date
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Throwable
      */
     public function dueDatesAnnexure(Request $request)
     {
@@ -483,7 +527,9 @@ class LeasePaymentsController extends Controller
                 $years = [];
 
                 $start_year = Carbon::parse($asset->accural_period)->format('Y');
-                $end_year = Carbon::parse($asset->lease_end_date)->format('Y');
+//                $end_year = Carbon::parse($asset->lease_end_date)->format('Y');
+
+                $end_year = Carbon::parse($request->end_date)->format('Y');
 
                 if ($start_year == $end_year) {
                     $years[] = $end_year;
@@ -560,6 +606,86 @@ class LeasePaymentsController extends Controller
             } else {
                 return response()->json(['status' => false], 200);
             }
+        }
+    }
+
+    public function inconsistentIntervalAnnexure(Request $request){
+        try{
+            $validator = Validator::make($request->all(), [
+                'lease_id' => 'required|exists:lease,id',
+                'asset_id' => 'required|exists:lease_assets,id',
+                'paymentDates.*' => 'required'
+            ],[
+                'paymentDates.*.required' => 'Please confirm the payment dates annexure first.'
+            ]);
+
+            $errors = $months = $years = $dates = [];
+
+            if ($validator->fails()) {
+                $errors = $validator->errors();
+            } else {
+
+                for ($m = 1; $m <= 12; ++$m) {
+                    $months[$m] = date('F', mktime(0, 0, 0, $m, 1));
+                }
+
+                $paymentDates = Arr::sort($request->paymentDates);
+
+                //populate the years array here
+                foreach ($paymentDates as $paymentDate) {
+                    $years[Carbon::parse($paymentDate)->format('Y')] = Carbon::parse($paymentDate)->format('Y');
+                    $dates[Carbon::parse($paymentDate)->format('Y')][Carbon::parse($paymentDate)->format('m')][] = [
+                        'date' => $paymentDate,
+                        'amount' => 0
+                    ];
+                }
+            }
+
+
+            $data = $request->all();
+
+            return view('lease.payments._inconsistent_annexure', compact(
+                'data',
+                'errors',
+                'years',
+                'months',
+                'dates'
+            ));
+
+        } catch (\Exception $e){
+            dd($e);
+        }
+    }
+
+    public function loadInconsistentAnnexure($payment_id){
+        try{
+            $paymentDates = LeaseAssetPaymenetDueDate::query()->where('payment_id', $payment_id)->orderBy('date', 'asc')->get();
+
+            $errors = $months = $years = $dates = [];
+            for ($m = 1; $m <= 12; ++$m) {
+                $months[$m] = date('F', mktime(0, 0, 0, $m, 1));
+            }
+
+
+            //populate the years array here
+            foreach ($paymentDates as $paymentDate) {
+                $years[Carbon::parse($paymentDate->date)->format('Y')] = Carbon::parse($paymentDate->date)->format('Y');
+                $dates[Carbon::parse($paymentDate->date)->format('Y')][Carbon::parse($paymentDate->date)->format('m')][] = [
+                    'date' => $paymentDate->date,
+                    'amount' => $paymentDate->total_payment_amount
+                ];
+            }
+
+            return view('lease.payments._inconsistent_annexure', compact(
+                'data',
+                'errors',
+                'years',
+                'months',
+                'dates'
+            ));
+
+        }catch (\Exception $e){
+            dd($e);
         }
     }
 }

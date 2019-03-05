@@ -186,6 +186,9 @@
             dateFormat: "dd-M-yy",
             startDate: date,
             minDate: date,
+            changeMonth:true,
+            changeYear:true,
+            {!!  getYearRanage() !!}
         });
 
         $("#confirm").on("click", function (e) {

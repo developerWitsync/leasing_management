@@ -25,6 +25,8 @@
                 </div>
             @endif
 
+            @include('lease._subsequent_details')
+
 
             <div class="panel panel-info">
                 <div class="panel-heading">Section A: Lessor Details</div>
@@ -250,13 +252,6 @@
                 <div class="panel-heading">Section E: Lease Payments</div>
                 <table class="table table-bordered table-responsive">
                     <thead>
-                    <tr>
-                        @foreach($lease->assets as $asset)
-                            
-                    </thead>
-
-                    <thead>
-                    <tr>
                         <th>Lease Payment Name</th>
                         <th>Lease Payment Type</th>
                         <th>Lease Payment Nature</th>
@@ -268,11 +263,11 @@
                         <th>Total Lease Amount Per Interval</th>
                         <th>Total Undiscounted Lease Payments</th>
                         <th>Action</th>
-                    </tr>
                     </thead>
                     <tbody>
-                    <tr>
+
                         @foreach($asset->payments as $payment)
+                            <tr>
                             <td>{{$payment->name}}</td>
                             <td>{{$payment->paymentType->title}}</td>
                             <td>{{$payment->paymentNature->title}}</td>
@@ -291,12 +286,10 @@
                                     </button>
                                 </a>
                             </td>
+                            <tr>
                         @endforeach
                     </tr>
                     </tbody>
-
-                    @endforeach
-                    </tr>
                 </table>
             </div>
 

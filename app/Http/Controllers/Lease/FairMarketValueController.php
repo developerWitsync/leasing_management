@@ -64,6 +64,9 @@ class FairMarketValueController extends Controller
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
             if($lease) {
 
+                //check if the Subsequent Valuation is applied for the lease modification
+                $subsequent_modify_required = $lease->isSubsequentModification();
+
                 $asset = $lease->assets->first(); //since once lease will now have only one lease asset
 
                 if($asset->fairMarketValue){
@@ -128,7 +131,8 @@ class FairMarketValueController extends Controller
                     'reporting_foreign_currency_transaction_settings',
                     'reporting_currency_settings',
                     'breadcrumbs',
-                    'current_step'
+                    'current_step',
+                    'subsequent_modify_required'
                 ));
             } else {
                 abort(404);

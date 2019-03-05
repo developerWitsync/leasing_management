@@ -14,6 +14,8 @@
                 </div>
             @endif
 
+            @include('lease._subsequent_details')
+
             <div class="tab-content" style="padding: 0px;">
                 <div role="tabpanel" class="tab-pane active">
                     <form class="form-horizontal" method="POST"
@@ -21,7 +23,7 @@
                         {{ csrf_field() }}
 
                         <div class="categoriesOuter clearfix">
-                           <!--  <div class="categoriesHd">Lease Asset Categorization</div>
+                        <!--  <div class="categoriesHd">Lease Asset Categorization</div>
                             <div class="form-group{{ $errors->has('uuid') ? ' has-error' : '' }} required">
                                 <label for="uuid" class="col-md-12 control-label">ULA CODE</label>
                                 <div class="col-md-12">
@@ -29,8 +31,8 @@
                                     <input id="uuid" type="text" placeholder="ULA Code" class="form-control" name="uuid"
                                            value="{{ old('ula_code', $ulacode) }}" readonly="readonly">
                                     @if ($errors->has('uuid'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('uuid') }}</strong>
+                            <span class="help-block">
+                            <strong>{{ $errors->first('uuid') }}</strong>
                                     </span>
                                     @endif
                                 </div>
@@ -149,7 +151,7 @@
 
                         <div class="categoriesOuter clearfix">
                             <div class="categoriesHd">Basic Details of the Underlying Lease Asset</div>
-                            <div class="form-group{{ $errors->has('other_details') ? ' has-error' : '' }} required">
+                            <div class="form-group{{ $errors->has('other_details') ? ' has-error' : '' }} ">
                                 <label for="other_details" class="col-md-12 control-label">Any other Details of the
                                     Underlying Lease Asset</label>
                                 <div class="col-md-12">
@@ -170,8 +172,7 @@
                             <div class="form-group{{ $errors->has('country_id') ? ' has-error' : '' }} required">
                                 <label for="country" class="col-md-12 control-label">Country</label>
                                 <div class="col-md-12">
-                                    <select name="country_id" class="form-control"
-                                            @if($subsequent_modify_required) disabled="disabled" @endif>
+                                    <select name="country_id" class="form-control">
                                         <option value="">--Select Country--</option>
                                         @foreach($countries as $country)
                                             <option value="{{ $country->id }}"
@@ -183,10 +184,6 @@
                                         <span class="help-block">
                                             <strong>{{ $errors->first('country_id') }}</strong>
                                         </span>
-                                    @endif
-
-                                    @if($subsequent_modify_required)
-                                        <input type="hidden" name="country_id" value="{{ $asset->country_id }}"/>
                                     @endif
 
                                 </div>
@@ -256,7 +253,7 @@
 
                                     Useful Life of the Lease
                                     Asset
-                                    </label>
+                                </label>
                                 <div class="col-md-12">
                                     <select name="expected_life" class="form-control">
                                         <option value="">--Expected Life Of Lease Asset--</option>
@@ -353,7 +350,8 @@
                                     Non-Cancellable Period</label>
                                 <div class="col-md-12">
                                     <input id="lease_end_date" type="text"
-                                           placeholder="Lease End Date, Non-Cancellable Period" class="form-control lease_period"
+                                           placeholder="Lease End Date, Non-Cancellable Period"
+                                           class="form-control lease_period"
                                            name="lease_end_date"
                                            value="{{ old('lease_end_date', ($asset->lease_end_date)?(\Carbon\Carbon::parse($asset->lease_end_date)->format('d-M-Y')):'') }}"
                                            autocomplete="off">
@@ -415,7 +413,7 @@
                         </div>
 
                         <div class="categoriesOuter using_lease_payment clearfix" style="display:none;">
-                            <div class="categoriesHd">Lease Payment Use</div>
+                            <div class="categoriesHd">Lease Payment Basis</div>
                             <div class="form-group{{ $errors->has('using_lease_payment') ? ' has-error' : '' }} required using_lease_payment"
                                  style="display: block">
                                 <label for="variable_amount_determinable" class="col-md-12 control-label">Using Lease
@@ -425,7 +423,7 @@
                                     <div class="col-md-12 form-check form-check-inline">
                                         <input class="form-check-input" name="using_lease_payment" type="checkbox"
                                                id="yes" value="1"
-                                               @if(old('using_lease_payment' ,$asset->using_lease_payment) == "1") checked="checked" @endif>
+                                               @if(old('using_lease_payment' ,$asset->using_lease_payment) == "1") checked="checked" @endif @if($subsequent_modify_required) disabled="disabled" @endif>
                                         <label for="yes" class="form-check-label" for="1" style="vertical-align: 2px">Current
                                             Lease Payment as on Jan 01, 2019</label>
                                     </div>
@@ -433,7 +431,7 @@
                                     <div class=" col-md-12 form-check form-check-inline">
                                         <input class="form-check-input" name="using_lease_payment" type="checkbox"
                                                id="no" value="2"
-                                               @if(old('using_lease_payment',$asset->using_lease_payment) == "2") checked="checked" @endif>
+                                               @if(old('using_lease_payment',$asset->using_lease_payment) == "2") checked="checked" @endif @if($subsequent_modify_required) disabled="disabled" @endif>
                                         <label for="no" class="form-check-label" for="2" style="vertical-align: 2px">Initial
                                             Lease Payment as on First Lease Start</label>
                                     </div>
@@ -441,6 +439,10 @@
                                         <span class="help-block">
                                             <strong>{{ $errors->first('using_lease_payment') }}</strong>
                                         </span>
+                                    @endif
+                                    @if($subsequent_modify_required)
+                                        <input type="hidden" name="using_lease_payment"
+                                               value="{{ $asset->using_lease_payment }}"/>
                                     @endif
                                 </div>
 
@@ -454,19 +456,20 @@
 
                                 <a href="{{ route('add-new-lease.index',['id' => $lease->id]) }}"
                                    class="btn btn-danger">
-                                   <i class="fa fa-arrow-left"></i> {{ env('BACK_LABEL')}}</a>
-                              
+                                    <i class="fa fa-arrow-left"></i> {{ env('BACK_LABEL')}}</a>
+
                             </div>
                             <div class="col-md-4 col-sm-4 btnsubmitBx aligncenter">
 
-                                <button type="submit" class="btn btn-success"> 
-                                {{ env('SAVE_LABEL') }} <i class="fa fa-download"></i></button>
+                                <button type="submit" class="btn btn-success">
+                                    {{ env('SAVE_LABEL') }} <i class="fa fa-download"></i></button>
                             </div>
-                             <div class="col-md-4 col-sm-4 btn-backnextBx rightlign ">
+                            <div class="col-md-4 col-sm-4 btn-backnextBx rightlign ">
                                 <input type="hidden" name="action" value="">
-                                <a href="javascript:void(0);" class="btn btn-primary save_next"> {{ env('NEXT_LABEL') }} <i class="fa fa-arrow-right"></i></a>
-                             </div>
-                            
+                                <a href="javascript:void(0);" class="btn btn-primary save_next"> {{ env('NEXT_LABEL') }}
+                                    <i class="fa fa-arrow-right"></i></a>
+                            </div>
+
                         </div>
 
                     </form>
@@ -540,8 +543,8 @@
                 $("#lease_start_date").datepicker({
                     dateFormat: "dd-M-yy",
                     changeYear: true,
-                    changeMonth : true,
-                    yearRange: '{{ $settings->min_previous_first_lease_start_year }}:{{$settings->max_lease_end_year}}',
+                    changeMonth: true,
+                    {!!  getYearRanage() !!}
                     onSelect: function (date, instance) {
 
                         var _ajax_url = '{{route("lease.checklockperioddate")}}';
@@ -568,9 +571,9 @@
                 $('#lease_end_date').datepicker({
                     dateFormat: "dd-M-yy",
                     minDate: new Date('2019-01-30'),
-                    yearRange: '{{ $settings->min_previous_first_lease_start_year }}:{{$settings->max_lease_end_year}}',
+                    {!!  getYearRanage() !!}
                     changeYear: true,
-                    changeMonth:true,
+                    changeMonth: true,
                     onSelect: function (date, instance) {
                         var _ajax_url = '{{route("lease.checklockperioddate")}}';
                         checklockperioddate(date, instance, _ajax_url);
@@ -578,20 +581,20 @@
                     }
                 });
 
-    function calculateLeaseTerm() {
-        $.ajax({
-        url : "{{route('addlease.leaseasset.getdatedifference')}}",
-        data : {
-        accural_period : $('#accural_period').val(),
-        lease_end_date : $('#lease_end_date').val()
-           
-        },
-        type : 'get',
-        success : function (response) {
-          $("#lease_term").val(response.html);
-        }
-    });
-    }
+                function calculateLeaseTerm() {
+                    $.ajax({
+                        url: "{{route('addlease.leaseasset.getdatedifference')}}",
+                        data: {
+                            accural_period: $('#accural_period').val(),
+                            lease_end_date: $('#lease_end_date').val()
+
+                        },
+                        type: 'get',
+                        success: function (response) {
+                            $("#lease_term").val(response.html);
+                        }
+                    });
+                }
 
                 $('#accural_period').datepicker({
                     dateFormat: "dd-M-yy",
@@ -659,10 +662,10 @@
                 }
             });
         });
-     $('.save_next').on('click', function (e) {
-                e.preventDefault();
-                $('input[name="action"]').val('next');
-                $('#lease_asset').submit();
-            });
+        $('.save_next').on('click', function (e) {
+            e.preventDefault();
+            $('input[name="action"]').val('next');
+            $('#lease_asset').submit();
+        });
     </script>
 @endsection

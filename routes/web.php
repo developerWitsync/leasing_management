@@ -47,7 +47,7 @@ Route::middleware('auth')->group(function(){
         Route::get('purchase/{plan}', ['as' => 'plan.purchase', 'uses' => 'UpgradeController@purchase']);
         Route::get('success', ['as' => 'plan.purchase.success', 'uses'=> 'UpgradeController@success']);
         Route::get('cancel', ['as' => 'plan.purchase.cancel', 'uses'=> 'UpgradeController@cancel']);
-        Route::get('upgrade-downgrade-info/{plan}', ['as' => 'plan.purchase.updowninfo', 'uses' => 'UpgradeController@changePlanDetails' ]);
+        Route::get('upgrade-downgrade-info/{plan}', ['as' => 'plan.purchase.updowninfo', 'uses' => 'UpgradeController@changePlanDetails']);
     });
 
     Route::namespace('Lease')->middleware(['permission:add_lease', 'checksubscription:add_lease'])->prefix('lease')->group(function(){
@@ -118,6 +118,11 @@ Route::middleware('auth')->group(function(){
             Route::match(['post', 'get'],'update-asset-payment/{id}/{payment_id}', ['as' => 'lease.payments.updateassetpayment', 'uses' => 'LeasePaymentsController@updateAssetPayments']);
             Route::get('lease-asset-payment-due-dates-annexure', ['as' => 'lease.payments.duedatesannexure', 'uses' => 'LeasePaymentsController@dueDatesAnnexure']);
             Route::get('lease-asset-payment-due-dates-view-dates/{id}', ['as'=> 'addlease.payments.showpaymentdates', 'uses'=> 'LeasePaymentsController@viewExistingDates']);
+
+
+            Route::post('payment-annexure-inconsistent-per-interval', ['as' => 'addlease.payments.inconsitentperintervalannexure', 'uses' => 'LeasePaymentsController@inconsistentIntervalAnnexure']);
+
+            Route::get('load-payment-annexure-inconsistent/{payment_id}', ['as' => 'addlease.payments.loadinconsistentannexure', 'uses' => 'LeasePaymentsController@loadInconsistentAnnexure']);
         });
 
 
@@ -163,9 +168,8 @@ Route::middleware('auth')->group(function(){
             Route::match(['get', 'post'],'create/{id}/{lease}', ['as'=>'lease.escalation.create', 'uses'=> 'EscalationController@create'])->middleware('checkpreviousdata:9,lease_id,lease');
             Route::get('escalation-chart/{id}', ['as'=>'lease.escalation.showescalationchart', 'uses'=> 'EscalationController@escalationChart']);
             Route::get('compute-total-escalation/{id}', ['as'=>'lease.escalation.compute', 'uses'=> 'EscalationController@computeTotalUndiscountedPayment']);
-            Route::get('show-payment-annexure/{id}', ['as'=>'lease.escalation.showpaymentannexure', 'uses'=> 'EscalationController@paymentAnnexure'])->middleware('checkpreviousdata:9,lease_id,id');
+            Route::get('show-payment-annexure/{id}', ['as'=>'lease.escalation.showpaymentannexure', 'uses'=> 'EscalationController@paymentAnnexure']);
         });
-
 
         /*
          * Select Low Value Value NL10
@@ -393,7 +397,6 @@ Route::middleware('auth')->group(function(){
             Route::match(['get', 'post'], 'create', ['as' => 'settings.user.create', 'uses' => 'UserAccessController@create'])->middleware('checksubscription:add_sub_users');
 
             Route::post('user-status-update', ['as' => 'settings.user.updatestatus', 'uses' => 'UserAccessController@changeStatus']);
-
 
             Route::match(['get', 'post'], '/update/{id}', ['as' => 'settings.user.update', 'uses' => 'UserAccessController@update']);
             
