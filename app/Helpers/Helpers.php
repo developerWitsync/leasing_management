@@ -648,7 +648,7 @@ function generateWitsyncAccountID($user)
  * @return mixed
  * @throws Exception
  */
-function generatePaypalExpressCheckoutLink(\App\SubscriptionPlans $package, \App\UserSubscription $subscription, $return_url = null, $cancel_url = null, $notify_url = null, $adjusted_amount = null)
+function generatePaypalExpressCheckoutLink(\App\SubscriptionPlans $package, \App\UserSubscription $subscription, $return_url = null, $cancel_url = null, $notify_url = null, $adjusted_amount = null, $quantity = 12)
 {
 
     $provider = new ExpressCheckout();
@@ -657,7 +657,7 @@ function generatePaypalExpressCheckoutLink(\App\SubscriptionPlans $package, \App
         [
             'name' => $package->title,
             'price' => $package->price,
-            'qty' => 12 // quantity is said to be 12 as the plan can only be purchased for 1 year
+            'qty' => $quantity // quantity is said to be 12 as the plan can only be purchased for 1 year
         ]
     ];
 
@@ -709,8 +709,11 @@ function generatePaypalExpressCheckoutLink(\App\SubscriptionPlans $package, \App
     //give a discount of 10% of the order amount
     $discounted_amount = 0;
     if ($package->annual_discount > 0) {
-        $discounted_amount = round(($package->annual_discount / 100) * $subtotal, 2);
-        $data['shipping_discount'] = $discounted_amount;
+        $discounted_percentage = ($quantity / 12 - 1) * $package->annual_discount;
+        if($discounted_percentage > 0){
+            $discounted_amount = round(($package->annual_discount / 100) * $subtotal, 2);
+            $data['shipping_discount'] = $discounted_amount;
+        }
     }
 
     //save all the details to the user_subscription for the details so that these can be used for the doExpressCheckout
@@ -744,166 +747,29 @@ function getInformationPage()
 }
 
 /**
- * returns the credit or balance for the upgrade or downgrade for the selected plan...
- * @param \App\SubscriptionPlans $package
- * @return float|\Illuminate\Http\RedirectResponse|int|mixed
+ * returns the yearRange as per the settings...
+ * @return string
  */
-function calculateCreditBalanceForUpgradeDowngrade(\App\SubscriptionPlans $package)
-{
-    $existing_plan = \App\UserSubscription::query()->whereIn('user_id', getDependentUserIds())->orderBy('id', 'desc')->where('payment_status', '=', 'Completed')->first();
-    $return = [];
-    $return['status'] = true;
-    if ($existing_plan && \Carbon\Carbon::today()->lessThanOrEqualTo(\Carbon\Carbon::parse($existing_plan->subscription_expire_at))) {
-
-        if ($package->price_plan_type == "1" && is_null($package->price)) {
-            return ['status' => false, 'message' => 'You are not allowed to downgrade to a trial plan.', 'errorCode' => 'package_error'];
-        }
-
-        if ($existing_plan->subscriptionPackage->price_plan_type == '1') {
-
-            //need to do the calculations for calculating the price that the user might have to pay...
-            $old_amount_paid = ($existing_plan->subscriptionPackage->price * 12) - $existing_plan->discounted_amount;
-
-            $old_plan_per_day_rate = $old_amount_paid / 365;
-
-            $old_plan_effective_until = \Carbon\Carbon::yesterday()->format('Y-m-d');
-
-            if (date('Y-m-d', strtotime($existing_plan->created_at)) == date('Y-m-d')) {
-                $old_plan_subscription_days = 0;
-            } else {
-                $old_plan_subscription_days = \Carbon\Carbon::parse($existing_plan->created_at)->diffInDays(\Carbon\Carbon::parse($old_plan_effective_until));
-            }
-
-            $old_plan_price_levied = round($old_plan_subscription_days * $old_plan_per_day_rate);
-
-            $new_plan_price = $package->price * 12;
-
-            if ($package->annual_discount > 0) {
-                $new_plan_price = $new_plan_price - round(($package->annual_discount / 100) * $new_plan_price, 2);
-            }
-
-            if(is_null($existing_plan->subscriptionPackage->price)) {
-                $total_subscription_days = 365;
-            } else {
-                $total_subscription_days = ($existing_plan->subscriptionPackage->validity)?$existing_plan->subscriptionPackage->validity:365;
-            }
-
-            $new_plan_per_day_rate = $new_plan_price / $total_subscription_days;
-
-            if(is_null($existing_plan->subscriptionPackage->price)) {
-                $new_plan_subscription_days = 365;
-            } else {
-                $new_plan_subscription_days = \Carbon\Carbon::parse($existing_plan->subscription_expire_at)->diffInDays(\Carbon\Carbon::today());
-            }
-
-            $new_plan_price_levied = round($new_plan_subscription_days * $new_plan_per_day_rate);
-
-            $total_payable = $new_plan_price_levied + $old_plan_price_levied;
-
-            $final_payment_amount = $old_amount_paid - $total_payable;
-
-            $return['status'] = true;
-
-            $return['old_plan_period'] = \Carbon\Carbon::parse($existing_plan->created_at)->format(config('settings.date_format'))." - ". \Carbon\Carbon::parse($existing_plan->subscription_expire_at)->format(config('settings.date_format'));
-
-            $return['old_plan_price'] = $old_amount_paid;
-
-            $return['total_subscription_days'] = $total_subscription_days;
-
-            $return['old_plan_per_day_rate'] = $old_plan_per_day_rate;
-
-            $return['old_plan_effective_untill']  = $old_plan_effective_until;
-
-            $return['old_plan_subscription_days'] = $old_plan_subscription_days;
-
-            $return['old_plan_price_levied'] = $old_plan_price_levied;
-
-            if(is_null($existing_plan->subscriptionPackage->price)) {
-                $return['new_subscription_period'] = \Carbon\Carbon::today()->format(config('settings.date_format'))." - ". \Carbon\Carbon::today()->addYear(1)->format(config('settings.date_format'));
-            } else {
-                $return['new_subscription_period'] = \Carbon\Carbon::today()->format(config('settings.date_format'))." - ". \Carbon\Carbon::parse($existing_plan->subscription_expire_at)->format(config('settings.date_format'));
-            }
-
-            $return['new_plan_price'] = $new_plan_price;
-
-            $return['new_plan_total_subscription_days'] = 365;
-
-            $return['new_plan_per_day_rate'] = $new_plan_per_day_rate;
-
-            $return['effective_date_of_new_plan'] = \Carbon\Carbon::today()->format(config('settings.date_format'));
-
-            $return['new_plan_subscroption_days'] = $new_plan_subscription_days;
-
-            $return['new_plan_price_levied'] = $new_plan_price_levied;
-
-            $return['total_payable'] = $total_payable;
-
-            $return['price_paid'] = $old_amount_paid;
-
-            $return['final_payment_amount'] = $final_payment_amount;
-
-            $return['adjustable_amount'] = $old_amount_paid - $old_plan_price_levied;
-
-        }
-    } else {
-
-        if($package->validity) {
-            $expiry_date = \Carbon\Carbon::today()->addDays($package->validity)->format(config('settings.date_format'));
-        } else {
-            $expiry_date = \Carbon\Carbon::today()->addYear(1)->format(config('settings.date_format'));
-        }
-
-        $new_plan_price = $package->price * 12;
-
-        if ($package->annual_discount > 0) {
-            $new_plan_price = $new_plan_price - round(($package->annual_discount / 100) * $new_plan_price, 2);
-        }
-
-        $total_subscription_days = ($package->validity)?$package->validity:365;
-
-        $new_plan_per_day_rate = $new_plan_price / $total_subscription_days;
-
-        $new_plan_subscription_days = \Carbon\Carbon::parse($expiry_date)->diffInDays(\Carbon\Carbon::today());
-
-        $return['status'] = true;
-
-        $return['new_subscription_period'] = \Carbon\Carbon::today()->format(config('settings.date_format'))." - ". $expiry_date;
-
-        $return['new_plan_price'] = $new_plan_price;
-
-        $return['new_plan_total_subscription_days'] = ($package->validity)?$package->validity:365;
-
-        $return['new_plan_per_day_rate'] = $new_plan_per_day_rate;
-
-        $return['effective_date_of_new_plan'] = \Carbon\Carbon::today()->format(config('settings.date_format'));
-
-        $return['new_plan_subscroption_days'] = $new_plan_subscription_days;
-
-        $return['new_plan_price_levied'] = 0;
-
-        $return['total_payable'] = $new_plan_price;
-
-        $return['price_paid'] = 0;
-
-        $return['final_payment_amount'] = -1 * $new_plan_price;
-
-        $return['adjustable_amount'] = 0;
-    }
-
-    return $return;
+function getYearRanage(){
+    $settings = \App\GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
+    return "yearRange: '{$settings->min_previous_first_lease_start_year}:{$settings->max_lease_end_year}',";
 }
 
 /**
- * get the adjusted amount for the users subscription upgrade or downgrade...
+ * calculate the adjustments during the subscription upgrade or downgrade as per the plan selected by the user...
  * @param \App\SubscriptionPlans $package
+ * @param int $months
  * @return array
  */
-function getAdjustedAmountForUpgradeDownGrade(\App\SubscriptionPlans $package){
-    $existing_plan = \App\UserSubscription::query()->whereIn('user_id', getDependentUserIds())->orderBy('id', 'desc')->where('payment_status', '=', 'Completed')->first();
+function calculateAdjustedAmountForUpgradeDowngrade(\App\SubscriptionPlans $package, $months = 12){
+    $existing_plan = \App\UserSubscription::query()
+        ->whereIn('user_id', getDependentUserIds())
+        ->orderBy('id', 'desc')
+        ->where('payment_status', '=', 'Completed')->first();
     $final_payment_amount = [];
     if ($existing_plan && \Carbon\Carbon::today()->lessThanOrEqualTo(\Carbon\Carbon::parse($existing_plan->subscription_expire_at))) {
-
-        if ($existing_plan->subscriptionPackage->price_plan_type == '1') {
+        //previous plan has not expired yet...
+        if ($existing_plan->subscriptionPackage->price_plan_type == '1' || $package->is_custom == '1') {
 
             if ($package->price_plan_type == "1" && is_null($package->price)) {
                 return ['status' => false, 'message' => 'You are not allowed to downgrade to a trial plan.'];
@@ -915,18 +781,28 @@ function getAdjustedAmountForUpgradeDownGrade(\App\SubscriptionPlans $package){
 
                 $final_payment_amount['adjusted_amount'] = 0;
 
-                $new_plan_price = $package->price * 12;
+                $new_plan_price = $package->price * $months;
 
+                $discounted_percentage = 0;
                 if ($package->annual_discount > 0) {
-                    $new_plan_price = $new_plan_price - round(($package->annual_discount / 100) * $new_plan_price, 2);
+                    $discounted_percentage = ($months / 12 - 1) * $package->annual_discount;
+                    if($discounted_percentage > 0){
+                        $discounted_amount = round(($package->annual_discount / 100) * $new_plan_price, 2);
+                        $new_plan_price = $new_plan_price - $discounted_amount;
+                    }
                 }
 
-                $final_payment_amount['balance' ]  = -1 * $new_plan_price;
+                $final_payment_amount['balance' ]  = round(-1 * $new_plan_price, 2);
+
+                $final_payment_amount['gross_value_of_new_plan'] = round($new_plan_price, 2);
+
+                $final_payment_amount['discounted_percentage'] = $discounted_percentage;
+
             } else {
                 //need to do the calculations for calculating the price that the user might have to pay...
-                $old_amount_paid = ($existing_plan->subscriptionPackage->price * 12) - $existing_plan->discounted_amount;
+                $old_amount_paid = ($existing_plan->subscriptionPackage->price * ($existing_plan->subscription_years * 12)) - $existing_plan->discounted_amount;
 
-                $old_plan_per_day_rate = $old_amount_paid / 365;
+                $old_plan_per_day_rate = $old_amount_paid / ($existing_plan->subscription_years * 365);
 
                 $old_plan_effective_until = \Carbon\Carbon::yesterday()->format('Y-m-d');
 
@@ -936,19 +812,23 @@ function getAdjustedAmountForUpgradeDownGrade(\App\SubscriptionPlans $package){
                     $old_plan_subscription_days = \Carbon\Carbon::parse($existing_plan->created_at)->diffInDays(\Carbon\Carbon::parse($old_plan_effective_until));
                 }
 
-                $old_plan_price_levied = round($old_plan_subscription_days * $old_plan_per_day_rate);
+                $old_plan_price_levied = $old_plan_subscription_days * $old_plan_per_day_rate;
 
-                $new_plan_price = $package->price * 12;
+                $new_plan_price = $package->price * $months;
 
+                $discounted_percentage = 0;
                 if ($package->annual_discount > 0) {
-                    $new_plan_price = $new_plan_price - round(($package->annual_discount / 100) * $new_plan_price, 2);
+                    $discounted_percentage = ($months / 12 - 1) * $package->annual_discount;
+                    if($discounted_percentage > 0){
+                        $new_plan_price = $new_plan_price - round(($package->annual_discount / 100) * $new_plan_price, 2);
+                    }
                 }
 
-                $total_subscription_days = 365;
+                $total_subscription_days = ($months/12) * 365;
 
                 $new_plan_per_day_rate = $new_plan_price / $total_subscription_days;
 
-                $new_plan_subscription_days = \Carbon\Carbon::parse($existing_plan->subscription_expire_at)->diffInDays(\Carbon\Carbon::today());
+                $new_plan_subscription_days = \Carbon\Carbon::parse($old_plan_effective_until)->addYear($months/12)->diffInDays(\Carbon\Carbon::today());
 
                 $new_plan_price_levied = round($new_plan_subscription_days * $new_plan_per_day_rate);
 
@@ -956,40 +836,54 @@ function getAdjustedAmountForUpgradeDownGrade(\App\SubscriptionPlans $package){
 
                 $final_payment_amount['status'] = true;
 
-                $final_payment_amount['adjusted_amount'] = $old_amount_paid - $old_plan_price_levied;
+                $final_payment_amount['adjusted_amount'] = round($old_amount_paid - $old_plan_price_levied, 2);
 
-                $final_payment_amount['balance' ]  = $old_amount_paid - $total_payable;
+                $final_payment_amount['balance' ]  = round($old_amount_paid - $total_payable, 2);
+
+                $final_payment_amount['gross_value_of_new_plan'] = round($new_plan_price, 2);
+
+                $final_payment_amount['discounted_percentage'] = $discounted_percentage;
 
             }
 
         } else {
             return [
                 'status' => false,
-                'message' => 'You are trying to upgrade to the enterprise plan.'
+                'message' => 'You are not allowed to downgrade from the enterprise plan.'
             ];
         }
     } else {
+        //previous plan has expired and user will now have to pay in full....
         $final_payment_amount['status'] = true;
 
         $final_payment_amount['adjusted_amount'] = 0;
 
-        $new_plan_price = $package->price * 12;
+        $new_plan_price = $package->price * $months;
 
+        $discounted_percentage = 0;
         if ($package->annual_discount > 0) {
-            $new_plan_price = $new_plan_price - round(($package->annual_discount / 100) * $new_plan_price, 2);
+            $discounted_percentage = ($months / 12 - 1) * $package->annual_discount;
+            if($discounted_percentage > 0){
+                $new_plan_price = $new_plan_price - round(($package->annual_discount / 100) * $new_plan_price, 2);
+            }
         }
 
-        $final_payment_amount['balance' ]  = -1 * $new_plan_price;
+        $final_payment_amount['balance' ]  = round(-1 * $new_plan_price, 2);
+
+        $final_payment_amount['gross_value_of_new_plan'] = round($new_plan_price, 2);
+
+        $final_payment_amount['discounted_percentage'] = $discounted_percentage;
     }
 
     return $final_payment_amount;
 }
 
 /**
- * returns the yearRange as per the settings...
- * @return string
+ * fetch the subscription plans to be listed on the pop up for the registration
+ * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Query\Builder[]|\Illuminate\Support\Collection
  */
-function getYearRanage(){
-    $settings = \App\GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
-    return "yearRange: '{$settings->min_previous_first_lease_start_year}:{$settings->max_lease_end_year}',";
+function getPaidSubscriptionPlans(){
+    return \App\SubscriptionPlans::query()
+        ->where('price_plan_type', '=', '1')
+        ->whereNotNull('price')->get();
 }

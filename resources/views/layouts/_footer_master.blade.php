@@ -55,11 +55,9 @@
                     </div>
 
                     <form id="getInTouchWithUs">
-                        <input type="text" name="first_name" class="form-control" placeholder="First Name">
-                        <input type="text" name="last_name" class="form-control" placeholder="Last Name">
+                        <input type="text" name="name" class="form-control" placeholder="Name">
                         <input type="email" name="email" class="form-control" placeholder="Business E-mail">
                         <input type="text" name="phone" class="form-control" placeholder="Mo. number">
-                        <input type="text" name="no_of_realestate" class="form-control" placeholder="Approximate Number of Real Estate and Equipment Leases">
                         <textarea class="form-control" name="comments" placeholder="Message"></textarea>
                         <button type="submit" class="btn submit">SEND MESSAGE</button>
                     </form>

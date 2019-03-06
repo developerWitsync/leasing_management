@@ -9,15 +9,12 @@
 namespace App\Http\Controllers;
 use App\Lease;
 use App\SubscriptionPlans;
-use App\User;
 use App\UserSubscription;
 use Carbon\Carbon;
-use function GuzzleHttp\Psr7\str;
+use Validator;
 use Illuminate\Http\Request;
-use phpDocumentor\Reflection\Types\Resource_;
 use Srmklive\PayPal\Services\ExpressCheckout;
 use Mail;
-use App\Mail\SubscriptionInvoice;
 
 class UpgradeController extends Controller
 {
@@ -55,12 +52,20 @@ class UpgradeController extends Controller
             $already_created_leases = Lease::query()->whereIn('business_account_id', getDependentUserIds())
                 ->where('status', '=', '1')
                 ->count();
-            $plans = SubscriptionPlans::query()->get();
+
+            $plans = SubscriptionPlans::query()->where('is_custom', '=', '0')->get();
+
+            $custom_plan = SubscriptionPlans::query()
+                ->where('is_custom', '=', '1')
+                ->where('email', '=', getParentDetails()->email)
+                ->first();
+
             return view('plan.index', compact(
                 'breadcrumbs',
                 'subscription',
                 'already_created_leases',
-                'plans'
+                'plans',
+                'custom_plan'
             ));
         } catch (\Exception $e){
             dd($e);
@@ -68,50 +73,103 @@ class UpgradeController extends Controller
     }
 
     /**
-     * upgrade downgrade info as per the selected plan by the user...
+     * user will land to this function in case the user cancels the purchase on paypal...
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function cancel(){
+        return redirect(route('plan.index'))->with('error', 'Your transasction has been cancelled.');
+    }
+
+    /**
+     * renders the pop up to show the upgrade downgrade subscription pop up once the user is logged in....
      * @param $plan
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      * @throws \Throwable
      */
-    public function changePlanDetails($plan, Request $request){
+    public function subscriptionSelection($plan, Request $request){
         try{
             if($request->ajax()){
-                $package = SubscriptionPlans::query()->where('slug', '=', $plan)->firstOrFail();
-                //need to check if the user is upgrading or downgrading the plan and need to send the amount to the paypal as per the calculations...
-                $credit_or_balance = calculateCreditBalanceForUpgradeDowngrade($package);
-                if($credit_or_balance['status']){
 
-                    $view = view('plan._upgrade_downgrade', compact(
-                        'credit_or_balance',
-                        'plan'
-                    ))->render();
+                if($plan){
 
-                    return response()->json([
-                        'status' => true,
-                        'view' => $view
-                    ], 200);
+                    $selected_package = SubscriptionPlans::query()
+                        ->where('slug', '=', $plan)
+                        ->firstOrFail();
 
                 } else {
-                    return response()->json($credit_or_balance, 200);
+                    return response()->json(['status' => false, 'message' => 'Invalid Request.', 'errorCode' => 'package_error'], 200);
                 }
+
+                $view = view('plan._subscription_selection', compact(
+                    'selected_package'
+                ))->render();
+
+                return response()->json([
+                    'status' => true,
+                    'view' => $view
+                ], 200);
+
+            } else {
+                abort(404);
             }
-        }catch (\Exception $e){
-            dd($e);
+
+        } catch (\Exception $e){
+            abort(404);
         }
     }
 
     /**
-     * redirect the user to the paypal payment gateway..
-     * @param $plan
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * calculate the adjustments for the upgrades/down-grade for the user...
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function purchase($plan){
+    public function showadjustments(Request $request){
         try{
-                $package = SubscriptionPlans::query()->where('slug', '=', $plan)->firstOrFail();
+            if($request->ajax()){
+                $plan = $request->plan;
+                if($plan){
+
+                    $months = $request->months;
+
+                    $selected_package = SubscriptionPlans::query()->findOrFail($plan);
+
+                    $credit_or_balance = calculateAdjustedAmountForUpgradeDowngrade($selected_package, $months);
+                    return response()->json($credit_or_balance, 200);
+
+                } else {
+                    return response()->json(['status' => false, 'message' => 'Invalid Request.', 'errorCode' => 'package_error'], 200);
+                }
+            } else {
+                abort(404);
+            }
+        } catch (\Exception $e){
+            abort(404);
+        }
+    }
+
+    /**
+     * returns the paypal redirect link in case the user needs to pay...
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function purchase(Request $request){
+        try{
+            if($request->ajax()){
+
+                $validator = Validator::make($request->all(), [
+                    'months' => 'required|numeric',
+                    'plan' => 'required|exists:subscription_plans,id'
+                ]);
+
+                if($validator->fails()){
+                    return response()->json(['status' => false,'errors' => $validator->errors()], 200);
+                }
+
+                $package = SubscriptionPlans::query()->findOrFail($request->plan);
 
                 //get the adjusted amount if applicable it can be -ve, +ve or 0
-                $adjusted_amount  = getAdjustedAmountForUpgradeDownGrade($package);
+                $adjusted_amount  = calculateAdjustedAmountForUpgradeDowngrade($package, $request->months);
                 $credits = getParentDetails()->credit_balance;
                 $send_to_paypal = false;
                 if($adjusted_amount['status']){
@@ -132,7 +190,7 @@ class UpgradeController extends Controller
                         }
                     }
                 } else {
-                    return redirect()->back()->with('error', $adjusted_amount['message']);
+                    return response()->json(['status' => false, 'errorMessage' => $adjusted_amount['message']], 200);
                 }
 
                 //need to create an entry to the user_subscription table...
@@ -141,24 +199,26 @@ class UpgradeController extends Controller
                     $expiry_date = Carbon::today()->addDays($package->validity)->format('Y-m-d');
                 } else {
                     //will expires after 1 year
-                    $expiry_date = Carbon::today()->addYear(1)->format('Y-m-d');
+                    $expiry_date = Carbon::today()->addYear($request->months / 12)->format('Y-m-d');
                 }
 
                 $renewal_date = Carbon::parse($expiry_date)->addDays(1)->format('Y-m-d');
                 $user_subscription = UserSubscription::create([
                     'plan_id' => $package->id,
                     'user_id' => auth()->user()->id,
-                    'paid_amount' => $package->price,
+                    'paid_amount' => $package->price * $request->months,
                     'subscription_expire_at' => $expiry_date,
                     'subscription_renewal_at' => $renewal_date,
-                    'payment_status' => 'pending'
+                    'payment_status' => 'pending',
+                    'subscription_years' => ($request->months / 12)
                 ]);
 
                 if ($package->price_plan_type == '1' && is_null($package->price)) {
                     $user_subscription->payment_status = "Completed";
                     $user_subscription->save();
-                    return redirect()->back()->with('success', 'Your subscription plan has been activated.');
-                } elseif ($package->price_plan_type == '1' && !is_null($package->price)) {
+                    session()->flash('status', 'Congratulations! Your plan has been activated.');
+                    return response()->json(['status' => true, 'redirect_link' => route('plan.index')], 200);
+                } elseif ($package->price_plan_type == '1' && !is_null($package->price) || ($package->price_plan_type == '2' && $package->is_custom == '1')) {
                     if(!$send_to_paypal){
                         //need to send the invoice directly to the user
                         $user_subscription->payment_status      = "Completed";
@@ -169,17 +229,24 @@ class UpgradeController extends Controller
 
                         //update the credit_balance for the user
                         updateCreditBalanceForParent($adjusted_amount);
-                        return redirect(route('plan.index'))->with('status', 'Congratulations! Your plan has been activated. We have also sent an invoice to your registered email.');
+                        session()->flash('status', 'Congratulations! Your plan has been activated. We have also sent an invoice to your registered email.');
+                        return response()->json(['status' => true, 'redirect_link' => route('plan.index')], 200);
                     } else {
-                        $link = generatePaypalExpressCheckoutLink($package, $user_subscription, route('plan.purchase.success'), route('plan.purchase.cancel'), null,$adjusted_amount);
-                        return redirect($link);
+                        $link = generatePaypalExpressCheckoutLink($package, $user_subscription, route('plan.purchase.success'), route('plan.purchase.cancel'), null,$adjusted_amount, $request->months);
+                        if($link) {
+                            return response()->json(['status' => true, 'redirect_link' => $link], 200);
+                        } else {
+                            return response()->json(['status' => false, 'errorMessage' => 'Something went wrong with paypal.Please try again.'], 200);
+                        }
                     }
                 } else {
                     // the selected plan is enterprise plan and the user will have to communicate with the admin,,,,
 
                 }
+            } else {
+                abort(404);
+            }
         } catch (\Exception $e){
-            dd($e);
             abort(404);
         }
     }

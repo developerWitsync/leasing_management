@@ -16,6 +16,8 @@ class SubscriptionPlans extends Model
         'available_users',
         'hosting_type',
         'validity',
+        'email',
+        'is_custom',
         'most_popular',
         'created_at',
         'updated_at',

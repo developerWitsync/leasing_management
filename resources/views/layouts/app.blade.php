@@ -16,6 +16,7 @@
     <link href="{{ asset('css/stylesheet.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/plugins/owlcarousel/owl.carousel.css') }}" rel="stylesheet">
     @yield('header-styles')
+    <link rel="shortcut icon" href="{{ asset('master/images/favicon.png') }}">
 </head>
 <body>
     <div>
@@ -174,6 +175,32 @@
                 } 
                 
             });
+
+    $('#buildYourPlan_Form').on('submit', function (e) {
+        e.preventDefault();
+        $.ajax({
+            url : $(this).attr('action'),
+            data : $(this).serialize(),
+            type : 'post',
+            dataType : 'json',
+            beforeSend: function(){
+                $('.buildyourplan_success').html('').hide();
+                $('.error').remove();
+            },
+            success : function(response){
+                if(response['status']){
+                    $('.buildyourplan_success').html(response.message).show();
+                    $('#buildYourPlan_Form')[0].reset();
+                } else {
+                    var errors = response.errors;
+                    $.each(errors, function(i, e){
+                        $("select[name='"+i+"'] , input[name='"+i+"']").after('<span class="error">'+e+'</span>');
+                    });
+                }
+            }
+        })
+    });
+
     </script>
 </body>
 </html>

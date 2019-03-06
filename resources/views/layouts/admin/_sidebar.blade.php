@@ -58,6 +58,11 @@
                                     href="{{ route('admin.subscriptionplans.index') }}">Manage Plans</a></li>
                         <li class="@if(request()->segment('3') == 'create') active @endif"><a
                                     href="{{ route('admin.subscriptionplans.create') }}">Add New Subscription Plan</a></li>
+                        <li class="@if(request()->segment('3') == 'custom-plans-request') active @endif"><a
+                                    href="{{ route('admin.subscriptionplans.customplanrequests') }}">Custom Plan Requests</a></li>
+
+                        <li class="@if(request()->segment('3') == 'create-custom-plan') active @endif"><a
+                                    href="{{ route('admin.subscriptionplans.createcustomplan') }}">Create Custom Plan</a></li>
                     </ul>
                 </li>
 

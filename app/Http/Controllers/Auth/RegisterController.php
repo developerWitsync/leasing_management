@@ -2,16 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Mail\RegistrationCredentials;
 use App\UserSubscription;
+use Session;
 use Mail;
-use App\Mail\RegistrationConfirmation;
-use App\Currencies;
-use App\IndustryTypes;
 use App\SubscriptionPayments;
 use App\SubscriptionPlans;
 use App\User;
-use App\Countries;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
@@ -119,7 +115,18 @@ class RegisterController extends Controller
     public function register(Request $request)
     {
         try{
+
             $package = SubscriptionPlans::query()->findOrFail($request->selected_plan);
+            $selected_plan_data = null;
+            if($package->price_plan_type == "1" && !is_null($package->price)){
+                $selected_plan_data = Session::get('selected_plan');
+                if(is_null($selected_plan_data)) {
+                    return redirect(route('master.pricing.index'))->with('error', 'Please select the plan and subscription years as well.');
+                }
+            } elseif($package->price_plan_type == "2"){
+                return redirect(route('master.pricing.index'))->with('error', 'Invalid Request.');
+            }
+
             $validator = $this->validator($request->all());
             if($validator->fails()){
                 return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
@@ -143,12 +150,12 @@ class RegisterController extends Controller
             if ($user) {
 
                 //need to create an entry to the user_subscription table...
-                if (!is_null($package->validity)) {
+                if (!is_null($package->validity) && is_null($selected_plan_data)) {
                     //this means that the plan is trial plan
                     $expiry_date = Carbon::today()->addDays($package->validity)->format('Y-m-d');
                 } else {
                     //will expires after 1 year
-                    $expiry_date = Carbon::today()->addYear(1)->format('Y-m-d');
+                    $expiry_date = Carbon::today()->addYear(isset($selected_plan_data["smonths"])? $selected_plan_data["smonths"]/12 : 1 )->format('Y-m-d');
                 }
 
                 $renewal_date = Carbon::parse($expiry_date)->addDays(1)->format('Y-m-d');
@@ -158,6 +165,7 @@ class RegisterController extends Controller
                     'paid_amount' => $package->price,
                     'subscription_expire_at' => $expiry_date,
                     'subscription_renewal_at' => $renewal_date,
+                    'subscription_years' => isset($selected_plan_data["smonths"])?$selected_plan_data["smonths"]/12:1, //default is set to 1 year
                     'payment_status' => 'pending'
                 ]);
 
@@ -170,14 +178,15 @@ class RegisterController extends Controller
                 } elseif ($package->price_plan_type == '1' && !is_null($package->price)) {
                     //the selected plan is not a free plan and the user will have to pay here...
                     //need to send the user to the express checkout
-                    $link = generatePaypalExpressCheckoutLink($package, $user_subscription);
-                    return redirect($link);
+                    $link = generatePaypalExpressCheckoutLink($package, $user_subscription, null, null, null, null, $selected_plan_data['smonths']);
+                    return redirect()->away($link);
                 } else {
                     // the selected plan is enterprise plan and the user will have to communicate with the admin,,,,
 
                 }
             }
         } catch (\Exception $e){
+            dd($e);
             abort(404);
         }
     }

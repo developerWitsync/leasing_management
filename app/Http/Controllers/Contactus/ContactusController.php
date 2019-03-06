@@ -55,11 +55,10 @@ class ContactusController extends Controller
      */
     private function validationRules($data){
         return Validator::make($data, [
-            'first_name' => 'required',
-            'last_name' => 'required',
+            'name' => 'required',
             'email' => 'required|string|email|max:255',
             'phone' => 'required',
-            'no_of_realestate' => 'required|numeric'
+            'comments' => 'required'
         ]);
     }
 

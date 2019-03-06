@@ -14,8 +14,8 @@
 
                             @guest
                                 <li><a href="{{ route('login') }}"><i class="fa fa-lock"></i> Login</a></li>
-                                <!--   <li><a href="{{ route('register') }}">Register</a></li>-->
-                                <li><a href="{{ route('contactus') }}"><span class="rg-btn">Contact us</span></a></li>
+                                {{--<li><a href="{{ route('contactus') }}"><span class="rg-btn">Contact us</span></a></li>--}}
+                                <li><a href="javascript:void(0);" data-toggle="modal" data-target="#leasing_software"><span class="rg-btn">Register</span></a></li>
                             @else
                                 @if(auth()->user()->parent_id == '0')
                                     <li><a href="{{route('settings.profile.index')}}"><i class="fa fa-user"></i>My Profile</a></li>
@@ -58,13 +58,12 @@
                     <li><a href="/">Home</a></li>
                     <li><a href="#">About Us</a></li>
                     <li><a href="#">Services</a></li>
-                    <!-- <li><a href="javascript:void(0);">Leasing Software</a></li> -->
+                    <li><a href="{{ route('master.leasingsoftware.index') }}">Leasing Software</a></li>
                     <li class="dropdown">
-                        <!-- <a href="leasing-software.php" class="dropdown-toggle" data-toggle="dropdown">Leasing Software <i class="fa fa-angle-down"></i></a> -->
-                        <a href="#" class="dropdown-toggle" >Leasing Software <i class="fa fa-angle-down"></i></a>
+                        <a href="javascript: void(0);" class="dropdown-toggle" >Pricing <i class="fa fa-angle-down"></i></a>
                         <ul class="dropdown-menu">
-                            <li><a href="{{ route('master.leasingsoftware.ifrs') }}">IFRS 16 Leasing Software</a></li>
-                            <li><a href="{{ route('master.leasingsoftware.index') }}">IND AS 116 Leasing Software</a></li>
+                            <li><a href="{{ route('master.pricing.index') }}">Leasing Software</a></li>
+                            <li><a href="{{ route('master.pricing.vatelearning') }}">VAT E-Learning</a></li>
                         </ul>
                     </li>
                     <li><a href="javascript:void(0);">E-Learning</a></li>

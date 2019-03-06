@@ -15,12 +15,10 @@ class CreateContactUsTable extends Migration
     {
         Schema::create('contact_us', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('first_name', 20);
-            $table->string('last_name', 20);
+            $table->text('name');
             $table->string('email', 50);
             $table->string('phone', 50);
-            $table->string('no_of_realestate', 50);
-            $table->string('comments', 255);
+            $table->text('comments');
             $table->timestamps();
         });
     }

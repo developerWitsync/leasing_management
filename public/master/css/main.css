@@ -184,7 +184,8 @@ body > section {
 
 .top-bar {
   padding: 6px 0;
-  background: #1b2d5b;
+  /*background: #1b2d5b;*/
+  background: #126198;
   /* border-bottom: 1px solid #1b2d5b; */
   line-height: 28px;
   position: relative;
@@ -327,7 +328,7 @@ input.search-form:hover {
   color: #fff;
 }
 
-..navbar-inverse .navbar-nav .dropdown-menu {
+.navbar-inverse .navbar-nav .dropdown-menu {
   /*background-color: rgba(0,0,0,.85);*/
   -webkit-box-shadow: 0 3px 8px rgba(0, 0, 0, 0.125);
   -moz-box-shadow: 0 3px 8px rgba(0, 0, 0, 0.125);
@@ -569,9 +570,8 @@ input.search-form:hover {
 }
 
 #feature {
-  background: #172752;
-  border-bottom: 3px solid #163260;
-
+  background: #33476d;
+  border-bottom: 3px solid #33476d;
 }
 
 .features{
@@ -1730,7 +1730,7 @@ ul.social_icons li  a i{
   position: relative;
   margin-bottom: 70px;
   /* padding: 0 5px; */
-  padding: 0;
+  /* padding: 0; */
 }
 
 .pricing-area ul {

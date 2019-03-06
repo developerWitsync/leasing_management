@@ -751,3 +751,46 @@ table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td
 .escalationFrmOuter .theads_escalations th {background: none !important; font-size: 14px; font-weight: 400;
     color: #000; vertical-align: top;}
 .dashLeft.leftNavOpen .ifrsBx{ display:none;}
+
+#buildYourPlan_Modal .modal-dialog .modal-body{padding: 0;}
+#buildYourPlan_Modal .left{color: #fff;padding: 30px;background-image: linear-gradient(to left, rgb(17, 123, 184) , rgb(27, 45, 91));min-height: 465px;}
+#buildYourPlan_Modal .left ul{list-style: none;padding: 0;margin-top: 20px;}
+#buildYourPlan_Modal .left ul li{position: relative;font-size: 13px;padding-left: 22px;padding-bottom: 14px;}
+#buildYourPlan_Modal .left ul li i{position: absolute;left: 1px;top: 5px;color: #0691e4;}
+#buildYourPlan_Modal .left h2{font-size: 20px;color: #fff;}
+#buildYourPlan_Modal .right{padding: 30px 40px;min-height: 426px;position: relative;}
+#buildYourPlan_Modal .right h1{font-size: 20px;color: #000;}
+#buildYourPlan_Modal .right h4{font-size: 14px;color: #848484;text-align: center;font-weight: 400;}
+#buildYourPlan_Modal .right .close{font-size: 32px;background: #15598f;color: #fff;opacity: 1;width: 35px;font-weight: 100;border-radius: 2px;margin: 0;position: relative;top: -30px;right: -25px;outline: none;}
+#buildYourPlan_Modal .right form{margin-top: 30px;}
+#buildYourPlan_Modal .right form label{font-weight: 400;}
+#buildYourPlan_Modal .right .form-control{border-color: #e6e6e6;}
+#buildYourPlan_Modal .right .submit-btn{font-size: 15px;color: #fff;padding: 10px 35px;border-radius: 20px;background-image: linear-gradient(to left, rgb(17, 123, 184) , rgb(27, 45, 91));text-transform: uppercase;transition: all .3s ease 0s;box-shadow: 0 0 10px #136ca6;margin-top: 25px;}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+}
+#pricing_Modal .modal-dialog .modal-content{background-image: linear-gradient(to left, rgb(92, 162, 255) , rgb(0, 147, 189));color: #fff;}
+#pricing_Modal .table-bordered>tbody>tr>td{border: 1px solid #3f87de;color: #fff;}
+#pricing_Modal h2{color: #fff;}
+
+@media screen and (min-width: 768px){
+    #buildYourPlan_Modal .modal-dialog{width: 935px;}
+    #buildYourPlan_Modal .left{width: 34%;}
+    #buildYourPlan_Modal .right{width: 66%;}
+    #pricing_Modal .modal-dialog{width: 680px;}
+}
+
+@media (max-width: 768px){
+    #buildYourPlan_Modal .left{display: none;}
+}
+
+.pricing_Modal{}
+.pricing_Modal .modal-content{background: #fff;}
+.pricing_Modal h1{color: #000;font-size: 22px;}
+.pricing_Modal .btn.proceed{display: inline-block;font-size: 15px;color: #fff;padding: 10px 35px;border-radius: 65px;text-transform: uppercase;transition: all .3s ease 0s;background-image: linear-gradient(to left, rgb(17, 123, 184) , rgb(27, 45, 91));box-shadow: 0 0 10px #136ca6;}
+.pricing_Modal fieldset{border: 1px solid #027ec7;padding: 20px;margin-top: 25px;border-radius: 4px;}
+.pricing_Modal legend{display: inline-block;border: none;width: inherit;margin-bottom: 0;padding: 4px 12px;background: #0b405f;color: #fff;border-radius: 4px;font-size: 14px;}
+.pricing_Modal .amt-tt{border: 1px solid #ececec;padding: 19px;border-radius: 20px;}
+
+

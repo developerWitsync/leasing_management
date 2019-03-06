@@ -26,11 +26,4 @@ class LeasingSoftwareController extends Controller
         ));
     }
 
-    public function IFRS(){
-        $subscription_plans = SubscriptionPlans::all();
-        return view('leasing-software.ifrs-16', compact(
-            'subscription_plans'
-        ));
-    }
-
 }

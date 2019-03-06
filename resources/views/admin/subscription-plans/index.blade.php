@@ -92,7 +92,7 @@
                     },
                     { "data": "title" },
                     { "data": "price" , "render": function (data, type, row) {
-                            if(row['price_plan_type'] == '1'){
+                            if(row['price_plan_type'] == '1' && row['is_custom'] == '0'){
                                 //Non-Customizable
                                 if(data){
                                     return "$ "+data;
@@ -100,8 +100,12 @@
                                     return "Free";
                                 }
                             } else {
-                                //Customizable
-                                return "N/A";
+                                if(row['is_custom'] == '1'){
+                                    return "$ "+data;
+                                } else {
+                                    //Customizable
+                                    return "N/A";
+                                }
                             }
                         }
                     },
@@ -151,6 +155,9 @@
                         "className" : "text-center",
                         "render" : function(data, type, full, meta) {
                             var html = "<button  data-toggle='tooltip' data-placement='top' title='Edit Subscription Plan' type=\"button\" data-plan='"+full['id']+"' class=\"btn btn-success edit_plan\">Edit</button>";
+                            if(full['is_custom'] == '1'){
+                                html += "&nbsp;<button  data-toggle='tooltip' data-placement='top' title='Delete Custom Subscription Plan' type=\"button\" data-plan='"+full['id']+"' class=\"btn btn-danger delete_plan\">Delete</button>";
+                            }
                             return html;
                         }
                     }
@@ -164,6 +171,38 @@
             $(document.body).on("click", ".edit_plan", function () {
                 location.href = "/admin/subscription-plans/update/"+$(this).data('plan');
             });
+
+            $(document.body).on("click", ".delete_plan", function () {
+                var country_id = $(this).data('plan');
+                bootbox.confirm({
+                    message: "Are you sure that you want to delete this? These changes cannot be reverted.",
+                    buttons: {
+                        confirm: {
+                            label: 'Yes',
+                            className: 'btn btn-success'
+                        },
+                        cancel: {
+                            label: 'No',
+                            className: 'btn btn-danger'
+                        }
+                    },
+                    callback: function (result) {
+                        if(result) {
+                            $.ajax({
+                                url : "/admin/subscription-plans/delete/"+country_id,
+                                type : 'delete',
+                                dataType : 'json',
+                                success : function (response) {
+                                    if(response['status']) {
+                                        plans_table.ajax.reload();
+                                    }
+                                }
+                            })
+                        }
+                    }
+                });
+            });
+
         });
     </script>
 @endsection

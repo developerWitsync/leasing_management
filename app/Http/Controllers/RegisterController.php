@@ -8,6 +8,7 @@
 
 namespace App\Http\Controllers;
 
+use Session;
 use App\SubscriptionPlans;
 use App\Countries;
 use App\IndustryTypes;
@@ -24,6 +25,15 @@ class RegisterController extends Controller
     public function index($package){
         $package = SubscriptionPlans::query()->where('slug', $package)->first();
         if($package) {
+
+            $selected_plan_data = null;
+            if($package->price_plan_type == "1" && !is_null($package->price)){
+                $selected_plan_data = Session::get('selected_plan');
+                if(is_null($selected_plan_data)) {
+                    return redirect()->back()->with('error', 'Please select the plan and subscription years as well.');
+                }
+            }
+
             $countries = Countries::query()->where('status','=', '1')->where('trash', '=', '0')->get();
             $industry_types = IndustryTypes::query()->where('status', '=', '1')->get();
             $currencies = Currencies::query()->where('status', '=', '1')->get();

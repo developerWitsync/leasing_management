@@ -6,14 +6,133 @@
 
 @endsection
 @section('content')
-    <section class="leasing-banner">
-        <img src="{{ asset('master/images/Banner_IND_AS_116.jpg?ver=1') }}" class="img-responsive">
+
+    <section id="main-slider" class="no-margin">
+        <div class="carousel slide">
+            <!-- <ol class="carousel-indicators">
+                <li data-target="#main-slider" data-slide-to="0" class="active"></li>
+                <li data-target="#main-slider" data-slide-to="1"></li>
+                <li data-target="#main-slider" data-slide-to="2"></li>
+                <li data-target="#main-slider" data-slide-to="3"></li>
+            </ol> -->
+            <div class="carousel-inner">
+                <div class="item active" style="background-image: url({{ asset('master/images/banner1_nnew.jpg') }})">
+                    <div class="container">
+                        <div class="row slide-margin">
+                            <div class="col-sm-8">
+                                <div class="carousel-content">
+                                    <h1 class="animation animated-item-1">Get Ready with the </h1>
+                                    <h1 class="animation animated-item-1">New Lease Accounting Standard</h1>
+                                    <br>
+                                    <h2 class="animation animated-item-1">IFRS 16 | IND AS-116 | MFRS 16 | SFRS(I) 16</h2>
+                                </div>
+                            </div>
+
+                            <div class="col-md-5 hidden-xs animation animated-item-4 pull-right">
+                                <div class="slider-img">
+                                    <!-- <img src="images/slider/ri-img2.jpeg?ver=2" class="img-responsive"> -->
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div><!--/.carousel-inner-->
+        </div><!--/.carousel-->
+        <!-- <a class="prev hidden-xs" href="#main-slider" data-slide="prev">
+            <i class="fa fa-chevron-left"></i>
+        </a>
+        <a class="next hidden-xs" href="#main-slider" data-slide="next">
+            <i class="fa fa-chevron-right"></i>
+        </a> -->
+    </section><!--/#main-slider-->
+
+
+    <section class="ser lease" style="padding-bottom: 0;">
+        <div class="container">
+            <div class="center wow fadeInDown">
+                <h2>Leasing Management Software</h2>
+                <!-- <h2>Lessee's Leasing Management Software</h2> -->
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <h2 class="text-center">A software tool to easily manage any type of Lease Assets</h2>
+                </div>
+                <div class="col-md-12  wow fadeInDown">
+                    <div class="carousel-wrap">
+                        <div class="owl-carousel one">
+                            <div class="item"><a href="javascript:void(0);"><img src="{{ asset('master/images/fd1/airline.jpeg?ver=1') }}"><p>Airline</p></a></div>
+                            <div class="item"><a href="javascript:void(0);"><img src="{{ asset('master/images/fd1/land.jpeg?ver=1') }}"><p>Land</p></a></div>
+                            <div class="item"><a href="javascript:void(0);"><img src="{{ asset('master/images/fd1/commercial.jpeg?ver=1') }}"><p>Commercial Property</p></a></div>
+                            <div class="item"><a href="javascript:void(0);"><img src="{{ asset('master/images/fd1/machinery.jpeg?ver=1') }}"><p>Plant & Machinery</p></a></div>
+                            <div class="item"><a href="javascript:void(0);"><img src="{{ asset('master/images/fd1/intangibles.jpeg?ver=1') }}"><p>Intangibles</p></a></div>
+                            <div class="item"><a href="javascript:void(0);"><img src="{{ asset('master/images/fd1/agricultural-assets.jpeg?ver=1') }}"><p>Agricultural Assets</p></a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><br>
     </section>
+
+
+
+    <section class="g-acc">
+        <div class="container">
+            <div class="col-md-8 col-md-offset-2 center wow fadeInDown">
+                <h2>Duly Compliant with New Accounting Standard on Leases</h2>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="card img">
+                        <div  class="overl">
+                            <h2>IFRS 16 Leasing Software</h2>
+                            <br><br><br>
+                            <a href="javascript:void(0);" class="btn btn1">View More Detail <i class="fa fa-angle-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="card img">
+                        <div  class="overl">
+                            <h2>IND AS 116 Leasing Software</h2>
+                            <br><br><br>
+                            <a href="javascript:void(0);" class="btn btn1">View More Detail <i class="fa fa-angle-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <div class="card img">
+                        <div  class="overl">
+                            <h2>MFRS 16  Leasing Software</h2>
+                            <br><br><br>
+                            <a href="javascript:void(0);" class="btn btn1">View More Detail <i class="fa fa-angle-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <div class="card img">
+                        <div  class="overl">
+                            <h2>SFRS(I) 16 Leasing Software</h2>
+                            <br><br><br>
+                            <a href="javascript:void(0);" class="btn btn1">View More Detail <i class="fa fa-angle-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- new add -->
 
     <section class="ser lease lease_30">
         <div class="container">
             <div class="center wow fadeInDown">
-                <h2>IND AS- 116 Leasing Software</h2>
+                <h2>Leasing Software</h2>
             </div>
             <div class="row lease_30_a">
                 <div class="col-sm-6">
@@ -21,12 +140,84 @@
                     <h2>The Platform for Lessee's</h2>
                     <h4>Manage Your Leases efficiently and Professionally</h4>
                     <br>
-                    <p>The software is designed for lessee’s in compliance with IND AS -116 on leases. Build to streamline your administrative additional workflow to enable you to easily value and manage your leases on a single destination with full disclosure from lease start to lease end.</p>
+                    <p>The software is designed for lessee’s in compliance with IFRS-16 on leases. Build to streamline your  administrative additional workflow to enable you to easily value and manage your leases on a single destination with full disclosure from lease start to lease end.</p>
                     <div><br></div>
-                    <a href="leasing-software.php" class="btn btn1">Subscribe Now <i class="fa fa-angle-right"></i></a>
-                    <a href="javascript:void(0);" class="btn btn2">Try Now for Free<i class="fa fa-angle-right"></i></a>
+                    <a href="javascript:void(0);" class="btn btn1" data-toggle="modal" data-target="#leasing_software">Subscribe Now <i class="fa fa-angle-right"></i></a>
+                    <a href="javascript:void(0);" class="btn btn2" data-toggle="modal" data-target="#leasing_software">Try Now for Free<i class="fa fa-angle-right"></i></a>
                 </div>
                 <div class="col-sm-6"><img src="{{ asset('master/images/Leasing.jpeg') }}" class="img-responsive"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="abc1 s_teem " style="background: url({{ asset('master/images/teem_bg.jpeg') }}) no-repeat fixed;">
+        <div class="center wow fadeInDown">
+            <h2>The Team Behind the Leasing Software</h2>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12 wow fadeInDown">
+                    <div class="carousel-wrap">
+                        <div class="owl-carousel two">
+                            <div class="item">
+                                <div class="col-md-3 col-sm-3 col-xs-12 wow fadeInDown text-center">
+                                    <img src="{{ asset('master/images/teem/Sajal.JPG') }}">
+                                </div>
+                                <div class="col-md-8 col-sm-8 col-xs-12 wow fadeInDown">
+                                    <div class="card">
+                                        <div class="cnt">
+                                            <h2>Sajal Arora <br><small>Founder & CEO</small></h2>
+                                            <p class="">He is a qualified Chartered Accountant from India with over 13 years of practical professional experience in almost all fields of integrated finance – IFRS’s, Accounting, Auditing, Taxation, Valuations, Cost & Benefit Analysis etc. He understands the transitional & subsequent challenges in the process of lease valuations and to simply the processes he invested over 9 months in the development of the leasing software duly compliant with principles as set in IFRS 16  to make an effective and easy tool for companies and its users. </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="item">
+                                <div class="col-md-3 col-sm-3 col-xs-12 wow fadeInDown text-center">
+                                    <img src="{{ asset('master/images/teem/Shahnawaz-Khan.png') }}">
+                                </div>
+                                <div class="col-md-8 col-sm-8 col-xs-12 wow fadeInDown">
+                                    <div class="card">
+                                        <div class="cnt">
+                                            <h2>Shahnawaz Khan <br><small>Chartered Accountant</small></h2>
+                                            <p>He is a Chartered Accountant from ICAI and ICAEW with over 18 years of professional experience specializing in financial services, Statutory Audits, Due Diligence, Compliance, and Regulatory Reviews and facilitated the number of training on IFRSs, insurance, and banking.  He works as a partner with Grant Thornton.  He reviewed in his individual capacity all key features of the WISTYNC's Leasing Software and provided his valuable inputs based on industry trends and best practices.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="item">
+                                <div class="col-md-3 col-sm-3 col-xs-12 wow fadeInDown text-center">
+                                    <img src="{{ asset('master/images/teem/Aaditya-Arora.jpg') }}">
+                                </div>
+                                <div class="col-md-8 col-sm-8 col-xs-12 wow fadeInDown">
+                                    <div class="card">
+                                        <div class="cnt">
+                                            <h2>Aaditya Arora <br><small>Research Analyst</small></h2>
+                                            <p>He holds Post Graduate Diploma in Management (Specialized in Finance) and possess over 6 years of practical experience in finance. He has actively supported in the research and analysis of the key elements in IFRS 16 and has done the extensive review of the basic functions of Leasing software. He is also part of the WITSYNC in assisting clients (GCC and Asia Pacific) with accounting, auditing and taxation assignments.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="item">
+                                <div class="col-md-3 col-sm-3 col-xs-12 wow fadeInDown text-center">
+                                    <img src="{{ asset('maseter/images/teem/Sajeev-Surendran.png') }}">
+                                </div>
+                                <div class="col-md-8 col-sm-8 col-xs-12 wow fadeInDown">
+                                    <div class="card">
+                                        <div class="cnt">
+                                            <h2>Sajeev Surendran <br><small>Independent External Reviewer</small></h2>
+                                            <p>He is a Chartered Accountant from ICAI and a Certified Management Accountant with over 15 years of professional experience specializing in financial and management consulting services. His expertise includes IFRS, Accounting, Forensic and Special Audits, Taxation and internal controls including process re-engineering. He is working as Managing Partner at Finpro Consulting, Sultanate of Oman.  He independently reviewed the WISTYNC's Leasing Software functions, features, internal control checks in compliance with IFRS 16.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -70,15 +261,15 @@
         </div>
     </section>
 
+
+
     <section class="abc1" style="background: url({{ asset('master/images/soft.jpeg') }}) no-repeat fixed;">
         <div class="center wow fadeInDown">
             <h2>Features of the Leasing Software</h2>
         </div>
         <div class="container">
             <div class="row">
-                <!-- <div class="col-md-6">
-                    <img src="images/soft.jpeg" class="img-responsives">
-                </div> -->
+
                 <div class="col-md-12  wow fadeInDown">
                     <h3>Features in Figures</h3>
                     <ul class="abc-aa">
@@ -95,6 +286,8 @@
             </div>
         </div>
     </section>
+
+
 
     <section class="abc2">
         <div class="container">
@@ -149,7 +342,7 @@
         <div class="container">
             <div class="team">
                 <div class="center wow fadeInDown animated" >
-                    <h2>Get Your Lease Valaution Done Easily and Instantly</h2>
+                    <h2>Get Your Lease Valuation Done Easily and Instantly</h2>
 
                 </div>
 
@@ -265,8 +458,8 @@
                                     <div class="tab-pane" id="tab1">
                                         <div class="media">
                                             <div class="media-body">
-                                                <h4>Timely Update Lease Cash Flows</h4>
-                                                <p>Timely Update Your Lease Cash Flows to Keep Accurate Lease Valuation</p>
+                                                <h4 class="animation anm_1">Timely Update Lease Cash Flows</h4>
+                                                <p class="animation anm_2">Timely Update Your Lease Cash Flows to Keep Accurate Lease Valuation</p>
                                             </div>
                                         </div>
                                     </div>
@@ -274,8 +467,8 @@
                                     <div class="tab-pane" id="tab2">
                                         <div class="media">
                                             <div class="media-body">
-                                                <h4>Easily Track Your Lease Balances</h4>
-                                                <ul>
+                                                <h4 class="animation anm_1">Easily Track Your Lease Balances</h4>
+                                                <ul class="animation anm_2">
                                                     <li>Present Value of Lease Liability</li>
                                                     <li>Accrued Interest</li>
                                                     <li>Value of Lease Asset</li>
@@ -288,8 +481,8 @@
                                     <div class="tab-pane" id="tab3">
                                         <div class="media">
                                             <div class="media-body">
-                                                <h4>Get Your Lease Disclosures</h4>
-                                                <p>Get Completely Filled Lease Disclosures Details for Every Audit Period with Lease Maturity Analysis</p>
+                                                <h4 class="animation anm_1">Get Your Lease Disclosures</h4>
+                                                <p class="animation anm_2">Get Completely Filled Lease Disclosures Details for Every Audit Period with Lease Maturity Analysis</p>
                                             </div>
                                         </div>
                                     </div>
@@ -297,8 +490,8 @@
                                     <div class="tab-pane active" id="tab4">
                                         <div class="media">
                                             <div class="media-body">
-                                                <h4>Get Lease Reports You Require</h4>
-                                                <div class="col-md-7">
+                                                <h4 class="animation anm_1">Get Lease Reports You Require</h4>
+                                                <div class="col-md-7 animation anm_2">
                                                     <img src="{{ asset('master/images/dashboard.jpg') }}" class="img-responsive">
                                                 </div>
                                             </div>
@@ -307,17 +500,17 @@
 
                                     <div class="tab-pane" id="tab5">
                                         <div class="media-body">
-                                            <h4>Reconcile Lease Balances With Accounting</h4>
-                                            <p>Reconcile Your Lease Balances on a Regular Basis with your Accounting Ledgers</p>
+                                            <h4 class="animation anm_1">Reconcile Lease Balances With Accounting</h4>
+                                            <p class="animation anm_2">Reconcile Your Lease Balances on a Regular Basis with your Accounting Ledgers</p>
                                         </div>
                                     </div>
-                                </div> <!--/.tab-content-->
-                            </div> <!--/.media-body-->
-                        </div> <!--/.media-->
-                    </div><!--/.tab-wrap-->
-                </div><!--/.col-sm-6-->
-            </div><!--/.row-->
-        </div><!--/.container-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 
 
@@ -361,7 +554,7 @@
 
                     <div class="col-md-4 col-sm-6 wow fadeInDown animated" >
                         <div class="feature-wrap">
-                            <i class="fa fa-inr"></i>
+                            <i class="fa fa-usd"></i>
                             <h3>Get automated currency exchange rate</h3>
                         </div>
                     </div><!--/.col-md-4-->
@@ -390,67 +583,5 @@
             </div><!--/.row-->
         </div><!--/.container-->
     </section>
-
-
-    @include('pricing._plans')
-
-    <section class="Build_plan">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-7">
-                    <h3>Unsure Which Plan is Right For You?</h3>
-                    <p>Tell us what you need and we’ll develop a plan that’s right for your business and provide support whenever you needed.</p>
-                </div>
-                <div class="col-md-4 pull-right text-center" >
-                    <a href="mailto:test@test.com" class="btn btn-primary">BUILD YOUR PLAN</a>
-                </div>
-            </div>
-        </div>
-    </section>
-@endsection
-@section('footer-script')
-
-    <script src="{{ asset('master/js/wow.min.js') }}"></script>
-    <script src="{{ asset('master/owl/owl.carousel.min.js') }}"></script>
-    <script>
-        $(document).ready(function() {
-            var owl = $('.owl-carousel');
-            owl.owlCarousel({
-                margin: 10,
-                nav: true,
-                loop: true,
-                autoplay:true,
-                autoplayTimeout:2000,
-                autoplayHoverPause:true,
-                responsive: {
-                    0: {
-                        items: 1
-                    },
-                    600: {
-                        items: 2
-                    },
-                    1000: {
-                        items: 3
-                    }
-                }
-            })
-        })
-    </script>
-    <!-- for jquery count function -->
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $('.count').each(function () {
-                $(this).prop('Counter',0).animate({
-                    Counter: $(this).text()
-                }, {
-                    duration: 5000,
-                    easing: 'swing',
-                    step: function (now) {
-                        $(this).text(Math.ceil(now));
-                    }
-                });
-            });
-        });
-    </script>
 
 @endsection
