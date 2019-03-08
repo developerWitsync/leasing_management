@@ -97,7 +97,7 @@
                 <div class="">
                     <div class="">
                         <div class="chartBg" id="chart1">
-                            <div class="chartHd">Items Sold Amount</div>
+                            <div class="chartHd">Consolidated Lease Assets Position</div>
                             <svg></svg>
                         </div>
                         <div class="chartBg" id="chart2">

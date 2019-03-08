@@ -2,163 +2,38 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1c290435-4779-45fe-873f-5594138f8734" name="Default Changelist" comment="Merge branch 'master' of http://100.100.7.4:8081/root/Witsync-Lease-Management&#10;&#10;# Conflicts:&#10;#&#9;app/Helpers/Helpers.php&#10;#&#9;config/settings.php&#10;#&#9;public/css/custom.css">
-      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/Master/PricingController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/admin/subscription-plans/_formcustomplan.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/admin/subscription-plans/createcustomplan.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/admin/subscription-plans/customplanrequest.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/layouts/_build_your_plan_popup.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/layouts/_master_popups.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/plan/_subscription_selection.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/pricing/_vat_e_learning.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/pricing/index.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/pricing/vatelearning.blade.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/Admin/CouponCodeController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/views/admin/coupon/_form.blade.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/views/admin/coupon/create.blade.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/views/admin/coupon/index.blade.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/views/admin/coupon/update.blade.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/views/lease/_complete_your_settings.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/ContactUs.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/ContactUs.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Helpers/Helpers.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Helpers/Helpers.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Admin/SubscriptionPlansController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Admin/SubscriptionPlansController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/RegisterController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Auth/RegisterController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Contactus/ContactusController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Contactus/ContactusController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Master/LeasingSoftwareController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Master/LeasingSoftwareController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/RegisterController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/RegisterController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Master/PricingController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Master/PricingController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Settings/IndexController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Settings/IndexController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/UpgradeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/UpgradeController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Middleware/RedirectIfAuthenticated.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Middleware/RedirectIfAuthenticated.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/SubscriptionPlans.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/SubscriptionPlans.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/UserSubscription.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/UserSubscription.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2018_12_17_061457_create_contact_us_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2018_12_17_061457_create_contact_us_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/css/custom.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/custom.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/css/animate.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/css/animate.min.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/css/bootstrap.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/css/bootstrap.min.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/css/font-awesome.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/css/font-awesome.min.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/css/main.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/css/prettyPhoto.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/css/prettyPhoto.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/css/responsive.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/css/responsive.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/css/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/fonts/FontAwesome.otf" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/fonts/FontAwesome.otf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/fonts/fontawesome-webfont.eot" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/fonts/fontawesome-webfont.eot" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/fonts/fontawesome-webfont.svg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/fonts/fontawesome-webfont.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/fonts/fontawesome-webfont.ttf" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/fonts/fontawesome-webfont.ttf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/fonts/fontawesome-webfont.woff" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/fonts/fontawesome-webfont.woff" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/fonts/glyphicons-halflings-regular.eot" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/fonts/glyphicons-halflings-regular.eot" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/fonts/glyphicons-halflings-regular.svg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/fonts/glyphicons-halflings-regular.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/fonts/glyphicons-halflings-regular.ttf" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/fonts/glyphicons-halflings-regular.ttf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/fonts/glyphicons-halflings-regular.woff" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/fonts/glyphicons-halflings-regular.woff" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/Banner1_IFRS 16.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/Banner1_IFRS 16.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/Banner_IND_AS_116.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/Banner_IND_AS_116.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/Explore.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/Explore.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/Leasing.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/Leasing.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/about-us-banner.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/about-us-banner.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/about-us.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/about-us.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/banner1.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/banner1.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/banner1_nnew.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/banner1_nnew.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/banner2-new.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/banner2-new.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/banner2-new1111.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/banner2-new1111.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/banner2.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/banner2.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/banner3-new.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/banner3-new.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/banner3-new111.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/banner3-new111.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/banner3.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/banner3.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/bg-1.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/bg-1.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/bg.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/bg.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/bg2.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/bg2.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/business-plan.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/business-plan.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/contact.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/contact.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/dashboard.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/dashboard.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/fd1/agricultural-assets.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/fd1/agricultural-assets.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/fd1/airline.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/fd1/airline.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/fd1/commercial.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/fd1/commercial.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/fd1/intangibles.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/fd1/intangibles.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/fd1/land.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/fd1/land.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/fd1/machinery.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/fd1/machinery.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/image_bg.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/image_bg.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/logo.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/logo.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/owl-img/E-Learning.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/owl-img/E-Learning.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/owl-img/accounting-servicees.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/owl-img/accounting-servicees.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/owl-img/business-software.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/owl-img/business-software.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/owl-img/management-consultancy.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/owl-img/management-consultancy.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/owl-img/taxation-advisory.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/owl-img/taxation-advisory.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/prettyPhoto/dark_rounded/btnNext.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/prettyPhoto/dark_rounded/btnNext.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/prettyPhoto/dark_rounded/btnPrevious.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/prettyPhoto/dark_rounded/btnPrevious.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/prettyPhoto/dark_rounded/contentPattern.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/prettyPhoto/dark_rounded/contentPattern.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/prettyPhoto/dark_rounded/default_thumbnail.gif" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/prettyPhoto/dark_rounded/default_thumbnail.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/prettyPhoto/dark_rounded/loader.gif" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/prettyPhoto/dark_rounded/loader.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/prettyPhoto/dark_rounded/sprite.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/prettyPhoto/dark_rounded/sprite.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/prettyPhoto/dark_square/btnNext.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/prettyPhoto/dark_square/btnNext.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/prettyPhoto/dark_square/btnPrevious.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/prettyPhoto/dark_square/btnPrevious.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/prettyPhoto/dark_square/contentPattern.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/prettyPhoto/dark_square/contentPattern.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/prettyPhoto/dark_square/default_thumbnail.gif" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/prettyPhoto/dark_square/default_thumbnail.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/prettyPhoto/dark_square/loader.gif" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/prettyPhoto/dark_square/loader.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/prettyPhoto/dark_square/sprite.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/prettyPhoto/dark_square/sprite.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/prettyPhoto/default/default_thumb.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/prettyPhoto/default/default_thumb.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/prettyPhoto/default/loader.gif" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/prettyPhoto/default/loader.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/prettyPhoto/default/sprite.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/prettyPhoto/default/sprite.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/prettyPhoto/default/sprite_next.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/prettyPhoto/default/sprite_next.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/prettyPhoto/default/sprite_prev.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/prettyPhoto/default/sprite_prev.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/prettyPhoto/default/sprite_x.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/prettyPhoto/default/sprite_x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/prettyPhoto/default/sprite_y.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/prettyPhoto/default/sprite_y.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/prettyPhoto/facebook/btnNext.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/prettyPhoto/facebook/btnNext.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/prettyPhoto/facebook/btnPrevious.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/prettyPhoto/facebook/btnPrevious.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/prettyPhoto/facebook/contentPatternBottom.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/prettyPhoto/facebook/contentPatternBottom.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/prettyPhoto/facebook/contentPatternLeft.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/prettyPhoto/facebook/contentPatternLeft.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/prettyPhoto/facebook/contentPatternRight.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/prettyPhoto/facebook/contentPatternRight.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/prettyPhoto/facebook/contentPatternTop.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/prettyPhoto/facebook/contentPatternTop.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/prettyPhoto/facebook/default_thumbnail.gif" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/prettyPhoto/facebook/default_thumbnail.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/prettyPhoto/facebook/loader.gif" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/prettyPhoto/facebook/loader.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/prettyPhoto/facebook/sprite.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/prettyPhoto/facebook/sprite.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/prettyPhoto/light_rounded/btnNext.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/prettyPhoto/light_rounded/btnNext.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/prettyPhoto/light_rounded/btnPrevious.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/prettyPhoto/light_rounded/btnPrevious.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/prettyPhoto/light_rounded/default_thumbnail.gif" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/prettyPhoto/light_rounded/default_thumbnail.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/prettyPhoto/light_rounded/loader.gif" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/prettyPhoto/light_rounded/loader.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/prettyPhoto/light_rounded/sprite.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/prettyPhoto/light_rounded/sprite.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/prettyPhoto/light_square/btnNext.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/prettyPhoto/light_square/btnNext.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/prettyPhoto/light_square/btnPrevious.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/prettyPhoto/light_square/btnPrevious.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/prettyPhoto/light_square/default_thumbnail.gif" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/prettyPhoto/light_square/default_thumbnail.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/prettyPhoto/light_square/loader.gif" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/prettyPhoto/light_square/loader.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/prettyPhoto/light_square/sprite.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/prettyPhoto/light_square/sprite.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/search_icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/search_icon.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/services.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/services.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/slider/img1.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/slider/img1.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/slider/img2.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/slider/img2.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/slider/img3.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/slider/img3.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/slider/img4.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/slider/img4.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/slider/img5.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/slider/img5.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/slider/ri-banner.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/slider/ri-banner.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/slider/ri-img1.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/slider/ri-img1.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/slider/ri-img2.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/slider/ri-img2.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/slider/ri-img3.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/slider/ri-img3.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/slider/ri-img4.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/slider/ri-img4.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/soft.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/soft.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/temp.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/temp.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/track.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/track.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/tran.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/tran.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/images/vat.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/images/vat.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/js/bootstrap.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/js/bootstrap.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/js/html5shiv.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/js/html5shiv.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/js/jquery.isotope.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/js/jquery.isotope.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/js/jquery.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/js/jquery.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/js/jquery.prettyPhoto.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/js/jquery.prettyPhoto.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/js/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/js/respond.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/js/respond.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/js/wow.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/js/wow.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/owl/assets/ajax-loader.gif" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/owl/assets/ajax-loader.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/owl/assets/owl.carousel.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/owl/assets/owl.carousel.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/owl/assets/owl.carousel.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/owl/assets/owl.carousel.min.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/owl/assets/owl.theme.default.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/owl/assets/owl.theme.default.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/owl/assets/owl.theme.default.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/owl/assets/owl.theme.default.min.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/owl/assets/owl.theme.green.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/owl/assets/owl.theme.green.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/owl/assets/owl.theme.green.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/owl/assets/owl.theme.green.min.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/owl/assets/owl.video.play.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/owl/assets/owl.video.play.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/owl/owl.carousel.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/owl/owl.carousel.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/video/Motion-Banner-witsync.mp4" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/video/Motion-Banner-witsync.mp4" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/master/video/home-video.mp4" beforeDir="false" afterPath="$PROJECT_DIR$/public/master/video/home-video.mp4" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/admin/subscription-plans/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/subscription-plans/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/layouts/_footer_master.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/_footer_master.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/layouts/_header_master.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/_header_master.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/seeds/DatabaseSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/DatabaseSeeder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/seeds/LeaseAssetCategories.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/LeaseAssetCategories.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/select2/js/select2.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/select2/js/select2.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/admin/dashboard/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/dashboard/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/contactus.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/contactus.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/home.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/home.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/invoice/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/invoice/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/layouts/_master_popups.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/_master_popups.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/layouts/admin/_sidebar.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/admin/_sidebar.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/layouts/admin/master.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/admin/master.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/layouts/invoice.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/invoice.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/layouts/master.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/master.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/leasing-software/ifrs-16.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/leasing-software/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/leasing-software/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/lease/lessor-details/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lessor-details/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/plan/_subscription_selection.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/plan/_subscription_selection.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/plan/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/plan/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/pricing/_plans.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/pricing/_plans.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/settings/classification/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/settings/classification/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/settings/general/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/settings/general/index.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -189,43 +64,71 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/web.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="780">
-              <caret line="544" column="122" selection-start-line="544" selection-start-column="95" selection-end-line="544" selection-end-column="122" />
+            <state relative-caret-position="312">
+              <caret line="30" column="93" selection-start-line="30" selection-start-column="76" selection-end-line="30" selection-end-column="93" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Admin/SubscriptionPlansController.php">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/UpgradeController.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="567">
+              <caret line="141" column="50" selection-start-line="141" selection-start-column="50" selection-end-line="141" selection-end-column="50" />
+              <folding>
+                <element signature="e#125#139#0#PHP" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Master/PricingController.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="561">
+              <caret line="71" column="59" selection-start-line="71" selection-start-column="59" selection-end-line="71" selection-end-column="59" />
+              <folding>
+                <element signature="e#131#151#0#PHP" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Auth/RegisterController.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="593">
-              <caret line="130" column="63" selection-start-line="130" selection-start-column="63" selection-end-line="130" selection-end-column="63" />
+              <caret line="181" column="45" selection-start-line="181" selection-start-column="45" selection-end-line="181" selection-end-column="45" />
               <folding>
-                <element signature="e#131#158#0#PHP" expanded="true" />
+                <element signature="e#45#70#0#PHP" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/views/admin/countries/index.blade.php">
+        <entry file="file://$PROJECT_DIR$/app/Helpers/Helpers.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="442">
-              <caret line="155" column="70" lean-forward="true" selection-start-line="155" selection-start-column="70" selection-end-line="155" selection-end-column="70" />
-              <folding>
-                <element signature="e#0#6#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="404">
+              <caret line="984" column="84" selection-start-line="984" selection-start-column="84" selection-end-line="984" selection-end-column="84" />
             </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/Mail/SubscriptionInvoice.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-407" />
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/resources/views/admin/subscription-plans/index.blade.php">
+        <entry file="file://$PROJECT_DIR$/resources/views/invoice/index.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="579">
-              <caret line="196" column="66" lean-forward="true" selection-start-line="196" selection-start-column="66" selection-end-line="196" selection-end-column="66" />
+            <state relative-caret-position="423">
+              <caret line="146" column="14" lean-forward="true" selection-start-line="146" selection-start-column="14" selection-end-line="146" selection-end-column="14" />
               <folding>
-                <element signature="e#0#6#0" expanded="true" />
+                <element signature="e#1625#1737#0#HTML" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -242,27 +145,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>pricingTable11</find>
-      <find>splan</find>
-      <find>notify</find>
-      <find>'uses' =&gt; 'ContactusController@getInTouchWithUs']);</find>
-      <find>required</find>
-      <find>getInTouchWithUs</find>
-      <find>reset</find>
-      <find>admin.subscriptionplans.</find>
-      <find>admin.subscriptionplans.index</find>
-      <find>plan_price</find>
-      <find>subscription_plans</find>
-      <find>`subscription_plans</find>
-      <find>$subscription_plans</find>
-      <find>plan</find>
-      <find>purchase-plan</find>
-      <find>plan.purchase.updowninfo</find>
-      <find>changePlanDetails</find>
-      <find>purchase</find>
-      <find>Validator</find>
-      <find>errors</find>
-      <find>syear</find>
       <find>cancel</find>
       <find>Coming Soon</find>
       <find>contact</find>
@@ -272,6 +154,27 @@
       <find>pricing_Modal</find>
       <find>subscription-plans</find>
       <find>delete</find>
+      <find>contactus</find>
+      <find>.error</find>
+      <find>.error {</find>
+      <find>foreign(</find>
+      <find>updatestatus</find>
+      <find>Searchind</find>
+      <find>admin.coupon.searchusers</find>
+      <find>plan-selected</find>
+      <find>master.pricing.subscribe</find>
+      <find>proceed_subscription_plan</find>
+      <find>&lt;form</find>
+      <find>Submit</find>
+      <find>Audit</find>
+      <find>Escalation Peer</find>
+      <find>Intengible</find>
+      <find>show-subscription-plan-adjustments</find>
+      <find>showAd</find>
+      <find>showadjustments</find>
+      <find>calculateAdjustedAmountForUpgradeDowngrade</find>
+      <find>calc-cart</find>
+      <find>img</find>
     </findStrings>
     <replaceStrings>
       <replace>col-md-6 col-sm-6 btn-backnextBx</replace>
@@ -293,57 +196,57 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseBalanceAsOnDecController.php" />
-        <option value="$PROJECT_DIR$/resources/views/lease/lease-balnce-as-on-dec/_form.blade.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/LeasePaymentsController.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/EscalationController.php" />
-        <option value="$PROJECT_DIR$/resources/views/lease/payments/_form.blade.php" />
-        <option value="$PROJECT_DIR$/app/LeaseAssets.php" />
-        <option value="$PROJECT_DIR$/database/sqls/stored_procedures.sql" />
-        <option value="$PROJECT_DIR$/app/Http/Middleware/RedirectIfAuthenticated.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/PricingController.php" />
-        <option value="$PROJECT_DIR$/resources/views/leasing-software/index.blade.php" />
-        <option value="$PROJECT_DIR$/resources/views/pricing/index.blade.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Master/LeasingSoftwareController.php" />
-        <option value="$PROJECT_DIR$/resources/views/pricing/_plans.blade.php" />
-        <option value="$PROJECT_DIR$/resources/views/layouts/_header_master.blade.php" />
-        <option value="$PROJECT_DIR$/resources/views/pricing/vatelearning.blade.php" />
-        <option value="$PROJECT_DIR$/resources/views/pricing/_vat_e_learning.blade.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/RegisterController.php" />
-        <option value="$PROJECT_DIR$/database/migrations/2019_03_05_130140_add_column_subscription_years_to_user_subscription.php" />
-        <option value="$PROJECT_DIR$/app/UserSubscription.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Auth/RegisterController.php" />
-        <option value="$PROJECT_DIR$/database/migrations/2019_03_06_044439_alter_table_contact_us.php" />
-        <option value="$PROJECT_DIR$/app/ContactUs.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Contactus/ContactusController.php" />
-        <option value="$PROJECT_DIR$/database/migrations/2018_12_17_061457_create_contact_us_table.php" />
-        <option value="$PROJECT_DIR$/resources/views/layouts/_footer_master.blade.php" />
-        <option value="$PROJECT_DIR$/public/master/css/style.css" />
-        <option value="$PROJECT_DIR$/database/migrations/2019_03_06_050448_create_table_custom_plans_request.php" />
-        <option value="$PROJECT_DIR$/app/CustomPlansRequest.php" />
         <option value="$PROJECT_DIR$/resources/views/admin/subscription-plans/customplanrequest.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/admin/subscription-plans/createcustomplan.blade.php" />
-        <option value="$PROJECT_DIR$/resources/views/layouts/admin/_sidebar.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/admin/subscription-plans/_formcustomplan.blade.php" />
         <option value="$PROJECT_DIR$/database/migrations/2019_03_06_064242_add_column_email_to_subscription_plans.php" />
         <option value="$PROJECT_DIR$/database/migrations/2019_03_06_064435_add_column_is_custom_to_subscription_plans.php" />
         <option value="$PROJECT_DIR$/app/SubscriptionPlans.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Master/PricingController.php" />
-        <option value="$PROJECT_DIR$/.env" />
-        <option value="$PROJECT_DIR$/resources/views/plan/_subscription_selection.blade.php" />
-        <option value="$PROJECT_DIR$/vendor/srmklive/paypal/src/Traits/PayPalHttpClient.php" />
         <option value="$PROJECT_DIR$/vendor/srmklive/paypal/src/Services/ExpressCheckout.php" />
-        <option value="$PROJECT_DIR$/app/Helpers/Helpers.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/UpgradeController.php" />
-        <option value="$PROJECT_DIR$/resources/views/layouts/_master_popups.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/layouts/_build_your_plan_popup.blade.php" />
-        <option value="$PROJECT_DIR$/resources/views/plan/index.blade.php" />
         <option value="$PROJECT_DIR$/public/css/custom.css" />
-        <option value="$PROJECT_DIR$/resources/views/layouts/master.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/layouts/app.blade.php" />
-        <option value="$PROJECT_DIR$/routes/web.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Admin/SubscriptionPlansController.php" />
         <option value="$PROJECT_DIR$/resources/views/admin/subscription-plans/index.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/contactus.blade.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Contactus/ContactusController.php" />
+        <option value="$PROJECT_DIR$/resources/views/admin/countries/index.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/layouts/admin/_sidebar.blade.php" />
+        <option value="$PROJECT_DIR$/database/migrations/2019_03_07_054022_create_table_coupon_codes.php" />
+        <option value="$PROJECT_DIR$/resources/views/layouts/admin/master.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/admin/dashboard/index.blade.php" />
+        <option value="$PROJECT_DIR$/app/CouponCodes.php" />
+        <option value="$PROJECT_DIR$/resources/views/admin/coupon/index.blade.php" />
+        <option value="$PROJECT_DIR$/public/assets/plugins/select2/js/select2.min.js" />
+        <option value="$PROJECT_DIR$/public/assets/plugins/select2/css/select2.min.css" />
+        <option value="$PROJECT_DIR$/resources/views/admin/coupon/create.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/admin/coupon/update.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/admin/coupon/_form.blade.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Admin/CouponCodeController.php" />
+        <option value="$PROJECT_DIR$/resources/views/layouts/_master_popups.blade.php" />
+        <option value="$PROJECT_DIR$/routes/web.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/RegisterController.php" />
+        <option value="$PROJECT_DIR$/database/migrations/2019_03_07_112939_add_column_coupon_code_to_users_subscription_table.php" />
+        <option value="$PROJECT_DIR$/app/UserSubscription.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Auth/RegisterController.php" />
+        <option value="$PROJECT_DIR$/resources/views/lease/_complete_your_settings.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/lease/lessor-details/index.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/settings/general/index.blade.php" />
+        <option value="$PROJECT_DIR$/database/seeds/DatabaseSeeder.php" />
+        <option value="$PROJECT_DIR$/resources/views/settings/classification/index.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/home.blade.php" />
+        <option value="$PROJECT_DIR$/database/seeds/LeaseAssetCategories.php" />
+        <option value="$PROJECT_DIR$/vendor/srmklive/paypal/src/Traits/PayPalHttpClient.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Settings/IndexController.php" />
+        <option value="$PROJECT_DIR$/resources/views/plan/_subscription_selection.blade.php" />
+        <option value="$PROJECT_DIR$/.env" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/UpgradeController.php" />
+        <option value="$PROJECT_DIR$/resources/views/plan/index.blade.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Master/PricingController.php" />
+        <option value="$PROJECT_DIR$/resources/views/layouts/master.blade.php" />
+        <option value="$PROJECT_DIR$/app/Helpers/Helpers.php" />
+        <option value="$PROJECT_DIR$/resources/views/layouts/invoice.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/invoice/index.blade.php" />
       </list>
     </option>
   </component>
@@ -461,7 +364,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -485,28 +387,13 @@
               <item name="witsync" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
               <item name="views" type="462c0819:PsiDirectoryNode" />
-              <item name="admin" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="witsync" type="b2602c69:ProjectViewProjectNode" />
-              <item name="witsync" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-              <item name="admin" type="462c0819:PsiDirectoryNode" />
-              <item name="countries" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="witsync" type="b2602c69:ProjectViewProjectNode" />
-              <item name="witsync" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-              <item name="admin" type="462c0819:PsiDirectoryNode" />
-              <item name="subscription-plans" type="462c0819:PsiDirectoryNode" />
+              <item name="invoice" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -599,12 +486,14 @@
       <workItem from="1551240941197" duration="27893000" />
       <workItem from="1551672987653" duration="22490000" />
       <workItem from="1551760322598" duration="27090000" />
-      <workItem from="1551846347976" duration="27187000" />
+      <workItem from="1551846347976" duration="30117000" />
+      <workItem from="1551934079596" duration="29721000" />
+      <workItem from="1552018967395" duration="10694000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="509355000" />
+    <option name="totallyTimeSpent" value="552700000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -619,7 +508,7 @@
     <frame x="64" y="-11" width="1857" height="1092" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20044175" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2048592" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -641,29 +530,6 @@
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Database" order="3" weight="0.32965213" />
     </layout>
-    <layout-to-restore>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.21976808" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="npm" order="2" side_tool="true" />
-      <window_info id="Favorites" order="3" side_tool="true" />
-      <window_info anchor="bottom" id="Thumbnails" order="0" weight="0.32911393" />
-      <window_info anchor="bottom" id="Message" order="1" />
-      <window_info anchor="bottom" id="Find" order="2" weight="0.32911393" />
-      <window_info anchor="bottom" id="Run" order="3" weight="0.32911393" />
-      <window_info anchor="bottom" id="Debug" order="4" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="7" weight="0.32972974" />
-      <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="9" weight="0.32911393" />
-      <window_info anchor="bottom" id="Database Changes" order="10" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" weight="0.32911393" />
-      <window_info anchor="bottom" id="Terminal" order="12" weight="0.32805908" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Database" order="3" weight="0.32965213" />
-    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
@@ -721,321 +587,157 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/Exceptions/Handler.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="202">
-          <caret line="15" column="29" selection-start-line="15" selection-start-column="29" selection-end-line="15" selection-end-column="29" />
-          <folding>
-            <element signature="e#34#48#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Master/LeasingSoftwareController.php">
+    <entry file="file://$PROJECT_DIR$/app/Mail/ContactUsQueryFrom.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="323">
-          <caret line="25" column="9" selection-start-line="23" selection-start-column="44" selection-end-line="25" selection-end-column="9" />
+          <caret line="25" column="20" selection-start-line="25" selection-start-column="20" selection-end-line="25" selection-end-column="20" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/leasing-software/index.blade.php">
+    <entry file="file://$PROJECT_DIR$/resources/views/contactus.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="644">
-          <caret line="578" column="34" selection-start-line="578" selection-start-column="34" selection-end-line="578" selection-end-column="34" />
+        <state relative-caret-position="782">
+          <caret line="94" column="76" lean-forward="true" selection-start-line="94" selection-start-column="76" selection-end-line="94" selection-end-column="76" />
           <folding>
-            <element signature="e#689#765#0#HTML" expanded="true" />
-            <element signature="e#2270#2296#0#HTML" expanded="true" />
-            <element signature="e#7509#7592#0#HTML" expanded="true" />
-            <element signature="e#15297#15377#0#HTML" expanded="true" />
-            <element signature="e#23857#23938#0#HTML" expanded="true" />
-            <element signature="e#28753#28773#0#HTML" expanded="true" />
+            <element signature="e#2929#2948#0#HTML" expanded="true" />
+            <element signature="e#3299#3319#0#HTML" expanded="true" />
+            <element signature="e#3349#3365#0#HTML" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/pricing/_vat_e_learning.blade.php">
+    <entry file="file://$PROJECT_DIR$/public/css/custom.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="24" column="21" selection-start-line="24" selection-start-column="21" selection-end-line="24" selection-end-column="21" />
-          <folding>
-            <element signature="n#style#0;n#section#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/pricing/vatelearning.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="763">
-          <caret line="54" column="37" selection-start-line="54" selection-start-column="22" selection-end-line="54" selection-end-column="37" />
-          <folding>
-            <element signature="e#676#730#0#HTML" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/layouts/_header_master.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="440">
-          <caret line="55" column="43" selection-start-line="55" selection-start-column="43" selection-end-line="55" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2019_03_05_130140_add_column_subscription_years_to_user_subscription.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="16" column="55" selection-start-line="16" selection-start-column="37" selection-end-line="16" selection-end-column="55" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/RegisterController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="34" column="13" selection-start-line="28" selection-start-column="12" selection-end-line="34" selection-end-column="13" />
-          <folding>
-            <element signature="e#125#137#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/composer.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="35" column="18" selection-start-line="35" selection-start-column="18" selection-end-line="35" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PaymentController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="457">
-          <caret line="108" column="45" selection-start-line="108" selection-start-column="45" selection-end-line="108" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Admin/ContactusController.php">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2019_03_06_044439_alter_table_contact_us.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="22" column="26" lean-forward="true" selection-start-line="22" selection-start-column="26" selection-end-line="22" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2018_12_17_061457_create_contact_us_table.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="21" column="33" lean-forward="true" selection-start-line="21" selection-start-column="33" selection-end-line="21" selection-end-column="33" />
+        <state relative-caret-position="-6392">
+          <caret line="347" column="6" selection-start-line="347" selection-end-line="347" selection-end-column="6" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Contactus/ContactusController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="440">
-          <caret line="65" column="74" lean-forward="true" selection-start-line="65" selection-start-column="74" selection-end-line="65" selection-end-column="74" />
+        <state relative-caret-position="270">
+          <caret line="43" column="62" lean-forward="true" selection-start-line="43" selection-start-column="62" selection-end-line="43" selection-end-column="62" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/layouts/_footer_master.blade.php">
+    <entry file="file://$PROJECT_DIR$/resources/views/admin/countries/index.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="433">
-          <caret line="70" column="27" lean-forward="true" selection-start-line="70" selection-start-column="27" selection-end-line="70" selection-end-column="27" />
+        <state relative-caret-position="476">
+          <caret line="157" column="33" lean-forward="true" selection-end-line="180" selection-end-column="11" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2019_03_06_050448_create_table_custom_plans_request.php">
+    <entry file="file://$PROJECT_DIR$/database/migrations/2018_12_18_111258_create_table_lease_payments_number_setting.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="23" column="34" selection-start-line="23" selection-start-column="26" selection-end-line="23" selection-end-column="34" />
+        <state relative-caret-position="272">
+          <caret line="18" column="138" lean-forward="true" selection-start-line="18" selection-start-column="12" selection-end-line="18" selection-end-column="138" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/CustomPlansRequest.php">
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_03_07_054022_create_table_coupon_codes.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="24" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="24" />
+        <state relative-caret-position="544">
+          <caret line="34" column="26" lean-forward="true" selection-start-line="34" selection-start-column="26" selection-end-line="34" selection-end-column="26" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/ContactUs.php">
+    <entry file="file://$PROJECT_DIR$/resources/views/admin/countries/create.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="54" selection-start-line="10" selection-start-column="54" selection-end-line="10" selection-end-column="54" />
+        <state relative-caret-position="408">
+          <caret line="24" column="25" selection-end-line="120" selection-end-column="11" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/admin/subscription-plans/_form.blade.php">
+    <entry file="file://$PROJECT_DIR$/resources/views/admin/dashboard/index.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="646">
-          <caret line="38" column="114" selection-end-line="154" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/admin/subscription-plans/create.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret selection-end-line="62" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/admin/subscription-plans/customplanrequest.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="695">
-          <caret line="112" column="104" lean-forward="true" selection-start-line="112" selection-start-column="104" selection-end-line="112" selection-end-column="104" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/admin/subscription-plans/createcustomplan.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="508">
-          <caret line="46" lean-forward="true" selection-start-line="46" selection-end-line="46" />
+        <state relative-caret-position="678">
+          <caret line="457" lean-forward="true" selection-start-line="457" selection-end-line="457" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/layouts/admin/_sidebar.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="329">
-          <caret line="64" column="126" selection-start-line="64" selection-start-column="126" selection-end-line="64" selection-end-column="126" />
+        <state relative-caret-position="465">
+          <caret line="87" column="21" lean-forward="true" selection-start-line="87" selection-start-column="21" selection-end-line="87" selection-end-column="21" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/admin/subscription-plans/_formcustomplan.blade.php">
+    <entry file="file://$PROJECT_DIR$/app/CouponCodes.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="73" column="66" selection-start-line="73" selection-start-column="66" selection-end-line="73" selection-end-column="66" />
+        <state relative-caret-position="391">
+          <caret line="23" column="27" lean-forward="true" selection-start-line="23" selection-start-column="27" selection-end-line="23" selection-end-column="27" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2019_03_06_064242_add_column_email_to_subscription_plans.php">
+    <entry file="file://$PROJECT_DIR$/resources/views/admin/coupon/index.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="16" column="31" selection-start-line="16" selection-start-column="26" selection-end-line="16" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2019_03_06_064435_add_column_is_custom_to_subscription_plans.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="32" lean-forward="true" selection-start-line="32" selection-end-line="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/SubscriptionPlans.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="19" column="20" selection-start-line="19" selection-start-column="20" selection-end-line="19" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/pricing/_plans.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="44" selection-start-line="10" selection-start-column="25" selection-end-line="10" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Master/PricingController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="312">
-          <caret line="25" column="94" selection-start-line="25" selection-start-column="94" selection-end-line="25" selection-end-column="94" />
+        <state relative-caret-position="511">
+          <caret line="150" column="35" selection-start-line="150" selection-start-column="35" selection-end-line="150" selection-end-column="35" />
           <folding>
-            <element signature="e#131#158#0#PHP" expanded="true" />
+            <element signature="e#0#6#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.env">
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Admin/CountriesController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="14" selection-start-line="3" selection-start-column="14" selection-end-line="3" selection-end-column="14" />
+        <state relative-caret-position="559">
+          <caret line="81" column="5" selection-start-line="53" selection-start-column="4" selection-end-line="81" selection-end-column="5" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/pricing/index.blade.php">
+    <entry file="file://$PROJECT_DIR$/resources/views/layouts/admin/master.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="695">
-          <caret line="41" column="30" lean-forward="true" selection-start-line="41" selection-start-column="30" selection-end-line="41" selection-end-column="30" />
+        <state relative-caret-position="270">
+          <caret line="84" selection-start-line="84" selection-end-line="84" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/UserSubscription.php">
+    <entry file="file://$PROJECT_DIR$/public/assets/plugins/select2/js/select2.min.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="20" column="27" selection-start-line="20" selection-start-column="9" selection-end-line="20" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Helpers/Helpers.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="566">
-          <caret line="851" column="88" selection-start-line="851" selection-start-column="88" selection-end-line="851" selection-end-column="88" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/srmklive/paypal/src/Services/ExpressCheckout.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="627">
-          <caret line="185" column="84" selection-start-line="185" selection-start-column="73" selection-end-line="185" selection-end-column="84" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/srmklive/paypal/src/Traits/PayPalHttpClient.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="610">
-          <caret line="119" column="33" selection-start-line="119" selection-start-column="33" selection-end-line="119" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Auth/RegisterController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="630">
-          <caret line="180" column="46" selection-start-line="180" selection-start-column="46" selection-end-line="180" selection-end-column="46" />
+        <state>
+          <caret column="67751" selection-start-column="67751" selection-end-column="67751" />
           <folding>
-            <element signature="e#45#70#0#PHP" expanded="true" />
+            <element signature="n#!!doc" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/plan/_upgrade_downgrade.blade.php">
+    <entry file="file://$PROJECT_DIR$/public/assets/plugins/select2/css/select2.min.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="52" lean-forward="true" selection-start-line="15" selection-start-column="52" selection-end-line="15" selection-end-column="52" />
+        <state>
+          <caret column="15274" selection-start-column="15274" selection-end-column="15274" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/plan/_subscription_selection.blade.php">
+    <entry file="file://$PROJECT_DIR$/resources/views/admin/coupon/update.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="48" column="20" selection-start-line="48" selection-start-column="20" selection-end-line="48" selection-end-column="20" />
+        <state relative-caret-position="374">
+          <caret line="61" column="18" selection-start-line="61" selection-start-column="18" selection-end-line="61" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/admin/coupon/create.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="491">
+          <caret line="69" column="16" selection-start-line="69" selection-start-column="16" selection-end-line="69" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/admin/coupon/_form.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="799">
+          <caret line="47" column="14" selection-start-line="47" selection-start-column="14" selection-end-line="47" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Admin/CouponCodeController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="595">
+          <caret line="142" lean-forward="true" selection-start-line="142" selection-end-line="142" />
           <folding>
-            <element signature="e#374#381#1#HTML" expanded="true" />
+            <element signature="e#132#152#0#PHP" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/UpgradeController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="431">
-          <caret line="75" column="89" selection-start-line="75" selection-start-column="89" selection-end-line="75" selection-end-column="89" />
-          <folding>
-            <element signature="e#125#139#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/layouts/_master_popups.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="321">
-          <caret line="127" column="42" lean-forward="true" selection-start-line="127" selection-start-column="42" selection-end-line="127" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/assets/css/style.css">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/layouts/app.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="457">
-          <caret line="178" column="56" lean-forward="true" selection-start-line="178" selection-start-column="56" selection-end-line="178" selection-end-column="56" />
         </state>
       </provider>
     </entry>
@@ -1046,67 +748,231 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/layouts/master.blade.php">
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/RegisterController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="372">
-          <caret line="292" column="26" selection-start-line="292" selection-start-column="26" selection-end-line="292" selection-end-column="26" />
+        <state relative-caret-position="340">
+          <caret line="30" column="35" selection-start-line="30" selection-start-column="16" selection-end-line="30" selection-end-column="35" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/master/css/style.css">
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_03_07_112939_add_column_coupon_code_to_users_subscription_table.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="618">
-          <caret line="397" column="68" lean-forward="true" selection-start-line="397" selection-start-column="68" selection-end-line="397" selection-end-column="68" />
+        <state relative-caret-position="544">
+          <caret line="34" lean-forward="true" selection-start-line="34" selection-end-line="34" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/css/custom.css">
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/lessor-details/index.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="508">
-          <caret line="777" column="53" selection-start-line="777" selection-start-column="53" selection-end-line="777" selection-end-column="53" />
+        <state relative-caret-position="576">
+          <caret line="243" column="10" lean-forward="true" selection-start-line="243" selection-start-column="10" selection-end-line="243" selection-end-column="10" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/plan/index.blade.php">
+    <entry file="file://$PROJECT_DIR$/resources/views/settings/general/index.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="300" column="46" lean-forward="true" selection-start-line="300" selection-start-column="46" selection-end-line="300" selection-end-column="46" />
+        <state relative-caret-position="499">
+          <caret line="145" column="56" lean-forward="true" selection-start-line="145" selection-start-column="56" selection-end-line="145" selection-end-column="56" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Admin/SubscriptionPlansController.php">
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/_complete_your_settings.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="593">
-          <caret line="130" column="63" selection-start-line="130" selection-start-column="63" selection-end-line="130" selection-end-column="63" />
+        <state relative-caret-position="238">
+          <caret line="14" column="6" lean-forward="true" selection-start-line="14" selection-start-column="6" selection-end-line="14" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/srmklive/paypal/src/Traits/PayPalHttpClient.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="447">
+          <caret line="108" column="7" lean-forward="true" selection-start-line="108" selection-start-column="7" selection-end-line="108" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/srmklive/paypal/src/Services/ExpressCheckout.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="455">
+          <caret line="168" column="77" lean-forward="true" selection-start-line="168" selection-start-column="77" selection-end-line="168" selection-end-column="77" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/database/seeds/DatabaseSeeder.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="578">
+          <caret line="52" column="28" lean-forward="true" selection-start-line="52" selection-start-column="28" selection-end-line="52" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/database/seeds/LeaseAssetCategories.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="21" column="58" selection-start-line="21" selection-start-column="58" selection-end-line="21" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/home.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="123" column="56" lean-forward="true" selection-start-line="123" selection-start-column="56" selection-end-line="123" selection-end-column="56" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/settings/classification/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="550">
+          <caret line="737" column="153" selection-start-line="737" selection-start-column="153" selection-end-line="737" selection-end-column="153" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Settings/IndexController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="16" column="12" lean-forward="true" selection-start-line="16" selection-start-column="12" selection-end-line="16" selection-end-column="12" />
           <folding>
-            <element signature="e#131#158#0#PHP" expanded="true" />
+            <element signature="e#139#163#0#PHP" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/UserSubscription.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="25" column="24" selection-start-line="25" selection-start-column="9" selection-end-line="25" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/layouts/_master_popups.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="253">
+          <caret line="102" column="37" lean-forward="true" selection-start-line="97" selection-start-column="32" selection-end-line="102" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/composer.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="37" column="10" selection-start-line="37" selection-start-column="10" selection-end-line="37" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.env">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="14" selection-start-line="3" selection-start-column="14" selection-end-line="3" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/plan/_subscription_selection.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="42" column="51" selection-start-line="42" selection-start-column="27" selection-end-line="42" selection-end-column="51" />
+          <folding>
+            <element signature="n#style#0;n#tr#3;n#tbody#0;n#table#0;n#form#0;n#fieldset#0;n#div#1;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/pricing/_plans.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="457">
+          <caret line="157" column="10" lean-forward="true" selection-start-line="157" selection-start-column="10" selection-end-line="157" selection-end-column="10" />
+          <folding>
+            <element signature="n#style#0;n#section#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/pricing/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="712">
+          <caret line="42" column="30" lean-forward="true" selection-start-line="42" selection-start-column="30" selection-end-line="42" selection-end-column="30" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/routes/web.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="780">
-          <caret line="544" column="122" selection-start-line="544" selection-start-column="95" selection-end-line="544" selection-end-column="122" />
+        <state relative-caret-position="312">
+          <caret line="30" column="93" selection-start-line="30" selection-start-column="76" selection-end-line="30" selection-end-column="93" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/admin/countries/index.blade.php">
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Master/PricingController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="155" column="70" lean-forward="true" selection-start-line="155" selection-start-column="70" selection-end-line="155" selection-end-column="70" />
+        <state relative-caret-position="561">
+          <caret line="71" column="59" selection-start-line="71" selection-start-column="59" selection-end-line="71" selection-end-column="59" />
           <folding>
-            <element signature="e#0#6#0" expanded="true" />
+            <element signature="e#131#151#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/admin/subscription-plans/index.blade.php">
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Auth/RegisterController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="579">
-          <caret line="196" column="66" lean-forward="true" selection-start-line="196" selection-start-column="66" selection-end-line="196" selection-end-column="66" />
+        <state relative-caret-position="593">
+          <caret line="181" column="45" selection-start-line="181" selection-start-column="45" selection-end-line="181" selection-end-column="45" />
           <folding>
-            <element signature="e#0#6#0" expanded="true" />
+            <element signature="e#45#70#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/SubscriptionPlans.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="6" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/plan/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="361" column="130" selection-start-line="361" selection-start-column="130" selection-end-line="361" selection-end-column="130" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/layouts/master.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="389">
+          <caret line="343" column="21" selection-start-line="343" selection-start-column="21" selection-end-line="343" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/UpgradeController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="567">
+          <caret line="141" column="50" selection-start-line="141" selection-start-column="50" selection-end-line="141" selection-end-column="50" />
+          <folding>
+            <element signature="e#125#139#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Helpers/Helpers.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="404">
+          <caret line="984" column="84" selection-start-line="984" selection-start-column="84" selection-end-line="984" selection-end-column="84" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Mail/SubscriptionInvoice.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-407" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/layouts/invoice.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" column="102" selection-start-line="18" selection-start-column="102" selection-end-line="18" selection-end-column="102" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/invoice/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="423">
+          <caret line="146" column="14" lean-forward="true" selection-start-line="146" selection-start-column="14" selection-end-line="146" selection-end-column="14" />
+          <folding>
+            <element signature="e#1625#1737#0#HTML" expanded="true" />
           </folding>
         </state>
       </provider>

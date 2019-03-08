@@ -42,7 +42,7 @@ class ContactusController extends Controller
             $contactus = ContactUs::create($request->except("_token"));
             if ($contactus) {
                 \Mail::to($contactus)->queue(new ContactUsQueryFrom($contactus));
-                return redirect()->route('contactus')->with('success', 'Thank you for contacting us.we will contact you as soon as possible');
+                return redirect()->route('contactus')->with('success', 'Thank you for contacting us. We will get back to you very soon.');
             }
         }
         return view('contactus');

@@ -134,7 +134,13 @@ class UpgradeController extends Controller
 
                     $selected_package = SubscriptionPlans::query()->findOrFail($plan);
 
-                    $credit_or_balance = calculateAdjustedAmountForUpgradeDowngrade($selected_package, $months);
+                    $coupon_code = null;
+                    if($request->has('coupon_code') && trim($request->coupon_code)!=""){
+                        $coupon_code = strtoupper(trim($request->coupon_code));
+                    }
+
+                    $credit_or_balance = calculateAdjustedAmountForUpgradeDowngrade($selected_package, $months, $coupon_code);
+
                     return response()->json($credit_or_balance, 200);
 
                 } else {
@@ -144,6 +150,7 @@ class UpgradeController extends Controller
                 abort(404);
             }
         } catch (\Exception $e){
+            dd($e);
             abort(404);
         }
     }
@@ -168,8 +175,12 @@ class UpgradeController extends Controller
 
                 $package = SubscriptionPlans::query()->findOrFail($request->plan);
 
+                $coupon_code = null;
+                if($request->has('coupon_code') && trim($request->coupon_code)!=""){
+                    $coupon_code = strtoupper(trim($request->coupon_code));
+                }
                 //get the adjusted amount if applicable it can be -ve, +ve or 0
-                $adjusted_amount  = calculateAdjustedAmountForUpgradeDowngrade($package, $request->months);
+                $adjusted_amount  = calculateAdjustedAmountForUpgradeDowngrade($package, $request->months, $coupon_code);
                 $credits = getParentDetails()->credit_balance;
                 $send_to_paypal = false;
                 if($adjusted_amount['status']){
@@ -210,7 +221,8 @@ class UpgradeController extends Controller
                     'subscription_expire_at' => $expiry_date,
                     'subscription_renewal_at' => $renewal_date,
                     'payment_status' => 'pending',
-                    'subscription_years' => ($request->months / 12)
+                    'subscription_years' => ($request->months / 12),
+                    'coupon_code'   => $coupon_code,
                 ]);
 
                 if ($package->price_plan_type == '1' && is_null($package->price)) {
@@ -225,6 +237,7 @@ class UpgradeController extends Controller
                         $user_subscription->discounted_amount   = round(($package->annual_discount / 100) * ($package->price * 12), 2);
                         $user_subscription->credits_used        = $credits;
                         $user_subscription->adjusted_amount     = $adjusted_amount['adjusted_amount'];
+                        $user_subscription->coupon_discount     = $adjusted_amount['coupon_discount'];
                         $user_subscription->save();
 
                         //update the credit_balance for the user

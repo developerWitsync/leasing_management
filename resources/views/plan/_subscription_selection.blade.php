@@ -40,6 +40,12 @@
                     </td>
                     <td class="text-right"><span id="anyoffer">--</span></td>
                 </tr>
+                <tr class="coupon_code_discount_row" style="display: none">
+                    <td>
+                        <small>Coupon Discount</small>
+                    </td>
+                    <td class="text-right"><span id="coupon_discount">---</span></td>
+                </tr>
                 <tr>
                     <td>
                         <small>Gross Value of Subscription</small>
@@ -64,7 +70,20 @@
         </form>
 
 
-        <p>Apply your discount coupon, if any, at the time of payment</p>
+        {{--<p>Apply your discount coupon, if any, at the time of payment</p>--}}
+    </fieldset>
+
+    <fieldset>
+        <legend>Apply Coupon</legend>
+        <p><small>Enter coupon code below in case you have any coupon code.</small></p>
+        <div class="row">
+            <div class="col-md-8">
+                <input class="form-control" type="text" name="coupon_code" placeholder="Enter Coupon Code">
+            </div>
+            <div class="col-md-4">
+                <a href="javascript:void(0);" class="btn btn-info apply_coupon_code">Apply Coupon</a>
+            </div>
+        </div>
     </fieldset>
 
     <fieldset>

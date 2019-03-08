@@ -19,7 +19,7 @@ class LeaseAssetCategories extends Seeder
                 'is_capitalized' => '1'
         ],
         [
-                'title' => 'Plants & Equipments',
+                'title' => 'Plant, Machinery & Equipment’s',
                 'is_capitalized' => '1'
         ],
         [

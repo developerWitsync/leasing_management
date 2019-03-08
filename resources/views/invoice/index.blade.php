@@ -126,7 +126,7 @@
             <td style=" border-bottom: #808080 solid 1px; border-right: #808080 solid 1px; padding:7px 10px; line-height: 25px;">
                 Purchased For Months
             </td>
-            <td style=" border-bottom: #808080 solid 1px; padding:7px 10px; line-height: 25px;">12</td>
+            <td style=" border-bottom: #808080 solid 1px; padding:7px 10px; line-height: 25px;">{{ $subscription->subscription_years * 12 }}</td>
         </tr>
         @if($subscription->subscriptionPackage->annual_discount)
             <tr>
@@ -136,6 +136,16 @@
                 <td style=" border-bottom: #808080 solid 1px; padding:7px 10px; line-height: 25px;">{{ $subscription->discounted_amount }}</td>
             </tr>
         @endif
+
+        @if($subscription->coupon_code && $subscription->coupon_discount > 0)
+            <tr>
+                <td style=" border-bottom: #808080 solid 1px; border-right: #808080 solid 1px; padding:7px 10px; line-height: 25px;">
+                    Coupon Code {{ $subscription->coupon_code }} discount
+                </td>
+                <td style=" border-bottom: #808080 solid 1px; padding:7px 10px; line-height: 25px;">{{ $subscription->coupon_discount }}</td>
+            </tr>
+        @endif
+
         <tr>
             <td style=" border-bottom: #808080 solid 1px; border-right: #808080 solid 1px; padding:7px 10px; line-height: 25px;">
                 Adjusted Amount

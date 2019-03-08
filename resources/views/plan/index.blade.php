@@ -325,21 +325,38 @@
 
         $(function(){
             $(document.body).on('change', '#months', function(){
+                calcCart();
+            });
+
+            $(document.body).on('click', '.apply_coupon_code', function(){
+                var copoun_code = $('input[name="coupon_code"]').val().trim();
+                $('.error').remove();
+                if(copoun_code == ""){
+                    $("input[name='coupon_code']").after('<span class="error">Please type a valid coupon code.</span>');
+                } else {
+                    calcCart();
+                }
+            });
+
+            function calcCart(){
                 $.ajax({
                     url : '{{ route("plan.purchase.showadjustments") }}',
                     data : {
-                        months : $(this).val(),
-                        plan : $('#selected_plan').val()
+                        months : $('#months').val(),
+                        plan : $('#selected_plan').val(),
+                        coupon_code : $('input[name="coupon_code"]').val()
                     },
                     dataType : 'json',
                     beforeSend: function(){
-                      $("span.error").html('').hide();
+                        $("span.error").html('').hide();
                     },
                     success : function(response){
                         if(response['status']){
                             $('#gvofs').html(response['gross_value_of_new_plan']);
                             $('#anyoffer').html(response['discounted_percentage']+"%");
                             $('#adjusted_amount').html("$ "+response['adjusted_amount']);
+                            $('#coupon_discount').html('$' +response['coupon_discount']);
+                            $('.coupon_code_discount_row').show();
                             if(response['balance'] > 0){
                                 //this means that we have to credit some amount to users account...
                                 $('#credit_or_balance_label').html('<b>Amount that will be credited to your witsync account</b>');
@@ -356,7 +373,7 @@
                         }
                     }
                 });
-            });
+            }
 
             $(document.body).on('click', '.upgrade_proceed', function(){
                 $.ajax({
@@ -364,7 +381,8 @@
                     type : 'post',
                     data : {
                         months : $('#months').val(),
-                        plan : $('#selected_plan').val()
+                        plan : $('#selected_plan').val(),
+                        coupon_code : $('input[name="coupon_code"]').val()
                     },
                     dataType : 'json',
                     beforeSend: function(){

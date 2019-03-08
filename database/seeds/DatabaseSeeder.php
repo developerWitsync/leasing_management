@@ -64,7 +64,7 @@ class DatabaseSeeder extends Seeder
 
         $path = 'database/sqls/subscription_plans.sql';
         DB::unprepared(file_get_contents($path));
-        $this->command->info('States table seeded!');
+        $this->command->info('Subscription table seeded!');
 
     }
 }

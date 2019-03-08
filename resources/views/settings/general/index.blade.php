@@ -122,7 +122,7 @@
                              <div class="form-group">
                                 <div class="col-md-6 col-md-offset-4">
                                     <button type="submit" class="btn btn-success">
-                                        Submit
+                                        Save
                                     </button>
                                 </div>
                             </div>
@@ -143,7 +143,7 @@
                      <thead>
                         <tr>
                             <th width="80px">Sr No.</th>
-                            <th>Adult Year ended on</th>
+                            <th>Audit Year ended on</th>
                             <th width="120px">Status</th>
 
                             <th width="120px">Action</th>

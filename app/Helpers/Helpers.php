@@ -657,7 +657,7 @@ function generatePaypalExpressCheckoutLink(\App\SubscriptionPlans $package, \App
         [
             'name' => $package->title,
             'price' => $package->price,
-            'qty' => $quantity // quantity is said to be 12 as the plan can only be purchased for 1 year
+            'qty' => $quantity // quantity is the number of months for which the user is subscribing with the plan...
         ]
     ];
 
@@ -693,11 +693,64 @@ function generatePaypalExpressCheckoutLink(\App\SubscriptionPlans $package, \App
         }
     }
 
+    //check if the coupon has been used bt the user if yes than in that case apply the discount for the coupon code as well
+    $coupon_discount = 0;
+    if($subscription->coupon_code){
+        $coupon = \App\CouponCodes::query()->where('code', '=', $subscription->coupon_code)->where('status', '=', '1')->first();
+        if($coupon){
+            if(auth()->check()){
+                $user_id = getParentDetails()->id;
+                if(!is_null($coupon->user_id) && $coupon->user_id == $user_id){
+                    $coupon_discount = round(($coupon->discount / 100) * $subtotal, 2);
+                } else if(is_null($coupon->user_id)){
+                    $coupon_discount = round(($coupon->discount / 100) * $subtotal, 2);
+                }
+
+                //check if the selected coupon code can only be applied to a particular plan
+                if(is_null($coupon->plan_id)){
+                    $coupon_discount = round(($coupon->discount / 100) * $subtotal, 2);
+                } elseif (!is_null($coupon->plan_id) && $coupon->plan_id == $package->id){
+                    $coupon_discount = round(($coupon->discount / 100) * $subtotal, 2);
+                }
+
+            } elseif(is_null($coupon->user_id)) {
+                //check if the selected coupon code can only be applied to a particular plan
+                if(is_null($coupon->plan_id)){
+                    $coupon_discount = round(($coupon->discount / 100) * $subtotal, 2);
+                } elseif (!is_null($coupon->plan_id) && $coupon->plan_id == $package->id){
+                    $coupon_discount = round(($coupon->discount / 100) * $subtotal, 2);
+                }
+            }
+
+            if($coupon_discount){
+                //calculate the discounted amount by the coupon..
+                $data['items'][] = [
+                    'name' => "Coupon {$coupon->code} Discount",
+                    'price' => -1 * $coupon_discount,
+                    'qty' => 1
+                ];
+            }
+
+        }
+    }
+
     $data['invoice_id'] = $subscription->id;
     $data['invoice_description'] = "Order #{$data['invoice_id']} Invoice";
     $data['return_url'] = ($return_url) ? $return_url : url('/payment/success');
     $data['cancel_url'] = ($cancel_url) ? $cancel_url : url('/payment/cancel');
     $data['notify_url'] = ($notify_url) ? $notify_url : url('/payment/notify');
+
+
+
+    //give a discount of 10% of the order amount
+    $discounted_amount = 0;
+    if ($package->annual_discount > 0) {
+        $discounted_percentage = ($quantity / 12 - 1) * $package->annual_discount;
+        if($discounted_percentage > 0){
+            $discounted_amount = round(($discounted_percentage / 100) * $subtotal, 2);
+            $data['shipping_discount'] = $discounted_amount;
+        }
+    }
 
     $total = 0;
     foreach ($data['items'] as $item) {
@@ -706,22 +759,13 @@ function generatePaypalExpressCheckoutLink(\App\SubscriptionPlans $package, \App
 
     $data['total'] = $total;
 
-    //give a discount of 10% of the order amount
-    $discounted_amount = 0;
-    if ($package->annual_discount > 0) {
-        $discounted_percentage = ($quantity / 12 - 1) * $package->annual_discount;
-        if($discounted_percentage > 0){
-            $discounted_amount = round(($package->annual_discount / 100) * $subtotal, 2);
-            $data['shipping_discount'] = $discounted_amount;
-        }
-    }
-
     //save all the details to the user_subscription for the details so that these can be used for the doExpressCheckout
     $subscription->purchased_items = json_encode($data);
     $subscription->paid_amount = $data['total'];
     $subscription->adjusted_amount = (isset($adjusted_amount['adjusted_amount']))?$adjusted_amount['adjusted_amount']: 0;
     $subscription->credits_used = $used_credits;
     $subscription->discounted_amount = $discounted_amount;
+    $subscription->coupon_discount = $coupon_discount;
     $subscription->save();
     $response = $provider->setExpressCheckout($data);
     return $response['paypal_link'];
@@ -761,18 +805,43 @@ function getYearRanage(){
  * @param int $months
  * @return array
  */
-function calculateAdjustedAmountForUpgradeDowngrade(\App\SubscriptionPlans $package, $months = 12){
+function calculateAdjustedAmountForUpgradeDowngrade(\App\SubscriptionPlans $package, $months = 12 , $coupon_code = null){
     $existing_plan = \App\UserSubscription::query()
         ->whereIn('user_id', getDependentUserIds())
         ->orderBy('id', 'desc')
         ->where('payment_status', '=', 'Completed')->first();
     $final_payment_amount = [];
+    $coupon_discount = 0; $discounted_amount = 0;
     if ($existing_plan && \Carbon\Carbon::today()->lessThanOrEqualTo(\Carbon\Carbon::parse($existing_plan->subscription_expire_at))) {
         //previous plan has not expired yet...
         if ($existing_plan->subscriptionPackage->price_plan_type == '1' || $package->is_custom == '1') {
 
+
             if ($package->price_plan_type == "1" && is_null($package->price)) {
                 return ['status' => false, 'message' => 'You are not allowed to downgrade to a trial plan.'];
+            }
+
+            if(!is_null($existing_plan->coupon_code) && $existing_plan->coupon_discount > 0){
+                return ['status' => false, 'message' => 'You have used a coupon code with the existing plan and hence you cannot downgrade/upgrade from the existing plan.'];
+            }
+
+            //check here if the coupon code can be applied or not
+            if($coupon_code){
+                $coupon_code = \App\CouponCodes::query()->where('code', '=', $coupon_code)->where('status', '=', '1')->first();
+                if(is_null($coupon_code) || (!is_null($coupon_code) && !is_null($coupon_code->user_id) && $coupon_code->user_id != getParentDetails()->id)){
+                    return [
+                        'status' => false,
+                        'message' => 'Coupon not found.'
+                    ];
+                }
+
+                //check if the coupon can also be meant to be applied for any particular plan
+                if(!is_null($coupon_code->plan_id) && $coupon_code->plan_id != $package->id){
+                    return [
+                        'status' => false,
+                        'message' => 'This coupon cannot be applied to the selected plan.'
+                    ];
+                }
             }
 
             if (is_null($existing_plan->subscriptionPackage->price)) {
@@ -781,22 +850,31 @@ function calculateAdjustedAmountForUpgradeDowngrade(\App\SubscriptionPlans $pack
 
                 $final_payment_amount['adjusted_amount'] = 0;
 
-                $new_plan_price = $package->price * $months;
+                $original_price = $package->price * $months;
 
                 $discounted_percentage = 0;
+
                 if ($package->annual_discount > 0) {
                     $discounted_percentage = ($months / 12 - 1) * $package->annual_discount;
                     if($discounted_percentage > 0){
-                        $discounted_amount = round(($package->annual_discount / 100) * $new_plan_price, 2);
-                        $new_plan_price = $new_plan_price - $discounted_amount;
+                        $discounted_amount = round(($discounted_percentage / 100) * $original_price, 2);
                     }
                 }
+
+                if($coupon_code){
+                    $coupon_discount = round(($coupon_code->discount / 100) * $original_price, 2);
+                }
+
+                $new_plan_price = $original_price - ($discounted_amount + $coupon_discount);
+
 
                 $final_payment_amount['balance' ]  = round(-1 * $new_plan_price, 2);
 
                 $final_payment_amount['gross_value_of_new_plan'] = round($new_plan_price, 2);
 
                 $final_payment_amount['discounted_percentage'] = $discounted_percentage;
+
+                $final_payment_amount['coupon_discount'] = $coupon_discount;
 
             } else {
                 //need to do the calculations for calculating the price that the user might have to pay...
@@ -814,15 +892,21 @@ function calculateAdjustedAmountForUpgradeDowngrade(\App\SubscriptionPlans $pack
 
                 $old_plan_price_levied = $old_plan_subscription_days * $old_plan_per_day_rate;
 
-                $new_plan_price = $package->price * $months;
+                $original_price = $package->price * $months;
 
                 $discounted_percentage = 0;
                 if ($package->annual_discount > 0) {
                     $discounted_percentage = ($months / 12 - 1) * $package->annual_discount;
                     if($discounted_percentage > 0){
-                        $new_plan_price = $new_plan_price - round(($package->annual_discount / 100) * $new_plan_price, 2);
+                        $discounted_amount = round(($discounted_percentage / 100) * $original_price, 2);
                     }
                 }
+
+                if($coupon_code){
+                    $coupon_discount = round(($coupon_code->discount / 100) * $original_price, 2);
+                }
+
+                $new_plan_price = $original_price - ($coupon_discount + $discounted_amount);
 
                 $total_subscription_days = ($months/12) * 365;
 
@@ -844,6 +928,8 @@ function calculateAdjustedAmountForUpgradeDowngrade(\App\SubscriptionPlans $pack
 
                 $final_payment_amount['discounted_percentage'] = $discounted_percentage;
 
+                $final_payment_amount['coupon_discount'] = $coupon_discount;
+
             }
 
         } else {
@@ -853,26 +939,58 @@ function calculateAdjustedAmountForUpgradeDowngrade(\App\SubscriptionPlans $pack
             ];
         }
     } else {
+
+        if($existing_plan && !is_null($existing_plan->coupon_code) && $existing_plan->coupon_discount > 0){
+            return ['status' => false, 'message' => 'You have used a coupon code with the existing plan and hence you cannot downgrade/upgrade from the existing plan.'];
+        }
+
+        //check here if the coupon code can be applied or not
+        if($coupon_code){
+            $coupon_code = \App\CouponCodes::query()->where('code', '=', $coupon_code)->where('status', '=', '1')->first();
+            if(is_null($coupon_code) || (!is_null($coupon_code) && !is_null($coupon_code->user_id) && $coupon_code->user_id != getParentDetails()->id)){
+                return [
+                    'status' => false,
+                    'message' => 'Coupon not found.'
+                ];
+            }
+
+            //check if the coupon can also be meant to be applied for any particular plan
+            if(!is_null($coupon_code->plan_id) && $coupon_code->plan_id != $package->id){
+                return [
+                    'status' => false,
+                    'message' => 'This coupon cannot be applied to the selected plan.'
+                ];
+            }
+        }
+
         //previous plan has expired and user will now have to pay in full....
         $final_payment_amount['status'] = true;
 
         $final_payment_amount['adjusted_amount'] = 0;
 
-        $new_plan_price = $package->price * $months;
+        $original_price = $package->price * $months;
 
         $discounted_percentage = 0;
         if ($package->annual_discount > 0) {
             $discounted_percentage = ($months / 12 - 1) * $package->annual_discount;
             if($discounted_percentage > 0){
-                $new_plan_price = $new_plan_price - round(($package->annual_discount / 100) * $new_plan_price, 2);
+                $discounted_amount = round(($discounted_percentage / 100) * $original_price, 2);
             }
         }
+
+        if($coupon_code){
+            $coupon_discount = round(($coupon_code->discount / 100) * $original_price, 2);
+        }
+
+        $new_plan_price = $original_price - ($coupon_discount + $discounted_amount);
 
         $final_payment_amount['balance' ]  = round(-1 * $new_plan_price, 2);
 
         $final_payment_amount['gross_value_of_new_plan'] = round($new_plan_price, 2);
 
         $final_payment_amount['discounted_percentage'] = $discounted_percentage;
+
+        $final_payment_amount['coupon_discount'] = $coupon_discount;
     }
 
     return $final_payment_amount;

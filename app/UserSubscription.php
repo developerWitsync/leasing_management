@@ -19,7 +19,11 @@ class UserSubscription extends Model
         'payment_status',
         'purchased_items',
         'subscription_years',
-        'discounted_amount','adjusted_amount','credits_used',
+        'discounted_amount',
+        'adjusted_amount',
+        'credits_used',
+        'coupon_code',
+        'coupon_discount',
         'created_at',
         'updated_at'
     ];
@@ -30,5 +34,9 @@ class UserSubscription extends Model
 
     public function subscriptionPackage(){
         return $this->hasOne('App\SubscriptionPlans', 'id', 'plan_id');
+    }
+
+    public function coupon(){
+        return $this->hasOne('App\CouponCodes', 'coupon_code', 'code');
     }
 }

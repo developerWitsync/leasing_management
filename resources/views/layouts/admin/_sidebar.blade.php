@@ -39,9 +39,9 @@
                     </ul>
                 </li>
 
-                 <li class="submenu">
+                <li class="submenu">
                     <a href="#" class="@if(request()->segment('2') == 'cms') active @endif"><i
-                                class="fa fa-fw fa-table"></i> <span> CMS </span> <span class="menu-arrow"></span></a>
+                                class="fa fa-fw fa-adjust"></i> <span> CMS </span> <span class="menu-arrow"></span></a>
                     <ul class="list-unstyled">
                         <li class="@if(request()->segment('3') == '') active @endif"><a
                                     href="{{ route('admin.cms.index') }}">Manage Cms</a></li>
@@ -52,17 +52,21 @@
 
                 <li class="submenu">
                     <a href="#" class="@if(request()->segment('2') == 'subscription-plans') active @endif"><i
-                                class="fa fa-fw fa-table"></i> <span> Subscription Plans </span> <span class="menu-arrow"></span></a>
+                                class="fa fa-fw fa-tv"></i> <span> Subscription Plans </span> <span
+                                class="menu-arrow"></span></a>
                     <ul class="list-unstyled">
                         <li class="@if(request()->segment('3') == '') active @endif"><a
                                     href="{{ route('admin.subscriptionplans.index') }}">Manage Plans</a></li>
                         <li class="@if(request()->segment('3') == 'create') active @endif"><a
-                                    href="{{ route('admin.subscriptionplans.create') }}">Add New Subscription Plan</a></li>
+                                    href="{{ route('admin.subscriptionplans.create') }}">Add New Subscription Plan</a>
+                        </li>
                         <li class="@if(request()->segment('3') == 'custom-plans-request') active @endif"><a
-                                    href="{{ route('admin.subscriptionplans.customplanrequests') }}">Custom Plan Requests</a></li>
+                                    href="{{ route('admin.subscriptionplans.customplanrequests') }}">Custom Plan
+                                Requests</a></li>
 
                         <li class="@if(request()->segment('3') == 'create-custom-plan') active @endif"><a
-                                    href="{{ route('admin.subscriptionplans.createcustomplan') }}">Create Custom Plan</a></li>
+                                    href="{{ route('admin.subscriptionplans.createcustomplan') }}">Create Custom
+                                Plan</a></li>
                     </ul>
                 </li>
 
@@ -70,6 +74,17 @@
                     <a class="@if(request()->segment('2') == 'contactus' || request()->segment('2') == 'contact-us-view') active @endif"
                        href="{{ route('admin.contactus.index') }}"><i
                                 class="fa fa-fw fa-envelope"></i><span>Contact Us</span> </a>
+                </li>
+
+                <li class="submenu">
+                    <a href="#" class="@if(request()->segment('2') == 'coupon-codes') active @endif"><i
+                                class="fa fa-fw fa-adjust"></i> <span> Coupon Codes </span> <span class="menu-arrow"></span></a>
+                    <ul class="list-unstyled">
+                        <li class="@if(request()->segment('3') == '') active @endif"><a
+                                    href="{{ route('admin.coupon.index') }}">Manage Coupon Codes</a></li>
+                        <li class="@if(request()->segment('3') == 'create') active @endif"><a
+                                    href="{{ route('admin.coupon.create') }}">Create New Coupon Codes</a></li>
+                    </ul>
                 </li>
 
                 {{--<li class="submenu">--}}

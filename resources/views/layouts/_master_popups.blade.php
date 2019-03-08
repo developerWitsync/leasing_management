@@ -27,7 +27,7 @@
 <!-- modal for subscription plan -->
 <div id="pricing_Modal" class="modal fade pricing_Modal" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg">
-        <form id="proceed_subscription_plan" action="{{ route('master.pricing.subscribe') }}">
+        <form id="proceed_subscription_plan" action="{{ route('master.pricing.subscribe') }}" onkeypress="return event.keyCode != 13;">
             <!-- Modal content-->
             <div class="modal-content">
 
@@ -44,7 +44,7 @@
                             calculated on
                             a daily basis and based on actual number of days involved.)</p>
                         <br>
-                        <form name="myform" method="post">
+
                             <table class="table table-bordered">
                                 <tbody>
                                 <tr>
@@ -95,6 +95,12 @@
                                     </td>
                                     <td class="text-right"><span id="anyoffer">--</span></td>
                                 </tr>
+                                <tr class="coupon_code_discount_row" style="display: none">
+                                    <td>
+                                        <small>Coupon Discount</small>
+                                    </td>
+                                    <td class="text-right"><span id="coupon_discount">---</span></td>
+                                </tr>
                                 <tr>
                                     <td class="net-value-text">
                                         <small><b>Net Value of Subscription Payable.</b></small>
@@ -104,8 +110,20 @@
 
                                 </tbody>
                             </table>
-                        </form>
-                        <p>Apply your discount coupon, if any, at the time of payment</p>
+                        {{--<p>Apply your discount coupon, if any, at the time of payment</p>--}}
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Apply Coupon</legend>
+                        <p><small>Enter coupon code below in case you have any coupon code.</small></p>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <input class="form-control" type="text" name="coupon_code" placeholder="Enter Coupon Code">
+                            </div>
+                            <div class="col-md-4">
+                                <a href="javascript:void(0);" class="btn btn-info apply_coupon_code">Apply Coupon</a>
+                            </div>
+                        </div>
                     </fieldset>
 
                     <fieldset>

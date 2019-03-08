@@ -74,10 +74,10 @@ class IndexController extends Controller
            if(isset($settings)) {
                 $settings->setRawAttributes($data);
                 $settings->save();
-                $status = 'General Settings has been updated successfully.';
+                $status = 'General Settings has been saved successfully.';
             } else {
-               GeneralSettings::create($data);
-                $status = 'General Settings has been created successfully.';
+                GeneralSettings::create($data);
+                $status = 'General Settings has been saved successfully.';
             }
             return redirect()->back()->with('status', $status);
         } catch (\Exception $e){

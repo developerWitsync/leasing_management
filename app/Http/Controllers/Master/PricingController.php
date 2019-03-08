@@ -8,6 +8,7 @@
 
 namespace App\Http\Controllers\Master;
 
+use App\CouponCodes;
 use App\CustomPlansRequest;
 use App\Http\Controllers\Controller;
 use App\SubscriptionPlans;
@@ -74,6 +75,92 @@ class PricingController extends Controller
                 'redirect_link' => route('register.index', ['package' => $selected_plan->slug])
             ]);
         } catch (\Exception $e) {
+            dd($e);
+        }
+    }
+
+    /**
+     * calculate the cart along with the coupon if the user have the coupon code in the input field
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function calculateCart(Request $request){
+        try{
+            $validator = Validator::make($request->all(), [
+                'selected_plan' => 'required|exists:subscription_plans,id',
+                'smonths' => 'required|numeric'
+            ],[
+                'selected_plan.required' => 'Please Select Annual Subscription Plan.',
+                'smonths.required' => 'Please Select Subscription Years.'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'errors' => $validator->errors()
+                ], 200);
+            }
+
+            $selected_plan = SubscriptionPlans::query()->find($request->selected_plan);
+
+            //need to  validate so that the coupon code cannot be applied to a trial plan
+            if(is_null($selected_plan->price) && $selected_plan->price_plan_type == '1') {
+                if($request->has('coupon_code') && trim($request->coupon_code) != ""){
+                    $message = 'Coupon code cannot be applied to a trial plan.';
+                } else {
+                    $message = 'Invalid Request';
+                }
+                return response()->json([
+                    'status' => false,
+                    'errorMessage' => $message
+                ], 200);
+            }
+
+            $original_amount = $selected_plan->price * $request->smonths;
+            $coupon_discount = 0;
+
+            if($request->has('coupon_code') && trim($request->coupon_code)!= ""){
+                $coupon_code = CouponCodes::query()->where('code', '=', $request->coupon_code)
+                    ->whereNull('user_id')
+                    ->where('status', '=', '1')
+                    ->first();
+                if(is_null($coupon_code)){
+                    return response()->json([
+                        'status' => false,
+                        'errorMessage' => 'Coupon not found.'
+                    ], 200);
+                }
+
+                //check here if the coupon can only be used for a particular plan
+                if(!is_null($coupon_code->plan_id) && $coupon_code->plan_id == $selected_plan->id || is_null($coupon_code->plan_id)){
+                    $coupon_discount = round(($coupon_code->discount / 100) * $original_amount, 2);
+                } else {
+                    return response()->json([
+                        'status' => false,
+                        'errorMessage' => 'This coupon cannot be applied to the selected plan.'
+                    ], 200);
+                }
+            }
+
+            $discounted_amount = 0;
+            if ($selected_plan->annual_discount > 0) {
+                $discounted_percentage = ($request->smonths / 12 - 1) * $selected_plan->annual_discount;
+                if($discounted_percentage > 0){
+                    $discounted_amount = round(($selected_plan->annual_discount / 100) * $original_amount, 2);
+                }
+            }
+
+            $net_payable = $original_amount - ($coupon_discount + $discounted_amount);
+
+            return response()->json([
+                'status' => true,
+                'coupon_discount' => $coupon_discount,
+                'net_payable' => $net_payable,
+                'offer' => $discounted_percentage,
+                'gross_value' => $original_amount
+            ], 200);
+
+        }catch (\Exception $e){
             dd($e);
         }
     }

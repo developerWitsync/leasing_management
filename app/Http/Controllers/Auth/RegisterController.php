@@ -166,7 +166,8 @@ class RegisterController extends Controller
                     'subscription_expire_at' => $expiry_date,
                     'subscription_renewal_at' => $renewal_date,
                     'subscription_years' => isset($selected_plan_data["smonths"])?$selected_plan_data["smonths"]/12:1, //default is set to 1 year
-                    'payment_status' => 'pending'
+                    'payment_status' => 'pending',
+                    'coupon_code'   => isset($selected_plan_data["coupon_code"])?$selected_plan_data["coupon_code"]:null,
                 ]);
 
                 //need to redirect the user to the paypal for generating the payment, before that need to create a transaction to the subscription_payments with
@@ -186,7 +187,6 @@ class RegisterController extends Controller
                 }
             }
         } catch (\Exception $e){
-            dd($e);
             abort(404);
         }
     }

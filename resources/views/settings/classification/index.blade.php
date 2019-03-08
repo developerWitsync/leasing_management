@@ -515,7 +515,7 @@
 
                         <div class="panel panel-info">
                             <div class="panel-heading">
-                                Escalation Percentages
+                                Escalation Percentages (% Per Annum)
                                 <span>
                                     <a href="javascript:void(0);" class="btn btn-sm btn-primary pull-right add_more" data-form="add_more_escalation_percentage">Add More</a>
                                 </span>
@@ -721,21 +721,21 @@
                                     @endforeach
                                         <tr> <td>3</td>
                                             @if(isset($category_excluded_id[2]) == 7)
-                                            <td>Intengible Asset  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                 <input type="button" disabled class="btn btn-sm btn-success" value="Include in Valuation">
-                                                   <a data-href="{{ route('settings.leaseclassification.deletecategoriesexcluded', ['id' => 7]) }}" href="javascript:;" class="btn btn-sm btn-danger delete_settings">Exclude in Valuation</a>
+                                            <td>Intangible Asset  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <input type="button" disabled class="btn btn-sm btn-success" value="Include in Lease Valuation Capitalization">
+                                                    <a data-href="{{ route('settings.leaseclassification.deletecategoriesexcluded', ['id' => 7]) }}" href="javascript:;" class="btn btn-sm btn-danger delete_settings">Exclude in Lease Valuation Capitalization</a>
                                             </td>
                                             @else
                                              <td>Intangible Asset  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             @if(count($check_intangible_asset)==0)
-                                             <a data-href="{{ route('settings.leaseclassification.addcategoriesexcluded', ['id' => 7]) }}" href="javascript:;" class="btn btn-sm btn-success add_intangible_asset">Include in Valuation</a>
+                                             <a data-href="{{ route('settings.leaseclassification.addcategoriesexcluded', ['id' => 7]) }}" href="javascript:;" class="btn btn-sm btn-success add_intangible_asset">Include in Lease Valuation Capitalization</a>
                                              @else
-                                             <input type="button" disabled class="btn btn-sm btn-success" value="Include in valuation">
+                                             <input type="button" disabled class="btn btn-sm btn-success" value="Include in Lease Valuation Capitalization">
                                             @endif
                                               @if(count($check_intangible_asset)==0)
-                                            <a data-href="{{ route('settings.leaseclassification.deletecategoriesexcluded', ['id' => 7]) }}" href="javascript:;" class="btn btn-sm btn-danger delete_settings">Exclude in Valuation</a>
+                                            <a data-href="{{ route('settings.leaseclassification.deletecategoriesexcluded', ['id' => 7]) }}" href="javascript:;" class="btn btn-sm btn-danger delete_settings">Exclude in Lease Valuation Capitalization</a>
                                              @else
-                                             <input type="button" disabled class="btn btn-sm btn-danger" value="Exclude in valuation">
+                                             <input type="button" disabled class="btn btn-sm btn-danger" value="Exclude in Lease Valuation Capitalization">
                                             @endif
                                             </td>
                                             @endif

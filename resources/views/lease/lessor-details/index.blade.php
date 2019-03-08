@@ -222,20 +222,22 @@
                 </div>
             @else
                 @if(Auth::user()->parent_id==0)
-
                         @if($general_settings_count == 0)
-                            <a href="{{route('settings.index')}}">
-                                <div class="alert alert-danger">Please create the general settings from the settings menu as well.</div>
-                            </a>
+                            {{--<a href="{{route('settings.index')}}">--}}
+                                {{--<div class="alert alert-danger">Please create the general settings from the settings menu as well.</div>--}}
+                            {{--</a>--}}
+                            @include('lease._complete_your_settings')
                         @else
-                            <a href="{{route('settings.currencies')}}">
-                                <div class="alert alert-danger">Please change the foreign currency settings</div>
-                            </a>
+                            {{--<a href="{{route('settings.currencies')}}">--}}
+                                {{--<div class="alert alert-danger">Please change the foreign currency settings</div>--}}
+                            {{--</a>--}}
+                            @include('lease._complete_your_settings')
                         @endif
                 @else
-                    <div class="alert alert-danger">Super Admin has not created the settings that can be utilised by
-                        you. Please contact to your Super Admin to generate the Settings. Thanks!
-                    </div>
+                    {{--<div class="alert alert-danger">Super Admin has not created the settings that can be utilised by--}}
+                        {{--you. Please contact to your Super Admin to generate the Settings. Thanks!--}}
+                    {{--</div>--}}
+                    @include('lease._complete_your_settings')
                 @endif
             @endif
         </div>

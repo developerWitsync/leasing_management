@@ -28,6 +28,7 @@ Route::namespace('Master')->prefix('pricing')->group(function () {
     Route::post('plan-selected', ['as' => 'master.pricing.subscribe', 'uses' => 'PricingController@planSelected']);
 
     Route::post('build-your-plan', ['as' => 'master.pricing.buildyourplan', 'uses' => 'PricingController@buildYourPlan']);
+    Route::post('calc-cart', ['as' => 'master.pricing.calccart', 'uses' => 'PricingController@calculateCart']);
 
 });
 
@@ -444,8 +445,8 @@ Route::middleware('auth')->group(function () {
 
 });
 
-Route::namespace('Contactus')->group(function () {
-    Route::match(['get', 'post'], '/contactus', ['as' => 'contactus', 'uses' => 'ContactusController@index']);
+Route::namespace('Contactus')->prefix('contact')->group(function () {
+    Route::match(['get', 'post'], '/', ['as' => 'contactus', 'uses' => 'ContactusController@index']);
     Route::post('get-in-touch-with-us', ['as' => 'getintouchwithus', 'uses' => 'ContactusController@getInTouchWithUs']);
 });
 
@@ -523,11 +524,8 @@ Route::namespace('Admin')->prefix('admin')->group(function () {
         });
 
         Route::prefix('contactus')->group(function () {
-
             Route::get('/', ['as' => 'admin.contactus.index', 'uses' => 'ContactusController@index']);
-
             Route::get('fetch', ['as' => 'admin.contactus.fetch', 'uses' => 'ContactusController@fetch']);
-
             Route::match(['get', 'post'], 'preview/{id}', ['as' => 'admin.contactus.preview', 'uses' => 'ContactusController@preview']);
         });
 
@@ -536,14 +534,21 @@ Route::namespace('Admin')->prefix('admin')->group(function () {
             Route::get('fetch', ['as' => 'admin.subscriptionplans.fetch', 'uses' => 'SubscriptionPlansController@fetch']);
             Route::match(['get', 'post'], 'create', ['as' => 'admin.subscriptionplans.create', 'uses' => 'SubscriptionPlansController@create']);
             Route::match(['get', 'post'], 'update/{id}', ['as' => 'admin.subscriptionplans.update', 'uses' => 'SubscriptionPlansController@update']);
-
             Route::get('custom-plans-request', ['as' => 'admin.subscriptionplans.customplanrequests', 'uses' => 'SubscriptionPlansController@customPlanRequests']);
             Route::get('fetch-custom-plan-requests', ['as' => 'admin.subscriptionplans.fetchcustomplanrequests', 'uses' => 'SubscriptionPlansController@fetchCustomPlanRequests']);
-
             Route::match(['get', 'post'], 'create-custom-plan/{request_id?}', ['as' => 'admin.subscriptionplans.createcustomplan', 'uses' => 'SubscriptionPlansController@createCustomPlan']);
-
             Route::delete('delete/{id}', ['as' => 'admin.subscriptionplans.delete', 'uses' => 'SubscriptionPlansController@delete']);
+        });
 
+
+        Route::prefix('coupon-codes')->group(function(){
+            Route::get('/', ['as' => 'admin.coupon.index', 'uses' => 'CouponCodeController@index']);
+            Route::match(['get', 'post'], 'create', ['as' => 'admin.coupon.create', 'uses' => 'CouponCodeController@create']);
+            Route::get('search-users', ['as' => 'admin.coupon.searchusers', 'uses' => 'CouponCodeController@searchUsers']);
+            Route::get('fetch', ['as' => 'admin.coupon.fetch', 'uses' => 'CouponCodeController@fetch']);
+            Route::post('updatestatus', ['as' => 'admin.coupon.updatestatus', 'uses' => 'CouponCodeController@changeStatus']);
+            Route::delete('delete/{id}', ['as' => 'admin.coupon.delete', 'uses' => 'CouponCodeController@delete']);
+            Route::match(['get', 'post'], 'update/{id}', ['as' => 'admin.coupon.update', 'uses' => 'CouponCodeController@update']);
         });
 
     });
