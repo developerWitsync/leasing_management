@@ -501,7 +501,7 @@
                     case 2:
                         //means selected option is monthly
                         @php
-                            $lease_end_date = \Carbon\Carbon::parse($asset->lease_end_date);
+                            $lease_end_date = \Carbon\Carbon::parse($asset->lease_end_date)->format('D M d Y');
                             $calculated_date = $lease_end_date;
                         @endphp
                             _calculated_last_payment_date = new Date("{{ $calculated_date }}");
@@ -534,6 +534,7 @@
                         break;
                 }
             }
+            //alert(_calculated_last_payment_date);
             $("#last_payment_end_date").datepicker("setDate", new Date(_calculated_last_payment_date));
         }
 
@@ -563,11 +564,9 @@
                         //means selected option is monthly.
                         @php
                             $accural_date = \Carbon\Carbon::parse($asset->accural_period);
-
                             $calculated_date = $accural_date->addMonth(1)->format('D M d Y');
                         @endphp
                             _calculated_first_payment_date = new Date("{{ $calculated_date }}");
-                        //alert(_calculated_first_payment_date);
                         break;
                     case 3:
                         //means selected option is Quarterly
@@ -651,13 +650,13 @@
 
                             final_payout_dates = response['final_payout_dates'];
 
+                            var asset_lease_start_date = new Date('{{ \Carbon\Carbon::parse($asset->accural_period)->format('Y') ."-". \Carbon\Carbon::parse($asset->accural_period)->format('m') }}');
+                            var asset_lease_end_date = new Date('{{ \Carbon\Carbon::parse($asset->lease_end_date)->format('Y')."-".\Carbon\Carbon::parse($asset->lease_end_date)->format('m') }}');
                             //setting up datepicker calendar on each input field.. taking care of lease start date and lease end date as well....
                             $('.alter_due_dates_input').each(function () {
                                 var data_year = $(this).data('year');
                                 var data_month = $(this).data('month');
                                 var temp_date = new Date(data_year + "-" + data_month);
-                                var asset_lease_start_date = new Date('{{ \Carbon\Carbon::parse($asset->accural_period)->format('Y') ."-". \Carbon\Carbon::parse($asset->accural_period)->format('m') }}');
-                                var asset_lease_end_date = new Date('{{ \Carbon\Carbon::parse($asset->lease_end_date)->format('Y')."-".\Carbon\Carbon::parse($asset->lease_end_date)->format('m') }}');
                                 if (temp_date >= asset_lease_start_date && temp_date <= asset_lease_end_date) {
                                     $(this).datepicker({
                                         dateFormat: "yy-mm-dd",
