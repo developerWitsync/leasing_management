@@ -44,17 +44,17 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group{{ $errors->has('exchange_rate') ? ' has-error' : '' }} required">
-                                    <label for="exchange_rate" class="col-md-4 control-label">Exchange Rate</label>
-                                    <div class="col-md-8">
-                                        <input type="text" id="exchange_rate" value="{{ old('exchange_rate') }}" name="exchange_rate" class="form-control" placeholder="Exchange">
-                                        @if ($errors->has('exchange_rate'))
-                                            <span class="help-block">
-                                                <strong>{{ $errors->first('exchange_rate') }}</strong>
-                                            </span>
-                                        @endif
-                                    </div>
-                                </div>
+                                {{--<div class="form-group{{ $errors->has('exchange_rate') ? ' has-error' : '' }} required">--}}
+                                    {{--<label for="exchange_rate" class="col-md-4 control-label">Exchange Rate</label>--}}
+                                    {{--<div class="col-md-8">--}}
+                                        {{--<input type="text" id="exchange_rate" value="{{ old('exchange_rate') }}" name="exchange_rate" class="form-control" placeholder="Exchange">--}}
+                                        {{--@if ($errors->has('exchange_rate'))--}}
+                                            {{--<span class="help-block">--}}
+                                                {{--<strong>{{ $errors->first('exchange_rate') }}</strong>--}}
+                                            {{--</span>--}}
+                                        {{--@endif--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
 
                                 <div class="form-group{{ $errors->has('base_currency') ? ' has-error' : '' }}">
                                     <label for="foreign_exchange_currency" class="col-md-4 control-label">Base Currency</label>
@@ -73,34 +73,34 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group{{ $errors->has('valid_from') ? ' has-error' : '' }} required">
-                                    <label for="valid_from" class="col-md-4 control-label">Exchange Rate Valid From</label>
-                                    <div class="col-md-8">
-                                        <input type="text" id="valid_from" value="{{ old('valid_from') }}" name="valid_from" class="form-control" placeholder="Exchange Rate Valid From">
-                                        @if ($errors->has('valid_from'))
-                                            <span class="help-block">
-                                                <strong>{{ $errors->first('valid_from') }}</strong>
-                                            </span>
-                                        @endif
-                                    </div>
-                                </div>
+                                {{--<div class="form-group{{ $errors->has('valid_from') ? ' has-error' : '' }} required">--}}
+                                    {{--<label for="valid_from" class="col-md-4 control-label">Exchange Rate Valid From</label>--}}
+                                    {{--<div class="col-md-8">--}}
+                                        {{--<input type="text" id="valid_from" value="{{ old('valid_from') }}" name="valid_from" class="form-control" placeholder="Exchange Rate Valid From">--}}
+                                        {{--@if ($errors->has('valid_from'))--}}
+                                            {{--<span class="help-block">--}}
+                                                {{--<strong>{{ $errors->first('valid_from') }}</strong>--}}
+                                            {{--</span>--}}
+                                        {{--@endif--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
 
-                                <div class="form-group{{ $errors->has('valid_to') ? ' has-error' : '' }} required">
-                                    <label for="valid_to" class="col-md-4 control-label">Exchange Rate Valid To</label>
-                                    <div class="col-md-8">
-                                        <input type="text" id="valid_to" value="{{ old('valid_to') }}" name="valid_to" class="form-control" placeholder="Exchange Rate Valid To">
-                                        @if ($errors->has('valid_to'))
-                                            <span class="help-block">
-                                                <strong>{{ $errors->first('valid_to') }}</strong>
-                                            </span>
-                                        @endif
-                                    </div>
-                                </div>
+                                {{--<div class="form-group{{ $errors->has('valid_to') ? ' has-error' : '' }} required">--}}
+                                    {{--<label for="valid_to" class="col-md-4 control-label">Exchange Rate Valid To</label>--}}
+                                    {{--<div class="col-md-8">--}}
+                                        {{--<input type="text" id="valid_to" value="{{ old('valid_to') }}" name="valid_to" class="form-control" placeholder="Exchange Rate Valid To">--}}
+                                        {{--@if ($errors->has('valid_to'))--}}
+                                            {{--<span class="help-block">--}}
+                                                {{--<strong>{{ $errors->first('valid_to') }}</strong>--}}
+                                            {{--</span>--}}
+                                        {{--@endif--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
 
                                 <div class="form-group">
                                     <div class="col-md-6 col-md-offset-4">
                                         <button type="submit" class="btn btn-success">
-                                            Submit
+                                            Save
                                         </button>
                                     </div>
                                 </div>

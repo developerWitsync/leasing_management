@@ -78,8 +78,8 @@
                                             </form>
                                         </td>
                                         <td>
-                                            <button type="button" onclick="javascript:$('.add_more_expected_life_of_assets_form').submit();" class="btn btn-sm btn-success">Save</button>
-                                            <a href="javascript:;" class="btn btn-sm btn-danger add_more" data-form="add_more_expected_life_of_assets">Cancel</a>
+                                            <button type="button" onclick="javascript:$('.add_more_expected_life_of_assets_form').submit();" class="btn btn-sm btn-success" title="Save"><i class="fa fa-check-square"></i></button>
+                                            <a href="javascript:;" class="btn btn-sm btn-danger add_more" data-form="add_more_expected_life_of_assets" title="Cancel"><i class="fa fa-times"></i></a>
                                         </td>
                                     </tr>
 

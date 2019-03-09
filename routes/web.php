@@ -50,7 +50,8 @@ Route::middleware('auth')->group(function () {
     Route::get('invoice/{id}', ['as' => 'invoice.index', 'uses' => 'InvoiceController@index']);
 
     Route::get('/home', 'HomeController@index')->name('home');
-    Route::get('/home/fetch-details', ['as' => 'home.fetchdetails', 'uses' => 'HomeController@fetchDetails']);
+    Route::get('/home/consolidated-chart', ['as' => 'home.chart.consolidatedchart', 'uses' => 'HomeController@consolidatedChart']);
+    Route::get('/home/categorised-charts', ['as' => 'home.fetchdetails', 'uses' => 'HomeController@categorisedChart']);
 
     Route::prefix('plan')->group(function () {
         Route::get('/', ['as' => 'plan.index', 'uses' => 'UpgradeController@index']);

@@ -102,16 +102,16 @@
                     </div>
                     <div class="DashRight">
                         <div class="rightContainer">
-                            @if(isset($breadcrumbs ))
-                                <nav aria-label="breadcrumb">
-                                    <ol class="breadcrumb">
+                            {{--@if(isset($breadcrumbs ))--}}
+                                {{--<nav aria-label="breadcrumb">--}}
+                                    {{--<ol class="breadcrumb">--}}
                                             {{--<li class="breadcrumb-item"><a href="/home">Dashboard</a></li>--}}
-                                            @foreach($breadcrumbs as $breadcrumb)
-                                                <li class="breadcrumb-item"><a href="{{ $breadcrumb['link'] }}">{{ $breadcrumb['title'] }}</a></li>
-                                            @endforeach
-                                    </ol>
-                                </nav>
-                            @endif
+                                            {{--@foreach($breadcrumbs as $breadcrumb)--}}
+                                                {{--<li class="breadcrumb-item"><a href="{{ $breadcrumb['link'] }}">{{ $breadcrumb['title'] }}</a></li>--}}
+                                            {{--@endforeach--}}
+                                    {{--</ol>--}}
+                                {{--</nav>--}}
+                            {{--@endif--}}
 
                             @if(request()->segment(1) == 'lease')
                                 @include('layouts._addlease_steps')

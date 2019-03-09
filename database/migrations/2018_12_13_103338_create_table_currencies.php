@@ -17,9 +17,9 @@ class CreateTableCurrencies extends Migration
             $table->increments('id');
             $table->string('currency',100);
             $table->string('code',25);
-            $table->string('symbol',25);
-            $table->string('thousand_separator',10);
-            $table->string('decimal_separator', 10);
+            $table->string('symbol',25)->nullable();
+            $table->string('thousand_separator',10)->nullable();
+            $table->string('decimal_separator', 10)->nullable();
             $table->enum('status', ['0', '1'])->default('1');
             $table->timestamps();
         });

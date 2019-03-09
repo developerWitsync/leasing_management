@@ -148,17 +148,17 @@ class CurrenciesController extends Controller
                 if($request->isMethod('post')) {
                     $validator = Validator::make($request->except('_token'), [
                         'foreign_exchange_currency' => 'required|exists:currencies,code',
-                        'valid_from'                => 'required|date',
-                        'exchange_rate'             => 'required|numeric',
-                        'valid_to'                  => 'required|date|after:valid_from'
+//                        'valid_from'                => 'required|date',
+//                        'exchange_rate'             => 'required|numeric',
+//                        'valid_to'                  => 'required|date|after:valid_from'
                     ], [
                         'foreign_exchange_currency.required' => 'The currency field is required.',
-                        'exchange_rate.required' => 'The rate field is required.',
-                        'exchange_rate.numeric' => 'The rate field must be a number.',
-                        'valid_from.required'   => 'The from date field is required',
-                        'valid_from.date'   => 'The from date must be a valid date.',
-                        'valid_to.required'   => 'The to date field is required',
-                        'valid_to.date'   => 'The to date must be a valid date.',
+//                        'exchange_rate.required' => 'The rate field is required.',
+//                        'exchange_rate.numeric' => 'The rate field must be a number.',
+//                        'valid_from.required'   => 'The from date field is required',
+//                        'valid_from.date'   => 'The from date must be a valid date.',
+//                        'valid_to.required'   => 'The to date field is required',
+//                        'valid_to.date'   => 'The to date must be a valid date.',
                     ]);
 
                     if($validator->fails()) {
@@ -170,9 +170,9 @@ class CurrenciesController extends Controller
 
                     $data = $request->except('_token');
 
-                    $data['valid_from']= date('Y-m-d', strtotime($request->valid_from));
+//                    $data['valid_from']= date('Y-m-d', strtotime($request->valid_from));
 
-                    $data['valid_to'] = date('Y-m-d', strtotime($request->valid_to));
+//                    $data['valid_to'] = date('Y-m-d', strtotime($request->valid_to));
 
                     ForeignCurrencyTransactionSettings::create($data);
 
@@ -273,17 +273,17 @@ class CurrenciesController extends Controller
                 if($request->isMethod('post')) {
                     $validator = Validator::make($request->except('_token'), [
                         'foreign_exchange_currency' => 'required|exists:currencies,code',
-                        'valid_from'                => 'required|date',
-                        'exchange_rate'             => 'required|numeric',
-                        'valid_to'                  => 'required|date|after:valid_from'
+//                        'valid_from'                => 'required|date',
+//                        'exchange_rate'             => 'required|numeric',
+//                        'valid_to'                  => 'required|date|after:valid_from'
                     ], [
                         'foreign_exchange_currency.required' => 'The currency field is required.',
-                        'exchange_rate.required' => 'The rate field is required.',
-                        'exchange_rate.numeric' => 'The rate field must be a number.',
-                        'valid_from.required'   => 'The from date field is required',
-                        'valid_from.date'   => 'The from date must be a valid date.',
-                        'valid_to.required'   => 'The to date field is required',
-                        'valid_to.date'   => 'The to date must be a valid date.',
+//                        'exchange_rate.required' => 'The rate field is required.',
+//                        'exchange_rate.numeric' => 'The rate field must be a number.',
+//                        'valid_from.required'   => 'The from date field is required',
+//                        'valid_from.date'   => 'The from date must be a valid date.',
+//                        'valid_to.required'   => 'The to date field is required',
+//                        'valid_to.date'   => 'The to date must be a valid date.',
                     ]);
 
                     if($validator->fails()) {
@@ -294,9 +294,9 @@ class CurrenciesController extends Controller
 
                     $data = $request->except('_token');
 
-                    $data['valid_from'] = date('Y-m-d', strtotime($request->valid_from));
-
-                    $data['valid_to']   = date('Y-m-d', strtotime($request->valid_to));
+//                    $data['valid_from'] = date('Y-m-d', strtotime($request->valid_from));
+//
+//                    $data['valid_to']   = date('Y-m-d', strtotime($request->valid_to));
 
                     $model->setRawAttributes($data);
 

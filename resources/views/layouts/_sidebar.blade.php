@@ -36,9 +36,26 @@
 <a href="#" class="list-group-item"><i class="fa fa-drivers-license-o"></i> <span>Leasing Disclosure</span>
     <!-- <small class="fa fa-angle-right" aria-hidden="true"></small> -->
 </a>
+
 <a href="#" class="list-group-item"><i class="fa fa-cart-arrow-down"></i> <span>Lease Asset Inventory</span>
     <!-- <small class="fa fa-angle-right" aria-hidden="true"></small> -->
 </a>
+
+<a href="#" class="list-group-item"><i class="fa fa-file-powerpoint-o"></i> <span>Presentation</span>
+    <!-- <small class="fa fa-angle-right" aria-hidden="true"></small> -->
+</a>
+
+<a href="#" class="list-group-item"><i class="fa fa-file-text-o"></i> <span>Disclosures</span>
+    <!-- <small class="fa fa-angle-right" aria-hidden="true"></small> -->
+</a>
+<a href="#" class="list-group-item"><i class="fa fa-book"></i> <span>Documents</span>
+    <!-- <small class="fa fa-angle-right" aria-hidden="true"></small> -->
+</a>
+
+<a href="#" class="list-group-item"><i class="fa fa-calendar-times-o"></i> <span>Expired Leases</span>
+    <!-- <small class="fa fa-angle-right" aria-hidden="true"></small> -->
+</a>
+
 @if(Auth::user()->can('settings'))
     <a href="{{ route('settings.index') }}" class="list-group-item @if(request()->segment('1') == 'settings') active @endif">
         <i class="fa fa-cogs"></i>
@@ -49,7 +66,7 @@
 
 <a href="#" class="list-group-item"><i class="fa fa-balance-scale"></i> <span>Resource Material</span>
 
-<a href="{{ route('plan.index') }}" class="list-group-item @if(request()->segment('1') == 'plan') active @endif"><i class="fa fa-arrow-circle-o-up"></i> <span>Upgrade</span>
+<a href="{{ route('plan.index') }}" class="list-group-item @if(request()->segment('1') == 'plan') active @endif"><i class="fa fa-arrow-circle-o-up"></i> <span>Manage Subscription</span>
 <!-- <small class="fa fa-angle-right" aria-hidden="true"></small> -->
 </a>
 <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="list-group-item"><i class="fa fa-sign-out"></i> <span>Logout</span>

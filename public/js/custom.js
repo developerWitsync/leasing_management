@@ -221,7 +221,14 @@ $(document).ready(function(){
     $(".dash_navicon").click(function(){
         $(".dashLeft").toggleClass("leftNavOpen");
         $(".DashRight").toggleClass("dashRightBx");
+        if($(".dashLeft").hasClass('leftNavOpen')){
+            $('.ifrsBx').hide('150');
+        } else {
+            $('.ifrsBx').show('150');
+        }
     });
+
+
 });
 
 

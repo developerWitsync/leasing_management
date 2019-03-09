@@ -36,9 +36,9 @@ disabled @endif type="checkbox" id="is_involved_no" value="no">
                             <th></th>
                             <th>Foreign Transaction Currency</th>
                             <th>Base Currency</th>
-                            <th>Rate</th>
-                            <th>Valid From</th>
-                            <th>Valid Till</th>
+                            {{--<th>Rate</th>--}}
+                            {{--<th>Valid From</th>--}}
+                            {{--<th>Valid Till</th>--}}
                             <th>Action</th>
                         </tr>
                     </thead>

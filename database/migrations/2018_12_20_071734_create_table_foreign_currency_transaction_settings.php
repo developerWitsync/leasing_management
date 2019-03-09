@@ -18,9 +18,9 @@ class CreateTableForeignCurrencyTransactionSettings extends Migration
             $table->unsignedInteger('business_account_id');
             $table->foreign('business_account_id', 'foreign_currency_transaction_ac_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('foreign_exchange_currency');
-            $table->date('valid_from');
-            $table->date('valid_to');
-            $table->decimal('exchange_rate');
+            $table->date('valid_from')->nullable();;
+            $table->date('valid_to')->nullable();;
+            $table->decimal('exchange_rate')->nullable();
             $table->string('base_currency');
             $table->timestamps();
         });

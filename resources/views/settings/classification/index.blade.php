@@ -185,8 +185,8 @@
                                                 </form>
                                             </td>
                                             <td>
-                                                <button type="button" onclick="javascript:$('.add_more_form_lease_basis_form').submit();" class="btn btn-sm btn-success">Save</button>
-                                                <a href="javascript:;" class="btn btn-sm btn-danger add_more" data-form="add_more_form_lease_basis">Cancel</a>
+                                                <button type="button" onclick="javascript:$('.add_more_form_lease_basis_form').submit();" class="btn btn-sm btn-success" title="Save"><i class="fa fa-check-square"></i></button>
+                                                <a href="javascript:;" class="btn btn-sm btn-danger add_more" data-form="add_more_form_lease_basis" title="Cancel"><i class="fa fa-times"></i></a>
                                             </td>
                                         </tr>
                                 </table>
@@ -246,8 +246,8 @@
                                             </form>
                                         </td>
                                         <td>
-                                            <button type="button" onclick="javascript:$('.add_more_no_of_underlying_asset_form').submit();" class="btn btn-sm btn-success">Save</button>
-                                            <a href="javascript:;" class="btn btn-sm btn-danger add_more" data-form="add_more_no_of_underlying_asset">Cancel</a>
+                                            <button type="button" onclick="javascript:$('.add_more_no_of_underlying_asset_form').submit();" class="btn btn-sm btn-success" title="Save"><i class="fa fa-check-square"></i></button>
+                                            <a href="javascript:;" class="btn btn-sm btn-danger add_more" data-form="add_more_no_of_underlying_asset" title="Cancel"><i class="fa fa-times"></i></a>
                                         </td>
                                     </tr>
                                 </table>
@@ -304,8 +304,8 @@
                                             </form>
                                         </td>
                                         <td>
-                                            <button type="button" onclick="javascript:$('.add_more_no_of_lease_asset_similar_charac_form').submit();" class="btn btn-sm btn-success">Save</button>
-                                            <a href="javascript:;" class="btn btn-sm btn-danger add_more" data-form="add_more_no_of_lease_asset_similar_charac">Cancel</a>
+                                            <button type="button" onclick="javascript:$('.add_more_no_of_lease_asset_similar_charac_form').submit();" class="btn btn-sm btn-success" title="Save"><i class="fa fa-check-square"></i></button>
+                                            <a href="javascript:;" class="btn btn-sm btn-danger add_more" data-form="add_more_no_of_lease_asset_similar_charac" title="Cancel"><i class="fa fa-times"></i></a>
                                         </td>
                                     </tr>
                                 </table>
@@ -461,8 +461,8 @@
                                             </form>
                                         </td>
                                         <td>
-                                            <button type="button" onclick="javascript:$('.add_more_no_of_lease_payments_form').submit();" class="btn btn-sm btn-success">Save</button>
-                                            <a href="javascript:;" class="btn btn-sm btn-danger add_more" data-form="add_more_no_of_lease_payments">Cancel</a>
+                                            <button type="button" onclick="javascript:$('.add_more_no_of_lease_payments_form').submit();" class="btn btn-sm btn-success" title="Save"><i class="fa fa-check-square"></i></button>
+                                            <a href="javascript:;" class="btn btn-sm btn-danger add_more" data-form="add_more_no_of_lease_payments" title="Cancel"><i class="fa fa-times"></i></a>
                                         </td>
                                     </tr>
                                 </table>
@@ -562,8 +562,8 @@
                                             </form>
                                         </td>
                                         <td>
-                                            <button type="button" onclick="javascript:$('.add_more_escalation_percentage_form').submit();" class="btn btn-sm btn-success">Save</button>
-                                            <a href="javascript:;" class="btn btn-sm btn-danger add_more" data-form="add_more_escalation_percentage">Cancel</a>
+                                            <button type="button" onclick="javascript:$('.add_more_escalation_percentage_form').submit();" class="btn btn-sm btn-success" title="Save"><i class="fa fa-check-square"></i></button>
+                                            <a href="javascript:;" class="btn btn-sm btn-danger add_more" data-form="add_more_escalation_percentage" title="Cancel"><i class="fa fa-times"></i></a>
                                         </td>
                                     </tr>
                                 </table>
@@ -685,8 +685,8 @@
                                             </form>
                                         </td>
                                         <td>
-                                            <button type="button" onclick="javascript:$('.add_more_modification_reason_form').submit();" class="btn btn-sm btn-success">Save</button>
-                                            <a href="javascript:;" class="btn btn-sm btn-danger add_more" data-form="add_more_modification_reason">Cancel</a>
+                                            <button type="button" onclick="javascript:$('.add_more_modification_reason_form').submit();" class="btn btn-sm btn-success" title="Save"><i class="fa fa-check-square"></i></button>
+                                            <a href="javascript:;" class="btn btn-sm btn-danger add_more" data-form="add_more_modification_reason" title="Cancel"><i class="fa fa-times"></i></a>
                                         </td>
                                     </tr>
                                 </table>

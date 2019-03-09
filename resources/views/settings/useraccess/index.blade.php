@@ -45,7 +45,7 @@
                                         <th>Sr No.</th>
                                         <th>Name</th>
                                         <th>Roles</th>
-                                        <th>Eamil</th>
+                                        <th>Email</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>

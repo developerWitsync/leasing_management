@@ -143,14 +143,14 @@
                     },
                     { "data": "foreign_exchange_currency"},
                     { "data": "base_currency"},
-                    { "data": "exchange_rate"},
-                    { "data": "valid_from"},
-                    { "data": "valid_to"},
+                    // { "data": "exchange_rate"},
+                    // { "data": "valid_from"},
+                    // { "data": "valid_to"},
                     { "data": "id"}
                 ],
                 "columnDefs": [
                     {
-                        "targets" : 6,
+                        "targets" : 3,
                         "data" : null,
                         "orderable": false,
                         "className" : "text-center",

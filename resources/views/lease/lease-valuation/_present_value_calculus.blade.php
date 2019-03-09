@@ -45,10 +45,14 @@
                                 $sub_total = 0;
                             @endphp
                             @foreach($months as $month)
-                                <td>{{ $data[$month]["payment_".$payment->id][0]->lease_liability }}</td>
-                                @php
-                                    $sub_total = $sub_total + $data[$month]["payment_".$payment->id][0]->lease_liability;
-                                @endphp
+                                @if(isset($data[$month]))
+                                    <td>{{ $data[$month]["payment_".$payment->id][0]->lease_liability }}</td>
+                                    @php
+                                        $sub_total = $sub_total + $data[$month]["payment_".$payment->id][0]->lease_liability;
+                                    @endphp
+                                @else
+                                    <td>&nbsp;</td>
+                                @endif
                             @endforeach
                             <td>{{$sub_total}}</td>
                             @php
@@ -60,7 +64,11 @@
                         <th>Termination</th>
                         @foreach($payments as $payment)
                             @foreach($months as $month)
-                                <td>{{ $data[$month]["payment_".$payment->id][0]->termination_penalty }}</td>
+                                @if(isset($data[$month]))
+                                    <td>{{ $data[$month]["payment_".$payment->id][0]->termination_penalty }}</td>
+                                @else
+                                    <td>&nbsp;</td>
+                                @endif
                             @endforeach
                             @php
                                 break;
@@ -73,7 +81,11 @@
                         <th>Residual</th>
                         @foreach($payments as $payment)
                             @foreach($months as $month)
-                                <td>{{ $data[$month]["payment_".$payment->id][0]->residual_value_gurantee_value }}</td>
+                                @if(isset($data[$month]))
+                                    <td>{{ $data[$month]["payment_".$payment->id][0]->residual_value_gurantee_value }}</td>
+                                @else
+                                    <td>&nbsp;</td>
+                                @endif
                             @endforeach
                             @php
                                 break;
@@ -85,7 +97,11 @@
                         <th>Purchase</th>
                         @foreach($payments as $payment)
                             @foreach($months as $month)
-                                <td>{{ $data[$month]["payment_".$payment->id][0]->purchase_option_price }}</td>
+                                @if(isset($data[$month]))
+                                    <td>{{ $data[$month]["payment_".$payment->id][0]->purchase_option_price }}</td>
+                                @else
+                                    <td>&nbsp;</td>
+                                @endif
                             @endforeach
                             @php
                                 break;
