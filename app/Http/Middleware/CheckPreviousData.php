@@ -82,6 +82,20 @@ class CheckPreviousData
 
             if($total_assets == 0){
                 $step = 10;
+                //select low value will not appear for the excluded categories so will have to check if it can go to the step 10
+                $asset_count = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)
+                    ->whereNotIn('specific_use', [2])
+                    ->whereHas('leaseDurationClassified',  function($query){
+                        $query->whereNotIn('lease_contract_duration_id',[1,2]);
+                    })->whereNotIn('category_id', $category_excluded_id)->count();
+                if($asset_count == 0){
+                    $step  = 9;
+                    $asset = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)
+                        ->whereNotIn('category_id', $category_excluded_id)->count();
+                    if($asset == 0){
+                        $step = 8;
+                    }
+                }
             }
         }
 
@@ -124,6 +138,20 @@ class CheckPreviousData
 
                 if($total_assets == 0){
                     $step = 10;
+                    //select low value will not appear for the excluded categories so will have to check if it can go to the step 10
+                    $asset_count = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)
+                        ->whereNotIn('specific_use', [2])
+                        ->whereHas('leaseDurationClassified',  function($query){
+                            $query->whereNotIn('lease_contract_duration_id',[1,2]);
+                        })->whereNotIn('category_id', $category_excluded_id)->count();
+                    if($asset_count == 0){
+                        $step  = 9;
+                        $asset = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)
+                            ->whereNotIn('category_id', $category_excluded_id)->count();
+                        if($asset == 0){
+                            $step = 8;
+                        }
+                    }
                 }
             }
         }
