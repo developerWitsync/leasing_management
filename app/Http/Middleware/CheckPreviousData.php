@@ -72,15 +72,18 @@ class CheckPreviousData
         }
 
         if($step == 11) {
-            $category_excluded = \App\CategoriesLeaseAssetExcluded::query()->where('business_account_id', getDependentUserIds())->get();
+
+            $category_excluded = \App\CategoriesLeaseAssetExcluded::query()->whereIn('business_account_id', getDependentUserIds())->get();
+
             $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
 
-            $total_assets = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)->whereNotIn('specific_use', [2])
-                ->whereHas('leaseDurationClassified', function ($query) {
-                    $query->whereNotIn('lease_contract_duration_id', [1, 2]);
+            $asset = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)
+                ->whereNotIn('specific_use', [2])
+                ->whereHas('leaseDurationClassified',  function($query){
+                    $query->whereNotIn('lease_contract_duration_id',[1,2]);
                 })->whereNotIn('category_id', $category_excluded_id)->count();
 
-            if($total_assets == 0){
+            if($asset == 0){
                 $step = 10;
             }
         }
