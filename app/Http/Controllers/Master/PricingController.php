@@ -24,6 +24,12 @@ class PricingController extends Controller
      */
     public function index()
     {
+        $is_register_allowed = env('REGISTER_ALLOWED');
+
+        if(!$is_register_allowed){
+            return redirect('/')->with('register_not_allowed', true);
+        }
+
         $subscription_plans = SubscriptionPlans::query()->where('is_custom', '=', '0')->get();
         return view('pricing.index', compact(
             'subscription_plans'

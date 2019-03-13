@@ -5,7 +5,7 @@
                 <div class="col-sm-6">
                     <ul class="social-share">
                         <li><a href="javascript:void(0);"><i class="fa fa-globe"></i> Global</a></li>
-                        <li><a href="javascript:void(0);"><i class="fa fa-envelope-o"></i> info@witsync.co</a></li>
+                        <li><a href="mailto:info@witsync.co"><i class="fa fa-envelope-o"></i> info@witsync.co</a></li>
                     </ul>
                 </div>
                 <div class="col-sm-6">
@@ -15,7 +15,8 @@
                             @guest
                                 <li><a href="{{ route('login') }}"><i class="fa fa-lock"></i> Login</a></li>
                                 {{--<li><a href="{{ route('contactus') }}"><span class="rg-btn">Contact us</span></a></li>--}}
-                                <li><a href="javascript:void(0);" data-toggle="modal" data-target="#leasing_software"><span class="rg-btn">Register</span></a></li>
+                                {{--<li><a href="javascript:void(0);" data-toggle="modal" data-target="#leasing_software"><span class="rg-btn">Register</span></a></li>--}}
+                                <li><a href="{{ route('master.pricing.index') }}"><span class="rg-btn">Register</span></a></li>
                             @else
                                 @if(auth()->user()->parent_id == '0')
                                     <li><a href="{{route('settings.profile.index')}}"><i class="fa fa-user"></i>My Profile</a></li>
