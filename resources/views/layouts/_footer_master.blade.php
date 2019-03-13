@@ -21,10 +21,10 @@
                 <div class="widget">
                     <h3>Featured Links</h3>
                     <ul class="ft-link">
-                        <li><a href="javascript:void(0);"><i class="fa fa-angle-right"></i> About Us</a></li>
-                        <li><a href="javascript:void(0);"><i class="fa fa-angle-right"></i> Services</a></li>
-                        <li><a href="javascript:void(0);"><i class="fa fa-angle-right"></i> E-Learning</a></li>
-                        <li><a href="javascript:void(0);"><i class="fa fa-angle-right"></i> Contact Us</a></li>
+                        <li><a href="{{ route('information.about') }}"><i class="fa fa-angle-right"></i> About Us</a></li>
+                        <li><a href="{{ route('information.services') }}"><i class="fa fa-angle-right"></i> Services</a></li>
+                        <li><a href="{{ route('information.eLearning') }}"><i class="fa fa-angle-right"></i> E-Learning</a></li>
+                        <li><a href="{{ route('contactus') }}"><i class="fa fa-angle-right"></i> Contact Us</a></li>
                     </ul>
 
                 </div>
