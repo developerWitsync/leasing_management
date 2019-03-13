@@ -43,4 +43,28 @@ class IndexController extends Controller
             abort(404);
         }
     }
+
+    /**
+     * renders the static about us page
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function about(){
+        return view('index.about');
+    }
+
+    /**
+     * renders the static services we offer template
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function services(){
+        return view('index.services');
+    }
+
+    /**
+     * renders the static e-learning page
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function eLearning(){
+        return view('index.e-learning');
+    }
 }

@@ -56,8 +56,8 @@
             <div class="collapse navbar-collapse navbar-right">
                 <ul class="nav navbar-nav">
                     <li><a href="/">Home</a></li>
-                    <li><a href="#">About Us</a></li>
-                    <li><a href="#">Services</a></li>
+                    <li><a href="{{ route('information.about') }}">About Us</a></li>
+                    <li><a href="{{ route('information.services') }}">Services</a></li>
                     <li><a href="{{ route('master.leasingsoftware.index') }}">Leasing Software</a></li>
                     <li class="dropdown">
                         <a href="javascript: void(0);" class="dropdown-toggle" >Pricing <i class="fa fa-angle-down"></i></a>
@@ -66,7 +66,7 @@
                             <li><a href="{{ route('master.pricing.vatelearning') }}">VAT E-Learning</a></li>
                         </ul>
                     </li>
-                    <li><a href="javascript:void(0);">E-Learning</a></li>
+                    <li><a href="{{ route('information.eLearning') }}">E-Learning</a></li>
                     <li><a href="{{ route('contactus') }}">Contact</a></li>
                 </ul>
             </div>

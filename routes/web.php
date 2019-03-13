@@ -13,7 +13,15 @@
 
 
 Route::get('/', 'Master\IndexController@index');
+
 Route::get('information/{slug}', ['as' => 'information.index', 'uses' => 'Master\IndexController@information']);
+
+Route::get('about-us', ['as' => 'information.about', 'uses' => 'Master\IndexController@about']);
+
+Route::get('services-we-offer', ['as' => 'information.services', 'uses' => 'Master\IndexController@services']);
+
+Route::get('e-learning', ['as' => 'information.eLearning', 'uses' => 'Master\IndexController@eLearning']);
+
 Route::namespace('Master')->prefix('leasing-software')->group(function () {
     Route::get('/', ['as' => 'master.leasingsoftware.index', 'uses' => 'LeasingSoftwareController@index']);
 });

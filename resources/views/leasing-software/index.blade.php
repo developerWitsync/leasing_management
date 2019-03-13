@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('title')
-    IND AS- 116 Leasing Software
+    Leasing Software
 @endsection
 @section('header-styles')
 
@@ -16,7 +16,7 @@
                 <li data-target="#main-slider" data-slide-to="3"></li>
             </ol> -->
             <div class="carousel-inner">
-                <div class="item active" style="background-image: url({{ asset('master/images/banner1_nnew.jpg') }})">
+                <div class="item active" style="background-image: url({{ asset('master/images/Banner1_new_02.jpg') }})">
                     <div class="container">
                         <div class="row slide-margin">
                             <div class="col-sm-8">
