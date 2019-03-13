@@ -207,6 +207,7 @@ class HomeController extends Controller
                             lease_duarion_classified.lease_contract_duration_id = 3
                                 AND lease.business_account_id IN ($ids)
                                 AND lease_assets.specific_use = '1'
+                                AND lease.status = '1'
                         GROUP BY lease_assets.category_id";
 
                 $data = DB::select($sql);
