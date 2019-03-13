@@ -148,6 +148,7 @@ class HomeController extends Controller
 
                 $data = LeaseAssets::query()->whereHas('lease', function ($query) {
                     $query->whereIn('business_account_id', getDependentUserIds());
+                    $query->where('status','=', '1');
                 })
                     ->where('specific_use', 1)
                     ->with('leaseDurationClassified')
