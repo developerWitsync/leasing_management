@@ -58,6 +58,19 @@
             font-style: italic;
         }
 
+        .launchinSoonContent{
+            padding-top: 20px;
+        }
+
+        .launchinSoonContent p{
+            font-size: 16px;
+            line-height: 25px;
+            color: #333333;
+        }
+
+        .launchinSoonContent a{
+            font-size: 16px;
+        }
     </style>
     @yield('header-styles')
     <link rel="shortcut icon" href="{{ asset('master/images/favicon.png') }}">
@@ -70,6 +83,36 @@
 @yield('content')
 
 @include('layouts._footer_master')
+
+@if (session('register_not_allowed'))
+    <div id="registerNotAllowed" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" style="text-align: center;color: #19afc8;font-weight: 700;padding-bottom: 10px;">Launching Soon</h4>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <img style="max-width: 100%" src="{{ asset('master/images/launching_soon.png') }}">
+                    </div>
+                    <div class="col-md-8 launchinSoonContent">
+                        <p>Lessee Leasing Mangement Software</p>
+                        <p>Duly Compliant with IFRS 16  On Leases</p>
+                        <p>A Tool To  Easily Manage Your Lease Assets Valuations</p>
+                        <a href="{{ route('contactus') }}">Contact Us</a>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    {{--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>--}}
+                </div>
+            </div>
+
+        </div>
+    </div>
+@endif
 
 <script src="{{ asset('master/js/jquery.js') }}"></script>
 <script src="{{ asset('master/js/bootstrap.min.js') }}"></script>
@@ -86,6 +129,13 @@
     });
 </script>
 
+@if (session('register_not_allowed'))
+    <script>
+        $(function(){
+            $("#registerNotAllowed").modal('show');
+        });
+    </script>
+@endif
 <script>
     $(document).ready(function () {
         // var owl = $('.owl-carousel');

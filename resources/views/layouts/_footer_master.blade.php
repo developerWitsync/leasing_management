@@ -34,7 +34,7 @@
                 <div class="widget">
                     <h3>Information</h3>
                     <ul class="">
-                        <li><a href="javascript:void(0);"><i class="fa fa-envelope-o"></i> info@witsync.co</a></li>
+                        <li><a href="mailto:info@witsync.co"><i class="fa fa-envelope-o"></i> info@witsync.co</a></li>
                     </ul>
                     <br>
                     <h3>Newsletter</h3>
