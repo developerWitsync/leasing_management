@@ -94,7 +94,10 @@ class LeaseBalanceAsOnDecController extends Controller
                         }
                         }
                     }
-                    $category_excluded = CategoriesLeaseAssetExcluded::query()->get();
+                    $category_excluded = CategoriesLeaseAssetExcluded::query()
+                        ->whereIn('business_account_id', getDependentUserIds())
+                        ->where('status', '=', '0')
+                        ->get();
                     $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
                     $asset_on_discount = LeaseAssets::query()->where('lease_id', '=', $lease->id)
                         ->where('specific_use', 1)
@@ -121,7 +124,10 @@ class LeaseBalanceAsOnDecController extends Controller
                     if ($asset_on_discount > 0) {
                         $back_url = route('addlease.discountrate.index', ['id' => $id]);
                     } else {
-                        $category_excluded = CategoriesLeaseAssetExcluded::query()->get();
+                        $category_excluded = CategoriesLeaseAssetExcluded::query()
+                            ->whereIn('business_account_id', getDependentUserIds())
+                            ->where('status', '=', '0')
+                            ->get();
                         $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
 
                         $asset_on_low = LeaseAssets::query()->where('lease_id', '=', $lease->id)->whereNotIn('specific_use', [2])

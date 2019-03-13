@@ -59,7 +59,11 @@ class LeaseDurationClassifiedController extends Controller
 
                 $back_button = route('addlease.residual.index', ['id' => $lease->id]);
 
-                $category_excluded = \App\CategoriesLeaseAssetExcluded::query()->where('business_account_id', getDependentUserIds())->get();
+                $category_excluded = \App\CategoriesLeaseAssetExcluded::query()
+                    ->whereIn('business_account_id', getDependentUserIds())
+                    ->where('status', '=', '0')
+                    ->get();
+
                 $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
 
                 $asset = LeaseAssets::query()->where('lease_id', '=', $id)

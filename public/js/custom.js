@@ -1,5 +1,33 @@
 $(function(){
 
+    function resizeMenu(){
+        var menuHeight = $('.dashLeft').height() + 20;
+
+        var ifrsBxHeight = $('.ifrsBx').height() + 20;
+
+        var leftMenuHeight = menuHeight - ifrsBxHeight - 44;
+
+        $('.mainMenu').height(leftMenuHeight);
+    }
+
+    resizeMenu();
+
+    $(window).resize(function(){
+       resizeMenu();
+    });
+
+    $('.mainMenuItem a').on('click', function () {
+        $(this).children('i').toggleClass('icon');
+        $(this).next('.subMenuItem').slideToggle();
+    });
+
+    $('.mainMenuItem').each(function () {
+        if($(this).children('a').hasClass('active')){
+            $(this).children('a').find('i').toggleClass('icon');
+            $(this).children('a').next('.subMenuItem').slideDown();
+        }
+    });
+
     //Toggle the add more on the Settings for the users
     $('.add_more').on('click', function(){
         $('.'+$(this).data('form')).toggle();
@@ -167,6 +195,7 @@ $(function(){
 
     $(document.body).on("click", ".add_intangible_asset", function () {
          var href = $(this).data('href');
+         var status = $(this).data('status');
          bootbox.confirm({
             message: "Are you sure that you want to add this setting? These changes cannot be reverted.",
             buttons: {
@@ -185,6 +214,9 @@ $(function(){
                         url : href,
                         type : 'post',
                         dataType : 'json',
+                        data : {
+                            status : status
+                        },
                         success : function (response) {
                             if(response['status']) {
                                 window.location.reload();

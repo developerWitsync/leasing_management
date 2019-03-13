@@ -16,8 +16,6 @@ use Illuminate\Http\Request;
 use Validator;
 use Session;
 
-
-
 class IndexController extends Controller
 {
 
@@ -33,16 +31,30 @@ class IndexController extends Controller
                 'title' => 'General Settings'
             ]
         ];
-        $settings = GeneralSettings::query()->where('business_account_id', '=', auth()->user()->id)->first();
+
+        $settings = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
         if(is_null($settings)) {
             $settings = new GeneralSettings();
         }
 
-        $lease_lock_year = LeaseLockYear::query()->where('business_account_id', '=', auth()->user()->id)->get();
+        $lease_lock_year = LeaseLockYear::query()
+            ->selectRaw('year(`start_date`) as lock_year, start_date, status')
+            ->whereIn('business_account_id', getDependentUserIds())
+            ->get()->toArray();
 
-        // $modication_reason = LeaseLockYear::query()->select('id', 'title')->where('status', '=', '1')->get();
+        if(!empty($lease_lock_year)){
+            $lease_lock_year = collect($lease_lock_year)->groupBy('lock_year')->toArray();
+        }
+
+        $lease_lock_year_range = range(2016, date('Y'));
         
-        return view('settings.general.index', compact('breadcrumbs', 'settings','lease_lock_year','modication_reason'));
+        return view('settings.general.index', compact(
+            'breadcrumbs',
+            'settings',
+            'lease_lock_year',
+            'modication_reason',
+            'lease_lock_year_range'
+        ));
     }
 
     /**

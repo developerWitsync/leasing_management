@@ -41,11 +41,18 @@ class CurrenciesController extends Controller
         if(collect($reporting_currency_settings)->isEmpty()) {
             $reporting_currency_settings = new ReportingCurrencySettings();
         }
+
         $countforeign = ForeignCurrencyTransactionSettings::query()->where('business_account_id', '=', auth()->user()->id)->get();
+
         $foreign_currency= $countforeign->pluck('foreign_exchange_currency')->toArray();
 
         $exsist_froegincurrency = Lease::query()->whereIn('business_account_id', getDependentUserIds())->whereIn('lease_contract_id',$foreign_currency)->count();
-        
+
+        $foreign_currencies = ForeignCurrencyTransactionSettings::query()
+            ->whereIn('business_account_id', getDependentUserIds())
+            ->get()
+            ->pluck('foreign_exchange_currency')
+            ->toArray();
 
         return view('settings.currencies.index', compact(
             'breadcrumbs',
@@ -54,7 +61,8 @@ class CurrenciesController extends Controller
             'internal_same_as_statutory_currency',
             'currency_for_lease_reports_same_as_statutory',
             'currency_for_lease_reports_same_as_internal',
-            'exsist_froegincurrency'
+            'exsist_froegincurrency',
+            'foreign_currencies'
         ));
     }
 
@@ -67,13 +75,13 @@ class CurrenciesController extends Controller
         try{
             $validator = Validator::make($request->except('_token'), [
                 'statutory_financial_reporting_currency' => 'required|exists:currencies,code',
-                'internal_same_as_statutory_reporting' => 'required',
-                'internal_company_financial_reporting_currency' => 'required_if:internal_same_as_statutory_reporting,no',
+                //'internal_same_as_statutory_reporting' => 'required',
+                //'internal_company_financial_reporting_currency' => 'required_if:internal_same_as_statutory_reporting,no',
                 'lease_report_same_as_statutory_reporting' => 'required',
                 'currency_for_lease_reports' => 'required_if:lease_report_same_as_statutory_reporting,3'
             ], [
-                'internal_same_as_statutory_reporting.required' => 'Please select any one option.',
-                'internal_company_financial_reporting_currency.required_if' => 'This field is required.',
+                //'internal_same_as_statutory_reporting.required' => 'Please select any one option.',
+                //'internal_company_financial_reporting_currency.required_if' => 'This field is required.',
                 'lease_report_same_as_statutory_reporting.required' => 'Please select any one option.',
                 'currency_for_lease_reports.required_if' => 'This field is required'
             ]);
@@ -92,6 +100,7 @@ class CurrenciesController extends Controller
             ReportingCurrencySettings::create($request->except('_token'));
             return redirect()->back()->with('status', 'Reporting Currency Settings has been saved successfully.');
         } catch (\Exception $e) {
+            dd($e);
             abort(404);
         }
     }
@@ -142,9 +151,20 @@ class CurrenciesController extends Controller
                     'title' => 'Currencies Settings'
                 ]
             ];
-            $reporting_currency_settings = ReportingCurrencySettings::query()->where('business_account_id', '=', auth()->user()->id)->first();
+
+            $reporting_currency_settings = ReportingCurrencySettings::query()
+                ->whereIn('business_account_id', getDependentUserIds())
+                ->first();
+
+            $foreign_currencies = ForeignCurrencyTransactionSettings::query()
+                ->whereIn('business_account_id', getDependentUserIds())
+                ->get()
+                ->pluck('foreign_exchange_currency')
+                ->toArray();
+
             if($reporting_currency_settings) {
                 $currencies = Currencies::query()->where('status', '=', '1')->get();
+
                 if($request->isMethod('post')) {
                     $validator = Validator::make($request->except('_token'), [
                         'foreign_exchange_currency' => 'required|exists:currencies,code',
@@ -165,7 +185,6 @@ class CurrenciesController extends Controller
                         return redirect()->back()->withErrors($validator->errors())->withInput($request->except("_token"));
                     }
 
-
                     $request->request->add(['base_currency' => $reporting_currency_settings->currency_for_lease_reports, 'business_account_id' => auth()->user()->id]);
 
                     $data = $request->except('_token');
@@ -179,7 +198,13 @@ class CurrenciesController extends Controller
                     return redirect(route('settings.currencies'))->with('status', 'Foreign Transaction Currency has been added successfully.');
 
                 }
-                return view('settings.currencies.add-foreign-transaction-currency', compact('currencies', 'reporting_currency_settings', 'breadcrumbs'));
+                return view('settings.currencies.add-foreign-transaction-currency',
+                    compact(
+                        'currencies',
+                        'reporting_currency_settings',
+                        'breadcrumbs',
+                        'foreign_currencies'
+                    ));
             } else {
                 return redirect(route('settings.currencies'))->with('error', 'Please create the Reporting currencies first.');
             }
@@ -208,7 +233,10 @@ class CurrenciesController extends Controller
                         return date('jS F Y h:i a', strtotime($data->created_at));
                     })
                     ->addColumn('is_used', function($data){
-                        $is_used = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('lease_contract_id','=',$data->foreign_exchange_currency)->count();
+                        $is_used = Lease::query()
+                            ->whereIn('business_account_id', getDependentUserIds())
+                            ->where('lease_contract_id','=',$data->foreign_exchange_currency)
+                            ->count();
                         return $is_used;
                     })
                     ->toJson();

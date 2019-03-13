@@ -41,7 +41,10 @@ class SelectLowValueController extends Controller
                 //check if the Subsequent Valuation is applied for the lease modification
                 $subsequent_modify_required = $lease->isSubsequentModification();
 
-                $category_excluded = CategoriesLeaseAssetExcluded::query()->whereIn('business_account_id', getDependentUserIds())->get();
+                $category_excluded = CategoriesLeaseAssetExcluded::query()
+                    ->whereIn('business_account_id', getDependentUserIds())
+                    ->where('status', '=', '0')
+                    ->get();
 
                 $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
 
@@ -130,7 +133,10 @@ class SelectLowValueController extends Controller
         if($lease) {
         //Load the assets only for the assets where specific use  is not availbale for sublease and not availble for very/short term lease
 
-            $category_excluded = CategoriesLeaseAssetExcluded::query()->get();
+            $category_excluded = CategoriesLeaseAssetExcluded::query()
+                ->whereIn('business_account_id', getDependentUserIds())
+                ->where('status', '=', '0')
+                ->get();
         
             $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
 

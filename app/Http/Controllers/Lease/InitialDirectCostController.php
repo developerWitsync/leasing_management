@@ -134,7 +134,10 @@ class InitialDirectCostController extends Controller
                     if ($asset_on_balence > 0) {
                         $back_url = route('addlease.balanceasondec.index', ['id' => $id]);
                     } else {
-                        $category_excluded = CategoriesLeaseAssetExcluded::query()->get();
+                        $category_excluded = CategoriesLeaseAssetExcluded::query()
+                            ->whereIn('business_account_id', getDependentUserIds())
+                            ->where('status', '=', '0')
+                            ->get();
                         $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
 
                         $asset_on_discount = LeaseAssets::query()->where('lease_id', '=', $lease->id)
@@ -163,7 +166,10 @@ class InitialDirectCostController extends Controller
                             $back_url = route('addlease.discountrate.index', ['id' => $id]);
                         } else {
                             //$back_url = route('addlease.lowvalue.index', ['id' => $id]);
-                            $category_excluded = CategoriesLeaseAssetExcluded::query()->get();
+                            $category_excluded = CategoriesLeaseAssetExcluded::query()
+                                ->whereIn('business_account_id', getDependentUserIds())
+                                ->where('status', '=', '0')
+                                ->get();
 
                             $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
 

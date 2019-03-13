@@ -34,11 +34,15 @@
                     <!-- Reporting Currency Settings -->
                     @include('settings.currencies._reporting_currencies')
                     <!-- Reporting Currency Settings Ends Here -->
-                    @if(isset($reporting_currency_settings->business_account_id))
-                        <!-- Foreign Currency Transaction Settings -->
-                        @include('settings.currencies._foreign_transaction_settings')
-                        <!-- Foreign Currency Transaction Settings Ends Here -->
-                    @endif
+                    {{-- Commented to show the foreign currency involved without creating the currency settings --}}
+                    {{--@if(isset($reporting_currency_settings->business_account_id))--}}
+                        {{--<!-- Foreign Currency Transaction Settings -->--}}
+                        {{--@include('settings.currencies._foreign_transaction_settings')--}}
+                        {{--<!-- Foreign Currency Transaction Settings Ends Here -->--}}
+                    {{--@endif--}}
+
+                    @include('settings.currencies._foreign_transaction_settings')
+
                 </div>
             </div>
         </div>
@@ -53,6 +57,35 @@
     <script>
 
         $(function(){
+
+            //new code added since we have removed the internal currency on the currencies settings....
+            $("#statutory_financial_reporting_currency").on('change', function(){
+                if($(this).val()!=""){
+                    var selected_value = $(this).val();
+                    bootbox.confirm({
+                        message: "Please Confirm “"+$(this).val()+"” is Your Statutory Reporting Currency, since once selected cannot be changed.",
+                        buttons: {
+                            confirm: {
+                                label: 'Yes',
+                                className: 'btn btn-success'
+                            },
+                            cancel: {
+                                label: 'No',
+                                className: 'btn btn-danger'
+                            }
+                        },
+                        callback: function (result) {
+                            if(result) {
+                                $("#currency_for_lease_reports").val(selected_value);
+                            } else {
+                                $("#statutory_financial_reporting_currency").val('');
+                                $("#currency_for_lease_reports").val('');
+                            }
+                        }
+                    });
+
+                }
+            });
 
             $("input[name='internal_same_as_statutory_reporting']").on('change', function(){
                 if($(this).is(':checked')) {
@@ -155,15 +188,11 @@
                         "orderable": false,
                         "className" : "text-center",
                         "render" : function(data, type, full, meta) {
-                            var html = "<button  data-toggle='tooltip' data-placement='top' title='Edit Country' type=\"button\" data-currency='"+full['id']+"' class=\"btn btn-sm btn-success edit_currency\"><i class=\"fa fa-pencil-square-o fa-lg\"></i></button>";
-
-                           
+                            var html = '';
                             if(full['is_used'] == 0){
-
-                                html += "&nbsp;&nbsp;<button  data-toggle='tooltip' data-placement='top' title='Delete Currency' type=\"button\" data-currency='"+full['id']+"' class=\"btn btn-sm btn-danger delete_currency\">  <i class=\"fa fa-trash-o fa-lg\"></i></button>"
-
+                                var html = "<button  data-toggle='tooltip' data-placement='top' title='Edit Country' type=\"button\" data-currency='"+full['id']+"' class=\"btn btn-sm btn-success edit_currency\"><i class=\"fa fa-pencil-square-o fa-lg\"></i></button>";
+                                html += "&nbsp;&nbsp;<button  data-toggle='tooltip' data-placement='top' title='Delete Currency' type=\"button\" data-currency='"+full['id']+"' class=\"btn btn-sm btn-danger delete_currency\">  <i class=\"fa fa-trash-o fa-lg\"></i></button>";
                             }
-
                             return html;
                         }
                     }

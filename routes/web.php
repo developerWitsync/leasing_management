@@ -12,10 +12,6 @@
 */
 
 
-//Route::get('/', function () {
-//    return view('welcome');
-//});
-
 Route::get('/', 'Master\IndexController@index');
 Route::get('information/{slug}', ['as' => 'information.index', 'uses' => 'Master\IndexController@information']);
 Route::namespace('Master')->prefix('leasing-software')->group(function () {
@@ -307,14 +303,12 @@ Route::middleware('auth')->group(function () {
         Route::prefix('general')->group(function () {
             Route::get('/', ['as' => 'settings.index', 'uses' => 'IndexController@index']);
             Route::post('save', ['as' => 'settings.index.save', 'uses' => 'IndexController@save']);
+            Route::get('changestatus', ['as' => 'settings.leaselockyear.index', 'uses' => 'LeaseLockYearController@index']);
 
-            Route::post('leaselockyear/add', ['as' => 'settings.leaselockyear.addleaselockyear', 'uses' => 'LeaseLockYearController@addLeaseLockYear']);
+            Route::get('fetch-lease-assets-countries', ['as' => 'settings.index.fetchleaseassetcountries', 'uses' => 'LeaseAssetCountriesController@index']);
+            Route::match(['get', 'post'], 'add-lease-asset-country', ['as' => 'settings.index.addleaseassetcountries', 'uses' => 'LeaseAssetCountriesController@create']);
 
-            Route::match(['get', 'post'], '/editleaselockyear/{id}', ['as' => 'settings.leaselockyear.editleaselockyear', 'uses' => 'LeaseLockYearController@editLeaseLockYear']);
-
-            Route::delete('deleteleaselockyear/{id}', ['as' => 'settings.leaselockyear.deleteleaselockyear', 'uses' => 'LeaseLockYearController@deleteLeaseLockYear']);
-
-            Route::get('changestatus', ['as' => 'settings.leaselockyear.changestatus', 'uses' => 'LeaseLockYearController@changeStatus']);
+            Route::delete('delete-lease-asset-country/{id}', ['as' => 'settings.index.deleteleaseassetcountry', 'uses' => 'LeaseAssetCountriesController@delete']);
         });
 
         Route::prefix('lease-classification')->group(function () {
@@ -365,8 +359,6 @@ Route::middleware('auth')->group(function () {
              * Categories of Lease Assets Excluded
              */
             Route::post('add-categories-excluded/{id}', ['as' => 'settings.leaseclassification.addcategoriesexcluded', 'uses' => 'LeaseClassificationController@addCategoriesExcluded']);
-
-            Route::delete('categories-excluded-delete/{id}', ['as' => 'settings.leaseclassification.deletecategoriesexcluded', 'uses' => 'LeaseClassificationController@deleteCategoriesExcluded']);
 
         });
 

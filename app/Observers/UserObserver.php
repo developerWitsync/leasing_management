@@ -125,11 +125,13 @@ class UserObserver
             CategoriesLeaseAssetExcluded::create([
                 'category_id' => '8',
                 'business_account_id'   => $user->id,
+                'status' => '0'
             ]);
 
             CategoriesLeaseAssetExcluded::create([
                 'category_id' => '5',
                 'business_account_id'   => $user->id,
+                'status' => '0'
             ]);
 
             return true;

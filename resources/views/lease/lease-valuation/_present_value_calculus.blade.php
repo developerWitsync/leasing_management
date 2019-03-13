@@ -31,7 +31,9 @@
                     <tr>
                         @php
                             $rowspan = 1;
-                            $allowed_payments = count($data['Jan']) + 1 + 3;
+                            $key = array_keys($data);
+                            $key = $key[0];
+                            $allowed_payments = count($data[$key]) + 1 + 3;
                         @endphp
                         <td rowspan="{{ $allowed_payments }}">
                             {{ $year }}

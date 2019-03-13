@@ -9,9 +9,11 @@
 namespace App\Http\Controllers\Settings;
 
 
+use App\CategoriesLeaseAssetExcluded;
 use App\DepreciationMethod;
 use App\ExpectedLifeOfAsset;
 use App\Http\Controllers\Controller;
+use App\InitialValuationModels;
 use App\LeaseAssetCategories;
 use App\LeaseAssetSubCategorySetting;
 use Illuminate\Http\Request;
@@ -161,33 +163,46 @@ class LeaseAssetsController extends Controller
     public function addCategorySettings($id, Request $request){
         try{
             $lease_asset_category = LeaseAssetCategories::query()->findOrFail($id);
+            $is_excluded = CategoriesLeaseAssetExcluded::query()
+                ->whereIn('business_account_id', getDependentUserIds())
+                ->where('status', '=', '0')
+                ->where('category_id', '=', $id)
+                ->count();
             if($request->isMethod('post')) {
                 $validator =  Validator::make($request->except('_token'),[
                     'title' => [
                         'required',
                         Rule::unique('lease_assets_sub_categories_settings', 'title')->where(function ($query) use ($id) {
-                            return $query->where('business_account_id', '=', auth()->user()->id)->where('category_id','=', $id);
+                            return $query->whereIn('business_account_id', getDependentUserIds())->where('category_id','=', $id);
                         })
                     ],
-                    'depreciation_method_id' => 'required'
+                    'depreciation_method_id' => 'required_if:is_excluded,1',
+                    'initial_valuation_model_id' => 'required_if:is_excluded,1'
                 ], [
-                    'depreciation_method_id.required' => 'Depreciation Method field is required.'
+                    'depreciation_method_id.required_if' => 'Depreciation Method field is required.',
+                    'initial_valuation_model_id.required_if' => 'Initial Valuation Model field is required.'
                 ]);
 
                 if($validator->fails()){
                     return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
                 }
+
                 $request->request->add(['business_account_id' => auth()->user()->id, 'category_id' => $id]);
 
-                $setting = LeaseAssetSubCategorySetting::create($request->except('_token'));
+                $setting = LeaseAssetSubCategorySetting::create($request->except('_token', 'is_excluded'));
+
                 if($setting) {
                     return redirect(route('settings.leaseassets'))->with('status', 'Lease Asset Type setting has been saved successfully.');
                 }
             }
+
             $depreciation_method = DepreciationMethod::query()->get();
+            $initial_valuation_model = InitialValuationModels::query()->get();
             return view('settings.leaseassets.addcategorysettings', compact(
                 'lease_asset_category',
-                'depreciation_method'
+                'depreciation_method',
+                'is_excluded',
+                'initial_valuation_model'
             ));
         } catch (\Exception $e){
             abort(404);
@@ -243,18 +258,27 @@ class LeaseAssetsController extends Controller
                 ->where('id', '=', $id)
                 ->first();
 
+            $is_excluded = CategoriesLeaseAssetExcluded::query()
+                ->whereIn('business_account_id', getDependentUserIds())
+                ->where('status', '=', '0')
+                ->where('category_id', '=', $id)
+                ->count();
+
             if($setting) {
                 if($request->isMethod('post')) {
+
                     $validator =  Validator::make($request->except('_token'),[
                         'title' => [
                             'required',
                             Rule::unique('lease_assets_sub_categories_settings', 'title')->where(function ($query) use ($setting) {
-                                return $query->where('business_account_id', '=', auth()->user()->id)->where('category_id','=', $setting->category_id);
+                                return $query->whereIn('business_account_id', getDependentUserIds())->where('category_id','=', $setting->category_id);
                             })->ignore($id)
                         ],
-                        'depreciation_method_id' => 'required'
+                        'depreciation_method_id' => 'required_if:is_excluded,1',
+                        'initial_valuation_model_id' => 'required_if:is_excluded,1'
                     ], [
-                        'depreciation_method_id.required' => 'Depreciation Method field is required.'
+                        'depreciation_method_id.required_if' => 'Depreciation Method field is required.',
+                        'initial_valuation_model_id.required_if' => 'Initial Valuation Model field is required.'
                     ]);
 
                     if($validator->fails()){
@@ -262,16 +286,19 @@ class LeaseAssetsController extends Controller
                     }
                     $request->request->add(['business_account_id' => auth()->user()->id, 'category_id' => $setting->category_id]);
 
-                    $setting->setRawAttributes($request->except('_token'));
+                    $setting->setRawAttributes($request->except('_token', 'is_excluded'));
                     if($setting->save()) {
                         return redirect(route('settings.leaseassets'))->with('status', 'Lease Asset Type setting has been updated successfully.');
                     }
                 }
 
                 $depreciation_method = DepreciationMethod::query()->get();
+                $initial_valuation_model = InitialValuationModels::query()->get();
                 return view('settings.leaseassets.editcategorysettings', compact(
                     'setting',
-                    'depreciation_method'
+                    'depreciation_method',
+                    'is_excluded',
+                    'initial_valuation_model'
                 ));
             } else {
                 abort(404);

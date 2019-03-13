@@ -175,8 +175,8 @@
                                     <select name="country_id" class="form-control">
                                         <option value="">--Select Country--</option>
                                         @foreach($countries as $country)
-                                            <option value="{{ $country->id }}"
-                                                    @if(old('country_id', $asset->country_id) == $country->id) selected="selected" @endif>{{ $country->name }}</option>
+                                            <option value="{{ $country->country_id }}"
+                                                    @if(old('country_id', $asset->country_id) == $country->country_id) selected="selected" @endif>{{ $country->country->name }}</option>
                                         @endforeach
                                     </select>
 
@@ -258,11 +258,11 @@
                                     <select name="expected_life" class="form-control">
                                         <option value="">--Expected Life Of Lease Asset--</option>
                                         @foreach($expected_life_of_assets as $life)
-                                            @if($asset->category_id != '1' && $life->years < 0)
-                                                @php
-                                                    continue;
-                                                @endphp
-                                            @endif
+                                            {{--@if($asset->category_id && $asset->category_id != '1' && $life->years < 0)--}}
+                                                {{--@php--}}
+                                                    {{--continue;--}}
+                                                {{--@endphp--}}
+                                            {{--@endif--}}
                                             <option value="{{ $life->id }}"
                                                     @if(old('expected_life', $asset->expected_life) == $life->id) selected="selected" @endif>{{ ($life->years > 0)?$life->years:'Indefinite' }}</option>
                                         @endforeach

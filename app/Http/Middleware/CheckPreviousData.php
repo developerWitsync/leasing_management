@@ -60,7 +60,10 @@ class CheckPreviousData
 
         if($step == 9){
             //check if assets exists on lease duration classified, if no than check for step
-            $category_excluded = \App\CategoriesLeaseAssetExcluded::query()->where('business_account_id', getDependentUserIds())->get();
+            $category_excluded = \App\CategoriesLeaseAssetExcluded::query()
+                ->where('business_account_id', getDependentUserIds())
+                ->where('status', '=', '0')
+                ->get();
             $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
 
             $asset = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)
@@ -73,7 +76,10 @@ class CheckPreviousData
 
         if($step == 11) {
 
-            $category_excluded = \App\CategoriesLeaseAssetExcluded::query()->whereIn('business_account_id', getDependentUserIds())->get();
+            $category_excluded = \App\CategoriesLeaseAssetExcluded::query()
+                ->where('business_account_id', getDependentUserIds())
+                ->where('status', '=', '0')
+                ->get();
 
             $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
 
@@ -117,7 +123,10 @@ class CheckPreviousData
 
             if($total_assets == 0){
                 $step = 11;
-                $category_excluded = \App\CategoriesLeaseAssetExcluded::query()->get();
+                $category_excluded = \App\CategoriesLeaseAssetExcluded::query()
+                    ->where('business_account_id', getDependentUserIds())
+                    ->where('status', '=', '0')
+                    ->get();
                 $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
 
                 $total_assets = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)->whereNotIn('specific_use', [2])
@@ -163,7 +172,12 @@ class CheckPreviousData
 
                 if($total_assets == 0){
                     $step = 11;
-                    $category_excluded = \App\CategoriesLeaseAssetExcluded::query()->get();
+
+                    $category_excluded = \App\CategoriesLeaseAssetExcluded::query()
+                        ->where('business_account_id', getDependentUserIds())
+                        ->where('status', '=', '0')
+                        ->get();
+
                     $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
 
                     $total_assets = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)->whereNotIn('specific_use', [2])

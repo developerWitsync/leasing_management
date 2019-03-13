@@ -41,6 +41,14 @@ class LeaseAssetCategories extends Seeder
         [
                 'title' => 'Intangible Assets under Licensing Arrangement',
                 'is_capitalized' => '0'
+        ],
+        [
+            'title' => 'Furniture & Fixtures',
+            'is_capitalized' => '1'
+        ],
+        [
+            'title' => 'Office Equipment',
+            'is_capitalized' => '1'
         ]
     ];
 

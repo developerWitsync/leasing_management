@@ -132,6 +132,9 @@ class LeaseValuationController extends Controller
                 $years = $data['years'];
                 $months = $data['months'];
                 $liability_caclulus_data = $data['present_value_data'];
+
+//                dd($liability_caclulus_data);
+
                 $payments = $asset->payments;
                 return view('lease.lease-valuation._present_value_calculus', compact(
                     'years',

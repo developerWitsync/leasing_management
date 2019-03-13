@@ -146,17 +146,17 @@ class HomeController extends Controller
         try {
             if ($request->ajax()) {
 
-                $data = LeaseAssets::query()->whereHas('lease', function ($query){
+                $data = LeaseAssets::query()->whereHas('lease', function ($query) {
                     $query->whereIn('business_account_id', getDependentUserIds());
                 })
-                ->where('specific_use', 1)
-                ->with('leaseDurationClassified')
-                ->with('leaseSelectLowValue')
-                ->whereHas('leaseSelectLowValue', function ($query) {
-                    $query->where('is_classify_under_low_value', '=', 'no');
-                })->whereHas('leaseDurationClassified', function ($query) {
-                    $query->where('lease_contract_duration_id', '=', '3');
-                })->whereNotIn('category_id', [5, 8])->get()->toArray();
+                    ->where('specific_use', 1)
+                    ->with('leaseDurationClassified')
+                    ->with('leaseSelectLowValue')
+                    ->whereHas('leaseSelectLowValue', function ($query) {
+                        $query->where('is_classify_under_low_value', '=', 'no');
+                    })->whereHas('leaseDurationClassified', function ($query) {
+                        $query->where('lease_contract_duration_id', '=', '3');
+                    })->whereNotIn('category_id', [5, 8])->get()->toArray();
 
                 $total_undiscounted_value = 0;
 
@@ -181,8 +181,9 @@ class HomeController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function categorisedChart(Request $request){
-        try{
+    public function categorisedChart(Request $request)
+    {
+        try {
             if ($request->ajax()) {
 
                 $ids = implode(',', getDependentUserIds());
@@ -210,20 +211,20 @@ class HomeController extends Controller
 
                 $data = DB::select($sql);
                 $resultData = [];
-                foreach ($data as $category){
+                foreach ($data as $category) {
                     $undiscounted_array = [];
                     $undiscounted_array["label"] = $category->title;
-                    $undiscounted_array["value"] =  $category->undiscounted_lease_payment;
+                    $undiscounted_array["value"] = $category->undiscounted_lease_payment;
 
                     $value_of_lease_asset_array = [];
                     $value_of_lease_asset_array["label"] = $category->title;
-                    $value_of_lease_asset_array["value"] =  $category->value_of_lease_asset;
+                    $value_of_lease_asset_array["value"] = $category->value_of_lease_asset;
 
                     $resultData["undiscounted_value"][$category->category_id] = $undiscounted_array;
                     $resultData["present_value"][$category->category_id] = $value_of_lease_asset_array;
                 }
 
-                if(empty($resultData)) {
+                if (empty($resultData)) {
                     return response()->json(['status' => false], 200);
                 } else {
                     return response()->json(['status' => true, 'data' => $resultData], 200);
@@ -232,7 +233,7 @@ class HomeController extends Controller
             } else {
                 abort(404);
             }
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             abort(404);
         }
     }

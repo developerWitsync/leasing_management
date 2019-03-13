@@ -51,8 +51,10 @@ class ProfileController extends Controller
                 'authorised_person_designation' => 'required',
                 'username' => 'required|string|max:255',
                 'email' => 'required|string|email|max:255',
-                'password' => 'nullable|min:6|confirmed',
+                'password' => 'nullable|min:8|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?!.*[\s])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/',
                 'phone' => 'required'
+            ],[
+                'password.regex' => 'Password must have one letter, one capital letter, one number as well.'
             ]);
 
             if ($validator->fails()) {

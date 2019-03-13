@@ -45,6 +45,7 @@ class DatabaseSeeder extends Seeder
 		$this->call(ContractClassifications::class);
 		$this->call(ContractEscalationBasis::class);
 		$this->call(DepreciationMethods::class);
+        $this->call(InitialValuationModels::class);
 		$this->call(EmailTemplates::class);
 		$this->call(EscalationAmountCalculatedOn::class);
 		$this->call(IndustryTypeSeeder::class);

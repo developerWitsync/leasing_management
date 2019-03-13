@@ -84,10 +84,17 @@ class LeaseClassificationController extends Controller
 
         $categories = LeaseAssetCategories::query()->select('id', 'title')->where('status', '=', '1')->get();
         
-        $category_excluded = CategoriesLeaseAssetExcluded::query()->whereIn('category_id',[5,8])->where('status', '=', '1')->where('business_account_id',auth()->user()->id)->with('leaseassetcategories')->get();
-       
+        $category_excluded = CategoriesLeaseAssetExcluded::query()
+            ->whereIn('category_id',[5,8])
+            ->where('status', '=', '0')
+            ->where('business_account_id',auth()->user()->id)
+            ->with('leaseassetcategories')
+            ->get();
 
-         $category_excluded_all = CategoriesLeaseAssetExcluded::query()->get();
+         $category_excluded_all = CategoriesLeaseAssetExcluded::query()
+             ->whereIn('business_account_id', getDependentUserIds())
+             ->groupBy('category_id')
+             ->get();
         
          $category_excluded_id = $category_excluded_all->pluck('category_id')->toArray();
          
@@ -800,20 +807,23 @@ class LeaseClassificationController extends Controller
         try{
             if($request->ajax()) {
                 
-                 $category_id = $id;
+                $category_id = $id;
 
-                $model = CategoriesLeaseAssetExcluded::create([
-                    'category_id' => $category_id,
-                    'business_account_id' => auth()->user()->id,
-                    'status' => '1'
-                 ]);
-                $model1 = LeaseAssetCategories::query()->where('id', '=', $category_id)->first();
-                $data['is_capitalized'] ='1';
-                $model1->setRawAttributes($data);
-                $model1->save();
+                $model = CategoriesLeaseAssetExcluded::query()
+                    ->whereIn('business_account_id', getDependentUserIds())
+                    ->where('category_id', '=', $category_id)
+                    ->first();
 
-                if($model){
-                  Session::flash('status', 'Setting has been added successfully.');
+                if(is_null($model)){
+                    $model = new CategoriesLeaseAssetExcluded();
+                }
+
+                $model->category_id = $category_id;
+                $model->business_account_id = getParentDetails()->id;
+                $model->status = $request->status;
+
+                if($model->save()){
+                    Session::flash('status', 'Setting has been added successfully.');
                     return response()->json(['status' => true], 200);
                 } else {
                     return response()->json(['status' => false, "message" => "Invalid request!"], 200);
@@ -825,39 +835,5 @@ class LeaseClassificationController extends Controller
             abort(404);
         }
     }
-
-     /**
-     * Delete Categories of Lease Assets Excluded
-     * @param $id
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
-     */
-    public function deleteCategoriesExcluded($id, Request $request){
-        try{
-
-            if($request->ajax()) {
-                $categories_excluded = CategoriesLeaseAssetExcluded::query()->where('category_id', $id);
-
-                $model1 = LeaseAssetCategories::query()->where('id', '=', $id)->first();
-                $data['is_capitalized'] ='0';
-                $model1->setRawAttributes($data);
-                $model1->save();
-
-                if($categories_excluded) {
-                    $categories_excluded->delete();
-                    Session::flash('status', 'Setting has been deleted successfully.');
-                    return response()->json(['status' => true], 200);
-                } else {
-                    return response()->json(['status' => false, "message" => "Invalid request!"], 200);
-                }
-            } else {
-                return redirect()->back();
-            }
-        } catch (\Exception $e){
-            abort(404);
-        }
-    }
-
-
 
 }

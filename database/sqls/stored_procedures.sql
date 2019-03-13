@@ -26,9 +26,9 @@ BEGIN
     declare residual_value_gurantee_value FLOAT;
     declare purchase_option_price FLOAT;
     #check if the escalation is applicable for this lease if yes than we have to take out the amount from the escalations
-    select `escalation_clause_applicable` into is_escalation_applicable
-    from `lease` JOIN `lease_assets` ON (`lease`.`id` = `lease_assets`.`lease_id`)
-    where `lease_assets`.`id` = asset_id;
+    select `payment_escalation`.`is_escalation_applicable` into is_escalation_applicable
+    from `payment_escalation`
+    where `payment_escalation`.`asset_id` = asset_id AND `payment_escalation`.`payment_id` = payment_id;
 
     select `name` into payment_name from `lease_assets_payments` where `id` = payment_id;
 

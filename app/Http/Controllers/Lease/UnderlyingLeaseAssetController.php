@@ -15,6 +15,7 @@ use App\Http\Controllers\Controller;
 use App\Lease;
 use App\LeaseAccountingTreatment;
 use App\LeaseAssetCategories;
+use App\LeaseAssetCountries;
 use App\LeaseAssets;
 use App\LeaseAssetSimilarCharacteristicSettings;
 use App\LeaseAssetsNumberSettings;
@@ -66,7 +67,16 @@ class UnderlyingLeaseAssetController extends Controller
                 ->select('number')
                 ->whereIn('business_account_id', getDependentUserIds())
                 ->get();
-            $countries  = Countries::query()->where('status', '=', '1')->get();
+
+//            $countries  = Countries::query()
+//                ->where('status', '=', '1')
+//                ->get();
+
+            $countries = LeaseAssetCountries::query()
+                ->with('country')
+                ->whereIn('business_account_id', getDependentUserIds())
+                ->get();
+
             $use_of_lease_asset = UseOfLeaseAsset::query()->where('status', '=', '1')->get();
             $expected_life_of_assets = ExpectedLifeOfAsset::query()->whereIn('business_account_id', getDependentUserIds())->get();
             $accounting_terms  = LeaseAccountingTreatment::query()->where('upto_year', '=', '2018')->get();

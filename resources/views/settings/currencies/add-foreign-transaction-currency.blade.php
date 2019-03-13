@@ -31,7 +31,7 @@
                                         <select id="foreign_exchange_currency" class="form-control" name="foreign_exchange_currency">
                                             <option value="">--Select Currency--</option>
                                             @foreach($currencies as $currency)
-                                                @if($currency->code != $reporting_currency_settings->statutory_financial_reporting_currency && $currency->code != $reporting_currency_settings->internal_company_financial_reporting_currency && $currency->code != $reporting_currency_settings->currency_for_lease_reports)
+                                                @if($currency->code != $reporting_currency_settings->statutory_financial_reporting_currency && $currency->code != $reporting_currency_settings->internal_company_financial_reporting_currency && $currency->code != $reporting_currency_settings->currency_for_lease_reports && !in_array($currency->code, $foreign_currencies))
                                                     <option value="{{ $currency->code }}" @if($currency->code == old('foreign_exchange_currency')) selected="selected" @endif>{{ $currency->code }}  {{ $currency->symbol }}</option>
                                                 @endif
                                             @endforeach

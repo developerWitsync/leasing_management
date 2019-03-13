@@ -130,7 +130,16 @@ $(document).ready(function () {
             {"data": "location"},
             {"data": "start_date", name: "accural_period"},
             {"data": "remaining_term", name: "remaining_term"},
-            {"data": "lease_select_discount_rate.discount_rate_to_use", "sortable": false},
+            {"data": "id",
+                "render" : function(data, type, row){
+                    if(typeof(data.lease_select_discount_rate)!="undefined"){
+                      return data.lease_select_discount_rate.discount_rate_to_use;
+                    } else {
+                        return "N/A";
+                    }
+                },
+                "sortable": false
+            },
 
 
             {"data": "foreign_initial_lease_currency", "sortable": false},

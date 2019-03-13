@@ -8,6 +8,7 @@
 
 namespace App\Http\Controllers\Leasevaluation;
 
+use App\CategoriesLeaseAssetExcluded;
 use App\Http\Controllers\Controller;
 use App\LeaseHistory;
 use App\ReportingCurrencySettings;
@@ -54,12 +55,29 @@ class LeaseValuationController extends Controller
                 $capitalized = '1'; //set capitalized = 1
             }
 
-            $categories = LeaseAssetCategories::query()->where('is_capitalized', '=', $capitalized)->get();
+            $excluded_categories = CategoriesLeaseAssetExcluded::query()
+                ->whereIn('business_account_id', getDependentUserIds())
+                ->where('status', '=', '0')
+                ->pluck('category_id')->toArray();
+
+            if($capitalized == '1'){
+
+                $categories = LeaseAssetCategories::query()
+                    ->whereNotIn('id', $excluded_categories)
+                    ->get();
+
+            } else {
+
+                $categories = LeaseAssetCategories::query()
+                    ->whereIn('id', $excluded_categories)
+                    ->get();
+            }
 
             return view('leasevaluation.index', compact(
                  'capitalized',
                 'categories',
-                'breadcrumbs'
+                'breadcrumbs',
+                'included_categories'
             ));
         } catch (\Exception $e) {
             abort(404);
@@ -77,6 +95,12 @@ class LeaseValuationController extends Controller
     {
         try {
             if ($request->ajax()) {
+
+                $excluded_categories = CategoriesLeaseAssetExcluded::query()
+                    ->whereIn('business_account_id', getDependentUserIds())
+                    ->where('status', '=', '0')
+                    ->pluck('category_id')->toArray();
+
                 $leases = Lease::query()
                     ->whereIn('business_account_id', getDependentUserIds())->where('status', '=', '1');
 
@@ -96,18 +120,31 @@ class LeaseValuationController extends Controller
                     $assets = $assets->where('category_id', '=', $category_id);
                 }
 
-                $assets = $assets->whereHas('leaseSelectLowValue', function ($query) {
-                    $query->where('is_classify_under_low_value', '=', 'no');
-                })->whereHas('leaseDurationClassified', function ($query) {
-                    $query->where('lease_contract_duration_id', '=', '3');
-                })->whereHas('category', function ($query) use ($capitalized) {
+                if($capitalized == '1') {
+                    $assets = $assets->whereHas('leaseSelectLowValue', function ($query) {
+                        $query->where('is_classify_under_low_value', '=', 'no');
+                    })->whereHas('leaseDurationClassified', function ($query) {
+                        $query->where('lease_contract_duration_id', '=', '3');
+                    });
+                }
+
+                $assets = $assets->whereHas('category', function ($query) use ($capitalized, $excluded_categories) {
                     $query->where('is_capitalized', '=', $capitalized);
+
+                    if($capitalized == '1'){
+                        $query->whereNotIn('id', $excluded_categories);
+                    } else {
+                        $query->whereIn('id', $excluded_categories);
+                    }
                 });
 
                 $reporting_currency = '';
-                $is_foreign_currency_applied = ReportingCurrencySettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
+                $is_foreign_currency_applied = ReportingCurrencySettings::query()
+                    ->whereIn('business_account_id', getDependentUserIds())
+                    ->first();
                 if($is_foreign_currency_applied) {
-                    $reporting_currency = $is_foreign_currency_applied->internal_company_financial_reporting_currency;
+                    //$reporting_currency = $is_foreign_currency_applied->internal_company_financial_reporting_currency;
+                    $reporting_currency = $is_foreign_currency_applied->currency_for_lease_reports;
                     $is_foreign_currency_applied = $is_foreign_currency_applied->is_foreign_transaction_involved;
                 } else {
                     $is_foreign_currency_applied = 'no';
@@ -270,6 +307,7 @@ class LeaseValuationController extends Controller
                 return redirect(route('leasevaluation.index'));
             }
         } catch (\Exception $exception) {
+            dd($exception);
             abort(404);
         }
     }
