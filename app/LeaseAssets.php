@@ -148,14 +148,16 @@ class LeaseAssets extends Model
      */
     public function presentValueOfLeaseLiability($return_value = false){
         $start_date =   Carbon::parse($this->accural_period);
-        $base_date = Carbon::create(2019, 01, 01);
+//        $base_date = Carbon::create(2019, 01, 01);
+        $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date);
+
+
         $base_date = ($start_date->lessThan($base_date))?$base_date:$start_date;
         $end_date = Carbon::parse($this->getLeaseEndDate($this));
 
-//        dd($end_date);
-
         $start_year = $base_date->format('Y');
         $end_year = $end_date->format('Y');
+        $first_month = $base_date->format('m');
 
         if($start_year == $end_year) {
             $years[] = $end_year;
@@ -172,16 +174,20 @@ class LeaseAssets extends Model
 
         $total_lease_liability = 0;
 
+        $first_year = $start_year;
+
         while ($start_year <= $end_year) {
             foreach ($months as $key=>$month){
                 $k_m = sprintf("%02d", $key);
-                //need to call a procedure from here that can return the value of the lease liablity for all the payments of the asset
-                foreach ($this->payments as $payment_key=>$payment){
+                if(($first_year == $start_year && $first_month <= $k_m) || ($first_year < $start_year)){
+                    //need to call a procedure from here that can return the value of the lease liablity for all the payments of the asset
+                    foreach ($this->payments as $payment_key=>$payment){
 //                    dd("call present_value_of_lease_liability('{$start_year}', '{$k_m}', '{$base_date}', '{$this->id}', '{$payment->id}')");
-                    $data = DB::select('call present_value_of_lease_liability(?, ?, ?, ?, ?)',[$start_year, $k_m, $base_date, $this->id, $payment->id]);
-                    if(count($data) > 0){
-                        $total_lease_liability = $total_lease_liability + $data[0]->lease_liability;
-                        $present_value_of_lease_liability[$start_year][$month]["payment_".$payment->id] = $data;
+                        $data = DB::select('call present_value_of_lease_liability(?, ?, ?, ?, ?)',[$start_year, $k_m, $base_date, $this->id, $payment->id]);
+                        if(count($data) > 0){
+                            $total_lease_liability = $total_lease_liability + $data[0]->lease_liability;
+                            $present_value_of_lease_liability[$start_year][$month]["payment_".$payment->id] = $data;
+                        }
                     }
                 }
 

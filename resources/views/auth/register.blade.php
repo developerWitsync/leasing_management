@@ -100,10 +100,9 @@
                                     <div class="form-group {{ $errors->has('applicable_gaap') ? ' has-error' : '' }} col-md-6 col-sm-12 required">
                                         <select id="applicable_gaap" class="form-control" name="applicable_gaap">
                                             <option value="">--Select Primary Applicable GAAP--</option>
-                                            <option value="IFRS- 16 (International Financial Reporting Standard)" @if("IFRS- 16 (International Financial Reporting Standard)" == old('applicable_gaap')) selected="selected" @endif>IFRS- 16 (International Financial Reporting Standard)</option>
-                                            <option value="IND-AS-116 (Indian Accounting Standard)" @if("IND-AS-116 (Indian Accounting Standard)" == old('applicable_gaap')) selected="selected" @endif>IND-AS-116 (Indian Accounting Standard)</option>
-                                            <option value="SFRS(I)16 - (Singapore Financial Reporting Standard (International))" @if("SFRS(I)16 - (Singapore Financial Reporting Standard (International))" == old('applicable_gaap')) selected="selected" @endif>SFRS(I)16 - (Singapore Financial Reporting Standard (International))</option>
-                                            <option value="MFRS 16 - (Malaysian Financial Reporting Standard)" @if("MFRS 16 - (Malaysian Financial Reporting Standard)" == old('applicable_gaap')) selected="selected" @endif>MFRS 16 - (Malaysian Financial Reporting Standard)</option>
+                                            @foreach($accounting_standards as $standard)
+                                                <option value="{{ $standard->id }}" @if($standard->id == old('applicable_gaap')) selected="selected" @endif>{{ $standard->title }}</option>
+                                            @endforeach
                                         </select>
 
                                         @if ($errors->has('applicable_gaap'))

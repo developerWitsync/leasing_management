@@ -8,6 +8,7 @@
 
 namespace App\Http\Controllers;
 
+use App\AccountingStandards;
 use Session;
 use App\SubscriptionPlans;
 use App\Countries;
@@ -37,11 +38,13 @@ class RegisterController extends Controller
             $countries = Countries::query()->where('status','=', '1')->where('trash', '=', '0')->get();
             $industry_types = IndustryTypes::query()->where('status', '=', '1')->get();
             $currencies = Currencies::query()->where('status', '=', '1')->get();
+            $accounting_standards = AccountingStandards::query()->get();
             return view('auth.register', compact(
                 'countries',
                 'industry_types',
                 'currencies',
-                'package'
+                'package',
+                'accounting_standards'
             ));
         } else{
             abort(404);

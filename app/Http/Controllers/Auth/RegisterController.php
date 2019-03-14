@@ -68,7 +68,7 @@ class RegisterController extends Controller
             'country' => 'required|exists:countries,name',
             'state' => 'required_if:country,India|exists:states,state_name|nullable',
             'gstin' => 'required_if:country,India|min:15|nullable',
-            'applicable_gaap' => 'required',
+            'applicable_gaap' => 'required|exists:accounting_standards,id',
             'legal_entity_name' => 'required',
             'authorised_person_name' => 'required|string|max:255',
             'authorised_person_dob' => 'required|date|before:-18 years',

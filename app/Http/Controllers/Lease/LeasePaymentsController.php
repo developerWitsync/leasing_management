@@ -572,9 +572,6 @@ class LeasePaymentsController extends Controller
                         break;
                 }
 
-
-
-
                 return response()->json([
                     'status' => true,
                     'html' => view('lease.payments._due_dates_annexure', compact('errors', 'months', 'years', 'final_payout_dates'))->render(),

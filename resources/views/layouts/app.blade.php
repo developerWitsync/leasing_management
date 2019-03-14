@@ -203,5 +203,20 @@
     });
 
     </script>
+
+
+    <script type="text/javascript">
+        $( window ).on( "load", function() {
+            var index = 0;
+            $('.owl-item').each(function(i,e){
+                if($(this).children('li').children('a').hasClass('active')){
+                    return false;
+                } else {
+                    index = index + 1;
+                }
+            });
+            $(".ul_carousel").trigger("to.owl.carousel", [index, 1, true]);
+        });
+    </script>
 </body>
 </html>

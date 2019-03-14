@@ -58,7 +58,7 @@
                                                    @if(old('date_of_initial_application', isset($settings->date_of_initial_application)?$settings->date_of_initial_application:"") == '1') checked="checked"
                                                    @endif name="date_of_initial_application" value="1" id="jan_1_2019">
                                             <label class="form-check-label" for="jan_1_2019">
-                                                January 01, 2019
+                                                {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->format('F d, Y') }}
                                             </label>
                                         </div>
                                         <div class="form-check col-md-6">
@@ -67,7 +67,7 @@
                                                    @endif name="date_of_initial_application" value="2"
                                                    id="earlier_jan_1_2019" disabled="disabled">
                                             <label class="form-check-label" for="earlier_jan_1_2019">
-                                                Prior to January 01, 2019
+                                                Prior to {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->format('F d, Y') }}
                                             </label>
                                         </div>
                                     </div>

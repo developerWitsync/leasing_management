@@ -59,11 +59,11 @@ class InitialDirectCostController extends Controller
             ];
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
             if ($lease) {
-
+                $base_date =  getParentDetails()->accountingStandard->base_date;
                 //check if the Subsequent Valuation is applied for the lease modification
                 $subsequent_modify_required = $lease->isSubsequentModification();
 
-                $asset = LeaseAssets::query()->where('lease_id', '=', $id)->where('lease_start_date', '>=', '2019-01-01')->first(); //since there can be only one lease asset per lease
+                $asset = LeaseAssets::query()->where('lease_id', '=', $id)->where('lease_start_date', '>=', $base_date)->first(); //since there can be only one lease asset per lease
                 if ($asset) {
                     $currencies = Currencies::query()->where('status', '=', '1')->get();
                     if ($asset->initialDirectCost) {
@@ -130,7 +130,7 @@ class InitialDirectCostController extends Controller
                             
                         }
                     }
-                    $asset_on_balence = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '<', '2019-01-01')->count();
+                    $asset_on_balence = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '<', $base_date)->count();
                     if ($asset_on_balence > 0) {
                         $back_url = route('addlease.balanceasondec.index', ['id' => $id]);
                     } else {
@@ -234,8 +234,9 @@ class InitialDirectCostController extends Controller
         ];
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->with('leaseType')->with('assets')->first();
         if ($lease) {
+            $base_date =  getParentDetails()->accountingStandard->base_date;
             //Load the assets only lease start on or after jan 01 2019
-            $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '>=', '2019-01-01')->get();
+            $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '>=', $base_date)->get();
 
             return view('lease.initial-direct-cost.index', compact(
                 'assets',
@@ -266,7 +267,7 @@ class InitialDirectCostController extends Controller
             ],
         ];
         try {
-
+            $base_date =  getParentDetails()->accountingStandard->base_date;
             $asset = LeaseAssets::query()->findOrFail($id);
             $lease = $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
             $currencies = Currencies::query()->where('status', '=', '1')->get();
@@ -325,7 +326,7 @@ class InitialDirectCostController extends Controller
                 }
 
                 $supplier_details = [];
-                $asset_on_balence = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '<', '2019-01-01')->first();
+                $asset_on_balence = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '<', $base_date)->first();
                 if ($asset_on_balence > 0) {
                     $back_url = route('addlease.balanceasondec.index', ['id' => $id]);
                 } else {

@@ -75,4 +75,8 @@ class User extends Authenticatable
     public function userSubscription(){
         return $this->hasMany('App\UserSubscription', 'user_id', 'id');
     }
+
+    public function accountingStandard(){
+        return $this->hasOne('App\AccountingStandards', 'id', 'applicable_gaap');
+    }
 }

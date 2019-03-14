@@ -46,7 +46,7 @@ class LeaseValuationController extends Controller
                 'title' => 'Lease Valuation'
             ],
         ];
-
+        $base_date =  getParentDetails()->accountingStandard->base_date;
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
         if ($lease) {
             //Load the assets only which will  not in is_classify_under_low_value = Yes in NL10 (Lease Select Low Value)and will not in very short tem/short term lease in NL 8.1(lease_contract_duration table) and not in intengible under license arrangements and biological assets (lease asset categories)
@@ -61,11 +61,11 @@ class LeaseValuationController extends Controller
             // complete Step
             confirmSteps($lease->id, 16);
 
-            $asset_on_lease_incentives = LeaseAssets::query()->where('lease_id', '=', $id)->where('lease_start_date', '>=', '2019-01-01')->count();
+            $asset_on_lease_incentives = LeaseAssets::query()->where('lease_id', '=', $id)->where('lease_start_date', '>=', $base_date)->count();
             if ($asset_on_lease_incentives > 0) {
                 $back_url = route('addlease.leaseincentives.index', ['id' => $id]);
             } else {
-                $asset_on_inital = LeaseAssets::query()->where('lease_id', '=', $id)->where('lease_start_date', '>=', '2019-01-01')->count();
+                $asset_on_inital = LeaseAssets::query()->where('lease_id', '=', $id)->where('lease_start_date', '>=', $base_date)->count();
                 if ($asset_on_inital > 0) {
                     $back_url = route('addlease.initialdirectcost.index', ['id' => $id]);
                 } else {

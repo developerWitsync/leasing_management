@@ -18,6 +18,7 @@ class CheckPreviousData
     public function handle($request, Closure $next, $step, $param_type, $param)
     {
         \Log::info('Checking ----- '. $step. ' On URL ------- '. $request->route()->getName());
+        $base_date =  getParentDetails()->accountingStandard->base_date;
         if ($param_type == 'asset_id') {
             $asset_id = $request->route($param);
             $asset = \App\LeaseAssets::query()->where('id', '=', $asset_id)->first();
@@ -142,7 +143,7 @@ class CheckPreviousData
 
         if($step == 13){
             //Checking Assets for Laese Balence on Dec
-            $total_assets = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)->where('lease_start_date', '<', '2019-01-01')->count();
+            $total_assets = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)->where('lease_start_date', '<', $base_date)->count();
             if($total_assets == 0){
                 $step = 12;
                 //Checking Assets for Select Discount Rate
@@ -194,10 +195,10 @@ class CheckPreviousData
 
         if($step == 14){
             $total_assets = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)
-                ->where('lease_start_date', '>=', '2019-01-01')->count();
+                ->where('lease_start_date', '>=', $base_date)->count();
             if($total_assets == 0){
                 $step = 13;
-                $total_assets = \App\LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '<', '2019-01-01')->count();
+                $total_assets = \App\LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '<', $base_date)->count();
                  if($total_assets == 0){
 
                     $step = 12;
@@ -242,20 +243,20 @@ class CheckPreviousData
 
         if($step == 15){
             $total_assets = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)
-                ->where('lease_start_date', '>=', '2019-01-01')->count();
+                ->where('lease_start_date', '>=', $base_date)->count();
             if($total_assets == 0){
                 $step = 13;
             }
         }
 
         if($step == 16){
-            $asset_on_lease_incentives = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)->where('lease_start_date','>=','2019-01-01')->count();
+            $asset_on_lease_incentives = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)->where('lease_start_date','>=',$base_date)->count();
             if($asset_on_lease_incentives == 0){
                 $step = 15;
-                 $asset_on_initial = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)->where('lease_start_date', '>=', '2019-01-01')->count();
+                 $asset_on_initial = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)->where('lease_start_date', '>=', $base_date)->count();
                  if($asset_on_initial == 0){
                     $step = 14;
-                    $asset_on_balence = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)->where('lease_start_date', '<', '2019-01-01')->count();
+                    $asset_on_balence = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)->where('lease_start_date', '<', $base_date)->count();
                     if($asset_on_balence ==0){
                          $step = 13;   
                     }

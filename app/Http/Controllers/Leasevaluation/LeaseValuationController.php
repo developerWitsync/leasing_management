@@ -96,6 +96,8 @@ class LeaseValuationController extends Controller
         try {
             if ($request->ajax()) {
 
+                $base_date = getParentDetails()->accountingStandard->base_date;
+
                 $excluded_categories = CategoriesLeaseAssetExcluded::query()
                     ->whereIn('business_account_id', getDependentUserIds())
                     ->where('status', '=', '0')
@@ -152,7 +154,6 @@ class LeaseValuationController extends Controller
 
 
                 return datatables()->eloquent($assets)
-
                     ->filter(function ($query) use ($request){
                         if ($request->has('search') && trim($request->search["value"])!="") {
                             $query->where('name', 'like', "%" . $request->search["value"] . "%");
@@ -209,9 +210,9 @@ class LeaseValuationController extends Controller
                             return 'N/A';
                         }
                     })
-                    ->addColumn('start_date', function ($data) {
-                        if (Carbon::parse($data->accural_period)->lessThanOrEqualTo(Carbon::create(2019, 1, 1))) {
-                            return Carbon::create(2019, 1, 1)->format(config('settings.date_format'));
+                    ->addColumn('start_date', function ($data) use ($base_date) {
+                        if (Carbon::parse($data->accural_period)->lessThanOrEqualTo(Carbon::parse($base_date))) {
+                            return Carbon::parse($base_date)->format(config('settings.date_format'));
                         } else {
                             return Carbon::parse($data->accural_period)->format(config('settings.date_format'));
                         }
@@ -255,12 +256,12 @@ class LeaseValuationController extends Controller
                             ->count();
                         return ($subsequent_modifications_count > 0);
                     })
-                    ->addColumn('exchange_rate', function($data) use ($is_foreign_currency_applied, $reporting_currency){
+                    ->addColumn('exchange_rate', function($data) use ($is_foreign_currency_applied, $reporting_currency, $base_date){
                         if($is_foreign_currency_applied == "yes") {
-                            if(Carbon::parse($data->accural_period)->greaterThan(Carbon::create(2019,1,1))){
+                            if(Carbon::parse($data->accural_period)->greaterThan(Carbon::parse($base_date))){
                                 $date = Carbon::parse($data->accural_period)->format('Y-m-d');
                             } else {
-                                $date = '2019-01-01';
+                                $date = $base_date;
                             }
                             $initial_currency = LeaseHistory::query()
                                 ->select('json_data_steps->lessor_details->lease_contract_id as initial_currency')

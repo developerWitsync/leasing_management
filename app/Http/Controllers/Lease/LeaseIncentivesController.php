@@ -40,6 +40,7 @@ class LeaseIncentivesController extends Controller
     public function index_V2($id, Request $request)
     {
         try {
+            $base_date =  getParentDetails()->accountingStandard->base_date;
             $breadcrumbs = [
                 [
                     'link' => route('add-new-lease.index'),
@@ -56,7 +57,7 @@ class LeaseIncentivesController extends Controller
                 //check if the Subsequent Valuation is applied for the lease modification
                 $subsequent_modify_required = $lease->isSubsequentModification();
 
-                $asset = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '>=', '2019-01-01')->first();
+                $asset = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '>=', $base_date)->first();
                 if ($asset) {
                     $currencies = Currencies::query()->where('status', '=', '1')->get();
                     if ($asset->leaseIncentives) {
@@ -173,8 +174,8 @@ class LeaseIncentivesController extends Controller
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
         if ($lease) {
             //Load the assets only lease start on or after jan 01 2019
-
-            $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '>=', '2019-01-01')->get();
+            $base_date =  getParentDetails()->accountingStandard->base_date;
+            $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '>=', $base_date)->get();
             return view('lease.lease-incentives.index', compact(
                 'lease',
                 'assets',
