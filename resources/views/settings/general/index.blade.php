@@ -56,7 +56,8 @@
                                         <div class="form-check col-md-4 ">
                                             <input class="form-check-input" type="radio"
                                                    @if(old('date_of_initial_application', isset($settings->date_of_initial_application)?$settings->date_of_initial_application:"") == '1') checked="checked"
-                                                   @endif name="date_of_initial_application" value="1" id="jan_1_2019">
+                                                   @endif name="date_of_initial_application" value="1" id="jan_1_2019"
+                                                   checked="checked">
                                             <label class="form-check-label" for="jan_1_2019">
                                                 {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->format('F d, Y') }}
                                             </label>
@@ -67,7 +68,8 @@
                                                    @endif name="date_of_initial_application" value="2"
                                                    id="earlier_jan_1_2019" disabled="disabled">
                                             <label class="form-check-label" for="earlier_jan_1_2019">
-                                                Prior to {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->format('F d, Y') }}
+                                                Prior
+                                                to {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->format('F d, Y') }}
                                             </label>
                                         </div>
                                     </div>
@@ -112,7 +114,6 @@
                                         Previous First Lease Start Year</label>
                                     <div class="col-md-6">
                                         <div class="from-group">
-
                                             <select name="min_previous_first_lease_start_year"
                                                     id="min_previous_first_lease_start_year  " type="text"
                                                     placeholder="Select Year"
@@ -169,12 +170,56 @@
                 </div>
             </div>
 
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    Your Annual Financial Reporting Period
+                </div>
+                <div class="panel-body">
+                    <div role="tabpanel" class="tab-pane active">
+                        <form class="form-horizontal" method="POST"
+                              action="{{ route('settings.index.financialreportingperiod') }}">
+                            {{ csrf_field() }}
+                            <div class="form-group{{ $errors->has('reporting_period_id') ? ' has-error' : '' }} required">
+                                <label for="reporting_period_id" class="col-md-4 control-label">Financial Reporting
+                                    Period</label>
+                                <div class="col-md-6">
+                                    <div class="from-group">
+
+                                        <select name="reporting_period_id" id="reporting_period_id"
+                                                placeholder="Select Financial Reporting Period" class="form-control">
+                                            <option value="">Please select Reporting Period</option>
+                                            @foreach ($reporting_periods as $period)
+                                                <option value="{{ $period->id }}"
+                                                        @if(old('reporting_period_id', $financial_reporting_period_setting->reporting_period_id) == $period->id) selected="selected" @endif>{{ $period->title }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    @if ($errors->has('reporting_period_id'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('reporting_period_id') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-6 col-md-offset-4">
+                                        <button type="submit" class="btn btn-success">
+                                            Save
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
 
             <div class="panel panel-info">
                 <div class="panel-heading">
                     Add Countries Where Lease Assets Located
                     <span>
-                    <a href="{{ route('settings.index.addleaseassetcountries') }}" class="btn btn-sm btn-primary pull-right">Add More</a>
+                    <a href="{{ route('settings.index.addleaseassetcountries') }}"
+                       class="btn btn-sm btn-primary pull-right">Add More</a>
                     </span>
                 </div>
                 <div class="panel-body settingTble">
@@ -300,7 +345,7 @@
                             return meta.row + meta.settings._iDisplayStart + 1;
                         }
                     },
-                    {"data": "country.name", sortable:false},
+                    {"data": "country.name", sortable: false},
                     {"data": "id"}
                 ],
                 "columnDefs": [

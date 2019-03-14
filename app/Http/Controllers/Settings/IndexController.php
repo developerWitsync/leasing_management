@@ -9,9 +9,11 @@
 namespace App\Http\Controllers\Settings;
 
 
+use App\FinancialReportingPeriodSetting;
 use App\GeneralSettings;
 use App\LeaseLockYear;
 use App\Http\Controllers\Controller;
+use App\ReportingPeriods;
 use Illuminate\Http\Request;
 use Validator;
 use Session;
@@ -47,13 +49,22 @@ class IndexController extends Controller
         }
 
         $lease_lock_year_range = range(2016, date('Y'));
+
+        $reporting_periods = ReportingPeriods::query()->get();
+
+        $financial_reporting_period_setting = FinancialReportingPeriodSetting::query()->whereIn('business_account_id',getDependentUserIds())->first();
+        if(is_null($financial_reporting_period_setting)){
+            $financial_reporting_period_setting =  new FinancialReportingPeriodSetting();
+        }
         
         return view('settings.general.index', compact(
             'breadcrumbs',
             'settings',
             'lease_lock_year',
             'modication_reason',
-            'lease_lock_year_range'
+            'lease_lock_year_range',
+            'reporting_periods',
+            'financial_reporting_period_setting'
         ));
     }
 
@@ -97,6 +108,36 @@ class IndexController extends Controller
         }
     }
 
-    
+    public function financialReportingPeriod(Request $request){
+        try{
+            if($request->isMethod('post')){
+                $validator = Validator::make($request->all(), [
+                    'reporting_period_id' => 'required|exists:reporting_periods,id'
+                ], [
+                    'reporting_period_id.required' => 'Financial Reporting Period is required.'
+                ]);
+
+                if($validator->fails()){
+                    return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
+                }
+
+                $financial_reporting_period_setting = FinancialReportingPeriodSetting::query()->whereIn('business_account_id',getDependentUserIds())->first();
+                if(is_null($financial_reporting_period_setting)){
+                    $financial_reporting_period_setting =  new FinancialReportingPeriodSetting();
+                }
+                $request->request->add(['business_account_id' => getParentDetails()->id]);
+                $financial_reporting_period_setting->setRawAttributes($request->except('_token'));
+
+                if($financial_reporting_period_setting->save()){
+                    return redirect()->back()->with('status', 'Financial Reporting Period Settings has been saved successfully.');
+                }
+
+            } else {
+                return redirect(route('settings.index'));
+            }
+        }catch (\Exception $e){
+            abort(404);
+        }
+    }
                 
 }

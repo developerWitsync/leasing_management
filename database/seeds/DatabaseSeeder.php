@@ -61,6 +61,7 @@ class DatabaseSeeder extends Seeder
 		$this->call(LeasesExcludedFromTransitionalValuation::class);
 		$this->call(PermissionSeeder::class);
 		$this->call(RateTypes::class);
+        $this->call(ReportingPeriods::class);
 		$this->call(UseOfLeaseAsset::class);
 
         $path = 'database/sqls/subscription_plans.sql';

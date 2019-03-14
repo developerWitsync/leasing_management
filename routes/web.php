@@ -315,8 +315,9 @@ Route::middleware('auth')->group(function () {
 
             Route::get('fetch-lease-assets-countries', ['as' => 'settings.index.fetchleaseassetcountries', 'uses' => 'LeaseAssetCountriesController@index']);
             Route::match(['get', 'post'], 'add-lease-asset-country', ['as' => 'settings.index.addleaseassetcountries', 'uses' => 'LeaseAssetCountriesController@create']);
-
             Route::delete('delete-lease-asset-country/{id}', ['as' => 'settings.index.deleteleaseassetcountry', 'uses' => 'LeaseAssetCountriesController@delete']);
+
+            Route::post('save-financial-reporting-period', ['as' => 'settings.index.financialreportingperiod', 'uses' => 'IndexController@financialReportingPeriod']);
         });
 
         Route::prefix('lease-classification')->group(function () {
