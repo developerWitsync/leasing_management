@@ -41,6 +41,11 @@
                     </tr>
 
                     @foreach($payments as $payment)
+                        @php
+                            if($payment->paymentDueDates->count() == 0){
+                                continue;
+                            }
+                        @endphp
                         <tr>
                             <th>{{ $payment->name }}</th>
                             @php
@@ -65,6 +70,11 @@
                     <tr>
                         <th>Termination</th>
                         @foreach($payments as $payment)
+                            @php
+                                if($payment->paymentDueDates->count() == 0){
+                                    continue;
+                                }
+                            @endphp
                             @foreach($months as $month)
                                 @if(isset($data[$month]))
                                     <td>{{ $data[$month]["payment_".$payment->id][0]->termination_penalty }}</td>
@@ -82,6 +92,11 @@
                     <tr>
                         <th>Residual</th>
                         @foreach($payments as $payment)
+                            @php
+                                if($payment->paymentDueDates->count() == 0){
+                                    continue;
+                                }
+                            @endphp
                             @foreach($months as $month)
                                 @if(isset($data[$month]))
                                     <td>{{ $data[$month]["payment_".$payment->id][0]->residual_value_gurantee_value }}</td>
@@ -98,6 +113,11 @@
                     <tr>
                         <th>Purchase</th>
                         @foreach($payments as $payment)
+                            @php
+                                if($payment->paymentDueDates->count() == 0){
+                                    continue;
+                                }
+                            @endphp
                             @foreach($months as $month)
                                 @if(isset($data[$month]))
                                     <td>{{ $data[$month]["payment_".$payment->id][0]->purchase_option_price }}</td>

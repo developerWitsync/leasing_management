@@ -108,6 +108,12 @@ class IndexController extends Controller
         }
     }
 
+    /**
+     * saves the financial reporting period settings for the business account
+     * also updates the financial reporting period settings
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function financialReportingPeriod(Request $request){
         try{
             if($request->isMethod('post')){

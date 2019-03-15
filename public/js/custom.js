@@ -5,7 +5,7 @@ $(function(){
 
         var ifrsBxHeight = $('.ifrsBx').height() + 20;
 
-        var leftMenuHeight = menuHeight - ifrsBxHeight - 44;
+        var leftMenuHeight = menuHeight - ifrsBxHeight - 64;
 
         $('.mainMenu').height(leftMenuHeight);
     }

@@ -129,13 +129,11 @@ class LeaseValuationController extends Controller
             if ($request->ajax()) {
                 $asset = LeaseAssets::query()->findOrFail($id);
                 $data = $asset->presentValueOfLeaseLiability(false);
+//                echo "<pre>"; print_r($data); die();
                 $years = $data['years'];
                 $months = $data['months'];
                 $liability_caclulus_data = $data['present_value_data'];
-
-//                dd($liability_caclulus_data);
-
-                $payments = $asset->payments;
+                $payments = $asset->payments; //need to take out the payments only where the due dates exists...
                 return view('lease.lease-valuation._present_value_calculus', compact(
                     'years',
                     'months',
@@ -145,6 +143,7 @@ class LeaseValuationController extends Controller
                 abort(404);
             }
         } catch (\Exception $e) {
+            dd($e);
             abort(404);
         }
     }

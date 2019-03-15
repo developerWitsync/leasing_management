@@ -26,8 +26,14 @@
                 <select name="type" class="form-control" @if($subsequent_modify_required) disabled="disabled" @endif>
                     <option value="">--Select Lease Payment Type--</option>
                     @foreach($lease_payments_types as $lease_payments_type)
-                        <option value="{{ $lease_payments_type->id }}"
-                                @if(old('type', $payment->type) == $lease_payments_type->id) selected="selected" @endif>{{ $lease_payments_type->title }}</option>
+                        @if($lease->lease_type_id == 1 && $lease_payments_type->id == 1)
+                            <option value="{{ $lease_payments_type->id }}"
+                                    @if(old('type', $payment->type) == $lease_payments_type->id) selected="selected" @endif>{{ $lease_payments_type->title }}</option>
+                            @php break; @endphp
+                        @else
+                            <option value="{{ $lease_payments_type->id }}"
+                                    @if(old('type', $payment->type) == $lease_payments_type->id) selected="selected" @endif>{{ $lease_payments_type->title }}</option>
+                        @endif
                     @endforeach
                 </select>
                 @if ($errors->has('type'))
@@ -67,11 +73,16 @@
         </div>
 
         <div class="form-group{{ $errors->has('variable_basis') ? ' has-error' : '' }} required variable_basis"
-             style="display: none">
+             @if(old('nature',$payment->nature) == "2") @else style="display: none" @endif>
             <label for="variable_basis" class="col-md-12 control-label">Variable Basis</label>
             <div class="col-md-12">
-                <input id="variable_basis" type="text" placeholder="Name" class="form-control" name="variable_basis"
-                       value="{{ old('variable_basis',$payment->variable_basis) }}">
+                <select name="variable_basis" class="form-control">
+                    <option value="">--Select Variable Basis--</option>
+                    @foreach($variable_basis as $basis)
+                        <option value="{{ $basis->id}}"
+                                @if(old('variable_basis',$payment->variable_basis) == $basis->id) selected="selected" @endif>{{ $basis->title }}</option>
+                    @endforeach
+                </select>
                 @if ($errors->has('variable_basis'))
                     <span class="help-block">
                         <strong>{{ $errors->first('variable_basis') }}</strong>
@@ -81,7 +92,7 @@
         </div>
 
         <div class="form-group{{ $errors->has('variable_amount_determinable') ? ' has-error' : '' }} required variable_basis"
-             style="display: none">
+             @if(old('nature',$payment->nature) == "2") @else style="display: none" @endif>
             <label for="variable_amount_determinable" class="col-md-12 control-label">Variable Amount
                 Determinable</label>
             <div class="col-md-12">
@@ -117,7 +128,7 @@
 
     </div>
 
-    <div class="categoriesOuter clearfix">
+    <div class="categoriesOuter clearfix variable_basis_amount_determinable">
         <div class="categoriesHd">Lease Payment Periods</div>
         <div class="form-group{{ $errors->has('payment_interval') ? ' has-error' : '' }} required">
             <label for="payment_interval" class="col-md-12 control-label">Lease Payment Interval</label>
@@ -235,7 +246,7 @@
         </div>
     </div>
 
-    <div class="categoriesOuter clearfix">
+    <div class="categoriesOuter clearfix variable_basis_amount_determinable">
         <div class="categoriesHd">Lease Payments</div>
         <div class="form-group{{ $errors->has('payment_currency') ? ' has-error' : '' }} required">
             <label for="payment_currency" class="col-md-12 control-label">Lease Payment Currency</label>
@@ -283,8 +294,14 @@
 
                 <select class="form-control" name="lease_payment_per_interval">
                     <option value="">--Select Interval Nature--</option>
-                    <option value="1" @if(old('lease_payment_per_interval', $payment->lease_payment_per_interval) == '1') selected="selected" @endif>Consistent Interval To Interval</option>
-                    <option value="2" @if(old('lease_payment_per_interval', $payment->lease_payment_per_interval) == '2') selected="selected" @endif>Inconsistent Interval to Interval</option>
+                    <option value="1"
+                            @if(old('lease_payment_per_interval', $payment->lease_payment_per_interval) == '1') selected="selected" @endif>
+                        Consistent Interval To Interval
+                    </option>
+                    <option value="2"
+                            @if(old('lease_payment_per_interval', $payment->lease_payment_per_interval) == '2') selected="selected" @endif>
+                        Inconsistent Interval to Interval
+                    </option>
                 </select>
 
                 @if ($errors->has('lease_payment_per_interval'))
@@ -343,7 +360,8 @@
             </div>
         </div>
 
-        <div class="form-group incpi @if(old('lease_payment_per_interval', $payment->lease_payment_per_interval) == '2') @else hidden @endif" style="width: 98%;padding: 15px;">
+        <div class="form-group incpi @if(old('lease_payment_per_interval', $payment->lease_payment_per_interval) == '2') @else hidden @endif"
+             style="width: 98%;padding: 15px;">
 
         </div>
 
@@ -389,6 +407,12 @@
     <script>
 
         $(function () {
+
+            // variable_basis_amount_determinable
+            @if(old('nature', $payment->nature) == "2" && old('variable_amount_determinable', $payment->variable_amount_determinable) == "no")
+                $('.variable_basis_amount_determinable').hide();
+            @endif
+
             $('select[name="lease_payment_per_interval"]').on('change', function () {
                 var selected_value = $(this).val();
                 if (selected_value == "1") {
@@ -433,14 +457,14 @@
             }
 
             @if($payment->id)
-                $.ajax({
-                    url: "{{ route('addlease.payments.loadinconsistentannexure', ['payment_id' => $payment->id]) }}",
-                    type: 'get',
-                    dataType: 'text',
-                    success: function (response) {
-                        $('.incpi').html(response);
-                    }
-                });
+            $.ajax({
+                url: "{{ route('addlease.payments.loadinconsistentannexure', ['payment_id' => $payment->id]) }}",
+                type: 'get',
+                dataType: 'text',
+                success: function (response) {
+                    $('.incpi').html(response);
+                }
+            });
             @endif
         });
 
@@ -460,8 +484,8 @@
             dateFormat: "dd-M-yy",
             changeYear: true,
             changeMonth: true,
-            minDate : new Date('{{ $asset->lease_accural_period }}'),
-            maxDate : new Date('{{ ($asset->getLeaseEndDate($asset)) }}'),
+            minDate: new Date('{{ $asset->lease_accural_period }}'),
+            maxDate: new Date('{{ ($asset->getLeaseEndDate($asset)) }}'),
             {!!  getYearRanage() !!}
             onSelect: function (date, instance) {
                 var _ajax_url = '{{route("lease.checklockperioddate")}}';
@@ -480,6 +504,35 @@
                 //change the values to null as well
                 $('#variable_basis').val('');
                 $('input[name="variable_amount_determinable"]').prop("checked", false);
+            }
+        });
+
+
+        //amount determinable checkbox in case of the Variable basis
+
+        $('input[name="variable_amount_determinable"]').on('click', function () {
+            if ($(this).is(':checked') && $(this).val() == 'yes') {
+                bootbox.alert('Are you sure that variable amount is determinable and to the extent of the determinable amount you want to include in the Lease Valuation. If not, then please select “No” else can proceed further.');
+                $('.variable_basis_amount_determinable').show();
+            } else if ($(this).is(':checked') && $(this).val() == 'no') {
+                //need to show the pop up here
+                bootbox.alert('Are you sure that variable amount is non-determinable. If so, then non-determinable variable amount will not be recorded here and will be expensed in your books of accounts on actual basis in the relevant incurred period.');
+                //need to hide all the other payment details and need to reset all the fields value to null as well..
+                $('.variable_basis_amount_determinable').hide();
+
+                $(".variable_basis_amount_determinable input").each(function(){
+                    var attr = $(this).attr('readonly');
+                    if(typeof attr == typeof undefined){
+                        this.value = "";
+                    }
+                });
+
+                $(".variable_basis_amount_determinable select").each(function(){
+                    var attr = $(this).attr('readonly');
+                    if(typeof attr == typeof undefined){
+                        this.value = "";
+                    }
+                });
             }
         });
 

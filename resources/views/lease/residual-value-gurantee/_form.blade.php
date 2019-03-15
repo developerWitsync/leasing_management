@@ -227,8 +227,10 @@
             $('input[name="amount_determinable"]').not(this).prop('checked', false);
 
             if ($(this).is(':checked') && $(this).val() == 'yes') {
+                bootbox.alert('Are you sure that variable amount is determinable and to the extent of the determinable amount you want to include in the Lease Valuation. If not, then please select “No” else can proceed further.');
                 $("#amount_determinable_no").prop('checked', false);
             } else {
+                bootbox.alert('Are you sure that variable amount is non-determinable. If so, then non-determinable variable amount will not be recorded here and will be expensed in your books of accounts on actual basis in the relevant incurred period.');
                 $("#amount_determinable_yes").prop('checked', false);
             }
 

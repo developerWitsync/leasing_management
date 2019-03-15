@@ -271,11 +271,11 @@
                             <td>{{$payment->name}}</td>
                             <td>{{$payment->paymentType->title}}</td>
                             <td>{{$payment->paymentNature->title}}</td>
-                            <td>{{$payment->paymentFrequency->title}}</td>
-                            <td>{{$payment->paymentInterval->title}}</td>
-                            <td>{{date('d-m-Y', strtotime($payment->first_payment_start_date))}}</td>
-                            <td>{{date('d-m-Y', strtotime($payment->last_payment_end_date))}}</td>
-                            <td>{{date('d-m-Y', strtotime($payment->first_payment_start_date))}}</td>
+                            <td>{{ ($payment->payment_interval)?$payment->paymentFrequency->title:"N/A"}}</td>
+                            <td>{{ ($payment->payout_time)?$payment->paymentInterval->title:"N/A"}}</td>
+                            <td>{{ ($payment->first_payment_start_date)?date('d-m-Y', strtotime($payment->first_payment_start_date)) : "N/A" }}</td>
+                            <td>{{ ($payment->last_payment_end_date) ? date('d-m-Y', strtotime($payment->last_payment_end_date)) : "N/A" }}</td>
+                            <td>{{ ($payment->first_payment_start_date) ? date('d-m-Y', strtotime($payment->first_payment_start_date)) : "N/A" }}</td>
                             <td>{{$payment->total_amount_per_interval}}</td>
                             <td>{{$payment->total_amount_per_interval}}</td>
                             <td>

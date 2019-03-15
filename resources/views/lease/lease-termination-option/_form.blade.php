@@ -80,7 +80,7 @@
             <div class="col-md-12">
 
                 <input type="text" placeholder="Expected Lease End Date" class="form-control lease_period" id="lease_end_date"
-                       name="lease_end_date" value="{{ old('lease_end_date', $model->lease_end_date) }}" autocomplete="off" readonly="true">
+                       name="lease_end_date" value="{{ old('lease_end_date', $model->lease_end_date) }}" autocomplete="off" readonly="true" style="background-color: #ffffff">
                 
                 @if ($errors->has('lease_end_date'))
                     <span class="help-block">
@@ -194,6 +194,15 @@
                 $('#hidden-field').show();
 
             } else {
+
+                //make all the other fields value as blank
+
+                $('input[name="exercise_termination_option_available"]').prop('checked', false);
+                $('#lease_end_date').val('');
+                $('input[name="termination_penalty_applicable"]').prop('checked', false);
+                $('#termination_penalty').val('');
+
+
                 $('#hidden-field').hide();
                 $('#hidden-fields').hide();
                 $('#hidden-elements').hide();
@@ -204,6 +213,11 @@
             if ($(this).is(':checked') && $(this).val() == 'yes') {
                 $('#hidden-elements').show();
             } else {
+
+                $('#lease_end_date').val('');
+                $('input[name="termination_penalty_applicable"]').prop('checked', false);
+                $('#termination_penalty').val('');
+
                 $('#hidden-elements').hide();
                 $('#hidden-fields').hide();
             }
@@ -213,6 +227,11 @@
             if ($(this).is(':checked') && $(this).val() == 'yes') {
                 $('#hidden-fields').show();
             } else {
+                $('#hidden-fields').hide();
+
+                $('#termination_penalty').val('');
+
+                //$('#hidden-elements').hide();
                 $('#hidden-fields').hide();
             }
         });

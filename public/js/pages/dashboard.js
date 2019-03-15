@@ -8,24 +8,25 @@ function ChartFirst(){
         type : "get",
         dataType : "json",
         success : function(response){
-            historicalBarChart1 = [
-                {
-                    key: "Cumulative Return",
-                    values: [
-                        {
-                            "label" : "Undiscounted value",
-                            "color": "#d67777",
-                            "value" : parseInt(response.total_undiscounted_value)
-                        } ,
-                        {
-                            "label" : "Present value" ,
-                            "color": "#4f99b4",
-                            "value" : parseInt(response.total_present_value_lease_asset)
-                        }
-                    ]
-                }
-            ];
-
+            if(response.status && parseFloat(response.total_present_value_lease_asset) > 0 && parseFloat(response.total_undiscounted_value) > 0){
+                historicalBarChart1 = [
+                    {
+                        key: "Cumulative Return",
+                        values: [
+                            {
+                                "label" : "Undiscounted value",
+                                "color": "#d67777",
+                                "value" : parseInt(response.total_undiscounted_value)
+                            } ,
+                            {
+                                "label" : "Present value" ,
+                                "color": "#4f99b4",
+                                "value" : parseInt(response.total_present_value_lease_asset)
+                            }
+                        ]
+                    }
+                ];
+            }
             nv.addGraph(function() {
                 var chart = nv.models.discreteBarChart()
                     .x(function(d) { return d.label; })

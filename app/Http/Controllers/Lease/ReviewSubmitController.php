@@ -48,43 +48,47 @@ class ReviewSubmitController extends Controller
      */
     public function index($id, Request $request)
     {
-        $breadcrumbs = [
-            [
-                'link' => route('add-new-lease.index'),
-                'title' => 'Add New Lease'
-            ],
-            [
-                'link' => route('addlease.reviewsubmit.index', ['id' => $id]),
-                'title' => 'Review & Submit'
-            ],
-        ];
+        try{
+            $breadcrumbs = [
+                [
+                    'link' => route('add-new-lease.index'),
+                    'title' => 'Add New Lease'
+                ],
+                [
+                    'link' => route('addlease.reviewsubmit.index', ['id' => $id]),
+                    'title' => 'Review & Submit'
+                ],
+            ];
 
-        $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
+            $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
 
-        if ($lease) {
+            if ($lease) {
 
-            //check if the Subsequent Valuation is applied for the lease modification
-            $subsequent_modify_required = $lease->isSubsequentModification();
+                //check if the Subsequent Valuation is applied for the lease modification
+                $subsequent_modify_required = $lease->isSubsequentModification();
 
-            $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->get();
-            $contract_classifications = ContractClassifications::query()->select('id', 'title')->where('status', '=', '1')->get();
+                $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->get();
+                $contract_classifications = ContractClassifications::query()->select('id', 'title')->where('status', '=', '1')->get();
 
-            //to get current step for steps form
-            $current_step = $this->current_step;
+                //to get current step for steps form
+                $current_step = $this->current_step;
 
-            return view('lease.review-submit.index', compact(
-                'lease',
-                'assets',
-                'breadcrumbs',
-                'reporting_currency_settings',
-                'contract_classifications',
-                'reporting_foreign_currency_transaction_settings',
-                'current_step',
-                'subsequent_modify_required'
-            ));
+                return view('lease.review-submit.index', compact(
+                    'lease',
+                    'assets',
+                    'breadcrumbs',
+                    'reporting_currency_settings',
+                    'contract_classifications',
+                    'reporting_foreign_currency_transaction_settings',
+                    'current_step',
+                    'subsequent_modify_required'
+                ));
 
-        } else {
-            abort(404);
+            } else {
+                abort(404);
+            }
+        }catch (\Exception $e){
+            dd($e);
         }
     }
 

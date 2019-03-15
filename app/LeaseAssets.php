@@ -182,7 +182,6 @@ class LeaseAssets extends Model
                 if(($first_year == $start_year && $first_month <= $k_m) || ($first_year < $start_year)){
                     //need to call a procedure from here that can return the value of the lease liablity for all the payments of the asset
                     foreach ($this->payments as $payment_key=>$payment){
-//                    dd("call present_value_of_lease_liability('{$start_year}', '{$k_m}', '{$base_date}', '{$this->id}', '{$payment->id}')");
                         $data = DB::select('call present_value_of_lease_liability(?, ?, ?, ?, ?)',[$start_year, $k_m, $base_date, $this->id, $payment->id]);
                         if(count($data) > 0){
                             $total_lease_liability = $total_lease_liability + $data[0]->lease_liability;
