@@ -15,18 +15,27 @@
                 </div>
             @endif
 
-                @include('lease._subsequent_details')
+            @include('lease._subsequent_details')
 
             <div class="tab-content" style="padding: 0px;">
                 <div role="tabpanel" class="tab-pane active">
-                    <form role="form" action="{{ route('lease.esacalation.applicablestatus', ['id' => $lease->id]) }}" class="form-horizontal" method="post" enctype="multipart/form-data" id="lease_esclation">
+                    <form role="form" action="{{ route('lease.esacalation.applicablestatus', ['id' => $lease->id]) }}"
+                          class="form-horizontal" method="post" enctype="multipart/form-data" id="lease_esclation">
                         {{ csrf_field() }}
                         <div class="form-group{{ $errors->has('escalation_clause_applicable') ? ' has-error' : '' }} required">
-                            <label for="escalation_clause_applicable" class="col-md-4 control-label">Any Escalation Clause Applicable</label>
+                            <label for="escalation_clause_applicable" class="col-md-4 control-label">Any Escalation
+                                Clause Applicable</label>
                             <div class="col-md-6 form-check form-check-inline">
-                                <input class="form-check-input" name="escalation_clause_applicable" id="yes" type="checkbox" value="yes" @if(old('escalation_clause_applicable', $lease->escalation_clause_applicable) == "yes") checked="checked" @endif @if($subsequent_modify_required && $lease->escalation_clause_applicable == "yes") disabled="disabled" @endif>
-                                <label class="form-check-label" for="yes" id="yes" style="vertical-align: 4px">Yes</label><br>
-                                <input class="form-check-input" name="escalation_clause_applicable" id="no" type="checkbox" value="no" @if(old('escalation_clause_applicable', $lease->escalation_clause_applicable)  == "no") checked="checked" @endif @if($subsequent_modify_required) disabled="disabled" @endif>
+                                <input class="form-check-input" name="escalation_clause_applicable" id="yes"
+                                       type="checkbox" value="yes"
+                                       @if(old('escalation_clause_applicable', $lease->escalation_clause_applicable) == "yes") checked="checked"
+                                       @endif @if($subsequent_modify_required && $lease->escalation_clause_applicable == "yes") disabled="disabled" @endif>
+                                <label class="form-check-label" for="yes" id="yes"
+                                       style="vertical-align: 4px">Yes</label><br>
+                                <input class="form-check-input" name="escalation_clause_applicable" id="no"
+                                       type="checkbox" value="no"
+                                       @if(old('escalation_clause_applicable', $lease->escalation_clause_applicable)  == "no") checked="checked"
+                                       @endif @if($subsequent_modify_required) disabled="disabled" @endif>
                                 <label class="form-check-label" for="no" id="no" style="vertical-align: 4px">No</label>
                                 @if ($errors->has('escalation_clause_applicable'))
                                     <span class="help-block">
@@ -34,7 +43,8 @@
                                     </span>
                                 @endif
                                 @if($subsequent_modify_required && $lease->escalation_clause_applicable == "yes")
-                                    <input type="hidden" name="escalation_clause_applicable" value="{{ $lease->escalation_clause_applicable }}">
+                                    <input type="hidden" name="escalation_clause_applicable"
+                                           value="{{ $lease->escalation_clause_applicable }}">
                                 @endif
                             </div>
                         </div>
@@ -52,35 +62,37 @@
                         @include('lease.escalation._list_escalation')
                     @endif
 
-<div class="form-group btnMainBx clearfix">
- <div class="col-md-4 col-sm-4 btn-backnextBx">
-        <a href="{{ $back_url }}" class="btn btn-danger"><i class="fa fa-arrow-left"></i> {{ env('BACK_LABEL')}}</a>
-</div>
+                    <div class="form-group btnMainBx clearfix">
+                        <div class="col-md-4 col-sm-4 btn-backnextBx">
+                            <a href="{{ $back_url }}" class="btn btn-danger"><i
+                                        class="fa fa-arrow-left"></i> {{ env('BACK_LABEL')}}</a>
+                        </div>
 
-<div class="col-md-4 col-sm-4 btn-backnextBx rightlign ">
-@if($lease->escalation_clause_applicable == 'no')
-<a href="{{ route('addlease.lowvalue.index', ['id' => $lease->id]) }}" class="btn btn-primary">{{ env('NEXT_LABEL') }} <i class="fa fa-arrow-right"></i></a>
-@elseif($show_next)
-<a href="{{ route('addlease.lowvalue.index', ['id' => $lease->id]) }}" class="btn btn-primary">{{ env('NEXT_LABEL') }} <i class="fa fa-arrow-right"></i></a>
-@endif
+                        <div class="col-md-4 col-sm-4 btn-backnextBx rightlign ">
+                            @if($lease->escalation_clause_applicable == 'no')
+                                <a href="{{ route('addlease.lowvalue.index', ['id' => $lease->id]) }}"
+                                   class="btn btn-primary">{{ env('NEXT_LABEL') }} <i class="fa fa-arrow-right"></i></a>
+                            @elseif($show_next)
+                                <a href="{{ route('addlease.lowvalue.index', ['id' => $lease->id]) }}"
+                                   class="btn btn-primary">{{ env('NEXT_LABEL') }} <i class="fa fa-arrow-right"></i></a>
+                            @endif
 
-</div>
- </div>
-
+                        </div>
+                    </div>
 
 
                 </div>
-         </div>
+            </div>
         </div>
     </div>
 @endsection
 @section('footer-script')
     <script>
-        $(document).ready(function(){
-            $(document).on('click', 'input[type="checkbox"]', function() {
+        $(document).ready(function () {
+            $(document).on('click', 'input[type="checkbox"]', function () {
                 $('input[type="checkbox"]').not(this).prop('checked', false);
             });
         });
-       
+
     </script>
 @endsection

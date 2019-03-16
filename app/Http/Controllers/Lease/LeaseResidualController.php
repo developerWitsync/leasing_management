@@ -8,32 +8,21 @@
 
 namespace App\Http\Controllers\Lease;
 
-
-use App\Countries;
-use App\ExpectedLifeOfAsset;
 use App\Http\Controllers\Controller;
 use App\Lease;
 use App\Currencies;
-use App\LeaseAccountingTreatment;
-use App\LeaseAssetCategories;
 use App\LeaseAssets;
-use App\LeaseAssetSimilarCharacteristicSettings;
-use App\LeaseAssetsNumberSettings;
-use App\LeaseAssetSubCategorySetting;
 use App\LeasePaymentsBasis;
-use App\UseOfLeaseAsset;
 use App\LeaseResidualValue;
 use App\ReportingCurrencySettings;
 use App\ForeignCurrencyTransactionSettings;
 use App\LeaseAssetPaymentsNature;
-use App\LeaseAssetPayments;
-use App\FairMarketValue;
 use Illuminate\Http\Request;
 use Validator;
 
 class LeaseResidualController extends Controller
 {
-    private $current_step = 8;
+    private $current_step = 7;
     protected function validationRules()
     {
         return [
@@ -112,7 +101,7 @@ class LeaseResidualController extends Controller
 
                     if ($residual_value->save()) {
                         // complete Step
-                        confirmSteps($lease->id, 8);
+                        confirmSteps($lease->id, $this->current_step);
                         if($request->has('action') && $request->action == "next") {
                             return redirect(route('addlease.durationclassified.index',['id' => $lease->id]))->with('status', 'Residual value Gurantee has been added successfully.');
                         } else {
@@ -246,7 +235,7 @@ class LeaseResidualController extends Controller
 
                     if ($residual_value) {
                         // complete Step
-                        $complete_step8 = confirmSteps($lease->id, 8);
+                        $complete_step8 = confirmSteps($lease->id, $this->current_step);
 
                         return redirect(route('addlease.residual.index', ['id' => $lease->id]))->with('status', 'Residual value Gurantee has been added successfully.');
                     }

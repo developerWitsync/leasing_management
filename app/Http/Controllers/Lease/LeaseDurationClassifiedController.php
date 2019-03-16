@@ -19,7 +19,7 @@ use Validator;
 
 class LeaseDurationClassifiedController extends Controller
 {
-    private $current_step = 9;
+    private $current_step = 8;
 
     protected function validationRules()
     {
@@ -93,7 +93,7 @@ class LeaseDurationClassifiedController extends Controller
                         $model->setRawAttributes($data);
                         if ($model->save()) {
                             // complete Step
-                            confirmSteps($lease->id, 9);
+                            confirmSteps($lease->id, $this->current_step);
 
                             if ($request->has('action') && $request->action == "next") {
                                 return redirect(route('lease.escalation.index', ['id' => $lease->id]))->with('status', 'Lease Duration Classified Value has been added successfully.');
@@ -226,7 +226,7 @@ class LeaseDurationClassifiedController extends Controller
                     if ($duration_classified_value) {
 
                         // complete Step
-                        confirmSteps($lease->id, 9);
+                        confirmSteps($lease->id, $this->current_step);
 
                         return redirect(route('addlease.durationclassified.index', ['id' => $lease->id]))->with('status', 'Lease Duration Classified Value has been added successfully.');
                     }

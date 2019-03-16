@@ -80,7 +80,7 @@
                         @foreach($assets as $key=>$asset)
                             <tr>
                                 <td>{{ $key + 1 }}</td>
-                               
+
                                 @if(isset($asset->category->title))
                                     <td>
                                         {{ $asset->category->title }}
@@ -138,7 +138,7 @@
                         @foreach($assets as $key=>$asset)
                             <tr>
                                 <td>{{ $key + 1 }}</td>
-                                
+
                                 @if(isset($asset->country->name))
                                     <td>
                                         {{ $asset->country->name }}
@@ -185,7 +185,7 @@
                     <thead>
                     <tr>
                         <th>Sr. No.</th>
-                     
+
                         <th>Lease Start Date</th>
                         <th>Initial Lease Free Period, If any</th>
                         <th>Start Date of Lease Payment/Accrual Period</th>
@@ -199,7 +199,7 @@
                         @foreach($assets as $key=>$asset)
                             <tr>
                                 <td>{{ $key + 1 }}</td>
-                               
+
                                 @if(isset($asset->lease_start_date))
                                     <td>
                                         {{date('d-m-Y', strtotime($asset->lease_start_date))}}
@@ -252,22 +252,22 @@
                 <div class="panel-heading">Section E: Lease Payments</div>
                 <table class="table table-bordered table-responsive">
                     <thead>
-                        <th>Lease Payment Name</th>
-                        <th>Lease Payment Type</th>
-                        <th>Lease Payment Nature</th>
-                        <th>Lease Payment Interval</th>
-                        <th>Lease Payment Payout Time</th>
-                        <th>First Lease Payment Start Date</th>
-                        <th>Last Lease Payment End Date</th>
-                        <th>Lease Payment Base</th>
-                        <th>Total Lease Amount Per Interval</th>
-                        <th>Total Undiscounted Lease Payments</th>
-                        <th>Action</th>
+                    <th>Lease Payment Name</th>
+                    <th>Lease Payment Type</th>
+                    <th>Lease Payment Nature</th>
+                    <th>Lease Payment Interval</th>
+                    <th>Lease Payment Payout Time</th>
+                    <th>First Lease Payment Start Date</th>
+                    <th>Last Lease Payment End Date</th>
+                    <th>Lease Payment Base</th>
+                    <th>Total Lease Amount Per Interval</th>
+                    <th>Total Undiscounted Lease Payments</th>
+                    <th>Action</th>
                     </thead>
                     <tbody>
 
-                        @foreach($asset->payments as $payment)
-                            <tr>
+                    @foreach($asset->payments as $payment)
+                        <tr>
                             <td>{{$payment->name}}</td>
                             <td>{{$payment->paymentType->title}}</td>
                             <td>{{$payment->paymentNature->title}}</td>
@@ -279,16 +279,16 @@
                             <td>{{$payment->total_amount_per_interval}}</td>
                             <td>{{$payment->total_amount_per_interval}}</td>
                             <td>
-                                <a href="{{ route('lease.payments.add', ['lease_id' => $lease->id, 'asset_id' => $asset->id, 'payment_id'=> $payment->id]) }}">
+                                <a href="{{ route('lease.payments.updateassetpayment', ['id' => $asset->id, 'payment_id'=> $payment->id]) }}">
                                     <button data-toggle='tooltip' data-placement='top' title='Edit Lease Payments'
                                             type="button" class="btn btn-sm  btn-success"><i
                                                 class="fa fa-pencil-square-o fa-lg"></i>
                                     </button>
                                 </a>
                             </td>
-                            <tr>
-                        @endforeach
-                    </tr>
+                        <tr>
+                            @endforeach
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -313,7 +313,7 @@
                         @foreach($assets as $key=>$asset)
                             <tr>
                                 <td>{{ $key + 1 }}</td>
-                               
+
                                 @if(isset($asset->fairMarketValue->total_units))
                                     <td>
                                         {{ $asset->fairMarketValue->total_units }}
@@ -329,13 +329,13 @@
                                     <td>-</td>
                                 @endif
 
-                            @if(isset($asset->residualGuranteeValue->other_desc))
-                            <td>{{ $asset->residualGuranteeValue->other_desc }}</td>
+                                @if(isset($asset->residualGuranteeValue->other_desc))
+                                    <td>{{ $asset->residualGuranteeValue->other_desc }}</td>
 
-                             @else
+                                @else
                                     <td>-</td>
                                 @endif
-                                
+
                                 @if(isset($asset->terminationOption->termination_penalty))
                                     <td>
                                         {{ $asset->terminationOption->termination_penalty }}
@@ -389,7 +389,7 @@
                         @foreach($assets as $key=>$asset)
                             <tr>
                                 <td>{{ $key + 1 }}</td>
-                                
+
                                 @if(isset($asset->leaseDurationClassified->getLeaseClassification->title))
                                     <td>
                                         {{ $asset->leaseDurationClassified->getLeaseClassification->title}}
@@ -459,7 +459,7 @@
                         @foreach($assets as $key=>$asset)
                             <tr>
                                 <td>{{ $key + 1 }}</td>
-                               
+
 
                                 <td>{{ is_null($asset->lease_liablity_value)?'-':$asset->lease_liablity_value }}</td>
                                 <td>{{ is_null($asset->value_of_lease_asset)?'-':$asset->value_of_lease_asset }}</td>
@@ -480,19 +480,19 @@
             </div>
 
 
-
             <div class="form-group btnMainBx clearfix">
                 <div class="col-md-4 col-sm-4 btn-backnextBx">
 
-                 <a href="{{ route('add-new-lease.index',['id' => $lease->id]) }}" class="btn btn-danger"><i class="fa fa-arrow-left"></i> {{ env('BACK_LABEL')}}</a>
+                    <a href="{{ route('add-new-lease.index',['id' => $lease->id]) }}" class="btn btn-danger"><i
+                                class="fa fa-arrow-left"></i> {{ env('BACK_LABEL')}}</a>
                 </div>
-                 <div class="col-md-4 col-sm-4 btnsubmitBx aligncenter">
-                     <a href="#" class="btn btn-primary">{{ env('PRINT_LABEL') }}</a>
+                <div class="col-md-4 col-sm-4 btnsubmitBx aligncenter">
+                    <a href="#" class="btn btn-primary">{{ env('PRINT_LABEL') }}</a>
                 </div>
-                
+
                 <div class="col-md-4 col-sm-4 btnsubmitBx alignright">
                     <form style="display: inline-block;"
-                          action="{{route('addlease.reviewsubmit.submit', ['id'=>$lease->id])}}" method="post">
+                          action="{{route('addlease.reviewsubmit.submit', ['id'=>$lease->id])}}" id="submitLeaseForm" method="post">
                         {{ csrf_field() }}
                         <button type="submit" class="btn btn-success">Submit</button>
                     </form>

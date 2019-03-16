@@ -56,8 +56,18 @@ class LeaseIncentivesController extends Controller
 
                 //check if the Subsequent Valuation is applied for the lease modification
                 $subsequent_modify_required = $lease->isSubsequentModification();
+                $category_excluded = \App\CategoriesLeaseAssetExcluded::query()
+                    ->whereIn('business_account_id', getDependentUserIds())
+                    ->where('status', '=', '0')
+                    ->get();
 
-                $asset = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '>=', $base_date)->first();
+                $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
+
+                $asset = LeaseAssets::query()->where('lease_id', '=', $lease->id)
+                    ->where('lease_start_date', '>=', $base_date)
+                    ->whereNotIn('category_id', $category_excluded_id)
+                    ->first();
+
                 if ($asset) {
                     $currencies = Currencies::query()->where('status', '=', '1')->get();
                     if ($asset->leaseIncentives) {

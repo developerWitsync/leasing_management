@@ -117,7 +117,7 @@
                         </div>
                         @if($show_next)
                             <div class="col-md-8 col-sm-8 btn-backnextBx rightlign ">
-                                <a href="{{ route('addlease.fairmarketvalue.index', ['id' => $lease->id]) }}"
+                                <a href="{{ route('addlease.residual.index', ['id' => $lease->id]) }}"
                                    class="btn btn-primary save_next"> {{ env('NEXT_LABEL') }} <i
                                             class="fa fa-arrow-right"></i></a>
                             </div>

@@ -27,7 +27,7 @@ use Validator;
 
 class EscalationController extends Controller
 {
-    private $current_step = 10;
+    private $current_step = 9;
     /**
      * Renders the index view for the Lease Escalation Clause
      * @param $id
@@ -61,7 +61,7 @@ class EscalationController extends Controller
                 $required_escalations = 0;
                 $completed_escalations = 0;
                 if($lease->escalation_clause_applicable == "no") {
-                    confirmSteps($lease->id,10);
+                    confirmSteps($lease->id,$this->current_step);
                     $show_next = true;
                 } else {
                     foreach ($payments as $payment){
@@ -136,7 +136,7 @@ class EscalationController extends Controller
                 $lease->escalation_clause_applicable = $request->escalation_clause_applicable;
 
                 if($request->escalation_clause_applicable == "no"){
-                    confirmSteps($lease->id,10);
+                    confirmSteps($lease->id,$this->current_step);
                 } else {
                     \App\LeaseCompletedSteps::query()->where('lease_id', '=',$lease->id)->where('completed_step', '=', 10)->delete();
                 }
@@ -285,7 +285,7 @@ class EscalationController extends Controller
                             }
                         }
                         // complete Step
-                        confirmSteps($lease->id,10);
+                        confirmSteps($lease->id,$this->current_step);
 
                         return redirect(route('lease.escalation.index', ['id' =>$lease ]))->with('status', 'Escalation Details has been saved sucessfully.');
                     }

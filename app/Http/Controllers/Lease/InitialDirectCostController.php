@@ -63,7 +63,18 @@ class InitialDirectCostController extends Controller
                 //check if the Subsequent Valuation is applied for the lease modification
                 $subsequent_modify_required = $lease->isSubsequentModification();
 
-                $asset = LeaseAssets::query()->where('lease_id', '=', $id)->where('lease_start_date', '>=', $base_date)->first(); //since there can be only one lease asset per lease
+                $category_excluded = \App\CategoriesLeaseAssetExcluded::query()
+                    ->whereIn('business_account_id', getDependentUserIds())
+                    ->where('status', '=', '0')
+                    ->get();
+
+                $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
+
+                $asset = LeaseAssets::query()->where('lease_id', '=', $id)
+                    ->where('lease_start_date', '>=', $base_date)
+                    ->whereNotIn('category_id', $category_excluded_id)
+                    ->first(); //since there can be only one lease asset per lease
+
                 if ($asset) {
                     $currencies = Currencies::query()->where('status', '=', '1')->get();
                     if ($asset->initialDirectCost) {

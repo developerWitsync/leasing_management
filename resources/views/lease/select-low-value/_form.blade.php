@@ -19,7 +19,7 @@
             </div>
         </div>
 
-        <input type="hidden" name="fair_market_value" value="{{$asset->fairMarketValue->total_units}}">
+        {{--<input type="hidden" name="fair_market_value" value="{{$asset->fairMarketValue->total_units}}">--}}
         <div class="form-group{{ $errors->has('undiscounted_lease_payment') ? ' has-error' : '' }} required">
             <label for="name" class="col-md-12 control-label">Undiscounted Lease Payments</label>
             <div class="col-md-12 form-check form-check-inline" required>

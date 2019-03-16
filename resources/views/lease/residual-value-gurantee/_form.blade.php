@@ -181,7 +181,7 @@
 <div class="form-group btnMainBx">
 
     <div class="col-md-4 col-sm-4 btn-backnextBx">
-        <a href="{{ route('addlease.fairmarketvalue.index', ['id' => $lease->id]) }}" class="btn btn-danger"><i class="fa fa-arrow-left"></i> {{ env('BACK_LABEL')}}</a>
+        <a href="{{ route('addlease.payments.index', ['id' => $lease->id]) }}" class="btn btn-danger"><i class="fa fa-arrow-left"></i> {{ env('BACK_LABEL')}}</a>
     </div>
     <div class="col-md-4 col-sm-4 btnsubmitBx aligncenter">
         <button type="submit" class="btn btn-success"> 

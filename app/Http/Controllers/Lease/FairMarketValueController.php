@@ -8,36 +8,28 @@
 
 namespace App\Http\Controllers\Lease;
 
-
-use App\Countries;
-use App\ExpectedLifeOfAsset;
 use App\Http\Controllers\Controller;
 use App\Lease;
 use App\Currencies;
-use App\LeaseAccountingTreatment;
-use App\LeaseAssetCategories;
 use App\LeaseAssets;
-use App\LeaseAssetSimilarCharacteristicSettings;
-use App\LeaseAssetsNumberSettings;
-use App\LeaseAssetSubCategorySetting;
-use App\UseOfLeaseAsset;
 use App\FairMarketValue;
 use App\ReportingCurrencySettings;
 use App\ForeignCurrencyTransactionSettings;
-use App\LeaseAssetPayments;
 use Illuminate\Http\Request;
 use Validator;
 
 class FairMarketValueController extends Controller
 {
-    private $current_step = 7;
-    protected function validationRules(){
+    private $current_step = 11;
+
+    protected function validationRules()
+    {
         return [
-            'is_market_value_present'   => 'required',
+            'is_market_value_present' => 'required',
             'currency' => 'required_if:is_market_value_present,yes',
-            'similar_asset_items'   => 'required_if:is_market_value_present,yes',
-            'unit'  => 'required_if:is_market_value_present,yes',
-            'total_units'  => 'required_if:is_market_value_present,yes',
+            'similar_asset_items' => 'required_if:is_market_value_present,yes',
+            'unit' => 'required_if:is_market_value_present,yes',
+            'total_units' => 'required_if:is_market_value_present,yes',
             'attachment' => config('settings.file_size_limits.file_rule')
         ];
     }
@@ -48,92 +40,113 @@ class FairMarketValueController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index_V2($id, Request $request){
-         try{
+    public function index_V2($id, Request $request)
+    {
+        try {
             $breadcrumbs = [
                 [
                     'link' => route('add-new-lease.index'),
                     'title' => 'Add New Lease'
                 ],
                 [
-                    'link' => route('addlease.fairmarketvalue.index',['id' => $id]),
+                    'link' => route('addlease.fairmarketvalue.index', ['id' => $id]),
                     'title' => 'Fair Market Value'
                 ],
             ];
 
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
-            if($lease) {
+            if ($lease) {
 
                 //check if the Subsequent Valuation is applied for the lease modification
                 $subsequent_modify_required = $lease->isSubsequentModification();
 
-                $asset = $lease->assets->first(); //since once lease will now have only one lease asset
+                $category_excluded = \App\CategoriesLeaseAssetExcluded::query()
+                    ->whereIn('business_account_id', getDependentUserIds())
+                    ->where('status', '=', '0')
+                    ->get();
 
-                if($asset->fairMarketValue){
-                    $model = $asset->fairMarketValue;
-                } else {
-                    $model = new FairMarketValue();
-                }
+                $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
 
-                if($request->isMethod('post')) {
-                    $validator = Validator::make($request->except('_token'), $this->validationRules(), [
-                'attachment.max' => 'Maximum file size can be '.config('settings.file_size_limits.max_size_in_mbs').'.',
-                'attachment.uploaded' => 'Maximum file size can be '.config('settings.file_size_limits.max_size_in_mbs').'.'
-            ]);
+                $asset = LeaseAssets::query()->where('lease_id', '=', $id)
+                    ->whereNotIn('category_id', $category_excluded_id)
+                    ->whereHas('leaseSelectLowValue', function ($query) {
+                        $query->where('is_classify_under_low_value', '=', 'no');
+                    })
+                    ->whereHas('leaseDurationClassified', function ($query) {
+                        $query->where('lease_contract_duration_id', '=', '3');
+                    })
+                    ->first();
 
-                    if($validator->fails()){
-                        return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
+                if($asset){
+                    if ($asset->fairMarketValue) {
+                        $model = $asset->fairMarketValue;
+                    } else {
+                        $model = new FairMarketValue();
                     }
 
-                    $data = $request->except('_token', 'uuid', 'asset_name', 'asset_category','action');
-                    $data['attachment'] = "";
-                    $data['lease_id']   = $asset->lease->id;
-                    $data['asset_id']   = $asset->id;
-                    if($request->hasFile('attachment')){
-                        $file = $request->file('attachment');
-                        $uniqueFileName = uniqid() . $file->getClientOriginalName();
-                        $request->file('attachment')->move('uploads', $uniqueFileName);
-                        $data['attachment'] = $uniqueFileName;
-                    }
-                    //dd('fdfdg');
-                    $market_value = $model->setRawAttributes($data);
-                    if($market_value->save()){
-                        // complete Step
-                        confirmSteps($lease->id,7);
-                         if($request->has('action') && $request->action == "next") {
-                             
-                            return redirect(route('addlease.residual.index',['id' => $lease->id]))->with('status', 'Fair Market has been added successfully.');
-                        } else {
+                    if ($request->isMethod('post')) {
+                        $validator = Validator::make($request->except('_token'), $this->validationRules(), [
+                            'attachment.max' => 'Maximum file size can be ' . config('settings.file_size_limits.max_size_in_mbs') . '.',
+                            'attachment.uploaded' => 'Maximum file size can be ' . config('settings.file_size_limits.max_size_in_mbs') . '.'
+                        ]);
 
-                             return redirect(route('addlease.fairmarketvalue.index',['id' => $lease->id]))->with('status', 'Fair Market has been added successfully.');
+                        if ($validator->fails()) {
+                            return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
+                        }
+
+                        $data = $request->except('_token', 'uuid', 'asset_name', 'asset_category', 'action');
+                        $data['attachment'] = "";
+                        $data['lease_id'] = $asset->lease->id;
+                        $data['asset_id'] = $asset->id;
+                        if ($request->hasFile('attachment')) {
+                            $file = $request->file('attachment');
+                            $uniqueFileName = uniqid() . $file->getClientOriginalName();
+                            $request->file('attachment')->move('uploads', $uniqueFileName);
+                            $data['attachment'] = $uniqueFileName;
+                        }
+                        //dd('fdfdg');
+                        $market_value = $model->setRawAttributes($data);
+                        if ($market_value->save()) {
+                            // complete Step
+                            confirmSteps($lease->id, $this->current_step);
+                            if ($request->has('action') && $request->action == "next") {
+
+                                return redirect(route('addlease.discountrate.index', ['id' => $lease->id]))->with('status', 'Fair Market has been added successfully.');
+                            } else {
+
+                                return redirect(route('addlease.fairmarketvalue.index', ['id' => $lease->id]))->with('status', 'Fair Market has been added successfully.');
+
+                            }
 
                         }
-                        
                     }
+
+                    $currencies = Currencies::query()->where('status', '=', '1')->get();
+                    $reporting_currency_settings = ReportingCurrencySettings::query()->where('business_account_id', '=', auth()->user()->id)->first();
+                    $reporting_foreign_currency_transaction_settings = ForeignCurrencyTransactionSettings::query()->where('business_account_id', '=', auth()->user()->id)->get();
+
+                    if (collect($reporting_currency_settings)->isEmpty()) {
+                        $reporting_currency_settings = new ReportingCurrencySettings();
+                    }
+
+                    //to get current step for steps form
+                    $current_step = $this->current_step;
+
+                    return view('lease.fair-market-value.createv2', compact(
+                        'model',
+                        'lease',
+                        'asset',
+                        'currencies',
+                        'reporting_foreign_currency_transaction_settings',
+                        'reporting_currency_settings',
+                        'breadcrumbs',
+                        'current_step',
+                        'subsequent_modify_required'
+                    ));
+                } else {
+                    return redirect(route("addlease.discountrate.index", ['id'=> $id]));
                 }
 
-                $currencies = Currencies::query()->where('status', '=', '1')->get();
-                $reporting_currency_settings = ReportingCurrencySettings::query()->where('business_account_id', '=', auth()->user()->id)->first();
-                $reporting_foreign_currency_transaction_settings = ForeignCurrencyTransactionSettings::query()->where('business_account_id', '=', auth()->user()->id)->get();
-
-                if(collect($reporting_currency_settings)->isEmpty()) {
-                    $reporting_currency_settings = new ReportingCurrencySettings();
-                }
-
-               //to get current step for steps form
-                $current_step = $this->current_step;
-
-                return view('lease.fair-market-value.createv2', compact(
-                    'model',
-                    'lease',
-                    'asset',
-                    'currencies',
-                    'reporting_foreign_currency_transaction_settings',
-                    'reporting_currency_settings',
-                    'breadcrumbs',
-                    'current_step',
-                    'subsequent_modify_required'
-                ));
             } else {
                 abort(404);
             }
@@ -148,25 +161,26 @@ class FairMarketValueController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index($id, Request $request){
-            $breadcrumbs = [
-                [
-                    'link' => route('add-new-lease.index'),
-                    'title' => 'Add New Lease'
-                ],
-                [
-                    'link' => route('addlease.fairmarketvalue.index',['id' => $id]),
-                    'title' => 'Fair Market Value'
-                ],
-            ];
-            $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->with('leaseType')->with('assets')->first();
-            if($lease) {
-                return view('lease.fair-market-value.index', compact('breadcrumbs',
-                    'lease'
-                ));
-            } else {
-                abort(404);
-            }
+    public function index($id, Request $request)
+    {
+        $breadcrumbs = [
+            [
+                'link' => route('add-new-lease.index'),
+                'title' => 'Add New Lease'
+            ],
+            [
+                'link' => route('addlease.fairmarketvalue.index', ['id' => $id]),
+                'title' => 'Fair Market Value'
+            ],
+        ];
+        $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->with('leaseType')->with('assets')->first();
+        if ($lease) {
+            return view('lease.fair-market-value.index', compact('breadcrumbs',
+                'lease'
+            ));
+        } else {
+            abort(404);
+        }
     }
 
     /**
@@ -175,29 +189,30 @@ class FairMarketValueController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function create($id, Request $request){
-        try{
+    public function create($id, Request $request)
+    {
+        try {
             $asset = LeaseAssets::query()->findOrFail($id);
             $lease = $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
-            if($lease) {
+            if ($lease) {
 
                 $model = new FairMarketValue();
 
-                if($request->isMethod('post')) {
-                    $validator = Validator::make($request->except('_token'), $this->validationRules(),[
-                    'attachment.max' => 'Maximum file size can be '.config('settings.file_size_limits.max_size_in_mbs').'.',
-                    'attachment.uploaded' => 'Maximum file size can be '.config('settings.file_size_limits.max_size_in_mbs').'.'
-              ]);
+                if ($request->isMethod('post')) {
+                    $validator = Validator::make($request->except('_token'), $this->validationRules(), [
+                        'attachment.max' => 'Maximum file size can be ' . config('settings.file_size_limits.max_size_in_mbs') . '.',
+                        'attachment.uploaded' => 'Maximum file size can be ' . config('settings.file_size_limits.max_size_in_mbs') . '.'
+                    ]);
 
-                    if($validator->fails()){
+                    if ($validator->fails()) {
                         return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
                     }
 
                     $data = $request->except('_token');
                     $data['attachment'] = "";
-                    $data['lease_id']   = $asset->lease->id;
-                    $data['asset_id']   = $asset->id;
-                    if($request->hasFile('attachment')){
+                    $data['lease_id'] = $asset->lease->id;
+                    $data['asset_id'] = $asset->id;
+                    if ($request->hasFile('attachment')) {
                         $file = $request->file('attachment');
                         $uniqueFileName = uniqid() . $file->getClientOriginalName();
                         $request->file('attachment')->move('uploads', $uniqueFileName);
@@ -206,19 +221,19 @@ class FairMarketValueController extends Controller
 
                     $market_value = FairMarketValue::create($data);
 
-                    if($market_value){
+                    if ($market_value) {
 
                         // complete Step
-                         $complete_step7 = confirmSteps($lease->id,7);
+                        confirmSteps($lease->id, $this->current_step);
 
-                        return redirect(route('addlease.fairmarketvalue.index',['id' => $lease->id]))->with('status', 'Fair Market has been added successfully.');
+                        return redirect(route('addlease.fairmarketvalue.index', ['id' => $lease->id]))->with('status', 'Fair Market has been added successfully.');
                     }
                 }
 
                 $currencies = Currencies::query()->where('status', '=', '1')->get();
                 $reporting_currency_settings = ReportingCurrencySettings::query()->where('business_account_id', '=', auth()->user()->id)->first();
                 $reporting_foreign_currency_transaction_settings = ForeignCurrencyTransactionSettings::query()->where('business_account_id', '=', auth()->user()->id)->get();
-                if(collect($reporting_currency_settings)->isEmpty()) {
+                if (collect($reporting_currency_settings)->isEmpty()) {
                     $reporting_currency_settings = new ReportingCurrencySettings();
                 }
                 return view('lease.fair-market-value.create', compact(
@@ -244,29 +259,30 @@ class FairMarketValueController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function update($id, Request $request){
-        try{
+    public function update($id, Request $request)
+    {
+        try {
             $asset = LeaseAssets::query()->findOrFail($id);
             $lease = $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
-            if($lease) {
+            if ($lease) {
 
                 $model = FairMarketValue::query()->where('asset_id', '=', $id)->first();
 
-                if($request->isMethod('post')) {
-                    $validator = Validator::make($request->except('_token'), $this->validationRules(),[
-                        'attachment.max' => 'Maximum file size can be '.config('settings.file_size_limits.max_size_in_mbs').'.',
-                        'attachment.uploaded' => 'Maximum file size can be '.config('settings.file_size_limits.max_size_in_mbs').'.'
+                if ($request->isMethod('post')) {
+                    $validator = Validator::make($request->except('_token'), $this->validationRules(), [
+                        'attachment.max' => 'Maximum file size can be ' . config('settings.file_size_limits.max_size_in_mbs') . '.',
+                        'attachment.uploaded' => 'Maximum file size can be ' . config('settings.file_size_limits.max_size_in_mbs') . '.'
                     ]);
 
-                    if($validator->fails()){
+                    if ($validator->fails()) {
                         return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
                     }
 
                     $data = $request->except('_token');
                     $data['attachment'] = "";
-                    $data['lease_id']   = $asset->lease->id;
-                    $data['asset_id']   = $asset->id;
-                    if($request->hasFile('attachment')){
+                    $data['lease_id'] = $asset->lease->id;
+                    $data['asset_id'] = $asset->id;
+                    if ($request->hasFile('attachment')) {
                         $file = $request->file('attachment');
                         $uniqueFileName = uniqid() . $file->getClientOriginalName();
                         $request->file('attachment')->move('uploads', $uniqueFileName);
@@ -275,15 +291,15 @@ class FairMarketValueController extends Controller
 
                     $model->setRawAttributes($data);
 
-                    if($model->save()){
-                        return redirect(route('addlease.fairmarketvalue.index',['id' => $lease->id]))->with('status', 'Fair Market has been updated successfully.');
+                    if ($model->save()) {
+                        return redirect(route('addlease.fairmarketvalue.index', ['id' => $lease->id]))->with('status', 'Fair Market has been updated successfully.');
                     }
                 }
 
                 $currencies = Currencies::query()->where('status', '=', '1')->get();
                 $reporting_currency_settings = ReportingCurrencySettings::query()->where('business_account_id', '=', auth()->user()->id)->first();
                 $reporting_foreign_currency_transaction_settings = ForeignCurrencyTransactionSettings::query()->where('business_account_id', '=', auth()->user()->id)->get();
-                if(collect($reporting_currency_settings)->isEmpty()) {
+                if (collect($reporting_currency_settings)->isEmpty()) {
                     $reporting_currency_settings = new ReportingCurrencySettings();
                 }
                 return view('lease.fair-market-value.update', compact(

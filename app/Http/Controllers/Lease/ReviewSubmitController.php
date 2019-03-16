@@ -274,7 +274,7 @@ class ReviewSubmitController extends Controller
 
             if ($lease_history) {
                 // complete Step
-                confirmSteps($id, 18);
+                confirmSteps($id, $this->current_step);
             }
             
             $ulacode = createUlaCode();
@@ -282,7 +282,7 @@ class ReviewSubmitController extends Controller
             $assets->setRawAttributes($uid);
             $assets->save();
 
-            return redirect(route('leasevaluation.index'))->with('status', 'Lease Information has been Submitted successfully.Ula Code is-'.$ulacode);
+            return redirect(route('leasevaluation.index'))->with('status', $ulacode);
         }
     }
 

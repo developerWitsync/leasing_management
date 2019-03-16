@@ -61,7 +61,10 @@ class LeaseBalanceAsOnDecController extends Controller
                 //check if the Subsequent Valuation is applied for the lease modification
                 $subsequent_modify_required = $lease->isSubsequentModification();
 
-                $asset = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '<', $base_date)->first();//since there can now only be one lease asset per lease
+                $asset = LeaseAssets::query()->where('lease_id', '=', $lease->id)
+                    ->where('lease_start_date', '<', $base_date)
+                    ->first();//since there can now only be one lease asset per lease
+
                 if ($asset) {
                     if ($asset->leaseBalanceAsOnDec) {
                         $model = $asset->leaseBalanceAsOnDec;

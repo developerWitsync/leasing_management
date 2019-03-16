@@ -21,12 +21,6 @@
 
         <div class="panel-body">
 
-            @if (session('status'))
-                <div class="alert alert-success">
-                    {{ session('status') }}
-                </div>
-            @endif
-
             @if (session('error'))
                 <div class="alert alert-danger">
                     {{ session('error') }}
@@ -153,4 +147,20 @@
         var _is_capitalized = false;
         @endif
     </script>
+    @if (session('status'))
+        <script>
+            $(function () {
+                bootbox.dialog({
+                    message: '<div class="thank-you-pop">\n' +
+                        '\t\t\t\t\t\t\t<img src="{{ asset('images/round_tick.png') }}" alt="">\n' +
+                        '\t\t\t\t\t\t\t<h1>Thank You!</h1>\n' +
+                        '\t\t\t\t\t\t\t<p>Your Lease has been submitted successfully.</p>\n' +
+                        '\t\t\t\t\t\t\t<h3 class="cupon-pop">Lease ULA CODE : <span>{{ session('status') }}</span></h3>\n' +
+                        '\t\t\t\t\t\t\t\n' +
+                        ' \t\t\t\t\t\t</div>',
+                    closeButton: true
+                });
+            });
+        </script>
+    @endif
 @endsection
