@@ -274,9 +274,13 @@ class ReviewSubmitController extends Controller
             if(count($model->modifyLeaseApplication) > 0 && $model->modifyLeaseApplication->last()->valuation == "Modify Initial Valuation"){
                 //fetch the current history and update the same..
                 $lease_history = LeaseHistory::query()->where('lease_id', '=', $id)->first();
-                unset($data['modify_id']);
-                $lease_history->setRawAttributes($data);
-                $lease_history->save();
+                if($lease_history) {
+                    unset($data['modify_id']);
+                    $lease_history->setRawAttributes($data);
+                    $lease_history->save();
+                } else {
+                    $lease_history = LeaseHistory::create($data);
+                }
             } else {
                 $lease_history = LeaseHistory::create($data);
             }
