@@ -118,9 +118,13 @@ class ReviewSubmitController extends Controller
 
             $payment_id = $assets->paymentsduedate->pluck('payment_id')->toArray();
 
-            $lease_payments = LeaseAssetPayments::query()->where('asset_id', '=', $asset_id)->first()->toArray();
+            $lease_payments = LeaseAssetPayments::query()->where('asset_id', '=', $asset_id)->get()->toArray();
 
-            $fair_market_value = FairMarketValue::query()->where('lease_id', '=', $id)->first()->toArray();
+
+            $fair_market_value = FairMarketValue::query()->where('lease_id', '=', $id)->first();
+            if($fair_market_value){
+                $fair_market_value = $fair_market_value->toArray();
+            }
 
             $residual_value = LeaseResidualValue::query()->where('lease_id', '=', $id)->first()->toArray();
 
@@ -187,7 +191,12 @@ class ReviewSubmitController extends Controller
                 $customer_details = [];
             }
 
-            $lease_invoice = LeasePaymentInvoice::query()->where('lease_id', '=', $id)->first()->toArray();
+            $lease_invoice = LeasePaymentInvoice::query()->where('lease_id', '=', $id)->first();
+            if($lease_invoice){
+                $lease_invoice = $lease_invoice->toArray();
+            } else {
+                $lease_invoice = [];
+            }
 
 
             //lessor-details step 1
