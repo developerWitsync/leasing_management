@@ -16,6 +16,7 @@ class SupplierDetails extends Model
     	'supplier_currency',
     	'amount',
     	'rate',
+        'type',
     	'created_at',
     	'updated_at'
     ];

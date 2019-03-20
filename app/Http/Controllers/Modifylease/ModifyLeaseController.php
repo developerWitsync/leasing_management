@@ -112,8 +112,8 @@ class ModifyLeaseController extends Controller
                     $model->save();
                     return redirect(route('add-new-lease.index', ['id' => $id]))->with('status', 'Modify Lease has been Created successfully.');
                 }
-
-                return view('modifylease.create', compact('lease', 'lase_modification', 'disable_initial'));
+                $asset = $lease->assets()->first();
+                return view('modifylease.create', compact('lease', 'lase_modification', 'disable_initial', 'asset'));
             } else {
                 abort(404);
             }

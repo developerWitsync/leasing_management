@@ -5,17 +5,21 @@
  * Date: 2/1/19
  * Time: 11:03 AM
  */
+
 namespace App\Http\Controllers\Drafts;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Lease;
 use App\LeaseAssets;
+
 // Using Eloquent
 
 
 class IndexController extends Controller
 {
     public $breadcrumbs;
+
     public function __construct()
     {
         $this->breadcrumbs = [
@@ -29,13 +33,15 @@ class IndexController extends Controller
             ]
         ];
     }
-	/**
+
+    /**
      * Render the table for all the leases
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index(){
-        $breadcrumbs = $this->breadcrumbs; 
-        return view('drafts.index',compact('breadcrumbs'));
+    public function index()
+    {
+        $breadcrumbs = $this->breadcrumbs;
+        return view('drafts.index', compact('breadcrumbs'));
     }
 
     /**
@@ -44,10 +50,11 @@ class IndexController extends Controller
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
 
-    public function fetchLeaseDetails(Request $request){
-        try{
+    public function fetchLeaseDetails(Request $request)
+    {
+        try {
             if ($request->ajax()) {
-            	return datatables()->eloquent(Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('status', '=', '0')->with('assets'))->toJson();
+                return datatables()->eloquent(Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('status', '=', '0')->with('assets'))->toJson();
             } else {
                 return redirect()->back();
             }
@@ -56,17 +63,18 @@ class IndexController extends Controller
         }
     }
 
-     /**
+    /**
      * deletes a particular lease from the database
      * @param $id
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function deleteLeaseDetails($id, Request $request) {
-        try{
-            if($request->ajax()) {
-                $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id',$id)->first();
-                if($lease){
+    public function deleteLeaseDetails($id, Request $request)
+    {
+        try {
+            if ($request->ajax()) {
+                $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', $id)->first();
+                if ($lease) {
                     $lease->delete();
                     return response()->json(['status' => true], 200);
                 } else {
@@ -79,4 +87,4 @@ class IndexController extends Controller
             abort('404');
         }
     }
-   }
+}

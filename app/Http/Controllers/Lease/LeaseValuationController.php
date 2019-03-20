@@ -13,12 +13,13 @@ use App\Lease;
 use App\LeaseSelectDiscountRate;
 use App\LeaseDurationClassified;
 use App\LeaseAssets;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Validator;
 
 class LeaseValuationController extends Controller
 {
-    private $current_step = 16;
+    private $current_step = 17;
     protected function validationRules()
     {
         return [
@@ -49,30 +50,51 @@ class LeaseValuationController extends Controller
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
         if ($lease) {
             //Load the assets only which will  not in is_classify_under_low_value = Yes in NL10 (Lease Select Low Value)and will not in very short tem/short term lease in NL 8.1(lease_contract_duration table) and not in intengible under license arrangements and biological assets (lease asset categories)
-            $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)
+
+            $category_excluded = \App\CategoriesLeaseAssetExcluded::query()
+                ->whereIn('business_account_id', getDependentUserIds())
+                ->where('status', '=', '0')
+                ->get();
+
+            $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
+
+            $asset = LeaseAssets::query()->where('lease_id', '=', $lease->id)
                 ->whereHas('leaseSelectLowValue', function ($query) {
                     $query->where('is_classify_under_low_value', '=', 'no');
                 })->whereHas('leaseDurationClassified', function ($query) {
                     $query->where('lease_contract_duration_id', '=', '3');
-                })->whereNotIn('category_id', [5, 8])->get();
+                })->whereNotIn('category_id', $category_excluded_id)->first();
 
-           
-            // complete Step
-            confirmSteps($lease->id, $this->current_step);
 
-            $back_url = getBackUrl($this->current_step - 1, $id);
+            if($asset){
+                // complete Step
+                confirmSteps($lease->id, $this->current_step);
 
-            //to get current step for steps form
-            $current_step = $this->current_step;
-           
-            return view('lease.lease-valuation.index', compact(
-                'lease',
-                'assets',
-                'breadcrumbs',
-                'back_url',
-                'lessor_invoice',
-                'current_step'
-            ));
+                $back_url = getBackUrl($this->current_step - 1, $id);
+                //to get current step for steps form
+                $current_step = $this->current_step;
+                $payments = $asset->payments;
+
+                //check if impairment is applicable or not
+                $impairment_applicable = false;
+                if(Carbon::parse($asset->accural_period)->lessThanOrEqualTo(getParentDetails()->accountingStandard->base_date) && !is_null($asset->accounting_treatment) && $asset->accounting_treatment !='2'){
+                    $impairment_applicable = true;
+                }
+
+                return view('lease.lease-valuation.index', compact(
+                    'lease',
+                    'asset',
+                    'breadcrumbs',
+                    'back_url',
+                    'lessor_invoice',
+                    'current_step',
+                    'payments',
+                    'impairment_applicable'
+                ));
+            } else {
+                //redirect to the lease incentives step in case not applicable....
+                return redirect(route('addlease.leasepaymentinvoice.index', ['id' => $lease->id]));
+            }
         } else {
             abort(404);
         }
@@ -90,7 +112,8 @@ class LeaseValuationController extends Controller
         try {
             if ($request->ajax()) {
                 $asset = LeaseAssets::query()->findOrFail($id);
-                $value = $asset->presentValueOfLeaseLiability(true);
+                $payment_id = $request->has('payment')?$request->payment:null;
+                $value = $asset->presentValueOfLeaseLiability(true, $payment_id);
 
                 $asset->setAttribute('lease_liablity_value', $value);
                 $asset->save();
@@ -102,7 +125,6 @@ class LeaseValuationController extends Controller
                 abort(404);
             }
         } catch (\Exception $e) {
-            dd($e->getMessage());
             abort(404);
         }
     }
@@ -119,7 +141,6 @@ class LeaseValuationController extends Controller
             if ($request->ajax()) {
                 $asset = LeaseAssets::query()->findOrFail($id);
                 $data = $asset->presentValueOfLeaseLiability(false);
-//                echo "<pre>"; print_r($data); die();
                 $years = $data['years'];
                 $months = $data['months'];
                 $liability_caclulus_data = $data['present_value_data'];
@@ -134,6 +155,103 @@ class LeaseValuationController extends Controller
             }
         } catch (\Exception $e) {
             dd($e);
+            abort(404);
+        }
+    }
+
+    /**
+     * fetch the present value for the termination option
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function terminationPresentValue($id, Request $request){
+        try {
+            if ($request->ajax()) {
+                $asset = LeaseAssets::query()->findOrFail($id);
+                $start_date =   Carbon::parse($asset->accural_period);
+                $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date);
+                $base_date = ($start_date->lessThan($base_date))?$base_date:$start_date;
+                $value = $asset->getLeaseLiabilityForTermination($base_date);
+                $value = isset($value['total_lease_liability'])?$value['total_lease_liability']:0;
+                return response()->json([
+                    'status' => true,
+                    'value' => $value
+                ], 200);
+            } else {
+                abort(404);
+            }
+        } catch (\Exception $e) {
+            abort(404);
+        }
+    }
+
+    /**
+     * fetches the present value for the residual value guarantee as well..
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function residualPresentValue($id, Request $request){
+        try {
+            if ($request->ajax()) {
+
+                $asset = LeaseAssets::query()->findOrFail($id);
+
+                $start_date =   Carbon::parse($asset->accural_period);
+
+                $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date);
+
+                $base_date = ($start_date->lessThan($base_date))?$base_date:$start_date;
+
+                $end_date = Carbon::parse($asset->getLeaseEndDate($asset));
+
+                $value = $asset->getPresentValueOfResidualValueGuarantee($base_date, null, null, $end_date);
+
+                $value = isset($value['total_lease_liability'])?$value['total_lease_liability']:0;
+
+                return response()->json([
+                    'status' => true,
+                    'value' => $value
+                ], 200);
+            } else {
+                abort(404);
+            }
+        } catch (\Exception $e) {
+            abort(404);
+        }
+    }
+
+    /**
+     * present value of the purchase options....
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function purchasePresentValue($id, Request $request){
+        try {
+            if ($request->ajax()) {
+
+                $asset = LeaseAssets::query()->findOrFail($id);
+
+                $start_date =   Carbon::parse($asset->accural_period);
+
+                $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date);
+
+                $base_date = ($start_date->lessThan($base_date))?$base_date:$start_date;
+
+                $value = $asset->getPresentValueOfPurchaseOption($base_date, null, null);
+
+                $value = isset($value['total_lease_liability'])?$value['total_lease_liability']:0;
+
+                return response()->json([
+                    'status' => true,
+                    'value' => $value
+                ], 200);
+            } else {
+                abort(404);
+            }
+        } catch (\Exception $e) {
             abort(404);
         }
     }
@@ -171,7 +289,6 @@ class LeaseValuationController extends Controller
                 abort(404);
             }
         } catch (\Exception $e) {
-            dd($e->getMessage());
             abort(404);
         }
     }

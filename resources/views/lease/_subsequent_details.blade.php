@@ -12,7 +12,7 @@
                 Subsequent Remeasurement No.
             </div>
             <div class="col-md-6"
-                 style="padding: 0;text-align: right">#{{ $lease->modifyLeaseApplication->last()->id }}</div>
+                 style="padding: 0;text-align: right">#{{ $lease->modifyLeaseApplication->where('valuation', '=', 'Subsequent Valuation')->count()}}</div>
         </div>
     </div>
 @endif

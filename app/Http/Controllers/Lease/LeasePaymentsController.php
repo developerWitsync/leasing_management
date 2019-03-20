@@ -478,7 +478,7 @@ class LeasePaymentsController extends Controller
                         $lease_id = $asset->lease->id;
                         confirmSteps($lease_id, $this->current_step);
 
-                        return redirect(route('lease.payments.index', ['id' => $asset->lease->id]))->with('status', 'Lease Asset Payments has been updated successfully.');
+                        return redirect(route('addlease.payments.index', ['id' => $asset->lease->id]))->with('status', 'Lease Asset Payments has been updated successfully.');
                     } else {
                         return redirect()->back()->with('error', 'Something went wrong. Please try again.')->withInput($request->except('_token'));
                     }

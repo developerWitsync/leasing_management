@@ -24,6 +24,74 @@ $(function(){
 
     var lease_liability_array = new Array();
 
+
+
+
+    $('.load_payment_present_value').each(function(index, value){
+        var asset_id = $(this).data('asset_id');
+        var payment_id = $(this).data('payment_id');
+        var that = $(this);
+        $.ajax({
+            url : '/lease/lease-valuation/lease-liability-asset/'+asset_id+'?payment='+payment_id,
+            dataType : 'json',
+            async : false,
+            beforeSend : function(){
+                $(that).text('Calculating...');
+            },
+            success : function (response) {
+                $(that).text(response['value'].toFixed(2));
+            }
+        });
+    });
+
+    $('.load_termination_present_value').each(function(index, value){
+        var asset_id = $(this).data('asset_id');
+        var that = $(this);
+        $.ajax({
+            url : '/lease/lease-valuation/termination-present-value/'+asset_id,
+            dataType : 'json',
+            async : false,
+            beforeSend : function(){
+                $(that).text('Calculating...');
+            },
+            success : function (response) {
+                $(that).text(response['value'].toFixed(2));
+            }
+        });
+    });
+
+    $('.load_residual_present_value').each(function(index, value){
+        var asset_id = $(this).data('asset_id');
+        var that = $(this);
+        $.ajax({
+            url : '/lease/lease-valuation/residual-present-value/'+asset_id,
+            dataType : 'json',
+            async : false,
+            beforeSend : function(){
+                $(that).text('Calculating...');
+            },
+            success : function (response) {
+                $(that).text(response['value'].toFixed(2));
+            }
+        });
+    });
+
+    $('.load_purchase_present_value').each(function(index, value){
+        var asset_id = $(this).data('asset_id');
+        var that = $(this);
+        $.ajax({
+            url : '/lease/lease-valuation/purchase-present-value/'+asset_id,
+            dataType : 'json',
+            async : false,
+            beforeSend : function(){
+                $(that).text('Calculating...');
+            },
+            success : function (response) {
+                $(that).text(response['value'].toFixed(2));
+            }
+        });
+    });
+
     $('.load_lease_liability').each(function(index, value){
         var asset_id = $(this).data('asset_id');
         if(typeof (lease_liability_array[asset_id])!= "undefined") {

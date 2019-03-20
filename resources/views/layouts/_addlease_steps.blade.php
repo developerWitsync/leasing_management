@@ -111,24 +111,33 @@
                 <span>Lease Incentives</span>
             </a>
         </li>
+
         <li @if(16 <= $current_step) class="active" @else class="disabled" @endif>
+            <a class="@if(request()->segment(2) == 'dismantling-costs') active @endif"
+               href="{{route('lease.dismantlingcosts.index',['id'=>$lease->id])}}">
+                <i>16</i>
+                <span>Dismantling Costs</span>
+            </a>
+        </li>
+
+        <li @if(17 <= $current_step) class="active" @else class="disabled" @endif>
             <a class="@if(request()->segment(2) == 'lease-valuation') active @endif"
                href="{{route('addlease.leasevaluation.index',['id'=>$lease->id])}}">
-                <i>16</i>
+                <i>17</i>
                 <span>Lease Valuation</span>
             </a>
         </li>
-        <li @if(17 <= $current_step) class="active" @else class="disabled" @endif>
+        <li @if(18 <= $current_step) class="active" @else class="disabled" @endif>
             <a class="@if(request()->segment(2) == 'lease-payment-invoice') active @endif"
                href="{{route('addlease.leasepaymentinvoice.index',['id'=>$lease->id])}}">
-                <i>17</i>
+                <i>18</i>
                 <span>Lessor Invoice</span>
             </a>
         </li>
-        <li @if(18 <= $current_step) class="active" @else class="disabled" @endif>
+        <li @if(19 <= $current_step) class="active" @else class="disabled" @endif>
             <a class="@if(request()->segment(2) == 'review-submit') active @endif"
                href="{{route('addlease.reviewsubmit.index',['id'=>$lease->id])}}">
-                <i>18</i>
+                <i>19</i>
                 <span>Review & Submit</span>
             </a>
         </li>

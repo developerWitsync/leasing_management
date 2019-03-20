@@ -6,7 +6,7 @@
 @endsection
 @section('content')
     <div class="panel panel-default">
-        <div class="panel-heading">Residual Value Gurantee</div>
+        <div class="panel-heading">Residual Value Guarantee</div>
 
         <div class="panel-body">
             @if (session('status'))

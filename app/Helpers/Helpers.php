@@ -1032,6 +1032,12 @@ function getBackUrl($step, $id)
         //check if the previous step that is Lease Incentives and Lease Initial Direct Cost were applicable or not ?
         $asset = \App\LeaseAssets::query()->where('lease_id', '=', $id)
             ->whereNotIn('category_id', $category_excluded_id)
+            ->whereHas('leaseSelectLowValue', function ($query) {
+                $query->where('is_classify_under_low_value', '=', 'no');
+            })
+            ->whereHas('leaseDurationClassified', function ($query) {
+                $query->where('lease_contract_duration_id', '=', '3');
+            })
             ->first();
 
         if ($asset) {
@@ -1043,6 +1049,12 @@ function getBackUrl($step, $id)
         //lease incentives and initial direct cost are not applicable now check for the step lease balances
         $asset = \App\LeaseAssets::query()->where('lease_id', '=', $id)
             ->where('lease_start_date', '<', $base_date)
+            ->whereHas('leaseSelectLowValue', function ($query) {
+                $query->where('is_classify_under_low_value', '=', 'no');
+            })
+            ->whereHas('leaseDurationClassified', function ($query) {
+                $query->where('lease_contract_duration_id', '=', '3');
+            })
             ->first();
         if ($asset) {
             return route('addlease.balanceasondec.index', ['id' => $id]);

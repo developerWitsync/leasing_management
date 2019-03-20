@@ -5,7 +5,7 @@
 
 @section('content')
     <div class="panel panel-default">
-        <div class="panel-heading">Edit Residual Guarantee Value </div>
+        <div class="panel-heading"> Dismantling Costs</div>
 
         <div class="panel-body">
             @if (session('status'))
@@ -14,13 +14,13 @@
                 </div>
             @endif
 
+            @include('lease._subsequent_details')
+
             <div class="tab-content" style="padding: 0px;">
                 <div role="tabpanel" class="tab-pane active">
-                    @include('lease.residual-value-gurantee._form')
+                    @include('lease.dismantling-costs._form')
                 </div>
             </div>
-
-                @include('lease._subsequent_details')
 
         </div>
     </div>

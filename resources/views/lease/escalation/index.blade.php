@@ -68,7 +68,7 @@
                                         class="fa fa-arrow-left"></i> {{ env('BACK_LABEL')}}</a>
                         </div>
 
-                        <div class="col-md-4 col-sm-4 btn-backnextBx rightlign ">
+                        <div class="col-md-8 col-sm-8 btn-backnextBx rightlign ">
                             @if($lease->escalation_clause_applicable == 'no')
                                 <a href="{{ route('addlease.lowvalue.index', ['id' => $lease->id]) }}"
                                    class="btn btn-primary">{{ env('NEXT_LABEL') }} <i class="fa fa-arrow-right"></i></a>

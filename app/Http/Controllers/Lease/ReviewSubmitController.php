@@ -39,7 +39,7 @@ use Validator;
 
 class ReviewSubmitController extends Controller
 {
-    private $current_step = 18;
+    private $current_step = 19;
     /**
      * renders the table to list all the lease assets.
      * @param $id Primary key for the lease

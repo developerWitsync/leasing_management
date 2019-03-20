@@ -72,10 +72,13 @@
          dateFormat: "dd-M-yy",
          changeYear: true,
          changeMonth:true,
-          onSelect: function(date, instance){
+         minDate : new Date('{{ \Carbon\Carbon::parse($asset->accural_period)->addDays(1)->format("Y-m-d")  }}'),
+         maxDate : new Date('{{ \Carbon\Carbon::parse($asset->lease_end_date)->format("Y-m-d") }}'),
+         yearRange : '{{\Carbon\Carbon::parse($asset->accural_period)->format("Y")}}:{{\Carbon\Carbon::parse($asset->lease_end_date)->format("Y")}}',
+         onSelect: function(date, instance){
             var _ajax_url = '{{route("lease.checklockperioddate")}}';
             checklockperioddate(date, instance, _ajax_url);
-          }
+         }
      })
  </script>
   <script type="text/javascript">

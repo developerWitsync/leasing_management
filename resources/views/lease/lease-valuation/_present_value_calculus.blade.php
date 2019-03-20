@@ -52,7 +52,7 @@
                                 $sub_total = 0;
                             @endphp
                             @foreach($months as $month)
-                                @if(isset($data[$month]))
+                                @if(isset($data[$month]) && isset($data[$month]["payment_".$payment->id]))
                                     <td>{{ $data[$month]["payment_".$payment->id][0]->lease_liability }}</td>
                                     @php
                                         $sub_total = $sub_total + $data[$month]["payment_".$payment->id][0]->lease_liability;
@@ -69,67 +69,63 @@
                     @endforeach
                     <tr>
                         <th>Termination</th>
-                        @foreach($payments as $payment)
-                            @php
-                                if($payment->paymentDueDates->count() == 0){
-                                    continue;
-                                }
-                            @endphp
-                            @foreach($months as $month)
-                                @if(isset($data[$month]))
-                                    <td>{{ $data[$month]["payment_".$payment->id][0]->termination_penalty }}</td>
-                                @else
-                                    <td>&nbsp;</td>
-                                @endif
-                            @endforeach
-                            @php
-                                break;
-                            @endphp
-
+                        @php
+                            $sub_total = 0;
+                        @endphp
+                        @foreach($months as $month)
+                            @if(isset($data[$month]['termination']))
+                                <td>{{ $data[$month]['termination'][0]->lease_liability }}</td>
+                                @php
+                                    $sub_total = $sub_total + $data[$month]['termination'][0]->lease_liability;
+                                @endphp
+                            @else
+                                <td>&nbsp;</td>
+                            @endif
                         @endforeach
-                        <td>&nbsp;</td>
+                        <td>{{$sub_total}}</td>
+                        @php
+                            $grand_total = $grand_total + $sub_total;
+                        @endphp
                     </tr>
                     <tr>
                         <th>Residual</th>
-                        @foreach($payments as $payment)
-                            @php
-                                if($payment->paymentDueDates->count() == 0){
-                                    continue;
-                                }
-                            @endphp
-                            @foreach($months as $month)
-                                @if(isset($data[$month]))
-                                    <td>{{ $data[$month]["payment_".$payment->id][0]->residual_value_gurantee_value }}</td>
-                                @else
-                                    <td>&nbsp;</td>
-                                @endif
-                            @endforeach
-                            @php
-                                break;
-                            @endphp
+                        @php
+                            $sub_total = 0;
+                        @endphp
+                        @foreach($months as $month)
+                            @if(isset($data[$month]['residual']))
+                                <td>{{ $data[$month]['residual'][0]->lease_liability }}</td>
+                                @php
+                                    $sub_total = $sub_total + $data[$month]['residual'][0]->lease_liability;
+                                @endphp
+                            @else
+                                <td>&nbsp;</td>
+                            @endif
                         @endforeach
-                        <td>&nbsp;</td>
+                        <td>{{$sub_total}}</td>
+                        @php
+                            $grand_total = $grand_total + $sub_total;
+                        @endphp
                     </tr>
                     <tr>
                         <th>Purchase</th>
-                        @foreach($payments as $payment)
-                            @php
-                                if($payment->paymentDueDates->count() == 0){
-                                    continue;
-                                }
-                            @endphp
-                            @foreach($months as $month)
-                                @if(isset($data[$month]))
-                                    <td>{{ $data[$month]["payment_".$payment->id][0]->purchase_option_price }}</td>
-                                @else
-                                    <td>&nbsp;</td>
-                                @endif
-                            @endforeach
-                            @php
-                                break;
-                            @endphp
+                        @php
+                            $sub_total = 0;
+                        @endphp
+                        @foreach($months as $month)
+                            @if(isset($data[$month]['purchase']))
+                                <td>{{ $data[$month]['purchase'][0]->lease_liability }}</td>
+                                @php
+                                    $sub_total = $sub_total + $data[$month]['purchase'][0]->lease_liability;
+                                @endphp
+                            @else
+                                <td>&nbsp;</td>
+                            @endif
                         @endforeach
-                        <td>&nbsp;</td>
+                        <td>{{$sub_total}}</td>
+                        @php
+                            $grand_total = $grand_total + $sub_total;
+                        @endphp
                     </tr>
                 @endforeach
                 <tr>

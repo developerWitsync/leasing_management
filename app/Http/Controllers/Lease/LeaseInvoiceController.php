@@ -17,7 +17,7 @@ use Validator;
 
 class LeaseInvoiceController extends Controller
 {
-    private $current_step = 17;
+    private $current_step = 18;
 
     protected function validationRules()
     {
@@ -62,6 +62,12 @@ class LeaseInvoiceController extends Controller
 
                 $asset = LeaseAssets::query()->where('lease_id', '=', $id)
                     ->whereNotIn('category_id', $category_excluded_id)
+                    ->whereHas('leaseSelectLowValue', function ($query) {
+                        $query->where('is_classify_under_low_value', '=', 'no');
+                    })
+                    ->whereHas('leaseDurationClassified', function ($query) {
+                        $query->where('lease_contract_duration_id', '=', '3');
+                    })
                     ->first();
 
                 if($asset) {
@@ -85,7 +91,7 @@ class LeaseInvoiceController extends Controller
 
                         if ($model->save()) {
                             // complete Step
-                            confirmSteps($lease->id, 17);
+                            confirmSteps($lease->id, $this->current_step);
                             if ($request->has('action') && $request->action == "next") {
                                 return redirect(route('addlease.reviewsubmit.index', ['id' => $lease->id]))->with('status', 'Lease Payment Invoice details has been updated successfully.');
                             } else {

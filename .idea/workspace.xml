@@ -2,8 +2,68 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1c290435-4779-45fe-873f-5594138f8734" name="Default Changelist" comment="Merge branch 'master' of http://100.100.7.4:8081/root/Witsync-Lease-Management&#10;&#10;# Conflicts:&#10;#&#9;app/Helpers/Helpers.php&#10;#&#9;config/settings.php&#10;#&#9;public/css/custom.css">
+      <change afterPath="$PROJECT_DIR$/app/DismantlingCosts.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/DismantlingCostsController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/migrations/2019_03_18_092425_alter_table_lease_select_discount_rate_add_column_dailt_discount_rate.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/migrations/2019_03_19_060007_create_store_procedure_termination_penalty_present_value.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/migrations/2019_03_19_081711_create_procedure_residual_present_value.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/migrations/2019_03_19_125513_create_table_dismantling_costs.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/migrations/2019_03_20_054334_add_column_type_to_supplier_details.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/sqls/store_procedure_residual.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/sqls/store_procedure_termination.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/uploads/5c91ea69dcf5dFlow charts.zip" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/uploads/5c9209ac01c7fFlow charts.zip" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/views/lease/dismantling-costs/_form.blade.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/views/lease/dismantling-costs/create.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/himanshur.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/himanshur.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Helpers/Helpers.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Helpers/Helpers.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Drafts/IndexController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Drafts/IndexController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/InitialDirectCostController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/InitialDirectCostController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseIncentivesController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseIncentivesController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseInvoiceController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseInvoiceController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/LeasePaymentsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/LeasePaymentsController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseRenewableOptionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseRenewableOptionController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseValuationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseValuationController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/PurchaseOptionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/PurchaseOptionController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/SelectDiscountRateController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/SelectDiscountRateController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Modifylease/ModifyLeaseController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Modifylease/ModifyLeaseController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Middleware/CheckPreviousData.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Middleware/CheckPreviousData.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/InitialDirectCost.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/InitialDirectCost.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/LeaseAssetPayments.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/LeaseAssetPayments.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/LeaseAssets.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/LeaseAssets.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/LeaseSelectDiscountRate.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/LeaseSelectDiscountRate.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/SupplierDetails.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/SupplierDetails.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/sqls/stored_procedures.sql" beforeDir="false" afterPath="$PROJECT_DIR$/database/sqls/stored_procedures.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/css/custom.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/custom.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/pages/escalations.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/pages/escalations.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/pages/lease_valuation.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/pages/lease_valuation.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/drafts/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/drafts/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/layouts/_addlease_steps.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/_addlease_steps.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/lease/_subsequent_details.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/_subsequent_details.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/lease/escalation/_form.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/escalation/_form.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/lease/escalation/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/escalation/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-balnce-as-on-dec/_form.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-balnce-as-on-dec/_form.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-renewable-option/_form.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-renewable-option/_form.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-renewable-option/create.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-renewable-option/create.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-renewable-option/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-renewable-option/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-valuation/_cumulative_valuation.blade.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-valuation/_equivaline_to_present_lease_liability.blade.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-valuation/_impairment_test.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-valuation/_impairment_test.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-valuation/_lease_liability.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-valuation/_lease_liability.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-valuation/_lease_valuation.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-valuation/_lease_valuation.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-valuation/_present_value_calculus.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-valuation/_present_value_calculus.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-valuation/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-valuation/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/lease/purchase-option/create.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/purchase-option/create.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/lease/residual-value-gurantee/_form.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/residual-value-gurantee/_form.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/lease/residual-value-gurantee/create.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/residual-value-gurantee/create.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/lease/residual-value-gurantee/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/residual-value-gurantee/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/lease/residual-value-gurantee/update.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/residual-value-gurantee/update.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/lease/select-discount-rate/_form.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/select-discount-rate/_form.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/modifylease/_form.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/modifylease/_form.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -33,8 +93,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/web.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="312">
-              <caret line="265" column="131" selection-start-line="265" selection-start-column="109" selection-end-line="265" selection-end-column="131" />
+            <state relative-caret-position="644">
+              <caret line="276" column="11" selection-start-line="276" selection-start-column="11" selection-end-line="276" selection-end-column="11" />
               <folding>
                 <element signature="e#7#389#0#PHP" expanded="true" />
               </folding>
@@ -42,77 +102,68 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="890">
-              <caret line="170" column="13" lean-forward="true" selection-start-line="170" selection-start-column="13" selection-end-line="170" selection-end-column="13" />
+            <state relative-caret-position="754">
+              <caret line="84" column="19" selection-start-line="84" selection-start-column="19" selection-end-line="84" selection-end-column="19" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/LeaseAssetPayments.php">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseInvoiceController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="6" column="6" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
+            <state relative-caret-position="68">
+              <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/InitialDirectCost.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="595">
+              <caret line="35" lean-forward="true" selection-start-line="35" selection-end-line="35" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-valuation/index.blade.php">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseValuationController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="714">
-              <caret line="42" column="70" selection-start-line="42" selection-start-column="70" selection-end-line="42" selection-end-column="70" />
+            <state relative-caret-position="663">
+              <caret line="51" column="94" selection-start-line="51" selection-start-column="94" selection-end-line="51" selection-end-column="94" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/views/leasevaluation/index.blade.php">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/DismantlingCostsController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="392">
-              <caret line="135" column="25" selection-start-line="135" selection-start-column="25" selection-end-line="135" selection-end-column="25" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/views/lease/initial-direct-cost/index.blade.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="15" column="18" selection-start-line="11" selection-start-column="12" selection-end-line="15" selection-end-column="18" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/views/lease/review-submit/index.blade.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="780">
-              <caret line="504" selection-start-line="504" selection-end-line="504" />
+            <state relative-caret-position="613">
+              <caret line="180" column="72" selection-start-line="180" selection-start-column="72" selection-end-line="180" selection-end-column="72" />
               <folding>
-                <element signature="e#24876#24906#0#HTML" expanded="true" />
+                <element signature="e#131#155#0#PHP" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/css/custom.css">
+        <entry file="file://$PROJECT_DIR$/app/Http/Middleware/CheckPreviousData.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="848">
-              <caret line="940" column="1" selection-start-line="940" selection-start-column="1" selection-end-line="940" selection-end-column="1" />
+            <state relative-caret-position="355">
+              <caret line="420" selection-start-line="420" selection-end-line="420" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/views/lease/payments/_form.blade.php">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/InitialDirectCostController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="312">
-              <caret line="404" column="80" selection-start-line="404" selection-start-column="4" selection-end-line="404" selection-end-column="80" />
+            <state relative-caret-position="533">
+              <caret line="90" column="43" selection-start-line="90" selection-start-column="43" selection-end-line="90" selection-end-column="43" />
             </state>
           </provider>
         </entry>
@@ -128,36 +179,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>required</find>
-      <find>$dependentRules</find>
-      <find>dependentRules</find>
-      <find>altered_payment_due_date</find>
-      <find>paymentFrequency</find>
-      <find>Amount Determinable</find>
-      <find>amount_determinable</find>
-      <find>create</find>
-      <find>payments</find>
-      <find>create-asset-payment</find>
-      <find>createAssetPayments</find>
-      <find>present_value_of_lease_liability</find>
-      <find>LeaseAssetSimilarCharacteristicSettings</find>
-      <find>addlease.discountrate.index</find>
-      <find>addlease.residual.index</find>
-      <find>next</find>
-      <find>lease-duration-classified</find>
-      <find>lease.payments.add</find>
-      <find>lease.payments.</find>
-      <find>updateAssetPayments</find>
       <find>lease-payment-invoice</find>
-      <find>yes</find>
-      <find>LeaseAssets</find>
-      <find>home</find>
-      <find>review-submit</find>
-      <find>addlease.reviewsubmit.submit</find>
-      <find>confirmSteps</find>
-      <find>bootbox</find>
-      <find>fair_market_value</find>
-      <find>LeasePaymentInvoice</find>
+      <find>select-discount-rate</find>
+      <find>daily_discount_rate</find>
+      <find>addlease.payments.index</find>
+      <find>lease.payments.index</find>
+      <find>index</find>
+      <find>asset</find>
+      <find>termina</find>
+      <find>stored_procedure</find>
+      <find>stored_procedures</find>
+      <find>lease-val</find>
+      <find>showLinkRequestForm</find>
+      <find>admin.password.reset.email</find>
+      <find>sendResetLinkEmail</find>
+      <find>getLeaseEndDate</find>
+      <find>lease-liability-asset</find>
+      <find>presentValueOfLeaseLiability</find>
+      <find>purchase</find>
+      <find>load_lease_liability</find>
+      <find>value_of_lease_asset</find>
+      <find>back_url</find>
+      <find>cost_of_dismantling_incurred</find>
+      <find>obligation_incurred_yes_no</find>
+      <find>getBac</find>
+      <find>initial</find>
+      <find>Initial Direct Cost Description</find>
+      <find>16</find>
+      <find>17</find>
+      <find>18</find>
+      <find>delete</find>
     </findStrings>
     <replaceStrings>
       <replace>col-md-6 col-sm-6 btn-backnextBx</replace>
@@ -172,66 +223,70 @@
       <dir>$PROJECT_DIR$</dir>
       <dir>$PROJECT_DIR$/database/migrations</dir>
       <dir>$PROJECT_DIR$/app</dir>
+      <dir>$PROJECT_DIR$/database/</dir>
     </dirStrings>
   </component>
   <component name="Git.Settings">
     <option name="UPDATE_TYPE" value="REBASE" />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.txt" root0="SKIP_INSPECTION" />
+  </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/database/migrations/2019_03_14_095528_create_table_reporting_periods.php" />
-        <option value="$PROJECT_DIR$/database/migrations/2019_03_14_095220_create_table_financial_reporting_period.php" />
-        <option value="$PROJECT_DIR$/database/seeds/LeaseAccountingTreatment.php" />
-        <option value="$PROJECT_DIR$/database/migrations/2019_03_14_100143_create_table_financial_reporting_period.php" />
-        <option value="$PROJECT_DIR$/database/seeds/ReportingPeriods.php" />
-        <option value="$PROJECT_DIR$/database/seeds/DatabaseSeeder.php" />
-        <option value="$PROJECT_DIR$/app/ReportingPeriods.php" />
-        <option value="$PROJECT_DIR$/app/FinancialReportingPeriodSetting.php" />
-        <option value="$PROJECT_DIR$/resources/views/settings/general/index.blade.php" />
-        <option value="$PROJECT_DIR$/resources/views/home.blade.php" />
-        <option value="$PROJECT_DIR$/public/js/custom.js" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Settings/IndexController.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseTerminationOptionController.php" />
-        <option value="$PROJECT_DIR$/resources/views/lease/lease-termination-option/_form.blade.php" />
-        <option value="$PROJECT_DIR$/database/migrations/2019_03_15_092855_alter_table_lease_assets_payments.php" />
-        <option value="$PROJECT_DIR$/.env" />
-        <option value="$PROJECT_DIR$/resources/views/lease/payments/_form.blade.php" />
-        <option value="$PROJECT_DIR$/resources/views/lease/payments/create.blade.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/LeasePaymentsController.php" />
-        <option value="$PROJECT_DIR$/app/LeaseAssets.php" />
-        <option value="$PROJECT_DIR$/app/LeaseAssetPayments.php" />
-        <option value="$PROJECT_DIR$/resources/views/lease/lease-valuation/_present_value_calculus.blade.php" />
-        <option value="$PROJECT_DIR$/resources/views/lease/payments/index.blade.php" />
-        <option value="$PROJECT_DIR$/resources/views/layouts/_addlease_steps.blade.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseDurationClassifiedController.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/EscalationController.php" />
-        <option value="$PROJECT_DIR$/resources/views/lease/residual-value-gurantee/_form.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/lease/lease-renewable-option/create.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/lease/lease-renewable-option/_form.blade.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseRenewableOptionController.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/PurchaseOptionController.php" />
+        <option value="$PROJECT_DIR$/resources/views/lease/purchase-option/create.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/lease/escalation/index.blade.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/SelectLowValueController.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseResidualController.php" />
-        <option value="$PROJECT_DIR$/resources/views/lease/select-low-value/_form.blade.php" />
-        <option value="$PROJECT_DIR$/routes/web.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/FairMarketValueController.php" />
-        <option value="$PROJECT_DIR$/config/settings.php" />
-        <option value="$PROJECT_DIR$/resources/views/lease/lease-incentives/_form.blade.php" />
-        <option value="$PROJECT_DIR$/public/js/pages/dashboard.js" />
-        <option value="$PROJECT_DIR$/resources/views/lease/lease-payment-invoice/index.blade.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseInvoiceController.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/InitialDirectCostController.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseIncentivesController.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseBalanceAsOnDecController.php" />
-        <option value="$PROJECT_DIR$/app/Http/Middleware/CheckPreviousData.php" />
+        <option value="$PROJECT_DIR$/resources/views/lease/escalation/_form.blade.php" />
+        <option value="$PROJECT_DIR$/public/js/pages/escalations.js" />
+        <option value="$PROJECT_DIR$/resources/views/lease/residual-value-gurantee/update.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/lease/residual-value-gurantee/index.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/lease/residual-value-gurantee/_form.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/lease/residual-value-gurantee/create.blade.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Drafts/IndexController.php" />
+        <option value="$PROJECT_DIR$/resources/views/drafts/index.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/SelectDiscountRateController.php" />
-        <option value="$PROJECT_DIR$/app/Helpers/Helpers.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseValuationController.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" />
+        <option value="$PROJECT_DIR$/resources/views/lease/select-discount-rate/_form.blade.php" />
+        <option value="$PROJECT_DIR$/database/migrations/2019_03_18_092425_alter_table_lease_select_discount_rate_add_column_dailt_discount_rate.php" />
+        <option value="$PROJECT_DIR$/app/LeaseSelectDiscountRate.php" />
+        <option value="$PROJECT_DIR$/resources/views/lease/lease-balnce-as-on-dec/_form.blade.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/LeasePaymentsController.php" />
         <option value="$PROJECT_DIR$/public/css/custom.css" />
-        <option value="$PROJECT_DIR$/resources/views/lease/review-submit/index.blade.php" />
+        <option value="$PROJECT_DIR$/app/LeaseAssetPayments.php" />
+        <option value="$PROJECT_DIR$/database/migrations/2019_03_19_060007_create_store_procedure_termination_penalty_present_value.php" />
+        <option value="$PROJECT_DIR$/database/migrations/2019_03_19_081711_create_procedure_residual_present_value.php" />
+        <option value="$PROJECT_DIR$/resources/views/lease/lease-valuation/_present_value_calculus.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/lease/lease-valuation/_lease_valuation.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/lease/lease-valuation/_lease_liability.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/lease/lease-valuation/index.blade.php" />
-        <option value="$PROJECT_DIR$/resources/views/leasevaluation/index.blade.php" />
+        <option value="$PROJECT_DIR$/public/js/pages/lease_valuation.js" />
+        <option value="$PROJECT_DIR$/resources/views/lease/lease-valuation/_impairment_test.blade.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseIncentivesController.php" />
+        <option value="$PROJECT_DIR$/resources/views/lease/dismantling-costs/create.blade.php" />
+        <option value="$PROJECT_DIR$/database/sqls/stored_procedures.sql" />
+        <option value="$PROJECT_DIR$/database/sqls/store_procedure_termination.sql" />
+        <option value="$PROJECT_DIR$/database/sqls/store_procedure_residual.sql" />
+        <option value="$PROJECT_DIR$/database/migrations/2019_03_20_054334_add_column_type_to_supplier_details.php" />
+        <option value="$PROJECT_DIR$/app/SupplierDetails.php" />
+        <option value="$PROJECT_DIR$/app/InitialDirectCost.php" />
+        <option value="$PROJECT_DIR$/app/DismantlingCosts.php" />
+        <option value="$PROJECT_DIR$/app/Helpers/Helpers.php" />
+        <option value="$PROJECT_DIR$/app/LeaseAssets.php" />
+        <option value="$PROJECT_DIR$/database/migrations/2019_03_19_125513_create_table_dismantling_costs.php" />
+        <option value="$PROJECT_DIR$/resources/views/lease/dismantling-costs/_form.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/layouts/_addlease_steps.blade.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseValuationController.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseInvoiceController.php" />
+        <option value="$PROJECT_DIR$/routes/web.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/DismantlingCostsController.php" />
+        <option value="$PROJECT_DIR$/app/Http/Middleware/CheckPreviousData.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/InitialDirectCostController.php" />
       </list>
     </option>
   </component>
@@ -373,7 +428,7 @@
               <item name="witsync" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
               <item name="views" type="462c0819:PsiDirectoryNode" />
-              <item name="leasevaluation" type="462c0819:PsiDirectoryNode" />
+              <item name="layouts" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -385,7 +440,7 @@
     <property name="DatabaseDriversLRU" value="mysql" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="com.jetbrains.php.phpunit.codeGeneration.PhpNewTestDialog.defaultLibrary" value="PHPUnit" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/app" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/database/migrations" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="preferences.fileTypes" />
   </component>
@@ -480,12 +535,15 @@
       <workItem from="1552451001745" duration="18190000" />
       <workItem from="1552538163651" duration="20684000" />
       <workItem from="1552631958536" duration="22238000" />
-      <workItem from="1552710307206" duration="25293000" />
+      <workItem from="1552710307206" duration="26853000" />
+      <workItem from="1552883216112" duration="26417000" />
+      <workItem from="1552969536014" duration="28644000" />
+      <workItem from="1553055913066" duration="10140000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="713462000" />
+    <option name="totallyTimeSpent" value="780223000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -500,24 +558,25 @@
     <frame x="64" y="-11" width="1857" height="1092" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.21258973" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2192159" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
-      <window_info anchor="bottom" id="Thumbnails" order="0" weight="0.32911393" />
-      <window_info anchor="bottom" id="Message" order="1" />
-      <window_info anchor="bottom" id="Find" order="2" weight="0.32911393" />
-      <window_info anchor="bottom" id="Run" order="3" weight="0.32911393" />
-      <window_info anchor="bottom" id="Debug" order="4" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="7" weight="0.32972974" />
-      <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="9" weight="0.32911393" />
-      <window_info anchor="bottom" id="Database Changes" order="10" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" weight="0.32911393" />
-      <window_info anchor="bottom" id="Terminal" order="12" weight="0.32805908" />
-      <window_info active="true" anchor="bottom" id="REST Client" order="13" weight="0.3755274" />
+      <window_info anchor="bottom" id="Command Line Tools Console" order="0" weight="0.32911393" />
+      <window_info anchor="bottom" id="Thumbnails" order="1" weight="0.32911393" />
+      <window_info anchor="bottom" id="Message" order="2" />
+      <window_info anchor="bottom" id="Find" order="3" weight="0.32911393" />
+      <window_info anchor="bottom" id="Run" order="4" weight="0.32911393" />
+      <window_info anchor="bottom" id="Debug" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="6" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="7" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="8" weight="0.32972974" />
+      <window_info anchor="bottom" id="Docker" order="9" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="10" weight="0.32911393" />
+      <window_info anchor="bottom" id="Database Changes" order="11" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Event Log" order="12" sideWeight="0.5002761" side_tool="true" weight="0.32805908" />
+      <window_info anchor="bottom" id="Terminal" order="13" sideWeight="0.4997239" weight="0.32805908" />
+      <window_info active="true" anchor="bottom" id="REST Client" order="14" weight="0.3755274" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -581,408 +640,393 @@
           <line>351</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/app/Http/Middleware/CheckPreviousData.php</url>
+          <line>389</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/LeasePaymentComponents.php">
+    <entry file="file://$PROJECT_DIR$/vendor/laravel/framework/src/Illuminate/Auth/Notifications/ResetPassword.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" selection-start-line="11" selection-end-line="11" />
+        <state relative-caret-position="353">
+          <caret line="22" column="20" selection-start-line="22" selection-start-column="20" selection-end-line="22" selection-end-column="20" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/LeaseAssetPaymentsNature.php">
+    <entry file="file://$PROJECT_DIR$/app/User.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
+        <state relative-caret-position="372">
+          <caret line="34" column="6" lean-forward="true" selection-start-line="34" selection-start-column="6" selection-end-line="34" selection-end-column="6" />
+          <folding>
+            <element signature="e#23#63#0#PHP" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/laravel/framework/src/Illuminate/Support/Facades/Validator.php">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/laravel/framework/src/Illuminate/Validation/Validator.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3895">
-          <caret line="867" column="33" selection-start-line="867" selection-start-column="19" selection-end-line="867" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2019_03_15_092855_alter_table_lease_assets_payments.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="11" column="19" lean-forward="true" selection-start-line="11" selection-start-column="19" selection-end-line="11" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2018_12_28_110018_create_table_lease_assets_payments.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="34" lean-forward="true" selection-start-line="34" selection-end-line="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/LeasePaymentsBasis.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/lease/payments/updatepayment.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="29" column="14" lean-forward="true" selection-start-line="29" selection-start-column="14" selection-end-line="29" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-termination-option/_form.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="192" column="67" selection-start-line="192" selection-start-column="12" selection-end-line="192" selection-end-column="67" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.env">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="14" selection-start-line="3" selection-start-column="14" selection-end-line="3" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/LeaseAssets.php">
+    <entry file="file://$PROJECT_DIR$/app/Notifications/ResetPassword.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="391">
-          <caret line="53" column="31" selection-start-line="53" selection-start-column="31" selection-end-line="53" selection-end-column="31" />
+          <caret line="26" column="39" selection-start-line="26" selection-start-column="39" selection-end-line="26" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/database/seeds/DatabaseSeeder.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="287">
+          <caret line="25" lean-forward="true" selection-start-line="25" selection-end-line="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_01_18_050523_create_stored_procedure.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="476">
+          <caret line="30" column="84" selection-start-line="30" selection-start-column="6" selection-end-line="30" selection-end-column="84" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/LeaseAssetPayments.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="185">
+          <caret line="72" column="66" selection-start-line="72" selection-start-column="66" selection-end-line="72" selection-end-column="66" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/auth.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="304">
+          <caret line="46" column="10" lean-forward="true" selection-start-line="46" selection-start-column="10" selection-end-line="46" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Admin/ForgotPasswordController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="729">
+          <caret line="64" column="70" lean-forward="true" selection-start-line="64" selection-start-column="70" selection-end-line="64" selection-end-column="70" />
+          <folding>
+            <element signature="e#46#82#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/admin/auth/login.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" column="40" lean-forward="true" selection-start-line="14" selection-start-column="40" selection-end-line="14" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Admin/AuthController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="440">
+          <caret line="37" column="66" lean-forward="true" selection-start-line="37" selection-start-column="66" selection-end-line="37" selection-end-column="66" />
+          <folding>
+            <element signature="e#130#166#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Middleware/CheckAdminLogin.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="493">
+          <caret line="35" lean-forward="true" selection-start-line="35" selection-end-line="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Kernel.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="644">
+          <caret line="62" column="8" selection-start-line="62" selection-start-column="8" selection-end-line="62" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/admin/auth/passwords/email.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="16" column="108" selection-start-line="16" selection-start-column="82" selection-end-line="16" selection-end-column="108" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_03_19_081711_create_procedure_residual_present_value.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="8" column="7" lean-forward="true" selection-start-line="8" selection-start-column="7" selection-end-line="8" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_03_19_060007_create_store_procedure_termination_penalty_present_value.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="476">
+          <caret line="30" column="96" lean-forward="true" selection-start-line="30" selection-start-column="8" selection-end-line="30" selection-end-column="96" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-valuation/_present_value_calculus.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="304">
-          <caret line="119" column="35" selection-start-line="119" selection-start-column="35" selection-end-line="119" selection-end-column="35" />
+        <state relative-caret-position="1562">
+          <caret line="114" column="51" lean-forward="true" selection-start-line="114" selection-start-column="51" selection-end-line="114" selection-end-column="51" />
           <folding>
-            <element signature="e#2334#2340#1#HTML" expanded="true" />
-            <element signature="e#3065#3071#1#HTML" expanded="true" />
-            <element signature="e#3329#3335#1#HTML" expanded="true" />
-            <element signature="e#3806#3812#1#HTML" expanded="true" />
-            <element signature="e#4577#4583#1#HTML" expanded="true" />
-            <element signature="e#4813#4819#1#HTML" expanded="true" />
-            <element signature="e#4801#4807#1#HTML" expanded="true" />
+            <element signature="e#3245#3251#1#HTML" expanded="true" />
+            <element signature="e#4239#4245#1#HTML" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Lease.php">
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-valuation/_cumulative_valuation.blade.php" />
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-valuation/_equivaline_to_present_lease_liability.blade.php" />
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-valuation/_lease_valuation.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="29" column="26" selection-start-line="29" selection-start-column="20" selection-end-line="29" selection-end-column="26" />
+        <state relative-caret-position="32">
+          <caret line="2" column="8" selection-start-line="2" selection-start-column="8" selection-end-line="2" selection-end-column="8" />
+          <folding>
+            <element signature="n#style#0;n#th#3;n#tr#0;n#table#0;n#div#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/lease/_menubar.blade.php">
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-valuation/index.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="18" column="5" lean-forward="true" selection-start-line="18" selection-start-column="5" selection-end-line="18" selection-end-column="5" />
+        <state relative-caret-position="595">
+          <caret line="44" column="64" selection-start-line="44" selection-start-column="48" selection-end-line="44" selection-end-column="64" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/lease/fair-market-value/index.blade.php">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/layouts/app.blade.php">
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-valuation/_lease_liability.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="612">
-          <caret line="114" column="42" lean-forward="true" selection-start-line="114" selection-start-column="42" selection-end-line="114" selection-end-column="42" />
+        <state relative-caret-position="289">
+          <caret line="17" column="20" selection-start-line="17" selection-start-column="20" selection-end-line="17" selection-end-column="70" />
+          <folding>
+            <element signature="n#style#0;n#th#0;n#tr#1;n#table#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#0;n#tr#1;n#table#0;n#div#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/lease/payments/index.blade.php">
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-valuation/_impairment_test.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="374">
-          <caret line="119" column="74" selection-start-line="119" selection-start-column="74" selection-end-line="119" selection-end-column="74" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/layouts/_addlease_steps.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="612">
-          <caret line="78" column="40" selection-start-line="78" selection-start-column="40" selection-end-line="78" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/lease/residual-value-gurantee/_form.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="183" column="27" selection-start-line="183" selection-start-column="27" selection-end-line="183" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/lease/residual-value-gurantee/create.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="18" column="59" lean-forward="true" selection-start-line="18" selection-start-column="59" selection-end-line="18" selection-end-column="59" />
+          <caret line="22" column="13" lean-forward="true" selection-start-line="22" selection-start-column="13" selection-end-line="22" selection-end-column="13" />
           <folding>
-            <element signature="e#551#572#0#HTML" expanded="true" />
+            <element signature="n#style#0;n#th#0;n#tr#0;n#table#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#th#1;n#tr#0;n#table#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#th#2;n#tr#0;n#table#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#0;n#tr#1;n#table#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#1;n#tr#1;n#table#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#2;n#tr#1;n#table#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#3;n#tr#1;n#table#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#4;n#tr#1;n#table#0;n#div#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/lease/escalation/index.blade.php">
+    <entry file="file://$PROJECT_DIR$/public/js/pages/lease_valuation.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="75" column="74" selection-start-line="75" selection-start-column="51" selection-end-line="75" selection-end-column="74" />
+        <state relative-caret-position="372">
+          <caret line="138" column="9" selection-start-line="138" selection-start-column="9" selection-end-line="138" selection-end-column="9" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/EscalationController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="284">
-          <caret line="59" column="26" selection-start-line="59" selection-start-column="22" selection-end-line="59" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseResidualController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="9" selection-start-line="9" selection-end-line="9" />
-          <folding>
-            <element signature="e#134#170#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/lease/select-low-value/_form.blade.php">
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/initial-direct-cost/_form.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="561">
-          <caret line="33" column="14" selection-start-line="33" selection-start-column="14" selection-end-line="33" selection-end-column="14" />
+          <caret line="33" column="18" lean-forward="true" selection-end-line="330" selection-end-column="11" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/LeasePaymentsController.php">
+    <entry file="file://$PROJECT_DIR$/database/sqls/stored_procedures.sql">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="312">
-          <caret line="350" column="39" selection-start-line="350" selection-start-column="20" selection-end-line="350" selection-end-column="39" />
+        <state relative-caret-position="711">
+          <caret line="77" column="4" selection-start-line="77" selection-start-column="4" selection-end-line="77" selection-end-column="4" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config/settings.php">
+    <entry file="file://$PROJECT_DIR$/database/sqls/store_procedure_residual.sql">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="663">
-          <caret line="39" column="82" selection-start-line="39" selection-start-column="82" selection-end-line="39" selection-end-column="82" />
+        <state relative-caret-position="51">
+          <caret line="3" column="21" lean-forward="true" selection-start-line="3" selection-start-column="21" selection-end-line="3" selection-end-column="21" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseDurationClassifiedController.php">
+    <entry file="file://$PROJECT_DIR$/database/sqls/store_procedure_termination.sql">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="561">
-          <caret line="69" column="80" selection-start-line="69" selection-start-column="80" selection-end-line="69" selection-end-column="80" />
+        <state relative-caret-position="221">
+          <caret line="13" column="72" lean-forward="true" selection-start-line="13" selection-end-line="13" selection-end-column="72" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-incentives/_form.blade.php">
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_01_04_051022_create_lease_incentives_table.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="629">
-          <caret line="67" column="112" selection-start-line="67" selection-start-column="112" selection-end-line="67" selection-end-column="112" />
+        <state relative-caret-position="374">
+          <caret line="24" column="33" selection-start-line="16" selection-start-column="12" selection-end-line="24" selection-end-column="33" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/js/pages/dashboard.js">
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/initial-direct-cost/create.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="714">
-          <caret line="42" column="33" lean-forward="true" selection-start-line="42" selection-start-column="33" selection-end-line="42" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-payment-invoice/index.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="678">
-          <caret line="76" column="300" selection-start-line="76" selection-start-column="300" selection-end-line="76" selection-end-column="300" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/InitialDirectCostController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="74" column="70" selection-start-line="74" selection-start-column="19" selection-end-line="74" selection-end-column="70" />
+        <state relative-caret-position="391">
+          <caret line="23" selection-end-line="26" selection-end-column="11" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseIncentivesController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="68" column="30" selection-start-line="68" selection-start-column="30" selection-end-line="68" selection-end-column="30" />
+        <state relative-caret-position="204">
+          <caret line="135" column="83" selection-start-line="135" selection-start-column="83" selection-end-line="135" selection-end-column="83" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseInvoiceController.php">
+    <entry file="file://$PROJECT_DIR$/app/LeaseIncentives.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="355">
-          <caret line="66" column="28" selection-start-line="55" selection-start-column="16" selection-end-line="66" selection-end-column="28" />
-          <folding>
-            <element signature="e#132#168#0#PHP" expanded="true" />
-          </folding>
+        <state relative-caret-position="374">
+          <caret line="22" column="5" lean-forward="true" selection-start-line="22" selection-start-column="5" selection-end-line="22" selection-end-column="5" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseBalanceAsOnDecController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="498">
-          <caret line="65" column="30" selection-start-line="63" selection-start-column="16" selection-end-line="65" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/SelectDiscountRateController.php">
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_03_20_054334_add_column_type_to_supplier_details.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
-          <caret line="64" column="19" selection-start-line="62" selection-start-column="16" selection-end-line="83" selection-end-column="17" />
+          <caret line="16" column="30" selection-start-line="16" selection-start-column="26" selection-end-line="16" selection-end-column="30" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Middleware/CheckPreviousData.php">
+    <entry file="file://$PROJECT_DIR$/app/SupplierDetails.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="26" column="16" lean-forward="true" selection-start-line="26" selection-start-column="16" selection-end-line="26" selection-end-column="16" />
+        <state relative-caret-position="306">
+          <caret line="18" column="15" selection-start-line="18" selection-start-column="15" selection-end-line="18" selection-end-column="15" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseValuationController.php">
+    <entry file="file://$PROJECT_DIR$/app/DismantlingCosts.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="542">
-          <caret line="62" column="65" lean-forward="true" selection-start-line="62" selection-start-column="65" selection-end-line="62" selection-end-column="65" />
+        <state relative-caret-position="374">
+          <caret line="22" column="122" selection-start-line="22" selection-start-column="122" selection-end-line="22" selection-end-column="122" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/SelectLowValueController.php">
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/dismantling-costs/create.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-374">
-          <caret line="55" column="42" lean-forward="true" selection-start-line="55" selection-start-column="42" selection-end-line="55" selection-end-column="42" />
+        <state relative-caret-position="340">
+          <caret line="20" column="61" selection-start-line="20" selection-start-column="61" selection-end-line="20" selection-end-column="61" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/HomeController.php">
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_03_19_125513_create_table_dismantling_costs.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="116" column="66" selection-start-line="116" selection-start-column="66" selection-end-line="116" selection-end-column="66" />
+        <state relative-caret-position="527">
+          <caret line="33" column="7" lean-forward="true" selection-start-line="33" selection-start-column="7" selection-end-line="33" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/lang/en/_sidebar.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/_menubar.blade.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.env">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="15" selection-start-line="15" selection-end-line="15" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Helpers/Helpers.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="1025" column="16" selection-start-line="1025" selection-start-column="16" selection-end-line="1025" selection-end-column="16" />
+        <state relative-caret-position="193">
+          <caret line="1012" lean-forward="true" selection-start-line="1012" selection-end-line="1012" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/dismantling-costs/_form.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" selection-start-line="14" selection-end-line="14" />
           <folding>
-            <element signature="n#uploadImage#0;n#!!top" />
-            <element signature="n#getUserProfileImageSrc#0;n#!!top" />
-            <element signature="n#getDependentUserIds#0;n#!!top" />
-            <element signature="n#getParentDetails#0;n#!!top" />
-            <element signature="n#updateCreditBalanceForParent#0;n#!!top" />
-            <element signature="n#calculatePaymentDueDates#0;n#!!top" />
-            <element signature="n#calculatePaymentDueDatesByPaymentId#0;n#!!top" />
-            <element signature="n#generateEsclationChart#0;n#!!top" />
-            <element signature="e#10687#15241#0#PHP" />
-            <element signature="e#15317#22367#0#PHP" />
-            <element signature="n#firstEscalationDate#0;n#!!top" />
-            <element signature="n#getUndiscountedTotalLeasePayment#0;n#!!top" />
-            <element signature="n#confirmSteps#0;n#!!top" />
-            <element signature="n#checkPreviousSteps#0;n#!!top" />
-            <element signature="n#createUlaCode#0;n#!!top" />
-            <element signature="n#fetchCurrencyExchangeRate#0;n#!!top" />
-            <element signature="n#generateWitsyncAccountID#0;n#!!top" />
-            <element signature="n#generatePaypalExpressCheckoutLink#0;n#!!top" />
-            <element signature="n#getLockYearDetails#0;n#!!top" />
-            <element signature="n#getInformationPage#0;n#!!top" />
-            <element signature="n#getYearRanage#0;n#!!top" />
-            <element signature="n#calculateAdjustedAmountForUpgradeDowngrade#0;n#!!top" />
-            <element signature="n#getPaidSubscriptionPlans#0;n#!!top" />
+            <element signature="e#1978#2005#0#HTML" expanded="true" />
+            <element signature="e#2382#2409#0#HTML" expanded="true" />
+            <element signature="e#2856#2964#0#HTML" expanded="true" />
+            <element signature="e#3523#3550#0#HTML" expanded="true" />
+            <element signature="e#4724#4942#0#HTML" expanded="true" />
+            <element signature="e#4943#4970#0#HTML" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/FairMarketValueController.php">
+    <entry file="file://$PROJECT_DIR$/app/LeaseAssets.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="544">
-          <caret line="70" column="70" selection-start-line="70" selection-start-column="20" selection-end-line="70" selection-end-column="70" />
+        <state relative-caret-position="380">
+          <caret line="122" column="35" selection-start-line="122" selection-start-column="20" selection-end-line="122" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/layouts/_addlease_steps.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="680">
+          <caret line="139" column="21" selection-start-line="139" selection-start-column="21" selection-end-line="139" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseValuationController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="663">
+          <caret line="51" column="94" selection-start-line="51" selection-start-column="94" selection-end-line="51" selection-end-column="94" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseInvoiceController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="754">
+          <caret line="84" column="19" selection-start-line="84" selection-start-column="19" selection-end-line="84" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/DismantlingCostsController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="613">
+          <caret line="180" column="72" selection-start-line="180" selection-start-column="72" selection-end-line="180" selection-end-column="72" />
           <folding>
-            <element signature="e#132#168#0#PHP" expanded="true" />
+            <element signature="e#131#155#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/routes/web.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="312">
-          <caret line="265" column="131" selection-start-line="265" selection-start-column="109" selection-end-line="265" selection-end-column="131" />
+        <state relative-caret-position="644">
+          <caret line="276" column="11" selection-start-line="276" selection-start-column="11" selection-end-line="276" selection-end-column="11" />
           <folding>
             <element signature="e#7#389#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/lease/fair-market-value/_form.blade.php">
+    <entry file="file://$PROJECT_DIR$/app/Http/Middleware/CheckPreviousData.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="312">
-          <caret line="136" column="52" selection-start-line="136" selection-start-column="52" selection-end-line="136" selection-end-column="52" />
+        <state relative-caret-position="355">
+          <caret line="420" selection-start-line="420" selection-end-line="420" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/lease/payments/_form.blade.php">
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/InitialDirectCostController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="312">
-          <caret line="404" column="80" selection-start-line="404" selection-start-column="4" selection-end-line="404" selection-end-column="80" />
+        <state relative-caret-position="533">
+          <caret line="90" column="43" selection-start-line="90" selection-start-column="43" selection-end-line="90" selection-end-column="43" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/css/custom.css">
+    <entry file="file://$PROJECT_DIR$/app/InitialDirectCost.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="848">
-          <caret line="940" column="1" selection-start-line="940" selection-start-column="1" selection-end-line="940" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/lease/review-submit/index.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="780">
-          <caret line="504" selection-start-line="504" selection-end-line="504" />
-          <folding>
-            <element signature="e#24876#24906#0#HTML" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/lease/initial-direct-cost/index.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="18" selection-start-line="11" selection-start-column="12" selection-end-line="15" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-valuation/index.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="714">
-          <caret line="42" column="70" selection-start-line="42" selection-start-column="70" selection-end-line="42" selection-end-column="70" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/leasevaluation/index.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="392">
-          <caret line="135" column="25" selection-start-line="135" selection-start-column="25" selection-end-line="135" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/LeaseAssetPayments.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="6" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="890">
-          <caret line="170" column="13" lean-forward="true" selection-start-line="170" selection-start-column="13" selection-end-line="170" selection-end-column="13" />
+        <state relative-caret-position="595">
+          <caret line="35" lean-forward="true" selection-start-line="35" selection-end-line="35" />
         </state>
       </provider>
     </entry>

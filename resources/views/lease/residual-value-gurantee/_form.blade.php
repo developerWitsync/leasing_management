@@ -138,7 +138,7 @@
             <label for="residual_gurantee_value" class="col-md-12 control-label">Residual Guarantee Value Per
                 Unit</label>
             <div class="col-md-12">
-                <input type="text" placeholder="Residual Gurantee Value" class="form-control"
+                <input type="text" placeholder="Residual Guarantee Value" class="form-control"
                        id="residual_gurantee_value" name="residual_gurantee_value"
                        value="{{ old('residual_gurantee_value', $model->residual_gurantee_value) }}">
                 @if ($errors->has('residual_gurantee_value'))

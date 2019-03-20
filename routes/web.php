@@ -241,15 +241,29 @@ Route::middleware('auth')->group(function () {
             Route::delete('delete-customer/{id}/{lease_id}', ['as' => 'addlease.leaseincentives.deletecustomer', 'uses' => 'LeaseIncentivesController@deleteCustomer'])->middleware('checkpreviousdata:14,lease_id,lease_id');
             Route::delete('delete-create-customer/{id}', ['as' => 'addlease.leaseincentives.deletecreatecustomer', 'uses' => 'LeaseIncentivesController@deleteCreateCustomer'])->middleware('checkpreviousdata:14,asset_id,id');
         });
+
+        /**
+         * Lease Dismantling Costs NL14.1
+         */
+        Route::prefix('dismantling-costs')->group(function () {
+            Route::match(['post', 'get'], 'index/{id}', ['as' => 'lease.dismantlingcosts.index', 'uses' => 'DismantlingCostsController@index_V2']);
+        });
+
+
         /**
          * Lease Incentives  NL15
          */
         Route::prefix('lease-valuation')->group(function () {
-            Route::get('index/{id}', ['as' => 'addlease.leasevaluation.index', 'uses' => 'LeaseValuationController@index'])->middleware('checkpreviousdata:15,lease_id,id');
-            Route::get('lease-liability-asset/{id}', ['as' => 'addlease.leasevaluation.liability', 'uses' => 'LeaseValuationController@presentValueOfLeaseLiability'])->middleware('checkpreviousdata:15,asset_id,id');
-            Route::get('show-lease-liability-calculus/{id}', ['as' => 'addlease.leasevaluation.showcalculus', 'uses' => 'LeaseValuationController@showPresentValueOfLeaseLiabilityCalculus'])->middleware('checkpreviousdata:15,asset_id,id');
-            Route::get('lease-valuation-asset/{id}', ['as' => 'addlease.leasevaluation.valuation', 'uses' => 'LeaseValuationController@equivalentPresentValueOfLeaseLiability'])->middleware('checkpreviousdata:15,asset_id,id');
-            Route::get('lease-impairment/{id}', ['as' => 'addlease.leasevaluation.impairment', 'uses' => 'LeaseValuationController@leaseAssetImpairment'])->middleware('checkpreviousdata:15,asset_id,id');
+            Route::get('index/{id}', ['as' => 'addlease.leasevaluation.index', 'uses' => 'LeaseValuationController@index'])->middleware('checkpreviousdata:16,lease_id,id');
+            Route::get('lease-liability-asset/{id}', ['as' => 'addlease.leasevaluation.liability', 'uses' => 'LeaseValuationController@presentValueOfLeaseLiability'])->middleware('checkpreviousdata:16,asset_id,id');
+            Route::get('show-lease-liability-calculus/{id}', ['as' => 'addlease.leasevaluation.showcalculus', 'uses' => 'LeaseValuationController@showPresentValueOfLeaseLiabilityCalculus'])->middleware('checkpreviousdata:16,asset_id,id');
+            Route::get('lease-valuation-asset/{id}', ['as' => 'addlease.leasevaluation.valuation', 'uses' => 'LeaseValuationController@equivalentPresentValueOfLeaseLiability'])->middleware('checkpreviousdata:16,asset_id,id');
+            Route::get('lease-impairment/{id}', ['as' => 'addlease.leasevaluation.impairment', 'uses' => 'LeaseValuationController@leaseAssetImpairment'])->middleware('checkpreviousdata:16,asset_id,id');
+            Route::get('termination-present-value/{id}', ['as' => 'addlease.leasevaluation.terminationpresentvalue', 'uses' => 'LeaseValuationController@terminationPresentValue']);
+
+            Route::get('residual-present-value/{id}', ['as' => 'addlease.leasevaluation.residualpresentvalue', 'uses' => 'LeaseValuationController@residualPresentValue']);
+
+            Route::get('purchase-present-value/{id}', ['as' => 'addlease.leasevaluation.purchasepresentvalue', 'uses' => 'LeaseValuationController@purchasePresentValue']);
         });
         /**
          * Lease Payment Invoice NL16
@@ -262,8 +276,8 @@ Route::middleware('auth')->group(function () {
          * Review&Submit  NL17
          */
         Route::prefix('review-submit')->group(function () {
-            Route::match(['post', 'get'], 'index/{id}', ['as' => 'addlease.reviewsubmit.index', 'uses' => 'ReviewSubmitController@index'])->middleware('checkpreviousdata:17,lease_id,id');
-            Route::match(['post', 'get'], 'submit/{id}', ['as' => 'addlease.reviewsubmit.submit', 'uses' => 'ReviewSubmitController@submit'])->middleware('checkpreviousdata:17,lease_id,id');
+            Route::match(['post', 'get'], 'index/{id}', ['as' => 'addlease.reviewsubmit.index', 'uses' => 'ReviewSubmitController@index'])->middleware('checkpreviousdata:18,lease_id,id');
+            Route::match(['post', 'get'], 'submit/{id}', ['as' => 'addlease.reviewsubmit.submit', 'uses' => 'ReviewSubmitController@submit'])->middleware('checkpreviousdata:18,lease_id,id');
         });
 
     });
@@ -286,9 +300,7 @@ Route::middleware('auth')->group(function () {
         Route::get('fetch-lease-details', ['as' => 'modifylease.fetchleasedetails', 'uses' => 'ModifyLeaseController@fetchLeaseDetails']);
         Route::match(['post', 'get'], 'create/{id}', ['as' => 'modifylease.create', 'uses' => 'ModifyLeaseController@create']);
         Route::match(['post', 'get'], 'update/{id}', ['as' => 'modifylease.update', 'uses' => 'ModifyLeaseController@update']);
-
         Route::get('checklockdate', ['as' => 'modifylease.checklockdate', 'uses' => 'ModifyLeaseController@checkLockDate']);
-
     });
 
 

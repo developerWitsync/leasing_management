@@ -57,6 +57,9 @@ class PurchaseOptionController extends Controller
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
             if ($lease) {
 
+                //check if the Subsequent Valuation is applied for the lease modification
+                $subsequent_modify_required = $lease->isSubsequentModification();
+
                 $asset = LeaseAssets::query()->where('lease_id', '=', $id)->whereHas('terminationOption', function ($query) {
                     $query->where(function($query){
                         $query->where('lease_termination_option_available', '=', 'yes');
@@ -125,7 +128,8 @@ class PurchaseOptionController extends Controller
                         'lease',
                         'asset',
                         'breadcrumbs',
-                        'current_step'
+                        'current_step',
+                        'subsequent_modify_required'
                     ));
                 } else {
                     return redirect(route('addlease.payments.index', ['id' => $id]));

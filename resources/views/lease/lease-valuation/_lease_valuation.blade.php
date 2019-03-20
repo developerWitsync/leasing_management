@@ -1,68 +1,57 @@
-<div class="panel panel-default">
-    <div class="panel-heading">Valuation Of Lease Asset</div>
-
-    <div class="panel-body">
-        @if (session('status1'))
-            <div class="alert alert-success">
-                {{ session('status1') }}
-            </div>
-        @endif
-
-        <div class="tab-content" style="padding: 0px;">
-            <div role="tabpanel" class="tab-pane active">
-                <div class="panel panel-info">
-                    <div class="panel-heading">Valuation Of Lease Asset</div>
-                    <table class="table table-bordered table-responsive">
-                        <thead>
-                        <tr>
-                            <th>Sr. No.</th>
-                            <th>Lease Asset</th>
-                            <th>LA Classification</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                            @if(count($assets) > 0)
-                                @foreach($assets as $key=>$asset)
-                                    <tr>
-                                        <td>{{ $key + 1 }}</td>
-                                       
-                                        <td>
-                                            {{ $asset->name }}
-                                        </td>
-                                        <td>
-                                            {{ $asset->subcategory->title }}
-                                        </td>
-                                    </tr>
-
-                                    @if($asset->using_lease_payment == 1 &&  \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->greaterThan(\Carbon\Carbon::parse($asset->accural_period)))
-                                        {{--Case 1 : if lease start date is prior to Base Date AND Initial Payment is selected on D1.13--}}
-                                        {{---> Both the option will appear--}}
-                                        @include('lease.lease-valuation._cumulative_valuation')
-                                        @include('lease.lease-valuation._equivaline_to_present_lease_liability')
-                                    @elseif($asset->using_lease_payment == 2 &&  \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->greaterThan(\Carbon\Carbon::parse($asset->accural_period)))
-                                        {{--Case 2 : if lease start date is prior to Base Date and Current Method is selected on D1.13--}}
-                                        {{---> Equivalent to Present Value of Lease Liability will appear--}}
-                                        @include('lease.lease-valuation._equivaline_to_present_lease_liability')
-                                    @elseif(\Carbon\Carbon::parse($asset->accural_period)->greaterThanOrEqualTo(\Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)))
-                                        {{--Case 3 : When the lease start date is on or after Base Date--}}
-                                        {{---> Only Equivalent to Present Value of Lease Liability will appear--}}
-                                        @include('lease.lease-valuation._equivaline_to_present_lease_liability')
-                                    @endif
-
-                                @endforeach
-                            @else
-                                <tr>
-                                    <td colspan="4">
-                                        <center>No Records exists.</center>
-                                    </td>
-                                </tr>
-                            @endif
-                        </tbody>
-                    </table>
-                </div>
-
-               
-            </div>
-        </div>
+<div class="panel panel-info">
+    <div class="panel-heading">
+        Valuation Of Lease Asset |
+        <small>Using Modified Retrospective Approach (equivalent to Present Value of Lease Liability)</small>
     </div>
+    <table class="table table-bordered table-responsive">
+
+        <tr>
+            <th style="text-align: center">Present Value of Lease Liability</th>
+            <th style="text-align: center">Prepaid Lease Payments</th>
+            <th style="text-align: center">Accrued Lease Payments</th>
+            <th style="text-align: center">Initial Direct Cost</th>
+            <th style="text-align: center">Lease Incentives</th>
+            <th style="text-align: center">Estimated Cost of Dismantling</th>
+            <th style="text-align: center">Value of Lease Asset</th>
+        </tr>
+
+        <tr>
+            <td style="border: 1px solid #ddd;text-align: center;" class="load_lease_liability"
+                data-asset_id="{{ $asset->id }}">Calculating...
+            </td>
+
+            @if($asset->leaseBalanceAsOnDec)
+                <td style="border: 1px solid #ddd;text-align: center;">{{ number_format($asset->leaseBalanceAsOnDec->prepaid_lease_payment_balance *  $asset->leaseBalanceAsOnDec->exchange_rate, 2) }}</td>
+                <td style="border: 1px solid #ddd;text-align: center;">{{ number_format($asset->leaseBalanceAsOnDec->accrued_lease_payment_balance *  $asset->leaseBalanceAsOnDec->exchange_rate, 2) }}</td>
+            @else
+                <td style="border: 1px solid #ddd;text-align: center;">0</td>
+                <td style="border: 1px solid #ddd;text-align: center;">0</td>
+            @endif
+
+            @if($asset->initialDirectCost)
+                @if($asset->initialDirectCost->initial_direct_cost_involved == "yes")
+                    <td style="border: 1px solid #ddd;text-align: center;">{{ number_format($asset->initialDirectCost->total_initial_direct_cost, 2) }}</td>
+                @else
+                    <td style="border: 1px solid #ddd;text-align: center;">0</td>
+                @endif
+            @else
+                <td style="border: 1px solid #ddd;text-align: center;">0</td>
+            @endif
+
+            @if($asset->leaseIncentives)
+                @if($asset->leaseIncentives->is_any_lease_incentives_receivable == "yes")
+                    <td style="border: 1px solid #ddd;text-align: center;">{{ number_format($asset->leaseIncentives->total_lease_incentives, 2) }}</td>
+                @else
+                    <td style="border: 1px solid #ddd;text-align: center;">0</td>
+                @endif
+            @else
+                <td style="border: 1px solid #ddd;text-align: center;">0</td>
+            @endif
+
+            <td style="border: 1px solid #ddd;text-align: center;">&nbsp;</td>
+            <td style="border: 1px solid #ddd;text-align: center;" class="value_of_lease_asset"
+                data-asset_id="{{ $asset->id }}"></td>
+        </tr>
+
+    </table>
 </div>

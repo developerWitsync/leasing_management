@@ -64,4 +64,44 @@ class LeaseAssetPayments extends Model
     public function paymentEscalationSingle(){
         return $this->hasOne('App\PaymentEscalationDetails', 'payment_id', 'id');
     }
+
+    public function paymentEscalationDates(){
+        return $this->hasMany('App\PaymentEscalationDates', 'payment_id', 'id');
+    }
+
+    /**
+     * get the undiscounted lease value for the current payment...
+     * @return mixed
+     */
+    public function getUndiscountedValue(){
+        $lease = Lease::query()->findOrFail($this->asset->lease_id);
+        if($lease->escalation_clause_applicable == "no"){
+            //will have to get the total from the paymentDueDates
+            return $this->calculateUndiscountedValueForPaymentDueDates();
+        } else {
+            //in case of yes have to check if the escalation is applicable
+            if($this->paymentEscalationSingle->is_escalation_applicable == "yes"){
+                return $this->calculateUndiscountedValueForEscalations();
+            } else {
+                //will have to get the total from the payment due dates only..
+                return $this->calculateUndiscountedValueForPaymentDueDates();
+            }
+        }
+    }
+
+    /**
+     * total of the total amount payable from the escalation dates...
+     * @return mixed
+     */
+    protected function calculateUndiscountedValueForEscalations(){
+        return $this->paymentEscalationDates->sum('total_amount_payable');
+    }
+
+    /**
+     * Sum of the total_amount from the total payments due dates...
+     * @return mixed
+     */
+    protected function calculateUndiscountedValueForPaymentDueDates(){
+        return $this->paymentDueDates->sum('total_payment_amount');
+    }
 }

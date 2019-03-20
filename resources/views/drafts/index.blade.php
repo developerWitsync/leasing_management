@@ -47,7 +47,7 @@
                                         <tr>
                                             <th>Sr No.</th>
                                             <th>Lessor Name</th>
-                                            <th>Number of Lease Asset</th>
+                                            <th>Asset Name</th>
                                             <th>Action</th>
                                         </tr>
                                         </thead>
@@ -86,7 +86,12 @@
                         }
                     },
                     { "data": "lessor_name"},
-                    { "data": "total_assets"},
+                    {
+                        "data": "id", render: function (data, type, row, meta) {
+                            return row.assets[0]['name'];
+                        },
+                        sortable : false
+                    },
                     { "data": "id"}
                 ],
                 "columnDefs": [
