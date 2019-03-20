@@ -51,6 +51,7 @@ class DatabaseSeeder extends Seeder
 		$this->call(IndustryTypeSeeder::class);
 		$this->call(LeaseAccountingTreatment::class);
         $this->call(EscalationFrequency::class);
+        $this->call(AccountingStandards::class);
 		$this->call(LeaseAssetCategories::class);
 		$this->call(LeaseAssetPaymentsNature::class);
 		$this->call(LeaseContractDuration::class);
