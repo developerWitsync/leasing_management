@@ -33,7 +33,7 @@ class LeaseAccountingTreatment extends Seeder
         foreach ($this->values as $value) {
             $value['created_at'] = date('Y-m-d H:i:s');
             $value['updated_at'] = date('Y-m-d H:i:s');
-            DB::table('reporting_periods')->insert($value);
+            DB::table('lease_accounting_treatment')->insert($value);
         }
     }
 }
