@@ -21,7 +21,7 @@ BEGIN
 
     DECLARE is_escalation_applicable char(10);
     DECLARE total_amount_payable decimal(12, 2) DEFAULT 0;
-	  declare payment_date date;
+	declare payment_date date;
     Declare days_diff INT DEFAULT 0;
     Declare lease_liability FLOAT DEFAULT 0;
     declare discount_rate INT default 0;
@@ -64,17 +64,16 @@ BEGIN
     set days_diff = datediff(payment_date, base_date);
 
     #select the discount rate for the current asset
-    select `discount_rate_to_use` into discount_rate from `lease_select_discount_rate`
+    select `daily_discount_rate` into discount_rate from `lease_select_discount_rate`
     where `lease_select_discount_rate`.`asset_id` = asset_id;
 
     #now need to calculate the lease_liability here
 
-    set lease_liability = total_amount_payable / POWER(( 1 + ( (discount_rate / 100) / 365 )), days_diff);
+    set lease_liability = total_amount_payable / POWER(( 1 + discount_rate), days_diff);
 
     select payment_id,payment_name, total_amount_payable, discount_rate, lease_liability, payment_year, payment_month, is_escalation_applicable,days_diff;
 
   END IF;
 
 END;
-
 -- --------------------------------------------------------
