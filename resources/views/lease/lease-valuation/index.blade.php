@@ -21,6 +21,7 @@
             </ul>
         </div>
     @endif
+
     <div class="panel panel-default">
         <div class="panel-heading">Lease Valuation</div>
         <div class="panel-body">

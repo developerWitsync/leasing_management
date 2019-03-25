@@ -272,6 +272,14 @@ Route::middleware('auth')->group(function () {
             Route::match(['post', 'get'], 'index/{id}', ['as' => 'addlease.leasepaymentinvoice.index', 'uses' => 'LeaseInvoiceController@index']);
             Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.leasepaymentinvoice.update', 'uses' => 'LeaseInvoiceController@index']);
         });
+
+        /**
+         *  Security Deposists NL16
+         */
+        Route::prefix('security-deposit')->group(function (){
+            Route::match(['post', 'get'], 'index/{id}', ['as' => 'addlease.securitydeposit.index', 'uses' => 'SecurityDepositController@index']);
+        });
+
         /**
          * Review&Submit  NL17
          */

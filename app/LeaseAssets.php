@@ -124,6 +124,10 @@ class LeaseAssets extends Model
         return $this->hasOne('App\DismantlingCosts', 'asset_id','id');
     }
 
+    public function securityDeposit(){
+        return $this->hasOne('App\SecurityDeposits', 'asset_id', 'id');
+    }
+
     public function leaseIncentiveCost(){
         return $this->hasOne('App\LeaseIncentives', 'asset_id','id');
     }

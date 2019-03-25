@@ -48,7 +48,16 @@
                 <td style="border: 1px solid #ddd;text-align: center;">0</td>
             @endif
 
-            <td style="border: 1px solid #ddd;text-align: center;">&nbsp;</td>
+            @if($asset->dismantlingCost)
+                @if($asset->dismantlingCost->cost_of_dismantling_incurred == "yes" && $asset->dismantlingCost->obligation_cost_of_dismantling_incurred == "yes")
+                    <td style="border: 1px solid #ddd;text-align: center;">{{ number_format($asset->dismantlingCost->total_estimated_cost, 2) }}</td>
+                @else
+                    <td style="border: 1px solid #ddd;text-align: center;">0</td>
+                @endif
+            @else
+                <td style="border: 1px solid #ddd;text-align: center;">0</td>
+            @endif
+
             <td style="border: 1px solid #ddd;text-align: center;" class="value_of_lease_asset"
                 data-asset_id="{{ $asset->id }}"></td>
         </tr>

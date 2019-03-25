@@ -134,10 +134,19 @@
                 <span>Lessor Invoice</span>
             </a>
         </li>
+
         <li @if(19 <= $current_step) class="active" @else class="disabled" @endif>
+            <a class="@if(request()->segment(2) == 'security-deposit') active @endif"
+               href="{{route('addlease.securitydeposit.index',['id'=>$lease->id])}}">
+                <i>19</i>
+                <span>Security Deposit</span>
+            </a>
+        </li>
+
+        <li @if(20 <= $current_step) class="active" @else class="disabled" @endif>
             <a class="@if(request()->segment(2) == 'review-submit') active @endif"
                href="{{route('addlease.reviewsubmit.index',['id'=>$lease->id])}}">
-                <i>19</i>
+                <i>20</i>
                 <span>Review & Submit</span>
             </a>
         </li>

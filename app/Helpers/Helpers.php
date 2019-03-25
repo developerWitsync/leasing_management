@@ -589,7 +589,10 @@ function createUlaCode()
 
     $current_year = date("Y");
     $first_param = \App\Lease::query()->count();
-    $second_param = \App\Lease::query()->whereRaw("YEAR(created_at) =  '$current_year'")->count();
+    $first_param = $first_param + 1;
+    $second_param = \App\Lease::query()
+        ->whereRaw("YEAR(created_at) =  '$current_year'")
+        ->count();
 
     $string = "LA" . str_pad($first_param, 3, 0, STR_PAD_LEFT) . '/' . str_pad($second_param, 3, 0, STR_PAD_LEFT) . '/' . $current_year;
     return $string;
@@ -1028,7 +1031,37 @@ function getBackUrl($step, $id)
 
     $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
 
-    if ($step === 15) {
+    if($step == 18){
+        //check if the step lease invoices was applicable or not?
+        $asset = \App\LeaseAssets::query()->where('lease_id', '=', $id)
+            ->whereNotIn('category_id', $category_excluded_id)
+            ->whereHas('leaseSelectLowValue', function ($query) {
+                $query->where('is_classify_under_low_value', '=', 'no');
+            })
+            ->whereHas('leaseDurationClassified', function ($query) {
+                $query->where('lease_contract_duration_id', '=', '3');
+            })
+            ->first();
+        if($asset){
+            return route('addlease.leasepaymentinvoice.index', ['id' => $id]);
+        } else {
+            return getBackUrl(17, $id);
+        }
+    } else if($step == 17){
+        //check if the lease valuation step was applicable or not ?
+        $asset = \App\LeaseAssets::query()->where('lease_id', '=', $id)
+            ->whereHas('leaseSelectLowValue', function ($query) {
+                $query->where('is_classify_under_low_value', '=', 'no');
+            })->whereHas('leaseDurationClassified', function ($query) {
+                $query->where('lease_contract_duration_id', '=', '3');
+            })->whereNotIn('category_id', $category_excluded_id)->first();
+        if($asset){
+            return route('addlease.leasevaluation.index', ['id' => $id]);
+        } else {
+            return getBackUrl(15, $id); //since the condition for the dismantling and lease initial direct cost and for lease incentives are all same...
+        }
+    } elseif  ($step === 15) {
+
         //check if the previous step that is Lease Incentives and Lease Initial Direct Cost were applicable or not ?
         $asset = \App\LeaseAssets::query()->where('lease_id', '=', $id)
             ->whereNotIn('category_id', $category_excluded_id)
