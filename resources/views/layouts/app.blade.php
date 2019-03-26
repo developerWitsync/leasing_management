@@ -17,6 +17,15 @@
     <link href="{{ asset('assets/plugins/owlcarousel/owl.carousel.css') }}" rel="stylesheet">
     @yield('header-styles')
     <link rel="shortcut icon" href="{{ asset('master/images/favicon.png') }}">
+    <style>
+        .error_raiase_ticket {
+            display: block;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            color: #e91717;
+            font-style: italic;
+        }
+    </style>
 </head>
 <body>
 <div>
@@ -130,31 +139,7 @@
     @endif
 
     @if(auth()->check())
-        <a href="javascript:void(0);" data-toggle="modal" data-target="#contactUsModal" class="badge btn-info contactUsCommon">
-            <i class="fa fa-envelope-o"></i>
-            Contact Support
-        </a>
-
-        <div id="contactUsModal" class="modal fade" role="dialog">
-            <div class="modal-dialog">
-
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Modal Header</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p>Some text in the modal.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
+        @include('layouts._raise_ticket')
     @endif
 
 </div>

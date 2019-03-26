@@ -110,7 +110,7 @@ class LeaseInvoiceController extends Controller
                         'subsequent_modify_required'
                     ));
                 } else {
-                    return redirect(route('addlease.reviewsubmit.index', ['id' => $lease->id]));
+                    return redirect(route('addlease.securitydeposit.index', ['id' => $lease->id]));
                 }
 
             } else {

@@ -49,6 +49,9 @@ class EscalationController extends Controller
 
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
             if($lease){
+
+                $asset = $lease->assets()->first();
+
                 //check if the Subsequent Valuation is applied for the lease modification
                 $subsequent_modify_required = $lease->isSubsequentModification();
                 //take out the payments for every lease asset
@@ -104,7 +107,8 @@ class EscalationController extends Controller
                     'breadcrumbs',
                     'subsequent_modify_required',
                     'back_url',
-                    'current_step'
+                    'current_step',
+                    'asset'
                 ));
 
             } else {

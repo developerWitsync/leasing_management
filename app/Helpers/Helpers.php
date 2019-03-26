@@ -1156,3 +1156,8 @@ function getBackUrl($step, $id)
     }
 
 }
+
+
+function customRequestCaptcha(){
+    return new \ReCaptcha\RequestMethod\Post();
+}

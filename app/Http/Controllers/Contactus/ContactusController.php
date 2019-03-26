@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Contactus;
 
 use App\ContactUs;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Exceptions\PostTooLargeException;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Mail\ContactUsQueryFrom;

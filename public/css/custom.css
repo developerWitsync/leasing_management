@@ -954,3 +954,46 @@ input[type=number]::-webkit-outer-spin-button {
     font-weight: 400;
     font-size: 15px;
 }
+#rc-imageselect{
+    transform: scale(1.12);
+    margin-left: 19px;
+}
+#contactUsModal label{
+    text-align: left !important;
+}
+
+#contactUsModal .modal-header{
+    background-color: #0f6fc6;
+    color: white;
+}
+
+#contactUsModal .modal-footer{
+    background-color: #0f6fc6;
+    color: white;
+}
+#contactUsModal .form-group {
+    position: relative;
+}
+
+#contactUsModal .form-group .error_raiase_ticket {
+    position: absolute;
+    bottom: -28px;
+    left: 12px;
+}
+
+.innerSubmit {
+    padding-bottom: 19px;
+    float: left;
+    width: 100%;
+    padding-left: 15px;
+}
+
+.browseFile{
+    width: 80%;
+    display: inline-block;
+    position: relative;
+}
+
+.browseFile .browseBtn {
+    right: 0px !important;
+}

@@ -468,6 +468,10 @@ Route::namespace('Contactus')->prefix('contact')->group(function () {
     Route::post('get-in-touch-with-us', ['as' => 'getintouchwithus', 'uses' => 'ContactusController@getInTouchWithUs']);
 });
 
+Route::namespace('Support')->prefix('support')->group(function(){
+    Route::post('raise-ticket', ['as' => 'support.raise.ticket', 'uses' => 'SupportController@create']);
+});
+
 Route::get('email-confirmation/{verification_code}', ['as' => 'email.confirmation', 'uses' => 'Auth\LoginController@verifyEmail']);
 
 Route::namespace('Admin')->prefix('admin')->group(function () {

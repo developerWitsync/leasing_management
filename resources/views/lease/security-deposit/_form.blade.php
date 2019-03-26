@@ -105,7 +105,7 @@
 
             <div class="form-group{{ $errors->has('file') ? ' has-error' : '' }}">
                 <label for="doc" class="col-md-12 control-label">Upload Copy of Security Deposit</label>
-                <div class="col-md-12">
+                <div class="col-md-12 frmattachFile">
                     <input type="name" id="upload2" name="name" class="form-control" disabled="disabled">
                     <button type="button" class="browseBtn">Browse</button>
                     <!-- <input type="file" id="file-name" name="file" class=""> -->
@@ -116,13 +116,11 @@
                             <strong>{{ $errors->first('file') }}</strong>
                         </span>
                     @endif
-
-                    @if($model->doc !='')
-                        <a href="{{asset('uploads/'.$model->doc)}}" class="downloadIcon"
-                           target="_blank"><i class="fa fa-download"></i></a>
-                    @endif
-
                 </div>
+                @if($model->doc !='')
+                    <a href="{{asset('uploads/'.$model->doc)}}" class="downloadIcon"
+                       target="_blank"><i class="fa fa-download"></i></a>
+                @endif
             </div>
 
             <div class="form-group{{ $errors->has('currency') ? ' has-error' : '' }} required">
