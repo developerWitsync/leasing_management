@@ -83,13 +83,14 @@
                         "data": "id",
                         render: function (data, type, row, meta) {
                             return meta.row + meta.settings._iDisplayStart + 1;
-                        }
+                        },
+                        sortable : false
                     },
-                    { "data": "created_at"},
+                    { "data": "created_at", sortable : false},
                     { "data" : "subscription_package.title", sortable : false},
-                    { "data": "invoice_number"},
-                    { "data": "payment_status"},
-                    { "data": "id"}
+                    { "data": "invoice_number", sortable : false},
+                    { "data": "payment_status", sortable : false},
+                    { "data": "id", sortable : false}
                 ],
                 "columnDefs": [
                     {

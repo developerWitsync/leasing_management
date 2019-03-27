@@ -36,6 +36,7 @@ class TransactionsController extends Controller
                 return datatables()->eloquent(
                     UserSubscription::query()->whereIn('user_id', getDependentUserIds())
                     ->with('subscriptionPackage')->with('coupon')->with('user')
+                    ->orderBy('created_at', 'desc')
                 )
                 ->filter(function ($query) use ($request){
                     if ($request->has('search') && trim($request->search["value"])!="") {
