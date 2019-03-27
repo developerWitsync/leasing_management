@@ -36,7 +36,6 @@ class TransactionsController extends Controller
                 return datatables()->eloquent(
                     UserSubscription::query()->whereIn('user_id', getDependentUserIds())
                     ->with('subscriptionPackage')->with('coupon')->with('user')
-                    ->orderBy('created_at', 'desc')
                 )
                 ->filter(function ($query) use ($request){
                     if ($request->has('search') && trim($request->search["value"])!="") {
@@ -75,7 +74,6 @@ class TransactionsController extends Controller
                     return redirect()->back()->with('error', "Invoice can only be downloaded when the payment will be completed.");
                 }
             } else {
-                dd("asfsdf");
                 abort(404);
             }
         } catch (\Exception $e){
