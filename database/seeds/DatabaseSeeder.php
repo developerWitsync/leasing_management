@@ -41,6 +41,10 @@ class DatabaseSeeder extends Seeder
         DB::unprepared(file_get_contents($path));
         $this->command->info('States table seeded!');
 
+        $path = 'database/sqls/cms_data.sql';
+        DB::unprepared(file_get_contents($path));
+        $this->command->info('CMS table seeded!');
+
 		$this->call(AdminUsers::class);
 		$this->call(ContractClassifications::class);
 		$this->call(ContractEscalationBasis::class);

@@ -131,8 +131,11 @@
             // CKEDITOR.config.width = 'auto';
             window.CKEDITOR_BASEPATH = '{{ asset('assets/js/') }}';
             var editorElement = CKEDITOR.document.getById( 'description' );
-            console.log(editorElement);
             CKEDITOR.replace( 'description');
+            CKEDITOR.config.allowedContent =
+                'h1 h2 h3 p blockquote strong em div ol li;' +
+                'a[!href];h3[!id];h2[!id];' +
+                'img(left,right)[!src,alt,width,height];';
         });
     </script>
 @endsection
