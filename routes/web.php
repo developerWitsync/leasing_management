@@ -69,6 +69,12 @@ Route::middleware('auth')->group(function () {
 
     });
 
+    Route::namespace('Transactions')->prefix('transactions')->group(function(){
+        Route::get('/', ['as' => 'transactions.index', 'uses' => 'TransactionsController@index']);
+        Route::get('fetch-transactions', ['as' => 'transactions.fetch', 'uses'=>'TransactionsController@fetch']);
+        Route::get('download-invoice/{id}', ['as'=> 'transactions.download.invoice', 'uses'=>'TransactionsController@downloadInvoice']);
+    });
+
     Route::namespace('Lease')->middleware(['permission:add_lease', 'checksubscription:add_lease'])->prefix('lease')->group(function () {
         // To check Lock Period Date
         Route::get('checklockperioddate', ['as' => 'lease.checklockperioddate', 'uses' => 'IndexController@checkLockPeriodDate']);

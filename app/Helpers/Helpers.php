@@ -646,6 +646,15 @@ function generateWitsyncAccountID($user)
 }
 
 /**
+ * generates the invoice number for the subscription
+ * @param $subscription
+ * @return string
+ */
+function generateInvoiceNumber($subscription){
+    return env('SOFTWARE_ID')."/".str_pad($subscription->id,3,0,STR_PAD_LEFT)."/".\Carbon\Carbon::parse($subscription->created_at)->format('Y');
+}
+
+/**
  * genrate the Paypal redirect link and returns the string
  * @param \App\SubscriptionPlans $package
  * @param \App\UserSubscription $subscription

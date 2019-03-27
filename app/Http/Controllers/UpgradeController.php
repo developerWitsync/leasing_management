@@ -8,6 +8,7 @@
 
 namespace App\Http\Controllers;
 use App\Lease;
+use App\Mail\SubscriptionInvoice;
 use App\SubscriptionPlans;
 use App\UserSubscription;
 use Carbon\Carbon;
@@ -229,6 +230,8 @@ class UpgradeController extends Controller
                     $user_subscription->payment_status = "Completed";
                     $user_subscription->save();
                     session()->flash('status', 'Congratulations! Your plan has been activated.');
+                    //need to send the invoice to the user for the purchase of the plan...
+                    Mail::to($user_subscription->user)->queue(new SubscriptionInvoice($user_subscription));
                     return response()->json(['status' => true, 'redirect_link' => route('plan.index')], 200);
                 } elseif ($package->price_plan_type == '1' && !is_null($package->price) || ($package->price_plan_type == '2' && $package->is_custom == '1')) {
                     if(!$send_to_paypal){
@@ -242,6 +245,8 @@ class UpgradeController extends Controller
 
                         //update the credit_balance for the user
                         updateCreditBalanceForParent($adjusted_amount);
+                        //need to send the invoice to the user for the purchase of the plan...
+                        Mail::to($user_subscription->user)->queue(new SubscriptionInvoice($user_subscription));
                         session()->flash('status', 'Congratulations! Your plan has been activated. We have also sent an invoice to your registered email.');
                         return response()->json(['status' => true, 'redirect_link' => route('plan.index')], 200);
                     } else {

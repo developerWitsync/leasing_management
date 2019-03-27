@@ -16,7 +16,6 @@ return [
         'lang' => app()->getLocale(),
     ],
     'attributes' => [
-        'theme' => 'light',
-        'style' => "transform:scale(0.77);-webkit-transform:scale(0.77);transform-origin:0 0;-webkit-transform-origin:0 0;"
+        'theme' => 'light'
     ],
 ];

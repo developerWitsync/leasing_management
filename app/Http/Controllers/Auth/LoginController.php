@@ -47,7 +47,8 @@ class LoginController extends Controller
             'password' => 'required|string',
             'g-recaptcha-response' => 'required|captcha'
         ],[
-            'g-recaptcha-response.required' => 'Please confirm the recaptcha.'
+            'g-recaptcha-response.required' => 'Please confirm the recaptcha.',
+            'g-recaptcha-response.captcha' => 'Recaptcha not confirmed.'
         ]);
     }
 

@@ -27,7 +27,7 @@ class SecurityDepositController extends Controller
      */
     public function index($id, Request $request){
         try{
-            $lease = Lease::query()->findOrFail($id);
+            $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
             $asset = $lease->assets()->first(); //every lease can have only one lease asset from now...
             if($asset){
 

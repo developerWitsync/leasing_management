@@ -78,11 +78,14 @@ class RegisterController extends Controller
             'admin_rights' => 'required',
             'declaration' => 'required',
             'terms_and_condition' => 'required',
-            'certificates' => config('settings.file_size_limits.certificates')
+            'certificates' => config('settings.file_size_limits.certificates'),
+            'g-recaptcha-response' => 'required|captcha'
         ], [
             'declaration.required' => 'Please accept the declaration.',
             'terms_and_condition.required' => 'Please accept Terms and Conditions.',
-            'authorised_person_dob.before' => 'The authorised person must be atleast 18 years old.'
+            'authorised_person_dob.before' => 'The authorised person must be atleast 18 years old.',
+            'g-recaptcha-response.required' => 'Please confirm the recaptcha.',
+            'g-recaptcha-response.captcha' => 'Recaptcha not confirmed.'
         ]);
     }
 
