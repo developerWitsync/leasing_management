@@ -93,8 +93,8 @@
                                             Login
                                         </button>
 
-                                        <a class="btn btn-link" href="{{ route('password.request') }}">
-                                            Forgot Your Password?
+                                        <a class="btn btn-link" href="{{ route('master.pricing.index') }}">
+                                            Don't have an account? Sign Up
                                         </a>
                                     </div>
                                 </div>

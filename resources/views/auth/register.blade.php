@@ -308,7 +308,8 @@
             $('input[name="authorised_person_dob"]').datepicker({
                 changeMonth: true,
                 changeYear: true,
-                yearRange: "-100:-18"
+
+                yearRange: "c-80:c-18"
             });
 
             $('#country').on('change', function(){

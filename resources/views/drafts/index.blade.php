@@ -88,7 +88,11 @@
                     { "data": "lessor_name"},
                     {
                         "data": "id", render: function (data, type, row, meta) {
-                            return row.assets[0]['name'];
+                            if(typeof(row.assets[0])!="undefined"){
+                                return row.assets[0]['name'];
+                            } else {
+                                return "N/A";
+                            }
                         },
                         sortable : false
                     },
