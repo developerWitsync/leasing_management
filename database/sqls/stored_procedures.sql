@@ -24,7 +24,7 @@ BEGIN
 	declare payment_date date;
     Declare days_diff INT DEFAULT 0;
     Declare lease_liability FLOAT DEFAULT 0;
-    declare discount_rate INT default 0;
+    declare discount_rate decimal(25,20) default 0;
     declare payment_name text;
     declare last_payment_month INT;
     declare last_payment_year INT;
@@ -64,7 +64,7 @@ BEGIN
     set days_diff = datediff(payment_date, base_date);
 
     #select the discount rate for the current asset
-    select `daily_discount_rate` into discount_rate from `lease_select_discount_rate`
+    select `lease_select_discount_rate`.`daily_discount_rate` into discount_rate from `lease_select_discount_rate`
     where `lease_select_discount_rate`.`asset_id` = asset_id;
 
     #now need to calculate the lease_liability here

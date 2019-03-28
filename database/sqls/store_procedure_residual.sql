@@ -11,7 +11,7 @@ BEGIN
 	declare residual_gurantee_value FLOAT;
     Declare days_diff INT DEFAULT 0;
     Declare lease_liability FLOAT DEFAULT 0;
-    declare discount_rate INT default 0;
+    declare discount_rate decimal(25,20) default 0;
 
 		#select the residual value gurantee if applicable and add the same to the total_amount_payable.
         select IFNULL(`lease_residual_value_gurantee`.`total_residual_gurantee_value`, 0) into residual_gurantee_value from `lease_residual_value_gurantee`

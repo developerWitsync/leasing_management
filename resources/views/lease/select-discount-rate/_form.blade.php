@@ -43,7 +43,7 @@
             </div>
         </div>
         <div class="form-group{{ $errors->has('discount_rate_to_use') ? ' has-error' : '' }} required">
-            <label for="name" class="col-md-12 control-label">Select Discount Rate to Use</label>
+            <label for="name" class="col-md-12 control-label">Select Discount Rate to Use(in %)</label>
             <div class="col-md-12 form-check form-check-inline" required>
                 <input class="form-control" name="discount_rate_to_use" id="discount_rate_to_use" type="text"
                        value="{{ old('discount_rate_to_use', $model->discount_rate_to_use) }}">
@@ -56,7 +56,7 @@
         </div>
 
         <div class="form-group{{ $errors->has('daily_discount_rate') ? ' has-error' : '' }} required">
-            <label for="name" class="col-md-12 control-label">Effective Daily Discount Rate </label>
+            <label for="name" class="col-md-12 control-label">Effective Daily Discount Rate(in %)</label>
             <div class="col-md-12 form-check form-check-inline" required>
                 <input class="form-control" name="daily_discount_rate" id="daily_discount_rate" type="text"
                        value="{{ old('daily_discount_rate', $model->daily_discount_rate) }}" readonly="readonly">

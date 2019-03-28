@@ -11,7 +11,7 @@ BEGIN
 	declare purchase_option_price FLOAT;
     Declare days_diff INT DEFAULT 0;
     Declare lease_liability FLOAT DEFAULT 0;
-    declare discount_rate INT default 0;
+    declare discount_rate decimal(25,20) default 0;
     declare expected_purchase_date date;
 
     select IFNULL(`purchase_option`.`purchase_price`, 0.0), `purchase_option`.`expected_purchase_date` into purchase_option_price, expected_purchase_date from `purchase_option` where
@@ -25,7 +25,7 @@ BEGIN
             set days_diff = datediff(expected_purchase_date, base_date);
 
 			#select the discount rate for the current asset
-			select `daily_discount_rate` into discount_rate from `lease_select_discount_rate`
+			select `lease_select_discount_rate`.`daily_discount_rate` into discount_rate from `lease_select_discount_rate`
 			where `lease_select_discount_rate`.`asset_id` = asset_id;
 
 			#now need to calculate the lease_liability here

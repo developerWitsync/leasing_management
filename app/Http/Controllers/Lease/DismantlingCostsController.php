@@ -151,7 +151,7 @@ class DismantlingCostsController extends Controller
                                 }
                             }
                             // complete Step
-                            confirmSteps($lease->id, 14);
+                            confirmSteps($lease->id, $this->current_step);
                             if ($request->has('action') && $request->action == "next") {
                                 return redirect(route('addlease.leasevaluation.index', ['id' => $lease->id]))->with('status', 'Dismantling Costs has been added successfully.');
                             } else {

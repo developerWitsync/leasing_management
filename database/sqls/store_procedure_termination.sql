@@ -23,7 +23,7 @@ BEGIN
 	declare termination_penalty_date date;
     Declare days_diff INT DEFAULT 0;
     Declare lease_liability FLOAT DEFAULT 0;
-    declare discount_rate INT default 0;
+    declare discount_rate decimal(25,20) default 0;
 
 	select IFNULL(`lease_termination_option`.`termination_penalty`, 0.0), `lease_termination_option`.`lease_end_date`  into termination_penalty, termination_penalty_date from `lease_termination_option`
         where `lease_termination_option`.`id` = termination_id

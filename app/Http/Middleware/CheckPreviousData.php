@@ -497,7 +497,6 @@ class CheckPreviousData
 
         }
 
-
         //\Log::info('Checking ----- ' . $step . ' On URL ------- ' . $request->route()->getName());
 
         if (!$this->verifyStep($step, $lease_id)) {
