@@ -14,7 +14,7 @@ class AlterTableLeaseSelectDiscountRateAddColumnDailtDiscountRate extends Migrat
     public function up()
     {
         Schema::table('lease_select_discount_rate', function (Blueprint $table) {
-            $table->decimal('daily_discount_rate', 12, 8)->after('discount_rate_to_use');
+            $table->decimal('daily_discount_rate', 25, 20)->after('discount_rate_to_use');
         });
     }
 
