@@ -375,7 +375,7 @@
                     },
                     success: function (response) {
                         if (response['status']) {
-                            $('#gvofs').html(response['gross_value_of_new_plan']);
+                            $('#gvofs').html(response['original_price']);
                             $('#anyoffer').html(response['discounted_percentage'] + "%");
                             $('#adjusted_amount').html("$ " + response['adjusted_amount']);
                             $('#coupon_discount').html('$' + response['coupon_discount']);

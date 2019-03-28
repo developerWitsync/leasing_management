@@ -36,6 +36,12 @@
                 </tr>
                 <tr>
                     <td>
+                        <small>Gross Value of Subscription</small>
+                    </td>
+                    <td class="text-right">$<span id="gvofs">0</span></td>
+                </tr>
+                <tr>
+                    <td>
                         <small>Any Offer</small>
                     </td>
                     <td class="text-right"><span id="anyoffer">--</span></td>
@@ -46,12 +52,7 @@
                     </td>
                     <td class="text-right"><span id="coupon_discount">---</span></td>
                 </tr>
-                <tr>
-                    <td>
-                        <small>Gross Value of Subscription</small>
-                    </td>
-                    <td class="text-right">$<span id="gvofs">0</span></td>
-                </tr>
+
                 <tr>
                     <td>
                         <small>Adjusted Amount as per current subscription</small>

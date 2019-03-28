@@ -151,7 +151,6 @@ class UpgradeController extends Controller
                 abort(404);
             }
         } catch (\Exception $e){
-            dd($e);
             abort(404);
         }
     }
@@ -208,10 +207,10 @@ class UpgradeController extends Controller
                 //need to create an entry to the user_subscription table...
                 if (!is_null($package->validity)) {
                     //this means that the plan is trial plan
-                    $expiry_date = Carbon::today()->addDays($package->validity)->format('Y-m-d');
+                    $expiry_date = Carbon::today()->addDays($package->validity)->subDays(1)->format('Y-m-d');
                 } else {
                     //will expires after 1 year
-                    $expiry_date = Carbon::today()->addYear($request->months / 12)->format('Y-m-d');
+                    $expiry_date = Carbon::today()->addYear($request->months / 12)->subDays(1)->format('Y-m-d');
                 }
 
                 $renewal_date = Carbon::parse($expiry_date)->addDays(1)->format('Y-m-d');

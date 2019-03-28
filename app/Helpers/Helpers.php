@@ -891,6 +891,9 @@ function calculateAdjustedAmountForUpgradeDowngrade(\App\SubscriptionPlans $pack
 
                 $final_payment_amount['coupon_discount'] = $coupon_discount;
 
+                $final_payment_amount['original_price'] = $original_price;
+
+
             } else {
                 //need to do the calculations for calculating the price that the user might have to pay...
                 $old_amount_paid = ($existing_plan->subscriptionPackage->price * ($existing_plan->subscription_years * 12)) - $existing_plan->discounted_amount;
@@ -944,6 +947,8 @@ function calculateAdjustedAmountForUpgradeDowngrade(\App\SubscriptionPlans $pack
                 $final_payment_amount['discounted_percentage'] = $discounted_percentage;
 
                 $final_payment_amount['coupon_discount'] = $coupon_discount;
+
+                $final_payment_amount['original_price'] = $original_price;
 
             }
 
@@ -1006,6 +1011,8 @@ function calculateAdjustedAmountForUpgradeDowngrade(\App\SubscriptionPlans $pack
         $final_payment_amount['discounted_percentage'] = $discounted_percentage;
 
         $final_payment_amount['coupon_discount'] = $coupon_discount;
+
+        $final_payment_amount['original_price'] = $original_price;
     }
 
     return $final_payment_amount;

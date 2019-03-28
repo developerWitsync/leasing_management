@@ -30,7 +30,7 @@ BEGIN
 
 			#now need to calculate the lease_liability here
 
-			set lease_liability = total_amount_payable / POWER(( 1 + discount_rate), days_diff);
+			set lease_liability = total_amount_payable / POWER( 1 + (discount_rate) * (1 / 100), days_diff);
 
             select total_amount_payable, discount_rate, lease_liability, days_diff, purchase_option_price;
 
