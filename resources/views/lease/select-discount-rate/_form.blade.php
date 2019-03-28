@@ -95,7 +95,7 @@
             $('#discount_rate_to_use').focusout( function(){
                 var value = $(this).val();
                 if($.isNumeric(value)){
-                        var effective_daialy_disount_rate  = Math.pow(1 + value, (1/365)) - 1;
+                        var effective_daialy_disount_rate  = Math.pow(1 + (value/100), (1/365)) - 1 ;
                         $("#daily_discount_rate").val(effective_daialy_disount_rate.toFixed(7));
                 } else {
                     alert("Please enter numbers only.");

@@ -305,11 +305,12 @@
                 }
             });
 
-            $('input[name="authorised_person_dob"]').datepicker({
+            $('#authorised_person_dob').datepicker({
+                dateFormat: "dd-M-yy",
+                yearRange: "{{ \Carbon\Carbon::today()->subYear(100)->format('Y') }}:{{ \Carbon\Carbon::today()->subYear(18)->format('Y') }}",
                 changeMonth: true,
                 changeYear: true,
-
-                yearRange: "c-80:c-18"
+                defaultDate : new Date("{{ \Carbon\Carbon::today()->subYear(100)->firstOfYear()->format('Y-m-d') }}")
             });
 
             $('#country').on('change', function(){
