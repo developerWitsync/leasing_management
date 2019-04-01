@@ -102,8 +102,14 @@ class UpgradeController extends Controller
                     return response()->json(['status' => false, 'message' => 'Invalid Request.', 'errorCode' => 'package_error'], 200);
                 }
 
+                $action = null;
+                if($request->has('action')){
+                    $action = $request->action;
+                }
+
                 $view = view('plan._subscription_selection', compact(
-                    'selected_package'
+                    'selected_package',
+                    'action'
                 ))->render();
 
                 return response()->json([
@@ -140,7 +146,11 @@ class UpgradeController extends Controller
                         $coupon_code = strtoupper(trim($request->coupon_code));
                     }
 
-                    $credit_or_balance = calculateAdjustedAmountForUpgradeDowngrade($selected_package, $months, $coupon_code);
+                    $action = null;
+                    if($request->has('action')){
+                        $action = $request->action;
+                    }
+                    $credit_or_balance = calculateAdjustedAmountForUpgradeDowngrade($selected_package, $months, $coupon_code, $action);
 
                     return response()->json($credit_or_balance, 200);
 
@@ -179,8 +189,12 @@ class UpgradeController extends Controller
                 if($request->has('coupon_code') && trim($request->coupon_code)!=""){
                     $coupon_code = strtoupper(trim($request->coupon_code));
                 }
+                $action = null;
+                if($request->has('action')){
+                    $action = $request->action;
+                }
                 //get the adjusted amount if applicable it can be -ve, +ve or 0
-                $adjusted_amount  = calculateAdjustedAmountForUpgradeDowngrade($package, $request->months, $coupon_code);
+                $adjusted_amount  = calculateAdjustedAmountForUpgradeDowngrade($package, $request->months, $coupon_code, $action);
                 $credits = getParentDetails()->credit_balance;
                 $send_to_paypal = false;
                 if($adjusted_amount['status']){
@@ -249,7 +263,7 @@ class UpgradeController extends Controller
                         session()->flash('status', 'Congratulations! Your plan has been activated. We have also sent an invoice to your registered email.');
                         return response()->json(['status' => true, 'redirect_link' => route('plan.index')], 200);
                     } else {
-                        $link = generatePaypalExpressCheckoutLink($package, $user_subscription, route('plan.purchase.success'), route('plan.purchase.cancel'), null,$adjusted_amount, $request->months);
+                        $link = generatePaypalExpressCheckoutLink($package, $user_subscription, route('plan.purchase.success'), route('plan.purchase.cancel'), null,$adjusted_amount, $request->months, $action);
                         if($link) {
                             return response()->json(['status' => true, 'redirect_link' => $link], 200);
                         } else {

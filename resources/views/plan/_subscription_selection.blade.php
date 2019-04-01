@@ -18,7 +18,8 @@
                     </td>
                     <td>
                         {{ $selected_package->title }}
-                        <input type="hidden" name="selected_plan" value="{{ $selected_package->id }}" id="selected_plan">
+                        <input type="hidden" name="selected_plan" value="{{ $selected_package->id }}"
+                               id="selected_plan">
                     </td>
                 </tr>
                 <tr>
@@ -46,12 +47,17 @@
                     </td>
                     <td class="text-right"><span id="anyoffer">--</span></td>
                 </tr>
-                <tr class="coupon_code_discount_row" style="display: none">
-                    <td>
-                        <small>Coupon Discount</small>
-                    </td>
-                    <td class="text-right"><span id="coupon_discount">---</span></td>
-                </tr>
+
+                <input type="hidden" name="action" value="{{$action}}" />
+
+                @if($action != 'downgrade')
+                    <tr class="coupon_code_discount_row" style="display: none">
+                        <td>
+                            <small>Coupon Discount</small>
+                        </td>
+                        <td class="text-right"><span id="coupon_discount">---</span></td>
+                    </tr>
+                @endif
 
                 <tr>
                     <td>
@@ -73,24 +79,27 @@
 
         {{--<p>Apply your discount coupon, if any, at the time of payment</p>--}}
     </fieldset>
-
-    <fieldset>
-        <legend>Apply Coupon</legend>
-        <p><small>Enter coupon code below in case you have any coupon code.</small></p>
-        <div class="row">
-            <div class="col-md-8">
-                <input class="form-control" type="text" name="coupon_code" placeholder="Enter Coupon Code">
+    @if($action != 'downgrade')
+        <fieldset>
+            <legend>Apply Coupon</legend>
+            <p>
+                <small>Enter coupon code below in case you have any coupon code.</small>
+            </p>
+            <div class="row">
+                <div class="col-md-8">
+                    <input class="form-control" type="text" name="coupon_code" placeholder="Enter Coupon Code">
+                </div>
+                <div class="col-md-4">
+                    <a href="javascript:void(0);" class="btn btn-info apply_coupon_code">Apply Coupon</a>
+                </div>
             </div>
-            <div class="col-md-4">
-                <a href="javascript:void(0);" class="btn btn-info apply_coupon_code">Apply Coupon</a>
-            </div>
-        </div>
-    </fieldset>
+        </fieldset>
 
-    <fieldset>
-        <legend>Assured Benefit</legend>
-        <p>On every renewal, you will get 10% additional discount on the basic standard subscription plan price.</p>
-    </fieldset>
+        <fieldset>
+            <legend>Assured Benefit</legend>
+            <p>On every renewal, you will get 10% additional discount on the basic standard subscription plan price.</p>
+        </fieldset>
+    @endif
 </div>
 <div class="modal-footer">
     <a href="javascript:void(0);" class="btn btn-info proceed upgrade_proceed">Proceed</a>

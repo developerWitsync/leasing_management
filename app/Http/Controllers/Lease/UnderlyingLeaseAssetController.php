@@ -49,7 +49,12 @@ class UnderlyingLeaseAssetController extends Controller
             ],
         ];
 
-        $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->with('leaseType')->with('assets')->first();
+        $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())
+            ->where('id', '=', $id)
+            ->with('leaseType')
+            ->with('assets')
+            ->where('status', '=', '0')
+            ->first();
 
         if($lease) {
             if(count($lease->assets) > 0) {

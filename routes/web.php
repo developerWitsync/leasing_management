@@ -53,11 +53,11 @@ Route::middleware('auth')->group(function () {
 
     Route::get('invoice/{id}', ['as' => 'invoice.index', 'uses' => 'InvoiceController@index']);
 
-    Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/home', 'HomeController@index')->middleware(['permission:dashboard'])->name('home');
     Route::get('/home/consolidated-chart', ['as' => 'home.chart.consolidatedchart', 'uses' => 'HomeController@consolidatedChart']);
     Route::get('/home/categorised-charts', ['as' => 'home.fetchdetails', 'uses' => 'HomeController@categorisedChart']);
 
-    Route::prefix('plan')->group(function () {
+    Route::prefix('plan')->middleware(['permission:manage_subscription'])->group(function () {
         Route::get('/', ['as' => 'plan.index', 'uses' => 'UpgradeController@index']);
         Route::post('purchase', ['as' => 'plan.purchase', 'uses' => 'UpgradeController@purchase']);
         Route::get('success', ['as' => 'plan.purchase.success', 'uses' => 'UpgradeController@success']);
@@ -69,7 +69,7 @@ Route::middleware('auth')->group(function () {
 
     });
 
-    Route::namespace('Transactions')->prefix('transactions')->group(function(){
+    Route::namespace('Transactions')->middleware(['permission:manage_subscription'])->prefix('transactions')->group(function(){
         Route::get('/', ['as' => 'transactions.index', 'uses' => 'TransactionsController@index']);
         Route::get('fetch-transactions', ['as' => 'transactions.fetch', 'uses'=>'TransactionsController@fetch']);
         Route::get('download-invoice/{id}', ['as'=> 'transactions.download.invoice', 'uses'=>'TransactionsController@downloadInvoice']);
@@ -299,7 +299,7 @@ Route::middleware('auth')->group(function () {
     /*
     * Drafts Routes
     */
-    Route::namespace('Drafts')->prefix('drafts')->group(function () {
+    Route::namespace('Drafts')->middleware(['permission:drafts'])->prefix('drafts')->group(function () {
         Route::get('/', ['as' => 'drafts.index', 'uses' => 'IndexController@index']);
         Route::get('fetch-lease-details', ['as' => 'drafts.fetchleasedetails', 'uses' => 'IndexController@fetchLeaseDetails']);
         Route::match(['post', 'get', 'delete'], 'delete-lease-details/{id}', ['as' => 'drafts.deleteleasedetails', 'uses' => 'IndexController@deleteLeaseDetails']);
@@ -309,7 +309,7 @@ Route::middleware('auth')->group(function () {
     * Modify Lease Routes
     */
 
-    Route::namespace('Modifylease')->prefix('modify-lease')->group(function () {
+    Route::namespace('Modifylease')->middleware(['permission:modify_lease'])->prefix('modify-lease')->group(function () {
         Route::get('/', ['as' => 'modifylease.index', 'uses' => 'ModifyLeaseController@index']);
         Route::get('fetch-lease-details', ['as' => 'modifylease.fetchleasedetails', 'uses' => 'ModifyLeaseController@fetchLeaseDetails']);
         Route::match(['post', 'get'], 'create/{id}', ['as' => 'modifylease.create', 'uses' => 'ModifyLeaseController@create']);

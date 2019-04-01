@@ -48,7 +48,7 @@ class IndexController extends Controller
             $lease_lock_year = collect($lease_lock_year)->groupBy('lock_year')->toArray();
         }
 
-        $lease_lock_year_range = range(2016, date('Y'));
+        $lease_lock_year_range = range(2019, date('Y'));
 
         $reporting_periods = ReportingPeriods::query()->get();
 

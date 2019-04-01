@@ -63,7 +63,10 @@ class LeaseTerminationOptionController extends Controller
                     'title' => 'Termination Option'
                 ],
             ];
-            $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
+            $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())
+                ->where('id', '=', $id)
+                ->where('status', '=', '0')
+                ->first();
             if($lease) {
 
                 //check if the Subsequent Valuation is applied for the lease modification

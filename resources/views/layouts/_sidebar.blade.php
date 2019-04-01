@@ -6,13 +6,15 @@
 @endif
 <ul class="mainMenu">
 
-    <li>
-        <a href="/home" class="list-group-item @if(request()->segment('1') == 'home') active @endif">
-            <img width="28" src="{{ asset('images/icons/dashboard.png') }}"> <span
-                    style="vertical-align: sub">Dashboard</span>
-            <!--  <small class="fa fa-angle-right" aria-hidden="true"></small> -->
-        </a>
-    </li>
+    @if(Auth::user()->can('dashboard'))
+        <li>
+            <a href="/home" class="list-group-item @if(request()->segment('1') == 'home') active @endif">
+                <img width="28" src="{{ asset('images/icons/dashboard.png') }}"> <span
+                        style="vertical-align: sub">Dashboard</span>
+                <!--  <small class="fa fa-angle-right" aria-hidden="true"></small> -->
+            </a>
+        </li>
+    @endif
 
     @if(Auth::user()->can('add_lease'))
         <li>
@@ -54,13 +56,14 @@
     </li>
 
     <li class="mainMenuItem">
-        <a href="javascript:void(0);" class="list-group-item"><img width="28" src="{{ asset('images/icons/cash.png') }}">
+        <a href="javascript:void(0);" class="list-group-item"><img width="28"
+                                                                   src="{{ asset('images/icons/cash.png') }}">
             <span>Lease Cash Flows</span>
             <i class="fa fa-chevron-down" style="float: right"></i>
         </a>
         <ul class="subMenuItem">
-            <li  class="menu-item"><a tabindex="-1" href="#">Leases Due</a></li>
-            <li  class="menu-item"><a tabindex="-1" href="#">Cash Flow Planning</a></li>
+            <li class="menu-item"><a tabindex="-1" href="#">Leases Due</a></li>
+            <li class="menu-item"><a tabindex="-1" href="#">Cash Flow Planning</a></li>
         </ul>
     </li>
 
@@ -73,9 +76,12 @@
             <i class="fa fa-chevron-down" style="float: right"></i>
         </a>
         <ul class="subMenuItem">
-            <li  class="menu-item"><a class="@if(request()->segment('1') == 'lease-valuation' && request()->capitalized == 1) active @endif" tabindex="-1" href="{{route('leasevaluation.index', ['capitalized' => 1])}}">Initial / Subsequent</a></li>
-            <li  class="menu-item"><a tabindex="-1" href="#">Interest Expense</a></li>
-            <li  class="menu-item"><a tabindex="-1" href="#">Depreciation</a></li>
+            <li class="menu-item"><a
+                        class="@if(request()->segment('1') == 'lease-valuation' && request()->capitalized == 1) active @endif"
+                        tabindex="-1" href="{{route('leasevaluation.index', ['capitalized' => 1])}}">Initial /
+                    Subsequent</a></li>
+            <li class="menu-item"><a tabindex="-1" href="#">Interest Expense</a></li>
+            <li class="menu-item"><a tabindex="-1" href="#">Depreciation</a></li>
         </ul>
     </li>
 
@@ -130,13 +136,16 @@
         </a>
     </li>
 
-    <li>
-        <a href="{{ route('plan.index') }}"
-           class="list-group-item @if(request()->segment('1') == 'plan') active @endif">
-            <img width="28" src="{{ asset('images/icons/renew-subscription.png') }}"><span>Manage Subscription</span>
-            <!-- <small class="fa fa-angle-right" aria-hidden="true"></small> -->
-        </a>
-    </li>
+    @if(Auth::user()->can('manage_subscription'))
+        <li>
+            <a href="{{ route('plan.index') }}"
+               class="list-group-item @if(request()->segment('1') == 'plan') active @endif">
+                <img width="28"
+                     src="{{ asset('images/icons/renew-subscription.png') }}"><span>Manage Subscription</span>
+                <!-- <small class="fa fa-angle-right" aria-hidden="true"></small> -->
+            </a>
+        </li>
+    @endif
 
     <li>
         <a href="{{ route('logout') }}"

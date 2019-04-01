@@ -109,7 +109,7 @@
                                                 </div>
                                             </div>
 
-                                            @if($reporting_currency_settings->is_foreign_transaction_involved == "yes")
+
                                                 <div class="form-group{{ $errors->has('lease_contract_id') ? ' has-error' : '' }} required">
                                                     <label for="lease_contract_id" class="col-md-12 control-label">Lease
                                                         Contract Currency</label>
@@ -118,10 +118,10 @@
                                                                 @if($subsequent_modify_required) disabled="disabled" @endif>
                                                             <option value="">Select Lease Contract Currency</option>
 
-                                                            @foreach($reporting_foreign_currency_transaction_settings as $currencies)
-                                                                <option value="{{ $currencies->foreign_exchange_currency }}"
-                                                                        @if(old('lease_contract_id', $lease->lease_contract_id) == $currencies->foreign_exchange_currency) selected="selected" @endif>
-                                                                    {{ $currencies->foreign_exchange_currency }}</option>
+                                                            @foreach($contract_currencies as $currency)
+                                                                <option value="{{ $currency }}"
+                                                                        @if(old('lease_contract_id', $lease->lease_contract_id) == $currency) selected="selected" @endif>
+                                                                    {{ $currency }}</option>
                                                             @endforeach
                                                         </select>
 
@@ -137,39 +137,8 @@
                                                         @endif
                                                     </div>
                                                 </div>
-                                            @endif
 
-                                            @if($reporting_currency_settings->is_foreign_transaction_involved == "no")
-                                                <div class="form-group{{ $errors->has('lease_contract_id') ? ' has-error' : '' }} required">
-                                                    <label for="lease_contract_id" class="col-md-12 control-label">Lease
-                                                        Contract Currency</label>
-                                                    <div class="col-md-12">
-                                                        <select name="lease_contract_id" class="form-control"
-                                                                @if($subsequent_modify_required) disabled="disabled" @endif>
-                                                            <option value="">Select Lease Contract Currency</option>
-                                                            <option value="{{ $reporting_currency_settings->currency_for_lease_reports }}"
-                                                                    @if(old('lease_contract_id', $lease->lease_contract_id) == $reporting_currency_settings->currency_for_lease_reports) selected="selected" @endif >
-                                                                {{ $reporting_currency_settings->currency_for_lease_reports }}</option>
-                                                            @if($reporting_currency_settings->currency_for_lease_reports != $reporting_currency_settings->statutory_financial_reporting_currency)
-                                                                <option value="{{ $reporting_currency_settings->statutory_financial_reporting_currency }}"
-                                                                        @if(old('lease_contract_id', $lease->lease_contract_id) == $reporting_currency_settings->statutory_financial_reporting_currency) selected="selected" @endif >
-                                                                    {{ $reporting_currency_settings->statutory_financial_reporting_currency }}</option>
-                                                            @endif
-                                                        </select>
 
-                                                        @if($subsequent_modify_required)
-                                                            <input type="hidden" name="lease_contract_id"
-                                                                   value="{{$lease->lease_contract_id}}"/>
-                                                        @endif
-
-                                                        @if ($errors->has('lease_contract_id'))
-                                                            <span class="help-block">
-                                                        <strong>{{ $errors->first('lease_contract_id') }}</strong>
-                                                    </span>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            @endif
                                             <div class="form-group{{ $errors->has('file') ? ' has-error' : '' }} ">
                                                 <label for="file" class="col-md-12 control-label">Upload a Copy of
                                                     Contract Signed</label>

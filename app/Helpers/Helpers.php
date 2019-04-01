@@ -223,6 +223,15 @@ function calculatePaymentDueDatesByPaymentId(\App\LeaseAssetPayments $payment)
 }
 
 /**
+ * format the number to 2 decimal places..
+ * @param $number
+ * @return string
+ */
+function formatToDecimal($number){
+    return number_format((float)$number, 2, '.', '');
+}
+
+/**
  * generate the escalations that will be applied through out the year
  * @param array $data
  * @param \App\LeaseAssetPayments $payment
@@ -321,7 +330,7 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
                                 $current_class = 'info';
                             }
 
-                            $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => $amount_to_consider, 'current_class' => $current_class];
+                            $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
                             $escalation_date->addYear(1); //applied annually
 
                         } else {
@@ -330,7 +339,7 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
                                 //$amount_to_consider = $payment->payment_per_interval_per_unit;
                                 $amount_to_consider = $payments_in_this_year_month->total_payment_amount;
                             }
-                            $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => $amount_to_consider, 'current_class' => $current_class];
+                            $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
                         }
 
                     } else {
@@ -420,7 +429,7 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
                                         $current_class = 'info';
                                     }
 
-                                    $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => $amount_to_consider, 'current_class' => $current_class];
+                                    $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
 
                                 } else {
                                     //escalation is not applied however the user needs to pay for this month and year
@@ -428,7 +437,7 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
                                         //$amount_to_consider = $payment->payment_per_interval_per_unit;
                                         $amount_to_consider = $payments_in_this_year_month->total_payment_amount;
                                     }
-                                    $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => $amount_to_consider, 'current_class' => $current_class];
+                                    $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
                                 }
                             }
                         } else {
@@ -437,7 +446,7 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
                                 //$amount_to_consider = $payment->payment_per_interval_per_unit;
                                 $amount_to_consider = $payments_in_this_year_month->total_payment_amount;
                             }
-                            $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => $amount_to_consider, 'current_class' => $current_class];
+                            $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
                         }
                     } else {
                         $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => 0, 'current_class' => $current_class];
@@ -475,7 +484,7 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
                             //$amount_to_consider = $payment->payment_per_interval_per_unit;
                             $amount_to_consider = $payments_in_this_year_month->total_payment_amount;
                         }
-                        $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => $amount_to_consider, 'current_class' => $current_class];
+                        $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
                     } else {
                         $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => 0, 'current_class' => $current_class];
                     }
@@ -538,6 +547,21 @@ function getUndiscountedTotalLeasePayment($asset_id)
                 $payments_total = \App\PaymentEscalationDates::query()->where('payment_id', '=', $payment->id)->sum('total_amount_payable');
                 $total = $total + $payments_total;
             }
+        }
+
+        //have to add up the termination , purchase or residual option as well whatever applicable here...
+        if($asset->terminationOption->lease_termination_option_available == "yes" && $asset->terminationOption->exercise_termination_option_available == "yes" && $asset->terminationOption->termination_penalty_applicable == "yes") {
+            $total = $total + $asset->terminationOption->termination_penalty;
+        }
+
+        //add the purchase option for the asset as well.
+        if($asset->purchaseOption && $asset->purchaseOption->purchase_option_clause == "yes" && $asset->purchaseOption->purchase_option_exerecisable == "yes"){
+            $total = $total + $asset->purchaseOption->purchase_price;
+        }
+
+        //add the residual value guarantee as well
+        if($asset->residualGuranteeValue->any_residual_value_gurantee == "yes"){
+            $total = $total + $asset->residualGuranteeValue->total_residual_gurantee_value;
         }
 
         return $total;
@@ -658,10 +682,16 @@ function generateInvoiceNumber($subscription){
  * genrate the Paypal redirect link and returns the string
  * @param \App\SubscriptionPlans $package
  * @param \App\UserSubscription $subscription
+ * @param null $return_url
+ * @param null $cancel_url
+ * @param null $notify_url
+ * @param null $adjusted_amount
+ * @param int $quantity
+ * @param null $action
  * @return mixed
  * @throws Exception
  */
-function generatePaypalExpressCheckoutLink(\App\SubscriptionPlans $package, \App\UserSubscription $subscription, $return_url = null, $cancel_url = null, $notify_url = null, $adjusted_amount = null, $quantity = 12)
+function generatePaypalExpressCheckoutLink(\App\SubscriptionPlans $package, \App\UserSubscription $subscription, $return_url = null, $cancel_url = null, $notify_url = null, $adjusted_amount = null, $quantity = 12, $action = null)
 {
 
     $provider = new ExpressCheckout();
@@ -708,7 +738,7 @@ function generatePaypalExpressCheckoutLink(\App\SubscriptionPlans $package, \App
 
     //check if the coupon has been used bt the user if yes than in that case apply the discount for the coupon code as well
     $coupon_discount = 0;
-    if ($subscription->coupon_code) {
+    if ($subscription->coupon_code && $action != "downgrade") {
         $coupon = \App\CouponCodes::query()->where('code', '=', $subscription->coupon_code)->where('status', '=', '1')->first();
         if ($coupon) {
             if (auth()->check()) {
@@ -756,7 +786,7 @@ function generatePaypalExpressCheckoutLink(\App\SubscriptionPlans $package, \App
 
     //give a discount of 10% of the order amount
     $discounted_amount = 0;
-    if ($package->annual_discount > 0) {
+    if ($package->annual_discount > 0  && $action != "downgrade") {
         $discounted_percentage = ($quantity / 12 - 1) * $package->annual_discount;
         if ($discounted_percentage > 0) {
             $discounted_amount = round(($discounted_percentage / 100) * $subtotal, 2);
@@ -785,12 +815,27 @@ function generatePaypalExpressCheckoutLink(\App\SubscriptionPlans $package, \App
 
 /**
  * get the parent user get lease lock year when will stored in settings
- * render the lease lock year when user add in user settings
- * @return [type] [description]
+ * @param $date
+ * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|object|null
  */
-function getLockYearDetails()
+function getLockYearDetails($date)
 {
-    return \App\LeaseLockYear::query()->where('business_account_id', '=', auth()->user()->id)->where('status', '1')->first();
+    $year = \Carbon\Carbon::parse($date)->format('Y');
+    if($year < 2019){
+        return \App\LeaseLockYear::query()
+            ->whereIn('business_account_id', getDependentUserIds())
+            ->where('status', '1')
+            ->where('start_date','>=', $date)
+            ->first();
+    } else {
+
+        return \App\LeaseLockYear::query()
+            ->whereIn('business_account_id', getDependentUserIds())
+            ->where('status', '1')
+            ->whereRaw("year(`start_date`) =  '{$year}'")
+            ->where('start_date','>=', $date)
+            ->first();
+    }
 }
 
 /**
@@ -816,9 +861,11 @@ function getYearRanage()
  * calculate the adjustments during the subscription upgrade or downgrade as per the plan selected by the user...
  * @param \App\SubscriptionPlans $package
  * @param int $months
+ * @param null $coupon_code
+ * @param null $action
  * @return array
  */
-function calculateAdjustedAmountForUpgradeDowngrade(\App\SubscriptionPlans $package, $months = 12, $coupon_code = null)
+function calculateAdjustedAmountForUpgradeDowngrade(\App\SubscriptionPlans $package, $months = 12, $coupon_code = null, $action = null)
 {
     $existing_plan = \App\UserSubscription::query()
         ->whereIn('user_id', getDependentUserIds())
@@ -869,14 +916,14 @@ function calculateAdjustedAmountForUpgradeDowngrade(\App\SubscriptionPlans $pack
 
                 $discounted_percentage = 0;
 
-                if ($package->annual_discount > 0) {
+                if ($package->annual_discount > 0 && $action!="downgrade") {
                     $discounted_percentage = ($months / 12 - 1) * $package->annual_discount;
                     if ($discounted_percentage > 0) {
                         $discounted_amount = round(($discounted_percentage / 100) * $original_price, 2);
                     }
                 }
 
-                if ($coupon_code) {
+                if ($coupon_code && $action!="downgrade") {
                     $coupon_discount = round(($coupon_code->discount / 100) * $original_price, 2);
                 }
 
@@ -913,14 +960,14 @@ function calculateAdjustedAmountForUpgradeDowngrade(\App\SubscriptionPlans $pack
                 $original_price = $package->price * $months;
 
                 $discounted_percentage = 0;
-                if ($package->annual_discount > 0) {
+                if ($package->annual_discount > 0 && $action!="downgrade") {
                     $discounted_percentage = ($months / 12 - 1) * $package->annual_discount;
                     if ($discounted_percentage > 0) {
                         $discounted_amount = round(($discounted_percentage / 100) * $original_price, 2);
                     }
                 }
 
-                if ($coupon_code) {
+                if ($coupon_code && $action!="downgrade") {
                     $coupon_discount = round(($coupon_code->discount / 100) * $original_price, 2);
                 }
 
@@ -991,14 +1038,14 @@ function calculateAdjustedAmountForUpgradeDowngrade(\App\SubscriptionPlans $pack
         $original_price = $package->price * $months;
 
         $discounted_percentage = 0;
-        if ($package->annual_discount > 0) {
+        if ($package->annual_discount > 0 && $action!="downgrade") {
             $discounted_percentage = ($months / 12 - 1) * $package->annual_discount;
             if ($discounted_percentage > 0) {
                 $discounted_amount = round(($discounted_percentage / 100) * $original_price, 2);
             }
         }
 
-        if ($coupon_code) {
+        if ($coupon_code && $action!="downgrade") {
             $coupon_discount = round(($coupon_code->discount / 100) * $original_price, 2);
         }
 

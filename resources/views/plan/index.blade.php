@@ -185,12 +185,12 @@
                                                 Expiring on {{ \Carbon\Carbon::parse($subscription->subscription_expire_at)->format('Y-m-d') }}
                                             </span>
                                             @elseif($subscription && $current_plan_key > -1 && $current_plan_key < $key)
-                                                <a href="{{ route('plan.purchase.subscriptionselection', ['plan' => $plan->slug]) }}"
+                                                <a href="{{ route('plan.purchase.subscriptionselection', ['plan' => $plan->slug,'action'=> 'upgrade']) }}"
                                                    class="btn btn-sm btn-success purchase-plan" role="button">
                                                     Upgrade
                                                 </a>
                                             @elseif($subscription)
-                                                <a href="{{ route('plan.purchase.subscriptionselection', ['plan' => $plan->slug]) }}"
+                                                <a href="{{ route('plan.purchase.subscriptionselection', ['plan' => $plan->slug,'action'=> 'downgrade']) }}"
                                                    class="btn btn-sm btn-success purchase-plan" role="button">
                                                     DownGrade
                                                 </a>
@@ -363,7 +363,7 @@
 
             function calcCart() {
                 $.ajax({
-                    url: '{{ route("plan.purchase.showadjustments") }}',
+                    url: '{{ route("plan.purchase.showadjustments") }}'+"?action="+$('input[name="action"]').val(),
                     data: {
                         months: $('#months').val(),
                         plan: $('#selected_plan').val(),
@@ -405,7 +405,8 @@
                     data: {
                         months: $('#months').val(),
                         plan: $('#selected_plan').val(),
-                        coupon_code: $('input[name="coupon_code"]').val()
+                        coupon_code: $('input[name="coupon_code"]').val(),
+                        action: $('input[name="action"]').val()
                     },
                     dataType: 'json',
                     beforeSend: function () {

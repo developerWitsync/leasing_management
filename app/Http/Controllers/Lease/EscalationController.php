@@ -68,10 +68,27 @@ class EscalationController extends Controller
                     $show_next = true;
                 } else {
                     foreach ($payments as $payment){
+                        if($payment->nature == 2 && $payment->variable_amount_determinable == "no"){
+                            $escalation_exists = PaymentEscalationDetails::query()->where('lease_id', '=', $lease->id)
+                                ->where('asset_id', '=', $asset->id)
+                                ->where('payment_id', '=', $payment->id)
+                                ->count();
+                            if($escalation_exists == 0){
+                                //create the escalation for this payment here automatically...
+                                PaymentEscalationDetails::create([
+                                    'lease_id' => $lease->id,
+                                    'asset_id' => $asset->id,
+                                    'payment_id' => $payment->id,
+                                    'is_escalation_applicable' => 'no'
+                                ]);
+                            }
+                        }
+
                         $required_escalations = $required_escalations + 1;
                         if(count($payment->paymentEscalations) > 0){
                             $completed_escalations = $completed_escalations + 1;
                         }
+
                     }
                 }
 
@@ -115,7 +132,7 @@ class EscalationController extends Controller
                 abort(404);
             }
         } catch (\Exception $e) {
-            dd($e);
+           abort(404);
         }
     }
 
@@ -487,7 +504,7 @@ class EscalationController extends Controller
 
                     return response()->json([
                         'status' => true,
-                        'computed_total' => $total
+                        'computed_total' => formatToDecimal($total)
                     ], 200);
 
                 } else {

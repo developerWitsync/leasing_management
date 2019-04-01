@@ -47,7 +47,11 @@ class LeaseRenewableOptionController extends Controller
                 ],
             ];
 
-            $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
+            $lease = Lease::query()
+                ->whereIn('business_account_id', getDependentUserIds())
+                ->where('id', '=', $id)
+                ->where('status', '=', '0')
+                ->first();
             if($lease) {
                 //check if the Subsequent Valuation is applied for the lease modification
                 $subsequent_modify_required = $lease->isSubsequentModification();
@@ -82,7 +86,12 @@ class LeaseRenewableOptionController extends Controller
                         $data = $request->except('_token','submit', 'uuid', 'asset_name', 'asset_category','action');
                         $data['lease_id']   = $asset->lease->id;
                         $data['asset_id']   = $asset->id;
-                        if($request->is_reasonable_certainity_option == "yes") {
+
+                        if($request->is_renewal_option_under_contract == "no") {
+                            $data['is_reasonable_certainity_option'] = null;
+                        }
+
+                        if($request->is_renewal_option_under_contract == "yes" && $request->is_reasonable_certainity_option == "yes") {
                             $data['expected_lease_end_Date'] = Carbon::parse($request->expected_lease_end_Date)->format('Y-m-d');
                         } else {
                             $data['expected_lease_end_Date']  = null;

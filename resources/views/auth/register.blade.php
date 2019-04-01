@@ -22,7 +22,7 @@
             <div class="col-md-3 register-left">
                 <img src="{{ asset('images/rocket.png') }}" alt=""/>
                 <h3>Welcome</h3>
-                <p>You are few minutes away from getting started!</p>
+                <p style="padding: 12px 10px 0px">Already Registered?</p>
                 <a class="login_register" href="{{ route('login') }}">Login</a>
             </div>
             <div class="col-md-9 register-right">
@@ -197,7 +197,7 @@
 
                                     <div class="form-group {{ $errors->has('certificates') ? ' has-error' : '' }} col-md-6 col-sm-12 required">
                                         <label>
-                                            {{ ucfirst(strtolower('UPLOAD REGISTRATION CERTIFICATE')) }}
+                                            {{ ucfirst(strtolower('Upload commercial license copy')) }}
                                         </label>
                                         <div class="frmattachFile" style="position: relative;">
                                             <input type="name" id="upload" name="name" class="form-control" disabled="disabled">

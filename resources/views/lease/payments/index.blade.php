@@ -81,8 +81,7 @@
                                 {{ $asset->name }} Payments
                                 <span>
                                     <a href="{{ route('lease.payments.createassetpayment', ['id' => $asset->id]) }}"
-                                       class="btn btn-sm btn-primary pull-right add_more">@if($asset->total_payments > 1)
-                                            Add More @else Add Payment Details @endif</a>
+                                       class="btn btn-sm btn-primary pull-right add_more">Add Lease Payments</a>
                                 </span>
                             </div>
                             <div class="panel-body">

@@ -7,7 +7,7 @@
             <div class="form-group{{ $errors->has('statutory_financial_reporting_currency') ? ' has-error' : '' }} required">
                 <label for="statutory_financial_reporting_currency" class="col-md-4 control-label">Statutory Financial Reporting Currency</label>
                 <div class="col-md-6">
-                    <select id="statutory_financial_reporting_currency" class="form-control" name="statutory_financial_reporting_currency">
+                    <select id="statutory_financial_reporting_currency" class="form-control" name="statutory_financial_reporting_currency" @if($reporting_currency_settings->statutory_financial_reporting_currency) readonly="readonly" @endif>
                         <option value="">--Select Currency--</option>
                         @foreach($currencies as $currency)
                             <option value="{{ $currency->code }}" @if($currency->code == old('statutory_financial_reporting_currency', $reporting_currency_settings->statutory_financial_reporting_currency)) selected="selected" @endif>{{ $currency->code }}  {{ $currency->symbol }}</option>

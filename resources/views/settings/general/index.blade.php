@@ -239,7 +239,7 @@
 
             <div class="panel panel-info">
                 <div class="panel-heading">
-                    Manage Your Audit Period & Lock Your Lease Valuations
+                    Lock Your Lease Valuations
                     {{--<span>--}}
                     {{--<a href="javascript:void(0);" class="btn btn-sm btn-primary pull-right add_more"--}}
                     {{--data-form="add_more_lease_lock_year">Add More</a>--}}
@@ -458,17 +458,41 @@
             var status = $(this).data('status');
             var selected_date = $('#lock_unlock_' + year).val();
 
-            $.ajax({
-                url: "{{ route('settings.leaselockyear.index') }}",
-                data: {
-                    status: status,
-                    start_date: selected_date
+            if(status == '1') {
+                var message = "Your Valuations up to the selected date will be locked and you will not be allowed to enter any leases for such period";
+            } else {
+                message = "Your selected year will be unlocked and you will be allowed to enter leases for the unlocked period";
+            }
+
+            bootbox.confirm({
+                message: message,
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn btn-danger'
+                    }
                 },
-                dataType: 'json',
-                success: function (response) {
-                    window.location.reload();
+                callback: function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: "{{ route('settings.leaselockyear.index') }}",
+                            data: {
+                                status: status,
+                                start_date: selected_date
+                            },
+                            dataType: 'json',
+                            success: function (response) {
+                                window.location.reload();
+                            }
+                        });
+                    }
                 }
             });
+
         });
     </script>
 @endsection

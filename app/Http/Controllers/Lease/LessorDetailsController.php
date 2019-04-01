@@ -14,7 +14,6 @@ use App\GeneralSettings;
 use App\Lease;
 use App\ReportingCurrencySettings;
 use App\ForeignCurrencyTransactionSettings;
-use App\LeaseCompletedSteps;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Validator;
@@ -57,12 +56,15 @@ class LessorDetailsController extends Controller
 
         $subsequent_modify_required = false;
         if($id) {
-            $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $request->id)->first();
-            //check if the Subsequent Valuation is applied for the lease modification
-            $subsequent_modify_required = $lease->isSubsequentModification();
+            $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())
+                ->where('id', '=', $request->id)
+                ->where('status', '=', '0')
+                ->first();
             if(is_null($lease)) {
                 abort(404);
             }
+            //check if the Subsequent Valuation is applied for the lease modification
+            $subsequent_modify_required = $lease->isSubsequentModification();
         } else {
             $lease = new Lease();
         }
@@ -70,9 +72,21 @@ class LessorDetailsController extends Controller
         $contract_classifications = ContractClassifications::query()->select('id', 'title')->where('status', '=', '1')->get();
         $currencies = Currencies::query()->where('status', '=', '1')->get();
         $reporting_currency_settings = ReportingCurrencySettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
-        $reporting_foreign_currency_transaction_settings = ForeignCurrencyTransactionSettings::query()->whereIn('business_account_id', getDependentUserIds())->get();
-        if(collect($reporting_currency_settings)->isEmpty()) {
-            $reporting_currency_settings = new ReportingCurrencySettings();
+        $contract_currencies = [];
+
+        if(collect($reporting_currency_settings)->isNotEmpty()) {
+            $contract_currencies[$reporting_currency_settings->statutory_financial_reporting_currency] = $reporting_currency_settings->statutory_financial_reporting_currency;
+            $contract_currencies[$reporting_currency_settings->currency_for_lease_reports] = $reporting_currency_settings->currency_for_lease_reports;
+        }
+
+        $reporting_foreign_currency_transaction_settings = ForeignCurrencyTransactionSettings::query()
+            ->whereIn('business_account_id', getDependentUserIds())
+            ->get();
+
+        if($reporting_currency_settings->is_foreign_transaction_involved == 'yes'){
+            foreach ($reporting_foreign_currency_transaction_settings as $reporting_foreign_currency_transaction_setting){
+                $contract_currencies[$reporting_foreign_currency_transaction_setting->foreign_exchange_currency] = $reporting_foreign_currency_transaction_setting->foreign_exchange_currency;
+            }
         }
         $general_settings_count = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->count();
         $breadcrumbs = $this->breadcrumbs;
@@ -89,7 +103,8 @@ class LessorDetailsController extends Controller
             'lease',
             'subsequent_modify_required',
             'general_settings_count',
-            'current_step'
+            'current_step',
+            'contract_currencies'
         ));
     }
 

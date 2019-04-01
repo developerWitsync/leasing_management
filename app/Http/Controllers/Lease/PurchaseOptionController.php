@@ -79,6 +79,11 @@ class PurchaseOptionController extends Controller
                     }
 
                     if ($request->isMethod('post')) {
+
+                        if($request->has('purchase_option_clause') && $request->purchase_option_clause == "no"){
+                            $request->request->add(['purchase_option_exerecisable' => null]);
+                        }
+
                         $validator = Validator::make($request->except('_token'), $this->validationRules());
 
                         if ($validator->fails()) {
@@ -94,6 +99,14 @@ class PurchaseOptionController extends Controller
 
                         if ($request->has('expected_lease_end_date') && $data['expected_lease_end_date'] != "") {
                             $data['expected_lease_end_date'] = Carbon::parse($data['expected_lease_end_date'])->format('Y-m-d');
+                        }
+
+                        if($request->purchase_option_clause == "no"){
+                            $data['purchase_option_exerecisable'] = null;
+                            $data['expected_purchase_date'] = null;
+                            $data['expected_lease_end_date'] = null;
+                            $data['currency'] = null;
+                            $data['purchase_price'] = null;
                         }
 
                         if ($request->has('purchase_option_exerecisable') && $data['purchase_option_exerecisable'] == 'no') {
