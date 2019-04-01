@@ -47,6 +47,9 @@
                     <a class="navbar-brand logoBx" href="{{ url('/') }}">
                         <img src="{{ asset('assets/images/logo2.png') }}"/>
                     </a>
+                    @if(env('BETA'))
+                        <span style="cursor:pointer;" class="badge badge-success beta_version">Beta Version</span>
+                    @endif
                 </div>
 
 
@@ -231,8 +234,20 @@
         });
         $(".ul_carousel").trigger("to.owl.carousel", [index, 1, true]);
     });
-
-
 </script>
+@if(env('BETA'))
+    <script src="{{ asset('assets/plugins/bootbox/bootbox.min.js') }}"></script>
+    <script>
+        $('.beta_version').on('click', function(){
+            bootbox.alert({
+                title: "Beta Version Disclaimer",
+                className : "beta_version_modal",
+                message : "Please note this is a Beta release version, some sections are still under process of the additions. However, WITSYNC is taking all measures to give you a better experience but there may be possibility that you may encounter any unknown bug or any function not working. In case you find any such issues or problem, we request you to immediately email us at info@witsync.co or press contact us bar at footer to submit issues faced by you. Our team will support to resolve your issues on earliest priority. \n" +
+                    "\n" +
+                    "We thank you for your understanding."
+            });
+        });
+    </script>
+@endif
 </body>
 </html>

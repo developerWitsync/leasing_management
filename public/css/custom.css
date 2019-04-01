@@ -997,3 +997,8 @@ input[type=number]::-webkit-outer-spin-button {
 .browseFile .browseBtn {
     right: 0px !important;
 }
+
+.beta_version_modal .modal-header{
+    background-color: #0f6fc6;
+    color: #fff;
+}
