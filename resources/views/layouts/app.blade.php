@@ -231,6 +231,8 @@
         });
         $(".ul_carousel").trigger("to.owl.carousel", [index, 1, true]);
     });
+
+
 </script>
 </body>
 </html>

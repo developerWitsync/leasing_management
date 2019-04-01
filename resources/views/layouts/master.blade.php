@@ -430,6 +430,19 @@
         })
     }
 
+    $(function () {
+        $('#pricing_Modal').on('hidden.bs.modal', function () {
+            // do something…
+            $('#proceed_subscription_plan')[0].reset();
+            $('.error').hide();
+            $('#anyoffer').html('--');
+            $('#gvofs').html('0');
+            $('#coupon_discount').html('$ 0');
+            $('.coupon_code_discount_row').hide();
+            $('#net_payable').html('0');
+        })
+    })
+
 </script>
 
 </body>

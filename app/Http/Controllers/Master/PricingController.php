@@ -152,7 +152,7 @@ class PricingController extends Controller
             if ($selected_plan->annual_discount > 0) {
                 $discounted_percentage = ($request->smonths / 12 - 1) * $selected_plan->annual_discount;
                 if($discounted_percentage > 0){
-                    $discounted_amount = round(($selected_plan->annual_discount / 100) * $original_amount, 2);
+                    $discounted_amount = round(($discounted_percentage / 100) * $original_amount, 2);
                 }
             }
 
