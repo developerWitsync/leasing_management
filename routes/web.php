@@ -299,7 +299,7 @@ Route::middleware('auth')->group(function () {
     /*
     * Drafts Routes
     */
-    Route::namespace('Drafts')->middleware(['permission:drafts'])->prefix('drafts')->group(function () {
+    Route::namespace('Drafts')->middleware(['permission:drafts','checksubscription'])->prefix('drafts')->group(function () {
         Route::get('/', ['as' => 'drafts.index', 'uses' => 'IndexController@index']);
         Route::get('fetch-lease-details', ['as' => 'drafts.fetchleasedetails', 'uses' => 'IndexController@fetchLeaseDetails']);
         Route::match(['post', 'get', 'delete'], 'delete-lease-details/{id}', ['as' => 'drafts.deleteleasedetails', 'uses' => 'IndexController@deleteLeaseDetails']);
@@ -309,7 +309,7 @@ Route::middleware('auth')->group(function () {
     * Modify Lease Routes
     */
 
-    Route::namespace('Modifylease')->middleware(['permission:modify_lease'])->prefix('modify-lease')->group(function () {
+    Route::namespace('Modifylease')->middleware(['permission:modify_lease','checksubscription'])->prefix('modify-lease')->group(function () {
         Route::get('/', ['as' => 'modifylease.index', 'uses' => 'ModifyLeaseController@index']);
         Route::get('fetch-lease-details', ['as' => 'modifylease.fetchleasedetails', 'uses' => 'ModifyLeaseController@fetchLeaseDetails']);
         Route::match(['post', 'get'], 'create/{id}', ['as' => 'modifylease.create', 'uses' => 'ModifyLeaseController@create']);
@@ -322,13 +322,13 @@ Route::middleware('auth')->group(function () {
     * Lease Valuation Routes
     */
 
-    Route::namespace('Leasevaluation')->prefix('lease-valuation')->group(function () {
+    Route::namespace('Leasevaluation')->prefix('lease-valuation','checksubscription')->group(function () {
         Route::get('/', ['as' => 'leasevaluation.index', 'uses' => 'LeaseValuationController@index']);
         Route::get('assets/{category_id}/{capitalized}', ['as' => 'leasevaluation.fetchassets', 'uses' => 'LeaseValuationController@fetchAssets']);
     });
 
 
-    Route::namespace('Settings')->middleware(['permission:settings'])->prefix('settings')->group(function () {
+    Route::namespace('Settings')->middleware(['permission:settings','checksubscription'])->prefix('settings')->group(function () {
 
         Route::prefix('general')->group(function () {
             Route::get('/', ['as' => 'settings.index', 'uses' => 'IndexController@index']);

@@ -106,10 +106,10 @@
                 </div>
                 <div class="leftmenuHd">
                     <div class="menuHd">
-                        <a class="dash_navicon" href="javascript:void(0)">
-                            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                        <a class="dash_navicon" href="javascript:void(0)" style="text-align: center;background-color: #CCCCCC">
+                            <i class="fa fa-angle-right" aria-hidden="true" style="font-weight: bolder"></i>
                             {{--<span><i class="fa fa-angle-double-left" aria-hidden="true"></i>Move sidebar</span></a>--}}
-                            <span><i class="fa fa-angle-double-left" aria-hidden="true"></i></span></a>
+                            <span><i class="fa fa-angle-left" aria-hidden="true" style="font-weight: bolder"></i></span></a>
                     </div>
                 </div>
             </div>
