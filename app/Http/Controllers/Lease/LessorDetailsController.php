@@ -83,7 +83,7 @@ class LessorDetailsController extends Controller
             ->whereIn('business_account_id', getDependentUserIds())
             ->get();
 
-        if($reporting_currency_settings->is_foreign_transaction_involved == 'yes'){
+        if(collect($reporting_currency_settings)->isNotEmpty() && $reporting_currency_settings->is_foreign_transaction_involved == 'yes'){
             foreach ($reporting_foreign_currency_transaction_settings as $reporting_foreign_currency_transaction_setting){
                 $contract_currencies[$reporting_foreign_currency_transaction_setting->foreign_exchange_currency] = $reporting_foreign_currency_transaction_setting->foreign_exchange_currency;
             }
