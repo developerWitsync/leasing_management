@@ -73,21 +73,23 @@ class LessorDetailsController extends Controller
         $currencies = Currencies::query()->where('status', '=', '1')->get();
         $reporting_currency_settings = ReportingCurrencySettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
         $contract_currencies = [];
-
-        if(collect($reporting_currency_settings)->isNotEmpty()) {
-            $contract_currencies[$reporting_currency_settings->statutory_financial_reporting_currency] = $reporting_currency_settings->statutory_financial_reporting_currency;
-            $contract_currencies[$reporting_currency_settings->currency_for_lease_reports] = $reporting_currency_settings->currency_for_lease_reports;
-        }
-
         $reporting_foreign_currency_transaction_settings = ForeignCurrencyTransactionSettings::query()
             ->whereIn('business_account_id', getDependentUserIds())
             ->get();
 
-        if(collect($reporting_currency_settings)->isNotEmpty() && $reporting_currency_settings->is_foreign_transaction_involved == 'yes'){
-            foreach ($reporting_foreign_currency_transaction_settings as $reporting_foreign_currency_transaction_setting){
-                $contract_currencies[$reporting_foreign_currency_transaction_setting->foreign_exchange_currency] = $reporting_foreign_currency_transaction_setting->foreign_exchange_currency;
+        if(collect($reporting_currency_settings)->isNotEmpty()) {
+            $contract_currencies[$reporting_currency_settings->statutory_financial_reporting_currency] = $reporting_currency_settings->statutory_financial_reporting_currency;
+            $contract_currencies[$reporting_currency_settings->currency_for_lease_reports] = $reporting_currency_settings->currency_for_lease_reports;
+
+            if ($reporting_currency_settings->is_foreign_transaction_involved == 'yes') {
+                foreach ($reporting_foreign_currency_transaction_settings as $reporting_foreign_currency_transaction_setting) {
+                    $contract_currencies[$reporting_foreign_currency_transaction_setting->foreign_exchange_currency] = $reporting_foreign_currency_transaction_setting->foreign_exchange_currency;
+                }
             }
+        } else {
+            $reporting_currency_settings = new ReportingCurrencySettings();
         }
+
         $general_settings_count = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->count();
         $breadcrumbs = $this->breadcrumbs;
 
