@@ -243,6 +243,11 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
 {
     $base_date = getParentDetails()->accountingStandard->base_date;
     $effective_date = \Carbon\Carbon::parse($data['effective_from']);
+    //check for the subsequent modification and change the effective date as it is..
+    $subsequent_modify_required = $lease->isSubsequentModification();
+    if($subsequent_modify_required){
+        $effective_date = \Carbon\Carbon::parse($lease->modifyLeaseApplication->last()->effective_from);
+    }
 
     $escalation_applicable = $data['is_escalation_applicable'];
     $escalation_basis = isset($data['escalation_basis']) ? $data['escalation_basis'] : null;
@@ -339,11 +344,17 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
                                 //$amount_to_consider = $payment->payment_per_interval_per_unit;
                                 $amount_to_consider = $payments_in_this_year_month->total_payment_amount;
                             }
-                            $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
+
+                            if($subsequent_modify_required){
+                                //have to take out the escalation percentage that was applied in the initial valuation..
+                                //@todo Need to create functions in helper to get the data from any json data...
+                                $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
+                            } else {
+                                $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
+                            }
                         }
 
                     } else {
-
                         //no the user is not paying on this month of this year
                         $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => 0, 'current_class' => $current_class];
                     }

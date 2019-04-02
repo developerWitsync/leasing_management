@@ -93,11 +93,15 @@ $(".show_escalation_chart").on("click", function(){
         url : _show_escalation_char_url,
         data : $("form").serialize(),
         type : "get",
+        beforeSend: function(){
+            showOverlayForAjax();
+        },
         success : function(response){
             setTimeout(function () {
                 $(".escalation_chart_modal_body").html(response);
 
                 $("#myModal").modal("show");
+                removeOverlayAjax();
             }, 100);
         }
     });

@@ -275,7 +275,7 @@
         <div class="col-md-6 col-md-offset-4">
 
             <a href="{{ route('lease.escalation.index', ['id' => $lease->id]) }}" class="btn btn-danger">Cancel</a>
-            <button type="submit" class="btn btn-success">
+            <button type="submit" class="btn btn-success" onclick="javascript:showOverlayForAjax();">
                 Submit
             </button>
         </div>
@@ -303,6 +303,10 @@
     <script src="{{ asset('assets/plugins/bootbox/bootbox.min.js') }}"></script>
     <script src="{{ asset('js/pages/escalations.js') }}"></script>
     <script>
+
+         $(function () {
+             removeOverlayAjax();
+         })
 
        var paymentDueDates = '{!! json_encode($paymentDueDates)  !!}';
 

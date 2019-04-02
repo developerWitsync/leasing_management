@@ -354,12 +354,18 @@
                                            class="form-control lease_period"
                                            name="lease_end_date"
                                            value="{{ old('lease_end_date', ($asset->lease_end_date)?(\Carbon\Carbon::parse($asset->lease_end_date)->format('d-M-Y')):'') }}"
-                                           autocomplete="off">
+                                           autocomplete="off" @if($subsequent_modify_required) disabled="disabled" @endif>
                                     @if ($errors->has('lease_end_date'))
                                         <span class="help-block">
                                             <strong>{{ $errors->first('lease_end_date') }}</strong>
                                         </span>
                                     @endif
+
+                                    @if($subsequent_modify_required)
+                                        <input type="hidden" name="lease_end_date"
+                                               value="{{ \Carbon\Carbon::parse($asset->lease_end_date)->format(config('settings.date_format')) }}"/>
+                                    @endif
+
                                 </div>
                             </div>
 

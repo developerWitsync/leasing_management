@@ -278,9 +278,10 @@ class ReviewSubmitController extends Controller
             //save the record in lease history
             $data = $request->except('_token');
             $data['lease_id'] = $id;
-            $data['json_data_steps'] = json_encode($record);
-            $data['esclation_payments'] = json_encode($escalation_dates);
-            $data['payment_anxure'] = json_encode($payments);
+
+            $data['json_data_steps'] = json_encode($record, JSON_PRESERVE_ZERO_FRACTION);
+            $data['esclation_payments'] = json_encode($escalation_dates, JSON_PRESERVE_ZERO_FRACTION);
+            $data['payment_anxure'] = json_encode($payments, JSON_PRESERVE_ZERO_FRACTION);
 
             if (count($model->modifyLeaseApplication) > 0) {
                 $data['modify_id'] = $model->modifyLeaseApplication->last()->id;

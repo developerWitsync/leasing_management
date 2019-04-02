@@ -119,7 +119,7 @@
             text-align: right;
             border-top: 1px solid #e5e5e5;
         }
-        
+
     </style>
     @yield('header-styles')
     <link rel="shortcut icon" href="{{ asset('master/images/favicon.png') }}">

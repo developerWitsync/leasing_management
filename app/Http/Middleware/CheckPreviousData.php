@@ -86,7 +86,7 @@ class CheckPreviousData
             $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
 
             $asset = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)
-                ->whereNotIn('specific_use', [2])
+                //->whereNotIn('specific_use', [2])
                 ->whereHas('leaseDurationClassified', function ($query) {
                     $query->whereNotIn('lease_contract_duration_id', [1, 2]);
                 })->whereNotIn('category_id', $category_excluded_id)->count();
@@ -121,7 +121,7 @@ class CheckPreviousData
                 //check for select low value if the fair market value was not applicable...
                 $step = 10;
                 $asset = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)
-                    ->whereNotIn('specific_use', [2])
+                    //->whereNotIn('specific_use', [2])
                     ->whereHas('leaseDurationClassified', function ($query) {
                         $query->whereNotIn('lease_contract_duration_id', [1, 2]);
                     })->whereNotIn('category_id', $category_excluded_id)->count();
@@ -186,7 +186,7 @@ class CheckPreviousData
                     //check for select low value if the fair market value was not applicable...
                     $step = 10;
                     $asset = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)
-                        ->whereNotIn('specific_use', [2])
+                        //->whereNotIn('specific_use', [2])
                         ->whereHas('leaseDurationClassified', function ($query) {
                             $query->whereNotIn('lease_contract_duration_id', [1, 2]);
                         })->whereNotIn('category_id', $category_excluded_id)->count();
@@ -259,7 +259,7 @@ class CheckPreviousData
                         //check for select low value if the fair market value was not applicable...
                         $step = 10;
                         $asset = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)
-                            ->whereNotIn('specific_use', [2])
+                            //->whereNotIn('specific_use', [2])
                             ->whereHas('leaseDurationClassified', function ($query) {
                                 $query->whereNotIn('lease_contract_duration_id', [1, 2]);
                             })->whereNotIn('category_id', $category_excluded_id)->count();
@@ -352,7 +352,7 @@ class CheckPreviousData
                             //check for select low value if the fair market value was not applicable...
                             $step = 10;
                             $asset = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)
-                                ->whereNotIn('specific_use', [2])
+                                //->whereNotIn('specific_use', [2])
                                 ->whereHas('leaseDurationClassified', function ($query) {
                                     $query->whereNotIn('lease_contract_duration_id', [1, 2]);
                                 })->whereNotIn('category_id', $category_excluded_id)->count();
@@ -477,7 +477,7 @@ class CheckPreviousData
                                     //check for select low value if the fair market value was not applicable...
                                     $step = 10;
                                     $asset = \App\LeaseAssets::query()->where('lease_id', '=', $lease_id)
-                                        ->whereNotIn('specific_use', [2])
+                                        //->whereNotIn('specific_use', [2])
                                         ->whereHas('leaseDurationClassified', function ($query) {
                                             $query->whereNotIn('lease_contract_duration_id', [1, 2]);
                                         })->whereNotIn('category_id', $category_excluded_id)->count();

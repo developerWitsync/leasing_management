@@ -75,7 +75,7 @@ class RegisterController extends Controller
             'gender' => 'required',
             'authorised_person_designation' => 'required',
             'email' => 'required|string|email|max:255|unique:users',
-            'admin_rights' => 'required',
+            'admin_rights' => 'required|in:yes',
             'declaration' => 'required',
             'terms_and_condition' => 'required',
             'certificates' => config('settings.file_size_limits.certificates'),
@@ -85,7 +85,8 @@ class RegisterController extends Controller
             'terms_and_condition.required' => 'Please accept Terms and Conditions.',
             'authorised_person_dob.before' => 'The authorised person must be atleast 18 years old.',
             'g-recaptcha-response.required' => 'Please confirm the recaptcha.',
-            'g-recaptcha-response.captcha' => 'Recaptcha not confirmed.'
+            'g-recaptcha-response.captcha' => 'Recaptcha not confirmed.',
+            'admin_rights.in' => 'You need to register with admin rights.'
         ]);
     }
 
@@ -119,16 +120,16 @@ class RegisterController extends Controller
     {
         try{
 
-            $package = SubscriptionPlans::query()->findOrFail($request->selected_plan);
-            $selected_plan_data = null;
-            if($package->price_plan_type == "1" && !is_null($package->price)){
-                $selected_plan_data = Session::get('selected_plan');
-                if(is_null($selected_plan_data)) {
-                    return redirect(route('master.pricing.index'))->with('error', 'Please select the plan and subscription years as well.');
-                }
-            } elseif($package->price_plan_type == "2"){
-                return redirect(route('master.pricing.index'))->with('error', 'Invalid Request.');
-            }
+//            $package = SubscriptionPlans::query()->findOrFail($request->selected_plan);
+//            $selected_plan_data = null;
+//            if($package->price_plan_type == "1" && !is_null($package->price)){
+//                $selected_plan_data = Session::get('selected_plan');
+//                if(is_null($selected_plan_data)) {
+//                    return redirect(route('master.pricing.index'))->with('error', 'Please select the plan and subscription years as well.');
+//                }
+//            } elseif($package->price_plan_type == "2"){
+//                return redirect(route('master.pricing.index'))->with('error', 'Invalid Request.');
+//            }
 
             $validator = $this->validator($request->all());
             if($validator->fails()){
@@ -192,6 +193,7 @@ class RegisterController extends Controller
 //                }
             }
         } catch (\Exception $e){
+            dd($e);
             abort(404);
         }
     }

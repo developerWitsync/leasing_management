@@ -139,5 +139,5 @@
 
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-success">Confirm</button>
+    <button type="button" data-dismiss="modal" class="btn btn-success">Confirm</button>
 </div>

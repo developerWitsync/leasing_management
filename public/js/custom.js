@@ -402,3 +402,11 @@ function checklockperioddate(date, instance, _ajax_url) {
           }
      });  
 }
+
+function showOverlayForAjax(){
+    $('#overlay').show();
+}
+
+function removeOverlayAjax(){
+    $('#overlay').hide();
+}

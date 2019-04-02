@@ -292,7 +292,7 @@
             <label for="lease_payment_per_interval" class="col-md-12 control-label">Lease Payment Per Interval</label>
             <div class="col-md-12">
 
-                <select class="form-control" name="lease_payment_per_interval">
+                <select class="form-control" name="lease_payment_per_interval" @if($subsequent_modify_required) disabled="disabled" @endif>
                     <option value="">--Select Interval Nature--</option>
                     <option value="1"
                             @if(old('lease_payment_per_interval', $payment->lease_payment_per_interval) == '1') selected="selected" @endif>
@@ -308,6 +308,10 @@
                     <span class="help-block">
                         <strong>{{ $errors->first('lease_payment_per_interval') }}</strong>
                     </span>
+                @endif
+
+                @if($subsequent_modify_required)
+                    <input type="hidden" name="lease_payment_per_interval" value="{{ $payment->lease_payment_per_interval }}">
                 @endif
 
             </div>
@@ -384,7 +388,7 @@
             <a href="{{ route('addlease.payments.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
         </div>
         <div class="col-md-6 btnsubmitBx">
-            <button type="submit" class="btn btn-success" name="submit" value="save">Save</button>
+            <button type="submit" class="btn btn-success" name="submit" value="save" onclick="javascript:showOverlayForAjax();">Save</button>
         </div>
     </div>
 
@@ -407,6 +411,8 @@
     <script>
 
         $(function () {
+
+            removeOverlayAjax();
 
             // variable_basis_amount_determinable
             @if(old('nature', $payment->nature) == "2" && old('variable_amount_determinable', $payment->variable_amount_determinable) == "no")
@@ -696,11 +702,15 @@
                         lease_id: $lease_id,
                         asset_id: $asset_id
                     },
+                    beforeSend: function(){
+                        showOverlayForAjax();
+                    },
                     type: 'get',
                     success: function (response) {
                         setTimeout(function () {
                             $('.annexure_modal_body').html(response['html']);
-
+                            $('#overlay').hide();
+                            removeOverlayAjax();
                             final_payout_dates = response['final_payout_dates'];
 
                             var asset_lease_start_date = new Date('{{ \Carbon\Carbon::parse($asset->accural_period)->format('Y') ."-". \Carbon\Carbon::parse($asset->accural_period)->format('m') }}');

@@ -51,13 +51,20 @@ class SelectLowValueController extends Controller
 
                 $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
 
+//                $asset = LeaseAssets::query()->where('lease_id', '=', $lease->id)
+//                    ->whereNotIn('specific_use', [2])
+//                    ->whereHas('leaseDurationClassified', function ($query) {
+//                        $query->whereNotIn('lease_contract_duration_id', [1, 2]);
+//                    })->whereNotIn('category_id', $category_excluded_id)->first();
+
+
                 $asset = LeaseAssets::query()->where('lease_id', '=', $lease->id)
-                    ->whereNotIn('specific_use', [2])
                     ->whereHas('leaseDurationClassified', function ($query) {
                         $query->whereNotIn('lease_contract_duration_id', [1, 2]);
                     })->whereNotIn('category_id', $category_excluded_id)->first();
 
                 if ($asset) {
+
                     $total_undiscounted_value = getUndiscountedTotalLeasePayment($asset->id);
 
                     if ($asset->leaseSelectLowValue) {
@@ -74,6 +81,9 @@ class SelectLowValueController extends Controller
                         $data = $request->except('_token', 'submit', 'uuid', 'asset_name', 'asset_category', 'action');
                         $data['lease_id'] = $asset->lease->id;
                         $data['asset_id'] = $asset->id;
+                        if($asset->specific_use == '2'){
+                            $data['is_classify_under_low_value'] = "no";
+                        }
                         $model->setRawAttributes($data);
                         if ($model->save()) {
                             // complete Step

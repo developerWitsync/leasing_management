@@ -109,7 +109,8 @@
                 </div>
                 <div class="leftmenuHd">
                     <div class="menuHd">
-                        <a class="dash_navicon" href="javascript:void(0)" style="text-align: center;background-color: #CCCCCC">
+                        <a class="dash_navicon" href="javascript:void(0)"
+                           style="text-align: center;background-color: #CCCCCC">
                             <i class="fa fa-angle-right" aria-hidden="true" style="font-weight: bolder"></i>
                             {{--<span><i class="fa fa-angle-double-left" aria-hidden="true"></i>Move sidebar</span></a>--}}
                             <span><i class="fa fa-angle-left" aria-hidden="true" style="font-weight: bolder"></i></span></a>
@@ -238,16 +239,22 @@
 @if(env('BETA'))
     <script src="{{ asset('assets/plugins/bootbox/bootbox.min.js') }}"></script>
     <script>
-        $('.beta_version').on('click', function(){
+        $('.beta_version').on('click', function () {
             bootbox.alert({
                 title: "Beta Version Disclaimer",
-                className : "beta_version_modal",
-                message : "Please note this is a Beta release version, some sections are still under process of the additions. However, WITSYNC is taking all measures to give you a better experience but there may be possibility that you may encounter any unknown bug or any function not working. In case you find any such issues or problem, we request you to immediately email us at info@witsync.co or press contact us bar at footer to submit issues faced by you. Our team will support to resolve your issues on earliest priority. \n" +
+                className: "beta_version_modal",
+                message: "Please note this is a Beta release version, some sections are still under process of the additions. However, WITSYNC is taking all measures to give you a better experience but there may be possibility that you may encounter any unknown bug or any function not working. In case you find any such issues or problem, we request you to immediately email us at info@witsync.co or press contact us bar at footer to submit issues faced by you. Our team will support to resolve your issues on earliest priority. \n" +
                     "\n" +
                     "We thank you for your understanding."
             });
         });
     </script>
 @endif
+<div id="overlay">
+    <div id="text">
+        <i class="fa fa-circle-o-notch fa-spin" style="font-size:100px; text-align: center"></i><br/>
+        Processing your request please wait....
+    </div>
+</div>
 </body>
 </html>

@@ -66,7 +66,6 @@
 @section('footer-script')
     <script src="{{ asset('assets/plugins/bootbox/bootbox.min.js') }}"></script>
     <script src="{{ asset('js/jquery-ui.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
     <script src="{{ asset('assets/plugins/datatables/jquery.dataTables.js') }}"></script>
     <script src="{{ asset('assets/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
 
@@ -79,15 +78,13 @@
                     {
                         "data": "id",
                         render: function (data, type, row, meta) {
-
-
                             return meta.row + meta.settings._iDisplayStart + 1;
                         }
                     },
                     { "data": "lessor_name"},
                     { "data": "total_assets"},
-                    { "data": "lease_type.title"},
-                     { "data": "id"}
+                    { "data": "contract_classification_title"},
+                    { "data": "id"}
                 ],
                 "columnDefs": [
                     {

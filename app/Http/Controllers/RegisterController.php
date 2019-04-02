@@ -23,17 +23,21 @@ class RegisterController extends Controller
      * @param $package
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index($package){
-        $package = SubscriptionPlans::query()->where('slug', $package)->first();
-        if($package) {
-
-            $selected_plan_data = null;
-            if($package->price_plan_type == "1" && !is_null($package->price)){
-                $selected_plan_data = Session::get('selected_plan');
-                if(is_null($selected_plan_data)) {
-                    return redirect()->back()->with('error', 'Please select the plan and subscription years as well.');
-                }
+    public function index($package = null){
+        try{
+            if(auth()->check()){
+                return redirect('/home');
             }
+//            if($package){
+//                $package = SubscriptionPlans::query()->where('slug', $package)->first();
+//                $selected_plan_data = null;
+//                if($package->price_plan_type == "1" && !is_null($package->price)){
+//                    $selected_plan_data = Session::get('selected_plan');
+//                    if(is_null($selected_plan_data)) {
+//                        return redirect()->back()->with('error', 'Please select the plan and subscription years as well.');
+//                    }
+//                }
+//            }
 
             $countries = Countries::query()->where('status','=', '1')->where('trash', '=', '0')->get();
             $industry_types = IndustryTypes::query()->where('status', '=', '1')->get();
@@ -46,8 +50,8 @@ class RegisterController extends Controller
                 'package',
                 'accounting_standards'
             ));
-        } else{
-            abort(404);
+        } catch (\Exception $e){
+          abort(404);
         }
     }
 

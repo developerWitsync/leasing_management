@@ -36,7 +36,11 @@ Route::namespace('Master')->prefix('pricing')->group(function () {
 
 });
 
-Route::get('register/{package}', ['as' => 'register.index', 'uses' => 'RegisterController@index']);
+
+Auth::routes();
+
+
+Route::get('register', ['as' => 'register', 'uses' => 'RegisterController@index']);
 Route::post('create-account', ['as' => 'register.create', 'uses' => 'RegisterController@register']);
 Route::get('fetch-states/{country_id}', ['as' => 'register.fetch.states', 'uses' => 'RegisterController@fetchStates']);
 
@@ -45,9 +49,6 @@ Route::prefix('payment')->group(function () {
     Route::any('cancel', ['as' => 'payment.cancel', 'uses' => 'PaymentController@cancel']);
     Route::any('notify', ['as' => 'payment.notify', 'uses' => 'PaymentController@notify']);
 });
-
-
-Auth::routes();
 
 Route::middleware('auth')->group(function () {
 

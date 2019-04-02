@@ -16,7 +16,7 @@
                                 <li><a href="{{ route('login') }}"><i class="fa fa-lock"></i> Login</a></li>
                                 {{--<li><a href="{{ route('contactus') }}"><span class="rg-btn">Contact us</span></a></li>--}}
                                 {{--<li><a href="javascript:void(0);" data-toggle="modal" data-target="#leasing_software"><span class="rg-btn">Register</span></a></li>--}}
-                                <li><a href="{{ route('master.pricing.index') }}"><span class="rg-btn">Register</span></a></li>
+                                <li><a href="{{ route('register') }}"><span class="rg-btn">Register</span></a></li>
                             @else
                                 @if(auth()->user()->parent_id == '0')
                                     <li><a href="{{route('settings.profile.index')}}"><i class="fa fa-user"></i>My Profile</a></li>
@@ -61,6 +61,7 @@
                 <ul class="nav navbar-nav">
                     <li><a href="/">Home</a></li>
                     <li><a href="{{ route('information.about') }}">About Us</a></li>
+                    <li><a href="{{ route('information.services') }}">Services</a></li>
                     <li><a href="{{ route('information.services') }}">Services</a></li>
                     <li><a href="{{ route('master.leasingsoftware.index') }}">Leasing Software</a></li>
                     <li class="dropdown">

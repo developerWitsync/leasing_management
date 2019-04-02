@@ -39,7 +39,7 @@
                         <div class="row register-form">
                             <form class="" method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
                                 {{ csrf_field() }}
-                                <input type="hidden" name="selected_plan" value="{{ $package->id }}">
+                                {{--<input type="hidden" name="selected_plan" value="{{ $package->id }}">--}}
                                 <div class="row">
                                     <div class="form-group {{ $errors->has('country') ? ' has-error' : '' }} col-md-12 col-sm-12 required">
                                         <select id="country" class="form-control" name="country">

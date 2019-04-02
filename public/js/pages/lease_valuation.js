@@ -1,3 +1,4 @@
+
 /**
  * Show present value calculus for an asset
  * @param asset_id
@@ -22,10 +23,9 @@ function showPresentValueCalculus(asset_id = null){
 // document ready function
 $(function(){
 
+    showOverlayForAjax();
+
     var lease_liability_array = new Array();
-
-
-
 
     $('.load_payment_present_value').each(function(index, value){
         var asset_id = $(this).data('asset_id');
@@ -135,7 +135,7 @@ $(function(){
                     $(that).text(response['value'].toFixed(2));
                     lease_valuation_array[asset_id] = response['value'];
                 }
-            })
+            });
         }
 
     });
@@ -157,7 +157,14 @@ $(function(){
             success : function (response) {
                 $(that).text(response['value'].toFixed(2));
             }
-        })
+        });
     });
 
+
+
+
+});
+
+$(document).ready(function () {
+    removeOverlayAjax();
 });

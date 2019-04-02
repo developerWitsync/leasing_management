@@ -36,10 +36,10 @@ class CheckSubscription
             //check if the limit for adding leases has reached...
             if($function == "add_lease"){
                 $submitted_leases = Lease::query()->whereIn('business_account_id', getDependentUserIds())
-                    ->where('status', '=', '1')
+                    //->where('status', '=', '1')
                     ->count();
                 $allowed_lease = $subscription->subscriptionPackage->available_leases;
-                if(($allowed_lease - $submitted_leases) == 0){
+                if($allowed_lease <= $submitted_leases){
                     //not allowed to add new lease and needs to redirect to the upgrade plan page..
                     return redirect(route('plan.index'))->with('error', "You have utilised the allowed number of leases as per your plan. Please upgrade your subscription plan.");
                 }

@@ -78,10 +78,11 @@ class PricingController extends Controller
             Session::put('selected_plan', $request->all());
             return response()->json([
                 'status' => true,
-                'redirect_link' => route('register.index', ['package' => $selected_plan->slug])
+                //'redirect_link' => route('register', ['package' => $selected_plan->slug])
+                'redirect_link' => route('register')
             ]);
         } catch (\Exception $e) {
-            dd($e);
+            abort(404);
         }
     }
 
