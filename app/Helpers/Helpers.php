@@ -247,6 +247,9 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
     $subsequent_modify_required = $lease->isSubsequentModification();
     if($subsequent_modify_required){
         $effective_date = \Carbon\Carbon::parse($lease->modifyLeaseApplication->last()->effective_from);
+        $lease_history = \App\LeaseHistory::query()->where('lease_id', '=', $lease->id)->orderBy('id', 'desc')->first();
+        $filtered_escalation_dates  = collect(json_decode($lease_history->esclation_payments, false))
+            ->where('payment_id', '=', $payment->id);
     }
 
     $escalation_applicable = $data['is_escalation_applicable'];
@@ -299,12 +302,9 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
                 $payments_in_this_year_month = \App\LeaseAssetPaymenetDueDate::query()
                     ->whereRaw("`payment_id` = '{$payment->id}' AND DATE_FORMAT(`date`,'%m') = '{$k_m}' and DATE_FORMAT(`date`,'%Y') = '{$start_year}'")
                     ->where('date', '<=', \Carbon\Carbon::parse($end_date)->format('Y-m-d'))
-                    ->count();
-                if ($payments_in_this_year_month > 0) {
-                    $payments_in_this_year_month = \App\LeaseAssetPaymenetDueDate::query()
-                        ->whereRaw("`payment_id` = '{$payment->id}' AND DATE_FORMAT(`date`,'%m') = '{$k_m}' and DATE_FORMAT(`date`,'%Y') = '{$start_year}'")
-                        ->where('date', '<=', \Carbon\Carbon::parse($end_date)->format('Y-m-d'))
-                        ->first();
+                    ->first();
+                if ($payments_in_this_year_month) {
+
                     if ($payments_in_this_year_month->total_payment_amount > 0) {
                         //yes the user is paying on this month of this year
                         //the condition is applying the escalations only on the escalation date
@@ -337,7 +337,6 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
 
                             $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
                             $escalation_date->addYear(1); //applied annually
-
                         } else {
                             //escalation is not applied however the user needs to pay for this month and year
                             if ($amount_to_consider == 0) {
@@ -345,13 +344,20 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
                                 $amount_to_consider = $payments_in_this_year_month->total_payment_amount;
                             }
 
-                            if($subsequent_modify_required){
+                            if($subsequent_modify_required && $start_year <= $effective_date->format('Y') && $key <= $effective_date->format('m')){
                                 //have to take out the escalation percentage that was applied in the initial valuation..
-                                //@todo Need to create functions in helper to get the data from any json data...
+                                $filtered_data = $filtered_escalation_dates
+                                    ->where('escalation_year', '=', $start_year)->where('escalation_month', '=',$key)
+                                    ->first();
+                                if(count($filtered_data) == 1){
+                                    $escalation_percentage_or_amount = $filtered_data->value_escalated;
+                                    $amount_to_consider = $filtered_data->total_amount_payable;
+                                }
                                 $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
                             } else {
                                 $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
                             }
+
                         }
 
                     } else {
@@ -368,7 +374,6 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
         }
     }
 
-
     //code to compute the escalations when applied inconsistently...
     if ($escalation_applicable == "yes" && (($escalation_basis == '1' && $escalation_applied_consistently_annually == 'no') || ($escalation_basis == '2' && $escalation_applied_consistently_annually == 'no'))) {
         if ($escalation_basis == '1') {
@@ -381,17 +386,13 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
 
         while ($start_year <= $end_year) {
             foreach ($months as $key => $month) {
-
                 $k_m = sprintf("%02d", $key);
                 $payments_in_this_year_month = \App\LeaseAssetPaymenetDueDate::query()
                     ->whereRaw("`payment_id` = '{$payment->id}' AND DATE_FORMAT(`date`,'%m') = '{$k_m}' and DATE_FORMAT(`date`,'%Y') = '{$start_year}'")
                     ->where('date', '<=', \Carbon\Carbon::parse($end_date)->format('Y-m-d'))
-                    ->count();
-                if ($payments_in_this_year_month > 0) {
-                    $payments_in_this_year_month = \App\LeaseAssetPaymenetDueDate::query()
-                        ->whereRaw("`payment_id` = '{$payment->id}' AND DATE_FORMAT(`date`,'%m') = '{$k_m}' and DATE_FORMAT(`date`,'%Y') = '{$start_year}'")
-                        ->where('date', '<=', \Carbon\Carbon::parse($end_date)->format('Y-m-d'))
-                        ->first();
+                    ->first();
+                if ($payments_in_this_year_month) {
+
                     if ($payments_in_this_year_month->total_payment_amount > 0) {
                         $first_date_of_month = \Carbon\Carbon::parse("first day of {$month} {$start_year}");
                         $last_date_of_month = \Carbon\Carbon::parse("last day of {$month} {$start_year}");
@@ -442,7 +443,7 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
 
                                     $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
 
-                                } else {
+                                    } else {
                                     //escalation is not applied however the user needs to pay for this month and year
                                     if ($amount_to_consider == 0) {
                                         //$amount_to_consider = $payment->payment_per_interval_per_unit;
@@ -457,7 +458,22 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
                                 //$amount_to_consider = $payment->payment_per_interval_per_unit;
                                 $amount_to_consider = $payments_in_this_year_month->total_payment_amount;
                             }
-                            $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
+
+                            if($subsequent_modify_required && $start_year <= $effective_date->format('Y') && $key <= $effective_date->format('m')){
+                                //have to take out the escalation percentage that was applied in the initial valuation..
+                                $filtered_data = $filtered_escalation_dates
+                                    ->where('escalation_year', '=', $start_year)->where('escalation_month', '=',$key)
+                                    ->first();
+                                if(count($filtered_data) == 1){
+                                    $escalation_percentage_or_amount = $filtered_data->value_escalated;
+                                    $amount_to_consider = $filtered_data->total_amount_payable;
+                                }
+                                $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
+                            } else {
+                                $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
+                            }
+
+                            // $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
                         }
                     } else {
                         $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => 0, 'current_class' => $current_class];
@@ -479,16 +495,15 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
             foreach ($months as $key => $month) {
 
                 $k_m = sprintf("%02d", $key);
+
                 $payments_in_this_year_month = \App\LeaseAssetPaymenetDueDate::query()
                     ->whereRaw("`payment_id` = '{$payment->id}' AND DATE_FORMAT(`date`,'%m') = '{$k_m}' and DATE_FORMAT(`date`,'%Y') = '{$start_year}'")
                     ->where('date', '<=', \Carbon\Carbon::parse($end_date)->format('Y-m-d'))
-                    ->count();
-                if ($payments_in_this_year_month > 0) {
+                    ->first();
 
-                    $payments_in_this_year_month = \App\LeaseAssetPaymenetDueDate::query()
-                        ->whereRaw("`payment_id` = '{$payment->id}' AND DATE_FORMAT(`date`,'%m') = '{$k_m}' and DATE_FORMAT(`date`,'%Y') = '{$start_year}'")
-                        ->where('date', '<=', \Carbon\Carbon::parse($end_date)->format('Y-m-d'))
-                        ->first();
+                if ($payments_in_this_year_month) {
+
+
                     if ($payments_in_this_year_month->total_payment_amount > 0) {
                         //escalation is not applied however the user needs to pay for this month and year
                         if ($amount_to_consider == 0) {
@@ -677,7 +692,13 @@ function fetchCurrencyExchangeRate($date = null, $source, $target)
  */
 function generateWitsyncAccountID($user)
 {
-    return 'WSUID' . str_pad($user->id, 5, '0', STR_PAD_LEFT);
+    $user_country = strtolower($user->country);
+    $country = \App\Countries::query()->whereRaw("LOWER(name) = '{$user_country}'")->first();
+    if($country) {
+        return '97' . str_pad($country->id, 3, '0', STR_PAD_LEFT) . date('Y') . str_pad($user->id, 5, '0', STR_PAD_LEFT);
+    } else {
+        return '97' . date('Y') . str_pad($user->id, 5, '0', STR_PAD_LEFT);
+    }
 }
 
 /**

@@ -32,6 +32,128 @@
                         <div class="panel-body">
                             <form class="form-horizontal" method="POST" action="{{ route('settings.profile.index') }}">
                                 {{ csrf_field() }}
+
+                                @if($user->parent_id == 0)
+                                    <div class="form-group{{ $errors->has('country') ? ' has-error' : '' }} required">
+                                        <label for="country" class="col-md-4 control-label">Country Of
+                                            Incorporation</label>
+
+                                        <div class="col-md-6">
+                                            <select id="country" class="form-control" name="country">
+                                                <option value="">--Select Country Of Incorporation--</option>
+                                                @foreach($countries as $country)
+                                                    <option value="{{ $country->name }}"
+                                                            @if($country->name == old('country', $user->country)) selected="selected"
+                                                            @endif data-id="{{ $country->id }}">{{ $country->name }}</option>
+                                                @endforeach
+                                            </select>
+
+                                            @if ($errors->has('country'))
+                                                <span class="help-block">
+                                            <strong>{{ $errors->first('country') }}</strong>
+                                        </span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endif
+
+                                @if($user->parent_id == 0 && $user->country == "India")
+                                    <div class="state_div form-group{{ $errors->has('state') ? ' has-error' : '' }} required">
+                                        <label for="state" class="col-md-4 control-label">State</label>
+                                        <div class="col-md-6">
+                                            <select id="state" class="form-control" name="state">
+                                                <option value="">--Select State--</option>
+                                                @foreach($states as $state)
+                                                    <option value="{{ $state->state_name }}"
+                                                            @if($state->state_name == old('state', $user->state)) selected="selected"
+                                                            @endif>{{ $state->state_name }}</option>
+                                                @endforeach
+                                            </select>
+
+                                            @if ($errors->has('state'))
+                                                <span class="help-block">
+                                            <strong>{{ $errors->first('state') }}</strong>
+                                        </span>
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                    <div class="state_div form-group{{ $errors->has('gstin') ? ' has-error' : '' }} required">
+                                        <label for="gstin" class="col-md-4 control-label">GSTIN</label>
+                                        <div class="col-md-6">
+                                            <input id="gstin" type="text" class="form-control"
+                                                   name="gstin"
+                                                   value="{{ old('gstin', $user->gstin) }}"
+                                                   autofocus>
+
+                                            @if ($errors->has('gstin'))
+                                                <span class="help-block">
+                                            <strong>{{ $errors->first('gstin') }}</strong>
+                                        </span>
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                @endif
+
+
+                                @if($user->parent_id == 0)
+                                    <div class="form-group{{ $errors->has('legal_entity_name') ? ' has-error' : '' }} required">
+                                        <label for="legal_entity_name" class="col-md-4 control-label">Legal Entity
+                                            Name</label>
+
+                                        <div class="col-md-6">
+                                            <input id="legal_entity_name" type="text" class="form-control"
+                                                   name="legal_entity_name"
+                                                   value="{{ old('legal_entity_name', $user->legal_entity_name) }}"
+                                                   autofocus>
+
+                                            @if ($errors->has('legal_entity_name'))
+                                                <span class="help-block">
+                                        <strong>{{ $errors->first('legal_entity_name') }}</strong>
+                                    </span>
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group{{ $errors->has('legal_entity_name') ? ' has-error' : '' }} required">
+                                        <label for="legal_entity_name" class="col-md-4 control-label">Legal Entity
+                                            Name</label>
+
+                                        <div class="col-md-6">
+                                            <input id="legal_entity_name" type="text" class="form-control"
+                                                   name="legal_entity_name"
+                                                   value="{{ old('legal_entity_name', $user->legal_entity_name) }}"
+                                                   autofocus>
+
+                                            @if ($errors->has('legal_entity_name'))
+                                                <span class="help-block">
+                                        <strong>{{ $errors->first('legal_entity_name') }}</strong>
+                                    </span>
+                                            @endif
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group{{ $errors->has('address') ? ' has-error' : '' }} required">
+                                        <label for="address" class="col-md-4 control-label">Registered Address</label>
+
+                                        <div class="col-md-6">
+                                            <input id="address" type="text" class="form-control"
+                                                   name="address"
+                                                   value="{{ old('address', $user->address) }}"
+                                                   autofocus>
+
+                                            @if ($errors->has('address'))
+                                                <span class="help-block">
+                                        <strong>{{ $errors->first('address') }}</strong>
+                                    </span>
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                @endif
+
                                 <div class="form-group{{ $errors->has('authorised_person_name') ? ' has-error' : '' }} required">
                                     <label for="authorised_person_name" class="col-md-4 control-label">Authorised Person
                                         Name</label>
@@ -184,6 +306,29 @@
                                         @endif
                                     </div>
                                 </div>
+
+                                @if($user->parent_id == 0)
+                                    <div class="form-group{{ $errors->has('certificates') ? ' has-error' : '' }} ">
+                                        <label for="file" class="col-md-4 control-label"> Commercial license copy</label>
+                                        <div class="col-md-6 frmattachFile" style="width: auto;">
+                                            <input type="name" id="upload" name="name" class="form-control"
+                                                   disabled="disabled">
+                                            <button type="button" class="browseBtn">Browse</button>
+                                            <input type="file" id="file-name" name="certificates" class="fileType">
+                                            <h6 class="disabled">{{ config('settings.file_size_limits.file_validation') }}</h6>
+                                            @if ($errors->has('file'))
+                                                <span class="help-block">
+                                            <strong>{{ $errors->first('certificates') }}</strong>
+                                                </span>
+                                            @endif
+                                        </div>
+                                        @if($user->certificates !='')
+                                            <a href="{{asset('uploads/'.$user->certificates)}}" class="downloadIcon"
+                                               target="_blank"><i class="fa fa-download"></i></a>
+                                        @endif
+                                    </div>
+                                @endif
+
                                 <div class="form-group">
                                     <div class="col-md-6 col-md-offset-4">
                                         <button type="submit" class="btn btn-success">
@@ -214,6 +359,24 @@
                 changeYear: true,
                 yearRange: "-100:-18"
             });
+
+            $('#country').on('change', function(){
+                if($(this).val() == "India"){
+                    $('.state_div').show();
+                } else {
+                    $('.state_div').hide();
+                    $('#state').val('');
+                    $('#gstin').val('');
+                }
+            });
+
+            $('#file-name').change(function () {
+                $('#file-name').show();
+                var filename = $('#file-name').val();
+                var or_name = filename.split("\\");
+                $('#upload').val(or_name[or_name.length - 1]);
+            });
+
         });
 
     </script>

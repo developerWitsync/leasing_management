@@ -105,7 +105,6 @@ class RegisterController extends Controller
         $data['parent_id'] = 0;
         $data['raw_password'] = $data['password'];
         $data['password'] = bcrypt($data['password']);
-
         unset($data['_token']);
         return User::create($data);
     }

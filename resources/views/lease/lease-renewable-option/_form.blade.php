@@ -171,6 +171,17 @@
             if ($(this).is(':checked') && $(this).val() == 'yes') {
                 $('#hidden-fields_date').show();
                 $("#is_reasonable_certainity_option_no").prop('checked', false);
+
+                bootbox.dialog({
+                    message: "Please input, verify and update your Lease Payments Schedule as well under step 6 to extend Lease Payments up to the date of Lease Renewal. Failure to do so may impact the Lease Valuation.",
+                    buttons: {
+                        confirm: {
+                            label: 'Ok',
+                            className: 'btn-success'
+                        },
+                    }
+                });
+
             } else {
                 $('#hidden-fields_date').hide();
                 $("#is_reasonable_certainity_option_yes").prop('checked', false);

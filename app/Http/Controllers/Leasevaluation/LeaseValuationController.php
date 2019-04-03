@@ -312,4 +312,8 @@ class LeaseValuationController extends Controller
             abort(404);
         }
     }
+
+    public function capitalised(){
+        return view('leasevaluation.capitalised');
+    }
 }

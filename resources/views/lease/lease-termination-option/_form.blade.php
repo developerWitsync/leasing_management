@@ -80,7 +80,7 @@
             <div class="col-md-12">
 
                 <input type="text" placeholder="Expected Lease End Date" class="form-control lease_period" id="lease_end_date"
-                       name="lease_end_date" value="{{ old('lease_end_date', $model->lease_end_date) }}" autocomplete="off" readonly="true" style="background-color: #ffffff">
+                       name="lease_end_date" value="{{ old('lease_end_date', $model->lease_end_date) }}" autocomplete="off" readonly="readonly" style="background-color:#fff">
                 
                 @if ($errors->has('lease_end_date'))
                     <span class="help-block">
@@ -211,6 +211,17 @@
         $(document).on('click', 'input[name="exercise_termination_option_available"]', function () {
             $('input[name="exercise_termination_option_available"]').not(this).prop('checked', false);
             if ($(this).is(':checked') && $(this).val() == 'yes') {
+                //show pop up here
+                bootbox.dialog({
+                    message: "Please input, verify and update your Lease Payments Schedule as well under step 6 to restrict Lease Payments up to the date of Lease Termination. Failure to do so may impact the Lease Valuation.",
+                    buttons: {
+                        confirm: {
+                            label: 'Ok',
+                            className: 'btn-success'
+                        },
+                    }
+                });
+
                 $('#hidden-elements').show();
             } else {
 

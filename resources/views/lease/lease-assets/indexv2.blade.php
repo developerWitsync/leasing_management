@@ -431,7 +431,7 @@
                                                id="yes" value="1"
                                                @if(old('using_lease_payment' ,$asset->using_lease_payment) == "1") checked="checked" @endif @if($subsequent_modify_required) disabled="disabled" @endif>
                                         <label for="yes" class="form-check-label" for="1" style="vertical-align: 2px">Current
-                                            Lease Payment as on {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->format('F d, Y') }}</label>
+                                            Lease Payment Effective From {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->format('Y') }}</label>
                                     </div>
 
                                     <div class=" col-md-12 form-check form-check-inline">
