@@ -43,17 +43,31 @@
             </div>
         </div>
         <div class="form-group{{ $errors->has('discount_rate_to_use') ? ' has-error' : '' }} required">
-            <label for="name" class="col-md-12 control-label">Select Discount Rate to Use</label>
+            <label for="name" class="col-md-12 control-label">Select Discount Rate to Use(in %)</label>
             <div class="col-md-12 form-check form-check-inline" required>
-                <input class="form-control" name="discount_rate_to_use" id="yes" type="text"
+                <input class="form-control" name="discount_rate_to_use" id="discount_rate_to_use" type="text"
                        value="{{ old('discount_rate_to_use', $model->discount_rate_to_use) }}">
                 @if ($errors->has('discount_rate_to_use'))
                     <span class="help-block">
-                    <strong>{{ $errors->first('discount_rate_to_use') }}</strong>
+                        <strong>{{ $errors->first('discount_rate_to_use') }}</strong>
+                    </span>
+                @endif
+            </div>
+        </div>
+
+        <div class="form-group{{ $errors->has('daily_discount_rate') ? ' has-error' : '' }} required">
+            <label for="name" class="col-md-12 control-label">Effective Daily Discount Rate(in %)</label>
+            <div class="col-md-12 form-check form-check-inline" required>
+                <input class="form-control" name="daily_discount_rate" id="daily_discount_rate" type="text"
+                       value="{{ old('daily_discount_rate', $model->daily_discount_rate) }}" readonly="readonly">
+                @if ($errors->has('daily_discount_rate'))
+                    <span class="help-block">
+                    <strong>{{ $errors->first('daily_discount_rate') }}</strong>
                 </span>
                 @endif
             </div>
         </div>
+
     </div>
     <div class="form-group btnMainBx">
         <div class="col-md-4 col-sm-4 btn-backnextBx">
@@ -76,6 +90,18 @@
 @section('footer-script')
     <script src="{{ asset('js/jquery-ui.js') }}"></script>
     <script type="text/javascript">
+
+        $(function(){
+            $('#discount_rate_to_use').focusout( function(){
+                var value = $(this).val();
+                if($.isNumeric(value)){
+                        var effective_daialy_disount_rate  = (Math.pow(1 + (value/100), (1/365)) - 1) * 100;
+                        $("#daily_discount_rate").val(effective_daialy_disount_rate);
+                } else {
+                    alert("Please enter numbers only.");
+                }
+            })
+        })
 
         $('.save_next').on('click', function (e) {
             e.preventDefault();

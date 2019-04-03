@@ -29,8 +29,17 @@ class PermissionSeeder extends Seeder
             'name' => 'modify_lease',
             'display_name' => 'Modify Lease',
             'description'   => 'User can access the lease after review and submit form.'
+        ],
+        [
+            'name' => 'dashboard',
+            'display_name' => 'Dashboard',
+            'description' => 'User can access the dashboard for the company.'
+        ],
+        [
+            'name' => 'manage_subscription',
+            'display_name' => 'Manage Subscriptions',
+            'description' => 'User can manage the subscriptions for the company.'
         ]
-        
     ];
     /**
      * Run the database seeds.

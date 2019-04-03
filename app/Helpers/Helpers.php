@@ -117,7 +117,7 @@ function getParentDetails()
 function updateCreditBalanceForParent($adjusted_amount)
 {
     $credits = getParentDetails()->credit_balance;
-    if($credits >= (-1 * $adjusted_amount['balance'])) {
+    if ($credits >= (-1 * $adjusted_amount['balance'])) {
         $user = getParentDetails();
         $user->credit_balance = $user->credit_balance + $adjusted_amount['balance'];
         $user->save();
@@ -223,6 +223,15 @@ function calculatePaymentDueDatesByPaymentId(\App\LeaseAssetPayments $payment)
 }
 
 /**
+ * format the number to 2 decimal places..
+ * @param $number
+ * @return string
+ */
+function formatToDecimal($number){
+    return number_format((float)$number, 2, '.', '');
+}
+
+/**
  * generate the escalations that will be applied through out the year
  * @param array $data
  * @param \App\LeaseAssetPayments $payment
@@ -232,7 +241,16 @@ function calculatePaymentDueDatesByPaymentId(\App\LeaseAssetPayments $payment)
  */
 function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \App\Lease $lease, \App\LeaseAssets $asset)
 {
+    $base_date = getParentDetails()->accountingStandard->base_date;
     $effective_date = \Carbon\Carbon::parse($data['effective_from']);
+    //check for the subsequent modification and change the effective date as it is..
+    $subsequent_modify_required = $lease->isSubsequentModification();
+    if($subsequent_modify_required){
+        $effective_date = \Carbon\Carbon::parse($lease->modifyLeaseApplication->last()->effective_from);
+        $lease_history = \App\LeaseHistory::query()->where('lease_id', '=', $lease->id)->orderBy('id', 'desc')->first();
+        $filtered_escalation_dates  = collect(json_decode($lease_history->esclation_payments, false))
+            ->where('payment_id', '=', $payment->id);
+    }
 
     $escalation_applicable = $data['is_escalation_applicable'];
     $escalation_basis = isset($data['escalation_basis']) ? $data['escalation_basis'] : null;
@@ -241,7 +259,7 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
     $start_date = $asset->accural_period; //start date with the free period
     $end_date = $asset->getLeaseEndDate($asset); //end date based upon all the conditions
 
-    $escalation_start_date = ($asset->using_lease_payment == '1') ? \Carbon\Carbon::create(2019, 01, 01) : \Carbon\Carbon::parse($start_date);
+    $escalation_start_date = ($asset->using_lease_payment == '1') ? \Carbon\Carbon::parse($base_date) : \Carbon\Carbon::parse($start_date);
     $escalation_end_date = \Carbon\Carbon::parse($end_date);
 
     $years = [];
@@ -283,14 +301,11 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
                 $k_m = sprintf("%02d", $key);
                 $payments_in_this_year_month = \App\LeaseAssetPaymenetDueDate::query()
                     ->whereRaw("`payment_id` = '{$payment->id}' AND DATE_FORMAT(`date`,'%m') = '{$k_m}' and DATE_FORMAT(`date`,'%Y') = '{$start_year}'")
-                    ->where('date','<=', \Carbon\Carbon::parse($end_date)->format('Y-m-d'))
-                    ->count();
-                if ($payments_in_this_year_month > 0) {
-                    $payments_in_this_year_month = \App\LeaseAssetPaymenetDueDate::query()
-                        ->whereRaw("`payment_id` = '{$payment->id}' AND DATE_FORMAT(`date`,'%m') = '{$k_m}' and DATE_FORMAT(`date`,'%Y') = '{$start_year}'")
-                        ->where('date','<=', \Carbon\Carbon::parse($end_date)->format('Y-m-d'))
-                        ->first();
-                    if($payments_in_this_year_month->total_payment_amount > 0){
+                    ->where('date', '<=', \Carbon\Carbon::parse($end_date)->format('Y-m-d'))
+                    ->first();
+                if ($payments_in_this_year_month) {
+
+                    if ($payments_in_this_year_month->total_payment_amount > 0) {
                         //yes the user is paying on this month of this year
                         //the condition is applying the escalations only on the escalation date
                         //however it should apply the escalation on the next year as well
@@ -320,20 +335,32 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
                                 $current_class = 'info';
                             }
 
-                            $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => $amount_to_consider, 'current_class' => $current_class];
+                            $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
                             $escalation_date->addYear(1); //applied annually
-
                         } else {
                             //escalation is not applied however the user needs to pay for this month and year
                             if ($amount_to_consider == 0) {
                                 //$amount_to_consider = $payment->payment_per_interval_per_unit;
                                 $amount_to_consider = $payments_in_this_year_month->total_payment_amount;
                             }
-                            $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => $amount_to_consider, 'current_class' => $current_class];
+
+                            if($subsequent_modify_required && $start_year <= $effective_date->format('Y') && $key <= $effective_date->format('m')){
+                                //have to take out the escalation percentage that was applied in the initial valuation..
+                                $filtered_data = $filtered_escalation_dates
+                                    ->where('escalation_year', '=', $start_year)->where('escalation_month', '=',$key)
+                                    ->first();
+                                if(count($filtered_data) == 1){
+                                    $escalation_percentage_or_amount = $filtered_data->value_escalated;
+                                    $amount_to_consider = $filtered_data->total_amount_payable;
+                                }
+                                $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
+                            } else {
+                                $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
+                            }
+
                         }
 
                     } else {
-
                         //no the user is not paying on this month of this year
                         $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => 0, 'current_class' => $current_class];
                     }
@@ -347,7 +374,6 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
         }
     }
 
-
     //code to compute the escalations when applied inconsistently...
     if ($escalation_applicable == "yes" && (($escalation_basis == '1' && $escalation_applied_consistently_annually == 'no') || ($escalation_basis == '2' && $escalation_applied_consistently_annually == 'no'))) {
         if ($escalation_basis == '1') {
@@ -360,18 +386,14 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
 
         while ($start_year <= $end_year) {
             foreach ($months as $key => $month) {
-
                 $k_m = sprintf("%02d", $key);
                 $payments_in_this_year_month = \App\LeaseAssetPaymenetDueDate::query()
                     ->whereRaw("`payment_id` = '{$payment->id}' AND DATE_FORMAT(`date`,'%m') = '{$k_m}' and DATE_FORMAT(`date`,'%Y') = '{$start_year}'")
-                    ->where('date','<=', \Carbon\Carbon::parse($end_date)->format('Y-m-d'))
-                    ->count();
-                if ($payments_in_this_year_month > 0) {
-                    $payments_in_this_year_month = \App\LeaseAssetPaymenetDueDate::query()
-                        ->whereRaw("`payment_id` = '{$payment->id}' AND DATE_FORMAT(`date`,'%m') = '{$k_m}' and DATE_FORMAT(`date`,'%Y') = '{$start_year}'")
-                        ->where('date','<=', \Carbon\Carbon::parse($end_date)->format('Y-m-d'))
-                        ->first();
-                    if($payments_in_this_year_month->total_payment_amount > 0){
+                    ->where('date', '<=', \Carbon\Carbon::parse($end_date)->format('Y-m-d'))
+                    ->first();
+                if ($payments_in_this_year_month) {
+
+                    if ($payments_in_this_year_month->total_payment_amount > 0) {
                         $first_date_of_month = \Carbon\Carbon::parse("first day of {$month} {$start_year}");
                         $last_date_of_month = \Carbon\Carbon::parse("last day of {$month} {$start_year}");
                         if (isset($data['inconsistent_effective_date'][$start_year])) {
@@ -419,15 +441,15 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
                                         $current_class = 'info';
                                     }
 
-                                    $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => $amount_to_consider, 'current_class' => $current_class];
+                                    $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
 
-                                } else {
+                                    } else {
                                     //escalation is not applied however the user needs to pay for this month and year
                                     if ($amount_to_consider == 0) {
                                         //$amount_to_consider = $payment->payment_per_interval_per_unit;
                                         $amount_to_consider = $payments_in_this_year_month->total_payment_amount;
                                     }
-                                    $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => $amount_to_consider, 'current_class' => $current_class];
+                                    $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
                                 }
                             }
                         } else {
@@ -436,7 +458,22 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
                                 //$amount_to_consider = $payment->payment_per_interval_per_unit;
                                 $amount_to_consider = $payments_in_this_year_month->total_payment_amount;
                             }
-                            $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => $amount_to_consider, 'current_class' => $current_class];
+
+                            if($subsequent_modify_required && $start_year <= $effective_date->format('Y') && $key <= $effective_date->format('m')){
+                                //have to take out the escalation percentage that was applied in the initial valuation..
+                                $filtered_data = $filtered_escalation_dates
+                                    ->where('escalation_year', '=', $start_year)->where('escalation_month', '=',$key)
+                                    ->first();
+                                if(count($filtered_data) == 1){
+                                    $escalation_percentage_or_amount = $filtered_data->value_escalated;
+                                    $amount_to_consider = $filtered_data->total_amount_payable;
+                                }
+                                $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
+                            } else {
+                                $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
+                            }
+
+                            // $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
                         }
                     } else {
                         $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => 0, 'current_class' => $current_class];
@@ -458,23 +495,22 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
             foreach ($months as $key => $month) {
 
                 $k_m = sprintf("%02d", $key);
+
                 $payments_in_this_year_month = \App\LeaseAssetPaymenetDueDate::query()
                     ->whereRaw("`payment_id` = '{$payment->id}' AND DATE_FORMAT(`date`,'%m') = '{$k_m}' and DATE_FORMAT(`date`,'%Y') = '{$start_year}'")
-                    ->where('date','<=', \Carbon\Carbon::parse($end_date)->format('Y-m-d'))
-                    ->count();
-                if ($payments_in_this_year_month > 0) {
+                    ->where('date', '<=', \Carbon\Carbon::parse($end_date)->format('Y-m-d'))
+                    ->first();
 
-                    $payments_in_this_year_month = \App\LeaseAssetPaymenetDueDate::query()
-                        ->whereRaw("`payment_id` = '{$payment->id}' AND DATE_FORMAT(`date`,'%m') = '{$k_m}' and DATE_FORMAT(`date`,'%Y') = '{$start_year}'")
-                        ->where('date','<=', \Carbon\Carbon::parse($end_date)->format('Y-m-d'))
-                        ->first();
-                    if($payments_in_this_year_month->total_payment_amount > 0){
+                if ($payments_in_this_year_month) {
+
+
+                    if ($payments_in_this_year_month->total_payment_amount > 0) {
                         //escalation is not applied however the user needs to pay for this month and year
                         if ($amount_to_consider == 0) {
                             //$amount_to_consider = $payment->payment_per_interval_per_unit;
                             $amount_to_consider = $payments_in_this_year_month->total_payment_amount;
                         }
-                        $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => $amount_to_consider, 'current_class' => $current_class];
+                        $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
                     } else {
                         $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => 0, 'current_class' => $current_class];
                     }
@@ -539,6 +575,21 @@ function getUndiscountedTotalLeasePayment($asset_id)
             }
         }
 
+        //have to add up the termination , purchase or residual option as well whatever applicable here...
+        if($asset->terminationOption->lease_termination_option_available == "yes" && $asset->terminationOption->exercise_termination_option_available == "yes" && $asset->terminationOption->termination_penalty_applicable == "yes") {
+            $total = $total + $asset->terminationOption->termination_penalty;
+        }
+
+        //add the purchase option for the asset as well.
+        if($asset->purchaseOption && $asset->purchaseOption->purchase_option_clause == "yes" && $asset->purchaseOption->purchase_option_exerecisable == "yes"){
+            $total = $total + $asset->purchaseOption->purchase_price;
+        }
+
+        //add the residual value guarantee as well
+        if($asset->residualGuranteeValue->any_residual_value_gurantee == "yes"){
+            $total = $total + $asset->residualGuranteeValue->total_residual_gurantee_value;
+        }
+
         return $total;
     }
 
@@ -588,7 +639,10 @@ function createUlaCode()
 
     $current_year = date("Y");
     $first_param = \App\Lease::query()->count();
-    $second_param = \App\Lease::query()->whereRaw("YEAR(created_at) =  '$current_year'")->count();
+    $first_param = $first_param + 1;
+    $second_param = \App\Lease::query()
+        ->whereRaw("YEAR(created_at) =  '$current_year'")
+        ->count();
 
     $string = "LA" . str_pad($first_param, 3, 0, STR_PAD_LEFT) . '/' . str_pad($second_param, 3, 0, STR_PAD_LEFT) . '/' . $current_year;
     return $string;
@@ -638,17 +692,38 @@ function fetchCurrencyExchangeRate($date = null, $source, $target)
  */
 function generateWitsyncAccountID($user)
 {
-    return 'WSUID' . str_pad($user->id, 5, '0', STR_PAD_LEFT);
+    $user_country = strtolower($user->country);
+    $country = \App\Countries::query()->whereRaw("LOWER(name) = '{$user_country}'")->first();
+    if($country) {
+        return '97' . str_pad($country->id, 3, '0', STR_PAD_LEFT) . date('Y') . str_pad($user->id, 5, '0', STR_PAD_LEFT);
+    } else {
+        return '97' . date('Y') . str_pad($user->id, 5, '0', STR_PAD_LEFT);
+    }
+}
+
+/**
+ * generates the invoice number for the subscription
+ * @param $subscription
+ * @return string
+ */
+function generateInvoiceNumber($subscription){
+    return env('SOFTWARE_ID')."/".str_pad($subscription->id,3,0,STR_PAD_LEFT)."/".\Carbon\Carbon::parse($subscription->created_at)->format('Y');
 }
 
 /**
  * genrate the Paypal redirect link and returns the string
  * @param \App\SubscriptionPlans $package
  * @param \App\UserSubscription $subscription
+ * @param null $return_url
+ * @param null $cancel_url
+ * @param null $notify_url
+ * @param null $adjusted_amount
+ * @param int $quantity
+ * @param null $action
  * @return mixed
  * @throws Exception
  */
-function generatePaypalExpressCheckoutLink(\App\SubscriptionPlans $package, \App\UserSubscription $subscription, $return_url = null, $cancel_url = null, $notify_url = null, $adjusted_amount = null, $quantity = 12)
+function generatePaypalExpressCheckoutLink(\App\SubscriptionPlans $package, \App\UserSubscription $subscription, $return_url = null, $cancel_url = null, $notify_url = null, $adjusted_amount = null, $quantity = 12, $action = null)
 {
 
     $provider = new ExpressCheckout();
@@ -666,8 +741,8 @@ function generatePaypalExpressCheckoutLink(\App\SubscriptionPlans $package, \App
         $subtotal += $item['price'] * $item['qty'];
     }
 
-    if(!empty($adjusted_amount)) {
-        if($adjusted_amount['balance'] < 0 && $adjusted_amount['adjusted_amount'] > 0){
+    if (!empty($adjusted_amount)) {
+        if ($adjusted_amount['balance'] < 0 && $adjusted_amount['adjusted_amount'] > 0) {
             $data['items'][] = [
                 'name' => 'Adjustable amount as per the previous subscription',
                 'price' => -1 * $adjusted_amount['adjusted_amount'],
@@ -677,10 +752,10 @@ function generatePaypalExpressCheckoutLink(\App\SubscriptionPlans $package, \App
     }
 
     $used_credits = 0;
-    if(auth()->check()){
+    if (auth()->check()) {
         $credits = getParentDetails()->credit_balance;
 
-        if($credits > 0){
+        if ($credits > 0) {
             $data['items'][] = [
                 'name' => 'Adjusted available credits.',
                 'price' => -1 * $credits,
@@ -695,34 +770,34 @@ function generatePaypalExpressCheckoutLink(\App\SubscriptionPlans $package, \App
 
     //check if the coupon has been used bt the user if yes than in that case apply the discount for the coupon code as well
     $coupon_discount = 0;
-    if($subscription->coupon_code){
+    if ($subscription->coupon_code && $action != "downgrade") {
         $coupon = \App\CouponCodes::query()->where('code', '=', $subscription->coupon_code)->where('status', '=', '1')->first();
-        if($coupon){
-            if(auth()->check()){
+        if ($coupon) {
+            if (auth()->check()) {
                 $user_id = getParentDetails()->id;
-                if(!is_null($coupon->user_id) && $coupon->user_id == $user_id){
+                if (!is_null($coupon->user_id) && $coupon->user_id == $user_id) {
                     $coupon_discount = round(($coupon->discount / 100) * $subtotal, 2);
-                } else if(is_null($coupon->user_id)){
+                } else if (is_null($coupon->user_id)) {
                     $coupon_discount = round(($coupon->discount / 100) * $subtotal, 2);
                 }
 
                 //check if the selected coupon code can only be applied to a particular plan
-                if(is_null($coupon->plan_id)){
+                if (is_null($coupon->plan_id)) {
                     $coupon_discount = round(($coupon->discount / 100) * $subtotal, 2);
-                } elseif (!is_null($coupon->plan_id) && $coupon->plan_id == $package->id){
+                } elseif (!is_null($coupon->plan_id) && $coupon->plan_id == $package->id) {
                     $coupon_discount = round(($coupon->discount / 100) * $subtotal, 2);
                 }
 
-            } elseif(is_null($coupon->user_id)) {
+            } elseif (is_null($coupon->user_id)) {
                 //check if the selected coupon code can only be applied to a particular plan
-                if(is_null($coupon->plan_id)){
+                if (is_null($coupon->plan_id)) {
                     $coupon_discount = round(($coupon->discount / 100) * $subtotal, 2);
-                } elseif (!is_null($coupon->plan_id) && $coupon->plan_id == $package->id){
+                } elseif (!is_null($coupon->plan_id) && $coupon->plan_id == $package->id) {
                     $coupon_discount = round(($coupon->discount / 100) * $subtotal, 2);
                 }
             }
 
-            if($coupon_discount){
+            if ($coupon_discount) {
                 //calculate the discounted amount by the coupon..
                 $data['items'][] = [
                     'name' => "Coupon {$coupon->code} Discount",
@@ -741,12 +816,11 @@ function generatePaypalExpressCheckoutLink(\App\SubscriptionPlans $package, \App
     $data['notify_url'] = ($notify_url) ? $notify_url : url('/payment/notify');
 
 
-
     //give a discount of 10% of the order amount
     $discounted_amount = 0;
-    if ($package->annual_discount > 0) {
+    if ($package->annual_discount > 0  && $action != "downgrade") {
         $discounted_percentage = ($quantity / 12 - 1) * $package->annual_discount;
-        if($discounted_percentage > 0){
+        if ($discounted_percentage > 0) {
             $discounted_amount = round(($discounted_percentage / 100) * $subtotal, 2);
             $data['shipping_discount'] = $discounted_amount;
         }
@@ -762,7 +836,7 @@ function generatePaypalExpressCheckoutLink(\App\SubscriptionPlans $package, \App
     //save all the details to the user_subscription for the details so that these can be used for the doExpressCheckout
     $subscription->purchased_items = json_encode($data);
     $subscription->paid_amount = $data['total'];
-    $subscription->adjusted_amount = (isset($adjusted_amount['adjusted_amount']))?$adjusted_amount['adjusted_amount']: 0;
+    $subscription->adjusted_amount = (isset($adjusted_amount['adjusted_amount'])) ? $adjusted_amount['adjusted_amount'] : 0;
     $subscription->credits_used = $used_credits;
     $subscription->discounted_amount = $discounted_amount;
     $subscription->coupon_discount = $coupon_discount;
@@ -773,12 +847,27 @@ function generatePaypalExpressCheckoutLink(\App\SubscriptionPlans $package, \App
 
 /**
  * get the parent user get lease lock year when will stored in settings
- * render the lease lock year when user add in user settings
- * @return [type] [description]
+ * @param $date
+ * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|object|null
  */
-function getLockYearDetails()
+function getLockYearDetails($date)
 {
-    return \App\LeaseLockYear::query()->where('business_account_id', '=', auth()->user()->id)->where('status', '1')->first();
+    $year = \Carbon\Carbon::parse($date)->format('Y');
+    if($year < 2019){
+        return \App\LeaseLockYear::query()
+            ->whereIn('business_account_id', getDependentUserIds())
+            ->where('status', '1')
+            ->where('start_date','>=', $date)
+            ->first();
+    } else {
+
+        return \App\LeaseLockYear::query()
+            ->whereIn('business_account_id', getDependentUserIds())
+            ->where('status', '1')
+            ->whereRaw("year(`start_date`) =  '{$year}'")
+            ->where('start_date','>=', $date)
+            ->first();
+    }
 }
 
 /**
@@ -794,7 +883,8 @@ function getInformationPage()
  * returns the yearRange as per the settings...
  * @return string
  */
-function getYearRanage(){
+function getYearRanage()
+{
     $settings = \App\GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
     return "yearRange: '{$settings->min_previous_first_lease_start_year}:{$settings->max_lease_end_year}',";
 }
@@ -803,15 +893,19 @@ function getYearRanage(){
  * calculate the adjustments during the subscription upgrade or downgrade as per the plan selected by the user...
  * @param \App\SubscriptionPlans $package
  * @param int $months
+ * @param null $coupon_code
+ * @param null $action
  * @return array
  */
-function calculateAdjustedAmountForUpgradeDowngrade(\App\SubscriptionPlans $package, $months = 12 , $coupon_code = null){
+function calculateAdjustedAmountForUpgradeDowngrade(\App\SubscriptionPlans $package, $months = 12, $coupon_code = null, $action = null)
+{
     $existing_plan = \App\UserSubscription::query()
         ->whereIn('user_id', getDependentUserIds())
         ->orderBy('id', 'desc')
         ->where('payment_status', '=', 'Completed')->first();
     $final_payment_amount = [];
-    $coupon_discount = 0; $discounted_amount = 0;
+    $coupon_discount = 0;
+    $discounted_amount = 0;
     if ($existing_plan && \Carbon\Carbon::today()->lessThanOrEqualTo(\Carbon\Carbon::parse($existing_plan->subscription_expire_at))) {
         //previous plan has not expired yet...
         if ($existing_plan->subscriptionPackage->price_plan_type == '1' || $package->is_custom == '1') {
@@ -821,14 +915,14 @@ function calculateAdjustedAmountForUpgradeDowngrade(\App\SubscriptionPlans $pack
                 return ['status' => false, 'message' => 'You are not allowed to downgrade to a trial plan.'];
             }
 
-            if(!is_null($existing_plan->coupon_code) && $existing_plan->coupon_discount > 0){
+            if (!is_null($existing_plan->coupon_code) && $existing_plan->coupon_discount > 0) {
                 return ['status' => false, 'message' => 'You have used a coupon code with the existing plan and hence you cannot downgrade/upgrade from the existing plan.'];
             }
 
             //check here if the coupon code can be applied or not
-            if($coupon_code){
+            if ($coupon_code) {
                 $coupon_code = \App\CouponCodes::query()->where('code', '=', $coupon_code)->where('status', '=', '1')->first();
-                if(is_null($coupon_code) || (!is_null($coupon_code) && !is_null($coupon_code->user_id) && $coupon_code->user_id != getParentDetails()->id)){
+                if (is_null($coupon_code) || (!is_null($coupon_code) && !is_null($coupon_code->user_id) && $coupon_code->user_id != getParentDetails()->id)) {
                     return [
                         'status' => false,
                         'message' => 'Coupon not found.'
@@ -836,7 +930,7 @@ function calculateAdjustedAmountForUpgradeDowngrade(\App\SubscriptionPlans $pack
                 }
 
                 //check if the coupon can also be meant to be applied for any particular plan
-                if(!is_null($coupon_code->plan_id) && $coupon_code->plan_id != $package->id){
+                if (!is_null($coupon_code->plan_id) && $coupon_code->plan_id != $package->id) {
                     return [
                         'status' => false,
                         'message' => 'This coupon cannot be applied to the selected plan.'
@@ -854,27 +948,30 @@ function calculateAdjustedAmountForUpgradeDowngrade(\App\SubscriptionPlans $pack
 
                 $discounted_percentage = 0;
 
-                if ($package->annual_discount > 0) {
+                if ($package->annual_discount > 0 && $action!="downgrade") {
                     $discounted_percentage = ($months / 12 - 1) * $package->annual_discount;
-                    if($discounted_percentage > 0){
+                    if ($discounted_percentage > 0) {
                         $discounted_amount = round(($discounted_percentage / 100) * $original_price, 2);
                     }
                 }
 
-                if($coupon_code){
+                if ($coupon_code && $action!="downgrade") {
                     $coupon_discount = round(($coupon_code->discount / 100) * $original_price, 2);
                 }
 
                 $new_plan_price = $original_price - ($discounted_amount + $coupon_discount);
 
 
-                $final_payment_amount['balance' ]  = round(-1 * $new_plan_price, 2);
+                $final_payment_amount['balance'] = round(-1 * $new_plan_price, 2);
 
                 $final_payment_amount['gross_value_of_new_plan'] = round($new_plan_price, 2);
 
                 $final_payment_amount['discounted_percentage'] = $discounted_percentage;
 
                 $final_payment_amount['coupon_discount'] = $coupon_discount;
+
+                $final_payment_amount['original_price'] = $original_price;
+
 
             } else {
                 //need to do the calculations for calculating the price that the user might have to pay...
@@ -895,24 +992,24 @@ function calculateAdjustedAmountForUpgradeDowngrade(\App\SubscriptionPlans $pack
                 $original_price = $package->price * $months;
 
                 $discounted_percentage = 0;
-                if ($package->annual_discount > 0) {
+                if ($package->annual_discount > 0 && $action!="downgrade") {
                     $discounted_percentage = ($months / 12 - 1) * $package->annual_discount;
-                    if($discounted_percentage > 0){
+                    if ($discounted_percentage > 0) {
                         $discounted_amount = round(($discounted_percentage / 100) * $original_price, 2);
                     }
                 }
 
-                if($coupon_code){
+                if ($coupon_code && $action!="downgrade") {
                     $coupon_discount = round(($coupon_code->discount / 100) * $original_price, 2);
                 }
 
                 $new_plan_price = $original_price - ($coupon_discount + $discounted_amount);
 
-                $total_subscription_days = ($months/12) * 365;
+                $total_subscription_days = ($months / 12) * 365;
 
                 $new_plan_per_day_rate = $new_plan_price / $total_subscription_days;
 
-                $new_plan_subscription_days = \Carbon\Carbon::parse($old_plan_effective_until)->addYear($months/12)->diffInDays(\Carbon\Carbon::today());
+                $new_plan_subscription_days = \Carbon\Carbon::parse($old_plan_effective_until)->addYear($months / 12)->diffInDays(\Carbon\Carbon::today());
 
                 $new_plan_price_levied = round($new_plan_subscription_days * $new_plan_per_day_rate);
 
@@ -922,13 +1019,15 @@ function calculateAdjustedAmountForUpgradeDowngrade(\App\SubscriptionPlans $pack
 
                 $final_payment_amount['adjusted_amount'] = round($old_amount_paid - $old_plan_price_levied, 2);
 
-                $final_payment_amount['balance' ]  = round($old_amount_paid - $total_payable, 2);
+                $final_payment_amount['balance'] = round($old_amount_paid - $total_payable, 2);
 
                 $final_payment_amount['gross_value_of_new_plan'] = round($new_plan_price, 2);
 
                 $final_payment_amount['discounted_percentage'] = $discounted_percentage;
 
                 $final_payment_amount['coupon_discount'] = $coupon_discount;
+
+                $final_payment_amount['original_price'] = $original_price;
 
             }
 
@@ -940,14 +1039,14 @@ function calculateAdjustedAmountForUpgradeDowngrade(\App\SubscriptionPlans $pack
         }
     } else {
 
-        if($existing_plan && !is_null($existing_plan->coupon_code) && $existing_plan->coupon_discount > 0){
+        if ($existing_plan && !is_null($existing_plan->coupon_code) && $existing_plan->coupon_discount > 0) {
             return ['status' => false, 'message' => 'You have used a coupon code with the existing plan and hence you cannot downgrade/upgrade from the existing plan.'];
         }
 
         //check here if the coupon code can be applied or not
-        if($coupon_code){
+        if ($coupon_code) {
             $coupon_code = \App\CouponCodes::query()->where('code', '=', $coupon_code)->where('status', '=', '1')->first();
-            if(is_null($coupon_code) || (!is_null($coupon_code) && !is_null($coupon_code->user_id) && $coupon_code->user_id != getParentDetails()->id)){
+            if (is_null($coupon_code) || (!is_null($coupon_code) && !is_null($coupon_code->user_id) && $coupon_code->user_id != getParentDetails()->id)) {
                 return [
                     'status' => false,
                     'message' => 'Coupon not found.'
@@ -955,7 +1054,7 @@ function calculateAdjustedAmountForUpgradeDowngrade(\App\SubscriptionPlans $pack
             }
 
             //check if the coupon can also be meant to be applied for any particular plan
-            if(!is_null($coupon_code->plan_id) && $coupon_code->plan_id != $package->id){
+            if (!is_null($coupon_code->plan_id) && $coupon_code->plan_id != $package->id) {
                 return [
                     'status' => false,
                     'message' => 'This coupon cannot be applied to the selected plan.'
@@ -971,26 +1070,28 @@ function calculateAdjustedAmountForUpgradeDowngrade(\App\SubscriptionPlans $pack
         $original_price = $package->price * $months;
 
         $discounted_percentage = 0;
-        if ($package->annual_discount > 0) {
+        if ($package->annual_discount > 0 && $action!="downgrade") {
             $discounted_percentage = ($months / 12 - 1) * $package->annual_discount;
-            if($discounted_percentage > 0){
+            if ($discounted_percentage > 0) {
                 $discounted_amount = round(($discounted_percentage / 100) * $original_price, 2);
             }
         }
 
-        if($coupon_code){
+        if ($coupon_code && $action!="downgrade") {
             $coupon_discount = round(($coupon_code->discount / 100) * $original_price, 2);
         }
 
         $new_plan_price = $original_price - ($coupon_discount + $discounted_amount);
 
-        $final_payment_amount['balance' ]  = round(-1 * $new_plan_price, 2);
+        $final_payment_amount['balance'] = round(-1 * $new_plan_price, 2);
 
         $final_payment_amount['gross_value_of_new_plan'] = round($new_plan_price, 2);
 
         $final_payment_amount['discounted_percentage'] = $discounted_percentage;
 
         $final_payment_amount['coupon_discount'] = $coupon_discount;
+
+        $final_payment_amount['original_price'] = $original_price;
     }
 
     return $final_payment_amount;
@@ -1000,8 +1101,158 @@ function calculateAdjustedAmountForUpgradeDowngrade(\App\SubscriptionPlans $pack
  * fetch the subscription plans to be listed on the pop up for the registration
  * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Query\Builder[]|\Illuminate\Support\Collection
  */
-function getPaidSubscriptionPlans(){
+function getPaidSubscriptionPlans()
+{
     return \App\SubscriptionPlans::query()
         ->where('price_plan_type', '=', '1')
         ->whereNotNull('price')->get();
+}
+
+
+/**
+ * get the back url for any step after checking for the different conditions...
+ * @param $step
+ * @param $id
+ * @return string
+ */
+function getBackUrl($step, $id)
+{
+    $base_date = getParentDetails()->accountingStandard->base_date; //fetching the dynamic base date
+    //check if the previous step that is Lease Incentives and Lease Initial Direct Cost were applicable or not ?
+    $category_excluded = \App\CategoriesLeaseAssetExcluded::query()
+        ->whereIn('business_account_id', getDependentUserIds())
+        ->where('status', '=', '0')
+        ->get();
+
+    $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
+
+    if($step == 18){
+        //check if the step lease invoices was applicable or not?
+        $asset = \App\LeaseAssets::query()->where('lease_id', '=', $id)
+            ->whereNotIn('category_id', $category_excluded_id)
+            ->whereHas('leaseSelectLowValue', function ($query) {
+                $query->where('is_classify_under_low_value', '=', 'no');
+            })
+            ->whereHas('leaseDurationClassified', function ($query) {
+                $query->where('lease_contract_duration_id', '=', '3');
+            })
+            ->first();
+        if($asset){
+            return route('addlease.leasepaymentinvoice.index', ['id' => $id]);
+        } else {
+            return getBackUrl(17, $id);
+        }
+    } else if($step == 17){
+        //check if the lease valuation step was applicable or not ?
+        $asset = \App\LeaseAssets::query()->where('lease_id', '=', $id)
+            ->whereHas('leaseSelectLowValue', function ($query) {
+                $query->where('is_classify_under_low_value', '=', 'no');
+            })->whereHas('leaseDurationClassified', function ($query) {
+                $query->where('lease_contract_duration_id', '=', '3');
+            })->whereNotIn('category_id', $category_excluded_id)->first();
+        if($asset){
+            return route('addlease.leasevaluation.index', ['id' => $id]);
+        } else {
+            return getBackUrl(15, $id); //since the condition for the dismantling and lease initial direct cost and for lease incentives are all same...
+        }
+    } elseif  ($step === 15) {
+
+        //check if the previous step that is Lease Incentives and Lease Initial Direct Cost were applicable or not ?
+        $asset = \App\LeaseAssets::query()->where('lease_id', '=', $id)
+            ->whereNotIn('category_id', $category_excluded_id)
+            ->whereHas('leaseSelectLowValue', function ($query) {
+                $query->where('is_classify_under_low_value', '=', 'no');
+            })
+            ->whereHas('leaseDurationClassified', function ($query) {
+                $query->where('lease_contract_duration_id', '=', '3');
+            })
+            ->first();
+
+        if ($asset) {
+            return route('addlease.leaseincentives.index', ['id' => $id]);
+        } else {
+            return getBackUrl(14, $id);
+        }
+    } elseif ($step === 14) {
+        //lease incentives and initial direct cost are not applicable now check for the step lease balances
+        $asset = \App\LeaseAssets::query()->where('lease_id', '=', $id)
+            ->where('lease_start_date', '<', $base_date)
+            ->whereHas('leaseSelectLowValue', function ($query) {
+                $query->where('is_classify_under_low_value', '=', 'no');
+            })
+            ->whereHas('leaseDurationClassified', function ($query) {
+                $query->where('lease_contract_duration_id', '=', '3');
+            })
+            ->first();
+        if ($asset) {
+            return route('addlease.balanceasondec.index', ['id' => $id]);
+        } else {
+            return getBackUrl(13, $id);
+        }
+    } elseif ($step === 13) {
+        //lease balances is also not applicable will have to check for the select discount rate...
+        $asset = \App\LeaseAssets::query()->where('lease_id', '=', $id)
+            ->where('specific_use', 1)
+            ->whereNotIn('category_id', $category_excluded_id)
+            ->whereHas('leaseSelectLowValue', function ($query) {
+                $query->where('is_classify_under_low_value', '=', 'no');
+            })
+            ->whereHas('leaseDurationClassified', function ($query) {
+                $query->where('lease_contract_duration_id', '=', '3');
+            })->first();
+
+        if (is_null($asset)) {
+            $asset = \App\LeaseAssets::query()->where('lease_id', '=', $id)
+                ->where('specific_use', 2)
+                ->whereNotIn('category_id', $category_excluded_id)
+                ->whereHas('leaseSelectLowValue', function ($query) {
+                    $query->where('is_classify_under_low_value', '=', 'no');
+                })
+                ->whereHas('leaseDurationClassified', function ($query) {
+
+                    $query->where('lease_contract_duration_id', '=', '3');
+                })->first();
+        }
+
+        if ($asset) {
+            return route('addlease.discountrate.index', ['id' => $id]);
+        } else {
+            return getBackUrl(12, $id);
+        }
+    } elseif ($step === 12) {
+        //select discount rate is also not applicable check for the lease fair market value
+        $asset = \App\LeaseAssets::query()->where('lease_id', '=', $id)
+            ->whereNotIn('category_id', $category_excluded_id)
+            ->whereHas('leaseSelectLowValue', function ($query) {
+                $query->where('is_classify_under_low_value', '=', 'no');
+            })
+            ->whereHas('leaseDurationClassified', function ($query) {
+                $query->where('lease_contract_duration_id', '=', '3');
+            })
+            ->first();
+
+        if ($asset) {
+            return route('addlease.fairmarketvalue.index', ['id' => $id]);
+        } else {
+            return getBackUrl(11, $id);
+        }
+    } elseif ($step === 11) {
+        //fair market value is not applicable check for select low value step
+        $asset = \App\LeaseAssets::query()->where('lease_id', '=', $id)
+            ->whereNotIn('specific_use', [2])
+            ->whereHas('leaseDurationClassified', function ($query) {
+                $query->whereNotIn('lease_contract_duration_id', [1, 2]);
+            })->whereNotIn('category_id', $category_excluded_id)->first();
+        if ($asset) {
+            return route('addlease.lowvalue.index', ['id' => $id]);
+        } else {
+            return route('lease.escalation.index', ['id' => $id]);
+        }
+    }
+
+}
+
+
+function customRequestCaptcha(){
+    return new \ReCaptcha\RequestMethod\Post();
 }

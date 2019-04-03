@@ -183,7 +183,8 @@ return [
         Intervention\Image\ImageServiceProvider::class,
         Zizaco\Entrust\EntrustServiceProvider::class,
         Srmklive\PayPal\Providers\PayPalServiceProvider::class,
-        Barryvdh\Snappy\ServiceProvider::class
+        Barryvdh\Snappy\ServiceProvider::class,
+        Buzz\LaravelGoogleCaptcha\CaptchaServiceProvider::class,
     ],
 
     /*

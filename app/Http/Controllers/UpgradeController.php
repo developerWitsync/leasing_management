@@ -8,6 +8,7 @@
 
 namespace App\Http\Controllers;
 use App\Lease;
+use App\Mail\SubscriptionInvoice;
 use App\SubscriptionPlans;
 use App\UserSubscription;
 use Carbon\Carbon;
@@ -101,8 +102,14 @@ class UpgradeController extends Controller
                     return response()->json(['status' => false, 'message' => 'Invalid Request.', 'errorCode' => 'package_error'], 200);
                 }
 
+                $action = null;
+                if($request->has('action')){
+                    $action = $request->action;
+                }
+
                 $view = view('plan._subscription_selection', compact(
-                    'selected_package'
+                    'selected_package',
+                    'action'
                 ))->render();
 
                 return response()->json([
@@ -139,7 +146,11 @@ class UpgradeController extends Controller
                         $coupon_code = strtoupper(trim($request->coupon_code));
                     }
 
-                    $credit_or_balance = calculateAdjustedAmountForUpgradeDowngrade($selected_package, $months, $coupon_code);
+                    $action = null;
+                    if($request->has('action')){
+                        $action = $request->action;
+                    }
+                    $credit_or_balance = calculateAdjustedAmountForUpgradeDowngrade($selected_package, $months, $coupon_code, $action);
 
                     return response()->json($credit_or_balance, 200);
 
@@ -150,7 +161,6 @@ class UpgradeController extends Controller
                 abort(404);
             }
         } catch (\Exception $e){
-            dd($e);
             abort(404);
         }
     }
@@ -179,8 +189,12 @@ class UpgradeController extends Controller
                 if($request->has('coupon_code') && trim($request->coupon_code)!=""){
                     $coupon_code = strtoupper(trim($request->coupon_code));
                 }
+                $action = null;
+                if($request->has('action')){
+                    $action = $request->action;
+                }
                 //get the adjusted amount if applicable it can be -ve, +ve or 0
-                $adjusted_amount  = calculateAdjustedAmountForUpgradeDowngrade($package, $request->months, $coupon_code);
+                $adjusted_amount  = calculateAdjustedAmountForUpgradeDowngrade($package, $request->months, $coupon_code, $action);
                 $credits = getParentDetails()->credit_balance;
                 $send_to_paypal = false;
                 if($adjusted_amount['status']){
@@ -207,10 +221,10 @@ class UpgradeController extends Controller
                 //need to create an entry to the user_subscription table...
                 if (!is_null($package->validity)) {
                     //this means that the plan is trial plan
-                    $expiry_date = Carbon::today()->addDays($package->validity)->format('Y-m-d');
+                    $expiry_date = Carbon::today()->addDays($package->validity)->subDays(1)->format('Y-m-d');
                 } else {
                     //will expires after 1 year
-                    $expiry_date = Carbon::today()->addYear($request->months / 12)->format('Y-m-d');
+                    $expiry_date = Carbon::today()->addYear($request->months / 12)->subDays(1)->format('Y-m-d');
                 }
 
                 $renewal_date = Carbon::parse($expiry_date)->addDays(1)->format('Y-m-d');
@@ -229,6 +243,8 @@ class UpgradeController extends Controller
                     $user_subscription->payment_status = "Completed";
                     $user_subscription->save();
                     session()->flash('status', 'Congratulations! Your plan has been activated.');
+                    //need to send the invoice to the user for the purchase of the plan...
+                    Mail::to($user_subscription->user)->queue(new SubscriptionInvoice($user_subscription));
                     return response()->json(['status' => true, 'redirect_link' => route('plan.index')], 200);
                 } elseif ($package->price_plan_type == '1' && !is_null($package->price) || ($package->price_plan_type == '2' && $package->is_custom == '1')) {
                     if(!$send_to_paypal){
@@ -242,10 +258,12 @@ class UpgradeController extends Controller
 
                         //update the credit_balance for the user
                         updateCreditBalanceForParent($adjusted_amount);
+                        //need to send the invoice to the user for the purchase of the plan...
+                        Mail::to($user_subscription->user)->queue(new SubscriptionInvoice($user_subscription));
                         session()->flash('status', 'Congratulations! Your plan has been activated. We have also sent an invoice to your registered email.');
                         return response()->json(['status' => true, 'redirect_link' => route('plan.index')], 200);
                     } else {
-                        $link = generatePaypalExpressCheckoutLink($package, $user_subscription, route('plan.purchase.success'), route('plan.purchase.cancel'), null,$adjusted_amount, $request->months);
+                        $link = generatePaypalExpressCheckoutLink($package, $user_subscription, route('plan.purchase.success'), route('plan.purchase.cancel'), null,$adjusted_amount, $request->months, $action);
                         if($link) {
                             return response()->json(['status' => true, 'redirect_link' => $link], 200);
                         } else {

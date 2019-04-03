@@ -30,6 +30,6 @@ class InitialDirectCost extends Model
     ];
 
     public function supplierDetails(){
-        return $this->hasMany('App\SupplierDetails', 'initial_direct_cost_id', 'id');
+        return $this->hasMany('App\SupplierDetails', 'initial_direct_cost_id', 'id')->where('type', '=', 'initial_direct_cost');
     }
 }

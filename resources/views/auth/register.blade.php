@@ -10,6 +10,10 @@
             line-height: 19px;
             vertical-align: top;
         }
+        #rc-imageselect {
+            transform: scale(0.98);
+            margin-left: 192px;
+        }
     </style>
 @endsection
 @section('content')
@@ -18,7 +22,7 @@
             <div class="col-md-3 register-left">
                 <img src="{{ asset('images/rocket.png') }}" alt=""/>
                 <h3>Welcome</h3>
-                <p>You are few minutes away from getting started!</p>
+                <p style="padding: 12px 10px 0px">Already Registered?</p>
                 <a class="login_register" href="{{ route('login') }}">Login</a>
             </div>
             <div class="col-md-9 register-right">
@@ -35,7 +39,7 @@
                         <div class="row register-form">
                             <form class="" method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
                                 {{ csrf_field() }}
-                                <input type="hidden" name="selected_plan" value="{{ $package->id }}">
+                                {{--<input type="hidden" name="selected_plan" value="{{ $package->id }}">--}}
                                 <div class="row">
                                     <div class="form-group {{ $errors->has('country') ? ' has-error' : '' }} col-md-12 col-sm-12 required">
                                         <select id="country" class="form-control" name="country">
@@ -100,10 +104,9 @@
                                     <div class="form-group {{ $errors->has('applicable_gaap') ? ' has-error' : '' }} col-md-6 col-sm-12 required">
                                         <select id="applicable_gaap" class="form-control" name="applicable_gaap">
                                             <option value="">--Select Primary Applicable GAAP--</option>
-                                            <option value="IFRS- 16 (International Financial Reporting Standard)" @if("IFRS- 16 (International Financial Reporting Standard)" == old('applicable_gaap')) selected="selected" @endif>IFRS- 16 (International Financial Reporting Standard)</option>
-                                            <option value="IND-AS-116 (Indian Accounting Standard)" @if("IND-AS-116 (Indian Accounting Standard)" == old('applicable_gaap')) selected="selected" @endif>IND-AS-116 (Indian Accounting Standard)</option>
-                                            <option value="SFRS(I)16 - (Singapore Financial Reporting Standard (International))" @if("SFRS(I)16 - (Singapore Financial Reporting Standard (International))" == old('applicable_gaap')) selected="selected" @endif>SFRS(I)16 - (Singapore Financial Reporting Standard (International))</option>
-                                            <option value="MFRS 16 - (Malaysian Financial Reporting Standard)" @if("MFRS 16 - (Malaysian Financial Reporting Standard)" == old('applicable_gaap')) selected="selected" @endif>MFRS 16 - (Malaysian Financial Reporting Standard)</option>
+                                            @foreach($accounting_standards as $standard)
+                                                <option value="{{ $standard->id }}" @if($standard->id == old('applicable_gaap')) selected="selected" @endif>{{ $standard->title }}</option>
+                                            @endforeach
                                         </select>
 
                                         @if ($errors->has('applicable_gaap'))
@@ -194,7 +197,7 @@
 
                                     <div class="form-group {{ $errors->has('certificates') ? ' has-error' : '' }} col-md-6 col-sm-12 required">
                                         <label>
-                                            {{ ucfirst(strtolower('UPLOAD REGISTRATION CERTIFICATE')) }}
+                                            {{ ucfirst(strtolower('Upload commercial license copy')) }}
                                         </label>
                                         <div class="frmattachFile" style="position: relative;">
                                             <input type="name" id="upload" name="name" class="form-control" disabled="disabled">
@@ -249,6 +252,20 @@
                                     </div>
                                 </div>
 
+                                <div class="form-group{{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }} col-md-12 col-sm-12  text-center">
+
+                                        {!! app('captcha')->display([
+                                                'data-theme' => 'light',
+                                                'id' => 'rc-imageselect'
+                                        ]) !!}
+
+                                        @if ($errors->has('g-recaptcha-response'))
+                                            <span class="help-block">
+                                                <strong>{{ $errors->first('g-recaptcha-response') }}</strong>
+                                            </span>
+                                        @endif
+                                </div>
+
                                 <div class="form-group col-md-12 col-sm-12  text-center">
                                     <input type="submit" class="btnRegister" value="Register"/>
                                 </div>
@@ -288,10 +305,12 @@
                 }
             });
 
-            $('input[name="authorised_person_dob"]').datepicker({
+            $('#authorised_person_dob').datepicker({
+                dateFormat: "dd-M-yy",
+                yearRange: "{{ \Carbon\Carbon::today()->subYear(100)->format('Y') }}:{{ \Carbon\Carbon::today()->subYear(18)->format('Y') }}",
                 changeMonth: true,
                 changeYear: true,
-                yearRange: "-100:-18"
+                defaultDate : new Date("{{ \Carbon\Carbon::today()->subYear(100)->firstOfYear()->format('Y-m-d') }}")
             });
 
             $('#country').on('change', function(){

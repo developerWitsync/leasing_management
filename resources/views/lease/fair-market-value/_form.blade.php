@@ -110,6 +110,12 @@
                             <strong>{{ $errors->first('attachment') }}</strong>
                         </span>
                 @endif
+
+                @if($model->attachment !='')
+                    <a href="{{asset('uploads/'.$model->attachment)}}" class="downloadIcon"
+                       target="_blank"><i class="fa fa-download"></i></a>
+                @endif
+
             </div>
         </div>
     </div>

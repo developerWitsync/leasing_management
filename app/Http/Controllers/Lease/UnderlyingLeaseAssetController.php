@@ -49,7 +49,12 @@ class UnderlyingLeaseAssetController extends Controller
             ],
         ];
 
-        $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->with('leaseType')->with('assets')->first();
+        $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())
+            ->where('id', '=', $id)
+            ->with('leaseType')
+            ->with('assets')
+            ->where('status', '=', '0')
+            ->first();
 
         if($lease) {
             if(count($lease->assets) > 0) {
@@ -123,14 +128,17 @@ class UnderlyingLeaseAssetController extends Controller
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->with('leaseType')->with('assets')->first();
             if($lease) {
 
+                $base_date = getParentDetails()->accountingStandard->base_date;
+                $base_date_formatted = Carbon::parse($base_date)->format('F d, Y');
+
                 if(count($lease->assets) > 0) {
                     $asset = $lease->assets->first();
                 } else {
                     $asset = new LeaseAssets();
                 }
 
-                Validator::extend('required_if_prior_to_date', function ($attribute, $value, $parameters, $validator) {
-                    if (date('Y-m-d', strtotime($parameters['0'])) < date('Y-m-d', strtotime('2019-01-01'))) {
+                Validator::extend('required_if_prior_to_date', function ($attribute, $value, $parameters, $validator) use ($base_date) {
+                    if (date('Y-m-d', strtotime($parameters['0'])) < date('Y-m-d', strtotime($base_date))) {
                         if (is_null($value)) {
                             return false;
                         } else {
@@ -170,10 +178,10 @@ class UnderlyingLeaseAssetController extends Controller
                     'accural_period.required' => 'The Start Date of Lease Payment / Accrual Period field is required.',
                     'lease_end_date.required' => 'The Lease End Date field is required.',
                     'lease_end_date.date' => 'The Lease End Date field must be a valid date.',
-                    'accounting_treatment.required_if_prior_to_date' => 'The accounting period is required when Start Date of Lease Payment / Accrual Period is prior to Jan 01, 2019.'
+                    'accounting_treatment.required_if_prior_to_date' => 'The accounting period is required when Start Date of Lease Payment / Accrual Period is prior to '.$base_date_formatted.'.'
                 ];
 
-                if (date('Y-m-d', strtotime($request->accural_period)) < date('Y-m-d', strtotime('2019-01-01'))) {
+                if (date('Y-m-d', strtotime($request->accural_period)) < date('Y-m-d', strtotime($base_date))) {
                     $rules['using_lease_payment'] = 'required';
                 }
 
@@ -349,10 +357,13 @@ class UnderlyingLeaseAssetController extends Controller
 
             $asset = LeaseAssets::query()->where('lease_id', '=', $lease_id)->where('id', '=', $asset_id)->first();
             if($lease && $asset) {
+
+                $base_date =  getParentDetails()->accountingStandard->base_date;
+
                 if($request->isMethod('post')) {
 
-                    Validator::extend('required_if_prior_to_date', function ($attribute, $value, $parameters, $validator) {
-                        if(date('Y-m-d',strtotime($parameters['0'])) < date('Y-m-d', strtotime('2019-01-01'))){
+                    Validator::extend('required_if_prior_to_date', function ($attribute, $value, $parameters, $validator) use ($base_date) {
+                        if(date('Y-m-d',strtotime($parameters['0'])) < date('Y-m-d', strtotime($base_date))){
                             if(is_null($value)) {
                                 return false;
                             } else {
@@ -388,10 +399,10 @@ class UnderlyingLeaseAssetController extends Controller
                         'accural_period.required'      =>   'The Start Date of Lease Payment / Accrual Period field is required.',
                         'lease_end_date.required'      =>   'The Lease End Date field is required.',
                         'lease_end_date.date'          =>   'The Lease End Date field must be a valid date.',
-                        'accounting_treatment.required_if_prior_to_date'   => 'The accounting period is required when Start Date of Lease Payment / Accrual Period is prior to Jan 01, 2019.'
+                        'accounting_treatment.required_if_prior_to_date'   => 'The accounting period is required when Start Date of Lease Payment / Accrual Period is prior to '.Carbon::parse($base_date)->format('F d, Y').'.'
                     ];
 
-                    if(date('Y-m-d',strtotime($request->accural_period)) < date('Y-m-d', strtotime('2019-01-01'))){
+                    if(date('Y-m-d',strtotime($request->accural_period)) < date('Y-m-d', strtotime($base_date))){
                         $rules['using_lease_payment'] = 'required';
                     }
 

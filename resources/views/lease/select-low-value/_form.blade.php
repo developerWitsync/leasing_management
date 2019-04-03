@@ -19,7 +19,7 @@
             </div>
         </div>
 
-        <input type="hidden" name="fair_market_value" value="{{$asset->fairMarketValue->total_units}}">
+        {{--<input type="hidden" name="fair_market_value" value="{{$asset->fairMarketValue->total_units}}">--}}
         <div class="form-group{{ $errors->has('undiscounted_lease_payment') ? ' has-error' : '' }} required">
             <label for="name" class="col-md-12 control-label">Undiscounted Lease Payments</label>
             <div class="col-md-12 form-check form-check-inline" required>
@@ -38,14 +38,14 @@
                 <span>
                     <input class="form-check-input" name="is_classify_under_low_value" type="checkbox"
                            id="is_classify_under_low_value_yes" value="yes"
-                           @if(old('is_classify_under_low_value', $model->is_classify_under_low_value)  == "yes") checked="checked" @endif @if($subsequent_modify_required) disabled="disabled" @endif>
+                           @if(old('is_classify_under_low_value', $model->is_classify_under_low_value)  == "yes") checked="checked" @endif @if($subsequent_modify_required || $asset->specific_use == '2') disabled="disabled" @endif>
                     <label clas="form-check-label" for="is_classify_under_low_value_yes"
                            style="vertical-align: 4px">Yes</label>
                 </span>
                 <span>
                     <input class="form-check-input" name="is_classify_under_low_value" type="checkbox"
                            id="is_classify_under_low_value_no" value="no"
-                           @if(old('is_classify_under_low_value', $model->is_classify_under_low_value)  == "no") checked="checked" @endif @if($subsequent_modify_required) disabled="disabled" @endif>
+                           @if(old('is_classify_under_low_value', $model->is_classify_under_low_value)  == "no" || $asset->specific_use == '2') checked="checked" @endif @if($subsequent_modify_required || $asset->specific_use == '2') disabled="disabled" @endif>
                     <label class="form-check-label" for="is_classify_under_low_value	_no"
                            style="vertical-align: 4px">No</label>
                 </span>
@@ -58,6 +58,10 @@
 
                 @if($subsequent_modify_required)
                     <input type="hidden" name="is_classify_under_low_value" value="{{ $model->is_classify_under_low_value }}" />
+                @endif
+
+                @if($asset->specific_use == '2')
+                    <input type="hidden" name="is_classify_under_low_value" value="no" />
                 @endif
 
             </div>

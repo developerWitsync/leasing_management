@@ -1,11 +1,58 @@
 $(function(){
 
+    $("#workings_doc").change(function () {
+        $("#workings_doc").show();
+        var filename = $("#workings_doc").val();
+        var or_name = filename.split("\\");
+        $("#upload2").val(or_name[or_name.length - 1]);
+    });
+
+    $("#raise_ticket_form").on("submit", function(e){
+        var that = $(this);
+        e.preventDefault();
+        var formData = new FormData($(this)[0]);
+        $.ajax({
+            url : $(this).attr("action"),
+            data : formData,
+            dataType : "json",
+            type : "post",
+            async: false,
+            cache: false,
+            contentType: false,
+            enctype: "multipart/form-data",
+            processData: false,
+            beforeSend : function(){
+                $(".error_raiase_ticket").remove();
+                $(".raise_ticket_success_message").hide();
+            },
+            success : function (response) {
+                if(response.status){
+                    $(".raise_ticket_success_message").html(response.message).show();
+                    $(that)[0].reset();
+                } else {
+                    $.each(response.errors, function(i, e){
+                        var error_html = "<span class=\"error_raiase_ticket\">\n" +
+                            "                        <span>"+e+"</span>\n" +
+                            "                    </span>";
+                       $("#"+i).after(error_html);
+                    });
+                }
+            }
+        });
+    });
+
+    $("#contactUsModal").on("hidden.bs.modal", function () {
+        $(".raise_ticket_success_message").hide();
+        $(".error_raiase_ticket").remove();
+        $("#raise_ticket_form")[0].reset();
+    });
+
     function resizeMenu(){
         var menuHeight = $('.dashLeft').height() + 20;
 
         var ifrsBxHeight = $('.ifrsBx').height() + 20;
 
-        var leftMenuHeight = menuHeight - ifrsBxHeight - 44;
+        var leftMenuHeight = menuHeight - ifrsBxHeight - 64;
 
         $('.mainMenu').height(leftMenuHeight);
     }
@@ -354,4 +401,12 @@ function checklockperioddate(date, instance, _ajax_url) {
               }
           }
      });  
+}
+
+function showOverlayForAjax(){
+    $('#overlay').show();
+}
+
+function removeOverlayAjax(){
+    $('#overlay').hide();
 }

@@ -34,7 +34,7 @@
                     </div>
 
                     <div class="box">
-                        <a href="javascript:void(0);"><i class="fa fa-envelope-o"></i>info@witsync.co</a>
+                        <a href="mailto:info@witsync.co"><i class="fa fa-envelope-o"></i>info@witsync.co</a>
                     </div>
 
                 </div>
@@ -88,7 +88,7 @@
 
                             <div class="col-xs-12 col-sm-12 col-md-12">
                                 <div class="form-group">
-                                    <textarea name="comments" class="form-control input-lg" placeholder="Massage..."
+                                    <textarea name="comments" class="form-control input-lg" placeholder="Message..."
                                               ></textarea>
                                     @if ($errors->has('comments'))
                                         <span class="help-block error">
@@ -98,7 +98,7 @@
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-6 col-md-6">
-                                <button class="btn btn1" type="submit">Send Massage <i class="fa fa-paper-plane"></i>
+                                <button class="btn btn1" type="submit">Send Message <i class="fa fa-paper-plane"></i>
                                 </button>
                             </div>
 

@@ -80,7 +80,7 @@
             <div class="col-md-12">
 
                 <input type="text" placeholder="Expected Lease End Date" class="form-control lease_period" id="lease_end_date"
-                       name="lease_end_date" value="{{ old('lease_end_date', $model->lease_end_date) }}" autocomplete="off" readonly="true">
+                       name="lease_end_date" value="{{ old('lease_end_date', $model->lease_end_date) }}" autocomplete="off" readonly="readonly" style="background-color:#fff">
                 
                 @if ($errors->has('lease_end_date'))
                     <span class="help-block">
@@ -194,6 +194,15 @@
                 $('#hidden-field').show();
 
             } else {
+
+                //make all the other fields value as blank
+
+                $('input[name="exercise_termination_option_available"]').prop('checked', false);
+                $('#lease_end_date').val('');
+                $('input[name="termination_penalty_applicable"]').prop('checked', false);
+                $('#termination_penalty').val('');
+
+
                 $('#hidden-field').hide();
                 $('#hidden-fields').hide();
                 $('#hidden-elements').hide();
@@ -202,8 +211,24 @@
         $(document).on('click', 'input[name="exercise_termination_option_available"]', function () {
             $('input[name="exercise_termination_option_available"]').not(this).prop('checked', false);
             if ($(this).is(':checked') && $(this).val() == 'yes') {
+                //show pop up here
+                bootbox.dialog({
+                    message: "Please input, verify and update your Lease Payments Schedule as well under step 6 to restrict Lease Payments up to the date of Lease Termination. Failure to do so may impact the Lease Valuation.",
+                    buttons: {
+                        confirm: {
+                            label: 'Ok',
+                            className: 'btn-success'
+                        },
+                    }
+                });
+
                 $('#hidden-elements').show();
             } else {
+
+                $('#lease_end_date').val('');
+                $('input[name="termination_penalty_applicable"]').prop('checked', false);
+                $('#termination_penalty').val('');
+
                 $('#hidden-elements').hide();
                 $('#hidden-fields').hide();
             }
@@ -213,6 +238,11 @@
             if ($(this).is(':checked') && $(this).val() == 'yes') {
                 $('#hidden-fields').show();
             } else {
+                $('#hidden-fields').hide();
+
+                $('#termination_penalty').val('');
+
+                //$('#hidden-elements').hide();
                 $('#hidden-fields').hide();
             }
         });

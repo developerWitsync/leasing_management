@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Observers\UserSubscriptionObserver;
 use Illuminate\Database\Eloquent\Model;
 
 class UserSubscription extends Model
@@ -25,7 +26,12 @@ class UserSubscription extends Model
         'coupon_code',
         'coupon_discount',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'invoice_number'
+    ];
+
+    protected $dispatchesEvents = [
+        'created' => UserSubscriptionObserver::class
     ];
 
     public function user(){
@@ -37,6 +43,6 @@ class UserSubscription extends Model
     }
 
     public function coupon(){
-        return $this->hasOne('App\CouponCodes', 'coupon_code', 'code');
+        return $this->hasOne('App\CouponCodes', 'code', 'coupon_code');
     }
 }

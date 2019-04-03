@@ -14,6 +14,7 @@ class LeaseSelectDiscountRate extends Model
         'interest_rate',
         'annual_average_esclation_rate',
         'discount_rate_to_use',
+        'daily_discount_rate',
         'created_at',
         'updated_at'
     ];

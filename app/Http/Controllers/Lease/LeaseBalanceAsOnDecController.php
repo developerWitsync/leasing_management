@@ -57,11 +57,14 @@ class LeaseBalanceAsOnDecController extends Controller
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
 
             if ($lease) {
-
+                $base_date =  getParentDetails()->accountingStandard->base_date;
                 //check if the Subsequent Valuation is applied for the lease modification
                 $subsequent_modify_required = $lease->isSubsequentModification();
 
-                $asset = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '<', '2019-01-01')->first();//since there can now only be one lease asset per lease
+                $asset = LeaseAssets::query()->where('lease_id', '=', $lease->id)
+                    ->where('lease_start_date', '<', $base_date)
+                    ->first();//since there can now only be one lease asset per lease
+
                 if ($asset) {
                     if ($asset->leaseBalanceAsOnDec) {
                         $model = $asset->leaseBalanceAsOnDec;
@@ -191,8 +194,8 @@ class LeaseBalanceAsOnDecController extends Controller
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
         if ($lease) {
             //Load the assets only lease start prior to Dec 31 2018
-
-            $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '<', '2019-01-01')->get();
+            $base_date =  getParentDetails()->accountingStandard->base_date;
+            $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '<', $base_date)->get();
 
             return view('lease.lease-balnce-as-on-dec.index', compact(
                 'lease',

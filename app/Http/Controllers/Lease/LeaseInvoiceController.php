@@ -10,13 +10,14 @@ namespace App\Http\Controllers\Lease;
 
 use App\Http\Controllers\Controller;
 use App\Lease;
+use App\LeaseAssets;
 use App\LeasePaymentInvoice;
 use Illuminate\Http\Request;
 use Validator;
 
 class LeaseInvoiceController extends Controller
 {
-    private $current_step = 17;
+    private $current_step = 18;
 
     protected function validationRules()
     {
@@ -52,44 +53,66 @@ class LeaseInvoiceController extends Controller
                 //check if the Subsequent Valuation is applied for the lease modification
                 $subsequent_modify_required = $lease->isSubsequentModification();
 
-                $model = LeasePaymentInvoice::query()->where('lease_id', '=', $id)->first();
+                $category_excluded = \App\CategoriesLeaseAssetExcluded::query()
+                    ->whereIn('business_account_id', getDependentUserIds())
+                    ->where('status', '=', '0')
+                    ->get();
 
-                if (is_null($model)) {
-                    $model = new LeasePaymentInvoice();
-                }
+                $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
 
-                if ($request->isMethod('post')) {
-                    $validator = Validator::make($request->except('_token'), $this->validationRules());
+                $asset = LeaseAssets::query()->where('lease_id', '=', $id)
+                    ->whereNotIn('category_id', $category_excluded_id)
+                    ->whereHas('leaseSelectLowValue', function ($query) {
+                        $query->where('is_classify_under_low_value', '=', 'no');
+                    })
+                    ->whereHas('leaseDurationClassified', function ($query) {
+                        $query->where('lease_contract_duration_id', '=', '3');
+                    })
+                    ->first();
 
-                    if ($validator->fails()) {
-                        return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
+                if($asset) {
+                    $model = LeasePaymentInvoice::query()->where('lease_id', '=', $id)->first();
+
+                    if (is_null($model)) {
+                        $model = new LeasePaymentInvoice();
                     }
 
-                    $data = $request->except('_token', 'action');
-                    $data['lease_id'] = $id;
+                    if ($request->isMethod('post')) {
+                        $validator = Validator::make($request->except('_token'), $this->validationRules());
 
-                    $model->setRawAttributes($data);
-
-                    if ($model->save()) {
-                        // complete Step
-                        confirmSteps($lease->id, 17);
-                        if ($request->has('action') && $request->action == "next") {
-                            return redirect(route('addlease.reviewsubmit.index', ['id' => $lease->id]))->with('status', 'Lease Payment Invoice details has been updated successfully.');
-                        } else {
-
-                            return redirect(route('addlease.leasepaymentinvoice.update', ['id' => $lease->id]))->with('status', 'Lease Payment Invoice details has been updated successfully.');
-
+                        if ($validator->fails()) {
+                            return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
                         }
 
+                        $data = $request->except('_token', 'action');
+                        $data['lease_id'] = $id;
+
+                        $model->setRawAttributes($data);
+
+                        if ($model->save()) {
+                            // complete Step
+                            confirmSteps($lease->id, $this->current_step);
+                            if ($request->has('action') && $request->action == "next") {
+                                return redirect(route('addlease.securitydeposit.index', ['id' => $lease->id]))->with('status', 'Lease Payment Invoice details has been updated successfully.');
+                            } else {
+
+                                return redirect(route('addlease.leasepaymentinvoice.update', ['id' => $lease->id]))->with('status', 'Lease Payment Invoice details has been updated successfully.');
+
+                            }
+
+                        }
                     }
+                    $current_step = $this->current_step;
+                    return view('lease.lease-payment-invoice.index', compact('breadcrumbs',
+                        'lease',
+                        'model',
+                        'current_step',
+                        'subsequent_modify_required'
+                    ));
+                } else {
+                    return redirect(route('addlease.securitydeposit.index', ['id' => $lease->id]));
                 }
-                $current_step = $this->current_step;
-                return view('lease.lease-payment-invoice.index', compact('breadcrumbs',
-                    'lease',
-                    'model',
-                    'current_step',
-                    'subsequent_modify_required'
-                ));
+
             } else {
                 abort(404);
             }

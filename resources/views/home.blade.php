@@ -26,6 +26,13 @@
         .nvd3 nv-noData{
             text-anchor: end !important;
         }
+
+        .nvd3.nv-noData {
+            position: relative;
+            transform: translate(-10%, 0) !important;
+            text-align: center;
+        }
+
     </style>
 @endsection
 @section('content')

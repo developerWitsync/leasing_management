@@ -22,7 +22,7 @@ class User extends Authenticatable
         'type','email','phone','username', 'password', 'remember_token','created_at', 'updated_at',
         'authorised_person_name', 'authorised_person_designation','authorised_person_dob','legal_entity_name',
         'applicable_gaap','country','state','gender',
-        'email_verification_code','is_verified','parent_id', 'account_id', 'raw_password', 'gstin', 'credit_balance'
+        'email_verification_code','is_verified','parent_id', 'account_id', 'raw_password', 'gstin', 'credit_balance', 'address', 'certificates'
     ];
 
     /**
@@ -74,5 +74,9 @@ class User extends Authenticatable
 
     public function userSubscription(){
         return $this->hasMany('App\UserSubscription', 'user_id', 'id');
+    }
+
+    public function accountingStandard(){
+        return $this->hasOne('App\AccountingStandards', 'id', 'applicable_gaap');
     }
 }

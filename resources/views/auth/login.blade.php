@@ -33,8 +33,7 @@
 
                                     <div class="col-md-12">
                                         <input id="email" type="text" placeholder="E-Mail / Username"
-                                               class="form-control" name="email" value="{{ old('email') }}" required
-                                               autofocus>
+                                               class="form-control" name="email" value="{{ old('email') }}" autofocus>
 
                                         @if ($errors->has('email'))
                                             <span class="help-block">
@@ -49,12 +48,28 @@
 
                                     <div class="col-md-12">
                                         <input id="password" type="password" placeholder="Password" class="form-control"
-                                               name="password" required>
+                                               name="password">
 
                                         @if ($errors->has('password'))
                                             <span class="help-block">
                                         <strong>{{ $errors->first('password') }}</strong>
                                     </span>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="form-group{{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }}">
+                                    <div class="col-md-12">
+
+                                        {!! app('captcha')->display([
+                                                'data-theme' => 'light',
+                                                'id' => 'rc-imageselect'
+                                        ]) !!}
+
+                                        @if ($errors->has('g-recaptcha-response'))
+                                            <span class="help-block">
+                                                <strong>{{ $errors->first('g-recaptcha-response') }}</strong>
+                                            </span>
                                         @endif
                                     </div>
                                 </div>
@@ -78,8 +93,8 @@
                                             Login
                                         </button>
 
-                                        <a class="btn btn-link" href="{{ route('password.request') }}">
-                                            Forgot Your Password?
+                                        <a class="btn btn-link" href="{{ route('master.pricing.index') }}">
+                                            Don't have an account? Sign Up
                                         </a>
                                     </div>
                                 </div>
@@ -90,4 +105,7 @@
             </div>
         </div>
     </div>
+@endsection
+@section('footer-script')
+
 @endsection

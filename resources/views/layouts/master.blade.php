@@ -58,6 +58,68 @@
             font-style: italic;
         }
 
+        .launchinSoonContent{
+            padding-top: 20px;
+        }
+
+        .launchinSoonContent p{
+            font-size: 16px;
+            line-height: 25px;
+            color: #333333;
+        }
+
+        .launchinSoonContent a{
+            font-size: 16px;
+        }
+
+        .badge-success {
+             border-radius: 4px !important;
+             background-color: #1ab921;
+             word-wrap: break-word;
+             white-space: normal;
+        }
+
+        .navbarBeta{
+            position: relative;
+        }
+
+        .navbarBeta span{
+            position: absolute;
+            left: auto;
+            right: -92px;
+            top: 0px;
+        }
+
+        .beta_version_modal .modal-header{
+            background-color: #0f6fc6;
+            color: #fff;
+            padding: 15px !important;
+        }
+
+        .beta_version_modal .modal-header h4{
+            color: #ffffff;
+            font-size: 22px;
+        }
+
+        .beta_version_modal .modal-header .close{
+            margin-top: -2px !important;
+            float: right !important;
+            font-size: 30px !important;
+            font-weight: bold !important;
+            line-height: 1 !important;
+            color: #000 !important;
+            text-shadow: 0 1px 0 #fff !important;
+            opacity: 0.2 !important;
+            position: inherit;
+            background:none;
+        }
+
+        .beta_version_modal .modal-footer {
+            padding: 15px;
+            text-align: right;
+            border-top: 1px solid #e5e5e5;
+        }
+
     </style>
     @yield('header-styles')
     <link rel="shortcut icon" href="{{ asset('master/images/favicon.png') }}">
@@ -70,6 +132,36 @@
 @yield('content')
 
 @include('layouts._footer_master')
+
+@if (session('register_not_allowed'))
+    <div id="registerNotAllowed" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" style="text-align: center;color: #19afc8;font-weight: 700;padding-bottom: 10px;">Launching Soon</h4>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <img style="max-width: 100%" src="{{ asset('master/images/launching_soon.png') }}">
+                    </div>
+                    <div class="col-md-8 launchinSoonContent">
+                        <p>Lessee Leasing Mangement Software</p>
+                        <p>Duly Compliant with IFRS 16  On Leases</p>
+                        <p>A Tool To  Easily Manage Your Lease Assets Valuations</p>
+                        <a href="{{ route('contactus') }}">Contact Us</a>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    {{--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>--}}
+                </div>
+            </div>
+
+        </div>
+    </div>
+@endif
 
 <script src="{{ asset('master/js/jquery.js') }}"></script>
 <script src="{{ asset('master/js/bootstrap.min.js') }}"></script>
@@ -86,6 +178,13 @@
     });
 </script>
 
+@if (session('register_not_allowed'))
+    <script>
+        $(function(){
+            $("#registerNotAllowed").modal('show');
+        });
+    </script>
+@endif
 <script>
     $(document).ready(function () {
         // var owl = $('.owl-carousel');
@@ -380,7 +479,34 @@
         })
     }
 
-</script>
+    $(function () {
+        $('#pricing_Modal').on('hidden.bs.modal', function () {
+            // do something…
+            $('#proceed_subscription_plan')[0].reset();
+            $('.error').hide();
+            $('#anyoffer').html('--');
+            $('#gvofs').html('0');
+            $('#coupon_discount').html('$ 0');
+            $('.coupon_code_discount_row').hide();
+            $('#net_payable').html('0');
+        });
 
+    });
+
+</script>
+@if(env('BETA'))
+    <script src="{{ asset('assets/plugins/bootbox/bootbox.min.js') }}"></script>
+    <script>
+        $('.beta_version').on('click', function(){
+            bootbox.alert({
+                title: "Beta Version Disclaimer",
+                className : "beta_version_modal",
+                message : "Please note this is a Beta release version, some sections are still under process of the additions. However, WITSYNC is taking all measures to give you a better experience but there may be possibility that you may encounter any unknown bug or any function not working. In case you find any such issues or problem, we request you to immediately email us at info@witsync.co or press contact us bar at footer to submit issues faced by you. Our team will support to resolve your issues on earliest priority. \n" +
+                    "\n" +
+                    "We thank you for your understanding."
+            });
+        });
+    </script>
+@endif
 </body>
 </html>

@@ -105,9 +105,16 @@ class HomeController extends Controller
                 $query->where('is_classify_under_low_value', '=', 'yes');
             })->count();
 
+        $category_excluded = \App\CategoriesLeaseAssetExcluded::query()
+            ->whereIn('business_account_id', getDependentUserIds())
+            ->where('status', '=', '0')
+            ->get();
+
+        $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
+
         //other lease asset combining together intangible and biological
-        $total_other_lease_asset = LeaseAssets::query()->whereHas('category', function ($query) {
-            $query->where('id', 5)->where('id', 8);
+        $total_other_lease_asset = LeaseAssets::query()->whereHas('category', function ($query) use ($category_excluded_id) {
+            $query->whereIn('category_id', $category_excluded_id);
         })->whereIn('lease_id', $lease_id)->count();
 
         //undiscounted lease assets
@@ -148,7 +155,7 @@ class HomeController extends Controller
 
                 $data = LeaseAssets::query()->whereHas('lease', function ($query) {
                     $query->whereIn('business_account_id', getDependentUserIds());
-                    $query->where('status','=', '1');
+                    $query->where('status', '=', '1');
                 })
                     ->where('specific_use', 1)
                     ->with('leaseDurationClassified')

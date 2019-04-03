@@ -354,12 +354,18 @@
                                            class="form-control lease_period"
                                            name="lease_end_date"
                                            value="{{ old('lease_end_date', ($asset->lease_end_date)?(\Carbon\Carbon::parse($asset->lease_end_date)->format('d-M-Y')):'') }}"
-                                           autocomplete="off">
+                                           autocomplete="off" @if($subsequent_modify_required) disabled="disabled" @endif>
                                     @if ($errors->has('lease_end_date'))
                                         <span class="help-block">
                                             <strong>{{ $errors->first('lease_end_date') }}</strong>
                                         </span>
                                     @endif
+
+                                    @if($subsequent_modify_required)
+                                        <input type="hidden" name="lease_end_date"
+                                               value="{{ \Carbon\Carbon::parse($asset->lease_end_date)->format(config('settings.date_format')) }}"/>
+                                    @endif
+
                                 </div>
                             </div>
 
@@ -425,7 +431,7 @@
                                                id="yes" value="1"
                                                @if(old('using_lease_payment' ,$asset->using_lease_payment) == "1") checked="checked" @endif @if($subsequent_modify_required) disabled="disabled" @endif>
                                         <label for="yes" class="form-check-label" for="1" style="vertical-align: 2px">Current
-                                            Lease Payment as on Jan 01, 2019</label>
+                                            Lease Payment Effective From {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->format('Y') }}</label>
                                     </div>
 
                                     <div class=" col-md-12 form-check form-check-inline">
@@ -514,7 +520,8 @@
 
                 function toggleUsinLeasePayment() {
                     var _start_date = $('#accural_period').datepicker('getDate');
-                    if (_start_date < new Date('January 01 2019')) {
+
+                    if (_start_date < new Date('{{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->format("F d Y") }}')) {
                         $('.using_lease_payment').show();
 
                         $('#prior_accounting').show();
@@ -570,7 +577,7 @@
 
                 $('#lease_end_date').datepicker({
                     dateFormat: "dd-M-yy",
-                    minDate: new Date('2019-01-30'),
+                    minDate : new Date('{{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->lastOfMonth()->format('Y-m-d')}}'),
                     {!!  getYearRanage() !!}
                     changeYear: true,
                     changeMonth: true,
@@ -623,8 +630,8 @@
                     var dt3 = new Date($('#accural_period').datepicker('getDate'));
                     var dt4 = new Date(dt3.setDate(dt3.getDate() + 30));
 
-                    if (dt4 <= new Date('2019-01-30')) {
-                        dt2.datepicker('option', 'minDate', new Date('2019-01-30'));
+                    if (dt4 <= new Date('{{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->lastOfMonth()->format("Y-m-d")}}')) {
+                        dt2.datepicker('option', 'minDate', new Date('{{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->lastOfMonth()->format("Y-m-d")}}'));
                     } else {
                         dt2.datepicker('option', 'minDate', dt4);
                     }
@@ -642,7 +649,7 @@
                 var lease_asset_accounting = $("#accounting_treatment").find('option:selected').text();
                 if (lease_asset_accounting == 'Finance Lease Accounting') {
                     var modal = bootbox.dialog({
-                        message: "Finance Lease will be revalued at present value as on Jan 01, 2019",
+                        message: "Finance Lease will be revalued at present value as on {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->format('F d, Y') }}",
                         buttons: [
                             {
                                 label: "OK",

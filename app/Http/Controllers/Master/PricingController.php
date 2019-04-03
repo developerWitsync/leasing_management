@@ -24,6 +24,12 @@ class PricingController extends Controller
      */
     public function index()
     {
+        $is_register_allowed = env('REGISTER_ALLOWED');
+
+        if(!$is_register_allowed){
+            return redirect('/')->with('register_not_allowed', true);
+        }
+
         $subscription_plans = SubscriptionPlans::query()->where('is_custom', '=', '0')->get();
         return view('pricing.index', compact(
             'subscription_plans'
@@ -72,10 +78,11 @@ class PricingController extends Controller
             Session::put('selected_plan', $request->all());
             return response()->json([
                 'status' => true,
-                'redirect_link' => route('register.index', ['package' => $selected_plan->slug])
+                //'redirect_link' => route('register', ['package' => $selected_plan->slug])
+                'redirect_link' => route('register')
             ]);
         } catch (\Exception $e) {
-            dd($e);
+            abort(404);
         }
     }
 
@@ -146,7 +153,7 @@ class PricingController extends Controller
             if ($selected_plan->annual_discount > 0) {
                 $discounted_percentage = ($request->smonths / 12 - 1) * $selected_plan->annual_discount;
                 if($discounted_percentage > 0){
-                    $discounted_amount = round(($selected_plan->annual_discount / 100) * $original_amount, 2);
+                    $discounted_amount = round(($discounted_percentage / 100) * $original_amount, 2);
                 }
             }
 

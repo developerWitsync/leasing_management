@@ -47,7 +47,8 @@ class LeaseDurationClassified extends Model
      */
     public function getLeaseAssetClassification(LeaseAssets $asset){
         $lease_start_date = Carbon::parse($asset->lease_start_date);
-        $base_date = Carbon::create(2019, 01,01);
+        //$base_date = Carbon::create(2019, 01,01);
+        $base_date =  getParentDetails()->accountingStandard->base_date;
 
         $end_date = Carbon::parse($this->getExpectedLeaseEndDate($asset));
 

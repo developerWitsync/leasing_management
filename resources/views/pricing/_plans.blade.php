@@ -126,7 +126,7 @@
                             <div class="pricingTable-signup">
                                 @if($plan->price_plan_type == 1 )
                                     @if(is_null($plan->price))
-                                        <a href="{{ route('register.index', ['package'=>$plan->slug]) }}">Subscribe Now</a>
+                                        <a href="{{ route('register') }}">Register Now</a>
                                     @else
                                         <a href="#" data-toggle="modal" data-target="#pricing_Modal">Subscribe Now</a>
                                     @endif

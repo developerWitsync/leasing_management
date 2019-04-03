@@ -34,7 +34,7 @@
             <label for="effective_from" class="col-md-12 control-label">Escalation Effective From</label>
             <div class="col-md-12 form-check form-check-inline">
                 
-                <select name="effective_from" class="form-control lease_period" id="effective_from" @if($subsequent_modify_required) disabled="disabled" @endif>
+                <select name="effective_from" class="form-control lease_period" id="effective_from" @if($subsequent_modify_required && $model->is_escalation_applicable == "yes") disabled="disabled" @endif>
                 <option value="">Please Select Date</option>
                 @foreach($payment_dates as $payments)
 
@@ -47,7 +47,7 @@
                     </span>
                 @endif
 
-                @if($subsequent_modify_required)
+                @if($subsequent_modify_required  && $model->is_escalation_applicable == "yes")
                     <input type="hidden" value="{{ $model->effective_from }}" name="effective_from">
                 @endif
 
@@ -57,7 +57,7 @@
         <div class="form-group{{ $errors->has('escalation_basis') ? ' has-error' : '' }} required">
             <label for="escalation_basis" class="col-md-12 control-label">Escalation Basis</label>
             <div class="col-md-12 form-check form-check-inline">
-                <select name="escalation_basis" class="form-control" @if($subsequent_modify_required) disabled="disabled" @endif>
+                <select name="escalation_basis" class="form-control" @if($subsequent_modify_required  && $model->is_escalation_applicable == "yes") disabled="disabled" @endif>
                     <option value="">--Select Escalation Basis--</option>
                     @foreach($contract_escalation_basis as $basis)
                         <option value="{{ $basis->id }}" @if(old('escalation_basis', $model->escalation_basis) == $basis->id) selected="selected" @endif>{{ $basis->title }}</option>
@@ -69,7 +69,7 @@
                     </span>
                 @endif
 
-                @if($subsequent_modify_required)
+                @if($subsequent_modify_required  && $model->is_escalation_applicable == "yes")
                     <input type="hidden" name="escalation_basis" value="{{ $model->escalation_basis }}">
                 @endif
 
@@ -79,7 +79,7 @@
         <div class="form-group{{ $errors->has('escalation_rate_type') ? ' has-error' : '' }} required escalation_rate_type @if(old('escalation_basis', $model->escalation_basis) != '1') hidden @endif">
             <label for="escalation_rate_type" class="col-md-12 control-label">Escalation Rate Type</label>
             <div class="col-md-12 form-check form-check-inline">
-                <select name="escalation_rate_type" class="form-control" @if($subsequent_modify_required) disabled="disabled" @endif>
+                <select name="escalation_rate_type" class="form-control" @if($subsequent_modify_required  && $model->is_escalation_applicable == "yes") disabled="disabled" @endif>
                     <option value="">--Select Rate Type--</option>
                     @foreach($percentage_rate_types as $type)
                         <option value="{{ $type->id }}" @if(old('escalation_rate_type', $model->escalation_rate_type) == $type->id) selected="selected" @endif>{{ $type->title }}</option>
@@ -91,7 +91,7 @@
                     </span>
                 @endif
 
-                @if($subsequent_modify_required)
+                @if($subsequent_modify_required && $model->is_escalation_applicable == "yes")
                     <input type="hidden" name="escalation_rate_type" value="{{ $model->escalation_rate_type }}">
                 @endif
 
@@ -275,7 +275,7 @@
         <div class="col-md-6 col-md-offset-4">
 
             <a href="{{ route('lease.escalation.index', ['id' => $lease->id]) }}" class="btn btn-danger">Cancel</a>
-            <button type="submit" class="btn btn-success">
+            <button type="submit" class="btn btn-success" onclick="javascript:showOverlayForAjax();">
                 Submit
             </button>
         </div>
@@ -304,6 +304,10 @@
     <script src="{{ asset('js/pages/escalations.js') }}"></script>
     <script>
 
+         $(function () {
+             removeOverlayAjax();
+         })
+
        var paymentDueDates = '{!! json_encode($paymentDueDates)  !!}';
 
        var _global_fixed_rate_select = '<select class="form-control" name="inconsistent_fixed_rate[YEAR][]" data-year="YEAR" onChange="javascript:calculateTotalEscalationRateInconsistent(this)">\n' +
@@ -328,9 +332,9 @@
 
        var _show_payment_annexure_url  = "{{ route('lease.escalation.showpaymentannexure', ['id' => $payment->id]) }}";
 
-       var _is_subsequent_modification = "{{ $subsequent_modify_required }}";
+       var _is_subsequent_modification = "{{ ($subsequent_modify_required && $model->is_escalation_applicable == "yes")?1:0 }}";
 
-       @if($subsequent_modify_required)
+       @if($subsequent_modify_required  && $model->is_escalation_applicable == "yes")
            var _subsequent_modification_applicable_from = "{{ \Carbon\Carbon::parse($lease->modifyLeaseApplication->last()->effective_from)->format('Y-m-d') }}";
            var _subsequent_modification_year = "{{ \Carbon\Carbon::parse($lease->modifyLeaseApplication->last()->effective_from)->format('Y') }}";
        @endif

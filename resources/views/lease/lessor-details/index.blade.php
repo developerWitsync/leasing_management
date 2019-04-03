@@ -109,7 +109,7 @@
                                                 </div>
                                             </div>
 
-                                            @if($reporting_currency_settings->is_foreign_transaction_involved == "yes")
+
                                                 <div class="form-group{{ $errors->has('lease_contract_id') ? ' has-error' : '' }} required">
                                                     <label for="lease_contract_id" class="col-md-12 control-label">Lease
                                                         Contract Currency</label>
@@ -118,10 +118,10 @@
                                                                 @if($subsequent_modify_required) disabled="disabled" @endif>
                                                             <option value="">Select Lease Contract Currency</option>
 
-                                                            @foreach($reporting_foreign_currency_transaction_settings as $currencies)
-                                                                <option value="{{ $currencies->foreign_exchange_currency }}"
-                                                                        @if(old('lease_contract_id', $lease->lease_contract_id) == $currencies->foreign_exchange_currency) selected="selected" @endif>
-                                                                    {{ $currencies->foreign_exchange_currency }}</option>
+                                                            @foreach($contract_currencies as $currency)
+                                                                <option value="{{ $currency }}"
+                                                                        @if(old('lease_contract_id', $lease->lease_contract_id) == $currency) selected="selected" @endif>
+                                                                    {{ $currency }}</option>
                                                             @endforeach
                                                         </select>
 
@@ -137,48 +137,17 @@
                                                         @endif
                                                     </div>
                                                 </div>
-                                            @endif
 
-                                            @if($reporting_currency_settings->is_foreign_transaction_involved == "no")
-                                                <div class="form-group{{ $errors->has('lease_contract_id') ? ' has-error' : '' }} required">
-                                                    <label for="lease_contract_id" class="col-md-12 control-label">Lease
-                                                        Contract Currency</label>
-                                                    <div class="col-md-12">
-                                                        <select name="lease_contract_id" class="form-control"
-                                                                @if($subsequent_modify_required) disabled="disabled" @endif>
-                                                            <option value="">Select Lease Contract Currency</option>
-                                                            <option value="{{ $reporting_currency_settings->currency_for_lease_reports }}"
-                                                                    @if(old('lease_contract_id', $lease->lease_contract_id) == $reporting_currency_settings->currency_for_lease_reports) selected="selected" @endif >
-                                                                {{ $reporting_currency_settings->currency_for_lease_reports }}</option>
-                                                            @if($reporting_currency_settings->currency_for_lease_reports != $reporting_currency_settings->statutory_financial_reporting_currency)
-                                                                <option value="{{ $reporting_currency_settings->statutory_financial_reporting_currency }}"
-                                                                    @if(old('lease_contract_id', $lease->lease_contract_id) == $reporting_currency_settings->statutory_financial_reporting_currency) selected="selected" @endif >
-                                                                    {{ $reporting_currency_settings->statutory_financial_reporting_currency }}</option>
-                                                            @endif
-                                                        </select>
 
-                                                        @if($subsequent_modify_required)
-                                                            <input type="hidden" name="lease_contract_id"
-                                                                   value="{{$lease->lease_contract_id}}"/>
-                                                        @endif
-
-                                                        @if ($errors->has('lease_contract_id'))
-                                                            <span class="help-block">
-                                                        <strong>{{ $errors->first('lease_contract_id') }}</strong>
-                                                    </span>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            @endif
                                             <div class="form-group{{ $errors->has('file') ? ' has-error' : '' }} ">
                                                 <label for="file" class="col-md-12 control-label">Upload a Copy of
                                                     Contract Signed</label>
                                                 <div class="col-md-12 frmattachFile">
-                                         <input type="name" id="upload" name="name" class="form-control"
+                                                    <input type="name" id="upload" name="name" class="form-control"
                                                            disabled="disabled">
-                                        <button type="button" class="browseBtn">Browse</button>
-                                        <input type="file" id="file-name" name="file" class="fileType">
-                                        <h6 class="disabled">{{ config('settings.file_size_limits.file_validation') }}</h6>
+                                                    <button type="button" class="browseBtn">Browse</button>
+                                                    <input type="file" id="file-name" name="file" class="fileType">
+                                                    <h6 class="disabled">{{ config('settings.file_size_limits.file_validation') }}</h6>
                                                     @if ($errors->has('file'))
                                                         <span class="help-block">
                                             <strong>{{ $errors->first('file') }}</strong>
@@ -200,7 +169,7 @@
 
                                                 <a href="/home"
                                                    class="btn btn-danger">
-                                                     {{ env('CANCEL_LABEL')}}</a>
+                                                    {{ env('CANCEL_LABEL')}}</a>
 
                                             </div>
                                             <div class="col-md-4 col-sm-4 btnsubmitBx aligncenter">
@@ -211,31 +180,31 @@
 
                                             <div class="col-md-4 col-sm-4 btn-backnextBx rightlign ">
                                                 <button type="submit" class="btn btn-primary next_submit">
-                                                     {{ env('NEXT_LABEL') }} <i class="fa fa-arrow-right"></i>
+                                                    {{ env('NEXT_LABEL') }} <i class="fa fa-arrow-right"></i>
                                                 </button>
                                             </div>
 
                                         </div>
 
-                                </form>
+                                    </form>
                     </div>
                 </div>
             @else
                 @if(Auth::user()->parent_id==0)
-                        @if($general_settings_count == 0)
-                            {{--<a href="{{route('settings.index')}}">--}}
-                                {{--<div class="alert alert-danger">Please create the general settings from the settings menu as well.</div>--}}
-                            {{--</a>--}}
-                            @include('lease._complete_your_settings')
-                        @else
-                            {{--<a href="{{route('settings.currencies')}}">--}}
-                                {{--<div class="alert alert-danger">Please change the foreign currency settings</div>--}}
-                            {{--</a>--}}
-                            @include('lease._complete_your_settings')
-                        @endif
+                    @if($general_settings_count == 0)
+                        {{--<a href="{{route('settings.index')}}">--}}
+                        {{--<div class="alert alert-danger">Please create the general settings from the settings menu as well.</div>--}}
+                        {{--</a>--}}
+                        @include('lease._complete_your_settings')
+                    @else
+                        {{--<a href="{{route('settings.currencies')}}">--}}
+                        {{--<div class="alert alert-danger">Please change the foreign currency settings</div>--}}
+                        {{--</a>--}}
+                        @include('lease._complete_your_settings')
+                    @endif
                 @else
                     {{--<div class="alert alert-danger">Super Admin has not created the settings that can be utilised by--}}
-                        {{--you. Please contact to your Super Admin to generate the Settings. Thanks!--}}
+                    {{--you. Please contact to your Super Admin to generate the Settings. Thanks!--}}
                     {{--</div>--}}
                     @include('lease._complete_your_settings')
                 @endif
@@ -305,7 +274,7 @@
 
             $('.next_submit').on('click', function (e) {
                 e.preventDefault();
-               // alert('dfdsf');
+                // alert('dfdsf');
                 var next_url = $('#add-new-lease-form').attr('action') + "?action=next";
                 $('#add-new-lease-form').attr('action', next_url);
                 // alert(next_url);

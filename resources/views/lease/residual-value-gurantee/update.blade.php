@@ -5,7 +5,7 @@
 
 @section('content')
     <div class="panel panel-default">
-        <div class="panel-heading">Edit Residual Gurantee Value </div>
+        <div class="panel-heading">Edit Residual Guarantee Value </div>
 
         <div class="panel-body">
             @if (session('status'))

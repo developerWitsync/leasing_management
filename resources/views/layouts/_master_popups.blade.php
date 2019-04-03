@@ -39,7 +39,7 @@
 
                     <fieldset>
                         <h2>Thank You for Choosing Your Subscription Plan<br>You will be Charged Annually</h2>
-                        <p>(Please note thePresent Value of Leases, Value of Lease Assets, Accrued Interest, Interest
+                        <p>(Please note that the Present Value of Leases, Value of Lease Assets, Accrued Interest, Interest
                             Expense, Depreciation, Lease Cash Flows, Leasing Disclosures and Presentations are
                             calculated on
                             a daily basis and based on actual number of days involved.)</p>
@@ -103,7 +103,7 @@
                                 </tr>
                                 <tr>
                                     <td class="net-value-text">
-                                        <small><b>Net Value of Subscription Payable.</b></small>
+                                        <small><b>Estimated Net Value of Subscription Payable.</b></small>
                                     </td>
                                     <td class="text-right net-value">$<span id="net_payable">0</span></td>
                                 </tr>

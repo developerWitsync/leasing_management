@@ -37,7 +37,7 @@ return [
         25
     ],
     'date_format' => 'd-M-Y',
-    'complete_previous_steps_error_message' => "You haven't completed the previos steps for the lease, please complete the previous steps first.",
+    'complete_previous_steps_error_message' => "You haven't completed the previous steps for the lease, please complete the previous steps first.",
     'lease_already_submitted'   => 'This Lease has been already submitted. Please go to Modify Lease in case of any modifications if required.',
     'file_size_limits' => [
         'max_size_in_kbs' => '2000',
