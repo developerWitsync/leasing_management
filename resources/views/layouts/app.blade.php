@@ -150,7 +150,7 @@
     @yield('footer-script')
     @yield('inside-script')
     <script>
-    $('.ul_carousel').owlCarousel({
+        $('.ul_carousel').owlCarousel({
                 loop:false,
                 margin:10,
                 nav:true,
@@ -203,5 +203,6 @@
     });
 
     </script>
+    
 </body>
 </html>
