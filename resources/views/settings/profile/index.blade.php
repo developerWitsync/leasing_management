@@ -30,7 +30,7 @@
                             Edit Profile
                         </div>
                         <div class="panel-body">
-                            <form class="form-horizontal" method="POST" action="{{ route('settings.profile.index') }}">
+                            <form class="form-horizontal" method="POST" action="{{ route('settings.profile.index') }}" enctype="multipart/form-data">
                                 {{ csrf_field() }}
 
                                 @if($user->parent_id == 0)
@@ -115,25 +115,6 @@
                                             @endif
                                         </div>
                                     </div>
-
-                                    <div class="form-group{{ $errors->has('legal_entity_name') ? ' has-error' : '' }} required">
-                                        <label for="legal_entity_name" class="col-md-4 control-label">Legal Entity
-                                            Name</label>
-
-                                        <div class="col-md-6">
-                                            <input id="legal_entity_name" type="text" class="form-control"
-                                                   name="legal_entity_name"
-                                                   value="{{ old('legal_entity_name', $user->legal_entity_name) }}"
-                                                   autofocus>
-
-                                            @if ($errors->has('legal_entity_name'))
-                                                <span class="help-block">
-                                        <strong>{{ $errors->first('legal_entity_name') }}</strong>
-                                    </span>
-                                            @endif
-                                        </div>
-                                    </div>
-
 
                                     <div class="form-group{{ $errors->has('address') ? ' has-error' : '' }} required">
                                         <label for="address" class="col-md-4 control-label">Registered Address</label>
