@@ -1,4 +1,4 @@
-@if($assets->total() > 0)
+
     <div class="landBg clearfix">
         <div class="leaseTotalHd">
             <h2>{{ $category->title}}</h2>
@@ -42,4 +42,3 @@
             </ul>
         </div>
     </div>
-@endif
