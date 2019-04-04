@@ -1026,4 +1026,69 @@ input[type=number]::-webkit-outer-spin-button {
     color: white;
     transform: translate(-50%,-50%);
     -ms-transform: translate(-50%,-50%);
+} 
+
+/*--------------03-04-2019------------------------*/
+.DashRight.backValuation{ 
+    background: rgb(183,174,196);
+    background: -moz-linear-gradient(45deg, rgba(183,174,196,1) 0%, rgba(82,148,198,1) 100%);
+    background: -webkit-linear-gradient(45deg, rgba(183,174,196,1) 0%,rgba(82,148,198,1) 100%);
+    background: linear-gradient(45deg, rgba(183,174,196,1) 0%,rgba(82,148,198,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b7aec4', endColorstr='#5294c6',GradientType=1 );
+    min-height: 100vh;
+}
+.leasingBreatcrum {border-bottom: rgba(255, 255, 255, 0.2) solid 1px; font-size: 14px; color: #fff; padding-bottom: 10px;}
+.leasingBreatcrum a{ color: #fff; }
+.leasingMainHd {font-size: 25px; padding: 25px 0 35px 0; color: #ffff; line-height: 25px;}
+.landBg {background: rgba(255, 255, 255, 0.2); padding: 17px; border-radius: 10px; margin-bottom: 20px;  position: relative;}
+.leaseTotalHd { width: 190px; float: left; padding-right: 15px;}
+.leaseSlide {width: calc(100% - 190px); float: right;}
+.leaseTotalHd h2 {font-size: 29px; text-transform: uppercase; color: #fff; margin: 0; padding-bottom: 10px; font-weight: bold;}
+.leaseTotalHd span {font-size: 20px; color: #fff; line-height: 25px; padding-bottom: 10px; display: block;}
+.leaseTotalHd strong {display: block; font-size: 37px; color: #fff;}
+.leaseSlide li {background: #fff; float: left; border-radius: 4px; width: 24%; margin-right: 1.25%;}
+.leaseSlide li:last-child{ margin-right: 0px;}
+.landType {background: #1b2d5b; line-height: 33px; text-align: center; font-size: 20px; color: #fff; padding: 20px 0; border-radius: 4px;}
+.leaseterms {padding: 0 15px;}
+.leaseterms span {display: block; border-bottom: #eee solid 2px; padding: 20px 0; font-size: 15px; text-align: center; color: #000;}
+.leaseterms span strong {display: block; font-size: 16px; line-height:  font-weight: 600;}
+.landType2 {background: #71658b; line-height: 33px; text-align: center; font-size: 20px; color: #fff; padding: 20px 0; border-radius: 4px;}
+.pagerButton {
+    position: absolute;
+    left: 17px;
+    bottom: 17px;
+}
+.pagerButton a {
+    display: inline-block;
+    width: 43px;
+    height: 43px;
+    position: relative;
+    background: #fff;
+    border-radius: 3px;
+    margin-right: 3px;
+}
+.pagerButton a img {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    margin: auto;
+}
+.pagerButton a .img{ display: inline-block;}
+.pagerButton a .over{ display:none;}
+.pagerButton a:hover .img, .pagerButton a.active .img{ display: none;}
+.pagerButton a:hover .over, .pagerButton a.active .over{ display:inline-block;}
+.pagerButton a:hover, .pagerButton a.active{ background: #1b2d5b; }
+
+@media(max-width:1170px){
+.landType, .landType2{ font-size: 17px; line-height: 26px; padding: 10px 0; }
+.leaseterms span strong{font-size: 14px; line-height: 20px;}
+.leaseterms span{ font-size: 13px; line-height: 18px; padding-bottom: 5px;}
+.leaseterms {padding: 0 10px;}
+.leaseTotalHd h2 {font-size: 20px;}
+.leaseTotalHd span {font-size: 15px; line-height: 20px;}
+.leaseTotalHd strong{ font-size: 24px;}
+.leaseTotalHd {width: 140px;}
+.leaseSlide {width: calc(100% - 140px);}
 }
