@@ -32,82 +32,87 @@ class ProfileController extends Controller
      */
     public function index(Request $request)
     {
-        $id = auth()->user()->id;
-        $breadcrumbs = [
-            [
-                'link' => route('settings.index'),
-                'title' => 'Settings'
-            ],
-            [
-                'link' => route('settings.profile.index'),
-                'title' => 'My Profile'
-            ],
-        ];
-        $user = User::query()->findOrFail($id);
-        $countries = Countries::query()->where('status', '=', '1')->get();
-        $states = [];
-        if($user->country == "India"){
-            $country = Countries::query()->where('name', '=', $user->country)->first();
-            $states = $country->states;
-        }
-        if ($request->isMethod('post')) {
-
-            $rules = [
-                'authorised_person_name' => 'required|string|max:255',
-                'authorised_person_dob' => 'required|date',
-                'gender' => 'required',
-                'authorised_person_designation' => 'required',
-                'username' => 'required|string|max:255',
-                'email' => 'required|string|email|max:255',
-                'password' => 'nullable|min:8|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?!.*[\s])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/',
-                'phone' => 'required'
+        try{
+            $id = auth()->user()->id;
+            $breadcrumbs = [
+                [
+                    'link' => route('settings.index'),
+                    'title' => 'Settings'
+                ],
+                [
+                    'link' => route('settings.profile.index'),
+                    'title' => 'My Profile'
+                ],
             ];
-
-            if($user->parent_id == 0){
-                $rules['address'] = 'required';
-                $rules['state'] = 'required_if:country,India|exists:states,state_name|nullable';
-                $rules['gstin'] =   'required_if:country,India|min:15|nullable';
-                $rules['legal_entity_name'] = 'required';
-                $rules['certificates'] = config('settings.file_size_limits.file_rule');
+            $user = User::query()->findOrFail($id);
+            $countries = Countries::query()->where('status', '=', '1')->get();
+            $states = [];
+            if($user->country == "India"){
+                $country = Countries::query()->where('name', '=', $user->country)->first();
+                $states = $country->states;
             }
+            if ($request->isMethod('post')) {
 
-            $messages = [
-                'password.regex' => 'Password must have one letter, one capital letter, one number as well.'
-            ];
+                $rules = [
+                    'authorised_person_name' => 'required|string|max:255',
+                    'authorised_person_dob' => 'required|date',
+                    'gender' => 'required',
+                    'authorised_person_designation' => 'required',
+                    'username' => 'required|string|max:255',
+                    'email' => 'required|string|email|max:255',
+                    'password' => 'nullable|min:8|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?!.*[\s])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/',
+                    'phone' => 'required'
+                ];
 
-            $validator = Validator::make($request->except('_token'),$rules,$messages);
+                if($user->parent_id == 0){
+                    $rules['address'] = 'required';
+                    $rules['state'] = 'required_if:country,India|exists:states,state_name|nullable';
+                    $rules['gstin'] =   'required_if:country,India|min:15|nullable';
+                    $rules['legal_entity_name'] = 'required';
+                    $rules['certificates'] = config('settings.file_size_limits.file_rule');
+                }
 
-            if ($validator->fails()) {
-                return redirect()->back()->withInput($request->all())->withErrors($validator->errors());
+                $messages = [
+                    'password.regex' => 'Password must have one letter, one capital letter, one number as well.'
+                ];
+
+                $validator = Validator::make($request->except('_token'),$rules,$messages);
+
+                if ($validator->fails()) {
+                    return redirect()->back()->withInput($request->all())->withErrors($validator->errors());
+                }
+
+                $userdata = User::findOrFail($id);
+                $userdata->setRawAttributes($request->except('_token', 'certificates', 'password_confirmation'));
+                $userdata->authorised_person_name = $request->authorised_person_name;
+                $userdata->authorised_person_designation = $request->authorised_person_designation;
+                $userdata->username = $request->username;
+                $userdata->phone = $request->phone;
+                $userdata->email = $request->email;
+                $userdata->type = '0';
+                $userdata->password = bcrypt($request->password);
+                $userdata->authorised_person_dob = date('Y-m-d', strtotime($request->authorised_person_dob));
+
+                if($request->hasFile('certificates')){
+                    $file = $request->file('certificates');
+                    $uniqueFileName = uniqid() . $file->getClientOriginalName();
+                    $request->file('certificates')->move('uploads', $uniqueFileName);
+                    $userdata->certificates = $uniqueFileName;
+                }
+
+
+                $userdata->save();
+                if ($userdata) {
+                    \Mail::to($userdata)->queue(new UserCreateConfirmation($userdata));
+                    return redirect(route('settings.profile.index'))->with('status', 'Profile has been updated successfully.');
+                }
+
             }
-
-            $userdata = User::findOrFail($id);
-            $userdata->authorised_person_name = $request->authorised_person_name;
-            $userdata->authorised_person_designation = $request->authorised_person_designation;
-            $userdata->username = $request->username;
-            $userdata->phone = $request->phone;
-            $userdata->email = $request->email;
-            $userdata->type = '0';
-            $userdata->password = bcrypt($request->password);
-            $userdata->authorised_person_dob = date('Y-m-d', strtotime($request->authorised_person_dob));
-
-            if($request->hasFile('certificates')){
-                $file = $request->file('certificates');
-                $uniqueFileName = uniqid() . $file->getClientOriginalName();
-                $request->file('certificates')->move('uploads', $uniqueFileName);
-                $userdata->certificates = $uniqueFileName;
-            }
-
-
-
-            $userdata->save();
-            if ($userdata) {
-                \Mail::to($userdata)->queue(new UserCreateConfirmation($userdata));
-                return redirect(route('settings.profile.index'))->with('status', 'Profile has been updated successfully.');
-            }
-
+            return view('settings.profile.index', ['breadcrumbs' => $breadcrumbs, 'user' => $user, 'id' => $id, 'countries' => $countries, 'states' => $states]);
+        } catch (\Exception $e){
+            dd($e);
         }
-        return view('settings.profile.index', ['breadcrumbs' => $breadcrumbs, 'user' => $user, 'id' => $id, 'countries' => $countries, 'states' => $states]);
+
     }
 
 }

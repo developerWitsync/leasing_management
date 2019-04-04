@@ -197,7 +197,8 @@
 
                                     <div class="form-group {{ $errors->has('certificates') ? ' has-error' : '' }} col-md-6 col-sm-12 required">
                                         <label>
-                                            {{ ucfirst(strtolower('Upload commercial license copy')) }}
+                                            Upload Company Incorporation Certificate
+                                            <a href="javascript:void(0);" class="showHelp" data-toggle="tooltip" title="This is either Commercial License or Trade License or Establishment License issued by the Country’s Competent Authority to do business."><i class="fa fa-question-circle"></i></a>
                                         </label>
                                         <div class="frmattachFile" style="position: relative;">
                                             <input type="name" id="upload" name="name" class="form-control" disabled="disabled">
@@ -216,6 +217,22 @@
                                         @endif
                                     </div>
 
+                                </div>
+
+                                <div class="row termsConditionParent">
+                                    <div class="form-group {{ $errors->has('company_name_certificates') ? ' has-error' : '' }} col-md-12 col-sm-12 required">
+                                        <span>
+                                            <input type="checkbox" id="company_name_certificates" name="company_name_certificates" value="yes">
+                                            <label for="company_name_certificates" class="declarationLabel">{{ ucfirst(strtolower('I hereby confirm that the company name as mentioned in the upload certificate matches with the Legal Entity Name.')) }}</label>
+                                        </span>
+
+                                        @if ($errors->has('company_name_certificates'))
+                                            <span class="help-block">
+                                                <strong>{{ $errors->first('company_name_certificates') }}</strong>
+                                            </span>
+                                        @endif
+
+                                    </div>
                                 </div>
 
                                 <div class="row termsConditionParent">

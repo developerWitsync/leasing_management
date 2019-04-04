@@ -29,12 +29,24 @@
                 <div>
                     Lease Asset : <span class="badge badge-primary">{{ $asset->name }}</span>
                 </div>
+
                 <div>
                     Lease Asset Classification : <span
                             class="badge badge-primary">{{ $asset->subcategory->title }}</span>
                 </div>
+
                 <div>
                     Currency : <span class="badge badge-primary">{{ $lease->lease_contract_id }}</span>
+                </div>
+
+                <div>
+                    Lease Valuation as on Date : <span class="badge badge-primary">
+                        @if(\Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->greaterThan(\Carbon\Carbon::parse($asset->accural_period)))
+                            {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->format(config('settings.date_format')) }}
+                        @else
+                            {{ \Carbon\Carbon::parse($asset->lease_start_date)->format(config('settings.date_format')) }}
+                        @endif
+                    </span>
                 </div>
 
             </div>

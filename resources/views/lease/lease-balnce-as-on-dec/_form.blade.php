@@ -227,7 +227,7 @@
                     fetchExchangeRate(base, _return_currency, base_date, access_key, element_selector, 'historical');
                     break;
                 case '3' :
-                    _return_currency = '{{ $currency_settings->currency_for_lease_reports }}';
+                    _return_currency = '{{ $lease->lease_contract_id }}';
                     $('.selected_currency_option').html(_return_currency).show();
                     $('input[name="reporting_currency_selected"]').val(_return_currency);
                     fetchExchangeRate(base, _return_currency, base_date, access_key, element_selector, 'historical');

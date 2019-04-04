@@ -1,5 +1,12 @@
 $(function(){
 
+    $('.showHelp').tooltip();
+
+
+    function showHelp(){
+        //$(this).tooltip('show');
+    }
+
     $("#workings_doc").change(function () {
         $("#workings_doc").show();
         var filename = $("#workings_doc").val();

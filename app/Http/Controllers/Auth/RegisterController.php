@@ -78,6 +78,7 @@ class RegisterController extends Controller
             'admin_rights' => 'required|in:yes',
             'declaration' => 'required',
             'terms_and_condition' => 'required',
+            'company_name_certificates' => 'required',
             'certificates' => config('settings.file_size_limits.certificates'),
             'g-recaptcha-response' => 'required|captcha'
         ], [
@@ -86,7 +87,8 @@ class RegisterController extends Controller
             'authorised_person_dob.before' => 'The authorised person must be atleast 18 years old.',
             'g-recaptcha-response.required' => 'Please confirm the recaptcha.',
             'g-recaptcha-response.captcha' => 'Recaptcha not confirmed.',
-            'admin_rights.in' => 'You need to register with admin rights.'
+            'admin_rights.in' => 'You need to register with admin rights.',
+            'company_name_certificates.required' => 'Please accept the confirmation.'
         ]);
     }
 
