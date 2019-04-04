@@ -354,7 +354,10 @@ class LeaseValuationController extends Controller
                 ->whereIn('lease_id', $leases->get()->pluck('id')->toArray())
                 ->with('lease')
                 ->with('category')
-                ->with('leaseSelectLowValue');
+                ->with('leaseSelectLowValue')
+                ->whereHas('leaseSelectLowValue', function ($query) {
+                    $query->where('is_classify_under_low_value', '=', 'no');
+                });
 
             if ($category_id) {
                 $assets = $assets->where('category_id', '=', $category_id);
