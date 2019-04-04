@@ -86,12 +86,12 @@
     {{--</li>--}}
 
     <li>
-        <a href="{{ route('leasevaluation.cap.index') }}" class="list-group-item"><img width="28" src="{{ asset('images/icons/dollar.png') }}"> <span>Valuation CAP</span></a>
+        <a href="{{ route('leasevaluation.cap.index') }}" class="@if(request()->segment('2') == 'valuation-capitalised') active @endif list-group-item"><img width="28" src="{{ asset('images/icons/dollar.png') }}"> <span>Valuation CAP</span></a>
     </li>
 
     <li>
         <a href="{{route('leasevaluation.index', ['capitalized' => 0])}}"
-           class="@if(request()->segment('1') == 'lease-valuation' && request()->capitalized == 0) active @endif list-group-item"><img
+           class="@if(request()->segment('1') == 'lease-valuation' && request()->has('capitalized') && request()->capitalized == 0) active @endif list-group-item"><img
                     width="28" src="{{ asset('images/icons/ncap.png') }}">
             <span>Valuation - NCAP</span></a>
     </li>

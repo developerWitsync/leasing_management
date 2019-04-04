@@ -40,7 +40,6 @@ class ModifyLeaseController extends Controller
      */
     public function index()
     {
-
         $breadcrumbs = $this->breadcrumbs;
         return view('modifylease.index', compact('breadcrumbs'));
     }
@@ -57,6 +56,7 @@ class ModifyLeaseController extends Controller
             if ($request->ajax()) {
                 $model = Lease::select('lease.*', 'contract_classifications.title as contract_classification_title')
                     ->join('contract_classifications', 'lease.lease_type_id', '=', 'contract_classifications.id')
+                    ->whereIn('lease.business_account_id', getDependentUserIds())
                     ->where('lease.status', '=', '1');
                 return datatables()->eloquent(
                     $model
