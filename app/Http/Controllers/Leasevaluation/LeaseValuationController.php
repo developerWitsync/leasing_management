@@ -316,4 +316,8 @@ class LeaseValuationController extends Controller
     public function capitalised(){
         return view('leasevaluation.capitalised');
     }
+
+    public function assetValuation(){
+        return view('leasevaluation.asset');
+    }
 }
