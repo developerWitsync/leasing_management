@@ -191,6 +191,7 @@ class LeaseAssets extends Model
             $payments = $this->payments;
         }
 
+
         while ($start_year <= $end_year) {
             foreach ($months as $key=>$month){
                 $k_m = sprintf("%02d", $key);

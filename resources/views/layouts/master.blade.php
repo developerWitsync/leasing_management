@@ -120,6 +120,25 @@
             border-top: 1px solid #e5e5e5;
         }
 
+        .logoutInner {
+
+            text-align: center;
+            padding-top: 30px;
+
+        }
+        .logoutInner p {
+
+            max-width: 400px;
+            margin: 0 auto;
+            padding-bottom: 10px;
+            font-size: 15px;
+
+        }
+        #logout_success .modal-header .close{
+            position: absolute;
+            top:0px;
+            right: 0px;
+        }
     </style>
     @yield('header-styles')
     <link rel="shortcut icon" href="{{ asset('master/images/favicon.png') }}">
@@ -163,6 +182,31 @@
     </div>
 @endif
 
+@if(session('logout_success'))
+    <div id="logout_success" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    {{--<h4 class="modal-title" style="text-align: center;color: #19afc8;font-weight: 700;padding-bottom: 10px;">Thanks for your visit!</h4>--}}
+                </div>
+                <div class="row logoutInner">
+                    <img src="{{ asset('master/images/logout_success.png') }}"/>
+                    <p>You have successfully logged out from Witsync Lease Management.<a href="{{ route('login') }}">Click here</a> to login again.</p>
+                    <p>Thank you for using Witsync Lease Management.</p>
+                </div>
+                <div class="modal-footer">
+                    {{--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>--}}
+                </div>
+            </div>
+
+        </div>
+    </div>
+@endif
+
+
+
 <script src="{{ asset('master/js/jquery.js') }}"></script>
 <script src="{{ asset('master/js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('master/js/jquery.prettyPhoto.js') }}"></script>
@@ -185,6 +229,19 @@
         });
     </script>
 @endif
+
+<script>
+    $(function(){
+        $("#logout_success").modal('show');
+    });
+</script>
+{{--@if(session('logout_success'))--}}
+    {{--<script>--}}
+        {{--$(function(){--}}
+            {{--$("#logout_success").modal('show');--}}
+        {{--});--}}
+    {{--</script>--}}
+{{--@endif--}}
 <script>
     $(document).ready(function () {
         // var owl = $('.owl-carousel');

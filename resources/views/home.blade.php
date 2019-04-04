@@ -124,14 +124,22 @@
                 <div class="row">
                     <div id="chart1" class='col-md-4 mb-2 mt-4'>
                         <div class="chartBg">
-                            <div class="chartHd">Consolidated Lease Assets Position</div>
+                            <div class="chartHd">
+                                Consolidated Lease Assets Position
+                                <br>
+                                <span class="badge alert-danger">Initial Valuation</span>
+                            </div>
                             <svg></svg>
                         </div>
                     </div>
 
                     <div class="col-md-8 mb-2 mt-4" id="chart2">
                         <div class="chartBg">
-                            <div class="chartHd">Categorised Lease Asset Position</div>
+                            <div class="chartHd">
+                                Categorised Lease Asset Position
+                                <br>
+                                <span class="badge alert-danger">Initial Valuation</span>
+                            </div>
                             <svg></svg>
                         </div>
                     </div>

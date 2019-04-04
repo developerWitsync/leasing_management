@@ -172,11 +172,19 @@
         });
 
         $(document).ready(function(){
+
+            @if(\Carbon\Carbon::parse($asset->accural_period)->greaterThan(\Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)))
+                var minDate = new Date('{{ $asset->accural_period }}');
+                    @else
+                var minDate = new Date('{{ getParentDetails()->accountingStandard->base_date }}');
+            @endif
+
             $("#expected_purchase_date").datepicker({
                 dateFormat: "dd-M-yy",
                 changeMonth:true,
                 changeYear:true,
-                minDate : new Date('{{ \Carbon\Carbon::parse($asset->accural_period)->addDay(1)->format('Y-m-d') }}'),
+                //minDate : new Date('{{ \Carbon\Carbon::parse($asset->accural_period)->addDay(1)->format('Y-m-d') }}'),
+                minDate: minDate,
                 maxDate : new Date('{{ ($asset->renewableOptionValue->is_reasonable_certainity_option == "yes")?$asset->renewableOptionValue->expected_lease_end_Date:$asset->lease_end_date }}'),
                 {!!  getYearRanage() !!}
                 onSelect: function (date, instance) {
