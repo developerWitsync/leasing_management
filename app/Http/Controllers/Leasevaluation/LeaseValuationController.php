@@ -334,10 +334,17 @@ class LeaseValuationController extends Controller
             ));
 
         } catch (\Exception $e) {
-            dd($e);
+            abort(404);
         }
     }
 
+    /**
+     * capitalised lease assets listing on the Lease Valuation CAP page.
+     * @param $category_id
+     * @param Request $request
+     * @return string
+     * @throws \Throwable
+     */
     public function fetchCategoryAsset($category_id, Request $request)
     {
         try {
@@ -371,7 +378,7 @@ class LeaseValuationController extends Controller
             ))->render();
 
         } catch (\Exception $e) {
-            dd($e);
+            abort(404);
         }
     }
 

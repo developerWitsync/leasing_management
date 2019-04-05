@@ -30,10 +30,9 @@
                 @foreach($liability_caclulus_data as $year=>$data)
                     <tr>
                         @php
-                            $rowspan = 1;
                             $key = array_keys($data);
                             $key = $key[0];
-                            $allowed_payments = count($data[$key]) + 1 + 3;
+                            $allowed_payments = count($payments) + 1 + 3;
                         @endphp
                         <td rowspan="{{ $allowed_payments }}">
                             {{ $year }}
@@ -41,11 +40,11 @@
                     </tr>
 
                     @foreach($payments as $payment)
-                        @php
-                            if($payment->paymentDueDates->count() == 0){
-                                continue;
-                            }
-                        @endphp
+                        {{--@php--}}
+                            {{--if($payment->paymentDueDates->count() == 0){--}}
+                                {{--continue;--}}
+                            {{--}--}}
+                        {{--@endphp--}}
                         <tr>
                             <th>{{ $payment->name }}</th>
                             @php
@@ -53,9 +52,9 @@
                             @endphp
                             @foreach($months as $month)
                                 @if(isset($data[$month]) && isset($data[$month]["payment_".$payment->id]))
-                                    <td>{{ $data[$month]["payment_".$payment->id][0]->lease_liability }}</td>
+                                    <td>{{ $data[$month]["payment_".$payment->id]->lease_liability }}</td>
                                     @php
-                                        $sub_total = $sub_total + $data[$month]["payment_".$payment->id][0]->lease_liability;
+                                        $sub_total = $sub_total + $data[$month]["payment_".$payment->id]->lease_liability;
                                     @endphp
                                 @else
                                     <td>&nbsp;</td>
@@ -74,9 +73,9 @@
                         @endphp
                         @foreach($months as $month)
                             @if(isset($data[$month]['termination']))
-                                <td>{{ $data[$month]['termination'][0]->lease_liability }}</td>
+                                <td>{{ $data[$month]['termination']->lease_liability }}</td>
                                 @php
-                                    $sub_total = $sub_total + $data[$month]['termination'][0]->lease_liability;
+                                    $sub_total = $sub_total + $data[$month]['termination']->lease_liability;
                                 @endphp
                             @else
                                 <td>&nbsp;</td>
@@ -94,9 +93,9 @@
                         @endphp
                         @foreach($months as $month)
                             @if(isset($data[$month]['residual']))
-                                <td>{{ $data[$month]['residual'][0]->lease_liability }}</td>
+                                <td>{{ $data[$month]['residual']->lease_liability }}</td>
                                 @php
-                                    $sub_total = $sub_total + $data[$month]['residual'][0]->lease_liability;
+                                    $sub_total = $sub_total + $data[$month]['residual']->lease_liability;
                                 @endphp
                             @else
                                 <td>&nbsp;</td>
@@ -114,9 +113,9 @@
                         @endphp
                         @foreach($months as $month)
                             @if(isset($data[$month]['purchase']))
-                                <td>{{ $data[$month]['purchase'][0]->lease_liability }}</td>
+                                <td>{{ $data[$month]['purchase']->lease_liability }}</td>
                                 @php
-                                    $sub_total = $sub_total + $data[$month]['purchase'][0]->lease_liability;
+                                    $sub_total = $sub_total + $data[$month]['purchase']->lease_liability;
                                 @endphp
                             @else
                                 <td>&nbsp;</td>

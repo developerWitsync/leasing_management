@@ -112,14 +112,12 @@ class LeaseValuationController extends Controller
     {
         try {
             if ($request->ajax()) {
-                \Log::info("Start Measure".date('Y-m-d H:i:s'));
                 $asset = LeaseAssets::query()->findOrFail($id);
                 $payment_id = $request->has('payment')?$request->payment:null;
                 $value = $asset->presentValueOfLeaseLiability(true, $payment_id);
 
                 $asset->setAttribute('lease_liablity_value', $value);
                 $asset->save();
-                \Log::info("Stop Measure".date('Y-m-d H:i:s'));
                 return response()->json([
                     'status' => true,
                     'value' => $value
