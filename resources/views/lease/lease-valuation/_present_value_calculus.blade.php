@@ -9,6 +9,8 @@
         <strong>Note!</strong> The below information is generated on the basis of the current inputs.
     </div>
 
+   
+
     <div class="row" style="width: 2000px;">
         <div class="col-md-12">
             <table class="table table-bordered">
@@ -72,10 +74,10 @@
                             $sub_total = 0;
                         @endphp
                         @foreach($months as $month)
-                            @if(isset($data[$month]['termination']))
-                                <td>{{ $data[$month]['termination']->lease_liability }}</td>
+                            @if(isset($data[$month]['termination'][0]))
+                                <td>{{ $data[$month]['termination'][0]->lease_liability }}</td>
                                 @php
-                                    $sub_total = $sub_total + $data[$month]['termination']->lease_liability;
+                                    $sub_total = $sub_total + $data[$month]['termination'][0]->lease_liability;
                                 @endphp
                             @else
                                 <td>&nbsp;</td>
@@ -93,9 +95,9 @@
                         @endphp
                         @foreach($months as $month)
                             @if(isset($data[$month]['residual']))
-                                <td>{{ $data[$month]['residual']->lease_liability }}</td>
+                                <td>{{ $data[$month]['residual'][0]->lease_liability }}</td>
                                 @php
-                                    $sub_total = $sub_total + $data[$month]['residual']->lease_liability;
+                                    $sub_total = $sub_total + $data[$month]['residual'][0]->lease_liability;
                                 @endphp
                             @else
                                 <td>&nbsp;</td>
@@ -113,9 +115,9 @@
                         @endphp
                         @foreach($months as $month)
                             @if(isset($data[$month]['purchase']))
-                                <td>{{ $data[$month]['purchase']->lease_liability }}</td>
+                                <td>{{ $data[$month]['purchase'][0]->lease_liability }}</td>
                                 @php
-                                    $sub_total = $sub_total + $data[$month]['purchase']->lease_liability;
+                                    $sub_total = $sub_total + $data[$month]['purchase'][0]->lease_liability;
                                 @endphp
                             @else
                                 <td>&nbsp;</td>
