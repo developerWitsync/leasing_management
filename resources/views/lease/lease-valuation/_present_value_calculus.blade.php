@@ -9,7 +9,7 @@
         <strong>Note!</strong> The below information is generated on the basis of the current inputs.
     </div>
 
-   
+
 
     <div class="row" style="width: 2000px;">
         <div class="col-md-12">

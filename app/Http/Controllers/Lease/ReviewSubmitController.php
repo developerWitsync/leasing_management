@@ -107,6 +107,7 @@ class ReviewSubmitController extends Controller
 
             $model = Lease::query()->where('id', '=', $id)->first();
             $model->status = "1";
+            $model->is_completed = 1;
             $model->save();
 
 
@@ -311,7 +312,7 @@ class ReviewSubmitController extends Controller
             $assets->setRawAttributes($uid);
             $assets->save();
 
-            return redirect(route('leasevaluation.index'))->with('status', $ulacode);
+            return redirect(route('leasevaluation.cap.index'))->with('status', $ulacode);
         }
     }
 

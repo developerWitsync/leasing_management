@@ -10,14 +10,8 @@ use Closure;
 
 class CheckSubscription
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return mixed
-     */
-    public function handle($request, Closure $next, $function = null)
+    //Handle an incoming request.
+    public function handle($request, Closure $next, $function = null, $param_type = null, $param = null)
     {
         //check if the logged in user have purchased a plan or not
         $subscription = UserSubscription::query()->whereIn('user_id', getDependentUserIds())
@@ -35,9 +29,37 @@ class CheckSubscription
 
             //check if the limit for adding leases has reached...
             if($function == "add_lease"){
-                $submitted_leases = Lease::query()->whereIn('business_account_id', getDependentUserIds())
-                    //->where('status', '=', '1')
-                    ->count();
+                $submitted_leases = Lease::query()->whereIn('business_account_id', getDependentUserIds());
+
+                if ($param_type == 'asset_id') {
+                    $asset_id = $request->route($param);
+                    $asset = \App\LeaseAssets::query()->where('id', '=', $asset_id)->first();
+                    $lease_id = $asset->lease_id;
+                } else {
+                    $lease_id = $request->route($param);
+                }
+
+                if($lease_id){
+                    //check the lease status and is_completed_status
+                    $lease = Lease::query()->findOrFail($lease_id);
+                    if($lease->status == "0" && $lease->is_completed == 1) {
+                        //check if the lease is under modification
+                        $underModification = $lease->modifyLeaseApplication->last();
+                        if($underModification){
+                            //Don't include under counting...
+                            $submitted_leases = $submitted_leases->where('id', '<>', $lease_id);
+                        } else {
+                            //Include under counting...
+                            //$submitted_leases = $submitted_leases->where('id', '<>', $lease_id);
+                        }
+                    } else if($lease->status == "0" && $lease->is_completed == 0) {
+                        //don't include under counting..
+                        $submitted_leases = $submitted_leases->where('id', '<>', $lease_id);
+                    }
+                }
+
+                $submitted_leases = $submitted_leases->count();
+
                 $allowed_lease = $subscription->subscriptionPackage->available_leases;
                 if($allowed_lease <= $submitted_leases){
                     //not allowed to add new lease and needs to redirect to the upgrade plan page..

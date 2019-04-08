@@ -76,17 +76,17 @@ Route::middleware('auth')->group(function () {
         Route::get('download-invoice/{id}', ['as'=> 'transactions.download.invoice', 'uses'=>'TransactionsController@downloadInvoice']);
     });
 
-    Route::namespace('Lease')->middleware(['permission:add_lease', 'checksubscription:add_lease'])->prefix('lease')->group(function () {
+    Route::namespace('Lease')->middleware(['permission:add_lease', /*'checksubscription:add_lease'*/])->prefix('lease')->group(function () {
         // To check Lock Period Date
         Route::get('checklockperioddate', ['as' => 'lease.checklockperioddate', 'uses' => 'IndexController@checkLockPeriodDate']);
         /**
          * Lessor Details Routes NL1
          */
         Route::prefix('lessor-details')->group(function () {
-            Route::match(['post', 'get'], 'create/{id?}', ['as' => 'add-new-lease.index', 'uses' => 'LessorDetailsController@index']);
+            Route::match(['post', 'get'], 'create/{id?}', ['as' => 'add-new-lease.index', 'uses' => 'LessorDetailsController@index'])->middleware('checksubscription:add_lease,lease_id,id');
             Route::post('save', ['as' => 'add-new-lease.index.save', 'uses' => 'LessorDetailsController@save']);
-            Route::post('update/{id}', ['as' => 'add-new-lease.index.update', 'uses' => 'LessorDetailsController@udpate']);
-            Route::post('udpate-total-assets/{id}', ['as' => 'add-new-lease.index.updatetotalassets', 'uses' => 'LessorDetailsController@udpateTotalAssets']);
+            Route::post('update/{id}', ['as' => 'add-new-lease.index.update', 'uses' => 'LessorDetailsController@udpate'])->middleware('checksubscription:add_lease,lease_id,id');
+            Route::post('udpate-total-assets/{id}', ['as' => 'add-new-lease.index.updatetotalassets', 'uses' => 'LessorDetailsController@udpateTotalAssets'])->middleware('checksubscription:add_lease,lease_id,id');
         });
 
         /**
@@ -94,7 +94,7 @@ Route::middleware('auth')->group(function () {
          */
         Route::prefix('underlying-lease-assets')->group(function () {
             //Route::match(['post', 'get'],'create/{id}', ['as' => 'addlease.leaseasset.index', 'uses' => 'UnderlyingLeaseAssetController@index']); // commented out to show the form for one lease asset directly
-            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.leaseasset.index', 'uses' => 'UnderlyingLeaseAssetController@index_V2']);
+            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.leaseasset.index', 'uses' => 'UnderlyingLeaseAssetController@index_V2'])->middleware('checksubscription:add_lease,lease_id,id');
             Route::get('fetch-sub-categories/{id}', ['as' => 'addlease.leaseasset.fetchsubcategories', 'uses' => 'UnderlyingLeaseAssetController@fetchSubCategories']);
             Route::match(['post', 'get'], 'complete-asset-details/{lease}/{asset}', ['as' => 'addlease.leaseasset.completedetails', 'uses' => 'UnderlyingLeaseAssetController@assetDetails']);
             Route::post('save/{id}', ['as' => 'addlease.leaseasset.saveasset', 'uses' => 'UnderlyingLeaseAssetController@save']);
@@ -104,10 +104,9 @@ Route::middleware('auth')->group(function () {
         * Lease Termination Options Routes NL6
         */
         Route::prefix('lease-termination-option')->group(function () {
-            //Route::get('index/{id}', ['as' => 'addlease.leaseterminationoption.index', 'uses' => 'LeaseTerminationOptionController@index'])->middleware('checkpreviousdata:step5,lease_id,id');
-            Route::match(['post', 'get'], 'index/{id}', ['as' => 'addlease.leaseterminationoption.index', 'uses' => 'LeaseTerminationOptionController@index_V2'])->middleware('checkpreviousdata:2,lease_id,id');
-            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.leaseterminationoption.create', 'uses' => 'LeaseTerminationOptionController@create'])->middleware('checkpreviousdata:2,asset_id,id');
-            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.leaseterminationoption.update', 'uses' => 'LeaseTerminationOptionController@update'])->middleware('checkpreviousdata:2,asset_id,id');
+            Route::match(['post', 'get'], 'index/{id}', ['as' => 'addlease.leaseterminationoption.index', 'uses' => 'LeaseTerminationOptionController@index_V2'])->middleware('checkpreviousdata:2,lease_id,id','checksubscription:add_lease,lease_id,id');
+            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.leaseterminationoption.create', 'uses' => 'LeaseTerminationOptionController@create'])->middleware('checkpreviousdata:2,asset_id,id','checksubscription:add_lease,asset_id,id');
+            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.leaseterminationoption.update', 'uses' => 'LeaseTerminationOptionController@update'])->middleware('checkpreviousdata:2,asset_id,id','checksubscription:add_lease,asset_id,id');
         });
 
         /**
@@ -116,27 +115,26 @@ Route::middleware('auth')->group(function () {
         Route::prefix('lease-renewal-option')->group(function () {
             //Route::get('index/{id}', ['as' => 'addlease.renewable.index', 'uses' => 'LeaseRenewableOptionController@index'])->middleware('checkpreviousdata:step6,lease_id,id');
 
-            Route::match(['post', 'get'], 'index/{id}', ['as' => 'addlease.renewable.index', 'uses' => 'LeaseRenewableOptionController@index_V2'])->middleware('checkpreviousdata:3,lease_id,id');
-            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.renewable.create', 'uses' => 'LeaseRenewableOptionController@create'])->middleware('checkpreviousdata:3,asset_id,id');
-            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.renewable.update', 'uses' => 'LeaseRenewableOptionController@update'])->middleware('checkpreviousdata:3,asset_id,id');
+            Route::match(['post', 'get'], 'index/{id}', ['as' => 'addlease.renewable.index', 'uses' => 'LeaseRenewableOptionController@index_V2'])->middleware('checkpreviousdata:3,lease_id,id','checksubscription:add_lease,lease_id,id');
+            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.renewable.create', 'uses' => 'LeaseRenewableOptionController@create'])->middleware('checkpreviousdata:3,asset_id,id','checksubscription:add_lease,asset_id,id');
+            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.renewable.update', 'uses' => 'LeaseRenewableOptionController@update'])->middleware('checkpreviousdata:3,asset_id,id','checksubscription:add_lease,asset_id,id');
         });
 
         /*
          * Purchase Option Routes NL8
          */
         Route::prefix('purchase-option')->group(function () {
-            //Route::get('index/{id}', ['as' => 'addlease.purchaseoption.index', 'uses' => 'PurchaseOptionController@index'])->middleware('checkpreviousdata:step7,lease_id,id');
-            Route::match(['post', 'get'], 'index/{id}', ['as' => 'addlease.purchaseoption.index', 'uses' => 'PurchaseOptionController@index_V2'])->middleware('checkpreviousdata:4,lease_id,id');
+            Route::match(['post', 'get'], 'index/{id}', ['as' => 'addlease.purchaseoption.index', 'uses' => 'PurchaseOptionController@index_V2'])->middleware('checkpreviousdata:4,lease_id,id','checksubscription:add_lease,lease_id,id');
             Route::post('save', ['as' => 'addlease.purchaseoption.save', 'uses' => 'PurchaseOptionController@store']);
-            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.purchaseoption.create', 'uses' => 'PurchaseOptionController@create'])->middleware('checkpreviousdata:4,asset_id,id');
-            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.purchaseoption.update', 'uses' => 'PurchaseOptionController@update'])->middleware('checkpreviousdata:4,asset_id,id');
+            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.purchaseoption.create', 'uses' => 'PurchaseOptionController@create'])->middleware('checkpreviousdata:4,asset_id,id','checksubscription:add_lease,asset_id,id');
+            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.purchaseoption.update', 'uses' => 'PurchaseOptionController@update'])->middleware('checkpreviousdata:4,asset_id,id','checksubscription:add_lease,asset_id,id');
         });
 
         /**
          * Lease Payments Routes NL3
          */
         Route::prefix('payments')->group(function () {
-            Route::get('index/{id}', ['as' => 'addlease.payments.index', 'uses' => 'LeasePaymentsController@index'])->middleware('checkpreviousdata:5,lease_id,id');
+            Route::get('index/{id}', ['as' => 'addlease.payments.index', 'uses' => 'LeasePaymentsController@index'])->middleware('checkpreviousdata:5,lease_id,id','checksubscription:add_lease,lease_id,id');
             Route::post('save-total-payments/{id}', ['as' => 'lease.payments.savetotalpayments', 'uses' => 'LeasePaymentsController@saveTotalPayments']);
             Route::get('fetch-asset-payments/{id}', ['as' => 'lease.payments.fetchassetpayments', 'uses' => 'LeasePaymentsController@fetchAssetPayments']);
             Route::match(['post', 'get'], 'create-asset-payment/{id}', ['as' => 'lease.payments.createassetpayment', 'uses' => 'LeasePaymentsController@createAssetPayments']);
@@ -152,10 +150,9 @@ Route::middleware('auth')->group(function () {
          * Residual Value Guarantee Routes NL5
          */
         Route::prefix('residual-value-gurantee')->group(function () {
-            //Route::get('index/{id}', ['as' => 'addlease.residual.index', 'uses' => 'LeaseResidualController@index'])->middleware('checkpreviousdata:step4,lease_id,id');
-            Route::match(['post', 'get'], 'index/{id}', ['as' => 'addlease.residual.index', 'uses' => 'LeaseResidualController@create_V2'])->middleware('checkpreviousdata:6,lease_id,id');
-            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.residual.create', 'uses' => 'LeaseResidualController@create'])->middleware('checkpreviousdata:6,asset_id,id');
-            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.residual.update', 'uses' => 'LeaseResidualController@update'])->middleware('checkpreviousdata:6,asset_id,id');
+            Route::match(['post', 'get'], 'index/{id}', ['as' => 'addlease.residual.index', 'uses' => 'LeaseResidualController@create_V2'])->middleware('checkpreviousdata:6,lease_id,id','checksubscription:add_lease,lease_id,id');
+            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.residual.create', 'uses' => 'LeaseResidualController@create'])->middleware('checkpreviousdata:6,asset_id,id','checksubscription:add_lease,asset_id,id');
+            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.residual.update', 'uses' => 'LeaseResidualController@update'])->middleware('checkpreviousdata:6,asset_id,id','checksubscription:add_lease,asset_id,id');
         });
 
 
@@ -164,18 +161,18 @@ Route::middleware('auth')->group(function () {
          */
         Route::prefix('lease-duration-classified')->group(function () {
             //Route::get('index/{id}', ['as' => 'addlease.durationclassified.index', 'uses' => 'LeaseDurationClassifiedController@index'])->middleware('checkpreviousdata:step8,lease_id,id');
-            Route::match(['post', 'get'], 'index/{id}', ['as' => 'addlease.durationclassified.index', 'uses' => 'LeaseDurationClassifiedController@index_V2'])->middleware('checkpreviousdata:7,lease_id,id');
-            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.durationclassified.create', 'uses' => 'LeaseDurationClassifiedController@create'])->middleware('checkpreviousdata:7,asset_id,id');
-            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.durationclassified.update', 'uses' => 'LeaseDurationClassifiedController@update'])->middleware('checkpreviousdata:7,asset_id,id');
+            Route::match(['post', 'get'], 'index/{id}', ['as' => 'addlease.durationclassified.index', 'uses' => 'LeaseDurationClassifiedController@index_V2'])->middleware('checkpreviousdata:7,lease_id,id','checksubscription:add_lease,lease_id,id');
+            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.durationclassified.create', 'uses' => 'LeaseDurationClassifiedController@create'])->middleware('checkpreviousdata:7,asset_id,id','checksubscription:add_lease,asset_id,id');
+            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.durationclassified.update', 'uses' => 'LeaseDurationClassifiedController@update'])->middleware('checkpreviousdata:7,asset_id,id','checksubscription:add_lease,asset_id,id');
         });
 
         /**
          * Lease Escalation Clause Routes NL9
          */
         Route::prefix('escalation')->group(function () {
-            Route::get('index/{id}', ['as' => 'lease.escalation.index', 'uses' => 'EscalationController@index'])->middleware('checkpreviousdata:8,lease_id,id');
-            Route::post('update-lease-escalation-applicable-status/{id}', ['as' => 'lease.esacalation.applicablestatus', 'uses' => 'EscalationController@updateLeaseEscalationApplicableStatus'])->middleware('checkpreviousdata:8,lease_id,id');
-            Route::match(['get', 'post'], 'create/{id}/{lease}', ['as' => 'lease.escalation.create', 'uses' => 'EscalationController@create'])->middleware('checkpreviousdata:8,lease_id,lease');
+            Route::get('index/{id}', ['as' => 'lease.escalation.index', 'uses' => 'EscalationController@index'])->middleware('checkpreviousdata:8,lease_id,id','checksubscription:add_lease,lease_id,id');
+            Route::post('update-lease-escalation-applicable-status/{id}', ['as' => 'lease.esacalation.applicablestatus', 'uses' => 'EscalationController@updateLeaseEscalationApplicableStatus'])->middleware('checkpreviousdata:8,lease_id,id','checksubscription:add_lease,lease_id,id');
+            Route::match(['get', 'post'], 'create/{id}/{lease}', ['as' => 'lease.escalation.create', 'uses' => 'EscalationController@create'])->middleware('checkpreviousdata:8,lease_id,lease','checksubscription:add_lease,lease_id,lease');
             Route::get('escalation-chart/{id}', ['as' => 'lease.escalation.showescalationchart', 'uses' => 'EscalationController@escalationChart']);
             Route::get('compute-total-escalation/{id}', ['as' => 'lease.escalation.compute', 'uses' => 'EscalationController@computeTotalUndiscountedPayment']);
             Route::get('show-payment-annexure/{id}', ['as' => 'lease.escalation.showpaymentannexure', 'uses' => 'EscalationController@paymentAnnexure']);
@@ -185,10 +182,9 @@ Route::middleware('auth')->group(function () {
          * Select Low Value Value NL10
          */
         Route::prefix('select-low-value')->group(function () {
-            //Route::get('index/{id}', ['as' => 'addlease.lowvalue.index', 'uses' => 'SelectLowValueController@index'])->middleware('checkpreviousdata:step10,lease_id,id');
-            Route::match(['post', 'get'], 'index/{id}', ['as' => 'addlease.lowvalue.index', 'uses' => 'SelectLowValueController@index_V2'])->middleware('checkpreviousdata:9,lease_id,id');
-            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.lowvalue.create', 'uses' => 'SelectLowValueController@create'])->middleware('checkpreviousdata:9,asset_id,id');
-            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.lowvalue.update', 'uses' => 'SelectLowValueController@update'])->middleware('checkpreviousdata:9,asset_id,id');
+            Route::match(['post', 'get'], 'index/{id}', ['as' => 'addlease.lowvalue.index', 'uses' => 'SelectLowValueController@index_V2'])->middleware('checkpreviousdata:9,lease_id,id','checksubscription:add_lease,lease_id,id');
+            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.lowvalue.create', 'uses' => 'SelectLowValueController@create'])->middleware('checkpreviousdata:9,asset_id,id','checksubscription:add_lease,asset_id,id');
+            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.lowvalue.update', 'uses' => 'SelectLowValueController@update'])->middleware('checkpreviousdata:9,asset_id,id','checksubscription:add_lease,asset_id,id');
         });
 
         /*
@@ -196,9 +192,9 @@ Route::middleware('auth')->group(function () {
          */
         Route::prefix('fair-market-value')->group(function () {
             //Route::get('index/{id}', ['as' => 'addlease.fairmarketvalue.index', 'uses' => 'FairMarketValueController@index'])->middleware('checkpreviousdata:step3,lease_id,id');
-            Route::match(['post', 'get'], 'index/{id}', ['as' => 'addlease.fairmarketvalue.index', 'uses' => 'FairMarketValueController@index_V2'])->middleware('checkpreviousdata:10,lease_id,id');
-            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.fairmarketvalue.create', 'uses' => 'FairMarketValueController@create'])->middleware('checkpreviousdata:10,asset_id,id');
-            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.fairmarketvalue.update', 'uses' => 'FairMarketValueController@update'])->middleware('checkpreviousdata:10,asset_id,id');
+            Route::match(['post', 'get'], 'index/{id}', ['as' => 'addlease.fairmarketvalue.index', 'uses' => 'FairMarketValueController@index_V2'])->middleware('checkpreviousdata:10,lease_id,id','checksubscription:add_lease,lease_id,id');
+            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.fairmarketvalue.create', 'uses' => 'FairMarketValueController@create'])->middleware('checkpreviousdata:10,asset_id,id','checksubscription:add_lease,asset_id,id');
+            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.fairmarketvalue.update', 'uses' => 'FairMarketValueController@update'])->middleware('checkpreviousdata:10,asset_id,id','checksubscription:add_lease,asset_id,id');
         });
 
         /**
@@ -206,18 +202,18 @@ Route::middleware('auth')->group(function () {
          */
         Route::prefix('select-discount-rate')->group(function () {
             //Route::get('index/{id}', ['as' => 'addlease.discountrate.index', 'uses' => 'SelectDiscountRateController@index'])->middleware('checkpreviousdata:step11,lease_id,id');
-            Route::match(['post', 'get'], 'index/{id}', ['as' => 'addlease.discountrate.index', 'uses' => 'SelectDiscountRateController@index_V2'])->middleware('checkpreviousdata:11,lease_id,id');
-            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.discountrate.create', 'uses' => 'SelectDiscountRateController@create'])->middleware('checkpreviousdata:11,asset_id,id');
-            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.discountrate.update', 'uses' => 'SelectDiscountRateController@update'])->middleware('checkpreviousdata:11,asset_id,id');
+            Route::match(['post', 'get'], 'index/{id}', ['as' => 'addlease.discountrate.index', 'uses' => 'SelectDiscountRateController@index_V2'])->middleware('checkpreviousdata:11,lease_id,id','checksubscription:add_lease,lease_id,id');
+            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.discountrate.create', 'uses' => 'SelectDiscountRateController@create'])->middleware('checkpreviousdata:11,asset_id,id','checksubscription:add_lease,asset_id,id');
+            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.discountrate.update', 'uses' => 'SelectDiscountRateController@update'])->middleware('checkpreviousdata:11,asset_id,id','checksubscription:add_lease,asset_id,id');
         });
         /**
          * Lease Balances as on Dec 31, 2018  NL12
          */
         Route::prefix('lease-balnce-as-on-dec')->group(function () {
             //Route::get('index/{id}', ['as' => 'addlease.balanceasondec.index', 'uses' => 'LeaseBalanceAsOnDecController@index'])->middleware('checkpreviousdata:step12,lease_id,id');
-            Route::match(['post', 'get'], 'index/{id}', ['as' => 'addlease.balanceasondec.index', 'uses' => 'LeaseBalanceAsOnDecController@index_V2'])->middleware('checkpreviousdata:12,lease_id,id');
-            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.balanceasondec.create', 'uses' => 'LeaseBalanceAsOnDecController@create'])->middleware('checkpreviousdata:12,asset_id,id');
-            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.balanceasondec.update', 'uses' => 'LeaseBalanceAsOnDecController@update'])->middleware('checkpreviousdata:12,asset_id,id');
+            Route::match(['post', 'get'], 'index/{id}', ['as' => 'addlease.balanceasondec.index', 'uses' => 'LeaseBalanceAsOnDecController@index_V2'])->middleware('checkpreviousdata:12,lease_id,id','checksubscription:add_lease,lease_id,id');
+            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.balanceasondec.create', 'uses' => 'LeaseBalanceAsOnDecController@create'])->middleware('checkpreviousdata:12,asset_id,id','checksubscription:add_lease,asset_id,id');
+            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.balanceasondec.update', 'uses' => 'LeaseBalanceAsOnDecController@update'])->middleware('checkpreviousdata:12,asset_id,id','checksubscription:add_lease,asset_id,id');
         });
 
         /**
@@ -225,28 +221,28 @@ Route::middleware('auth')->group(function () {
          */
         Route::prefix('initial-direct-cost')->group(function () {
             //Route::get('index/{id}', ['as' => 'addlease.initialdirectcost.index', 'uses' => 'InitialDirectCostController@index'])->middleware('checkpreviousdata:step13,lease_id,id');
-            Route::match(['post', 'get'], 'index/{id}', ['as' => 'addlease.initialdirectcost.index', 'uses' => 'InitialDirectCostController@index_V2'])->middleware('checkpreviousdata:13,lease_id,id');
-            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.initialdirectcost.create', 'uses' => 'InitialDirectCostController@create'])->middleware('checkpreviousdata:13,asset_id,id');
-            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.initialdirectcost.update', 'uses' => 'InitialDirectCostController@update'])->middleware('checkpreviousdata:13,asse_id,id');
+            Route::match(['post', 'get'], 'index/{id}', ['as' => 'addlease.initialdirectcost.index', 'uses' => 'InitialDirectCostController@index_V2'])->middleware('checkpreviousdata:13,lease_id,id','checksubscription:add_lease,lease_id,id');
+            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.initialdirectcost.create', 'uses' => 'InitialDirectCostController@create'])->middleware('checkpreviousdata:13,asset_id,id','checksubscription:add_lease,asset_id,id');
+            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.initialdirectcost.update', 'uses' => 'InitialDirectCostController@update'])->middleware('checkpreviousdata:13,asset_id,id','checksubscription:add_lease,asset_id,id');
             Route::match(['post', 'get'], 'add-supplier-details', ['as' => 'addlease.initialdirectcost.addsupplier', 'uses' => 'InitialDirectCostController@addSupplier']);
-            Route::match(['post', 'get'], 'update-supplier-details/{id}', ['as' => 'addlease.initialdirectcost.updatesupplier', 'uses' => 'InitialDirectCostController@updateSupplier'])->middleware('checkpreviousdata:13,asset_id,id');
+            Route::match(['post', 'get'], 'update-supplier-details/{id}', ['as' => 'addlease.initialdirectcost.updatesupplier', 'uses' => 'InitialDirectCostController@updateSupplier'])->middleware('checkpreviousdata:13,asset_id,id','checksubscription:add_lease,asset_id,id');
             Route::post('create-supplier', ['as' => 'addlease.initialdirectcost.createsupplier', 'uses' => 'InitialDirectCostController@createSupplier']);
-            Route::delete('delete-supplier/{id}/{lease_id}', ['as' => 'addlease.initialdirectcost.deletesupplier', 'uses' => 'InitialDirectCostController@deleteSupplier'])->middleware('checkpreviousdata:13,lease_id,lease_id');
-            Route::delete('delete-create-supplier/{id}', ['as' => 'addlease.initialdirectcost.deletecreatesupplier', 'uses' => 'InitialDirectCostController@deleteCreateSupplier'])->middleware('checkpreviousdata:13,asset_id,id');
+            Route::delete('delete-supplier/{id}/{lease_id}', ['as' => 'addlease.initialdirectcost.deletesupplier', 'uses' => 'InitialDirectCostController@deleteSupplier'])->middleware('checkpreviousdata:13,lease_id,lease_id','checksubscription:add_lease,lease_id,id');
+            Route::delete('delete-create-supplier/{id}', ['as' => 'addlease.initialdirectcost.deletecreatesupplier', 'uses' => 'InitialDirectCostController@deleteCreateSupplier'])->middleware('checkpreviousdata:13,asset_id,id','checksubscription:add_lease,asset_id,id');
         });
         /**
          * Lease Incentives  NL14
          */
         Route::prefix('lease-incentives')->group(function () {
             //Route::get('index/{id}', ['as' => 'addlease.leaseincentives.index', 'uses' => 'LeaseIncentivesController@index'])->middleware('checkpreviousdata:step14,lease_id,id');
-            Route::match(['post', 'get'], 'index/{id}', ['as' => 'addlease.leaseincentives.index', 'uses' => 'LeaseIncentivesController@index_V2'])->middleware('checkpreviousdata:14,lease_id,id');
-            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.leaseincentives.create', 'uses' => 'LeaseIncentivesController@create'])->middleware('checkpreviousdata:14,asset_id,id');
-            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.leaseincentives.update', 'uses' => 'LeaseIncentivesController@update'])->middleware('checkpreviousdata:14,asset_id,id');
+            Route::match(['post', 'get'], 'index/{id}', ['as' => 'addlease.leaseincentives.index', 'uses' => 'LeaseIncentivesController@index_V2'])->middleware('checkpreviousdata:14,lease_id,id','checksubscription:add_lease,lease_id,id');
+            Route::match(['post', 'get'], 'create/{id}', ['as' => 'addlease.leaseincentives.create', 'uses' => 'LeaseIncentivesController@create'])->middleware('checkpreviousdata:14,asset_id,id','checksubscription:add_lease,asset_id,id');
+            Route::match(['post', 'get'], 'update/{id}', ['as' => 'addlease.leaseincentives.update', 'uses' => 'LeaseIncentivesController@update'])->middleware('checkpreviousdata:14,asset_id,id','checksubscription:add_lease,asset_id,id');
             Route::match(['post', 'get'], 'add-customer-details', ['as' => 'addlease.leaseincentives.addcustomer', 'uses' => 'LeaseIncentivesController@addCustomer']);
-            Route::match(['post', 'get'], 'update-customer-details/{id}', ['as' => 'addlease.leaseincentives.updatecustomer', 'uses' => 'LeaseIncentivesController@updateCustomer'])->middleware('checkpreviousdata:14,asset_id,id');
+            Route::match(['post', 'get'], 'update-customer-details/{id}', ['as' => 'addlease.leaseincentives.updatecustomer', 'uses' => 'LeaseIncentivesController@updateCustomer'])->middleware('checkpreviousdata:14,asset_id,id','checksubscription:add_lease,asset_id,id');
             Route::post('create-customer', ['as' => 'addlease.leaseincentives.createcustomer', 'uses' => 'LeaseIncentivesController@createCustomer']);
-            Route::delete('delete-customer/{id}/{lease_id}', ['as' => 'addlease.leaseincentives.deletecustomer', 'uses' => 'LeaseIncentivesController@deleteCustomer'])->middleware('checkpreviousdata:14,lease_id,lease_id');
-            Route::delete('delete-create-customer/{id}', ['as' => 'addlease.leaseincentives.deletecreatecustomer', 'uses' => 'LeaseIncentivesController@deleteCreateCustomer'])->middleware('checkpreviousdata:14,asset_id,id');
+            Route::delete('delete-customer/{id}/{lease_id}', ['as' => 'addlease.leaseincentives.deletecustomer', 'uses' => 'LeaseIncentivesController@deleteCustomer'])->middleware('checkpreviousdata:14,lease_id,lease_id','checksubscription:add_lease,lease_id,lease_id');
+            Route::delete('delete-create-customer/{id}', ['as' => 'addlease.leaseincentives.deletecreatecustomer', 'uses' => 'LeaseIncentivesController@deleteCreateCustomer'])->middleware('checkpreviousdata:14,asset_id,id','checksubscription:add_lease,asset_id,id');
         });
 
         /**
@@ -261,11 +257,11 @@ Route::middleware('auth')->group(function () {
          * Lease Incentives  NL15
          */
         Route::prefix('lease-valuation')->group(function () {
-            Route::get('index/{id}', ['as' => 'addlease.leasevaluation.index', 'uses' => 'LeaseValuationController@index'])->middleware('checkpreviousdata:16,lease_id,id');
-            Route::get('lease-liability-asset/{id}', ['as' => 'addlease.leasevaluation.liability', 'uses' => 'LeaseValuationController@presentValueOfLeaseLiability'])->middleware('checkpreviousdata:16,asset_id,id');
-            Route::get('show-lease-liability-calculus/{id}', ['as' => 'addlease.leasevaluation.showcalculus', 'uses' => 'LeaseValuationController@showPresentValueOfLeaseLiabilityCalculus'])->middleware('checkpreviousdata:16,asset_id,id');
-            Route::get('lease-valuation-asset/{id}', ['as' => 'addlease.leasevaluation.valuation', 'uses' => 'LeaseValuationController@equivalentPresentValueOfLeaseLiability'])->middleware('checkpreviousdata:16,asset_id,id');
-            Route::get('lease-impairment/{id}', ['as' => 'addlease.leasevaluation.impairment', 'uses' => 'LeaseValuationController@leaseAssetImpairment'])->middleware('checkpreviousdata:16,asset_id,id');
+            Route::get('index/{id}', ['as' => 'addlease.leasevaluation.index', 'uses' => 'LeaseValuationController@index'])->middleware('checkpreviousdata:16,lease_id,id','checksubscription:add_lease,lease_id,id');
+            Route::get('lease-liability-asset/{id}', ['as' => 'addlease.leasevaluation.liability', 'uses' => 'LeaseValuationController@presentValueOfLeaseLiability'])->middleware('checkpreviousdata:16,asset_id,id','checksubscription:add_lease,asset_id,id');
+            Route::get('show-lease-liability-calculus/{id}', ['as' => 'addlease.leasevaluation.showcalculus', 'uses' => 'LeaseValuationController@showPresentValueOfLeaseLiabilityCalculus'])->middleware('checkpreviousdata:16,asset_id,id','checksubscription:add_lease,asset_id,id');
+            Route::get('lease-valuation-asset/{id}', ['as' => 'addlease.leasevaluation.valuation', 'uses' => 'LeaseValuationController@equivalentPresentValueOfLeaseLiability'])->middleware('checkpreviousdata:16,asset_id,id','checksubscription:add_lease,asset_id,id');
+            Route::get('lease-impairment/{id}', ['as' => 'addlease.leasevaluation.impairment', 'uses' => 'LeaseValuationController@leaseAssetImpairment'])->middleware('checkpreviousdata:16,asset_id,id','checksubscription:add_lease,asset_id,id');
             Route::get('termination-present-value/{id}', ['as' => 'addlease.leasevaluation.terminationpresentvalue', 'uses' => 'LeaseValuationController@terminationPresentValue']);
 
             Route::get('residual-present-value/{id}', ['as' => 'addlease.leasevaluation.residualpresentvalue', 'uses' => 'LeaseValuationController@residualPresentValue']);
@@ -291,8 +287,8 @@ Route::middleware('auth')->group(function () {
          * Review&Submit  NL17
          */
         Route::prefix('review-submit')->group(function () {
-            Route::match(['post', 'get'], 'index/{id}', ['as' => 'addlease.reviewsubmit.index', 'uses' => 'ReviewSubmitController@index'])->middleware('checkpreviousdata:18,lease_id,id');
-            Route::match(['post', 'get'], 'submit/{id}', ['as' => 'addlease.reviewsubmit.submit', 'uses' => 'ReviewSubmitController@submit'])->middleware('checkpreviousdata:18,lease_id,id');
+            Route::match(['post', 'get'], 'index/{id}', ['as' => 'addlease.reviewsubmit.index', 'uses' => 'ReviewSubmitController@index'])->middleware('checkpreviousdata:18,lease_id,id','checksubscription:add_lease,lease_id,id');
+            Route::match(['post', 'get'], 'submit/{id}', ['as' => 'addlease.reviewsubmit.submit', 'uses' => 'ReviewSubmitController@submit'])->middleware('checkpreviousdata:18,lease_id,id','checksubscription:add_lease,lease_id,id');
         });
 
     });
