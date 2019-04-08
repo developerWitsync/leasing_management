@@ -14,7 +14,14 @@ input.form-control{ height: 49px; border-radius: 3px; padding: 0 10px;}
 .btnAlign{ text-align: center;}
 .resetPadd{ padding-top: 100px;}
 .loginpadd{ padding-top: 50px;}
-.navbar-default {background-color: #1b2d5b; border-color: #1b2d5b;}
+.navbar-default {
+	background: #005ba2; /* Old browsers */
+	background: -moz-linear-gradient(top, #005ba2 0%, #027db6 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(top, #005ba2 0%,#027db6 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom, #005ba2 0%,#027db6 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#005ba2', endColorstr='#027db6',GradientType=0 ); /* IE6-9 */ 
+	border-color: #1b2d5b;
+}
 .navbar-brand.logoBx {padding: 9px 10px;}
 .navbar-default .navbar-nav > li > a {color: #fff !important;}
 .navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus{ background: none !important;}
