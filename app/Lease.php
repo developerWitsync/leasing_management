@@ -45,4 +45,8 @@ class Lease extends Model
         $modify_lease_data = $this->modifyLeaseApplication->last();
         return ($modify_lease_data && $modify_lease_data->valuation == "Subsequent Valuation");
     }
+
+    public function leasePaymentInvoice(){
+        return $this->hasOne('App\LeasePaymentInvoice', 'lease_id', 'id');
+    }
 }

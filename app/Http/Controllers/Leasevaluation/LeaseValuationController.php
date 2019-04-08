@@ -308,7 +308,6 @@ class LeaseValuationController extends Controller
                 return redirect(route('leasevaluation.index'));
             }
         } catch (\Exception $exception) {
-            dd($exception);
             abort(404);
         }
     }
@@ -382,8 +381,32 @@ class LeaseValuationController extends Controller
         }
     }
 
-    public function assetValuation()
+    /**
+     * Renders the lease valuation overview Tab for the lease
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function assetValuation($id)
     {
-        return view('leasevaluation.asset');
+        try{
+            $lease = Lease::query()
+                ->where('id', '=', $id)
+                ->whereIn('business_account_id', getDependentUserIds())
+                ->where('status', '=', '1')->firstOrFail();
+            $asset = $lease->assets()->first(); //there will be only one lease asset for a lease...
+            $subsequent_modified = $lease->isSubsequentModification();
+            $subsequent = null;
+            if($subsequent_modified) {
+                $subsequent = $lease->modifyLeaseApplication->last();
+            }
+            return view('leasevaluation.asset', compact(
+                'lease',
+                'asset',
+                'subsequent_modified',
+                'subsequent'
+            ));
+        }catch (\Exception $e){
+            dd($e);
+        }
     }
 }

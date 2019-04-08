@@ -40,6 +40,10 @@ class LeaseAssets extends Model
         'updated_at'
     ];
 
+    public function accountingTreatment(){
+        return $this->belongsTo('App\LeaseAccountingTreatment', 'accounting_treatment', 'id');
+    }
+
     public function category()
     {
         return $this->belongsTo('App\LeaseAssetCategories', 'category_id', 'id');

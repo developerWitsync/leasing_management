@@ -1,21 +1,21 @@
+<div class="landBg clearfix">
+    <div class="leaseTotalHd">
+        <h2>{{ $category->title}}</h2>
 
-    <div class="landBg clearfix">
-        <div class="leaseTotalHd">
-            <h2>{{ $category->title}}</h2>
+        <span>Total Lease <br/> Assets</span>
+        <strong>{{ str_pad($assets->total(), 2, '0', STR_PAD_LEFT) }}</strong>
+        @if($assets->total() > 4)
+            <div class="pagerButton">
+                {{ $assets->links('leasevaluation.partials._paginate', ['category' => $category->id]) }}
+            </div>
 
-            <span>Total Lease <br/> Assets</span>
-            <strong>{{ str_pad($assets->total(), 2, '0', STR_PAD_LEFT) }}</strong>
-            @if($assets->total() > 4)
-                <div class="pagerButton">
-                    {{ $assets->links('leasevaluation.partials._paginate', ['category' => $category->id]) }}
-                </div>
-
-            @endif
-        </div>
-        <div class="leaseSlide">
-            <ul class="clearfix">
-                @foreach($assets as $asset)
-                    <li>
+        @endif
+    </div>
+    <div class="leaseSlide">
+        <ul class="clearfix">
+            @foreach($assets as $asset)
+                <li>
+                    <a href="{{ route('leasevaluation.cap.asset', ['id' => $asset->lease->id]) }}">
                         <div class="landType">{{str_limit($asset->name, $limit = 15, $end = '...')  }}</div>
                         <div class="leaseterms">
    							<span>
@@ -37,8 +37,9 @@
                                 </strong>
    							</span>
                         </div>
-                    </li>
-                @endforeach
-            </ul>
-        </div>
+                    </a>
+                </li>
+            @endforeach
+        </ul>
     </div>
+</div>

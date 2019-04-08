@@ -322,12 +322,10 @@ Route::middleware('auth')->group(function () {
     Route::namespace('Leasevaluation')->prefix('lease-valuation','checksubscription')->group(function () {
         Route::get('/', ['as' => 'leasevaluation.index', 'uses' => 'LeaseValuationController@index']);
         Route::get('assets/{category_id}/{capitalized}', ['as' => 'leasevaluation.fetchassets', 'uses' => 'LeaseValuationController@fetchAssets']);
-
         Route::get('valuation-capitalised', ['as' => 'leasevaluation.cap.index', 'uses' => 'LeaseValuationController@capitalised']);
-        Route::get('valuation-capitalised-asset', ['as' => 'leasevaluation.cap.asset', 'uses' => 'LeaseValuationController@assetValuation']);
-
         Route::get('fetch-assets-for-category/{category_id}', ['as' => 'leasevaluation.cap.fetchassets', 'uses' => 'LeaseValuationController@fetchCategoryAsset']);
 
+        Route::get('valuation-capitalised-asset/{id}', ['as' => 'leasevaluation.cap.asset', 'uses' => 'LeaseValuationController@assetValuation']);
     });
 
 
