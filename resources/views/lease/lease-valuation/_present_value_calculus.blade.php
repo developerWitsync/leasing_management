@@ -9,6 +9,8 @@
         <strong>Note!</strong> The below information is generated on the basis of the current inputs.
     </div>
 
+   
+
     <div class="row" style="width: 2000px;">
         <div class="col-md-12">
             <table class="table table-bordered">
@@ -30,10 +32,9 @@
                 @foreach($liability_caclulus_data as $year=>$data)
                     <tr>
                         @php
-                            $rowspan = 1;
                             $key = array_keys($data);
                             $key = $key[0];
-                            $allowed_payments = count($data[$key]) + 1 + 3;
+                            $allowed_payments = count($payments) + 1 + 3;
                         @endphp
                         <td rowspan="{{ $allowed_payments }}">
                             {{ $year }}
@@ -41,11 +42,11 @@
                     </tr>
 
                     @foreach($payments as $payment)
-                        @php
-                            if($payment->paymentDueDates->count() == 0){
-                                continue;
-                            }
-                        @endphp
+                        {{--@php--}}
+                            {{--if($payment->paymentDueDates->count() == 0){--}}
+                                {{--continue;--}}
+                            {{--}--}}
+                        {{--@endphp--}}
                         <tr>
                             <th>{{ $payment->name }}</th>
                             @php
@@ -53,9 +54,9 @@
                             @endphp
                             @foreach($months as $month)
                                 @if(isset($data[$month]) && isset($data[$month]["payment_".$payment->id]))
-                                    <td>{{ $data[$month]["payment_".$payment->id][0]->lease_liability }}</td>
+                                    <td>{{ $data[$month]["payment_".$payment->id]->lease_liability }}</td>
                                     @php
-                                        $sub_total = $sub_total + $data[$month]["payment_".$payment->id][0]->lease_liability;
+                                        $sub_total = $sub_total + $data[$month]["payment_".$payment->id]->lease_liability;
                                     @endphp
                                 @else
                                     <td>&nbsp;</td>
@@ -73,7 +74,7 @@
                             $sub_total = 0;
                         @endphp
                         @foreach($months as $month)
-                            @if(isset($data[$month]['termination']))
+                            @if(isset($data[$month]['termination'][0]))
                                 <td>{{ $data[$month]['termination'][0]->lease_liability }}</td>
                                 @php
                                     $sub_total = $sub_total + $data[$month]['termination'][0]->lease_liability;

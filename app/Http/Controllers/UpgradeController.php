@@ -51,7 +51,7 @@ class UpgradeController extends Controller
                 ->first();
 
             $already_created_leases = Lease::query()->whereIn('business_account_id', getDependentUserIds())
-                ->where('status', '=', '1')
+                //->where('status', '=', '1')
                 ->count();
 
             $plans = SubscriptionPlans::query()->where('is_custom', '=', '0')->get();

@@ -21,7 +21,7 @@ BEGIN
 
     DECLARE is_escalation_applicable char(10);
     DECLARE total_amount_payable decimal(12, 2) DEFAULT 0;
-	declare payment_date date;
+	  declare payment_date date;
     Declare days_diff INT DEFAULT 0;
     Declare lease_liability FLOAT DEFAULT 0;
     declare discount_rate decimal(25,20) default 0;

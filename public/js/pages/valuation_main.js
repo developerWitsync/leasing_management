@@ -189,14 +189,43 @@ $(document).ready(function () {
         }];
     }
 
-    $("#lease_valuation").DataTable({
-        responsive: true,
-        columnDefs : columnDefs,
-        "scrollX": true,
-        "columns": columns,
-        "processing": true,
-        "serverSide": true,
-        "ajax": _data_table_url,
-    });
+    if($("#lease_valuation").lenght ){
+        $("#lease_valuation").DataTable({
+            responsive: true,
+            columnDefs : columnDefs,
+            "scrollX": true,
+            "columns": columns,
+            "processing": true,
+            "serverSide": true,
+            "ajax": _data_table_url,
+        });
+    }
 
 });
+
+
+/**
+ * Code for the new pages for the cards goes here...
+ */
+
+function fetchCategoryAssets(category_id) {
+    if(category_id){
+        $.ajax({
+            url: '/lease-valuation/fetch-assets-for-category/'+category_id,
+            success: function (response) {
+                $('#append_here_'+category_id).html(response);
+            }
+        });
+    }
+}
+
+$(document.body).on('click', '.pagination_changed', function (e) {
+    e.preventDefault();
+    var category_id = $(this).data('category');
+    $.ajax({
+        url: $(this).attr('href'),
+        success: function (response) {
+            $('#append_here_'+category_id).html(response);
+        }
+    });
+})

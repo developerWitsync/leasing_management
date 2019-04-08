@@ -330,6 +330,8 @@ Route::middleware('auth')->group(function () {
         Route::get('valuation-capitalised', ['as' => 'leasevaluation.cap.index', 'uses' => 'LeaseValuationController@capitalised']);
         Route::get('valuation-capitalised-asset', ['as' => 'leasevaluation.cap.asset', 'uses' => 'LeaseValuationController@assetValuation']);
 
+        Route::get('fetch-assets-for-category/{category_id}', ['as' => 'leasevaluation.cap.fetchassets', 'uses' => 'LeaseValuationController@fetchCategoryAsset']);
+
     });
 
 
