@@ -1080,6 +1080,64 @@ input[type=number]::-webkit-outer-spin-button {
 .pagerButton a:hover .img, .pagerButton a.active .img{ display: none;}
 .pagerButton a:hover .over, .pagerButton a.active .over{ display:inline-block;}
 .pagerButton a:hover, .pagerButton a.active{ background: #1b2d5b; }
+.leasingMainHd span {display: inline-block; float: right; font-size: 14px;}
+.leasingMainHd span select {width: 230px; height: 38px; border-radius: 3px; border: 0; appearance: none; -moz-appearance: none; -webkit-appearance: none; 
+    margin-left: 10px; background:#fff url(../assets/images/sel-arrow.png) right 10px center no-repeat; }
+.assetsNameOuter {background: rgba(255, 255, 255, 0.2); border-radius: 10px;}
+
+.assetsTabs {border-bottom: rgba(99, 109, 114, 0.24) solid 1px; padding: 0 30px 0 15px;}
+.assetsTabs li {display: inline-block; padding: 0 15px;}
+.assetsTabs li a{ display: inline-block; font-size: 15px; color: #fff; padding: 20px 0 15px 0; border-bottom: transparent solid 3px;}
+.assetsTabs li a:hover, .assetsTabs li a.active{ text-decoration: none; border-bottom: #0078d4 solid 3px; color: #1b2d5b;}
+.tabBxOuter {padding: 30px;}
+.leaseRafBx {padding: 30px;background: #fff; margin-bottom: 30px;}
+.leaseref_left{ width: 20%; float: left; margin-right: 15px;}
+.leaseref_left span { display: block; font-size: 14px;}
+.leaseref_left strong {font-size: 18px; font-weight: 600; color: #000;}
+.leaseref_left strong i{ display: inline-block; font-size: 16px; padding-right:10px; font-style: normal; }
+.leaseref_left strong i label{ font-weight: 600; }
+.lessernameTop {border-bottom: #d1d5de solid 1px; padding-bottom: 40px; margin-bottom: 40px; padding-top: 30px;}
+.leasernameBx1 {width: 20%;  display: table-cell;}
+.lesserName span {display: block; font-size: 14px; color: #636c72; padding-bottom: 5px;}
+.lesserName strong {color: #292b2c; display: block; font-size: 18px; font-weight: 600; line-height: 25px;}
+.leasernameBx2 {width: 20%; display: table-cell; border-left: #d1d5de solid 1px; padding-left: 20px; min-height: 80px;}
+.locatpurposeBx {width: 20%; float: left;}
+.locatpurposeBx1 {width: 20%; float: left; padding-left: 20px;}
+.locatPurposeOutBx {background: #fff; border-radius: 3px; margin-bottom: 30px;}
+.locatpurposeTop {background: #1b2d5b; border-radius: 3px; padding: 10px 30px; font-size: 15px; color: #fff;}
+.locatpurposeBot {padding: 20px 30px; display: table; width: 100%;}
+.leaserLocation span{ display: block; font-size: 16px; color: #292b2c;}
+.leaseprior span{ display: block; font-size: 16px; min-height: 100px; color: #292b2c; padding-bottom: 20px;}
+.leaseprior span strong{ display: block;}
+.leaseterminatHd{ font-size: 16px; font-weight: 600; }
+.leaserrenewalBx1{width: 33.33%;  display: table-cell;}
+.leaserrenewalBx2{width: 33.33%;  display: table-cell;  border-left: #d1d5de solid 1px; padding-left: 30px; padding-right: 20px;}
+.leasepaymentTble table tr th { background: #f8f8f8; border-bottom: #cccfd9 solid 2px; padding: 10px 10px 10px 20px; text-align: left; line-height: 20px;
+ font-size: 14px; position: relative; color: #636c72; font-weight: 500;}
+.leasepaymentTble table tr th:after{ height: 60%; width: 1px; background: #cccfd9; content: ''; position: absolute; top: 20%; right: 0px; }
+.leasepaymentTble table tr th:last-child:after{display: none;}
+.leasepaymentTble table tr td { font-size: 14px; color: #292b2c; border-bottom: #d1d5de solid 1px; padding: 15px 20px;}
+.leasepaymentTble table tr:last-child td{ border-bottom: 0px; }
+.discountRateOuter {padding: 30px;}
+.discountTop{padding-bottom: 30px;}
+.discountBx {width: 23.5%; float: left; border: #d9d9d9 solid 1px; margin-right: 2%; min-height: 100px; padding: 20px; border-radius: 5px; 
+    box-shadow: #ccc 2px 2px 3px -1px;}
+.discountBx:last-child{ margin-right: 0px; }
+.discountBx span{display: block; font-size: 16px; color: #292b2c;}
+.discountBx strong {display: block; font-size: 16px; color: #292b2c;}
+img{ max-width: 100%; }
+.leasevaluationTble table tr th{ padding:0 ; }
+table.tableInner tr td{ padding: 0px 10px 0px 20px;}
+table.tableInner tr th{ padding: 5px 10px 5px 20px;}
+.blueClr{ color: #117bb8 !important;}
+.locatpurposeTop span {float: right;}
+.presentValue {margin-bottom: 10px;}
+.presentValue li {width: 32%; height: 100px; background: #fff; line-height: 25px; color: #292b2c; padding: 20px; margin-bottom: 20px; border-radius: 5px; float: left; margin-right: 2%;}
+.presentValue li:nth-child(3n){ margin-right: 0px; }
+.presentValue li span {display: block; font-size: 17px;}
+.presentValue li strong {display: block; font-size: 18px;}
+
+
 
 @media(max-width:1170px){
 .landType, .landType2{ font-size: 17px; line-height: 26px; padding: 10px 0; }
