@@ -12,12 +12,12 @@
         <div class="assetsNameOuter">
         	<div class="assetsTabs">
         		<ul>
-        			<li><a href="assetTab1">Overivew</a></li>
-        			<li><a href="assetTab2">Valuation</a></li>
-        			<li><a href="assetTab3">Interest &amp; Depreciation</a></li>
+        			<li><a href="#assetTab1" class="active">Overivew</a></li>
+        			<li><a href="#assetTab2">Valuation</a></li>
+        			<li><a href="#assetTab3">Interest &amp; Depreciation</a></li>
         		</ul>
         	</div>
-        	<div class="tabBxOuter" style="display: none;" id="assetTab1">
+        	<div class="tabBxOuter" style="display: block;" id="assetTab1">
         		<div class="leaseRafBx">
         			<div class="leaserefouter clearfix">
         				<div class="leaseref_left">
@@ -242,7 +242,6 @@
 	        		</div>
 	        	</div>
 
-
 	        	<!--Lease Payments-->
 	        	<div class="locatPurposeOutBx">
 	        		<div class="locatpurposeTop leaseterminatHd">
@@ -419,11 +418,11 @@
 
         	<div class="tabBxOuter" id="assetTab2">
         		<div class="leaseRafBx">
-        			
         			<div class="initialGraphBx">
         				<img src="/assets/images/initialGraph.png">
         			</div>
         		</div>
+
         		<!--Lease Valuation-->
         		<div class="locatPurposeOutBx">
 	        		<div class="locatpurposeTop leaseterminatHd">
@@ -439,7 +438,7 @@
 	        					<th width="54%" style="padding: 0px;">
 	        						<table cellspacing="0" cellpadding="0" border="0" width="100%" class="tableInner">
 	        							<tr>
-	        								<th class="leasevaluaTh2" colspan="5" style="padding-bottom:0px;"><span style="text-align: center; border-bottom: #cccfd9 solid 1px; display: block; padding-bottom: 5px;">Lease Currency - Specify Currency</span></th>
+	        								<th class="leasevaluaTh2" colspan="5" style="padding-bottom:0px; border-bottom: 0px;"><span style="text-align: center; border-bottom: #cccfd9 solid 1px; display: block; padding-bottom: 5px;">Lease Currency - Specify Currency</span></th>
 	        							</tr>
 	        							<tr>
 	        								<th style="border-bottom:none" width="22%">UD Lease Liability</th>
@@ -505,7 +504,52 @@
 	        			</table>
 	        		</div>
 	        	</div>
-	        	
+	        	<!--Initial Lease-->
+        		<div class="locatPurposeOutBx">
+	        		<div class="locatpurposeTop leaseterminatHd">
+	        			Initial Lease Valuation
+	        			<span>Initial Lease Valuation as on  : 20-05-2019</span>
+	        		</div>
+	        		<div class="leasepaymentTble">
+	        			<table cellpadding="0" cellspacing="0" border="0" width="100%">
+	        				<tr>
+	        					<th width="12.5%">Lease Payment <br/> Name</th>
+	        					<th width="12.5%">Effective Lease <br/> Start Date</th>
+	        					<th width="10%">Lease <br/> End Date</th>
+	        					<th width="14%">Undiscounted <br/> Lease Liability (LC)</th>
+	        					<th width="12.5%">PV of Lease <br/> Liability (LC)</th>
+	        					<th width="11%">Exchange <br/> Rate</th>
+	        					<th width="15%">Undiscounted <br/> Lease Liability (SC)</th>
+	        					<th width="12.5%">PV of Lease <br/> Liability (SC)</th>	
+	        				</tr>
+	        				<tr>
+	        					<td colspan="8"><strong>Lease Payment 1</strong></td>
+	        				</tr>
+	        				<tr>
+	        					<td colspan="8"><strong>Lease Payment 2</strong></td>
+	        				</tr>
+	        				<tr>
+	        					<td colspan="8"><strong>Lease Payment 3</strong></td>
+	        				</tr>
+	        				<tr>
+	        					<td colspan="8"><strong>Lease Payment 4</strong></td>
+	        				</tr>
+	        				<tr>
+	        					<td colspan="8"><strong>Termination Penalty</strong></td>
+	        				</tr>
+	        				<tr>
+	        					<td colspan="8"><strong>Residual Value Guarantee</strong></td>
+	        				</tr>
+	        				<tr>
+	        					<td colspan="8"><strong>Purchase Price</strong></td>
+	        				</tr>
+	        				<tr>
+	        					<td colspan="8" class="totalLease"><strong>Total Lease Liability</strong></td>
+	        				</tr>
+	        			</table>
+	        		</div>
+	        	</div>
+
 	        	<!--Present Value-->
 	        	<div class="presentValue">
 	        		<ul class="clearfix">
@@ -536,11 +580,316 @@
 	        		</ul>
 	        	</div>
 
+	        	<!--Initial Lease Valuation-->
+        		<div class="locatPurposeOutBx">
+	        		<div class="locatpurposeTop leaseterminatHd">
+	        			Initial Lease Valuation
+	        			<span>Initial Lease Valuation as on  : 20-05-2019</span>
+	        		</div>
+	        		<div class="leasepaymentTble">
+	        			<table cellpadding="0" cellspacing="0" border="0" width="100%" class="inetialTble">
+	        				<tr>
+	        					<th width="28%"></th>
+	        					<th width="18%">Lease Currency</th>
+	        					<th width="18%">Amount in LC</th>
+	        					<th width="18%">Exchange Rate</th>
+	        					<th width="18%">Amount in Statutory Currency</th>
+	        				</tr>
+	        				<tr>
+	        					<th>Prepaid Lease Payments</th>
+	        					<td>&nbsp;</td>
+	        					<td>&nbsp;</td>
+	        					<td>&nbsp;</td>
+	        					<td>&nbsp;</td>
+	        				</tr>
+	        				<tr>
+	        					<th>Accrued Lease Payments</th>
+	        					<td>&nbsp;</td>
+	        					<td>&nbsp;</td>
+	        					<td>&nbsp;</td>
+	        					<td>&nbsp;</td>
+	        				</tr>
+	        				<tr>
+	        					<th>Outstanding Lease Payments</th>
+	        					<td>&nbsp;</td>
+	        					<td>&nbsp;</td>
+	        					<td>&nbsp;</td>
+	        					<td>&nbsp;</td>
+	        				</tr>
+	        				<tr>
+	        					<th><strong>Total</strong></th>
+	        					<td>&nbsp;</td>
+	        					<td>&nbsp;</td>
+	        					<td>&nbsp;</td>
+	        					<td>&nbsp;</td>
+	        				</tr>
+	        				
+	        			</table>
+	        		</div>
+	        	</div>
 
+				<!--Present Value-->
+	        	<div class="presentValue">
+	        		<ul class="clearfix">
+	        			<li>
+	        				<span>Fair Value</span>
+	        				<strong>INR 240,000</strong>
+	        			</li>
+	        			<li>
+	        				<span>Impairement</span>
+	        				<strong>INR 240,000</strong>
+	        			</li>
+	        		</ul>
+	        	</div>
 
-        </div>
-    </div>
+	        	<!--Subsequent Lease Valuation-->
+        		<div class="locatPurposeOutBx">
+	        		<div class="locatpurposeTop leaseterminatHd">
+	        			Subsequent Lease Valuation
+	        			<span><i>Initial Lease Valuation as on  : 20-05-2019</i> Subsequent Reference No : 2596</span>
+	        		</div>
+	        		<div class="leasepaymentTble">
+	        			<table cellpadding="0" cellspacing="0" border="0" width="100%">
+	        				<tr>
+	        					<th width="12.5%">Lease Payment <br/> Name</th>
+	        					<th width="12.5%">Effective <br/>Subsequent Date</th>
+	        					<th width="10%">Lease <br/> End Date</th>
+	        					<th width="14%">Undiscounted Lease <br/> Liability (LC)</th>
+	        					<th width="12.5%">PV of Lease<br/> Liability (LC)</th>
+	        					<th width="11%">Exchange <br/> Rate</th>
+	        					<th width="15%">Undiscounted Lease <br/> Liability (SC)</th>
+	        					<th width="11.5%">PV of Lease <br/> Liability (SC)</th>	
+	        				</tr>
+	        				<tr>
+	        					<td colspan="8"><strong>Lease Payment 1</strong></td>
+	        				</tr>
+	        				<tr>
+	        					<td colspan="8"><strong>Lease Payment 2</strong></td>
+	        				</tr>
+	        				<tr>
+	        					<td colspan="8"><strong>Lease Payment 3</strong></td>
+	        				</tr>
+	        				<tr>
+	        					<td colspan="8"><strong>Lease Payment 4</strong></td>
+	        				</tr>
+	        				<tr>
+	        					<td colspan="8"><strong>Termination Penalty</strong></td>
+	        				</tr>
+	        				<tr>
+	        					<td colspan="8"><strong>Residual Value Guarantee</strong></td>
+	        				</tr>
+	        				<tr>
+	        					<td colspan="8"><strong>Purchase Price</strong></td>
+	        				</tr>
+	        				<tr>
+	        					<td colspan="8" class="totalLease"><strong>Total Lease Liability</strong></td>
+	        				</tr>
+	        			</table>
+	        		</div>
+	        	</div>
+	        	<!--Present Value-->
+	        	<div class="presentValue">
+	        		<ul class="clearfix">
+	        			<li>
+	        				<span>Present Value of Lease Liability</span>
+	        				<strong>INR 240,000</strong>
+	        			</li>
+	        			<li>
+	        				<span>Addition / Deduction from Lease Asset</span>
+	        				<strong>INR 1,227</strong>
+	        			</li>
+	        			<li>
+	        				<span>Value of Lease Asset</span>
+	        				<strong>INR 1,284</strong>
+	        			</li>
+	        			<li>
+	        				<span>Fair Value</span>
+	        				<strong>INR 240,000</strong>
+	        			</li>
+	        			<li>
+	        				<span>Impairement</span>
+	        				<strong>INR 240,000</strong>
+	        			</li>
+	        		</ul>
+	        	</div>
+        	</div>
+
+        	<div class="tabBxOuter" id="assetTab3">
+        		<div class="leaseRafBx">
+        			<div class="initialGraphBx">
+        				<img src="/assets/images/initialGraph2.png">
+        			</div>
+        		</div>
+
+        		<!--Lease Valuation-->
+        		<div class="locatPurposeOutBx">
+	        		<div class="locatpurposeTop leaseterminatHd">
+	        			Lease Interest Expense
+	        		</div>
+	        		<div class="leasepaymentTble">
+	        			<table cellpadding="0" cellspacing="0" border="0" width="100%">
+	        				<tr>
+	        					<th width="8.5%">Year</th>
+	        					<th width="14.5%">
+	        						<span style="border-bottom:2px dashed #666; padding: 3px 0; display: block;">Lease Start Date</span>
+	        						<span style="border-bottom:2px dashed #666; padding: 3px 0; display: block;">Lease Payment Dates</span>
+	        						<span>Month End Dates</span>
+	        					</th>
+	        					<th width="10%">Number of Days</th>
+	        					<th width="12%">Effective Daily <br/> Discount Rate</th>
+	        					<th width="51%" style="padding: 0px;">
+	        						<table cellspacing="0" cellpadding="0" border="0" width="100%" class="tableInner">
+	        							<tr>
+	        								<th class="leasevaluaTh2" colspan="5" style="padding-bottom:0px; border-bottom: 0px;"><span style="text-align: center; border-bottom: #cccfd9 solid 1px; display: block; padding-bottom: 5px;">Lease Currency - Specify Currency</span></th>
+	        							</tr>
+	        							<tr>
+	        								<th style="border-bottom:none; text-align: center;" width="25%">Opening <br/> Lease Liability </th>
+				        					<th style="border-bottom:none; text-align: center;" width="27%">Monthly <br/> Interest Expense</th>
+				        					<th style="border-bottom:none; text-align: center;" width="23%">Lease <br/> Payments</th>
+				        					<th style="border-bottom:none; text-align: center;" width="25%">Closing <br/> Lease Liability</th>
+	        							</tr>
+	        						</table>
+	        					</th>
+	        				</tr>
+	        				<tr bgcolor="#117bb8">
+	        					<td colspan="5" style="padding: 0;">
+		        					<table cellpadding="0" cellspacing="0" border="0" class="categoryTble">
+		        						<tr>
+			        						<td>Part 1 of 4:</td>
+			        						<td colspan="4">Initial Valuation Basis</td>
+			        					</tr>
+			        				</table>
+		        				</td>
+	        				</tr>
+	        				<tr>
+	        					<td>2019</td>
+	        					<td>Lease Start Date</td>
+	        					<td></td>
+	        					<td></td>
+	        					<td style="padding: 0px;">
+	        						<table cellspacing="0" cellpadding="0" border="0" width="100%" class="tableInner">
+	        							<tr>
+	        								<td width="25%" class="blueClr" align="center">PV of Lease Liability </td>
+	        								<td width="25%" class="blueClr" align="center">= PV*(((1+EDD) ^Days)-1) </td>
+	        								<td width="25%" align="center">Total Lease Payment Amount </td>
+	        								<td width="25%" class="blueClr" align="center">CLL1 = PV (+) <br/> INTEREST (-) LP </td>
+	        							</tr>
+	        						</table>
+	        					</td>
+	        				</tr>
+	        				<tr>
+	        					<td>2019</td>
+	        					<td>Lease Start Date</td>
+	        					<td></td>
+	        					<td></td>
+	        					<td style="padding: 0px;">
+	        						<table cellspacing="0" cellpadding="0" border="0" width="100%" class="tableInner">
+	        							<tr>
+	        								<td width="25%" class="blueClr" align="center">PV of Lease Liability </td>
+	        								<td width="25%" class="blueClr" align="center">= PV*(((1+EDD) ^Days)-1) </td>
+	        								<td width="25%" align="center">Total Lease Payment Amount </td>
+	        								<td width="25%" class="blueClr" align="center">CLL1 = PV (+) <br/> INTEREST (-) LP </td>
+	        							</tr>
+	        						</table>
+	        					</td>
+	        				</tr>
+	        				<tr>
+	        					<td>2019</td>
+	        					<td>Lease Start Date</td>
+	        					<td></td>
+	        					<td></td>
+	        					<td style="padding: 0px;">
+	        						<table cellspacing="0" cellpadding="0" border="0" width="100%" class="tableInner">
+	        							<tr>
+	        								<td width="25%" class="blueClr" align="center">PV of Lease Liability </td>
+	        								<td width="25%" class="blueClr" align="center">= PV*(((1+EDD) ^Days)-1) </td>
+	        								<td width="25%" align="center">Total Lease Payment Amount </td>
+	        								<td width="25%" class="blueClr" align="center">CLL1 = PV (+) <br/> INTEREST (-) LP </td>
+	        							</tr>
+	        						</table>
+	        					</td>
+	        				</tr>
+	        				<tr bgcolor="#117bb8">
+	        					<td colspan="5" style="padding: 0;">
+		        					<table cellpadding="0" cellspacing="0" border="0" class="categoryTble">
+		        						<tr>
+			        						<td>Part 1 of 4:</td>
+			        						<td>Subsequent Lease Valuation</td>
+			        						<td>Subsequent Reference# 01</td>
+			        						<td>Effective from</td>
+			        						<td>DD/MM/YYYY</td>
+			        					</tr>
+			        				</table>
+		        				</td>
+	        				</tr>
+	        				<tr>
+	        					<td>2019</td>
+	        					<td>Lease Start Date</td>
+	        					<td></td>
+	        					<td></td>
+	        					<td style="padding: 0px;">
+	        						<table cellspacing="0" cellpadding="0" border="0" width="100%" class="tableInner">
+	        							<tr>
+	        								<td width="25%" class="blueClr" align="center">PV of Lease Liability </td>
+	        								<td width="25%" class="blueClr" align="center">= PV*(((1+EDD) ^Days)-1) </td>
+	        								<td width="25%" align="center">Total Lease Payment Amount </td>
+	        								<td width="25%" class="blueClr" align="center">CLL1 = PV (+) <br/> INTEREST (-) LP </td>
+	        							</tr>
+	        						</table>
+	        					</td>
+	        				</tr>
+	        				<tr>
+	        					<td>2019</td>
+	        					<td>Lease Start Date</td>
+	        					<td></td>
+	        					<td></td>
+	        					<td style="padding: 0px;">
+	        						<table cellspacing="0" cellpadding="0" border="0" width="100%" class="tableInner">
+	        							<tr>
+	        								<td width="25%" class="blueClr" align="center">PV of Lease Liability </td>
+	        								<td width="25%" class="blueClr" align="center">= PV*(((1+EDD) ^Days)-1) </td>
+	        								<td width="25%" align="center">Total Lease Payment Amount </td>
+	        								<td width="25%" class="blueClr" align="center">CLL1 = PV (+) <br/> INTEREST (-) LP </td>
+	        							</tr>
+	        						</table>
+	        					</td>
+	        				</tr>
+	        				<tr>
+	        					<td>2019</td>
+	        					<td>Lease Start Date</td>
+	        					<td></td>
+	        					<td></td>
+	        					<td style="padding: 0px;">
+	        						<table cellspacing="0" cellpadding="0" border="0" width="100%" class="tableInner">
+	        							<tr>
+	        								<td width="25%" class="blueClr" align="center">PV of Lease Liability </td>
+	        								<td width="25%" class="blueClr" align="center">= PV*(((1+EDD) ^Days)-1) </td>
+	        								<td width="25%" align="center">Total Lease Payment Amount </td>
+	        								<td width="25%" class="blueClr" align="center">CLL1 = PV (+) <br/> INTEREST (-) LP </td>
+	        							</tr>
+	        						</table>
+	        					</td>
+	        				</tr>
+	        			</table>
+	        		</div>
+	        	</div>
+        	</div>
+    	</div>
+	</div>
+
 @endsection
 @section('footer-script')
-
+	
+<script>
+	$(document).ready(function(){
+		$(".assetsTabs ul li a").on("click", function(e){
+			e.preventDefault();
+			var webend = $(this).attr("href");
+			$(".tabBxOuter").hide(0);
+			$(webend).show(0);
+			$(".assetsTabs ul li a").removeClass("active");
+			$(this).addClass("active");
+		});
+	});
+</script>
 @endsection
