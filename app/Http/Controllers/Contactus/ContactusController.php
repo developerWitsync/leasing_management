@@ -41,6 +41,7 @@ class ContactusController extends Controller
             $contactus = ContactUs::create($request->except("_token"));
             if ($contactus) {
                 \Mail::to($contactus)->queue(new ContactUsQueryFrom($contactus));
+                \Mail::to(env('INFO_EMAIL'))->queue(new ContactUsQueryFrom($contactus));
                 return redirect()->route('contactus')->with('success', 'Thank you for contacting us. We will get back to you very soon.');
             }
         }
@@ -77,6 +78,7 @@ class ContactusController extends Controller
                 $contactus = ContactUs::create($request->except("_token"));
                 if ($contactus) {
                     \Mail::to($contactus)->queue(new ContactUsQueryFrom($contactus));
+                    \Mail::to(env('INFO_EMAIL'))->queue(new ContactUsQueryFrom($contactus));
                     return response()->json([
                         'status' => true,
                         'message' => 'Thanks for connecting with us. We will get back to you very soon.'
