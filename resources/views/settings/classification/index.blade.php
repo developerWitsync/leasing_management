@@ -26,116 +26,116 @@
 
             <div class="">
                 <div role="tabpanel" class="tab-pane active">
-                    <div class="panel panel-info">
-                        <div class="panel-heading">Percentage Rate Types</div>
-                        <div class="panel-body settingTble">
-                            <table class="table table-condensed">
-                                <thead>
-                                <tr>
-                                    <th width="80px">Sr No.</th>
-                                    <th>Title</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($rates as $key =>$rate)
-                                    <tr>
-                                        <td>{{ $key + 1 }}</td>
-                                        <td>{{ $rate->title }}</td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    {{--<div class="panel panel-info">--}}
+                        {{--<div class="panel-heading">Percentage Rate Types</div>--}}
+                        {{--<div class="panel-body settingTble">--}}
+                            {{--<table class="table table-condensed">--}}
+                                {{--<thead>--}}
+                                {{--<tr>--}}
+                                    {{--<th width="80px">Sr No.</th>--}}
+                                    {{--<th>Title</th>--}}
+                                {{--</tr>--}}
+                                {{--</thead>--}}
+                                {{--<tbody>--}}
+                                {{--@foreach($rates as $key =>$rate)--}}
+                                    {{--<tr>--}}
+                                        {{--<td>{{ $key + 1 }}</td>--}}
+                                        {{--<td>{{ $rate->title }}</td>--}}
+                                    {{--</tr>--}}
+                                {{--@endforeach--}}
+                                {{--</tbody>--}}
+                            {{--</table>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
 
-                    <div class="panel panel-info">
-                        <div class="panel-heading">Lease Contract Classification</div>
-                        <div class="panel-body settingTble">
-                            <table class="table table-condensed">
-                                <thead>
-                                <tr>
-                                    <th width="80px">Sr No.</th>
-                                    <th>Title</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($contract_classifications as $key =>$classification)
-                                    <tr>
-                                        <td>{{ $key + 1 }}</td>
-                                        <td>{{ $classification->title }}</td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    {{--<div class="panel panel-info">--}}
+                        {{--<div class="panel-heading">Lease Contract Classification</div>--}}
+                        {{--<div class="panel-body settingTble">--}}
+                            {{--<table class="table table-condensed">--}}
+                                {{--<thead>--}}
+                                {{--<tr>--}}
+                                    {{--<th width="80px">Sr No.</th>--}}
+                                    {{--<th>Title</th>--}}
+                                {{--</tr>--}}
+                                {{--</thead>--}}
+                                {{--<tbody>--}}
+                                {{--@foreach($contract_classifications as $key =>$classification)--}}
+                                    {{--<tr>--}}
+                                        {{--<td>{{ $key + 1 }}</td>--}}
+                                        {{--<td>{{ $classification->title }}</td>--}}
+                                    {{--</tr>--}}
+                                {{--@endforeach--}}
+                                {{--</tbody>--}}
+                            {{--</table>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
 
-                    <div class="panel panel-info">
-                        <div class="panel-heading">Use of Lease Asset</div>
-                        <div class="panel-body settingTble">
-                            <table class="table table-condensed">
-                                <thead>
-                                <tr>
-                                    <th width="80px">Sr No.</th>
-                                    <th>Title</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($lease_asset_use as $key =>$value)
-                                    <tr>
-                                        <td>{{ $key + 1 }}</td>
-                                        <td>{{ $value->title }}</td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    {{--<div class="panel panel-info">--}}
+                        {{--<div class="panel-heading">Use of Lease Asset</div>--}}
+                        {{--<div class="panel-body settingTble">--}}
+                            {{--<table class="table table-condensed">--}}
+                                {{--<thead>--}}
+                                {{--<tr>--}}
+                                    {{--<th width="80px">Sr No.</th>--}}
+                                    {{--<th>Title</th>--}}
+                                {{--</tr>--}}
+                                {{--</thead>--}}
+                                {{--<tbody>--}}
+                                {{--@foreach($lease_asset_use as $key =>$value)--}}
+                                    {{--<tr>--}}
+                                        {{--<td>{{ $key + 1 }}</td>--}}
+                                        {{--<td>{{ $value->title }}</td>--}}
+                                    {{--</tr>--}}
+                                {{--@endforeach--}}
+                                {{--</tbody>--}}
+                            {{--</table>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
 
-                    <div class="panel panel-info">
-                        <div class="panel-heading">Components of Lease Payments</div>
-                        <div class="panel-body settingTble">
-                            <table class="table table-condensed">
-                                <thead>
-                                <tr>
-                                    <th width="80px">Sr No.</th>
-                                    <th>Title</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($lease_payment_component as $key =>$value)
-                                    <tr>
-                                        <td>{{ $key + 1 }}</td>
-                                        <td>{{ $value->title }}</td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                                Percentage Rate Types
-                            </table>
-                        </div>
-                    </div>
+                    {{--<div class="panel panel-info">--}}
+                        {{--<div class="panel-heading">Components of Lease Payments</div>--}}
+                        {{--<div class="panel-body settingTble">--}}
+                            {{--<table class="table table-condensed">--}}
+                                {{--<thead>--}}
+                                {{--<tr>--}}
+                                    {{--<th width="80px">Sr No.</th>--}}
+                                    {{--<th>Title</th>--}}
+                                {{--</tr>--}}
+                                {{--</thead>--}}
+                                {{--<tbody>--}}
+                                {{--@foreach($lease_payment_component as $key =>$value)--}}
+                                    {{--<tr>--}}
+                                        {{--<td>{{ $key + 1 }}</td>--}}
+                                        {{--<td>{{ $value->title }}</td>--}}
+                                    {{--</tr>--}}
+                                {{--@endforeach--}}
+                                {{--</tbody>--}}
+                                {{--Percentage Rate Types--}}
+                            {{--</table>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
 
-                    <div class="panel panel-info">
-                        <div class="panel-heading">Nature of Lease Payments</div>
-                        <div class="panel-body settingTble">
-                            <table class="table table-condensed">
-                                <thead>
-                                <tr>
-                                    <th width="80px">Sr No.</th>
-                                    <th>Title</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($lease_payment_nature as $key =>$value)
-                                    <tr>
-                                        <td>{{ $key + 1 }}</td>
-                                        <td>{{ $value->title }}</td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    {{--<div class="panel panel-info">--}}
+                        {{--<div class="panel-heading">Nature of Lease Payments</div>--}}
+                        {{--<div class="panel-body settingTble">--}}
+                            {{--<table class="table table-condensed">--}}
+                                {{--<thead>--}}
+                                {{--<tr>--}}
+                                    {{--<th width="80px">Sr No.</th>--}}
+                                    {{--<th>Title</th>--}}
+                                {{--</tr>--}}
+                                {{--</thead>--}}
+                                {{--<tbody>--}}
+                                {{--@foreach($lease_payment_nature as $key =>$value)--}}
+                                    {{--<tr>--}}
+                                        {{--<td>{{ $key + 1 }}</td>--}}
+                                        {{--<td>{{ $value->title }}</td>--}}
+                                    {{--</tr>--}}
+                                {{--@endforeach--}}
+                                {{--</tbody>--}}
+                            {{--</table>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
 
 
                     <div class="panel panel-info">
@@ -356,129 +356,129 @@
                         </div>
                     </div>
 
-                    <div class="panel panel-info">
-                        <div class="panel-heading">Contract Escalation Basis</div>
-                        <div class="panel-body settingTble">
-                            <table class="table table-condensed">
-                                <thead>
-                                <tr>
-                                    <th width="80px">Sr No.</th>
-                                    <th>Title</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($contract_escalation_basis as $key =>$value)
-                                    <tr>
-                                        <td>{{ $key + 1 }}</td>
-                                        <td>{{ $value->title }}</td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    {{--<div class="panel panel-info">--}}
+                        {{--<div class="panel-heading">Contract Escalation Basis</div>--}}
+                        {{--<div class="panel-body settingTble">--}}
+                            {{--<table class="table table-condensed">--}}
+                                {{--<thead>--}}
+                                {{--<tr>--}}
+                                    {{--<th width="80px">Sr No.</th>--}}
+                                    {{--<th>Title</th>--}}
+                                {{--</tr>--}}
+                                {{--</thead>--}}
+                                {{--<tbody>--}}
+                                {{--@foreach($contract_escalation_basis as $key =>$value)--}}
+                                    {{--<tr>--}}
+                                        {{--<td>{{ $key + 1 }}</td>--}}
+                                        {{--<td>{{ $value->title }}</td>--}}
+                                    {{--</tr>--}}
+                                {{--@endforeach--}}
+                                {{--</tbody>--}}
+                            {{--</table>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
 
-                    <div class="panel panel-info">
-                        <div class="panel-heading">Lease Contract Duration</div>
-                        <div class="panel-body settingTble">
-                            <table class="table table-condensed">
-                                <thead>
-                                <tr>
-                                    <th width="80px">Sr No.</th>
-                                    <th>Time Range</th>
-                                    <th>Title</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($lease_contract as $key =>$value)
-                                    <tr>
-                                        <td>{{ $key + 1 }}</td>
-                                        <td>{{ $value->month_range_description }}</td>
-                                        <td>{{ $value->title }}</td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    {{--<div class="panel panel-info">--}}
+                        {{--<div class="panel-heading">Lease Contract Duration</div>--}}
+                        {{--<div class="panel-body settingTble">--}}
+                            {{--<table class="table table-condensed">--}}
+                                {{--<thead>--}}
+                                {{--<tr>--}}
+                                    {{--<th width="80px">Sr No.</th>--}}
+                                    {{--<th>Time Range</th>--}}
+                                    {{--<th>Title</th>--}}
+                                {{--</tr>--}}
+                                {{--</thead>--}}
+                                {{--<tbody>--}}
+                                {{--@foreach($lease_contract as $key =>$value)--}}
+                                    {{--<tr>--}}
+                                        {{--<td>{{ $key + 1 }}</td>--}}
+                                        {{--<td>{{ $value->month_range_description }}</td>--}}
+                                        {{--<td>{{ $value->title }}</td>--}}
+                                    {{--</tr>--}}
+                                {{--@endforeach--}}
+                                {{--</tbody>--}}
+                            {{--</table>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
 
-                    <div class="panel panel-info">
-                        <div class="panel-heading">Leases Excluded from Transitional Valuation</div>
-                        <div class="panel-body settingTble">
-                            <table class="table table-condensed">
-                                <thead>
-                                <tr>
-                                    <th width="80px">Sr No.</th>
-                                    <th>Purpose</th>
-                                    <th>Title</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($lease_excluded_from_transitional_valuation  as $key =>$value)
-                                    <tr>
-                                        <td>{{ $key + 1 }}</td>
-                                        <td>
-                                            @if($value->value_for == 'lease_asset_level')
-                                                Underlying Lease Asset Level
-                                            @else
-                                                Lease Payments
-                                            @endif
-                                        </td>
-                                        <td>{{ $value->title }}</td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    {{--<div class="panel panel-info">--}}
+                        {{--<div class="panel-heading">Leases Excluded from Transitional Valuation</div>--}}
+                        {{--<div class="panel-body settingTble">--}}
+                            {{--<table class="table table-condensed">--}}
+                                {{--<thead>--}}
+                                {{--<tr>--}}
+                                    {{--<th width="80px">Sr No.</th>--}}
+                                    {{--<th>Purpose</th>--}}
+                                    {{--<th>Title</th>--}}
+                                {{--</tr>--}}
+                                {{--</thead>--}}
+                                {{--<tbody>--}}
+                                {{--@foreach($lease_excluded_from_transitional_valuation  as $key =>$value)--}}
+                                    {{--<tr>--}}
+                                        {{--<td>{{ $key + 1 }}</td>--}}
+                                        {{--<td>--}}
+                                            {{--@if($value->value_for == 'lease_asset_level')--}}
+                                                {{--Underlying Lease Asset Level--}}
+                                            {{--@else--}}
+                                                {{--Lease Payments--}}
+                                            {{--@endif--}}
+                                        {{--</td>--}}
+                                        {{--<td>{{ $value->title }}</td>--}}
+                                    {{--</tr>--}}
+                                {{--@endforeach--}}
+                                {{--</tbody>--}}
+                            {{--</table>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
 
-                    @foreach($lease_accounting_treatment as $year=>$treatments)
-                        <div class="panel panel-info">
-                            <div class="panel-heading">Lease Accounting Treatment Upto {{ $year }}</div>
-                            <div class="panel-body settingTble">
-                                <table class="table table-condensed">
-                                    <thead>
-                                    <tr>
-                                        <th width="80px">Sr No.</th>
-                                        <th>Title</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    @foreach($treatments  as $key => $value)
-                                        <tr>
-                                            <td>{{ $key + 1 }}</td>
-                                            <td>{{ $value['title']}}</td>
-                                        </tr>
-                                    @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    @endforeach
+                    {{--@foreach($lease_accounting_treatment as $year=>$treatments)--}}
+                        {{--<div class="panel panel-info">--}}
+                            {{--<div class="panel-heading">Lease Accounting Treatment Upto {{ $year }}</div>--}}
+                            {{--<div class="panel-body settingTble">--}}
+                                {{--<table class="table table-condensed">--}}
+                                    {{--<thead>--}}
+                                    {{--<tr>--}}
+                                        {{--<th width="80px">Sr No.</th>--}}
+                                        {{--<th>Title</th>--}}
+                                    {{--</tr>--}}
+                                    {{--</thead>--}}
+                                    {{--<tbody>--}}
+                                    {{--@foreach($treatments  as $key => $value)--}}
+                                        {{--<tr>--}}
+                                            {{--<td>{{ $key + 1 }}</td>--}}
+                                            {{--<td>{{ $value['title']}}</td>--}}
+                                        {{--</tr>--}}
+                                    {{--@endforeach--}}
+                                    {{--</tbody>--}}
+                                {{--</table>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                    {{--@endforeach--}}
 
-                    <div class="panel panel-info">
-                        <div class="panel-heading">
-                            Number of Lease Payments
+                    {{--<div class="panel panel-info">--}}
+                        {{--<div class="panel-heading">--}}
+                            {{--Number of Lease Payments--}}
                             {{--<span>--}}
                             {{--<a href="javascript:void(0);" class="btn btn-sm btn-primary pull-right add_more" data-form="add_more_no_of_lease_payments">Add More</a>--}}
                             {{--</span>--}}
-                        </div>
-                        <div class="panel-body settingTble">
-                            <table class="table table-condensed">
-                                <thead>
-                                <tr>
-                                    <th width="80px">Sr No.</th>
-                                    <th>Number</th>
+                        {{--</div>--}}
+                        {{--<div class="panel-body settingTble">--}}
+                            {{--<table class="table table-condensed">--}}
+                                {{--<thead>--}}
+                                {{--<tr>--}}
+                                    {{--<th width="80px">Sr No.</th>--}}
+                                    {{--<th>Number</th>--}}
                                     {{--<th width="120px">Action</th>--}}
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($number_of_lease_payments as $key => $value)
-                                    <tr>
-                                        <td>{{ $key + 1 }}</td>
-                                        <td class="title">
-                                            {{ $value->number }}
-                                        </td>
+                                {{--</tr>--}}
+                                {{--</thead>--}}
+                                {{--<tbody>--}}
+                                {{--@foreach($number_of_lease_payments as $key => $value)--}}
+                                    {{--<tr>--}}
+                                        {{--<td>{{ $key + 1 }}</td>--}}
+                                        {{--<td class="title">--}}
+                                            {{--{{ $value->number }}--}}
+                                        {{--</td>--}}
                                         {{--<td>--}}
 
                                         {{--<a data-href="{{ route('settings.leaseclassification.editleasepaymentsnumber', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-success edit_table_setting">--}}
@@ -487,84 +487,84 @@
 
                                         {{--<a data-href="{{ route('settings.leaseclassification.deleteleasepaymentsnumber', ['id' => $value->id]) }}" href="javascript:;" class="btn btn-sm btn-danger delete_settings"><i class="fa fa-trash-o"></i></a>--}}
                                         {{--</td>--}}
-                                    </tr>
-                                @endforeach
-                                <tr style=" {{ $errors->has('lease_payments_no') ? ' has-error' : 'display: none' }}"
-                                    class="add_more_no_of_lease_payments">
-                                    <td>{{ count($number_of_lease_payments) + 1 }}</td>
-                                    <td>
-                                        <form action="{{ route('settings.leaseclassification.addleasepaymentsnumber') }}"
-                                              method="POST" class="add_more_no_of_lease_payments_form">
-                                            {{ csrf_field() }}
-                                            <div class="form-group{{ $errors->has('lease_payments_no') ? ' has-error' : '' }}">
-                                                <input type="text" value="{{ old('lease_payments_no') }}"
-                                                       name="lease_payments_no" placeholder="Number"
-                                                       class="form-control {{ $errors->has('lease_payments_no') ? ' has-error' : '' }}"/>
-                                                @if ($errors->has('lease_payments_no'))
-                                                    <span class="help-block">
-                                                            <strong>{{ $errors->first('lease_payments_no') }}</strong>
-                                                        </span>
-                                                @endif
-                                            </div>
-                                        </form>
-                                    </td>
-                                    <td>
-                                        <button type="button"
-                                                onclick="javascript:$('.add_more_no_of_lease_payments_form').submit();"
-                                                class="btn btn-sm btn-success" title="Save"><i
-                                                    class="fa fa-check-square"></i></button>
-                                        <a href="javascript:;" class="btn btn-sm btn-danger add_more"
-                                           data-form="add_more_no_of_lease_payments" title="Cancel"><i
-                                                    class="fa fa-times"></i></a>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
+                                    {{--</tr>--}}
+                                {{--@endforeach--}}
+                                {{--<tr style=" {{ $errors->has('lease_payments_no') ? ' has-error' : 'display: none' }}"--}}
+                                    {{--class="add_more_no_of_lease_payments">--}}
+                                    {{--<td>{{ count($number_of_lease_payments) + 1 }}</td>--}}
+                                    {{--<td>--}}
+                                        {{--<form action="{{ route('settings.leaseclassification.addleasepaymentsnumber') }}"--}}
+                                              {{--method="POST" class="add_more_no_of_lease_payments_form">--}}
+                                            {{--{{ csrf_field() }}--}}
+                                            {{--<div class="form-group{{ $errors->has('lease_payments_no') ? ' has-error' : '' }}">--}}
+                                                {{--<input type="text" value="{{ old('lease_payments_no') }}"--}}
+                                                       {{--name="lease_payments_no" placeholder="Number"--}}
+                                                       {{--class="form-control {{ $errors->has('lease_payments_no') ? ' has-error' : '' }}"/>--}}
+                                                {{--@if ($errors->has('lease_payments_no'))--}}
+                                                    {{--<span class="help-block">--}}
+                                                            {{--<strong>{{ $errors->first('lease_payments_no') }}</strong>--}}
+                                                        {{--</span>--}}
+                                                {{--@endif--}}
+                                            {{--</div>--}}
+                                        {{--</form>--}}
+                                    {{--</td>--}}
+                                    {{--<td>--}}
+                                        {{--<button type="button"--}}
+                                                {{--onclick="javascript:$('.add_more_no_of_lease_payments_form').submit();"--}}
+                                                {{--class="btn btn-sm btn-success" title="Save"><i--}}
+                                                    {{--class="fa fa-check-square"></i></button>--}}
+                                        {{--<a href="javascript:;" class="btn btn-sm btn-danger add_more"--}}
+                                           {{--data-form="add_more_no_of_lease_payments" title="Cancel"><i--}}
+                                                    {{--class="fa fa-times"></i></a>--}}
+                                    {{--</td>--}}
+                                {{--</tr>--}}
+                            {{--</table>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
 
-                    <div class="panel panel-info">
-                        <div class="panel-heading">Lease Payment Interval</div>
-                        <div class="panel-body settingTble">
-                            <table class="table table-condensed">
-                                <thead>
-                                <tr>
-                                    <th width="80px">Sr No.</th>
-                                    <th>Title</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($lease_payment_interval  as $key => $value)
-                                    <tr>
-                                        <td>{{ $key + 1 }}</td>
-                                        <td>{{ $value->title}}</td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    {{--<div class="panel panel-info">--}}
+                        {{--<div class="panel-heading">Lease Payment Interval</div>--}}
+                        {{--<div class="panel-body settingTble">--}}
+                            {{--<table class="table table-condensed">--}}
+                                {{--<thead>--}}
+                                {{--<tr>--}}
+                                    {{--<th width="80px">Sr No.</th>--}}
+                                    {{--<th>Title</th>--}}
+                                {{--</tr>--}}
+                                {{--</thead>--}}
+                                {{--<tbody>--}}
+                                {{--@foreach($lease_payment_interval  as $key => $value)--}}
+                                    {{--<tr>--}}
+                                        {{--<td>{{ $key + 1 }}</td>--}}
+                                        {{--<td>{{ $value->title}}</td>--}}
+                                    {{--</tr>--}}
+                                {{--@endforeach--}}
+                                {{--</tbody>--}}
+                            {{--</table>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
 
-                    <div class="panel panel-info">
-                        <div class="panel-heading">Lease Payments Frequency</div>
-                        <div class="panel-body settingTble">
-                            <table class="table table-condensed">
-                                <thead>
-                                <tr>
-                                    <th width="80px">Sr No.</th>
-                                    <th>Title</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($lease_payments_frequency  as $key => $value)
-                                    <tr>
-                                        <td>{{ $key + 1 }}</td>
-                                        <td>{{ $value->title}}</td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    {{--<div class="panel panel-info">--}}
+                        {{--<div class="panel-heading">Lease Payments Frequency</div>--}}
+                        {{--<div class="panel-body settingTble">--}}
+                            {{--<table class="table table-condensed">--}}
+                                {{--<thead>--}}
+                                {{--<tr>--}}
+                                    {{--<th width="80px">Sr No.</th>--}}
+                                    {{--<th>Title</th>--}}
+                                {{--</tr>--}}
+                                {{--</thead>--}}
+                                {{--<tbody>--}}
+                                {{--@foreach($lease_payments_frequency  as $key => $value)--}}
+                                    {{--<tr>--}}
+                                        {{--<td>{{ $key + 1 }}</td>--}}
+                                        {{--<td>{{ $value->title}}</td>--}}
+                                    {{--</tr>--}}
+                                {{--@endforeach--}}
+                                {{--</tbody>--}}
+                            {{--</table>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
 
                     <div class="panel panel-info">
                         <div class="panel-heading">
@@ -636,71 +636,71 @@
                         </div>
                     </div>
 
-                    <div class="panel panel-info">
-                        <div class="panel-heading">Escalation Clause Applicable on Lease Payments</div>
-                        <div class="panel-body settingTble">
-                            <table class="table table-condensed">
-                                <thead>
-                                <tr>
-                                    <th width="80px">Sr No.</th>
-                                    <th>Title</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($lease_payment_escalation_clause  as $key => $value)
-                                    <tr>
-                                        <td>{{ $key + 1 }}</td>
-                                        <td>{{ $value->title}}</td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    {{--<div class="panel panel-info">--}}
+                        {{--<div class="panel-heading">Escalation Clause Applicable on Lease Payments</div>--}}
+                        {{--<div class="panel-body settingTble">--}}
+                            {{--<table class="table table-condensed">--}}
+                                {{--<thead>--}}
+                                {{--<tr>--}}
+                                    {{--<th width="80px">Sr No.</th>--}}
+                                    {{--<th>Title</th>--}}
+                                {{--</tr>--}}
+                                {{--</thead>--}}
+                                {{--<tbody>--}}
+                                {{--@foreach($lease_payment_escalation_clause  as $key => $value)--}}
+                                    {{--<tr>--}}
+                                        {{--<td>{{ $key + 1 }}</td>--}}
+                                        {{--<td>{{ $value->title}}</td>--}}
+                                    {{--</tr>--}}
+                                {{--@endforeach--}}
+                                {{--</tbody>--}}
+                            {{--</table>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
 
-                    <div class="panel panel-info">
-                        <div class="panel-heading">Escalation Amount Calculated On</div>
-                        <div class="panel-body settingTble">
-                            <table class="table table-condensed">
-                                <thead>
-                                <tr>
-                                    <th width="80px">Sr No.</th>
-                                    <th>Title</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($escalation_amount_calculated_on  as $key => $value)
-                                    <tr>
-                                        <td>{{ $key + 1 }}</td>
-                                        <td>{{ $value->title}}</td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    {{--<div class="panel panel-info">--}}
+                        {{--<div class="panel-heading">Escalation Amount Calculated On</div>--}}
+                        {{--<div class="panel-body settingTble">--}}
+                            {{--<table class="table table-condensed">--}}
+                                {{--<thead>--}}
+                                {{--<tr>--}}
+                                    {{--<th width="80px">Sr No.</th>--}}
+                                    {{--<th>Title</th>--}}
+                                {{--</tr>--}}
+                                {{--</thead>--}}
+                                {{--<tbody>--}}
+                                {{--@foreach($escalation_amount_calculated_on  as $key => $value)--}}
+                                    {{--<tr>--}}
+                                        {{--<td>{{ $key + 1 }}</td>--}}
+                                        {{--<td>{{ $value->title}}</td>--}}
+                                    {{--</tr>--}}
+                                {{--@endforeach--}}
+                                {{--</tbody>--}}
+                            {{--</table>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
 
-                    <div class="panel panel-info">
-                        <div class="panel-heading">Escalation Frequency</div>
-                        <div class="panel-body settingTble">
-                            <table class="table table-condensed">
-                                <thead>
-                                <tr>
-                                    <th width="80px">Sr No.</th>
-                                    <th>Esclation Frequency</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($escalation_frequencies  as $key => $frequency)
-                                    <tr>
-                                        <td>{{ $key + 1 }}</td>
-                                        <td>{{ $frequency->title}}</td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    {{--<div class="panel panel-info">--}}
+                        {{--<div class="panel-heading">Escalation Frequency</div>--}}
+                        {{--<div class="panel-body settingTble">--}}
+                            {{--<table class="table table-condensed">--}}
+                                {{--<thead>--}}
+                                {{--<tr>--}}
+                                    {{--<th width="80px">Sr No.</th>--}}
+                                    {{--<th>Esclation Frequency</th>--}}
+                                {{--</tr>--}}
+                                {{--</thead>--}}
+                                {{--<tbody>--}}
+                                {{--@foreach($escalation_frequencies  as $key => $frequency)--}}
+                                    {{--<tr>--}}
+                                        {{--<td>{{ $key + 1 }}</td>--}}
+                                        {{--<td>{{ $frequency->title}}</td>--}}
+                                    {{--</tr>--}}
+                                {{--@endforeach--}}
+                                {{--</tbody>--}}
+                            {{--</table>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
 
                     <div class="panel panel-info">
                         <div class="panel-heading">

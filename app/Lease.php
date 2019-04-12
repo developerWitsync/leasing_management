@@ -19,6 +19,7 @@ class Lease extends Model
         'status',
         'total_assets',
         'escalation_clause_applicable',
+        'is_completed',
         'created_at',
         'updated_at'
     ];
@@ -31,7 +32,6 @@ class Lease extends Model
         return $this->hasMany('App\LeaseAssets','lease_id', 'id');
     }
 
-
     public function leaseInvoice(){
         return $this->hasMany('App\LeasePaymentInvoice','lease_id', 'id');
     }
@@ -43,5 +43,9 @@ class Lease extends Model
     public function isSubsequentModification(){
         $modify_lease_data = $this->modifyLeaseApplication->last();
         return ($modify_lease_data && $modify_lease_data->valuation == "Subsequent Valuation");
+    }
+
+    public function leasePaymentInvoice(){
+        return $this->hasOne('App\LeasePaymentInvoice', 'lease_id', 'id');
     }
 }

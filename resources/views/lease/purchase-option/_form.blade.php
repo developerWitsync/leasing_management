@@ -60,7 +60,7 @@
         <div class="form-group{{ $errors->has('expected_purchase_date') ? ' has-error' : '' }} required">
             <label for="expected_purchase_date" class="col-md-12 control-label">Expected Purchase Date</label>
             <div class="col-md-12">
-                <input type="text" placeholder="Expected Purchase Date" class="form-control lease_period1" id="expected_purchase_date" name="expected_purchase_date" value="{{ old('expected_purchase_date', $model->expected_purchase_date) }}" autocomplete="off">
+                <input type="text" placeholder="Expected Purchase Date" class="form-control pull-right lease_period1" id="expected_purchase_date" name="expected_purchase_date" value="{{ old('expected_purchase_date', $model->expected_purchase_date) }}" autocomplete="off" readonly="readonly" style="opacity: 1;background-color:#fff">
                 @if ($errors->has('expected_purchase_date'))
                     <span class="help-block">
                         <strong>{{ $errors->first('expected_purchase_date') }}</strong>
@@ -72,7 +72,7 @@
          <div class="form-group{{ $errors->has('expected_lease_end_date') ? ' has-error' : '' }} required">
             <label for="expected_lease_end_date" class="col-md-12 control-label">Expected Lease End Date</label>
             <div class="col-md-12">
-                <input type="text" placeholder="Expected Lease End Date" class="form-control lease_period2" id="expected_lease_end_date" name="expected_lease_end_date" value="{{ old('expected_lease_end_date', $model->expected_lease_end_date) }}" autocomplete="off">
+                <input type="text" placeholder="Expected Lease End Date" class="form-control lease_period2" id="expected_lease_end_date" name="expected_lease_end_date" value="{{ old('expected_lease_end_date', $model->expected_lease_end_date) }}" autocomplete="off" readonly="readonly" style="opacity: 1;background-color:#fff">
                 @if ($errors->has('expected_lease_end_date'))
                     <span class="help-block">
                         <strong>{{ $errors->first('expected_lease_end_date') }}</strong>
@@ -145,6 +145,17 @@
             $('input[name="purchase_option_exerecisable"]').not(this).prop('checked', false);
             if($(this).is(':checked') && $(this).val() == 'yes') {
                 $('#hidden-elements').show();
+
+                bootbox.dialog({
+                    message: "Please input, verify and update your Lease Payments Schedule as well under step 6 to restrict Lease Payments up to the date of Lease Purchase. Failure to do so may impact the Lease Valuation.",
+                    buttons: {
+                        confirm: {
+                            label: 'Ok',
+                            className: 'btn-success'
+                        },
+                    }
+                });
+
             } else {
                 $('#hidden-elements').hide();
                 $('#hidden-fields').hide();
@@ -161,10 +172,19 @@
         });
 
         $(document).ready(function(){
+
+            @if(\Carbon\Carbon::parse($asset->accural_period)->greaterThan(\Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)))
+                var minDate = new Date('{{ $asset->accural_period }}');
+                    @else
+                var minDate = new Date('{{ getParentDetails()->accountingStandard->base_date }}');
+            @endif
+
             $("#expected_purchase_date").datepicker({
                 dateFormat: "dd-M-yy",
                 changeMonth:true,
                 changeYear:true,
+                //minDate : new Date('{{ \Carbon\Carbon::parse($asset->accural_period)->addDay(1)->format('Y-m-d') }}'),
+                minDate: minDate,
                 maxDate : new Date('{{ ($asset->renewableOptionValue->is_reasonable_certainity_option == "yes")?$asset->renewableOptionValue->expected_lease_end_Date:$asset->lease_end_date }}'),
                 {!!  getYearRanage() !!}
                 onSelect: function (date, instance) {
@@ -183,8 +203,9 @@
                     var y = newdate.getFullYear();
 
                     var nd = new Date(mm + '/' + dd + '/' + y);
-                    expectedLeaseEndDate.datepicker('setDate',nd);
                     expectedLeaseEndDate.datepicker('option','maxDate',nd);
+                    expectedLeaseEndDate.datepicker('option','minDate',nd);
+                    expectedLeaseEndDate.datepicker('setDate',nd);
                 }
             });
 
@@ -192,8 +213,9 @@
                 dateFormat: "dd-M-yy",
                 changeMonth:true,
                 changeYear:true,
-                {!!  getYearRanage() !!}
+                minDate : new Date('{{ \Carbon\Carbon::parse($asset->accural_period)->format('Y-m-d') }}'),
                 maxDate : new Date('{{ ($asset->renewableOptionValue->is_reasonable_certainity_option == "yes")?$asset->renewableOptionValue->expected_lease_end_Date:$asset->lease_end_date }}'),
+                {!!  getYearRanage() !!}
                 onSelect: function (date, instance) {
                         var _ajax_url = '{{route("lease.checklockperioddate")}}';
                         checklockperioddate(date, instance, _ajax_url);

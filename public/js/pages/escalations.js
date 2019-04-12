@@ -93,11 +93,15 @@ $(".show_escalation_chart").on("click", function(){
         url : _show_escalation_char_url,
         data : $("form").serialize(),
         type : "get",
+        beforeSend: function(){
+            showOverlayForAjax();
+        },
         success : function(response){
             setTimeout(function () {
                 $(".escalation_chart_modal_body").html(response);
 
                 $("#myModal").modal("show");
+                removeOverlayAjax();
             }, 100);
         }
     });
@@ -231,8 +235,9 @@ $(document).ready(function () {
 
         var _fixed_rate_select = '';
 
+
         var _select_payment_dates = '<select class="form-control" name="inconsistent_effective_date[YEAR][]">\n';
-        if(_is_subsequent_modification && _current_year < _subsequent_modification_year){
+        if(_is_subsequent_modification &&  typeof(_subsequent_modification_year)!="undefined" &&_current_year < _subsequent_modification_year){
             var _select_payment_dates = '<select class="form-control" name="inconsistent_effective_date[YEAR][]" readonly="readonly">\n';
         } else {
             var _select_payment_dates = '<select class="form-control" name="inconsistent_effective_date[YEAR][]">\n';
@@ -244,7 +249,7 @@ $(document).ready(function () {
 
         for(i = 0; i < datesArray.length; i++){
             if(datesArray[i].indexOf(_current_year) > -1) {
-                if(_is_subsequent_modification && _subsequent_modification_applicable_from >= datesArray[i]){
+                if(_is_subsequent_modification &&  typeof(_subsequent_modification_applicable_from)!="undefined" && _subsequent_modification_applicable_from >= datesArray[i]){
                     _select_payment_dates += '<option value="'+datesArray[i]+'" disabled="disabled">'+datesArray[i]+'</option>';
                 } else {
                     _select_payment_dates += '<option value="'+datesArray[i]+'">'+datesArray[i]+'</option>';

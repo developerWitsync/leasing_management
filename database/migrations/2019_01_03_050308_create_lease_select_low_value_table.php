@@ -20,7 +20,7 @@ class CreateLeaseSelectLowValueTable extends Migration
             $table->unsignedInteger('asset_id');
             $table->foreign('asset_id')->references('id')->on('lease_assets')->onDelete('cascade');
             $table->unsignedInteger('fair_market_value')->nullable();
-            $table->unsignedInteger('undiscounted_lease_payment')->nullable();
+            $table->text('undiscounted_lease_payment')->nullable();
             $table->enum('is_classify_under_low_value', ['yes', 'no'])->nullable();
             $table->timestamps();
         });

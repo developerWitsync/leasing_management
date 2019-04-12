@@ -8,40 +8,27 @@
 
 namespace App\Http\Controllers\Lease;
 
-
-use App\Countries;
-use App\ExpectedLifeOfAsset;
 use App\Http\Controllers\Controller;
 use App\Lease;
 use App\Currencies;
-use App\LeaseAccountingTreatment;
-use App\LeaseAssetCategories;
 use App\LeaseAssets;
-use App\LeaseAssetSimilarCharacteristicSettings;
-use App\LeaseAssetsNumberSettings;
-use App\LeaseAssetSubCategorySetting;
 use App\LeasePaymentsBasis;
-use App\UseOfLeaseAsset;
 use App\LeaseResidualValue;
 use App\ReportingCurrencySettings;
 use App\ForeignCurrencyTransactionSettings;
 use App\LeaseAssetPaymentsNature;
-use App\LeaseAssetPayments;
-use App\FairMarketValue;
 use Illuminate\Http\Request;
 use Validator;
 
 class LeaseResidualController extends Controller
 {
-    private $current_step = 8;
+    private $current_step = 7;
     protected function validationRules()
     {
         return [
             'any_residual_value_gurantee'   => 'required',
             'lease_payemnt_nature_id'       => 'required_if:any_residual_value_gurantee,yes|nullable',
             'similar_asset_items' => 'required_if:any_residual_value_gurantee,yes|nullable',
-            'residual_gurantee_value' => 'required_if:any_residual_value_gurantee,yes|numeric|nullable',
-            'total_residual_gurantee_value' => 'required_if:any_residual_value_gurantee,yes|nullable',
             'attachment' => 'file|mimes:jpeg,pdf,doc|nullable'
         ];
     }
@@ -86,9 +73,22 @@ class LeaseResidualController extends Controller
 
                     $rules = $this->validationRules();
 
+                    //conditions to modify the request data and validations rules based upon the input fields....
                     if($request->has('any_residual_value_gurantee') && $request->any_residual_value_gurantee == 'yes' && $request->has('lease_payemnt_nature_id') && $request->lease_payemnt_nature_id == '2'){
                         $rules['variable_basis_id'] = 'required';
                         $rules['amount_determinable'] = 'required';
+                        if($request->has('amount_determinable') && $request->amount_determinable == "yes"){
+                            $rules['residual_gurantee_value'] = 'required|numeric';
+                            $rules['total_residual_gurantee_value'] = 'required';
+                        } else if($request->has('amount_determinable') && $request->amount_determinable == "no"){
+                            $request->request->add(['residual_gurantee_value' => null, 'total_residual_gurantee_value' => null]);
+                        }
+                    } elseif($request->has('any_residual_value_gurantee') && $request->any_residual_value_gurantee == 'yes' && $request->has('lease_payemnt_nature_id') && $request->lease_payemnt_nature_id == '1') {
+                        $rules['residual_gurantee_value'] = 'required|numeric';
+                        $rules['total_residual_gurantee_value'] = 'required';
+                        $request->request->add(['amount_determinable' => null, 'variable_basis_id' => null]);
+                    } elseif($request->has('any_residual_value_gurantee') && $request->any_residual_value_gurantee == "no") {
+                        $request->request->add(['lease_payemnt_nature_id'=> null,'amount_determinable' => null, 'variable_basis_id' => null, 'residual_gurantee_value' => null, 'total_residual_gurantee_value' => null]);
                     }
 
                     $validator = Validator::make($request->except('_token'), $rules);
@@ -112,7 +112,7 @@ class LeaseResidualController extends Controller
 
                     if ($residual_value->save()) {
                         // complete Step
-                        confirmSteps($lease->id, 8);
+                        confirmSteps($lease->id, $this->current_step);
                         if($request->has('action') && $request->action == "next") {
                             return redirect(route('addlease.durationclassified.index',['id' => $lease->id]))->with('status', 'Residual value Gurantee has been added successfully.');
                         } else {
@@ -246,7 +246,7 @@ class LeaseResidualController extends Controller
 
                     if ($residual_value) {
                         // complete Step
-                        $complete_step8 = confirmSteps($lease->id, 8);
+                        $complete_step8 = confirmSteps($lease->id, $this->current_step);
 
                         return redirect(route('addlease.residual.index', ['id' => $lease->id]))->with('status', 'Residual value Gurantee has been added successfully.');
                     }

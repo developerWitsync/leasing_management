@@ -23,8 +23,8 @@ class SelectDiscountRateController extends Controller
     protected function validationRules()
     {
         return [
-
-            'discount_rate_to_use' => 'required|numeric|min:2'
+            'discount_rate_to_use' => 'required|numeric|min:2',
+            'daily_discount_rate' => 'required'
         ];
     }
 
@@ -105,9 +105,7 @@ class SelectDiscountRateController extends Controller
                             if ($request->has('action') && $request->action == "next") {
                                 return redirect(route('addlease.balanceasondec.index', ['id' => $lease->id]))->with('status', 'Select Discount Rate has been added successfully.');
                             } else {
-
                                 return redirect(route('addlease.discountrate.index', ['id' => $lease->id]))->with('status', 'Select Discount Rate has been added successfully.');
-
                             }
 
                         }

@@ -26,4 +26,8 @@ class PaymentEscalationDetails extends Model
         'escalation_currency',
         'total_undiscounted_lease_payment_amount'
     ];
+
+    public function escalationBasis(){
+        return $this->hasOne('App\ContractEscalationBasis', 'id', 'escalation_basis');
+    }
 }

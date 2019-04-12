@@ -9,13 +9,13 @@
 namespace App\Http\Controllers\Leasevaluation;
 
 use App\CategoriesLeaseAssetExcluded;
+use App\DiscountRateChartView;
 use App\Http\Controllers\Controller;
 use App\LeaseHistory;
 use App\ReportingCurrencySettings;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Lease;
-use App\ModifyLeaseApplication;
 use App\LeaseAssets;
 use App\LeaseAssetCategories;
 use Validator;
@@ -33,7 +33,7 @@ class LeaseValuationController extends Controller
                 'title' => 'Dashboard'
             ],
             [
-                'link' => route('leasevaluation.index'),
+                'link' => route('leasevaluation.cap.index'),
                 'title' => 'Lease Valuation'
             ]
         ];
@@ -60,7 +60,7 @@ class LeaseValuationController extends Controller
                 ->where('status', '=', '0')
                 ->pluck('category_id')->toArray();
 
-            if($capitalized == '1'){
+            if ($capitalized == '1') {
 
                 $categories = LeaseAssetCategories::query()
                     ->whereNotIn('id', $excluded_categories)
@@ -74,7 +74,7 @@ class LeaseValuationController extends Controller
             }
 
             return view('leasevaluation.index', compact(
-                 'capitalized',
+                'capitalized',
                 'categories',
                 'breadcrumbs',
                 'included_categories'
@@ -85,230 +85,390 @@ class LeaseValuationController extends Controller
     }
 
     /**
-     * fetch the lease assets for the lease valuation
+     * show the card pages for all the categories and list down the assets for the capitalised and non capitalised
      * @param Request $request
-     * @param null $category_id
-     * @param int $capitalized
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function fetchAssets(Request $request, $category_id = null, $capitalized = 1)
+    public function capitalised(Request $request)
     {
         try {
-            if ($request->ajax()) {
 
-                $excluded_categories = CategoriesLeaseAssetExcluded::query()
-                    ->whereIn('business_account_id', getDependentUserIds())
-                    ->where('status', '=', '0')
-                    ->pluck('category_id')->toArray();
+            $excluded_categories = CategoriesLeaseAssetExcluded::query()
+                ->whereIn('business_account_id', getDependentUserIds())
+                ->where('status', '=', '0')
+                ->pluck('category_id')->toArray();
 
-                $leases = Lease::query()
-                    ->whereIn('business_account_id', getDependentUserIds())->where('status', '=', '1');
-
-                //fetch the data that needs to be listed on the Lease Valuation
-                $assets = LeaseAssets::query()
-                    ->select('*')
-                    ->selectRaw('IF(current_date() > lease_end_date, datediff(current_date(), lease_end_date), datediff(lease_end_date, current_date())) as remaining_term')
-                    ->whereIn('lease_id', $leases->get()->pluck('id')->toArray())
-                    ->with('lease')
-                    ->with('category')
-                    ->with('specificUse')
-                    ->with('country')
-                    ->with('leaseSelectDiscountRate')
-                    ->with('leaseSelectLowValue');
-
-                if ($category_id && $category_id!="all") {
-                    $assets = $assets->where('category_id', '=', $category_id);
-                }
-
-                if($capitalized == '1') {
-                    $assets = $assets->whereHas('leaseSelectLowValue', function ($query) {
-                        $query->where('is_classify_under_low_value', '=', 'no');
-                    })->whereHas('leaseDurationClassified', function ($query) {
-                        $query->where('lease_contract_duration_id', '=', '3');
-                    });
-                }
-
-                $assets = $assets->whereHas('category', function ($query) use ($capitalized, $excluded_categories) {
-                    $query->where('is_capitalized', '=', $capitalized);
-
-                    if($capitalized == '1'){
-                        $query->whereNotIn('id', $excluded_categories);
-                    } else {
-                        $query->whereIn('id', $excluded_categories);
-                    }
-                });
-
-                $reporting_currency = '';
-                $is_foreign_currency_applied = ReportingCurrencySettings::query()
-                    ->whereIn('business_account_id', getDependentUserIds())
-                    ->first();
-                if($is_foreign_currency_applied) {
-                    //$reporting_currency = $is_foreign_currency_applied->internal_company_financial_reporting_currency;
-                    $reporting_currency = $is_foreign_currency_applied->currency_for_lease_reports;
-                    $is_foreign_currency_applied = $is_foreign_currency_applied->is_foreign_transaction_involved;
-                } else {
-                    $is_foreign_currency_applied = 'no';
-                }
-
-
-                return datatables()->eloquent($assets)
-
-                    ->filter(function ($query) use ($request){
-                        if ($request->has('search') && trim($request->search["value"])!="") {
-                            $query->where('name', 'like', "%" . $request->search["value"] . "%");
-                        }
-                    })
-                    ->addColumn('is_foreign_transaction_involved', function() use ($is_foreign_currency_applied){
-                        return $is_foreign_currency_applied;
-                    })
-                    ->addColumn('foreign_initial_lease_currency', function($data) use ($is_foreign_currency_applied){
-                        if($is_foreign_currency_applied == "yes"){
-                            $initial_currency = LeaseHistory::query()
-                                ->select('json_data_steps->lessor_details->lease_contract_id as initial_lease_currency')
-                                ->where('lease_id', '=', $data->lease->id)
-                                ->whereRaw('modify_id IS NULL')
-                                ->first();
-                            return str_replace('"', '', $initial_currency->initial_lease_currency);
-                        } else {
-                            return 'N/A';
-                        }
-                    })
-                    ->addColumn('foreign_initial_undiscounted_lease_liability', function($data) use ($is_foreign_currency_applied){
-                        if($is_foreign_currency_applied == "yes"){
-                            $initial_undiscounted_lease_liability = LeaseHistory::query()
-                                ->select('json_data_steps->low_value->undiscounted_lease_payment as initial_undiscounted_lease_liability')
-                                ->where('lease_id', '=', $data->lease->id)
-                                ->whereRaw('modify_id IS NULL')
-                                ->first();
-                            return str_replace('"', '', $initial_undiscounted_lease_liability->initial_undiscounted_lease_liability);
-                        } else {
-                            return 'N/A';
-                        }
-                    })
-                    ->addColumn('foreign_initial_present_value_of_lease_liability', function($data) use ($is_foreign_currency_applied){
-                        if($is_foreign_currency_applied == "yes"){
-                            $initial_present_value_of_lease_liability = LeaseHistory::query()
-                                ->select('json_data_steps->underlying_asset->lease_liablity_value as initial_present_value_of_lease_liability')
-                                ->where('lease_id', '=', $data->lease->id)
-                                ->whereRaw('modify_id IS NULL')
-                                ->first();
-                            return str_replace('"', '', $initial_present_value_of_lease_liability->initial_present_value_of_lease_liability);
-                        } else {
-                            return 'N/A';
-                        }
-                    })
-                    ->addColumn('foreign_initial_value_of_lease_asset', function($data) use ($is_foreign_currency_applied){
-                        if($is_foreign_currency_applied == "yes"){
-                            $initial_value_of_lease_asset = LeaseHistory::query()
-                                ->select('json_data_steps->underlying_asset->value_of_lease_asset as initial_value_of_lease_asset')
-                                ->where('lease_id', '=', $data->lease->id)
-                                ->whereRaw('modify_id IS NULL')
-                                ->first();
-                            return str_replace('"', '', $initial_value_of_lease_asset->initial_value_of_lease_asset);
-                        } else {
-                            return 'N/A';
-                        }
-                    })
-                    ->addColumn('start_date', function ($data) {
-                        if (Carbon::parse($data->accural_period)->lessThanOrEqualTo(Carbon::create(2019, 1, 1))) {
-                            return Carbon::create(2019, 1, 1)->format(config('settings.date_format'));
-                        } else {
-                            return Carbon::parse($data->accural_period)->format(config('settings.date_format'));
-                        }
-                    })
-                    ->addColumn('initial_lease_currency', function($data){
-                        $initial_currency = LeaseHistory::query()
-                            ->select('json_data_steps->lessor_details->lease_contract_id as initial_lease_currency')
-                            ->where('lease_id', '=', $data->lease->id)
-                            ->whereRaw('modify_id IS NULL')
-                            ->first();
-                        return str_replace('"', '', $initial_currency->initial_lease_currency);
-                    })
-                    ->addColumn('initial_undiscounted_lease_liability', function($data){
-                        $initial_undiscounted_lease_liability = LeaseHistory::query()
-                            ->select('json_data_steps->low_value->undiscounted_lease_payment as initial_undiscounted_lease_liability')
-                            ->where('lease_id', '=', $data->lease->id)
-                            ->whereRaw('modify_id IS NULL')
-                            ->first();
-                        return str_replace('"', '', $initial_undiscounted_lease_liability->initial_undiscounted_lease_liability);
-                    })
-                    ->addColumn('initial_present_value_of_lease_liability', function($data){
-                        $initial_present_value_of_lease_liability = LeaseHistory::query()
-                            ->select('json_data_steps->underlying_asset->lease_liablity_value as initial_present_value_of_lease_liability')
-                            ->where('lease_id', '=', $data->lease->id)
-                            ->whereRaw('modify_id IS NULL')
-                            ->first();
-                        return str_replace('"', '', $initial_present_value_of_lease_liability->initial_present_value_of_lease_liability);
-                    })
-                    ->addColumn('initial_value_of_lease_asset', function($data){
-                        $initial_value_of_lease_asset = LeaseHistory::query()
-                            ->select('json_data_steps->underlying_asset->value_of_lease_asset as initial_value_of_lease_asset')
-                            ->where('lease_id', '=', $data->lease->id)
-                            ->whereRaw('modify_id IS NULL')
-                            ->first();
-                        return str_replace('"', '', $initial_value_of_lease_asset->initial_value_of_lease_asset);
-                    })
-                    ->addColumn('has_subsequent_modifications', function($data){
-                        $subsequent_modifications_count = ModifyLeaseApplication::query()
-                            ->where('lease_id', '=', $data->lease->id)
-                            ->where('valuation', '=', 'Subsequent Valuation')
-                            ->count();
-                        return ($subsequent_modifications_count > 0);
-                    })
-                    ->addColumn('exchange_rate', function($data) use ($is_foreign_currency_applied, $reporting_currency){
-                        if($is_foreign_currency_applied == "yes") {
-                            if(Carbon::parse($data->accural_period)->greaterThan(Carbon::create(2019,1,1))){
-                                $date = Carbon::parse($data->accural_period)->format('Y-m-d');
-                            } else {
-                                $date = '2019-01-01';
-                            }
-                            $initial_currency = LeaseHistory::query()
-                                ->select('json_data_steps->lessor_details->lease_contract_id as initial_currency')
-                                ->where('lease_id', '=', $data->lease->id)
-                                ->whereRaw('modify_id IS NULL')
-                                ->first();
-
-                            $source = str_replace('"', '', $initial_currency->initial_currency);
-                            return fetchCurrencyExchangeRate($date, $source, $reporting_currency);
-                        } else {
-                            return 1;
-                        }
-                    })
-                    ->addColumn('subsequent_modification_effective_date', function($data){
-                        $subsequent_modification = ModifyLeaseApplication::query()
-                            ->where('lease_id', '=', $data->lease->id)
-                            ->where('valuation', '=', 'Subsequent Valuation')
-                            ->orderBy('created_at', 'desc')->first();
-                        if($subsequent_modification) {
-                            return $subsequent_modification->effective_from;
-                        } else {
-                            return "N/A";
-                        }
-
-                    })
-                    ->addColumn('subsequent_modification_exchange_rate', function($data) use ($reporting_currency){
-
-                        $subsequent_modification = ModifyLeaseApplication::query()
-                            ->where('lease_id', '=', $data->lease->id)
-                            ->where('valuation', '=', 'Subsequent Valuation')
-                            ->orderBy('created_at', 'desc')->first();
-                        if($subsequent_modification) {
-                            $date = Carbon::parse($subsequent_modification->effective_from)->format('Y-m-d');
-                            $source = $source = $data->lease->lease_contract_id;
-                            return fetchCurrencyExchangeRate($date, $source, $reporting_currency);
-                        } else {
-                            return "N/A";
-                        }
-
-                    })
-                    ->toJson();
+            if ($request->segment('2') == 'valuation-non-capitalised') {
+                $categories = LeaseAssetCategories::query()->select('title', 'id')
+                    ->whereIn('id', $excluded_categories)
+                    ->get();
 
             } else {
-                return redirect(route('leasevaluation.index'));
+                $categories = LeaseAssetCategories::query()->select('title', 'id')
+                    ->whereNotIn('id', $excluded_categories)
+                    ->get();
             }
-        } catch (\Exception $exception) {
-            dd($exception);
+
+            return view('leasevaluation.capitalised', compact(
+                'categories'
+            ));
+
+        } catch (\Exception $e) {
             abort(404);
         }
+    }
+
+    /**
+     * capitalised lease assets listing on the Lease Valuation CAP page.
+     * @param $category_id
+     * @param Request $request
+     * @return string
+     * @throws \Throwable
+     */
+    public function fetchCategoryAsset($category_id, Request $request)
+    {
+        try {
+
+            $category = LeaseAssetCategories::query()->findOrFail($category_id);
+
+            $leases = Lease::query()
+                ->whereIn('business_account_id', getDependentUserIds())->where('status', '=', '1');
+
+            //fetch the data that needs to be listed on the Lease Valuation
+            $assets = LeaseAssets::query()
+                ->select('*')
+                ->selectRaw('IF(current_date() > lease_end_date, datediff(current_date(), lease_end_date), datediff(lease_end_date, current_date())) as remaining_term')
+                ->whereIn('lease_id', $leases->get()->pluck('id')->toArray())
+                ->with('lease')
+                ->with('category')
+                ->with('leaseSelectLowValue');
+
+            $capitalized = false;
+            if($request->has('capitalized') && $request->capitalized == 'true'){
+                $assets = $assets->whereHas('leaseSelectLowValue', function ($query) {
+                    $query->where('is_classify_under_low_value', '=', 'no');
+                });
+                $capitalized = true;
+            }
+
+
+            if ($category_id) {
+                $assets = $assets->where('category_id', '=', $category_id);
+            }
+
+            $assets = $assets->paginate(4);
+
+            return view('leasevaluation.partials._category_card', compact(
+                'assets',
+                'category',
+                'capitalized'
+            ))->render();
+
+        } catch (\Exception $e) {
+            abort(404);
+        }
+    }
+
+    /**
+     * Renders the lease valuation overview Tab for the lease
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function leaseOverview($id, Request $request)
+    {
+        try{
+            $lease = Lease::query()
+                ->where('id', '=', $id)
+                ->whereIn('business_account_id', getDependentUserIds())
+                ->where('status', '=', '1')->firstOrFail();
+            $asset = $lease->assets()->first(); //there will be only one lease asset for a lease...
+            $subsequent_modified = $lease->isSubsequentModification();
+            $subsequent = null;
+            if($subsequent_modified) {
+                $subsequent = $lease->modifyLeaseApplication->last();
+            }
+
+            return view('leasevaluation.overview', compact(
+                'lease',
+                'asset',
+                'subsequent_modified',
+                'subsequent'
+            ));
+        }catch (\Exception $e){
+            abort(404);
+        }
+    }
+
+    /**
+     * renders the valuation tab UI for the lease
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function leaseValuation($id){
+        try{
+            $lease = Lease::query()
+                ->where('id', '=', $id)
+                ->whereIn('business_account_id', getDependentUserIds())
+                ->where('status', '=', '1')->firstOrFail();
+            $asset = $lease->assets()->first(); //there will be only one lease asset for a lease...
+            $subsequent_modified = $lease->isSubsequentModification();
+            $subsequent = null;
+            if($subsequent_modified) {
+                $subsequent = $lease->modifyLeaseApplication->last();
+            }
+            $show_statutory_columns = false;
+            $statutory_currency = $lease->lease_contract_id;
+            $currecy_settings = ReportingCurrencySettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
+            if($currecy_settings && ($currecy_settings->statutory_financial_reporting_currency != $lease->lease_contract_id)){
+                $show_statutory_columns = true;
+                $statutory_currency = $currecy_settings->statutory_financial_reporting_currency;
+            }
+            return view('leasevaluation.valuation', compact(
+                'lease',
+                'asset',
+                'subsequent_modified',
+                'subsequent',
+                'show_statutory_columns',
+                'statutory_currency'
+            ));
+        }catch (\Exception $e){
+            abort(404);
+        }
+    }
+
+    /**
+     * fetch the complete lease valuation list for the valuation tab...
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function fetchCompletedLeaseValuation($id){
+        try{
+
+            $base_date = getParentDetails()->accountingStandard->base_date;
+
+            $lease = Lease::query()
+                ->where('id', '=', $id)
+                ->whereIn('business_account_id', getDependentUserIds())
+                ->where('status', '=', '1')->firstOrFail();
+
+            $asset = $lease->assets()->first(); //there will be only one lease asset for a lease...
+
+            $lease_history = LeaseHistory::query()
+                ->selectRaw('json_data_steps->>"$.lessor_details.lease_contract_id" as source_currency')
+                ->selectRaw('lease_history.id as history_id')
+                ->selectRaw('lease_history.modify_id as modify_id')
+                ->selectRaw("IF(ISNULL(lease_history.modify_id),'Initial Valuation',modify_lease_application.valuation) AS valuation_type")
+                ->selectRaw('json_data_steps->>"$.discount_rate.daily_discount_rate" as daily_discount_rate')
+                ->selectRaw("IF(ISNULL(lease_history.modify_id),json_data_steps->>\"$.underlying_asset.accural_period\",modify_lease_application.effective_from) as effective_date")
+                ->selectRaw('json_data_steps->>"$.low_value.undiscounted_lease_payment" as undiscounted_value')
+                ->selectRaw('json_data_steps->>"$.underlying_asset.lease_liablity_value" as present_value')
+                ->selectRaw('json_data_steps->>"$.underlying_asset.value_of_lease_asset" as value_of_lease_asset')
+                ->selectRaw('json_data_steps->>"$.fair_market.total_units" as fair_market_value')
+                ->selectRaw('json_data_steps->>"$.underlying_asset.impairment_test_value" as impairment_value')
+                ->join('lease', 'lease.id', '=', 'lease_history.lease_id')
+                ->leftJoin('modify_lease_application', 'lease_history.modify_id', '=', 'modify_lease_application.id')
+                ->with('leaseModification')
+                ->where('lease_history.lease_id', '=', $id);
+
+            $datatable =  datatables()->eloquent($lease_history);
+
+            $currency_settings = ReportingCurrencySettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
+
+            if($currency_settings && ($currency_settings->statutory_financial_reporting_currency != $lease->lease_contract_id)){
+                //add columns for the statutory currency here as well....
+                $destination = $currency_settings->statutory_financial_reporting_currency;
+
+                $datatable->addColumn('exchange_rate', function($data) use ($destination, $base_date, $asset){
+                    $source = $data->source_currency;
+                    if (Carbon::parse($asset->accural_period)->greaterThan(Carbon::parse($base_date))) {
+                        $date = Carbon::parse($asset->accural_period)->format('Y-m-d');
+                    } else {
+                        $date = $base_date;
+                    }
+                    //check for the subsequent and fetch the exchange rate for the effective date in that case...
+                    if($data->valuation_type == "Subsequent Valuation"){
+                        $date = $data->effective_date;
+                    }
+                    $exchange_rate = fetchCurrencyExchangeRate($date, $source, $destination);
+                    return $exchange_rate;
+                })
+                ->addColumn('statutory_undiscounted_value', function($data){
+                    return $data->undiscounted_value;
+                })
+                ->addColumn('statutory_present_value', function($data){
+                    return $data->present_value ;
+                })
+                ->addColumn('statutory_value_of_lease_asset', function ($data){
+                    return $data->value_of_lease_asset;
+                })
+                ->addColumn('statutory_fair_market_value', function($data){
+                    if($data->fair_market_value != "null"){
+                        return $data->fair_market_value;
+                    } else {
+                        return 0;
+                    }
+                })
+                ->addColumn('statutory_impairment_value', function($data){
+                    if($data->impairment_value != "null"){
+                        return $data->impairment_value;
+                    } else {
+                        return 0;
+                    }
+                });
+            }
+            return $datatable->toJson();
+
+        } catch (\Exception $e) {
+           abort(404);
+        }
+    }
+
+
+    /**
+     * see details for the lease valuation on the valuation tab for the initial or subsequent valuation..
+     * @todo lease_end_date needs to be calculated on the basis of termination and other perspective..
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function seeDetails($id){
+        try{
+            $history = LeaseHistory::query()->findOrFail($id);
+
+            $lease = $history->lease;
+
+            $json_step_data = collect(json_decode($history->json_data_steps, true));
+            $final_data = [];
+            $final_data['valuation_type'] = is_null($history->modify_id)?"Initial Valuation":$history->leaseModification->valuation;
+            $final_data['effective_date'] = is_null($history->modify_id)?$json_step_data['underlying_asset']['accural_period']:$history->leaseModification->effective_from;
+            $final_data["value_of_lease_asset"] = $json_step_data['underlying_asset']['value_of_lease_asset'];
+
+            $source = $json_step_data["lessor_details"]["lease_contract_id"];
+            $base_date = getParentDetails()->accountingStandard->base_date;
+
+            $payments = $json_step_data['lease_payments'];
+            foreach ($payments as $payment) {
+                $payment_details = [];
+                $payment_details['payment_name'] = $payment['name'];
+                $payment_details['effective_lease_start_date'] = $final_data['effective_date'];
+                $payment_details['lease_end_date']  =  $json_step_data['underlying_asset']['lease_end_date'];
+                $payment_details['undiscounted_lease_liability'] = $payment['undiscounted_value'];
+                $payment_details['present_value'] = $payment['present_value'];
+                $final_data['payments'][] = $payment_details;
+            }
+
+            //termination option from the json data...
+            if($json_step_data['termination_option']['lease_termination_option_available'] == "yes" && $json_step_data['termination_option']['exercise_termination_option_available'] == "yes"){
+                $final_data['payments'][] = [
+                    'payment_name' => 'Termination Penalty',
+                    'effective_lease_start_date' => $final_data['effective_date'],
+                    'lease_end_date'    => $json_step_data['termination_option']['lease_end_date'],
+                    'undiscounted_lease_liability'  => $json_step_data['termination_option']['undiscounted_value'],
+                    'present_value' => $json_step_data['termination_option']['present_value']
+                ];
+            }
+
+            //residual value guarantee
+            if($json_step_data['residual_value']['any_residual_value_gurantee'] == "yes"){
+                $final_data['payments'][] = [
+                    'payment_name' => 'Residual Value Guarantee',
+                    'effective_lease_start_date' => $final_data['effective_date'],
+                    'lease_end_date'    => $json_step_data['underlying_asset']['lease_end_date'],
+                    'undiscounted_lease_liability'  => $json_step_data['residual_value']['undiscounted_value'],
+                    'present_value' => $json_step_data['residual_value']['present_value']
+                ];
+            }
+
+            //purchase option
+            if(isset($json_step_data['purchase_option']) && $json_step_data['purchase_option']['purchase_option_clause'] == 'yes' && $json_step_data['purchase_option']['purchase_option_exerecisable'] == "yes"){
+                $final_data['payments'][] = [
+                    'payment_name' => 'Purchase Option',
+                    'effective_lease_start_date' => $final_data['effective_date'],
+                    'lease_end_date'    => $json_step_data['purchase_option']['expected_lease_end_date'],
+                    'undiscounted_lease_liability'  => $json_step_data['purchase_option']['undiscounted_value'],
+                    'present_value' => $json_step_data['purchase_option']['present_value']
+                ];
+            }
+
+
+            $currency_settings = ReportingCurrencySettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
+
+            $show_statutory = false;
+            $exchange_rate = 1;
+            $statutory_currency = $currency_settings->statutory_financial_reporting_currency;
+            if($currency_settings && ($currency_settings->statutory_financial_reporting_currency != $lease->lease_contract_id)){
+                $destination = $currency_settings->statutory_financial_reporting_currency;
+                $show_statutory = true;
+                if (Carbon::parse($json_step_data['underlying_asset']['accural_period'])->greaterThan(Carbon::parse($base_date))) {
+                    $date = Carbon::parse($json_step_data['underlying_asset']['accural_period'])->format('Y-m-d');
+                } else {
+                    $date = $base_date;
+                }
+                //check for the subsequent and fetch the exchange rate for the effective date in that case...
+                if($final_data['valuation_type'] == "Subsequent Valuation"){
+                    $date = $final_data['effective_date'];
+                }
+                $exchange_rate = fetchCurrencyExchangeRate($date, $source, $destination);
+            }
+
+            $final_data['lease_currency'] = $source;
+
+            $final_data['statutory_currency'] = $currency_settings->statutory_financial_reporting_currency;
+
+            $final_data['lease_balances'] = is_array($json_step_data['lease_balance'])?$json_step_data['lease_balance']:[];
+
+            $final_data['initial_direct_cost'] = (count($json_step_data['initial_direct_cost']) > 1)?$json_step_data['initial_direct_cost']:[];
+
+            $final_data['lease_incentives'] = (count($json_step_data['lease_incentives']) > 1)?$json_step_data['lease_incentives']:[];
+
+            $final_data['dismantling_cost'] = (count($json_step_data['dismantling_cost']) > 1)?$json_step_data['dismantling_cost']:[];
+
+            return view('leasevaluation.partials._see_details_valuation', compact(
+                'final_data',
+                'show_statutory',
+                'exchange_rate',
+                'statutory_currency'
+            ));
+
+
+        } catch (\Exception $e) {
+            abort(404);
+        }
+    }
+
+    /**
+     * generate the discount rate chart json and return the same to the UI
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function generateDiscountRateChart($id){
+        $lease = $lease = Lease::query()
+            ->where('id', '=', $id)
+            ->whereIn('business_account_id', getDependentUserIds())
+            ->where('status', '=', '1')->firstOrFail();
+
+        $asset = $lease->assets()->first(); //there will be only one lease asset for a lease...
+
+        $chartData = DiscountRateChartView::query()
+            ->where('lease_id', '=', $lease->id)
+            ->orderBy('history_id', 'desc')
+            ->get()
+            ->toArray();
+
+        $start_date = $asset->lease_start_date;
+        $end_date = $asset->lease_end_date;
+
+        $lower_limit = $start_date;
+        $data = [];
+        while (strtotime($lower_limit) <= strtotime($end_date)) {
+            $filtered_object = collect($chartData)
+                ->where('effective_date', '<=', $lower_limit)
+                ->first();
+            if(!empty($filtered_object)) {
+                    $data['x'][] = date('M - Y', strtotime($lower_limit));
+                    $data['y'][] = (float)$filtered_object['discount_rate_to_use'];
+            }
+            $lower_limit = date ("Y-m-d", strtotime("+1 month", strtotime($lower_limit)));
+        }
+        return response()->json($data, 200);
     }
 }

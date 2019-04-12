@@ -41,6 +41,10 @@ class DatabaseSeeder extends Seeder
         DB::unprepared(file_get_contents($path));
         $this->command->info('States table seeded!');
 
+        $path = 'database/sqls/cms_data.sql';
+        DB::unprepared(file_get_contents($path));
+        $this->command->info('CMS table seeded!');
+
 		$this->call(AdminUsers::class);
 		$this->call(ContractClassifications::class);
 		$this->call(ContractEscalationBasis::class);
@@ -51,6 +55,7 @@ class DatabaseSeeder extends Seeder
 		$this->call(IndustryTypeSeeder::class);
 		$this->call(LeaseAccountingTreatment::class);
         $this->call(EscalationFrequency::class);
+        $this->call(AccountingStandards::class);
 		$this->call(LeaseAssetCategories::class);
 		$this->call(LeaseAssetPaymentsNature::class);
 		$this->call(LeaseContractDuration::class);
@@ -61,6 +66,7 @@ class DatabaseSeeder extends Seeder
 		$this->call(LeasesExcludedFromTransitionalValuation::class);
 		$this->call(PermissionSeeder::class);
 		$this->call(RateTypes::class);
+        $this->call(ReportingPeriods::class);
 		$this->call(UseOfLeaseAsset::class);
 
         $path = 'database/sqls/subscription_plans.sql';

@@ -63,7 +63,10 @@ class LeaseTerminationOptionController extends Controller
                     'title' => 'Termination Option'
                 ],
             ];
-            $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
+            $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())
+                ->where('id', '=', $id)
+                ->where('status', '=', '0')
+                ->first();
             if($lease) {
 
                 //check if the Subsequent Valuation is applied for the lease modification
@@ -87,12 +90,22 @@ class LeaseTerminationOptionController extends Controller
                     $data = $request->except('_token', 'uuid', 'asset_name', 'asset_category','action');
                     if($request->lease_end_date!=""){
                         $data['lease_end_date']  = Carbon::parse($request->lease_end_date)->format('Y-m-d');
+
                         //should also update the lease end date here..
-                        $asset->lease_end_date = $data['lease_end_date'];
-                        $asset->save();
+                        //$asset->lease_end_date = $data['lease_end_date'];
+                        //$asset->save();
                     }
                     $data['lease_id']   = $asset->lease->id;
                     $data['asset_id']   = $asset->id;
+
+                    if($request->lease_termination_option_available == "no"){
+                        $data['exercise_termination_option_available']  = null;
+                        $data['termination_penalty_applicable']  = null;
+                    }
+
+                    if($request->exercise_termination_option_available == "no"){
+                        $data['termination_penalty_applicable']  = null;
+                    }
 
                     $model->setRawAttributes($data);
 
@@ -120,7 +133,6 @@ class LeaseTerminationOptionController extends Controller
                 abort(404);
             }
         } catch (\Exception $e) {
-            dd($e);
             abort(404);
         }
     }

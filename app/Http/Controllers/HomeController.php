@@ -105,9 +105,16 @@ class HomeController extends Controller
                 $query->where('is_classify_under_low_value', '=', 'yes');
             })->count();
 
+        $category_excluded = \App\CategoriesLeaseAssetExcluded::query()
+            ->whereIn('business_account_id', getDependentUserIds())
+            ->where('status', '=', '0')
+            ->get();
+
+        $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
+
         //other lease asset combining together intangible and biological
-        $total_other_lease_asset = LeaseAssets::query()->whereHas('category', function ($query) {
-            $query->where('id', 5)->where('id', 8);
+        $total_other_lease_asset = LeaseAssets::query()->whereHas('category', function ($query) use ($category_excluded_id) {
+            $query->whereIn('category_id', $category_excluded_id);
         })->whereIn('lease_id', $lease_id)->count();
 
         //undiscounted lease assets
@@ -146,26 +153,36 @@ class HomeController extends Controller
         try {
             if ($request->ajax()) {
 
-                $data = LeaseAssets::query()->whereHas('lease', function ($query) {
-                    $query->whereIn('business_account_id', getDependentUserIds());
-                    $query->where('status','=', '1');
-                })
-                    ->where('specific_use', 1)
-                    ->with('leaseDurationClassified')
-                    ->with('leaseSelectLowValue')
-                    ->whereHas('leaseSelectLowValue', function ($query) {
-                        $query->where('is_classify_under_low_value', '=', 'no');
-                    })->whereHas('leaseDurationClassified', function ($query) {
-                        $query->where('lease_contract_duration_id', '=', '3');
-                    })->whereNotIn('category_id', [5, 8])->get()->toArray();
+                $ids = implode(',', getDependentUserIds());
+
+                $sql = "SELECT 
+                            SUM(`json_data_steps`->>'$.\"underlying_asset\".\"value_of_lease_asset\"') AS `value_of_lease_asset`,
+                            SUM(`json_data_steps`->>'$.\"low_value\".\"undiscounted_lease_payment\"') AS `undiscounted_lease_payment`
+                        FROM
+                            lease_history
+                                JOIN
+                            lease ON lease.id = lease_history.lease_id
+                                JOIN
+                            lease_assets ON (lease_assets.lease_id = lease.id)
+                                JOIN
+                            lease_assets_categories ON (lease_assets.category_id = lease_assets_categories.id)
+                        WHERE
+                            lease.business_account_id IN ($ids)
+                            and lease_history.modify_id is NULL
+                            and lease_assets.category_id NOT IN(5,8)
+                            and lease.status = '1'
+                            and `json_data_steps`->'$.\"underlying_asset\".\"specific_use\"' = 1
+                            and `json_data_steps`->'$.\"duration_classified\".\"lease_contract_duration_id\"' = 3";
 
                 $total_undiscounted_value = 0;
 
                 $total_present_value_lease_asset = 0;
 
-                foreach ($data as $key => $asset) {
-                    $total_undiscounted_value += $asset['lease_select_low_value']['undiscounted_lease_payment'];
-                    $total_present_value_lease_asset += $asset['value_of_lease_asset'];
+                $data = DB::select($sql);
+
+                foreach ($data as $key => $total) {
+                    $total_undiscounted_value += $total->undiscounted_lease_payment;
+                    $total_present_value_lease_asset += $total->value_of_lease_asset;
                 }
 
                 return response()->json(['status' => 1, 'total_undiscounted_value' => $total_undiscounted_value, 'total_present_value_lease_asset' => $total_present_value_lease_asset]);
@@ -190,25 +207,25 @@ class HomeController extends Controller
                 $ids = implode(',', getDependentUserIds());
 
                 $sql = "SELECT 
-                            SUM(`lease_assets`.`value_of_lease_asset`) AS `value_of_lease_asset`,
-                            SUM(`lease_select_low_value`.`undiscounted_lease_payment`) AS `undiscounted_lease_payment`,
+                            SUM(`json_data_steps`->>'$.\"underlying_asset\".\"value_of_lease_asset\"') AS `value_of_lease_asset`,
+                            SUM(`json_data_steps`->>'$.\"low_value\".\"undiscounted_lease_payment\"') AS `undiscounted_lease_payment`,
                             lease_assets.category_id,
                             lease_assets_categories.title
                         FROM
-                            lease_assets
+                            lease_history
                                 JOIN
-                            lease ON (lease_assets.lease_id = lease.id)
+                            lease ON lease.id = lease_history.lease_id
                                 JOIN
-                            lease_duarion_classified ON (lease_duarion_classified.asset_id = lease_assets.id)
-                                JOIN
+                            lease_assets ON (lease_assets.lease_id = lease.id)
+                            JOIN
                             lease_assets_categories ON (lease_assets.category_id = lease_assets_categories.id)
-                                JOIN
-                            lease_select_low_value ON (lease_select_low_value.asset_id = lease_assets.id)
                         WHERE
-                            lease_duarion_classified.lease_contract_duration_id = 3
-                                AND lease.business_account_id IN ($ids)
-                                AND lease_assets.specific_use = '1'
-                                AND lease.status = '1'
+                            lease.business_account_id IN ($ids)
+                            and lease_history.modify_id is NULL
+                            and lease_assets.category_id NOT IN(5,8)
+                            and lease.status = '1'
+                            and `json_data_steps`->'$.\"underlying_asset\".\"specific_use\"' = 1
+                            and `json_data_steps`->'$.\"duration_classified\".\"lease_contract_duration_id\"' = 3
                         GROUP BY lease_assets.category_id";
 
                 $data = DB::select($sql);

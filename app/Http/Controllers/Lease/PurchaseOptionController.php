@@ -57,6 +57,9 @@ class PurchaseOptionController extends Controller
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
             if ($lease) {
 
+                //check if the Subsequent Valuation is applied for the lease modification
+                $subsequent_modify_required = $lease->isSubsequentModification();
+
                 $asset = LeaseAssets::query()->where('lease_id', '=', $id)->whereHas('terminationOption', function ($query) {
                     $query->where(function($query){
                         $query->where('lease_termination_option_available', '=', 'yes');
@@ -76,6 +79,11 @@ class PurchaseOptionController extends Controller
                     }
 
                     if ($request->isMethod('post')) {
+
+                        if($request->has('purchase_option_clause') && $request->purchase_option_clause == "no"){
+                            $request->request->add(['purchase_option_exerecisable' => null]);
+                        }
+
                         $validator = Validator::make($request->except('_token'), $this->validationRules());
 
                         if ($validator->fails()) {
@@ -91,6 +99,14 @@ class PurchaseOptionController extends Controller
 
                         if ($request->has('expected_lease_end_date') && $data['expected_lease_end_date'] != "") {
                             $data['expected_lease_end_date'] = Carbon::parse($data['expected_lease_end_date'])->format('Y-m-d');
+                        }
+
+                        if($request->purchase_option_clause == "no"){
+                            $data['purchase_option_exerecisable'] = null;
+                            $data['expected_purchase_date'] = null;
+                            $data['expected_lease_end_date'] = null;
+                            $data['currency'] = null;
+                            $data['purchase_price'] = null;
                         }
 
                         if ($request->has('purchase_option_exerecisable') && $data['purchase_option_exerecisable'] == 'no') {
@@ -125,7 +141,8 @@ class PurchaseOptionController extends Controller
                         'lease',
                         'asset',
                         'breadcrumbs',
-                        'current_step'
+                        'current_step',
+                        'subsequent_modify_required'
                     ));
                 } else {
                     return redirect(route('addlease.payments.index', ['id' => $id]));

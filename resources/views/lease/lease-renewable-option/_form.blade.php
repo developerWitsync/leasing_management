@@ -20,7 +20,7 @@
     </div>
 
     <div class="form-group{{ $errors->has('is_renewal_option_under_contract') ? ' has-error' : '' }} required">
-        <label for="name" class="col-md-12 control-label">Lease Payment</label>
+        <label for="name" class="col-md-12 control-label">Lease Renewal Option Available under the Contract</label>
         <div class="col-md-12 form-check form-check-inline mrktavail" required>
             <span><input class="form-check-input" name="is_renewal_option_under_contract" id="yes" type="checkbox" value="yes"
                    @if(old('is_renewal_option_under_contract', $model->is_renewal_option_under_contract) == "yes") checked="checked" @endif>
@@ -171,6 +171,17 @@
             if ($(this).is(':checked') && $(this).val() == 'yes') {
                 $('#hidden-fields_date').show();
                 $("#is_reasonable_certainity_option_no").prop('checked', false);
+
+                bootbox.dialog({
+                    message: "Please input, verify and update your Lease Payments Schedule as well under step 6 to extend Lease Payments up to the date of Lease Renewal. Failure to do so may impact the Lease Valuation.",
+                    buttons: {
+                        confirm: {
+                            label: 'Ok',
+                            className: 'btn-success'
+                        },
+                    }
+                });
+
             } else {
                 $('#hidden-fields_date').hide();
                 $("#is_reasonable_certainity_option_yes").prop('checked', false);

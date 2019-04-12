@@ -65,7 +65,7 @@
         </div>
 
         <div class="form-group{{ $errors->has('total_lease_incentives') ? ' has-error' : '' }} required">
-            <label for="total_lease_incentives" class="col-md-12 control-label">Total Initial Direct Cost</label>
+            <label for="total_lease_incentives" class="col-md-12 control-label">Total Lease Incentive Receivable</label>
             <div class="col-md-12 form-check form-check-inline">
                 <input type="text" value="{{ old('total_lease_incentives', $model->total_lease_incentives)}}"
                        class="form-control" id="total_lease_incentives" name="total_lease_incentives"

@@ -27,7 +27,7 @@ use Validator;
 
 class EscalationController extends Controller
 {
-    private $current_step = 10;
+    private $current_step = 9;
     /**
      * Renders the index view for the Lease Escalation Clause
      * @param $id
@@ -49,6 +49,9 @@ class EscalationController extends Controller
 
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
             if($lease){
+
+                $asset = $lease->assets()->first();
+
                 //check if the Subsequent Valuation is applied for the lease modification
                 $subsequent_modify_required = $lease->isSubsequentModification();
                 //take out the payments for every lease asset
@@ -61,14 +64,31 @@ class EscalationController extends Controller
                 $required_escalations = 0;
                 $completed_escalations = 0;
                 if($lease->escalation_clause_applicable == "no") {
-                    confirmSteps($lease->id,10);
+                    confirmSteps($lease->id,$this->current_step);
                     $show_next = true;
                 } else {
                     foreach ($payments as $payment){
+                        if($payment->nature == 2 && $payment->variable_amount_determinable == "no"){
+                            $escalation_exists = PaymentEscalationDetails::query()->where('lease_id', '=', $lease->id)
+                                ->where('asset_id', '=', $asset->id)
+                                ->where('payment_id', '=', $payment->id)
+                                ->count();
+                            if($escalation_exists == 0){
+                                //create the escalation for this payment here automatically...
+                                PaymentEscalationDetails::create([
+                                    'lease_id' => $lease->id,
+                                    'asset_id' => $asset->id,
+                                    'payment_id' => $payment->id,
+                                    'is_escalation_applicable' => 'no'
+                                ]);
+                            }
+                        }
+
                         $required_escalations = $required_escalations + 1;
                         if(count($payment->paymentEscalations) > 0){
                             $completed_escalations = $completed_escalations + 1;
                         }
+
                     }
                 }
 
@@ -104,14 +124,15 @@ class EscalationController extends Controller
                     'breadcrumbs',
                     'subsequent_modify_required',
                     'back_url',
-                    'current_step'
+                    'current_step',
+                    'asset'
                 ));
 
             } else {
                 abort(404);
             }
         } catch (\Exception $e) {
-            dd($e);
+           abort(404);
         }
     }
 
@@ -136,7 +157,7 @@ class EscalationController extends Controller
                 $lease->escalation_clause_applicable = $request->escalation_clause_applicable;
 
                 if($request->escalation_clause_applicable == "no"){
-                    confirmSteps($lease->id,10);
+                    confirmSteps($lease->id,$this->current_step);
                 } else {
                     \App\LeaseCompletedSteps::query()->where('lease_id', '=',$lease->id)->where('completed_step', '=', 10)->delete();
                 }
@@ -285,7 +306,7 @@ class EscalationController extends Controller
                             }
                         }
                         // complete Step
-                        confirmSteps($lease->id,10);
+                        confirmSteps($lease->id,$this->current_step);
 
                         return redirect(route('lease.escalation.index', ['id' =>$lease ]))->with('status', 'Escalation Details has been saved sucessfully.');
                     }
@@ -294,8 +315,8 @@ class EscalationController extends Controller
                 //code for the inconsistent escalations to be applied
                 $start_date = $asset->accural_period; //start date with the free period
                 $end_date   = $asset->getLeaseEndDate($asset); //end date based upon all the conditions
-
-                $start_date = ($asset->using_lease_payment == '1')?\Carbon\Carbon::create(2019,01,01):\Carbon\Carbon::parse($start_date);
+                $base_date =  getParentDetails()->accountingStandard->base_date;
+                $start_date = ($asset->using_lease_payment == '1')?\Carbon\Carbon::parse($base_date):\Carbon\Carbon::parse($start_date);
                 $end_date   = \Carbon\Carbon::parse($end_date);
 
                 $years =  [];
@@ -340,7 +361,6 @@ class EscalationController extends Controller
                 abort(404);
             }
         } catch (\Exception $e) {
-            dd($e);
             abort(404);
         }
     }
@@ -483,7 +503,7 @@ class EscalationController extends Controller
 
                     return response()->json([
                         'status' => true,
-                        'computed_total' => $total
+                        'computed_total' => formatToDecimal($total)
                     ], 200);
 
                 } else {

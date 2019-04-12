@@ -23,7 +23,9 @@ use Validator;
 class LeaseIncentivesController extends Controller
 {
     private $current_step = 15;
-    protected function validationRules(){
+
+    protected function validationRules()
+    {
         return [
             'is_any_lease_incentives_receivable' => 'required',
             'currency' => 'required_if:is_any_lease_incentives_receivable,yes',
@@ -40,6 +42,7 @@ class LeaseIncentivesController extends Controller
     public function index_V2($id, Request $request)
     {
         try {
+            $base_date = getParentDetails()->accountingStandard->base_date;
             $breadcrumbs = [
                 [
                     'link' => route('add-new-lease.index'),
@@ -55,8 +58,24 @@ class LeaseIncentivesController extends Controller
 
                 //check if the Subsequent Valuation is applied for the lease modification
                 $subsequent_modify_required = $lease->isSubsequentModification();
+                $category_excluded = \App\CategoriesLeaseAssetExcluded::query()
+                    ->whereIn('business_account_id', getDependentUserIds())
+                    ->where('status', '=', '0')
+                    ->get();
 
-                $asset = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '>=', '2019-01-01')->first();
+                $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
+
+                $asset = LeaseAssets::query()->where('lease_id', '=', $lease->id)
+                    ->where('lease_start_date', '>=', $base_date)
+                    ->whereNotIn('category_id', $category_excluded_id)
+                    ->whereHas('leaseSelectLowValue', function ($query) {
+                        $query->where('is_classify_under_low_value', '=', 'no');
+                    })
+                    ->whereHas('leaseDurationClassified', function ($query) {
+                        $query->where('lease_contract_duration_id', '=', '3');
+                    })
+                    ->first();
+
                 if ($asset) {
                     $currencies = Currencies::query()->where('status', '=', '1')->get();
                     if ($asset->leaseIncentives) {
@@ -91,7 +110,7 @@ class LeaseIncentivesController extends Controller
                             return redirect()->back()->withInput($request->except('_token'))->withErrors($validator->errors());
                         }
 
-                        $data = $request->except('_token', 'submit','customer_name', 'description', 'incentive_date', 'currency_id', 'amount', 'exchange_rate',  'uuid', 'asset_name', 'asset_category','action');
+                        $data = $request->except('_token', 'submit', 'customer_name', 'description', 'incentive_date', 'currency_id', 'amount', 'exchange_rate', 'uuid', 'asset_name', 'asset_category', 'action');
                         $data['lease_id'] = $asset->lease->id;
                         $data['asset_id'] = $asset->id;
                         $model->setRawAttributes($data);
@@ -113,14 +132,14 @@ class LeaseIncentivesController extends Controller
                             }
                             // complete Step
                             confirmSteps($lease->id, 15);
-                            if($request->has('action') && $request->action == "next") {
-                            return redirect(route('addlease.leasevaluation.index',['id' => $lease->id]))->with('status', 'Lease incentive cost has been added successfully.');
-                        } else {
+                            if ($request->has('action') && $request->action == "next") {
+                                return redirect(route('lease.dismantlingcosts.index', ['id' => $lease->id]))->with('status', 'Lease incentive cost has been added successfully.');
+                            } else {
 
-                           return redirect(route('addlease.leaseincentives.index',['id' => $lease->id]))->with('status', 'Lease incentive cost has been added successfully.');
+                                return redirect(route('addlease.leaseincentives.index', ['id' => $lease->id]))->with('status', 'Lease incentive cost has been added successfully.');
 
-                        }
-                            
+                            }
+
                         }
                     }
 
@@ -141,7 +160,7 @@ class LeaseIncentivesController extends Controller
 
                 } else {
                     //redirect user to the next step
-                    return redirect(route('addlease.leasevaluation.index', ['id' => $id]));
+                    return redirect(route('lease.dismantlingcosts.index', ['id' => $id]));
                 }
             } else {
                 abort(404);
@@ -173,8 +192,8 @@ class LeaseIncentivesController extends Controller
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
         if ($lease) {
             //Load the assets only lease start on or after jan 01 2019
-
-            $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '>=', '2019-01-01')->get();
+            $base_date = getParentDetails()->accountingStandard->base_date;
+            $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '>=', $base_date)->get();
             return view('lease.lease-incentives.index', compact(
                 'lease',
                 'assets',
