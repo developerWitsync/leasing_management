@@ -43,11 +43,11 @@
                 <ul>
                     @if(request()->segment(2) == 'valuation-capitalised')
                         <li>
-                            <a href="{{ route('leasevaluation.cap.asset', ['id' => $lease->id]) }}" class="active">Overivew</a>
+                            <a href="{{ route('leasevaluation.cap.asset', ['id' => $lease->id]) }}">Overivew</a>
                         </li>
 
                         <li>
-                            <a href="{{ route('leasevaluation.cap.asset.valuation', ['id' => $lease->id]) }}">Valuation</a>
+                            <a href="{{ route('leasevaluation.cap.asset.valuation', ['id' => $lease->id]) }}"  class="active">Valuation</a>
                         </li>
 
                         <li>
