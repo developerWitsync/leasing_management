@@ -15,7 +15,11 @@
         <ul class="clearfix">
             @foreach($assets as $asset)
                 <li>
-                    <a href="{{ route('leasevaluation.cap.asset', ['id' => $asset->lease->id]) }}">
+                    @if(request()->segment(2) == 'valuation-capitalised')
+                        <a href="{{ route('leasevaluation.cap.asset', ['id' => $asset->lease->id]) }}">
+                    @else
+                        <a href="{{ route('leasevaluation.ncap.asset', ['id' => $asset->lease->id]) }}">
+                    @endif
                         <div class="landType">{{str_limit($asset->name, $limit = 15, $end = '...')  }}</div>
                         <div class="leaseterms">
    							<span>
@@ -24,18 +28,31 @@
                                     {{ $asset->lease_term }}
                                 </strong>
    							</span>
+
                             <span>
    								Lease Expiring On
 								<strong>
                                     {{ \Carbon\Carbon::parse($asset->getLeaseEndDate($asset))->format('Y-m-d') }}
                                 </strong>
    							</span>
+
                             <span>
-   								Undiscounted Lease Liability
+   								Lease Currency
 								<strong>
-                                    {{ number_format($asset->leaseSelectLowValue->undiscounted_lease_payment, 2) }}
+                                    {{ $asset->lease->lease_contract_id }}
                                 </strong>
    							</span>
+
+                            <span>
+                                Undiscounted Lease Liability
+                                <strong>
+                                    @if($capitalized && $asset->leaseSelectLowValue)
+                                        {{ number_format($asset->leaseSelectLowValue->undiscounted_lease_payment, 2) }}
+                                    @else
+                                        {{ number_format($asset->undiscounted_value, 2) }}
+                                    @endif
+                                </strong>
+                            </span>
                         </div>
                     </a>
                 </li>

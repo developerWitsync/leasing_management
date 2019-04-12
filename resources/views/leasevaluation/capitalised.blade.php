@@ -17,10 +17,14 @@
 @endsection
 @section('footer-script')
 	<script src="{{ asset('js/pages/valuation_main.js') }}"></script>
-	<script>var _is_capitalized = false;</script>
+	@if(request()->segment(2) == 'valuation-capitalised')
+		<script>var _is_capitalized = true;</script>
+	@else
+		<script>var _is_capitalized = false;</script>
+	@endif
 	@foreach($categories as $category)
 		<script>
-			fetchCategoryAssets({{$category->id}});
+			fetchCategoryAssets({{$category->id}}, _is_capitalized);
 		</script>
 	@endforeach
 @endsection

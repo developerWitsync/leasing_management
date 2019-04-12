@@ -24,4 +24,12 @@ class LeaseResidualValue extends Model
         'created_at',
         'updated_at'
     ];
+
+    public function nature(){
+        return $this->hasOne('App\LeaseAssetPaymentsNature', 'id', 'lease_payemnt_nature_id');
+    }
+
+    public function variableBasis(){
+        return $this->hasOne('App\LeasePaymentsBasis', 'id', 'variable_basis_id');
+    }
 }

@@ -307,7 +307,7 @@ class LeaseAssets extends Model
                         $present_value_of_lease_liability[$result->payment_year][$result->payment_month]["payment_" . $result->payment_id] = $result;
                     }
                 }
-            } elseif($is_eslaction_applicable && $is_eslaction_applicable->is_escalation_applicable == "no") {
+            } elseif(is_null($is_eslaction_applicable) || ($is_eslaction_applicable && $is_eslaction_applicable->is_escalation_applicable == "no")) {
                 //call the procedure `pv_calculus_when_escalation_is_not_applied`
                 $results = $this->fetchPVCalculus($base_date, $this->id,$payment->id,$start_year, 'no');
 
@@ -318,6 +318,11 @@ class LeaseAssets extends Model
                     }
                 }
             }
+
+            //save the present value for the payment here....
+            $payment->setAttribute('present_value', $total_lease_liability);
+            $payment->save();
+
         }
 
         if (is_null($payment_id)) {
@@ -414,6 +419,35 @@ class LeaseAssets extends Model
             }
         }
         return ['present_value_of_lease_liability' => $present_value_of_lease_liability, 'total_lease_liability' => $total_lease_liability];
+    }
+
+    /**
+     * undiscounted Lease liability for the asset...
+     * @param $id
+     * @return int
+     */
+    public function getUndiscountedLeaseLiability($id){
+        $asset = self::query()->findOrFail($id);
+        $payments = $asset->payments;
+        $total = 0;
+
+        foreach($payments as $payment){
+            $total = $total + $payment->getUndiscountedValue();
+        }
+
+        if($asset->terminationOption->lease_termination_option_available == "yes" && $asset->terminationOption->exercise_termination_option_available == "yes" && $asset->terminationOption->termination_penalty_applicable == "yes"){
+            $total = $total + $asset->terminationOption->termination_penalty;
+        }
+
+        if($asset->residualGuranteeValue->any_residual_value_gurantee == "yes"){
+            $total = $total + $asset->residualGuranteeValue->residual_gurantee_value;
+        }
+
+        if($asset->purchaseOption && $asset->purchaseOption->purchase_option_clause == "yes" && $asset->purchaseOption->purchase_option_exerecisable == "yes"){
+            $total = $total + $asset->purchaseOption->purchase_price;
+        }
+
+        return $total;
     }
 
     public function paymentsduedate()

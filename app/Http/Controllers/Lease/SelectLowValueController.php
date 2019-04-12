@@ -67,6 +67,10 @@ class SelectLowValueController extends Controller
 
                     $total_undiscounted_value = getUndiscountedTotalLeasePayment($asset->id);
 
+                    $asset->setAttribute('undiscounted_value', $total_undiscounted_value);
+
+                    $asset->save();
+
                     if ($asset->leaseSelectLowValue) {
                         $model = $asset->leaseSelectLowValue;
                     } else {
@@ -111,6 +115,17 @@ class SelectLowValueController extends Controller
                         'subsequent_modify_required'
                     ));
                 } else {
+
+                    //since the step is not applicable need to calculate the UD VAlue and save that to the database as well...
+
+                    $asset = $lease->assets->first();
+
+                    $total_undiscounted_value = getUndiscountedTotalLeasePayment($asset->id);
+
+                    $asset->setAttribute('undiscounted_value', $total_undiscounted_value);
+
+                    $asset->save();
+
                     return redirect(route('addlease.fairmarketvalue.index', ['id' => $id]));
                 }
 

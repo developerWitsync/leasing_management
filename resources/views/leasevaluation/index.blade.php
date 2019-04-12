@@ -142,10 +142,10 @@
     <script>
         var _data_table_url = "{{ route('leasevaluation.fetchassets',['capitalized' => $capitalized, 'category_id' => (request()->has('id'))?request()->id:'all']) }}";
                 @if($capitalized == '1')
-        var _is_capitalized = true;
+                    var _is_capitalized = true;
                 @else
-        var _is_capitalized = false;
-        @endif
+                    var _is_capitalized = false;
+                @endif
     </script>
     @if (session('status'))
         <script>

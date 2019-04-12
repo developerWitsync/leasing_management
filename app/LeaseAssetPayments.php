@@ -8,6 +8,8 @@ class LeaseAssetPayments extends Model
 {
     protected $table = 'lease_assets_payments';
 
+    protected $appends = ['undiscounted_liability_value'];
+
     protected $fillable = [
         'asset_id',
         'name',
@@ -28,6 +30,11 @@ class LeaseAssetPayments extends Model
         'updated_at',
         'lease_payment_per_interval'
     ];
+
+    public function getUndiscountedLiabilityValueAttribute()
+    {
+        return $this->getUndiscountedValue();
+    }
 
     public function category(){
         return $this->belongsTo('App\LeasePaymentComponents', 'type', 'id');

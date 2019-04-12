@@ -110,137 +110,175 @@
                         </strong>
                     </span>
                 </div>
+            @else
+                <div class="leasernameBx2 leaseprior">
+                    &nbsp;
+                </div>
             @endif
-            <div class="leasernameBx2 leaserLocation">
-                <span>Lessor Invoice :
+
+                <div class="leasernameBx2 leaserLocation">
+                    <span>Lessor Invoice :
+                        <strong>
+                            @if($lease->leasePaymentInvoice)
+                                {{ strtoupper($lease->leasePaymentInvoice->lease_payment_invoice_received) }}
+                            @else
+                                N/A
+                            @endif
+                        </strong>
+                    </span>
+                </div>
+        </div>
+    </div>
+
+@if($asset->terminationOption->lease_termination_option_available == "yes")
+    <!--Lease Termination-->
+        <div class="locatPurposeOutBx">
+            <div class="locatpurposeTop leaseterminatHd">
+                Lease Termination Option
+            </div>
+            <div class="locatpurposeBot clearfix">
+
+                <div class="leasernameBx1 leaseprior">
+                <span>Termination Option Available Under the Contract
+                    <strong>{{ ucfirst($asset->terminationOption->lease_termination_option_available) }}</strong>
+                </span>
+                </div>
+
+                <div class="leasernameBx2 leaseprior">
+                    <span>Reasonable Certainity to Exercise Termination Option as of today
+                    <strong>{{ ucfirst($asset->terminationOption->exercise_termination_option_available) }}</strong>
+                </span>
+                </div>
+
+                <div class="leasernameBx2 leaseprior">
+                    <span>Termination Penalty Applicable
+                    <strong>{{ ucfirst($asset->terminationOption->termination_penalty_applicable) }}</strong>
+                </span>
+                </div>
+
+                <div class="leasernameBx2 leaseprior">
+                <span>Expected Lease End Date
                     <strong>
-                        {{ strtoupper($lease->leasePaymentInvoice->lease_payment_invoice_received)}}
+                        @if($asset->terminationOption->lease_termination_option_available == "yes" && $asset->terminationOption->exercise_termination_option_available == "yes")
+                            {{ \Carbon\Carbon::parse($asset->terminationOption->lease_end_date)->format(config('settings.date_format')) }}
+                        @else
+                            -
+                        @endif
                     </strong>
                 </span>
+                </div>
+
+                @if($asset->terminationOption->lease_termination_option_available == "yes" && $asset->terminationOption->exercise_termination_option_available == "yes" && $asset->terminationOption->termination_penalty_applicable == "yes")
+                    <div class="leasernameBx2 leaseprior">
+                    <span>Currency
+                        <strong>{{ $asset->terminationOption->currency }}</strong>
+                    </span>
+                    </div>
+                    <div class="leasernameBx2 leaseprior">
+                    <span>Termination Penalty
+                        <strong>{{ number_format($asset->terminationOption->termination_penalty, 2) }}</strong>
+                    </span>
+                    </div>
+                @endif
             </div>
         </div>
-    </div>
-    <!--Lease Termination-->
-    <div class="locatPurposeOutBx">
-        <div class="locatpurposeTop leaseterminatHd">
-            Lease Termination Option
-        </div>
-        <div class="locatpurposeBot clearfix">
-            <div class="leasernameBx1 leaseprior">
-                <span>Termination Option Available Under the Contract
-                <strong>Yes</strong>
-            </span>
+@endif
+<!--Lease Renewal-->
+    @if($asset->terminationOption->lease_termination_option_available == "no" || $asset->terminationOption->exercise_termination_option_available == "no")
+        <div class="locatPurposeOutBx">
+            <div class="locatpurposeTop leaseterminatHd">
+                Lease Renewal Option
             </div>
-                <div class="leasernameBx2 leaseprior">
+            <div class="locatpurposeBot clearfix">
+                <div class="leaserrenewalBx1 leaseprior">
+                <span>Renewal Option Available Under the Contract
+                <strong>{{ ucfirst($asset->renewableOptionValue->is_renewal_option_under_contract) }}</strong>
+                </span>
+                </div>
+                <div class="leaserrenewalBx2 leaseprior">
                 <span>Reasonable Certainity to Exercise Termination Option as of today
-                    <strong>Yes</strong>
+                    @if($asset->renewableOptionValue->is_reasonable_certainity_option)
+                        <strong>{{ucfirst($asset->renewableOptionValue->is_reasonable_certainity_option)}}</strong>
+                    @else
+                        <strong> - </strong>
+                    @endif
                 </span>
-            </div>
-            <div class="leasernameBx2 leaseprior">
-                <span>Expected Lease End Date
-                    <strong>20-4-2019</strong>
-                </span>
-            </div>
-            <div class="leasernameBx2 leaseprior">
-                <span>Currency
-                    <strong>USD</strong>
-                </span>
-            </div>
-            <div class="leasernameBx2 leaseprior">
-                <span>Termination Penalty
-                    <strong>$250.00</strong>
-                </span>
+                </div>
+
+                <div class="leaserrenewalBx2 leaseprior">
+                    <span>Expected Lease End Date
+                        @if($asset->renewableOptionValue->is_renewal_option_under_contract == 'yes' && $asset->renewableOptionValue->is_reasonable_certainity_option == 'yes')
+                            <strong>{{ \Carbon\Carbon::parse($asset->renewableOptionValue->expected_lease_end_Date)->format(config('settings.date_format')) }}</strong>
+                        @else
+                            <strong> - </strong>
+                        @endif
+                    </span>
+                </div>
             </div>
         </div>
-    </div>
-    <!--Lease Renewal-->
-    <div class="locatPurposeOutBx">
-        <div class="locatpurposeTop leaseterminatHd">
-            Lease Renewal Option
-        </div>
-        <div class="locatpurposeBot clearfix">
-            <div class="leaserrenewalBx1 leaseprior">
-            <span>Renewal Option Available Under the Contract
-            <strong>Yes</strong>
-            </span>
-            </div>
-            <div class="leaserrenewalBx2 leaseprior">
-            <span>Reasonable Certainity to Exercise Termination Option as of today
-            <strong>Yes</strong>
-            </span>
-            </div>
-            <div class="leaserrenewalBx2 leaseprior">
-            <span>Expected Lease End Date
-            <strong>20-4-2019</strong>
-            </span>
-            </div>
-        </div>
-    </div>
+    @endif
+
+    @if($asset->terminationOption->lease_termination_option_available == "no" || $asset->terminationOption->exercise_termination_option_available == "no")
     <!--Lease Purchase-->
-    <div class="locatPurposeOutBx">
-        <div class="locatpurposeTop leaseterminatHd">
-            Lease Purchase Option
-        </div>
-        <div class="locatpurposeBot clearfix">
-            <div class="leaserrenewalBx1 leaseprior">
-            <span>Purchase Option Available Under the Contract
-            <strong>Yes</strong>
-            </span>
-                <span>Expected Lease End Date
-            <strong>20-5-2019</strong>
-            </span>
+        <div class="locatPurposeOutBx">
+            <div class="locatpurposeTop leaseterminatHd">
+                Lease Purchase Option
             </div>
-            <div class="leaserrenewalBx2 leaseprior">
-            <span>Reasonable Certainity to Exercise Purchase Option as of today
-            <strong>Yes</strong>
-            </span>
-                <span>Currency
-            <strong>USD</strong>
-            </span>
-            </div>
-            <div class="leaserrenewalBx2 leaseprior">
-            <span>Expected Purchase Date
-            <strong>20-4-2019</strong>
-            </span>
-                <span>Purchase Price
-            <strong>$250.00</strong>
-            </span>
-            </div>
-        </div>
-    </div>
-    <!--Lease Purchase-->
-    <div class="locatPurposeOutBx">
-        <div class="locatpurposeTop leaseterminatHd">
-            Lease Purchase Option
-        </div>
-        <div class="locatpurposeBot clearfix">
-            <div class="leaserrenewalBx1 leaseprior">
-            <span>Purchase Option Available Under the Contract
-            <strong>Yes</strong>
-            </span>
-                <span>Expected Lease End Date
-            <strong>20-5-2019</strong>
-            </span>
-            </div>
-            <div class="leaserrenewalBx2 leaseprior">
-            <span>Reasonable Certainity to Exercise Purchase Option as of today
-            <strong>Yes</strong>
-            </span>
-                <span>Currency
-            <strong>USD</strong>
-            </span>
-            </div>
-            <div class="leaserrenewalBx2 leaseprior">
-            <span>Expected Purchase Date
-            <strong>20-4-2019</strong>
-            </span>
-                <span>Purchase Price
-            <strong>$250.00</strong>
-            </span>
+            <div class="locatpurposeBot clearfix">
+                <div class="leaserrenewalBx1 leaseprior">
+                    <span>Purchase Option Available Under the Contract
+                        <strong>{{ ucfirst($asset->purchaseOption->purchase_option_clause) }}</strong>
+                    </span>
+
+                    <span>Expected Lease End Date
+                        @if($asset->purchaseOption->purchase_option_clause == "yes" && $asset->purchaseOption->purchase_option_exerecisable == "yes")
+                            <strong>{{ \Carbon\Carbon::parse($asset->purchaseOption->expected_lease_end_date)->format(config('settings.date_format')) }}</strong>
+                        @else
+                            <strong> - </strong>
+                        @endif
+                    </span>
+                </div>
+
+                <div class="leaserrenewalBx2 leaseprior">
+                    <span>Reasonable Certainity to Exercise Purchase Option as of today
+                        @if($asset->purchaseOption->purchase_option_clause == 'yes')
+                            <strong>{{ ucfirst($asset->purchaseOption->purchase_option_exerecisable) }}</strong>
+                        @else
+                            <strong> - </strong>
+                        @endif
+                    </span>
+
+                    <span>Currency
+                        @if($asset->purchaseOption->purchase_option_clause == 'yes' && $asset->purchaseOption->purchase_option_exerecisable == 'yes')
+                            <strong>{{ $asset->purchaseOption->currency }}</strong>
+                        @else
+                            <strong> - </strong>
+                        @endif
+                    </span>
+                </div>
+
+                <div class="leaserrenewalBx2 leaseprior">
+                    <span>Expected Purchase Date
+                        @if($asset->purchaseOption->purchase_option_clause == 'yes' && $asset->purchaseOption->purchase_option_exerecisable == 'yes')
+                            <strong>{{ \Carbon\Carbon::parse($asset->purchaseOption->expected_purchase_date)->format(config('settings.date_format')) }}</strong>
+                        @else
+                            <strong> - </strong>
+                        @endif
+                    </span>
+                    <span>Purchase Price
+                        @if($asset->purchaseOption->purchase_option_clause == 'yes' && $asset->purchaseOption->purchase_option_exerecisable == 'yes')
+                            <strong>{{ number_format($asset->purchaseOption->purchase_price, 2) }}</strong>
+                        @else
+                            <strong> - </strong>
+                        @endif
+                    </span>
+                </div>
+
             </div>
         </div>
-    </div>
-    <!--Lease Payments-->
+    @endif
+
+<!--Lease Payments-->
     <div class="locatPurposeOutBx">
         <div class="locatpurposeTop leaseterminatHd">
             Lease Payments
@@ -248,33 +286,50 @@
         <div class="leasepaymentTble">
             <table cellpadding="0" cellspacing="0" border="0" width="100%">
                 <tr>
-                    <th width="16.66%">Lease Payments</th>
-                    <th width="16.66%">Type</th>
-                    <th width="16.66%">Nature</th>
-                    <th width="16.66%">LP Interval</th>
-                    <th width="16.66%">Interval Point</th>
-                    <th width="16.66%">First Lease Payment <br/>Start Date</th>
+                    <th>Lease Payments</th>
+                    <th>Type</th>
+                    <th>Nature</th>
+                    <th>LP Interval</th>
+                    <th>Interval Point</th>
+                    <th>First Lease Payment <br/>Start Date</th>
+                    <th>Last Lease Payment End Date</th>
+                    <th>Lease Currency</th>
+                    <th>Amount Per Interval</th>
+                    <th>Total UD Lease Payments</th>
                 </tr>
-                <tr>
-                    <td>Basic Rent</td>
-                    <td>Lease <br/> Component</td>
-                    <td>Fixed Lease <br/> Payment</td>
-                    <td>Monthly</td>
-                    <td>At Lease <br/> Interval End</td>
-                    <td>Date</td>
-                </tr>
-                <tr>
-                    <td>Basic Rent</td>
-                    <td>Lease <br/> Component</td>
-                    <td>Fixed Lease <br/> Payment</td>
-                    <td>Monthly</td>
-                    <td>At Lease <br/> Interval End</td>
-                    <td>Date</td>
-                </tr>
+                @foreach($asset->payments as $payment)
+                    <tr>
+                        <td>{{ $payment->name }}</td>
+                        <td>{{ $payment->paymentType->title }}</td>
+                        <td>{{ $payment->paymentNature->title }}</td>
+                        <td>
+                            @if($payment->paymentFrequency)
+                                {{ $payment->paymentFrequency->title }}
+                            @else
+                                -
+                            @endif
+
+                        </td>
+                        <td>
+                            @if($payment->paymentInterval)
+                                {{ $payment->paymentInterval->title }}
+                            @else
+                                -
+                            @endif
+
+                        </td>
+                        <td>{{ \Carbon\Carbon::parse($payment->first_payment_start_date)->format(config('settings.date_format')) }}</td>
+                        <td>{{ \Carbon\Carbon::parse($payment->last_payment_end_date)->format(config('settings.date_format')) }}</td>
+                        <td>{{ $payment->payment_currency }}</td>
+                        <td>{{ number_format($payment->payment_per_interval_per_unit) }}</td>
+                        <td>{{ number_format($payment->getUndiscountedValue()) }}</td>
+                    </tr>
+                @endforeach
             </table>
         </div>
     </div>
     <!--Lease Payments-->
+
     <div class="locatPurposeOutBx">
         <div class="locatpurposeTop leaseterminatHd">
             Lease Escalation
@@ -282,37 +337,82 @@
         <div class="leasepaymentTble">
             <table cellpadding="0" cellspacing="0" border="0" width="100%">
                 <tr>
-                    <th width="16.66%">Lease Payments</th>
-                    <th width="16.66%">Lease Escalation Applied</th>
-                    <th width="16.66%">Escalation Effective Date</th>
-                    <th width="16.66%">Escalation Basis</th>
-                    <th width="16.66%">Escalation Consitently<br/>Applied</th>
-                    <th width="16.66%">Escalation <br/> Fixed Rate</th>
+                    <th>Lease Payments</th>
+                    <th>Lease Escalation Applied</th>
+                    <th> Effective Date</th>
+                    <th>Escalation <br> Basis</th>
+                    <th>Escalation Consistently<br/>Applied</th>
+                    <th>Fixed Rate</th>
+                    <th>Variable Rate</th>
+                    <th>Total Rate</th>
+                    <th>Escalation Amount</th>
+                    <th>Action</th>
                 </tr>
-                <tr>
-                    <td>Basic Rent</td>
-                    <td>Yes</td>
-                    <td>20-05-2019</td>
-                    <td>10% of $250</td>
-                    <td>Yes</td>
-                    <td>10%</td>
-                </tr>
-                <tr>
-                    <td>Basic Rent</td>
-                    <td>Yes</td>
-                    <td>20-05-2019</td>
-                    <td>10% of $250</td>
-                    <td>Yes</td>
-                    <td>10%</td>
-                </tr>
-                <tr>
-                    <td>Basic Rent</td>
-                    <td>Yes</td>
-                    <td>20-05-2019</td>
-                    <td>10% of $250</td>
-                    <td>Yes</td>
-                    <td>10%</td>
-                </tr>
+                @foreach($asset->payments as $payment)
+                    <tr>
+                        <td>{{ $payment->name }}</td>
+                        <td>
+                            @if($payment->paymentEscalationSingle)
+                                {{ ucfirst($payment->paymentEscalationSingle->is_escalation_applicable) }}
+                            @else
+                                No
+                            @endif
+                        </td>
+                        <td>
+                            @if($payment->paymentEscalationSingle && $payment->paymentEscalationSingle->is_escalation_applicable == "yes")
+                                {{ \Carbon\Carbon::parse($payment->paymentEscalationSingle->effective_from)->format(config('settings.date_format')) }}
+                            @else
+                                -
+                            @endif
+                        </td>
+                        <td>
+                            @if($payment->paymentEscalationSingle && $payment->paymentEscalationSingle->is_escalation_applicable == "yes")
+                                {{ $payment->paymentEscalationSingle->escalationBasis->title }}
+                            @else
+                                -
+                            @endif
+                        </td>
+                        <td>
+                            @if($payment->paymentEscalationSingle && $payment->paymentEscalationSingle->is_escalation_applicable == "yes")
+                                {{ ucfirst($payment->paymentEscalationSingle->is_escalation_applied_annually_consistently)}}
+                            @else
+                                -
+                            @endif
+                        </td>
+                        <td>
+                            @if($payment->paymentEscalationSingle && $payment->paymentEscalationSingle->is_escalation_applicable == "yes")
+                                {{ $payment->paymentEscalationSingle->fixed_rate}}
+                            @else
+                                -
+                            @endif
+                        </td>
+                        <td>
+                            @if($payment->paymentEscalationSingle && $payment->paymentEscalationSingle->is_escalation_applicable == "yes")
+                                {{ $payment->paymentEscalationSingle->current_variable_rate}}
+                            @else
+                                -
+                            @endif
+                        </td>
+                        <td>
+                            @if($payment->paymentEscalationSingle && $payment->paymentEscalationSingle->is_escalation_applicable == "yes")
+                                {{ $payment->paymentEscalationSingle->total_escalation_rate}}
+                            @else
+                                -
+                            @endif
+                        </td>
+                        <td>
+                            @if($payment->paymentEscalationSingle && $payment->paymentEscalationSingle->is_escalation_applicable == "yes")
+                                {{ $payment->paymentEscalationSingle->escalated_amount}}
+                            @else
+                                -
+                            @endif
+                        </td>
+                        <td>
+                            <a href="javascript:void(0);" class="btn btn-xs btn-primary" data-toggle="tooltip"
+                               title="View Escalation Chart"><i class="fa fa-eye"></i></a>
+                        </td>
+                    </tr>
+                @endforeach
             </table>
         </div>
     </div>
@@ -323,28 +423,87 @@
         </div>
         <div class="locatpurposeBot clearfix">
             <div class="leaserrenewalBx1 leaseprior">
-            <span>Residual Value Guarantee Applicable
-            <strong>Yes</strong>
-            </span>
+                <span>Residual Value Guarantee Applicable
+                    <strong>
+                        @if($asset->residualGuranteeValue)
+                            {{ ucfirst($asset->residualGuranteeValue->any_residual_value_gurantee) }}
+                        @else
+                            No
+                        @endif
+                    </strong>
+                </span>
+
+                <span>Nature of Guarantee
+                    <strong>
+                        @if($asset->residualGuranteeValue && $asset->residualGuranteeValue->nature)
+                            {{ ucfirst($asset->residualGuranteeValue->nature->title) }}
+                        @else
+                            No
+                        @endif
+                    </strong>
+                </span>
+
                 <span>Currency
-            <strong>USD</strong>
-            </span>
+                    <strong>
+                        @if($asset->residualGuranteeValue && $asset->residualGuranteeValue->any_residual_value_gurantee == 'yes')
+                            {{ ucfirst($asset->residualGuranteeValue->currency) }}
+                        @else
+                            -
+                        @endif
+                    </strong>
+                </span>
             </div>
+
             <div class="leaserrenewalBx2 leaseprior">
-            <span>Variable Basis
-            <strong>Turnover Lease</strong>
-            </span>
+                <span>Variable Basis
+                    <strong>
+                        @if($asset->residualGuranteeValue && $asset->residualGuranteeValue->any_residual_value_gurantee == 'yes' && $asset->residualGuranteeValue->variable_basis_id)
+                            {{ ucfirst($asset->residualGuranteeValue->variableBasis->title) }}
+                        @else
+                            -
+                        @endif
+                    </strong>
+                </span>
                 <span>Residual Value
-            <strong>123</strong>
-            </span>
+                    <strong>
+                        @if($asset->residualGuranteeValue && $asset->residualGuranteeValue->any_residual_value_gurantee == 'yes')
+                            {{ number_format($asset->residualGuranteeValue->residual_gurantee_value, 2) }}
+                        @else
+                            -
+                        @endif
+                    </strong>
+                </span>
             </div>
+
             <div class="leaserrenewalBx2 leaseprior">
-            <span>Determinable
-            <strong>Yes</strong>
-            </span>
-                <span>Amount
-            <strong>$250.00</strong>
-            </span>
+                <span>Determinable
+                    <strong>
+                        @if($asset->residualGuranteeValue && $asset->residualGuranteeValue->any_residual_value_gurantee == 'yes')
+                            {{ ucfirst($asset->residualGuranteeValue->amount_determinable) }}
+                        @else
+                            -
+                        @endif
+                    </strong>
+                </span>
+                <span>Total Residual Guarantee Value
+                    <strong>
+                        @if($asset->residualGuranteeValue && $asset->residualGuranteeValue->any_residual_value_gurantee == 'yes')
+                            {{ number_format($asset->residualGuranteeValue->total_residual_gurantee_value,2) }}
+                        @else
+                            -
+                        @endif
+                    </strong>
+                </span>
+
+                <span>Description
+                    <strong>
+                        @if($asset->residualGuranteeValue && $asset->residualGuranteeValue->any_residual_value_gurantee == 'yes')
+                            {{ $asset->residualGuranteeValue->other_desc }}
+                        @else
+                            -
+                        @endif
+                    </strong>
+                </span>
             </div>
         </div>
     </div>
@@ -357,55 +516,105 @@
             <div class="discountTop clearfix">
                 <div class="discountBx">
                     <span>Implicit Interest Rate</span>
-                    <strong>30%</strong>
+                    <strong>
+                        @if($asset->leaseSelectDiscountRate)
+                            {{ $asset->leaseSelectDiscountRate->interest_rate }}
+                        @else
+                            -
+                        @endif
+                    </strong>
                 </div>
                 <div class="discountBx">
                     <span>Annual Avg. Escalation Rate</span>
-                    <strong>50%</strong>
+                    <strong>
+                        @if($asset->leaseSelectDiscountRate)
+                            {{ $asset->leaseSelectDiscountRate->annual_average_esclation_rate }}
+                        @else
+                            -
+                        @endif
+                    </strong>
                 </div>
                 <div class="discountBx">
                     <span>Discount Rate in Use</span>
-                    <strong>10%</strong>
+                    <strong>
+                        @if($asset->leaseSelectDiscountRate)
+                            {{ $asset->leaseSelectDiscountRate->discount_rate_to_use }}
+                        @else
+                            -
+                        @endif
+                    </strong>
                 </div>
                 <div class="discountBx">
                     <span>Effective Daily Discount Rate</span>
-                    <strong>20%</strong>
+                    <strong>
+                        @if($asset->leaseSelectDiscountRate)
+                            {{ $asset->leaseSelectDiscountRate->daily_discount_rate }}
+                        @else
+                            -
+                        @endif
+                    </strong>
                 </div>
             </div>
-            <div class="graphBx"><img src="../assets/images/graph-img.png" alt=""></div>
+            <div class="graphBx" id="chart">
+                <canvas id="canvas"></canvas>
+            </div>
         </div>
     </div>
+    @if($asset->securityDeposit)
     <!--Lease Security Deposit-->
-    <div class="locatPurposeOutBx">
-        <div class="locatpurposeTop leaseterminatHd">
-            Lease Security Deposit
+        <div class="locatPurposeOutBx">
+            <div class="locatpurposeTop leaseterminatHd">
+                Lease Security Deposit
+            </div>
+            <div class="locatpurposeBot clearfix">
+                <div class="leaserrenewalBx1 leaseprior">
+                <span>Any Security Deposit
+                    <strong>{{ ucfirst($asset->securityDeposit->any_security_applicable)}}</strong>
+                </span>
+                    <span>Type of Secuity
+                    <strong>Money Transfer</strong>
+                </span>
+                </div>
+
+                <div class="leaserrenewalBx2 leaseprior">
+                <span>Security Deposit Refundable <br/> or Adjustable ?
+                    @if($asset->securityDeposit->refundable_or_adjustable == '1')
+                        <strong>Refundable</strong>
+                    @elseif($asset->securityDeposit->refundable_or_adjustable == '2')
+                        <strong>Adjustable</strong>
+                    @else
+                        <strong> - </strong>
+                    @endif
+                </span>
+                    <span>Currency
+                    <strong>
+                        {{ $asset->securityDeposit->currency}}
+                    </strong>
+                </span>
+                </div>
+
+                <div class="leaserrenewalBx2 leaseprior">
+                <span>Date of Payment
+                    <strong>
+                        @if($asset->securityDeposit->any_security_applicable === 'yes')
+                            {{ \Carbon\Carbon::parse($asset->securityDeposit->payment_date_of_security_deposit)->format(config('settings.date_format')) }}
+                        @else
+                            -
+                        @endif
+                    </strong>
+                </span>
+                    <span>Value
+                    <strong>
+                        @if($asset->securityDeposit->any_security_applicable === 'yes')
+                            {{ number_format($asset->securityDeposit->total_amount, 2) }}
+                        @else
+                            -
+                        @endif
+                    </strong>
+                </span>
+                </div>
+            </div>
         </div>
-        <div class="locatpurposeBot clearfix">
-            <div class="leaserrenewalBx1 leaseprior">
-            <span>Any Security Deposit
-            <strong>Yes</strong>
-            </span>
-                <span>Type of Secuity
-            <strong>Money Transfer</strong>
-            </span>
-            </div>
-            <div class="leaserrenewalBx2 leaseprior">
-            <span>Security Deposit Refundable <br/> or Adjustable ?
-            <strong>Refundable</strong>
-            </span>
-                <span>Currency
-            <strong>USD</strong>
-            </span>
-            </div>
-            <div class="leaserrenewalBx2 leaseprior">
-            <span>Date of Payment
-            <strong>20-03-2019</strong>
-            </span>
-                <span>Value
-            <strong>$250.00</strong>
-            </span>
-            </div>
-        </div>
-    </div>
+    @endif
 </div>
 

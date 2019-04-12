@@ -490,7 +490,7 @@
                 minDate: new Date('{{ getParentDetails()->accountingStandard->base_date }}'),
             @else
                 //cannot go before the lease start date..
-                minDate: new Date('{{ $asset->lease_accural_period }}'),
+                minDate: new Date('{{ $asset->accural_period }}'),
             @endif
             {!!  getYearRanage() !!}
             onSelect: function (date, instance) {

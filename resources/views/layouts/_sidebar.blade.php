@@ -67,31 +67,16 @@
         </ul>
     </li>
 
-    {{--<li class="mainMenuItem">--}}
-        {{--<a href="javascript:void(0);"--}}
-           {{--class="list-group-item @if(request()->segment('1') == 'lease-valuation' && request()->capitalized == 1) active @endif"><img--}}
-                    {{--width="28"--}}
-                    {{--src="{{ asset('images/icons/dollar.png') }}">--}}
-            {{--<span>Valuation - CAP</span>--}}
-            {{--<i class="fa fa-chevron-down" style="float: right"></i>--}}
-        {{--</a>--}}
-        {{--<ul class="subMenuItem">--}}
-            {{--<li class="menu-item"><a--}}
-                        {{--class="@if(request()->segment('1') == 'lease-valuation' && request()->capitalized == 1) active @endif"--}}
-                        {{--tabindex="-1" href="{{route('leasevaluation.index', ['capitalized' => 1])}}">Initial /--}}
-                    {{--Subsequent</a></li>--}}
-            {{--<li class="menu-item"><a tabindex="-1" href="#">Interest Expense</a></li>--}}
-            {{--<li class="menu-item"><a tabindex="-1" href="#">Depreciation</a></li>--}}
-        {{--</ul>--}}
-    {{--</li>--}}
-
     <li>
-        <a href="{{ route('leasevaluation.cap.index') }}" class="@if(request()->segment('2') == 'valuation-capitalised') active @endif list-group-item"><img width="28" src="{{ asset('images/icons/dollar.png') }}"> <span>Valuation CAP</span></a>
+        <a href="{{ route('leasevaluation.cap.index') }}"
+           class="@if(request()->segment('1') == 'lease-valuation' && request()->segment('2') == 'valuation-capitalised') active @endif list-group-item">
+            <img width="28" src="{{ asset('images/icons/dollar.png') }}">
+            <span>Valuation CAP</span></a>
     </li>
 
     <li>
-        <a href="{{route('leasevaluation.index', ['capitalized' => 0])}}"
-           class="@if(request()->segment('1') == 'lease-valuation' && request()->has('capitalized') && request()->capitalized == 0) active @endif list-group-item"><img
+        <a href="{{route('leasevaluation.ncap.index')}}"
+           class="@if(request()->segment('1') == 'lease-valuation' && request()->segment('2') == 'valuation-non-capitalised') active @endif list-group-item"><img
                     width="28" src="{{ asset('images/icons/ncap.png') }}">
             <span>Valuation - NCAP</span></a>
     </li>

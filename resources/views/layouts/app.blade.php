@@ -117,7 +117,7 @@
                     </div>
                 </div>
             </div>
-            <div class="DashRight @if(request()->segment(2) == 'valuation-capitalised' || request()->segment(2) == 'valuation-capitalised-asset') backValuation @endif">
+            <div class="DashRight @if(request()->segment(1) == 'lease-valuation') backValuation @endif">
                 <div class="rightContainer">
                     {{--@if(isset($breadcrumbs ))--}}
                     {{--<nav aria-label="breadcrumb">--}}

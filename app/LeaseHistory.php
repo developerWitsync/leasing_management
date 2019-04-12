@@ -18,7 +18,11 @@ class LeaseHistory extends Model
         'updated_at'
     ];
 
-    protected function leaseModification(){
+    public function lease(){
+        return $this->belongsTo('App\Lease', 'lease_id', 'id');
+    }
+
+    public function leaseModification(){
         return $this->hasOne('App\ModifyLeaseApplication', 'id','modify_id');
     }
 }

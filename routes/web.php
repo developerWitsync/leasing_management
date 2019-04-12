@@ -267,6 +267,7 @@ Route::middleware('auth')->group(function () {
             Route::get('residual-present-value/{id}', ['as' => 'addlease.leasevaluation.residualpresentvalue', 'uses' => 'LeaseValuationController@residualPresentValue']);
 
             Route::get('purchase-present-value/{id}', ['as' => 'addlease.leasevaluation.purchasepresentvalue', 'uses' => 'LeaseValuationController@purchasePresentValue']);
+
         });
         /**
          * Lease Payment Invoice NL16
@@ -320,27 +321,68 @@ Route::middleware('auth')->group(function () {
     */
 
     Route::namespace('Leasevaluation')->prefix('lease-valuation','checksubscription')->group(function () {
-        Route::get('/', ['as' => 'leasevaluation.index', 'uses' => 'LeaseValuationController@index']);
-        Route::get('assets/{category_id}/{capitalized}', ['as' => 'leasevaluation.fetchassets', 'uses' => 'LeaseValuationController@fetchAssets']);
-        Route::get('valuation-capitalised', ['as' => 'leasevaluation.cap.index', 'uses' => 'LeaseValuationController@capitalised']);
-        Route::get('fetch-assets-for-category/{category_id}', ['as' => 'leasevaluation.cap.fetchassets', 'uses' => 'LeaseValuationController@fetchCategoryAsset']);
 
-        Route::get('valuation-capitalised-asset/{id}', ['as' => 'leasevaluation.cap.asset', 'uses' => 'LeaseValuationController@assetValuation']);
+        Route::prefix('valuation-capitalised')->group(function(){
+
+            Route::get('/', ['as' => 'leasevaluation.cap.index', 'uses' => 'LeaseValuationController@capitalised']);
+
+            Route::get('overview/{id}', ['as' => 'leasevaluation.cap.asset', 'uses' => 'LeaseValuationController@leaseOverview']);
+
+            Route::get('valuation/{id}', ['as' => 'leasevaluation.cap.asset.valuation', 'uses' => 'LeaseValuationController@leaseValuation']);
+
+            Route::get('assets/{category_id}/{capitalized}', ['as' => 'leasevaluation.cap.fetchassets', 'uses' => 'LeaseValuationController@fetchAssets']);
+
+            Route::get('fetch-assets-for-category/{category_id}', ['as' => 'leasevaluation.cap.fetchassetsforcategory', 'uses' => 'LeaseValuationController@fetchCategoryAsset']);
+
+            Route::get('generate-discount-rate-chart/{id}', ['as' => 'leasevaluation.cap.discountRateChart', 'uses' => 'LeaseValuationController@generateDiscountRateChart']);
+
+            Route::get('fetch-complete-lease-valuations/{id}',['as' => 'leasevaluation.cap.asset.fetchvaluations', 'uses' => 'LeaseValuationController@fetchCompletedLeaseValuation']);
+
+            Route::get('see-valuation-details/{history_id}', ['as' => 'addlease.cap.leasevaluation.seedetails', 'uses' => 'LeaseValuationController@seeDetails']);
+
+        });
+
+        Route::prefix('valuation-non-capitalised')->group(function(){
+
+            Route::get('/', ['as' => 'leasevaluation.ncap.index', 'uses' => 'LeaseValuationController@capitalised']);
+
+            Route::get('overview/{id}', ['as' => 'leasevaluation.ncap.asset', 'uses' => 'LeaseValuationController@leaseOverview']);
+
+            Route::get('valuation/{id}', ['as' => 'leasevaluation.ncap.asset.valuation', 'uses' => 'LeaseValuationController@leaseValuation']);
+
+            Route::get('assets/{category_id}/{capitalized}', ['as' => 'leasevaluation.ncap.fetchassets', 'uses' => 'LeaseValuationController@fetchAssets']);
+
+            Route::get('fetch-assets-for-category/{category_id}', ['as' => 'leasevaluation.ncap.fetchassetsforcategory', 'uses' => 'LeaseValuationController@fetchCategoryAsset']);
+
+            Route::get('generate-discount-rate-chart/{id}', ['as' => 'leasevaluation.ncap.discountRateChart', 'uses' => 'LeaseValuationController@generateDiscountRateChart']);
+
+            Route::get('fetch-complete-lease-valuations/{id}',['as' => 'leasevaluation.ncap.asset.fetchvaluations', 'uses' => 'LeaseValuationController@fetchCompletedLeaseValuation']);
+
+            Route::get('see-valuation-details/{history_id}', ['as' => 'addlease.ncap.leasevaluation.seedetails', 'uses' => 'LeaseValuationController@seeDetails']);
+
+        });
+
     });
 
 
     Route::namespace('Settings')->middleware(['permission:settings','checksubscription'])->prefix('settings')->group(function () {
 
         Route::prefix('general')->group(function () {
+
             Route::get('/', ['as' => 'settings.index', 'uses' => 'IndexController@index']);
+
             Route::post('save', ['as' => 'settings.index.save', 'uses' => 'IndexController@save']);
+
             Route::get('changestatus', ['as' => 'settings.leaselockyear.index', 'uses' => 'LeaseLockYearController@index']);
 
             Route::get('fetch-lease-assets-countries', ['as' => 'settings.index.fetchleaseassetcountries', 'uses' => 'LeaseAssetCountriesController@index']);
+
             Route::match(['get', 'post'], 'add-lease-asset-country', ['as' => 'settings.index.addleaseassetcountries', 'uses' => 'LeaseAssetCountriesController@create']);
+
             Route::delete('delete-lease-asset-country/{id}', ['as' => 'settings.index.deleteleaseassetcountry', 'uses' => 'LeaseAssetCountriesController@delete']);
 
             Route::post('save-financial-reporting-period', ['as' => 'settings.index.financialreportingperiod', 'uses' => 'IndexController@financialReportingPeriod']);
+
         });
 
         Route::prefix('lease-classification')->group(function () {
