@@ -1,0 +1,32 @@
+server {
+    listen 80;
+    listen [::]:80;
+listen 443 ssl ;
+    listen [::]:443 ssl ;
+ ssl_prefer_server_ciphers  on;
+        ssl_ciphers  'ECDH !aNULL !eNULL !SSLv2 !SSLv3';
+
+    SSLCertificateFile /home/ubuntu/74867c6a9238d1d0.crt
+    SSLCertificateKeyFile /home/ubuntu/witsync.co.key
+    SSLCertificateChainFile /home/ubuntu/gd_bundle-g2-g1.crt
+
+    root /var/www/html/Witsync-Lease-Management/public;
+    index index.php index.html index.htm index.nginx-debian.html;
+
+    server_name witsync.co;
+
+    location / {
+#        try_files $uri $uri/ =404;
+        try_files $uri $uri/ /index.php?$args;
+    }
+
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/run/php/php7.1-fpm.sock;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+}
+
