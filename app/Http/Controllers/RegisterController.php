@@ -28,6 +28,14 @@ class RegisterController extends Controller
             if(auth()->check()){
                 return redirect('/home');
             }
+
+            $is_register_allowed = env('REGISTER_ALLOWED');
+
+            if(!$is_register_allowed){
+                return redirect('/')->with('register_not_allowed', true);
+            }
+
+
 //            if($package){
 //                $package = SubscriptionPlans::query()->where('slug', $package)->first();
 //                $selected_plan_data = null;
