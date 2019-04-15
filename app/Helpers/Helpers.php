@@ -147,7 +147,7 @@ function calculatePaymentDueDates($firt_payment_date, $last_payment_date, $payme
             $month = \Carbon\Carbon::parse($start_date)->format('F');
             $current_year = \Carbon\Carbon::parse($start_date)->format('Y');
             $final_payout_dates[$current_year][$month][$start_date] = $start_date;
-            $start_date = \Carbon\Carbon::parse($start_date)->addMonth($addMonths)->format('Y-m-d');
+            $start_date = \Carbon\Carbon::parse($start_date)->addMonth($addMonths)->firstOfMonth()->format('Y-m-d');
 
             if (strtotime($start_date) <= strtotime($end_date)) {
                 $month = \Carbon\Carbon::parse($end_date)->format('F');
