@@ -87,6 +87,7 @@ class LeasePaymentsController extends Controller
 
                 //check if the Subsequent Valuation is applied for the lease modification
                 $subsequent_modify_required = $lease->isSubsequentModification();
+                $is_subsequent = $subsequent_modify_required;
 
                 $asset = LeaseAssets::query()->where('lease_id', '=', $id)->where('id', '=', $asset->id)->first();
                 if ($asset) {
@@ -128,7 +129,8 @@ class LeasePaymentsController extends Controller
                         'subsequent_modify_required',
                         'current_step',
                         'show_next',
-                        'back_url'
+                        'back_url',
+                        'is_subsequent'
                     ));
 
                 } else {
@@ -156,6 +158,7 @@ class LeasePaymentsController extends Controller
             $lease = $asset->lease;
             //check if the Subsequent Valuation is applied for the lease modification
             $subsequent_modify_required = false; //it will remain false as the users will be creating new payment here and they will provide all the details here.
+            $is_subsequent = $lease->isSubsequentModification();
 
             $breadcrumbs = [
                 [
@@ -171,7 +174,6 @@ class LeasePaymentsController extends Controller
                     'title' => 'Create Lease Asset Payment'
                 ]
             ];
-
 
             $payment = new LeaseAssetPayments();
 
@@ -332,7 +334,8 @@ class LeasePaymentsController extends Controller
                 'lease_span_time_in_days',
                 'subsequent_modify_required',
                 'current_step',
-                'variable_basis'
+                'variable_basis',
+                'is_subsequent'
             ));
 
         } catch (\Exception $e) {
@@ -355,6 +358,7 @@ class LeasePaymentsController extends Controller
             $lease = $asset->lease;
             //check if the Subsequent Valuation is applied for the lease modification
             $subsequent_modify_required = $lease->isSubsequentModification();
+            $is_subsequent = $subsequent_modify_required;
             $payment = LeaseAssetPayments::query()->where('asset_id', '=', $id)->where('id', '=', $payment_id)->first();
             if ($payment) {
                 if ($request->isMethod('post')) {
@@ -508,13 +512,13 @@ class LeasePaymentsController extends Controller
                     'lease_span_time_in_days',
                     'subsequent_modify_required',
                     'current_step',
-                    'variable_basis'
+                    'variable_basis',
+                    'is_subsequent'
                 ));
             } else {
                 abort(404);
             }
         } catch (\Exception $e) {
-            dd($e);
             abort(404);
         }
     }

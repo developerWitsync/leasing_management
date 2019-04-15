@@ -200,7 +200,11 @@
             <div class="col-md-12">
                 <input id="first_payment_start_date" type="text" placeholder="First Lease Payment Start Date"
                        class="form-control lease_period1" name="first_payment_start_date"
+                       @if($subsequent_modify_required)
+                       value="{{ old('first_payment_start_date',$lease->modifyLeaseApplication->last()->effective_from) }}"
+                       @else
                        value="{{ old('first_payment_start_date',$payment->first_payment_start_date) }}"
+                       @endif
                        @if($subsequent_modify_required) disabled="disabled" @endif autocomplete="off" readonly="true">
                 @if ($errors->has('first_payment_start_date'))
                     <span class="help-block">
@@ -298,7 +302,8 @@
             <label for="lease_payment_per_interval" class="col-md-12 control-label">Lease Payment Per Interval</label>
             <div class="col-md-12">
 
-                <select class="form-control" name="lease_payment_per_interval" @if($subsequent_modify_required) disabled="disabled" @endif>
+                <select class="form-control" name="lease_payment_per_interval"
+                        @if($subsequent_modify_required) disabled="disabled" @endif>
                     <option value="">--Select Interval Nature--</option>
                     <option value="1"
                             @if(old('lease_payment_per_interval', $payment->lease_payment_per_interval) == '1') selected="selected" @endif>
@@ -317,7 +322,8 @@
                 @endif
 
                 @if($subsequent_modify_required)
-                    <input type="hidden" name="lease_payment_per_interval" value="{{ $payment->lease_payment_per_interval }}">
+                    <input type="hidden" name="lease_payment_per_interval"
+                           value="{{ $payment->lease_payment_per_interval }}">
                 @endif
 
             </div>
@@ -394,7 +400,9 @@
             <a href="{{ route('addlease.payments.index', ['id' => $lease->id]) }}" class="btn btn-danger">Back</a>
         </div>
         <div class="col-md-6 btnsubmitBx">
-            <button type="submit" class="btn btn-success" name="submit" value="save" onclick="javascript:showOverlayForAjax();">Save</button>
+            <button type="submit" class="btn btn-success" name="submit" value="save"
+                    onclick="javascript:showOverlayForAjax();">Save
+            </button>
         </div>
     </div>
 
@@ -422,7 +430,7 @@
 
             // variable_basis_amount_determinable
             @if(old('nature', $payment->nature) == "2" && old('variable_amount_determinable', $payment->variable_amount_determinable) == "no")
-                $('.variable_basis_amount_determinable').hide();
+            $('.variable_basis_amount_determinable').hide();
             @endif
 
             $('select[name="lease_payment_per_interval"]').on('change', function () {
@@ -485,13 +493,20 @@
             dateFormat: "dd-M-yy",
             changeYear: true,
             changeMonth: true,
-            @if($asset->using_lease_payment == '1')
-                //cannpt go before the base date...
-                minDate: new Date('{{ getParentDetails()->accountingStandard->base_date }}'),
+
+            @if($subsequent_modify_required || $is_subsequent)
+                minDate: new Date('{{ $lease->modifyLeaseApplication->last()->effective_from }}'),
             @else
-                //cannot go before the lease start date..
-                minDate: new Date('{{ $asset->accural_period }}'),
+                @if($asset->using_lease_payment == '1')
+                    //cannpt go before the base date...
+                    minDate: new Date('{{ getParentDetails()->accountingStandard->base_date }}'),
+                @else
+                    //cannot go before the lease start date..
+                    minDate: new Date('{{ $asset->accural_period }}'),
+                @endif
             @endif
+
+
             {!!  getYearRanage() !!}
             onSelect: function (date, instance) {
                 var _ajax_url = '{{route("lease.checklockperioddate")}}';
@@ -503,12 +518,16 @@
             dateFormat: "dd-M-yy",
             changeYear: true,
             changeMonth: true,
-            @if($asset->using_lease_payment == '1')
-                //cannpt go before the base date...
-                minDate: new Date('{{ getParentDetails()->accountingStandard->base_date }}'),
+            @if($subsequent_modify_required || $is_subsequent)
+                minDate: new Date('{{ $lease->modifyLeaseApplication->last()->effective_from }}'),
             @else
-                //cannot go before the lease start date..
-                minDate: new Date('{{ $asset->lease_accural_period }}'),
+                @if($asset->using_lease_payment == '1')
+                    //cannpt go before the base date...
+                    minDate: new Date('{{ getParentDetails()->accountingStandard->base_date }}'),
+                @else
+                    //cannot go before the lease start date..
+                    minDate: new Date('{{ $asset->lease_accural_period }}'),
+                @endif
             @endif
             maxDate: new Date('{{ ($asset->getLeaseEndDate($asset)) }}'),
             {!!  getYearRanage() !!}
@@ -545,16 +564,16 @@
                 //need to hide all the other payment details and need to reset all the fields value to null as well..
                 $('.variable_basis_amount_determinable').hide();
 
-                $(".variable_basis_amount_determinable input").each(function(){
+                $(".variable_basis_amount_determinable input").each(function () {
                     var attr = $(this).attr('readonly');
-                    if(typeof attr == typeof undefined){
+                    if (typeof attr == typeof undefined) {
                         this.value = "";
                     }
                 });
 
-                $(".variable_basis_amount_determinable select").each(function(){
+                $(".variable_basis_amount_determinable select").each(function () {
                     var attr = $(this).attr('readonly');
-                    if(typeof attr == typeof undefined){
+                    if (typeof attr == typeof undefined) {
                         this.value = "";
                     }
                 });
@@ -621,11 +640,18 @@
 
             var _value = parseInt($('select[name="payout_time"]').val());
             var _selected_payment_interval = parseInt($('select[name="payment_interval"]').val());
-            var _start_date = new Date("{{ date('D M d Y', strtotime($asset->accural_period)) }}");
-            @if($asset->using_lease_payment == '1' && \Carbon\Carbon::parse($asset->accural_period)->lessThan(\Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)))
-                //cannot go before the base date...
-                var _start_date = new Date("{{ date('D M d Y', strtotime(getParentDetails()->accountingStandard->base_date)) }}");
+
+            @if($subsequent_modify_required || $is_subsequent)
+                var _start_date = new Date("{{ date('D M d Y', strtotime($lease->modifyLeaseApplication->last()->effective_from)) }}");
+            @else
+                var _start_date = new Date("{{ date('D M d Y', strtotime($asset->accural_period)) }}");
+                @if($asset->using_lease_payment == '1' && \Carbon\Carbon::parse($asset->accural_period)->lessThan(\Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)))
+                    //cannot go before the base date...
+                    var _start_date = new Date("{{ date('D M d Y', strtotime(getParentDetails()->accountingStandard->base_date)) }}");
+                @endif
             @endif
+
+
             var _end_date = new Date("{{ date('D M d Y', strtotime($asset->getLeaseEndDate($asset))) }}");
 
             if (_value == "" || _selected_payment_interval == "") {
@@ -645,12 +671,16 @@
                     case 2:
                         //means selected option is monthly.
                         @php
-                            $accural_date = \Carbon\Carbon::parse($asset->accural_period);
-                            $calculated_date = $accural_date->addMonth(1)->format('D M d Y');
-                            //need to check for the current or initial payment basis
-                            if($asset->using_lease_payment == '1' && \Carbon\Carbon::parse($asset->accural_period)->lessThan(\Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date))){
-                                //cannot go before the base date...
-                                $calculated_date = \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->addMonth(1)->format('D M d Y');
+                            if($subsequent_modify_required || $is_subsequent){
+                                $calculated_date = \Carbon\Carbon::parse($lease->modifyLeaseApplication->last()->effective_from)->addMonth(1)->format('D M d Y');
+                            } else {
+                                $accural_date = \Carbon\Carbon::parse($asset->accural_period);
+                                $calculated_date = $accural_date->addMonth(1)->format('D M d Y');
+                                //need to check for the current or initial payment basis
+                                if($asset->using_lease_payment == '1' && \Carbon\Carbon::parse($asset->accural_period)->lessThan(\Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date))){
+                                    //cannot go before the base date...
+                                    $calculated_date = \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->addMonth(1)->format('D M d Y');
+                                }
                             }
                         @endphp
                             _calculated_first_payment_date = new Date("{{ $calculated_date }}");
@@ -658,12 +688,16 @@
                     case 3:
                         //means selected option is Quarterly
                         @php
-                            $accural_date = \Carbon\Carbon::parse($asset->accural_period);
-                            $calculated_date = $accural_date->addMonth(3)->format('D M d Y');
-                            //need to check for the current or initial payment basis
-                            if($asset->using_lease_payment == '1' && \Carbon\Carbon::parse($asset->accural_period)->lessThan(\Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date))){
-                                //cannot go before the base date...
-                                $calculated_date = \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->addMonth(3)->format('D M d Y');
+                            if($subsequent_modify_required || $is_subsequent){
+                                $calculated_date = \Carbon\Carbon::parse($lease->modifyLeaseApplication->last()->effective_from)->addMonth(3)->format('D M d Y');
+                            } else {
+                                $accural_date = \Carbon\Carbon::parse($asset->accural_period);
+                                $calculated_date = $accural_date->addMonth(3)->format('D M d Y');
+                                //need to check for the current or initial payment basis
+                                if($asset->using_lease_payment == '1' && \Carbon\Carbon::parse($asset->accural_period)->lessThan(\Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date))){
+                                    //cannot go before the base date...
+                                    $calculated_date = \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->addMonth(3)->format('D M d Y');
+                                }
                             }
                         @endphp
                             _calculated_first_payment_date = new Date("{{ $calculated_date }}");
@@ -671,12 +705,16 @@
                     case 4:
                         //means selected option is Semi-Annually
                         @php
-                            $accural_date = \Carbon\Carbon::parse($asset->accural_period);
-                            $calculated_date = $accural_date->addMonth(6)->format('D M d Y');
-                            //need to check for the current or initial payment basis
-                            if($asset->using_lease_payment == '1' && \Carbon\Carbon::parse($asset->accural_period)->lessThan(\Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date))){
-                                //cannot go before the base date...
-                                $calculated_date = \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->addMonth(6)->format('D M d Y');
+                            if($subsequent_modify_required || $is_subsequent){
+                                $calculated_date = \Carbon\Carbon::parse($lease->modifyLeaseApplication->last()->effective_from)->addMonth(6)->format('D M d Y');
+                            } else {
+                                $accural_date = \Carbon\Carbon::parse($asset->accural_period);
+                                $calculated_date = $accural_date->addMonth(6)->format('D M d Y');
+                                //need to check for the current or initial payment basis
+                                if($asset->using_lease_payment == '1' && \Carbon\Carbon::parse($asset->accural_period)->lessThan(\Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date))){
+                                    //cannot go before the base date...
+                                    $calculated_date = \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->addMonth(6)->format('D M d Y');
+                                }
                             }
                         @endphp
                             _calculated_first_payment_date = new Date("{{ $calculated_date }}");
@@ -684,12 +722,16 @@
                     case 5:
                         //means selected option is Annually
                         @php
-                            $accural_date = \Carbon\Carbon::parse($asset->accural_period);
-                            $calculated_date = $accural_date->addMonth(12)->format('D M d Y');
-                            //need to check for the current or initial payment basis
-                            if($asset->using_lease_payment == '1' && \Carbon\Carbon::parse($asset->accural_period)->lessThan(\Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date))){
-                                //cannot go before the base date...
-                                $calculated_date = \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->addMonth(12)->format('D M d Y');
+                            if($subsequent_modify_required || $is_subsequent){
+                                $calculated_date = \Carbon\Carbon::parse($lease->modifyLeaseApplication->last()->effective_from)->addMonth(12)->format('D M d Y');
+                            } else {
+                                $accural_date = \Carbon\Carbon::parse($asset->accural_period);
+                                $calculated_date = $accural_date->addMonth(12)->format('D M d Y');
+                                //need to check for the current or initial payment basis
+                                if($asset->using_lease_payment == '1' && \Carbon\Carbon::parse($asset->accural_period)->lessThan(\Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date))){
+                                    //cannot go before the base date...
+                                    $calculated_date = \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->addMonth(12)->format('D M d Y');
+                                }
                             }
                         @endphp
                             _calculated_first_payment_date = new Date("{{ $calculated_date }}");
@@ -745,7 +787,7 @@
                         lease_id: $lease_id,
                         asset_id: $asset_id
                     },
-                    beforeSend: function(){
+                    beforeSend: function () {
                         showOverlayForAjax();
                     },
                     type: 'get',
@@ -755,8 +797,12 @@
                             $('#overlay').hide();
                             removeOverlayAjax();
                             final_payout_dates = response['final_payout_dates'];
+                            @if($subsequent_modify_required || $is_subsequent)
+                                var asset_lease_start_date = new Date('{{ \Carbon\Carbon::parse($lease->modifyLeaseApplication->last()->effective_from)->format('Y') ."-". \Carbon\Carbon::parse($lease->modifyLeaseApplication->last()->effective_from)->format('m') }}');
+                            @else
+                                var asset_lease_start_date = new Date('{{ \Carbon\Carbon::parse($asset->accural_period)->format('Y') ."-". \Carbon\Carbon::parse($asset->accural_period)->format('m') }}');
+                            @endif
 
-                            var asset_lease_start_date = new Date('{{ \Carbon\Carbon::parse($asset->accural_period)->format('Y') ."-". \Carbon\Carbon::parse($asset->accural_period)->format('m') }}');
                             var asset_lease_end_date = new Date('{{ \Carbon\Carbon::parse($asset->getLeaseEndDate($asset))->format('Y')."-".\Carbon\Carbon::parse($asset->getLeaseEndDate($asset))->format('m') }}');
                             //setting up datepicker calendar on each input field.. taking care of lease start date and lease end date as well....
                             $('.alter_due_dates_input').each(function () {
@@ -766,7 +812,12 @@
                                 if (temp_date >= asset_lease_start_date && temp_date <= asset_lease_end_date) {
                                     $(this).datepicker({
                                         dateFormat: "yy-mm-dd",
-                                        minDate: new Date('{{ $asset->accural_period }}'),
+                                        @if($subsequent_modify_required || $is_subsequent)
+                                            minDate: new Date('{{ $lease->modifyLeaseApplication->last()->effective_from }}'),
+                                        @else
+                                            minDate: new Date('{{ $asset->accural_period }}'),
+                                        @endif
+
                                         maxDate: new Date('{{ $asset->getLeaseEndDate($asset) }}'),
                                         stepMonths: 0
                                     });

@@ -362,6 +362,8 @@ Route::middleware('auth')->group(function () {
 
         });
 
+        Route::get('show-escalation-chart/{id}', ['as' => 'lease.leasevaluation.escalationchart', 'uses' => 'LeaseValuationController@showEscalationChart']);
+
     });
 
 

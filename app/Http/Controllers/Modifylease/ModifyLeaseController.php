@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Modifylease;
 
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Lease;
 use App\ModifyLeaseApplication;
@@ -126,7 +127,28 @@ class ModifyLeaseController extends Controller
                     return redirect(route('add-new-lease.index', ['id' => $id]))->with('status', 'Modify Lease has been Created successfully.');
                 }
                 $asset = $lease->assets()->first();
-                return view('modifylease.create', compact('lease', 'lase_modification', 'disable_initial', 'asset'));
+
+                // need to send the minDate
+                // minDate will be lease start date + 1 day in case there is no modification done till this step..
+                // minDate will be last effective date + 1 day in case there are some modifications made till this point
+
+                $lease_modifications_history = ModifyLeaseApplication::query()->whereIn('business_account_id', getDependentUserIds())
+                    ->where('lease_id', '=', $id)
+                    ->orderBy('created_at', 'desc')
+                    ->first();
+                if($lease_modifications_history) {
+                    $minDate = Carbon::parse($lease_modifications_history->effective_from)->addDay(1)->format('Y-m-d');
+                } else {
+                    $minDate = Carbon::parse($asset->accural_period)->addDay(1)->format('Y-m-d');
+                }
+
+                return view('modifylease.create', compact(
+                    'lease',
+                    'lase_modification',
+                    'disable_initial',
+                    'asset',
+                    'minDate'
+                ));
             } else {
                 abort(404);
             }

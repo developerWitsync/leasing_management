@@ -134,5 +134,17 @@
             }
         });
 
+        $(function () {
+            $('.show_escalation').on('click', function(){
+                var payment_id = $(this).data('payment_id');
+                $.ajax({
+                    url : '/lease-valuation/show-escalation-chart/'+payment_id,
+                    success:function(response){
+                        console.log(response);
+                    }
+                })
+            });
+        })
+
     </script>
 @endsection

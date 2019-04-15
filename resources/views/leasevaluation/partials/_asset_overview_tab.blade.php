@@ -408,7 +408,7 @@
                             @endif
                         </td>
                         <td>
-                            <a href="javascript:void(0);" class="btn btn-xs btn-primary" data-toggle="tooltip"
+                            <a href="javascript:void(0);" class="btn btn-xs btn-primary show_escalation" data-payment_id="{{$payment->id}}" data-toggle="tooltip"
                                title="View Escalation Chart"><i class="fa fa-eye"></i></a>
                         </td>
                     </tr>

@@ -161,14 +161,16 @@ function calculatePaymentDueDates($firt_payment_date, $last_payment_date, $payme
             if ($i == 1) {
                 //will not increase by 1 month as the first payment date should be start_date
                 $start_date = \Carbon\Carbon::parse($start_date)->format('Y-m-d');
+                $interval_date = \Carbon\Carbon::parse($start_date)->format('Y-m-d');
             } else {
                 $start_date = \Carbon\Carbon::parse($start_date)->addMonth($addMonths)->format('Y-m-d');
+                $interval_date = \Carbon\Carbon::parse($start_date)->lastOfMonth()->format('Y-m-d');
             }
 
-            if (strtotime($start_date) <= strtotime($end_date)) {
-                $month = \Carbon\Carbon::parse($start_date)->format('F');
-                $current_year = \Carbon\Carbon::parse($start_date)->format('Y');
-                $final_payout_dates[$current_year][$month][$start_date] = $start_date;
+            if (strtotime($interval_date) <= strtotime($end_date)) {
+                $month = \Carbon\Carbon::parse($interval_date)->format('F');
+                $current_year = \Carbon\Carbon::parse($interval_date)->format('Y');
+                $final_payout_dates[$current_year][$month][$interval_date] = $interval_date;
             } else {
                 $month = \Carbon\Carbon::parse($end_date)->format('F');
                 $current_year = \Carbon\Carbon::parse($end_date)->format('Y');
@@ -244,13 +246,14 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
     $base_date = getParentDetails()->accountingStandard->base_date;
     $effective_date = \Carbon\Carbon::parse($data['effective_from']);
     //check for the subsequent modification and change the effective date as it is..
-    $subsequent_modify_required = $lease->isSubsequentModification();
-    if($subsequent_modify_required){
-        $effective_date = \Carbon\Carbon::parse($lease->modifyLeaseApplication->last()->effective_from);
-        $lease_history = \App\LeaseHistory::query()->where('lease_id', '=', $lease->id)->orderBy('id', 'desc')->first();
-        $filtered_escalation_dates  = collect(json_decode($lease_history->esclation_payments, false))
-            ->where('payment_id', '=', $payment->id);
-    }
+//    $subsequent_modify_required = false;
+//    $subsequent_modify_required = $lease->isSubsequentModification();
+//    if($subsequent_modify_required){
+//        $effective_date = \Carbon\Carbon::parse($lease->modifyLeaseApplication->last()->effective_from);
+//        $lease_history = \App\LeaseHistory::query()->where('lease_id', '=', $lease->id)->orderBy('id', 'desc')->first();
+//        $filtered_escalation_dates  = collect(json_decode($lease_history->esclation_payments, false))
+//            ->where('payment_id', '=', $payment->id);
+//    }
 
     $escalation_applicable = $data['is_escalation_applicable'];
     $escalation_basis = isset($data['escalation_basis']) ? $data['escalation_basis'] : null;
@@ -344,19 +347,20 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
                                 $amount_to_consider = $payments_in_this_year_month->total_payment_amount;
                             }
 
-                            if($subsequent_modify_required && $start_year <= $effective_date->format('Y') && $key <= $effective_date->format('m')){
-                                //have to take out the escalation percentage that was applied in the initial valuation..
-                                $filtered_data = $filtered_escalation_dates
-                                    ->where('escalation_year', '=', $start_year)->where('escalation_month', '=',$key)
-                                    ->first();
-                                if(count($filtered_data) == 1){
-                                    $escalation_percentage_or_amount = $filtered_data->value_escalated;
-                                    $amount_to_consider = $filtered_data->total_amount_payable;
-                                }
-                                $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
-                            } else {
-                                $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
-                            }
+//                            if($subsequent_modify_required && $start_year <= $effective_date->format('Y') && $key <= $effective_date->format('m')){
+//                                //have to take out the escalation percentage that was applied in the initial valuation..
+//                                $filtered_data = $filtered_escalation_dates
+//                                    ->where('escalation_year', '=', $start_year)->where('escalation_month', '=',$key)
+//                                    ->first();
+//                                if(count($filtered_data) == 1){
+//                                    $escalation_percentage_or_amount = $filtered_data->value_escalated;
+//                                    $amount_to_consider = $filtered_data->total_amount_payable;
+//                                }
+//                                $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
+//                            } else {
+//                                $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
+//                            }
+                            $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
 
                         }
 
@@ -459,21 +463,21 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
                                 $amount_to_consider = $payments_in_this_year_month->total_payment_amount;
                             }
 
-                            if($subsequent_modify_required && $start_year <= $effective_date->format('Y') && $key <= $effective_date->format('m')){
-                                //have to take out the escalation percentage that was applied in the initial valuation..
-                                $filtered_data = $filtered_escalation_dates
-                                    ->where('escalation_year', '=', $start_year)->where('escalation_month', '=',$key)
-                                    ->first();
-                                if(count($filtered_data) == 1){
-                                    $escalation_percentage_or_amount = $filtered_data->value_escalated;
-                                    $amount_to_consider = $filtered_data->total_amount_payable;
-                                }
-                                $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
-                            } else {
-                                $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
-                            }
+//                            if($subsequent_modify_required && $start_year <= $effective_date->format('Y') && $key <= $effective_date->format('m')){
+//                                //have to take out the escalation percentage that was applied in the initial valuation..
+//                                $filtered_data = $filtered_escalation_dates
+//                                    ->where('escalation_year', '=', $start_year)->where('escalation_month', '=',$key)
+//                                    ->first();
+//                                if(count($filtered_data) == 1){
+//                                    $escalation_percentage_or_amount = $filtered_data->value_escalated;
+//                                    $amount_to_consider = $filtered_data->total_amount_payable;
+//                                }
+//                                $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
+//                            } else {
+//                                $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
+//                            }
 
-                            // $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
+                            $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
                         }
                     } else {
                         $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => 0, 'current_class' => $current_class];

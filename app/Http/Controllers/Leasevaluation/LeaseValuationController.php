@@ -11,7 +11,10 @@ namespace App\Http\Controllers\Leasevaluation;
 use App\CategoriesLeaseAssetExcluded;
 use App\DiscountRateChartView;
 use App\Http\Controllers\Controller;
+use App\LeaseAssetPayments;
 use App\LeaseHistory;
+use App\LeasePaymentsEscalationClause;
+use App\PaymentEscalationDetails;
 use App\ReportingCurrencySettings;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -470,5 +473,18 @@ class LeaseValuationController extends Controller
             $lower_limit = date ("Y-m-d", strtotime("+1 month", strtotime($lower_limit)));
         }
         return response()->json($data, 200);
+    }
+
+    public function showEscalationChart($id){
+        try{
+            $payment = LeaseAssetPayments::query()->findOrFail($id);
+            //need to make the call to the generateEscalationChart funtion from here....
+            $asset = $payment->asset;
+            $lease = $asset->lease;
+            $data = PaymentEscalationDetails::query()->where('payment_id','=',$payment->id)->first()->toArray();
+
+        } catch (\Exception $e){
+            dd($e);
+        }
     }
 }

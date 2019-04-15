@@ -87,7 +87,7 @@ class LeaseAssetPayments extends Model
             return $this->calculateUndiscountedValueForPaymentDueDates();
         } else {
             //in case of yes have to check if the escalation is applicable
-            if($this->paymentEscalationSingle->is_escalation_applicable == "yes"){
+            if($this->paymentEscalationSingle && $this->paymentEscalationSingle->is_escalation_applicable == "yes"){
                 return $this->calculateUndiscountedValueForEscalations();
             } else {
                 //will have to get the total from the payment due dates only..

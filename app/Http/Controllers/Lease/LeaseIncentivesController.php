@@ -39,6 +39,12 @@ class LeaseIncentivesController extends Controller
         ];
     }
 
+    /**
+     * updated new function that will be now used for the lease incentives as we will now have only one lease asset..
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
+     */
     public function index_V2($id, Request $request)
     {
         try {

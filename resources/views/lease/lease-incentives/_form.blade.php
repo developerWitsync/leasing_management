@@ -33,18 +33,23 @@
             <span>
                 <input class="form-check-input" name="is_any_lease_incentives_receivable" id="yes" type="checkbox"
                    value="yes"
-                   @if(old('is_any_lease_incentives_receivable', $model->is_any_lease_incentives_receivable) == "yes") checked="checked" @endif>
+                   @if(old('is_any_lease_incentives_receivable', $model->is_any_lease_incentives_receivable) == "yes") checked="checked" @endif @if($subsequent_modify_required) disabled="disabled" @endif>
                 <label class="form-check-label" for="yes" id="yes" style="vertical-align: 4px">Yes</label>
             </span>
             <span>
                 <input class="form-check-input" name="is_any_lease_incentives_receivable" id="no" type="checkbox" value="no"
-                   @if(old('is_any_lease_incentives_receivable', $model->is_any_lease_incentives_receivable)  == "no") checked="checked" @endif>
+                   @if(old('is_any_lease_incentives_receivable', $model->is_any_lease_incentives_receivable)  == "no") checked="checked" @endif @if($subsequent_modify_required) disabled="disabled" @endif>
                 <label class="form-check-label" for="no" id="no" style="vertical-align: 4px">No</label>
             </span>
+
+            @if($subsequent_modify_required)
+                <input type="hidden" name="is_any_lease_incentives_receivable" value="{{$model->is_any_lease_incentives_receivable}}" />
+            @endif
+
             @if ($errors->has('is_any_lease_incentives_receivable'))
                 <span class="help-block">
-                        <strong>{{ $errors->first('is_any_lease_incentives_receivable') }}</strong>
-                    </span>
+                    <strong>{{ $errors->first('is_any_lease_incentives_receivable') }}</strong>
+                </span>
             @endif
         </div>
     </div>
@@ -55,7 +60,12 @@
             <label for="currency" class="col-md-12 control-label">Currency</label>
             <div class="col-md-12 form-check form-check-inline">
                 <input type="text" value="{{ $lease->lease_contract_id }}" class="form-control" id="currency"
-                       name="currency" readonly="readonly">
+                       name="currency" readonly="readonly" @if($subsequent_modify_required) disabled="disabled" @endif>
+
+                @if($subsequent_modify_required)
+                    <input type="hidden" name="currency" value="{{$model->lease_contract_id}}" />
+                @endif
+
                 @if ($errors->has('currency'))
                     <span class="help-block">
                         <strong>{{ $errors->first('currency') }}</strong>
@@ -69,7 +79,12 @@
             <div class="col-md-12 form-check form-check-inline">
                 <input type="text" value="{{ old('total_lease_incentives', $model->total_lease_incentives)}}"
                        class="form-control" id="total_lease_incentives" name="total_lease_incentives"
-                       readonly="readonly">
+                       readonly="readonly" @if($subsequent_modify_required) disabled="disabled" @endif>
+
+                @if($subsequent_modify_required)
+                    <input type="hidden" name="total_lease_incentives" value="{{$model->total_lease_incentives}}" />
+                @endif
+
                 @if ($errors->has('total_lease_incentives'))
                     <span class="help-block">
                         <strong>{{ $errors->first('total_lease_incentives') }}</strong>
@@ -96,37 +111,64 @@
                         <tr class="clonable_row customer">
                             <td>
                                 <input type="text" class="form-control" name="customer_name[]"
-                                       value="{{ $customerDetail->customer_name }}">
+                                       value="{{ $customerDetail->customer_name }}" @if($subsequent_modify_required) disabled="disabled" @endif>
+
+                                @if($subsequent_modify_required)
+                                    <input type="hidden" name="customer_name[]" value="{{ $customerDetail->customer_name }}"/>
+                                @endif
+
                             </td>
                             <td>
                                 <input type="text" class="form-control" name="description[]"
-                                       value="{{ $customerDetail->description }}">
+                                       value="{{ $customerDetail->description }}" @if($subsequent_modify_required) disabled="disabled" @endif>
+                                @if($subsequent_modify_required)
+                                    <input type="hidden" name="description[]" value="{{ $customerDetail->description }}"/>
+                                @endif
                             </td>
                             <td>
                                 <input type="text" class="form-control lease_period incentive_date" name="incentive_date[]"
-                                       value="{{ \Carbon\Carbon::parse($customerDetail->incentive_date)->format(config('settings.date_format')) }}">
+                                       value="{{ \Carbon\Carbon::parse($customerDetail->incentive_date)->format(config('settings.date_format')) }}" @if($subsequent_modify_required) disabled="disabled" @endif>
+
+                                @if($subsequent_modify_required)
+                                    <input type="hidden" name="incentive_date[]" value="{{ \Carbon\Carbon::parse($customerDetail->incentive_date)->format(config('settings.date_format')) }}"/>
+                                @endif
+
                             </td>
                             <td>
-                                <select class="form-control customer_currency" name="currency_id[]">
+                                <select class="form-control customer_currency" name="currency_id[]" @if($subsequent_modify_required) disabled="disabled" @endif>
                                     <option value="">--Select Currency--</option>
                                     @foreach($currencies as $currency)
                                         <option value="{{ $currency->code }}"
                                                 @if($customerDetail->currency_id == $currency->code) selected="selected" @endif>{{ $currency->code }}  {{ $currency->symbol }}</option>
                                     @endforeach
                                 </select>
+
+                                @if($subsequent_modify_required)
+                                    <input type="hidden" value="{{$customerDetail->currency_id}}" name="currency_id[]"/>
+                                @endif
+
                             </td>
                             <td>
                                 <input type="text" class="form-control" name="amount[]"
-                                       value="{{ $customerDetail->amount }}">
+                                       value="{{ $customerDetail->amount }}" @if($subsequent_modify_required) disabled="disabled" @endif>
+                                @if($subsequent_modify_required)
+                                    <input type="hidden" value="{{$customerDetail->amount}}" name="amount[]"/>
+                                @endif
                             </td>
                             <td>
                                 <input type="text" class="form-control rate" name="exchange_rate[]"
-                                       value="{{ $customerDetail->exchange_rate }}">
+                                       value="{{ $customerDetail->exchange_rate }}" @if($subsequent_modify_required) disabled="disabled" @endif>
+
+                                @if($subsequent_modify_required)
+                                    <input type="hidden" value="{{$customerDetail->exchange_rate}}" name="exchange_rate[]"/>
+                                @endif
+
                             </td>
                             <td>
                                 <a href="javascript:void(0);"
                                    class="btn btn-sm btn-danger customer_create_details_form_delete"
-                                   onClick="javascript:removeRow(this)">Remove</a>
+                                   @if($subsequent_modify_required) onClick="javascript:void(0)" @else onClick="javascript:removeRow(this)" @endif
+                                   @if($subsequent_modify_required) disabled="disabled" @endif>Remove</a>
                             </td>
                         </tr>
                     @endforeach
@@ -163,15 +205,20 @@
                         <td>
                             <a href="javascript:void(0);"
                                class="btn btn-sm btn-danger customer_create_details_form_delete"
-                               onClick="javascript:removeRow(this)">Remove</a>
+                               @if($subsequent_modify_required) onClick="javascript:void(0)" @else onClick="javascript:removeRow(this)" @endif
+                               @if($subsequent_modify_required) disabled="disabled" @endif>Remove</a>
                         </td>
                     </tr>
                 @endif
                 </tbody>
             </table>
-
-            <a href="javascript:void(0)" onclick="javascript:addMore(this)"
-               class="btn btn-sm right btn-success add_more"><i class="fa fa-plus-square"></i> Add More</a>
+            @if($subsequent_modify_required)
+                    <a href="javascript:void(0)"
+                       class="btn btn-sm right btn-success add_more" disabled="disabled"><i class="fa fa-plus-square"></i> Add More</a>
+            @else
+                    <a href="javascript:void(0)" onclick="javascript:addMore(this)"
+                       class="btn btn-sm right btn-success add_more"><i class="fa fa-plus-square"></i> Add More</a>
+            @endif
             </div>
         </div>
     </div>

@@ -34,11 +34,10 @@
             <label for="effective_from" class="col-md-12 control-label">Escalation Effective From</label>
             <div class="col-md-12 form-check form-check-inline">
                 
-                <select name="effective_from" class="form-control lease_period" id="effective_from" @if($subsequent_modify_required && $model->is_escalation_applicable == "yes") disabled="disabled" @endif>
+                <select name="effective_from" class="form-control lease_period" id="effective_from">
                 <option value="">Please Select Date</option>
                 @foreach($payment_dates as $payments)
-
-                <option value="{{ date('d-m-Y',strtotime( $payments->date)) }}"  @if(old('effective_from', $payments->date) == $model->effective_from) selected="selected" @endif> {{ date('d-m-Y',strtotime($payments->date)) }}</option>
+                    <option value="{{ date('d-m-Y',strtotime( $payments->date)) }}"  @if(old('effective_from', $payments->date) == $model->effective_from) selected="selected" @endif> {{ date('d-m-Y',strtotime($payments->date)) }}</option>
                 @endforeach 
                 </select>
                 @if ($errors->has('effective_from'))
@@ -47,9 +46,9 @@
                     </span>
                 @endif
 
-                @if($subsequent_modify_required  && $model->is_escalation_applicable == "yes")
-                    <input type="hidden" value="{{ $model->effective_from }}" name="effective_from">
-                @endif
+                {{--@if($subsequent_modify_required  && $model->is_escalation_applicable == "yes")--}}
+                    {{--<input type="hidden" value="{{ $model->effective_from }}" name="effective_from">--}}
+                {{--@endif--}}
 
             </div>
         </div>
