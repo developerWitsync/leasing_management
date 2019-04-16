@@ -83,7 +83,9 @@ class LeaseIncentivesController extends Controller
                     ->first();
 
                 if ($asset) {
-                    $currencies = Currencies::query()->where('status', '=', '1')->get();
+
+                    $currencies = fetchCurrenciesFromSettings();
+
                     if ($asset->leaseIncentives) {
                         $model = $asset->leaseIncentives;
                         $lease_incentive_id = $model->id;

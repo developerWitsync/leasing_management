@@ -475,6 +475,12 @@ class LeaseValuationController extends Controller
         return response()->json($data, 200);
     }
 
+    /**
+     * Show escalation chart for the latest updated data into the database...
+     * @TODO need to make sure that the escalation is applied if not then we have to show the payment annexure....
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function showEscalationChart($id){
         try{
             $payment = LeaseAssetPayments::query()->findOrFail($id);
@@ -482,6 +488,25 @@ class LeaseValuationController extends Controller
             $asset = $payment->asset;
             $lease = $asset->lease;
             $data = PaymentEscalationDetails::query()->where('payment_id','=',$payment->id)->first()->toArray();
+            $escalation = generateEsclationChart($data, $payment, $lease, $asset);
+
+            $years = $escalation['years'];
+            $months = $escalation['months'];
+            $escalations = $escalation['escalations'];
+
+            $errors =  [];
+
+            $requestData = $data;
+
+            return view('lease.escalation._chart',compact(
+                'errors',
+                'lease',
+                'asset',
+                'years',
+                'months',
+                'escalations',
+                'requestData'
+            ));
 
         } catch (\Exception $e){
             dd($e);

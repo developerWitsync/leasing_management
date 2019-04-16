@@ -28,7 +28,8 @@ class LeaseAssetPayments extends Model
         'attachment',
         'created_at',
         'updated_at',
-        'lease_payment_per_interval'
+        'lease_payment_per_interval',
+        'subsequent_status'
     ];
 
     public function getUndiscountedLiabilityValueAttribute()

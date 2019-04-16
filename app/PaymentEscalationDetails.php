@@ -24,7 +24,8 @@ class PaymentEscalationDetails extends Model
         'amount_based_currency',
         'escalated_amount',
         'escalation_currency',
-        'total_undiscounted_lease_payment_amount'
+        'total_undiscounted_lease_payment_amount',
+        'subsequent_status'
     ];
 
     public function escalationBasis(){

@@ -187,8 +187,8 @@
                                         <select class="form-control supplier_currency" name="supplier_currency[]" @if($subsequent_modify_required) disabled="disabled" @endif>
                                             <option value="">--Select Currency--</option>
                                             @foreach($currencies as $currency)
-                                                <option value="{{ $currency->code }}"
-                                                        @if($currency->code == $supplier->supplier_currency) selected="selected" @endif>{{ $currency->code }}  {{ $currency->symbol }}</option>
+                                                <option value="{{ $currency }}"
+                                                        @if($currency == $supplier->supplier_currency) selected="selected" @endif>{{ $currency }} </option>
                                             @endforeach
                                         </select>
 
@@ -243,7 +243,7 @@
                                     <select class="form-control supplier_currency" name="supplier_currency[]">
                                         <option value="">--Select Currency--</option>
                                         @foreach($currencies as $currency)
-                                            <option value="{{ $currency->code }}">{{ $currency->code }}  {{ $currency->symbol }}</option>
+                                            <option value="{{ $currency }}">{{ $currency }}</option>
                                         @endforeach
                                     </select>
                                 </td>
@@ -362,7 +362,7 @@
                 '                            <select class="form-control supplier_currency" name="supplier_currency[]">\n' +
                 '                                <option value="">--Select Currency--</option>\n' +
                 '                                @foreach($currencies as $currency)\n' +
-                '                                    <option value="{{ $currency->code }}">{{ $currency->code }}  {{ $currency->symbol }}</option>\n' +
+                '                                    <option value="{{ $currency }}">{{ $currency }} </option>\n' +
                 '                                @endforeach\n' +
                 '                            </select>\n' +
                 '                        </td>\n' +

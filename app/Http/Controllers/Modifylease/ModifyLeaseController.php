@@ -124,8 +124,35 @@ class ModifyLeaseController extends Controller
                     $data1['status'] = '0';
                     $model->setRawAttributes($data1);
                     $model->save();
+
+                    //need to set the subsequent status of all the payments to '0' so that we will ask the user to update the payments once again...
+
+                    $lease = Lease::query()->where('id', '=', $id)->first();
+                    $asset = $lease->assets()->first();
+                    foreach ($asset->payments as $payment){
+
+                        $escalationModel = $payment->paymentEscalationSingle;
+
+                        $payment->setRawAttributes([
+                            'subsequent_status' => '0'
+                        ]);
+
+                        $payment->save();
+
+                        //need to change the subsequent status of each escalation to 0 as well...
+                        if($escalationModel){
+
+                            $escalationModel->setRawAttributes([
+                                'subsequent_status' => '0'
+                            ]);
+
+                            $escalationModel->save();
+                        }
+                    }
+
                     return redirect(route('add-new-lease.index', ['id' => $id]))->with('status', 'Modify Lease has been Created successfully.');
                 }
+
                 $asset = $lease->assets()->first();
 
                 // need to send the minDate
@@ -153,6 +180,7 @@ class ModifyLeaseController extends Controller
                 abort(404);
             }
         } catch (\Exception $e) {
+            dd($e);
             abort(404);
         }
     }

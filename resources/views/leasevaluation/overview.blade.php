@@ -68,6 +68,17 @@
         </div>
     </div>
 
+    <!--Escalations Chart -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="dialog">
+            <div class="modal-content escalation_chart_modal_body">
+
+            </div>
+        </div>
+    </div>
+
+    <!--Escalations Chart -->
+
 @endsection
 @section('footer-script')
     <script>
@@ -139,8 +150,13 @@
                 var payment_id = $(this).data('payment_id');
                 $.ajax({
                     url : '/lease-valuation/show-escalation-chart/'+payment_id,
+                    beforeSend : function(){
+                      showOverlayForAjax();
+                    },
                     success:function(response){
-                        console.log(response);
+                        $(".escalation_chart_modal_body").html(response);
+                        $("#myModal").modal("show");
+                        removeOverlayAjax();
                     }
                 })
             });

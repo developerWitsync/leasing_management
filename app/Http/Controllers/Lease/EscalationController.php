@@ -85,8 +85,14 @@ class EscalationController extends Controller
                         }
 
                         $required_escalations = $required_escalations + 1;
-                        if(count($payment->paymentEscalations) > 0){
-                            $completed_escalations = $completed_escalations + 1;
+                        if($payment->paymentEscalationSingle){
+                            if($subsequent_modify_required) {
+                                if($payment->paymentEscalationSingle->subsequent_status == '1'){
+                                    $completed_escalations = $completed_escalations + 1;
+                                }
+                            } else {
+                                $completed_escalations = $completed_escalations + 1;
+                            }
                         }
 
                     }
@@ -254,6 +260,10 @@ class EscalationController extends Controller
                         $data['total_undiscounted_lease_payment_amount'] = null;
                     }
 
+                    if($subsequent_modify_required) {
+                        $data['subsequent_status'] = '1';
+                    }
+
                     $model->setRawAttributes($data);
                     if($model->save()){
 
@@ -339,7 +349,7 @@ class EscalationController extends Controller
                 //lease asset payment dates
                 $payment_dates = LeaseAssetPaymentDates::query()
                     ->where('total_payment_amount','>', 0)
-                    ->where('asset_id',$payment->asset_id)->get();
+                    ->where('payment_id',$payment->id)->get();
                 
                 return view('lease.escalation.create', compact(
                     'payment',

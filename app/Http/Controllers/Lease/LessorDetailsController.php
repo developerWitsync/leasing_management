@@ -78,14 +78,7 @@ class LessorDetailsController extends Controller
             ->get();
 
         if(collect($reporting_currency_settings)->isNotEmpty()) {
-            $contract_currencies[$reporting_currency_settings->statutory_financial_reporting_currency] = $reporting_currency_settings->statutory_financial_reporting_currency;
-            $contract_currencies[$reporting_currency_settings->currency_for_lease_reports] = $reporting_currency_settings->currency_for_lease_reports;
-
-            if ($reporting_currency_settings->is_foreign_transaction_involved == 'yes') {
-                foreach ($reporting_foreign_currency_transaction_settings as $reporting_foreign_currency_transaction_setting) {
-                    $contract_currencies[$reporting_foreign_currency_transaction_setting->foreign_exchange_currency] = $reporting_foreign_currency_transaction_setting->foreign_exchange_currency;
-                }
-            }
+            $contract_currencies = fetchCurrenciesFromSettings();
         } else {
             $reporting_currency_settings = new ReportingCurrencySettings();
         }

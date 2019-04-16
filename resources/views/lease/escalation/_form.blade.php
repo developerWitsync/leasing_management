@@ -1,6 +1,12 @@
 <form class="form-horizontal" enctype="multipart/form-data" method="post" role="form">
     {{ csrf_field() }}
     <div class="categoriesOuter clearfix">
+
+    @if($subsequent_modify_required && $model->is_escalation_applicable == "yes")
+            <span class="badge badge-primary" style="background-color: #f2dede;border-color: #ebccd1;color: #a94442;">Please re-update escalation details starting on or after subsequent modification date.</span>
+    @endif
+
+
     <div class="form-group{{ $errors->has('is_market_value_present') ? ' has-error' : '' }} required">
         <label for="is_escalation_applicable" class="col-md-12 control-label">Is Escalation Applicable</label>
         <div class="col-md-12 form-check form-check-inline mrktavail" required>
@@ -37,7 +43,13 @@
                 <select name="effective_from" class="form-control lease_period" id="effective_from">
                 <option value="">Please Select Date</option>
                 @foreach($payment_dates as $payments)
-                    <option value="{{ date('d-m-Y',strtotime( $payments->date)) }}"  @if(old('effective_from', $payments->date) == $model->effective_from) selected="selected" @endif> {{ date('d-m-Y',strtotime($payments->date)) }}</option>
+                    @if($subsequent_modify_required)
+                        @if(\Carbon\Carbon::parse($lease->modifyLeaseApplication->last()->effective_from)->lessThanOrEqualTo(\Carbon\Carbon::parse($payments->date)))
+                                <option value="{{ date('d-m-Y',strtotime( $payments->date)) }}"  @if(old('effective_from', $payments->date) == $model->effective_from) selected="selected" @endif> {{ date('d-m-Y',strtotime($payments->date)) }}</option>
+                        @endif
+                    @else
+                        <option value="{{ date('d-m-Y',strtotime( $payments->date)) }}"  @if(old('effective_from', $payments->date) == $model->effective_from) selected="selected" @endif> {{ date('d-m-Y',strtotime($payments->date)) }}</option>
+                    @endif
                 @endforeach 
                 </select>
                 @if ($errors->has('effective_from'))

@@ -27,4 +27,22 @@
 			fetchCategoryAssets({{$category->id}}, _is_capitalized);
 		</script>
 	@endforeach
+
+	@if (session('status'))
+		<script>
+			$(function () {
+				bootbox.dialog({
+					message: '<div class="thank-you-pop">\n' +
+							'\t\t\t\t\t\t\t<img src="{{ asset('images/round_tick.png') }}" alt="">\n' +
+							'\t\t\t\t\t\t\t<h1>Thank You!</h1>\n' +
+							'\t\t\t\t\t\t\t<p>Your Lease has been submitted successfully.</p>\n' +
+							'\t\t\t\t\t\t\t<h3 class="cupon-pop">Lease ULA CODE : <span>{{ session('status') }}</span></h3>\n' +
+							'\t\t\t\t\t\t\t\n' +
+							' \t\t\t\t\t\t</div>',
+					closeButton: true
+				});
+			});
+		</script>
+	@endif
+
 @endsection

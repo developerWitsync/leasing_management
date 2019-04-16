@@ -88,7 +88,7 @@ class DismantlingCostsController extends Controller
                     ->first();
 
                 if ($asset) {
-                    $currencies = Currencies::query()->where('status', '=', '1')->get();
+                    $currencies = fetchCurrenciesFromSettings();
 
                     if ($asset->dismantlingCost) {
                         $model = $asset->dismantlingCost;

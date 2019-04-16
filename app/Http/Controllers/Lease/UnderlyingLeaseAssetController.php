@@ -96,7 +96,6 @@ class UnderlyingLeaseAssetController extends Controller
             
             $ulacode = createUlaCode();
             
-            
             return view('lease.lease-assets.indexv2', compact('breadcrumbs',
                 'lease',
                 'lease_assets_categories',
