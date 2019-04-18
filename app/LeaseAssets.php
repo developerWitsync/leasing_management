@@ -216,7 +216,7 @@ class LeaseAssets extends Model
                         ROUND(`total_amount_payable` / POWER( 1 + (`daily_discount_rate`) * (1 / 100), datediff(`payment_date`, '{$base_date}')), 2) as lease_liability,
                         `year` as `payment_year`,
                         DATE_FORMAT(`payment_date`, '%b') AS `payment_month`,
-                        'yes' as `is_escalation_applicable`,
+                        'no' as `is_escalation_applicable`,
                         datediff(`payment_date`, '{$base_date}') as `days_diff`
                     FROM
                         pv_calculus_view_when_escalation_not_applied
@@ -239,9 +239,20 @@ class LeaseAssets extends Model
     public function presentValueOfLeaseLiability($return_value = false, $payment_id = null)
     {
 
+        $lease = $this->lease;
+
+
         $start_date = Carbon::parse($this->accural_period);
         $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date);
 
+        $subsequent_modify_required = $lease->isSubsequentModification();
+        if($subsequent_modify_required) {
+            $base_date = Carbon::parse($lease->modifyLeaseApplication->last()->effective_from);
+            $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
+        } else {
+            $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date);
+            $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
+        }
 
         $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
         $end_date = Carbon::parse($this->getLeaseEndDate($this));
@@ -294,8 +305,12 @@ class LeaseAssets extends Model
 
         //check if the escalations are applied or not and on the basis of the same fetch the data from the view..
         foreach ($payments as $payment_key => $payment) {
-            $is_eslaction_applicable = PaymentEscalationDetails::query()->select('is_escalation_applicable')->where('asset_id', '=', $this->id)
-                ->where('payment_id', '=', $payment->id)->first();
+            $is_eslaction_applicable = PaymentEscalationDetails::query()
+                ->select('is_escalation_applicable')
+                ->where('asset_id', '=', $this->id)
+                ->where('payment_id', '=', $payment->id)
+                ->first();
+
             if ($is_eslaction_applicable && $is_eslaction_applicable->is_escalation_applicable == "yes") {
                 //call the procedure `pv_calculus_when_escalation_is_applied`
 

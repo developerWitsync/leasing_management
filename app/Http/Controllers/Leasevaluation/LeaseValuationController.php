@@ -11,6 +11,7 @@ namespace App\Http\Controllers\Leasevaluation;
 use App\CategoriesLeaseAssetExcluded;
 use App\DiscountRateChartView;
 use App\Http\Controllers\Controller;
+use App\InterestAndDepreciation;
 use App\LeaseAssetPayments;
 use App\LeaseHistory;
 use App\LeasePaymentsEscalationClause;
@@ -473,6 +474,29 @@ class LeaseValuationController extends Controller
             $lower_limit = date ("Y-m-d", strtotime("+1 month", strtotime($lower_limit)));
         }
         return response()->json($data, 200);
+    }
+
+    public function interestDepreciation($id){
+        try{
+            $lease = Lease::query()
+                ->where('id', '=', $id)
+                ->whereIn('business_account_id', getDependentUserIds())
+                ->where('status', '=', '1')->firstOrFail();
+
+            $asset = $lease->assets()->first();
+
+            $interest_depreciation = InterestAndDepreciation::query()->where('asset_id', '=', $lease->assets()->first()->id)->get();
+            $interest_depreciation = collect($interest_depreciation)->groupBy('modify_id');
+
+            return view('leasevaluation.interest_depreciation', compact(
+                'interest_depreciation',
+                'lease',
+                'asset'
+            ));
+
+        } catch (\Exception $e){
+            dd($e);
+        }
     }
 
     /**

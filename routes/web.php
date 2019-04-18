@@ -340,6 +340,8 @@ Route::middleware('auth')->group(function () {
 
             Route::get('see-valuation-details/{history_id}', ['as' => 'addlease.cap.leasevaluation.seedetails', 'uses' => 'LeaseValuationController@seeDetails']);
 
+            Route::get('interest-depreciation/{id}', ['as' => 'leasevaluation.cap.interestdepreciation', 'uses' => 'LeaseValuationController@interestDepreciation']);
+
         });
 
         Route::prefix('valuation-non-capitalised')->group(function(){

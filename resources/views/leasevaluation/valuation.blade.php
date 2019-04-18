@@ -51,7 +51,7 @@
                         </li>
 
                         <li>
-                            <a href="#assetTab3">Interest &amp; Depreciation</a>
+                            <a href="{{ route('leasevaluation.cap.interestdepreciation', ['id' => $lease->id]) }}">Interest &amp; Depreciation</a>
                         </li>
                     @else
 
