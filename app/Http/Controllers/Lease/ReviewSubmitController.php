@@ -111,9 +111,50 @@ class ReviewSubmitController extends Controller
     }
 
     /**
+     * calculate and returns the total number of months...
+     * @param $start_date
+     * @param $end_date
+     * @return int
+     * @throws \Exception
+     */
+    private function calculateMonthsDifference($start_date, $end_date){
+        $start    = (new \DateTime($start_date))->modify('first day of this month');
+        $end      = (new \DateTime($end_date))->modify('first day of next month');
+        $interval = \DateInterval::createFromDateString('1 month');
+        $period   = new \DatePeriod($start, $interval, $end);
+        $months_array = [];
+        foreach ($period as $dt) {
+            $months_array[] = $dt->format("Y-m");
+        }
+        return count($months_array) - 1;
+    }
+
+    /**
+     * calculate the deprecition for the lease asset based upon the start date and end date and in case of subsequent from the effective date till the lease end date...
+     * @param $subsequent_modify_required
+     * @param $asset
+     * @param $value_of_lease_asset
+     * @return float|int
+     * @throws \Exception
+     */
+    private function calculateDepreciation($subsequent_modify_required, $asset, $value_of_lease_asset){
+        $start_date = Carbon::parse($asset->accural_period);
+        if(!$subsequent_modify_required) {
+            $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date);
+            $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
+
+            $months = $this->calculateMonthsDifference($base_date->format('Y-m-d'), $asset->lease_end_date);
+            $depreciation = (float)$value_of_lease_asset/$months;
+            return $depreciation;
+        }
+    }
+
+    /**
      * generate and inserts the data for the interest and depreciation tab for the lease
      * @param Lease $lease
+     * @param $modify_id
      * @return bool
+     * @throws \Exception
      */
     private function generateDataForInterestAndDepreciationTab(Lease $lease, $modify_id)
     {
@@ -160,31 +201,81 @@ class ReviewSubmitController extends Controller
                           and `lease_asset_payment_dates`.`date` >= '{$base_date->format('Y-m-d')}'
                     GROUP BY `lease_asset_payment_dates`.`date`";
 
+
             $lease_payments = DB::select($sql);
 
-            $check_date = null;
+            $check_date = $increase_or_decrease = null;
+
+            $previous_liability = $asset->lease_liablity_value;
 
             if($subsequent_modify_required) {
                 //need to fetch the last row and need to take out the closing liability from the same...
                 $previous_depreciation_data = InterestAndDepreciation::query()
                     ->where('date', '<', $base_date->format('Y-m-d'))
+                    ->where('asset_id', '=', $asset->id)
                     ->orderBy('date','desc')
                     ->first();
+
                 $previous_liability = (float)$previous_depreciation_data->closing_lease_liability;
+
                 //need to insert a row for the one day before the subsequent to the dates array...
                 $payment_date = $base_date->subDay(1)->format('Y-m-d');
+
                 $days_diff = Carbon::parse($payment_date)->diffInDays($previous_depreciation_data->date);
                 $interest_expense = $this->calculateInterestExpense($previous_liability, $previous_depreciation_data->discount_rate, $days_diff);
 
                 //check if the payment exists on the day before the subsequent modification
                 $day_before_subsequent = InterestAndDepreciation::query()
                     ->where('date', '=', $payment_date)
+                    ->where('asset_id', '=', $asset->id)
                     ->first();
+
                 if($day_before_subsequent) {
                     $lease_payment_on_day_before_subsequent = $day_before_subsequent->lease_payment;
                 } else {
                     $lease_payment_on_day_before_subsequent = 0;
                 }
+
+                //calculate the values for the interest and depreciations here for the subsequent..
+                $old_value_of_lease_asset = InterestAndDepreciation::query()
+                    ->where('asset_id', '=', $asset->id)
+                    ->orderBy('id', 'asc')
+                    ->firstOrFail();
+
+                $closing_lease_liability = $previous_depreciation_data->closing_lease_liability;
+                $new_present_value_of_lease_liability  = $asset->lease_liablity_value; //current pv value
+
+                $increase_or_decrease  = (float)$new_present_value_of_lease_liability - (float)$closing_lease_liability;
+
+                $existing_carrying_value = (float)$previous_depreciation_data->carrying_value_of_lease_asset; //P9
+                $existing_value_of_lease_asset = (float)$old_value_of_lease_asset->opening_lease_liability; //P8
+
+                //need to place conditions here for the $new_lease_value as per the conditions
+                if($increase_or_decrease < 0){
+                    //need to consider the conditions as per the shared xlsx....
+                    $increase_or_decrease  = -1 * $increase_or_decrease ; // P10
+                    if($existing_carrying_value - $increase_or_decrease > 0){
+                        //P8 - P10
+                        $new_value_of_lease_asset = $existing_value_of_lease_asset - $increase_or_decrease;
+                    } else if($existing_carrying_value - $increase_or_decrease < 0){
+                        //P8 - P9
+                        $new_value_of_lease_asset = $existing_value_of_lease_asset - $existing_carrying_value;
+                    } else if ($existing_carrying_value == 0){
+                        $new_value_of_lease_asset = $existing_value_of_lease_asset;
+                    }
+                } else {
+                    $new_value_of_lease_asset = $existing_value_of_lease_asset + $increase_or_decrease;
+                }
+
+                $number_of_months = $this->calculateMonthsDifference($base_date->format('Y-m-d'), $asset->lease_end_date);
+
+                $new_value_of_lease_asset =  $new_value_of_lease_asset - $increase_or_decrease;
+                $depreciation = $new_value_of_lease_asset/$number_of_months;
+
+
+                $previous_depreciation = $depreciation;
+                $previous_accumulated_depreciation = 0;
+                $previous_carrying_value_of_lease_asset = $new_value_of_lease_asset;
 
                 $dates[] = [
                     'asset_id' => $asset->id,
@@ -197,19 +288,35 @@ class ReviewSubmitController extends Controller
                     'lease_payment' => (float)$lease_payment_on_day_before_subsequent,
                     'closing_lease_liability' => ($interest_expense + $previous_liability - (float)$lease_payment_on_day_before_subsequent),
                     'created_at' => date('Y-m-d H:i:s'),
-                    'updated_at' => date('Y-m-d H:i:s')
+                    'updated_at' => date('Y-m-d H:i:s'),
+                    'value_of_lease_asset' => $previous_depreciation_data->value_of_lease_asset,
+                    'depreciation' => $previous_depreciation_data->depreciation,
+                    'change' => $previous_depreciation_data->change,
+                    'accumulated_depreciation' => $previous_depreciation_data->accumulated_depreciation,
+                    'carrying_value_of_lease_asset' => $previous_depreciation_data->carrying_value_of_lease_asset
                 ];
+
 
                 $check_date = $payment_date;
 
                 $base_date = $base_date->addDay(1);
 
+
+            } else {
+                $previous_depreciation = $this->calculateDepreciation($subsequent_modify_required, $asset, $previous_liability);
+                $previous_accumulated_depreciation = 0;
+                $previous_carrying_value_of_lease_asset = $previous_liability;
             }
 
             $previous_liability = $asset->lease_liablity_value;
 
             while ($start_year <= $end_year) {
                 foreach ($months as $key => $month) {
+                    //apply condition for the lease end date as well.
+                    $current_month_and_year_last_day = Carbon::create($start_year, $key)->lastOfMonth();
+                    if($end_date->lessThan($current_month_and_year_last_day)){
+                        continue;
+                    }
 
                     //filter the above array with same month as for the current date and same year as for the current year
                     $payment_dates = array_where($lease_payments, function($value, $index) use ($key, $start_year ,$check_date){
@@ -229,10 +336,16 @@ class ReviewSubmitController extends Controller
                             'discount_rate' => $discount_rate,
                             'opening_lease_liability' => $previous_liability,
                             'interest_expense' => $interest_expense,
-                            'lease_payment' => (float)$payment_date->total_amount_payable ,
-                            'closing_lease_liability' => $interest_expense + $previous_liability - (float)$payment_date->total_amount_payable,
+                            'lease_payment' => (float)$payment_date->total_amount_payable,
+                            'closing_lease_liability' => round($interest_expense + $previous_liability - (float)$payment_date->total_amount_payable, 2),
                             'created_at' => date('Y-m-d H:i:s'),
-                            'updated_at' => date('Y-m-d H:i:s')
+                            'updated_at' => date('Y-m-d H:i:s'),
+                            'value_of_lease_asset' => $previous_carrying_value_of_lease_asset,
+                            'depreciation' => $previous_depreciation,
+                            'change' => $increase_or_decrease,
+                            'accumulated_depreciation' => $previous_accumulated_depreciation,
+                            'carrying_value_of_lease_asset' => $previous_carrying_value_of_lease_asset
+
                         ];
                         $base_date = Carbon::parse($payment_date->date);
                         $previous_liability = $interest_expense + $previous_liability - (float)$payment_date->total_amount_payable;
@@ -258,20 +371,26 @@ class ReviewSubmitController extends Controller
                                 'opening_lease_liability' => $previous_liability,
                                 'interest_expense' => $interest_expense,
                                 'lease_payment' => $amount_payable,
-                                'closing_lease_liability' => $interest_expense + $previous_liability - (float)$amount_payable,
+                                'closing_lease_liability' => round($interest_expense + $previous_liability - (float)$amount_payable, 2),
                                 'created_at' => date('Y-m-d H:i:s'),
-                                'updated_at' => date('Y-m-d H:i:s')
+                                'updated_at' => date('Y-m-d H:i:s'),
+                                'value_of_lease_asset' => $previous_carrying_value_of_lease_asset,
+                                'depreciation' => $previous_depreciation,
+                                'change' => $increase_or_decrease,
+                                'accumulated_depreciation' => $previous_depreciation + $previous_accumulated_depreciation,
+                                'carrying_value_of_lease_asset' => round($previous_carrying_value_of_lease_asset - $previous_depreciation, 2)
                             ];
 
                             $base_date = Carbon::parse($current_date);
                             $previous_liability = $interest_expense + $previous_liability - (float)$amount_payable;
+
+                            $previous_accumulated_depreciation = $previous_depreciation + $previous_accumulated_depreciation;
+                            $previous_carrying_value_of_lease_asset = $previous_carrying_value_of_lease_asset - $previous_depreciation;
                         }
                     }
                 }
                 $start_year = $start_year + 1;
             }
-
-            echo "<pre>"; print_r($dates); die();
 
             //insert the dates data into the interest and depreciation table for the lease id
             if(is_null($modify_id)){
@@ -295,6 +414,7 @@ class ReviewSubmitController extends Controller
      * @param $id
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
      */
     public function submit($id, Request $request)
     {
@@ -305,7 +425,7 @@ class ReviewSubmitController extends Controller
 
             $model->status = "1";
             $model->is_completed = 1;
-            //$model->save();
+            $model->save();
 
 
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first()->toArray();
@@ -491,15 +611,32 @@ class ReviewSubmitController extends Controller
                 if ($lease_history) {
                     unset($data['modify_id']);
                     $lease_history->setRawAttributes($data);
-                    //$lease_history->save();
+                    $lease_history->save();
                 } else {
-                    //$lease_history = LeaseHistory::create($data);
+                    $lease_history = LeaseHistory::create($data);
                 }
             } else {
-                //$lease_history = LeaseHistory::create($data);
+               $lease_history = LeaseHistory::create($data);
             }
 
-            $this->generateDataForInterestAndDepreciationTab($model, isset($data['modify_id'])?$data['modify_id']:null);
+            //need to put condition so that this will be done only for the leases for which lease valuation has been done...
+            $category_excluded = \App\CategoriesLeaseAssetExcluded::query()
+                ->whereIn('business_account_id', getDependentUserIds())
+                ->where('status', '=', '0')
+                ->get();
+
+            $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
+
+            $asset = LeaseAssets::query()->where('lease_id', '=', $id)
+                ->whereHas('leaseSelectLowValue', function ($query) {
+                    $query->where('is_classify_under_low_value', '=', 'no');
+                })->whereHas('leaseDurationClassified', function ($query) {
+                    $query->where('lease_contract_duration_id', '=', '3');
+                })->whereNotIn('category_id', $category_excluded_id)->first();
+
+            if($asset) {
+                $this->generateDataForInterestAndDepreciationTab($model, isset($data['modify_id'])?$data['modify_id']:null);
+            }
 
             if ($lease_history) {
                 confirmSteps($id, $this->current_step);

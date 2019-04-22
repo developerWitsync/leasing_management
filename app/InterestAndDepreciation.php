@@ -18,6 +18,11 @@ class InterestAndDepreciation extends Model
         'lease_payment',
         'discount_rate',
         'closing_lease_liability',
+        'value_of_lease_asset',
+        'depreciation',
+        'accumulated_depreciation',
+        'carrying_value_of_lease_asset',
+        'change',
         'created_at',
         'updated_at'
     ];
