@@ -12,12 +12,9 @@ use App\DismantlingCosts;
 use App\Http\Controllers\Controller;
 use App\InterestAndDepreciation;
 use App\Lease;
-use App\Countries;
 use App\PaymentEscalationDates;
 use App\PvCalculus;
-use App\ReportingCurrencySettings;
 use App\ContractClassifications;
-use App\ForeignCurrencyTransactionSettings;
 use App\LeaseAssets;
 use App\LeaseAssetPayments;
 use App\FairMarketValue;
@@ -40,7 +37,6 @@ use App\CustomerDetails;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Psy\VersionUpdater\Checker;
 use Validator;
 
 class ReviewSubmitController extends Controller
@@ -318,6 +314,15 @@ class ReviewSubmitController extends Controller
             while ($start_year <= $end_year) {
                 foreach ($months as $key => $month) {
 
+                    //apply condition for the lease start date
+                    //condition to check the below condition should be when the start date is on or after the base date
+                    if($start_date->greaterThanOrEqualTo($base_date)){
+                        $current_month_and_year_last_day = Carbon::create($start_year, $key)->lastOfMonth();
+                        if($start_date->greaterThan($current_month_and_year_last_day)){
+                            continue;
+                        }
+                    }
+
                     //filter the above array with same month as for the current date and same year as for the current year
                     $payment_dates = array_where($lease_payments, function($value, $index) use ($key, $start_year ,$check_date){
                         $date_month = Carbon::parse($value->date)->format('m');
@@ -337,7 +342,7 @@ class ReviewSubmitController extends Controller
                             'opening_lease_liability' => $previous_liability,
                             'interest_expense' => $interest_expense,
                             'lease_payment' => (float)$payment_date->total_amount_payable,
-                            'closing_lease_liability' => round($interest_expense + $previous_liability - (float)$payment_date->total_amount_payable, 2),
+                            'closing_lease_liability' => ($interest_expense + $previous_liability - (float)$payment_date->total_amount_payable),
                             'created_at' => date('Y-m-d H:i:s'),
                             'updated_at' => date('Y-m-d H:i:s'),
                             'value_of_lease_asset' => $previous_carrying_value_of_lease_asset,
@@ -385,7 +390,7 @@ class ReviewSubmitController extends Controller
                                 'opening_lease_liability' => $previous_liability,
                                 'interest_expense' => $interest_expense,
                                 'lease_payment' => $amount_payable,
-                                'closing_lease_liability' => round($interest_expense + $previous_liability - (float)$amount_payable, 2),
+                                'closing_lease_liability' => ($interest_expense + $previous_liability - (float)$amount_payable),
                                 'created_at' => date('Y-m-d H:i:s'),
                                 'updated_at' => date('Y-m-d H:i:s'),
                                 'value_of_lease_asset' => $previous_carrying_value_of_lease_asset,
@@ -406,6 +411,8 @@ class ReviewSubmitController extends Controller
                 $start_year = $start_year + 1;
             }
 
+            //echo "<pre>"; print_r($dates); die();
+
             //insert the dates data into the interest and depreciation table for the lease id
             if(is_null($modify_id)){
                 InterestAndDepreciation::query()->where('asset_id', '=', $asset->id)->delete();
@@ -415,7 +422,11 @@ class ReviewSubmitController extends Controller
                     InterestAndDepreciation::query()->where('date', '>=', $dates[0]['date'])->delete();
                 }
             }
-            InterestAndDepreciation::query()->insert($dates);
+
+            DB::transaction(function () use ($dates) {
+                DB::table('interest_and_depreciation')->insert($dates);
+            });
+
             return true;
         } else {
             return false;
