@@ -476,6 +476,11 @@ class LeaseValuationController extends Controller
         return response()->json($data, 200);
     }
 
+    /**
+     * interest and depreciation Tab on the Lease Valuation...
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function interestDepreciation($id){
         try{
             $lease = Lease::query()
@@ -501,17 +506,20 @@ class LeaseValuationController extends Controller
 
     /**
      * Show escalation chart for the latest updated data into the database...
-     * @TODO need to make sure that the escalation is applied if not then we have to show the payment annexure....
      * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function showEscalationChart($id){
         try{
             $payment = LeaseAssetPayments::query()->findOrFail($id);
-            //need to make the call to the generateEscalationChart funtion from here....
+            //need to make the call to the generateEscalationChart function from here....
             $asset = $payment->asset;
             $lease = $asset->lease;
-            $data = PaymentEscalationDetails::query()->where('payment_id','=',$payment->id)->first()->toArray();
+            $data = PaymentEscalationDetails::query()
+                ->where('payment_id','=',$payment->id)
+                ->first()
+                ->toArray();
+
             $escalation = generateEsclationChart($data, $payment, $lease, $asset);
 
             $years = $escalation['years'];
@@ -533,7 +541,33 @@ class LeaseValuationController extends Controller
             ));
 
         } catch (\Exception $e){
-            dd($e);
+           abort(404);
+        }
+    }
+
+    /**
+     * generate the pv calculus from the lease history
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function pvCalculus($id){
+        try{
+            $history = LeaseHistory::query()->findOrFail($id);
+            $calculus = json_decode($history->pv_calculus, true);
+
+            $years = $calculus['years'];
+            $months = $calculus['months'];
+            $liability_caclulus_data = $calculus['present_value_data'];
+            $payments = json_decode($history->json_data_steps, true); //need to take out the payments only where the due dates exists...
+            $payments = $payments['lease_payments'];
+            return view('leasevaluation.partials._pv_calculus', compact(
+                'years',
+                'months',
+                'liability_caclulus_data',
+                'payments'
+            ));
+        }catch (\Exception $e) {
+            abort(404);
         }
     }
 }

@@ -14,6 +14,7 @@ use App\InterestAndDepreciation;
 use App\Lease;
 use App\Countries;
 use App\PaymentEscalationDates;
+use App\PvCalculus;
 use App\ReportingCurrencySettings;
 use App\ContractClassifications;
 use App\ForeignCurrencyTransactionSettings;
@@ -39,6 +40,7 @@ use App\CustomerDetails;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Psy\VersionUpdater\Checker;
 use Validator;
 
 class ReviewSubmitController extends Controller
@@ -195,12 +197,15 @@ class ReviewSubmitController extends Controller
                             LEFT JOIN
                         `lease_asset_payment_dates` ON `lease_assets_payments`.`id` = `lease_asset_payment_dates`.`payment_id`
                             LEFT JOIN
-                        `payment_escalation_dates` ON (`lease_assets_payments`.`id` = `payment_escalation_dates`.`payment_id` AND year(`lease_asset_payment_dates`.`date`) = `payment_escalation_dates`.`escalation_year` AND month(`lease_asset_payment_dates`.`date` = `payment_escalation_dates`.`escalation_month`))
+                        `payment_escalation_dates` ON (
+                            `lease_assets_payments`.`id` = `payment_escalation_dates`.`payment_id`
+                             AND year(`lease_asset_payment_dates`.`date`) = `payment_escalation_dates`.`escalation_year` 
+                             AND month(`lease_asset_payment_dates`.`date`) = `payment_escalation_dates`.`escalation_month`
+                          )
                     WHERE
                         `lease_assets_payments`.`asset_id` = {$asset->id}
                           and `lease_asset_payment_dates`.`date` >= '{$base_date->format('Y-m-d')}'
                     GROUP BY `lease_asset_payment_dates`.`date`";
-
 
             $lease_payments = DB::select($sql);
 
@@ -312,11 +317,6 @@ class ReviewSubmitController extends Controller
 
             while ($start_year <= $end_year) {
                 foreach ($months as $key => $month) {
-                    //apply condition for the lease end date as well.
-                    $current_month_and_year_last_day = Carbon::create($start_year, $key)->lastOfMonth();
-                    if($end_date->lessThan($current_month_and_year_last_day)){
-                        continue;
-                    }
 
                     //filter the above array with same month as for the current date and same year as for the current year
                     $payment_dates = array_where($lease_payments, function($value, $index) use ($key, $start_year ,$check_date){
@@ -349,19 +349,33 @@ class ReviewSubmitController extends Controller
                         ];
                         $base_date = Carbon::parse($payment_date->date);
                         $previous_liability = $interest_expense + $previous_liability - (float)$payment_date->total_amount_payable;
+
+                        if(Carbon::parse($payment_date->date)->isLastOfMonth()){
+                            $previous_accumulated_depreciation = $previous_depreciation + $previous_accumulated_depreciation;
+                            $previous_carrying_value_of_lease_asset = $previous_carrying_value_of_lease_asset - $previous_depreciation;
+                        }
+                    }
+
+                    //apply condition for the lease end date
+                    $current_month_and_year_last_day = Carbon::create($start_year, $key)->lastOfMonth();
+
+                    if($end_date->lessThan($current_month_and_year_last_day)){
+                        continue;
                     }
 
                     $current_date = Carbon::create($start_year, $key)->lastOfMonth();
                     if(is_null($check_date) || !is_null($check_date) && Carbon::parse($check_date)->lessThan($current_date)){
-                        //need to append the last day of month as well...
-                        $days_diff = Carbon::parse($current_date)->diffInDays($base_date);
-                        $interest_expense = $this->calculateInterestExpense($previous_liability, $discount_rate, $days_diff);
 
                         //find from array if any payment exists on this date
                         $payment_on_date = collect($lease_payments)->where('date', '=', $current_date->format('Y-m-d'))->values();
                         if(count($payment_on_date) == 0){
                             $amount_payable = (count($payment_on_date) > 0) ? $payment_on_date[0]->total_amount_payable : 0;
                             $current_date = (count($payment_on_date) > 0) ? $payment_on_date[0]->date : $current_date->format('Y-m-d');
+
+                            //need to append the last day of month as well...
+                            $days_diff = Carbon::parse($current_date)->diffInDays($base_date);
+                            $interest_expense = $this->calculateInterestExpense($previous_liability, $discount_rate, $days_diff);
+
                             $dates[] = [
                                 'asset_id' => $asset->id,
                                 'modify_id' => $modify_id,
@@ -422,6 +436,7 @@ class ReviewSubmitController extends Controller
 
             //need to generate the data for the Interest and Depreciation Tab for the current valuation..
             $model = Lease::query()->where('id', '=', $id)->first();
+
 
             $model->status = "1";
             $model->is_completed = 1;
@@ -598,8 +613,17 @@ class ReviewSubmitController extends Controller
             $data['lease_id'] = $id;
 
             $data['json_data_steps'] = json_encode($record, JSON_PRESERVE_ZERO_FRACTION);
+
             $data['esclation_payments'] = json_encode($escalation_dates, JSON_PRESERVE_ZERO_FRACTION);
+
             $data['payment_anxure'] = json_encode($payments, JSON_PRESERVE_ZERO_FRACTION);
+
+            $pvCalculus = PvCalculus::query()->select('calculus')->where('asset_id', '=', $asset_id)->first();
+            if($pvCalculus){
+                $data['pv_calculus'] = $pvCalculus->calculus;
+            } else {
+                $data['pv_calculus'] = [];
+            }
 
             if (count($model->modifyLeaseApplication) > 0) {
                 $data['modify_id'] = $model->modifyLeaseApplication->last()->id;
@@ -616,7 +640,7 @@ class ReviewSubmitController extends Controller
                     $lease_history = LeaseHistory::create($data);
                 }
             } else {
-               $lease_history = LeaseHistory::create($data);
+                $lease_history = LeaseHistory::create($data);
             }
 
             //need to put condition so that this will be done only for the leases for which lease valuation has been done...

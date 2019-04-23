@@ -22,7 +22,7 @@
                         <strong>{{ $errors->first('is_escalation_applicable') }}</strong>
                     </span>
             @endif
-            @if($subsequent_modify_required && $model->is_escalation_applicable == "yes")
+            @if($subsequent_modify_required )
                 <input type="hidden" name="is_escalation_applicable" value="{{$model->is_escalation_applicable}}">
             @endif
         </div>

@@ -14,6 +14,7 @@ use App\LeaseAssetPayments;
 use App\LeaseSelectDiscountRate;
 use App\LeaseDurationClassified;
 use App\LeaseAssets;
+use App\PvCalculus;
 use Carbon\Carbon;
 use DebugBar\DebugBar;
 use Illuminate\Http\Request;
@@ -182,13 +183,45 @@ class LeaseValuationController extends Controller
                 return view('lease.lease-valuation._present_value_calculus', compact(
                     'years',
                     'months',
-                    'liability_caclulus_data','payments'
+                    'liability_caclulus_data',
+                    'payments'
                 ));
             } else {
                 abort(404);
             }
         } catch (\Exception $e) {
-            dd($e);
+            abort(404);
+        }
+    }
+
+    /**
+     * create or update the pv calculus for the lease asset....
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function savePresentValueOfLeaseLiabilityCalculus($id, Request $request){
+        try {
+            if ($request->ajax()) {
+                $asset = LeaseAssets::query()->findOrFail($id);
+                $data = $asset->presentValueOfLeaseLiability(false);
+                $data = json_encode($data);
+                $model = PvCalculus::query()->where('asset_id', '=', $id)->first();
+                if(is_null($model)){
+                    $model = new PvCalculus();
+                }
+                $model->setRawAttributes([
+                    'asset_id' => $id,
+                    'calculus' => $data
+                ]);
+                $model->save();
+                return response()->json([
+                    'status' => true
+                ], 200);
+            } else {
+                abort(404);
+            }
+        } catch (\Exception $e) {
             abort(404);
         }
     }

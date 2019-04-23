@@ -15,7 +15,19 @@ function showPresentValueCalculus(asset_id = null){
                 $('#myModal').modal('show');
                 $('.calculus_spinner_'+asset_id).hide();
             }
-        })
+        });
+    }
+}
+
+/**
+ * save the pv calculus to database as well
+ * @param asset_id
+ */
+function savePresentValueCalculus(asset_id = null){
+    if(asset_id) {
+        $.ajax({
+            url : '/lease/lease-valuation/save-lease-liability-calculus/'+asset_id
+        });
     }
 }
 

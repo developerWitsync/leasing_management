@@ -205,7 +205,6 @@ class LeaseAssets extends Model
                         `year` >= '{$start_year}'
                         and `asset_id` = '{$asset_id}'
                         and `payment_id` = '{$payment_id}'";
-            //echo $sql; die();
         } else {
             $sql = "SELECT 
                         `payment_date`,
@@ -272,7 +271,7 @@ class LeaseAssets extends Model
             $months[$m] = date('M', mktime(0, 0, 0, $m, 1));
         }
 
-        $present_value_of_lease_liability = [];
+        $present_value_of_lease_liability =  [];
 
         $total_lease_liability = 0;
 
@@ -356,7 +355,6 @@ class LeaseAssets extends Model
             $purchase_present_value = $this->getPresentValueOfPurchaseOption($base_date, $total_lease_liability, $present_value_of_lease_liability);
             $present_value_of_lease_liability = $purchase_present_value['present_value_of_lease_liability'];
             $total_lease_liability = $purchase_present_value['total_lease_liability'];
-
         }
 
         if ($return_value) {

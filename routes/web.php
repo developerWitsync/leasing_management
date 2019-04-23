@@ -268,6 +268,8 @@ Route::middleware('auth')->group(function () {
 
             Route::get('purchase-present-value/{id}', ['as' => 'addlease.leasevaluation.purchasepresentvalue', 'uses' => 'LeaseValuationController@purchasePresentValue']);
 
+            Route::get('save-lease-liability-calculus/{id}', ['as' => 'addlease.leasevaluation.savecalculus', 'uses' => 'LeaseValuationController@savePresentValueOfLeaseLiabilityCalculus']);
+
         });
         /**
          * Lease Payment Invoice NL16
@@ -342,6 +344,8 @@ Route::middleware('auth')->group(function () {
 
             Route::get('interest-depreciation/{id}', ['as' => 'leasevaluation.cap.interestdepreciation', 'uses' => 'LeaseValuationController@interestDepreciation']);
 
+            Route::get('show-pv-calculus/{id}', ['as' => 'leasevaluation.cap.pvcalculus', 'uses' => 'LeaseValuationController@pvCalculus']);
+
         });
 
         Route::prefix('valuation-non-capitalised')->group(function(){
@@ -361,6 +365,8 @@ Route::middleware('auth')->group(function () {
             Route::get('fetch-complete-lease-valuations/{id}',['as' => 'leasevaluation.ncap.asset.fetchvaluations', 'uses' => 'LeaseValuationController@fetchCompletedLeaseValuation']);
 
             Route::get('see-valuation-details/{history_id}', ['as' => 'addlease.ncap.leasevaluation.seedetails', 'uses' => 'LeaseValuationController@seeDetails']);
+
+            Route::get('show-pv-calculus/{id}', ['as' => 'leasevaluation.ncap.pvcalculus', 'uses' => 'LeaseValuationController@pvCalculus']);
 
         });
 

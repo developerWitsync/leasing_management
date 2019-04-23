@@ -165,7 +165,10 @@ class EscalationController extends Controller
                 if($request->escalation_clause_applicable == "no"){
                     confirmSteps($lease->id,$this->current_step);
                 } else {
-                    \App\LeaseCompletedSteps::query()->where('lease_id', '=',$lease->id)->where('completed_step', '=', 10)->delete();
+                    \App\LeaseCompletedSteps::query()
+                        ->where('lease_id', '=',$lease->id)
+                        ->where('completed_step', '=', 10)
+                        ->delete();
                 }
 
                 if($lease->save()){

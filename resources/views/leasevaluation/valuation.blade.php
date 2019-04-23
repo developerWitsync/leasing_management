@@ -70,6 +70,17 @@
         </div>
     </div>
 
+
+    <!--Lease Liability Calculus -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="dialog">
+            <div class="modal-content current_modal_body">
+
+            </div>
+        </div>
+    </div>
+    <!--Lease Liability Calculus-->
+
 @endsection
 @section('footer-script')
     <script src="{{ asset('assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
@@ -287,6 +298,30 @@
                     success: function (response) {
                         $('#see_details').html(response);
                         removeOverlayAjax()
+                    }
+                })
+            });
+
+            /**
+             * Show the escalation chart from the json data here
+             */
+            $(document.body).on('click', '.pv_calculus', function(){
+                var history = $(this).data('history_id');
+                //call ajax to fetch the view for the Valuation Details.....
+                @if(request()->segment(2) == 'valuation-capitalised')
+                    var url = '/lease-valuation/valuation-capitalised/show-pv-calculus/'+history;
+                @else
+                    var url = '/lease-valuation/valuation-non-capitalised/show-pv-calculus/'+history;
+                @endif
+                $.ajax({
+                    url : url,
+                    beforeSend: function () {
+                        showOverlayForAjax();
+                    },
+                    success: function (response) {
+                        removeOverlayAjax();
+                        $('.current_modal_body').html(response);
+                        $('#myModal').modal('show');
                     }
                 })
             });

@@ -14,6 +14,7 @@ class LeaseHistory extends Model
         'json_data_steps',
         'esclation_payments',
         'payment_anxure',
+        'pv_calculus',
         'created_at',
         'updated_at'
     ];

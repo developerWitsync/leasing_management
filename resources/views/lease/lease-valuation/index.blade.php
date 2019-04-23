@@ -89,4 +89,7 @@
 @endsection
 @section('footer-script')
     <script src="{{ asset('js/pages/lease_valuation.js') }}"></script>
+    <script>
+        savePresentValueCalculus({{$asset->id}});
+    </script>
 @endsection

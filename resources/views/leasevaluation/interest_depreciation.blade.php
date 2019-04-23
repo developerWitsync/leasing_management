@@ -100,7 +100,7 @@
                                         </table>
                                     </td>
                                 </tr>
-                                @foreach($details as $detail)
+                                @foreach($details as $key=>$detail)
                                     <tr>
                                         <td>{{\Carbon\Carbon::parse($detail->date)->format('Y')}}</td>
                                         <td>{{\Carbon\Carbon::parse($detail->date)->format(config('settings.date_format'))}}</td>
@@ -113,7 +113,7 @@
                                                     <td width="11%" class="blueClr" align="center">{{$detail->interest_expense}}</td>
                                                     <td width="11%" align="center">{{$detail->lease_payment}}</td>
                                                     <td width="11%" class="blueClr" align="center">{{ $detail->closing_lease_liability }}</td>
-                                                    @if(\Carbon\Carbon::parse($detail->date)->isLastOfMonth())
+                                                    @if(\Carbon\Carbon::parse($detail->date)->isLastOfMonth() || $key + 1 == count($details))
                                                         <td width="11%" class="blueClr" align="center">{{ $detail->value_of_lease_asset }}</td>
                                                         <td width="11%" class="blueClr" align="center">  {{ $detail->change }} </td>
                                                         <td width="11%" class="blueClr" align="center">{{ $detail->depreciation }}</td>
