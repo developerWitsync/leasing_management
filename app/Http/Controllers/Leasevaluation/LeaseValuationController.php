@@ -10,11 +10,11 @@ namespace App\Http\Controllers\Leasevaluation;
 
 use App\CategoriesLeaseAssetExcluded;
 use App\DiscountRateChartView;
+use App\Exports\InterestAndDepreciationExport;
 use App\Http\Controllers\Controller;
 use App\InterestAndDepreciation;
 use App\LeaseAssetPayments;
 use App\LeaseHistory;
-use App\LeasePaymentsEscalationClause;
 use App\PaymentEscalationDetails;
 use App\ReportingCurrencySettings;
 use Carbon\Carbon;
@@ -23,6 +23,7 @@ use App\Lease;
 use App\LeaseAssets;
 use App\LeaseAssetCategories;
 use Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 class LeaseValuationController extends Controller
@@ -394,6 +395,7 @@ class LeaseValuationController extends Controller
                     if ($data->valuation_type == "Subsequent Valuation") {
                         $date = $data->effective_date;
                     }
+
                     $exchange_rate = fetchCurrencyExchangeRate($date, $source, $destination);
                     return $exchange_rate;
                 })
@@ -604,6 +606,25 @@ class LeaseValuationController extends Controller
             ));
 
         } catch (\Exception $e) {
+            abort(404);
+        }
+    }
+
+    /**
+     * exports the interest and depreciation for a particular lease asset..
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function exportInterestDepreciation($id){
+        try{
+            $lease = Lease::query()
+                ->where('id', '=', $id)
+                ->whereIn('business_account_id', getDependentUserIds())
+                ->where('status', '=', '1')->firstOrFail();
+
+            $asset = $lease->assets()->first();
+
+            return Excel::download(new InterestAndDepreciationExport($asset->id), 'interest_and_depreciation.xlsx');
+        } catch (\Exception $e){
             dd($e);
         }
     }

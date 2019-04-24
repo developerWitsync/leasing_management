@@ -346,6 +346,8 @@ Route::middleware('auth')->group(function () {
 
             Route::get('show-pv-calculus/{id}', ['as' => 'leasevaluation.cap.pvcalculus', 'uses' => 'LeaseValuationController@pvCalculus']);
 
+            Route::get('export-interest-depreciation/{id}', ['as' => 'leasevaluation.cap.exportinterestdepreciation', 'uses' => 'LeaseValuationController@exportInterestDepreciation']);
+
         });
 
         Route::prefix('valuation-non-capitalised')->group(function(){

@@ -22,10 +22,15 @@
         </div>
     @endif
 
+
+
     <div class="panel panel-default">
         <div class="panel-heading">Lease Valuation</div>
+
         <div class="panel-body">
-            <div class="topInfo">
+            @include('lease._subsequent_details')
+
+            <div class="topInfo" style="padding-top: 12px;">
                 <div>
                     Lease Asset : <span class="badge badge-primary">{{ $asset->name }}</span>
                 </div>

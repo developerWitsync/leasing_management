@@ -58,7 +58,7 @@ class ProfileController extends Controller
                     'authorised_person_dob' => 'required|date',
                     'gender' => 'required',
                     'authorised_person_designation' => 'required',
-                    'username' => 'required|string|max:255',
+                    //'username' => 'required|string|max:255',
                     'email' => 'required|string|email|max:255',
                     'password' => 'nullable|min:8|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?!.*[\s])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/',
                     'phone' => 'required'
@@ -86,7 +86,7 @@ class ProfileController extends Controller
                 $userdata->setRawAttributes($request->except('_token', 'certificates', 'password_confirmation'));
                 $userdata->authorised_person_name = $request->authorised_person_name;
                 $userdata->authorised_person_designation = $request->authorised_person_designation;
-                $userdata->username = $request->username;
+                //$userdata->username = $request->username;
                 $userdata->phone = $request->phone;
                 $userdata->email = $request->email;
                 $userdata->type = '0';

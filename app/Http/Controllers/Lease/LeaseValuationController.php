@@ -52,6 +52,10 @@ class LeaseValuationController extends Controller
 
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
         if ($lease) {
+
+            //check if the Subsequent Valuation is applied for the lease modification
+            $subsequent_modify_required = $lease->isSubsequentModification();
+
             //Load the assets only which will  not in is_classify_under_low_value = Yes in NL10 (Lease Select Low Value)and will not in very short tem/short term lease in NL 8.1(lease_contract_duration table) and not in intengible under license arrangements and biological assets (lease asset categories)
 
             $category_excluded = \App\CategoriesLeaseAssetExcluded::query()
@@ -96,7 +100,8 @@ class LeaseValuationController extends Controller
                     'lessor_invoice',
                     'current_step',
                     'payments',
-                    'impairment_applicable'
+                    'impairment_applicable',
+                    'subsequent_modify_required'
                 ));
             } else {
                 //redirect to the lease incentives step in case not applicable....
