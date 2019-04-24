@@ -258,7 +258,8 @@ function calculatePaymentDueDatesByPaymentId(\App\LeaseAssetPayments $payment)
  * @return string
  */
 function formatToDecimal($number){
-    return number_format((float)$number, 2, '.', '');
+    //return number_format((float)$number, 2, '.', '');
+    return $number;
 }
 
 /**

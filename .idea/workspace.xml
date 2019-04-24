@@ -2,19 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1c290435-4779-45fe-873f-5594138f8734" name="Default Changelist" comment="Merge branch 'master' of http://100.100.7.4:8081/root/Witsync-Lease-Management&#10;&#10;# Conflicts:&#10;#&#9;app/Helpers/Helpers.php&#10;#&#9;config/settings.php&#10;#&#9;public/css/custom.css">
-      <change afterPath="$PROJECT_DIR$/resources/views/leasevaluation/partials/short_term_asset_card.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Helpers/Helpers.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Helpers/Helpers.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Leasevaluation/LeaseValuationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Leasevaluation/LeaseValuationController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/css/custom.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/custom.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/pages/valuation_main.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/pages/valuation_main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/escalation/_form.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/escalation/_form.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/leasevaluation/capitalised.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/leasevaluation/capitalised.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/leasevaluation/interest_depreciation.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/leasevaluation/interest_depreciation.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/leasevaluation/valuation.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/leasevaluation/valuation.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -45,7 +34,7 @@
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/EscalationController.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="340">
-              <caret line="429" column="50" selection-start-line="429" selection-start-column="50" selection-end-line="429" selection-end-column="50" />
+              <caret line="429" column="46" selection-start-line="429" selection-start-column="46" selection-end-line="429" selection-end-column="46" />
               <folding>
                 <element signature="e#886#1210#0#PHP" />
               </folding>
@@ -56,8 +45,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Helpers/Helpers.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="754">
-              <caret line="456" column="66" selection-start-line="456" selection-start-column="66" selection-end-line="456" selection-end-column="66" />
+            <state relative-caret-position="311">
+              <caret line="260" column="6" selection-start-line="260" selection-start-column="6" selection-end-line="260" selection-end-column="6" />
               <folding>
                 <element signature="n#uploadImage#0;n#!!top" />
                 <element signature="n#getUserProfileImageSrc#0;n#!!top" />
@@ -477,12 +466,12 @@
       <workItem from="1555561386044" duration="20407000" />
       <workItem from="1555906589547" duration="27223000" />
       <workItem from="1555992900361" duration="28727000" />
-      <workItem from="1556080568473" duration="7944000" />
+      <workItem from="1556080568473" duration="10105000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1262435000" />
+    <option name="totallyTimeSpent" value="1264596000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -941,7 +930,7 @@
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/EscalationController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="340">
-          <caret line="429" column="50" selection-start-line="429" selection-start-column="50" selection-end-line="429" selection-end-column="50" />
+          <caret line="429" column="46" selection-start-line="429" selection-start-column="46" selection-end-line="429" selection-end-column="46" />
           <folding>
             <element signature="e#886#1210#0#PHP" />
           </folding>
@@ -950,8 +939,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Helpers/Helpers.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="754">
-          <caret line="456" column="66" selection-start-line="456" selection-start-column="66" selection-end-line="456" selection-end-column="66" />
+        <state relative-caret-position="311">
+          <caret line="260" column="6" selection-start-line="260" selection-start-column="6" selection-end-line="260" selection-end-column="6" />
           <folding>
             <element signature="n#uploadImage#0;n#!!top" />
             <element signature="n#getUserProfileImageSrc#0;n#!!top" />
