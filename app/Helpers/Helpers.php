@@ -258,8 +258,7 @@ function calculatePaymentDueDatesByPaymentId(\App\LeaseAssetPayments $payment)
  * @return string
  */
 function formatToDecimal($number){
-    //return number_format((float)$number, 2, '.', '');
-    return $number;
+    return number_format((float)$number, 2, '.', '');
 }
 
 /**
@@ -461,6 +460,7 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
                                         $escalation_percentage_or_amount = $data['inconsistent_total_escalation_rate'][$start_year][$key];
 
                                         $amount_to_consider = $amount_to_consider * (1 + (($escalation_percentage_or_amount / 100) / $days_in_current_year) * $diff_in_days);
+                                        \Log::info('amount_to_consider = '.$amount_to_consider.' escalation_percentage_or_amount ='.$escalation_percentage_or_amount ." days_in_current_year = ".$days_in_current_year ." diff_in_days = ".$diff_in_days." Final_value = ".$amount_to_consider);
 
                                     } else {
                                         $escalation_percentage_or_amount = $data['inconsistent_escalated_amount'][$start_year][$key];
