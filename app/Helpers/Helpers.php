@@ -459,7 +459,10 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
 
                                         $escalation_percentage_or_amount = $data['inconsistent_total_escalation_rate'][$start_year][$key];
 
+                                        \Log::info('days_in_current_year = '.$days_in_current_year .' amount_to_consider = '. $amount_to_consider. ' escalation_percentage_or_amount = '.$escalation_percentage_or_amount .' diff_in_days = '.$diff_in_days);
+
                                         $amount_to_consider = $amount_to_consider * (1 + (($escalation_percentage_or_amount / 100) / $days_in_current_year) * $diff_in_days);
+                                        \Log::info('Final Value = '.$amount_to_consider);
 
                                     } else {
                                         $escalation_percentage_or_amount = $data['inconsistent_escalated_amount'][$start_year][$key];

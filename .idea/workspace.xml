@@ -45,8 +45,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Helpers/Helpers.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="311">
-              <caret line="260" column="6" selection-start-line="260" selection-start-column="6" selection-end-line="260" selection-end-column="6" />
+            <state relative-caret-position="661">
+              <caret line="464" column="89" selection-start-line="464" selection-start-column="89" selection-end-line="464" selection-end-column="89" />
               <folding>
                 <element signature="n#uploadImage#0;n#!!top" />
                 <element signature="n#getUserProfileImageSrc#0;n#!!top" />
@@ -466,12 +466,12 @@
       <workItem from="1555561386044" duration="20407000" />
       <workItem from="1555906589547" duration="27223000" />
       <workItem from="1555992900361" duration="28727000" />
-      <workItem from="1556080568473" duration="10105000" />
+      <workItem from="1556080568473" duration="11801000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1264596000" />
+    <option name="totallyTimeSpent" value="1266292000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -939,8 +939,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Helpers/Helpers.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="311">
-          <caret line="260" column="6" selection-start-line="260" selection-start-column="6" selection-end-line="260" selection-end-column="6" />
+        <state relative-caret-position="661">
+          <caret line="464" column="89" selection-start-line="464" selection-start-column="89" selection-end-line="464" selection-end-column="89" />
           <folding>
             <element signature="n#uploadImage#0;n#!!top" />
             <element signature="n#getUserProfileImageSrc#0;n#!!top" />
