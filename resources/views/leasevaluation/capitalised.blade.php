@@ -9,10 +9,12 @@
 @section('content')
    <div class="leasingModuleOuter">
    		<!--<div class="leasingBreatcrum"><a href="">Dashboard</a>&nbsp; / &nbsp;<span>Lessee Leasing Module</span></div>-->
-   		<div class="leasingMainHd">Lessee Leasing Module</div>
-	   @foreach($categories as $category)
-   			<span id="append_here_{{$category->id}}"></span>
-	   @endforeach
+		<div class="leasingMainHd">Lessee Leasing Module</div>
+		   <span id="append_here_short_term"></span>
+	   		<span id="append_here_low_value"></span>
+		   @foreach($categories as $category)
+				<span id="append_here_{{$category->id}}"></span>
+		   @endforeach
    </div>
 @endsection
 @section('footer-script')
@@ -27,6 +29,13 @@
 			fetchCategoryAssets({{$category->id}}, _is_capitalized);
 		</script>
 	@endforeach
+	<script>
+		if(!_is_capitalized){
+			// if the valuation is non-capitalised we need to show 2 additional categories for short term and low value lease assets
+			fetchShortTermLeaseAssets();
+			fetchLowValueLeaseAssets();
+		}
+	</script>
 
 	@if (session('status'))
 		<script>

@@ -19,6 +19,26 @@ function fetchCategoryAssets(category_id, _is_capitalized) {
     }
 }
 
+function fetchShortTermLeaseAssets(){
+    $.ajax({
+        url: "/lease-valuation/valuation-non-capitalised/fetch-short-term-lease-assets",
+        success: function (response) {
+            console.log(response);
+            $('#append_here_short_term').html(response);
+        }
+    });
+}
+
+function fetchLowValueLeaseAssets(){
+    $.ajax({
+        url: "/lease-valuation/valuation-non-capitalised/fetch-low-value-lease-assets",
+        success: function (response) {
+            console.log(response);
+            $('#append_here_low_value').html(response);
+        }
+    });
+}
+
 $(document.body).on('click', '.pagination_changed', function (e) {
     e.preventDefault();
     var category_id = $(this).data('category');

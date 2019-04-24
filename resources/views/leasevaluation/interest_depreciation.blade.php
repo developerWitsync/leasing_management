@@ -54,7 +54,7 @@
                                     <span>Month End Dates</span>
                                 </th>
                                 <th width="5%">Number of Days</th>
-                                <th width="15%">Effective Daily <br/> Discount Rate</th>
+                                <th width="5%">Effective Daily <br/> Discount Rate</th>
                                 <th width="65%" style="padding: 0px;">
                                     <table cellspacing="0" cellpadding="0" border="0" width="100%" class="tableInner">
                                         <tr>
@@ -105,7 +105,7 @@
                                         <td>{{\Carbon\Carbon::parse($detail->date)->format('Y')}}</td>
                                         <td>{{\Carbon\Carbon::parse($detail->date)->format(config('settings.date_format'))}}</td>
                                         <td>{{$detail->number_of_days}}</td>
-                                        <td>{{$detail->discount_rate}}</td>
+                                        <td>{{ round($detail->discount_rate, 3)}}</td>
                                         <td style="padding: 0px;">
                                             <table cellspacing="0" cellpadding="0" border="0" width="100%" class="tableInner">
                                                 <tr>

@@ -633,7 +633,7 @@ class ReviewSubmitController extends Controller
             if($pvCalculus){
                 $data['pv_calculus'] = $pvCalculus->calculus;
             } else {
-                $data['pv_calculus'] = [];
+                $data['pv_calculus'] = json_encode([]);
             }
 
             if (count($model->modifyLeaseApplication) > 0) {
@@ -682,7 +682,12 @@ class ReviewSubmitController extends Controller
             $assets->setRawAttributes($uid);
             $assets->save();
 
-            return redirect(route('leasevaluation.cap.index'))->with('status', $ulacode);
+            //check here for the redirect based upon the category and other conditions as well
+            if($asset){
+                return redirect(route('leasevaluation.cap.index'))->with('status', $ulacode);
+            } else {
+                return redirect(route('leasevaluation.ncap.index'))->with('status', $ulacode);
+            }
         }
     }
 

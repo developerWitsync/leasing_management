@@ -165,7 +165,7 @@
         <div class="form-group{{ $errors->has('total_escalation_rate') ? ' has-error' : '' }} required total_escalation_rate @if(old('is_escalation_applied_annually_consistently', $model->is_escalation_applied_annually_consistently)  == 'yes' && old('escalation_basis', $model->escalation_basis) == '1')  @else hidden @endif">
             <label for="total_escalation_rate" class="col-md-12 control-label">Total Escalation Rate</label>
             <div class="col-md-12 form-check form-check-inline">
-                <input type="text" class="form-control" placeholder="Total Escalation Rate" name="total_escalation_rate" value="{{ old('total_escalation_rate', $model->total_escalation_rate) }}">
+                <input type="text" class="form-control" placeholder="Total Escalation Rate" name="total_escalation_rate" value="{{ old('total_escalation_rate', $model->total_escalation_rate) }}" readonly="readonly">
                 @if ($errors->has('total_escalation_rate'))
                     <span class="help-block">
                         <strong>{{ $errors->first('total_escalation_rate') }}</strong>

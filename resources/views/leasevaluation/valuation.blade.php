@@ -195,15 +195,30 @@
                 var _data_table_url = '{{ route("leasevaluation.ncap.asset.fetchvaluations", ["id" => $lease->id]) }}';
             @endif
 
+            function formatNumbers(data){
+                return new Intl.NumberFormat('ja-JP', { maximumSignificantDigits: 3 }).format(data);
+            }
+
             var columns = [
                 {"data": null, sortable:false},
                 {"data": "effective_date", sortable:false},
                 {"data": "valuation_type", sortable:false},
-                {"data": "daily_discount_rate", sortable:false},
-
-                {"data": "undiscounted_value", sortable:false},
-                {"data": "present_value", sortable:false},
-                {"data": "value_of_lease_asset", sortable:false},
+                {
+                    "data": "daily_discount_rate", sortable:false, render: function (data) {
+                        return formatNumbers(data);
+                    }
+                },
+                {
+                    "data": "undiscounted_value", sortable:false, render: function (data) {
+                        return formatNumbers(data);
+                    }
+                },
+                {"data": "present_value", sortable:false, render: function (data) {
+                        return formatNumbers(data);
+                    }},
+                {"data": "value_of_lease_asset", sortable:false, render: function (data) {
+                        return formatNumbers(data);
+                    }},
                 {"data": "fair_market_value", sortable:false, render : function (data, type, row, meta) {
                         if(data == "null"){
                             return "N/A";
@@ -223,19 +238,24 @@
                 @if($show_statutory_columns)
                     {"data": "exchange_rate", sortable: false},
                     {"data":"statutory_undiscounted_value", sortable:false, render : function(data, type, row, meta){
-                        return parseFloat(row['exchange_rate']) * parseFloat(data);
+                        var _return =  parseFloat(row['exchange_rate']) * parseFloat(data);
+                        return new Intl.NumberFormat('ja-JP', { maximumSignificantDigits: 3 }).format(_return);
                     }},
                     {"data":"statutory_present_value", sortable:false , render : function(data, type, row, meta){
-                            return parseFloat(row['exchange_rate']) * parseFloat(data);
+                            var _return = parseFloat(row['exchange_rate']) * parseFloat(data);
+                            return new Intl.NumberFormat('ja-JP', { maximumSignificantDigits: 3 }).format(_return);
                         }},
                     {"data":"statutory_value_of_lease_asset", sortable:false , render : function(data, type, row, meta){
-                            return parseFloat(row['exchange_rate']) * parseFloat(data);
+                            var _return = parseFloat(row['exchange_rate']) * parseFloat(data);
+                            return new Intl.NumberFormat('ja-JP', { maximumSignificantDigits: 3 }).format(_return);
                         }},
                     {"data":"statutory_fair_market_value", sortable:false , render : function(data, type, row, meta){
-                            return parseFloat(row['exchange_rate']) * parseFloat(data);
+                            var _return =  parseFloat(row['exchange_rate']) * parseFloat(data);
+                            return new Intl.NumberFormat('ja-JP', { maximumSignificantDigits: 3 }).format(_return);
                         }},
                     {"data":"statutory_impairment_value", sortable:false , render : function(data, type, row, meta){
-                            return parseFloat(row['exchange_rate']) * parseFloat(data);
+                            var _return =  parseFloat(row['exchange_rate']) * parseFloat(data);
+                            return new Intl.NumberFormat('ja-JP', { maximumSignificantDigits: 3 }).format(_return);
                     }},
                 @endif
 

@@ -153,17 +153,17 @@ function fetchCurrenciesFromSettings(){
 
 /**
  * calculate all the payment due dates provided the first payment due date and the last payment due date
- * @param $firt_payment_date Lease Asset First Payment Due Date
+ * @param $first_payment_date Lease Asset First Payment Due Date
  * @param $last_payment_date Lease Asset Last Payment Due Date
  * @param $payment_payout Lease Asset Payment TimeOut
  * @param int $addMonths lease Asset Payment Months interval
  * @return array
  */
-function calculatePaymentDueDates($firt_payment_date, $last_payment_date, $payment_payout, $addMonths = 1)
+function calculatePaymentDueDates($first_payment_date, $last_payment_date, $payment_payout, $addMonths = 1)
 {
     //check if the payments are going to be monthly
     //have to loop from the first payment start date till the last payment end date
-    $start_date = $firt_payment_date;
+    $start_date = $first_payment_date;
     $end_date = $last_payment_date;
     $final_payout_dates = [];
     $i = 1;
@@ -189,6 +189,7 @@ function calculatePaymentDueDates($firt_payment_date, $last_payment_date, $payme
                 //will not increase by 1 month as the first payment date should be start_date
                 $start_date = \Carbon\Carbon::parse($start_date)->format('Y-m-d');
                 $interval_date = \Carbon\Carbon::parse($start_date)->format('Y-m-d');
+                $start_date = \Carbon\Carbon::parse($start_date)->firstOfMonth()->format('Y-m-d');
             } else {
                 $start_date = \Carbon\Carbon::parse($start_date)->addMonth($addMonths)->format('Y-m-d');
                 $interval_date = \Carbon\Carbon::parse($start_date)->lastOfMonth()->format('Y-m-d');
@@ -451,6 +452,10 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
                                         if ($diff_in_days > 365) {
                                             $next_escalation_date = \Carbon\Carbon::create($start_year, 1, 1)->lastOfYear();
                                             $diff_in_days = $next_escalation_date->diffInDays($current_escalation_date);
+
+                                            if($diff_in_days == 0){
+                                                $diff_in_days = 1;
+                                            }
                                         }
 
                                         $days_in_current_year = \Carbon\Carbon::create($start_year, 1, 1)->firstOfYear()->diffInDays(\Carbon\Carbon::create($start_year, 1, 1)->lastOfYear());
