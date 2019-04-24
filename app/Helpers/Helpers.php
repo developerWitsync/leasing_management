@@ -450,12 +450,9 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
                                         $diff_in_days = $next_escalation_date->diffInDays($current_escalation_date);
 
                                         if ($diff_in_days > 365) {
-                                            $next_escalation_date = \Carbon\Carbon::create($start_year, 1, 1)->lastOfYear();
-                                            $diff_in_days = $next_escalation_date->diffInDays($current_escalation_date);
-
-                                            if($diff_in_days == 0){
-                                                $diff_in_days = 1;
-                                            }
+                                            //$next_escalation_date = \Carbon\Carbon::create($start_year, 1, 1)->lastOfYear();
+                                            //$diff_in_days = $next_escalation_date->diffInDays($current_escalation_date);
+                                            $diff_in_days = 365;
                                         }
 
                                         $days_in_current_year = \Carbon\Carbon::create($start_year, 1, 1)->firstOfYear()->diffInDays(\Carbon\Carbon::create($start_year, 1, 1)->lastOfYear());
