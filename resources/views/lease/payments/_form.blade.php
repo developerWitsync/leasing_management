@@ -237,12 +237,13 @@
             </div>
         </div>
 
-        <div class="form-group{{ $errors->has('altered_payment_due_date.0') || $errors->has('due_dates_confirmed') ? ' has-error' : '' }} show_annexure">
+        <div class="form-group{{ $errors->has('altered_payment_due_date.0') || $errors->has('due_dates_confirmed') ? ' has-error' : '' }} show_annexure" style="width: 98%">
             <div class="col-md-12">
                 <a href="javascript:void(0);" class="btn btn-primary confirm_lease_payment_due_dates">Confirm Lease
                     Payment Due Dates</a>
+                <a href="javascript:void(0);" class="btn btn-sm btn-warning view_current_edited_dates pull-right" style="display: none">View Selected Dates</a>
                 @if($payment->payment_interval == 6)
-                    <a href="javascript:void(0);" class="btn btn-warning view_current_lease_payment_due_dates">View
+                    <a href="javascript:void(0);" class="btn btn-warning view_current_lease_payment_due_dates pull-right">View
                         Current Dates</a>
                 @endif
                 @if(!empty($payout_due_dates) && !$subsequent_modify_required)
@@ -819,7 +820,9 @@
                             $('.alter_due_dates_input').each(function () {
                                 var data_year = $(this).data('year');
                                 var data_month = $(this).data('month');
-                                var temp_date = new Date(data_year + "-" + data_month);
+                                var date = $(this).val();
+                                //var temp_date = new Date(data_year + "-" + data_month);
+                                var temp_date = new Date(date);
                                 if (temp_date >= asset_lease_start_date && temp_date <= asset_lease_end_date) {
                                     $(this).datepicker({
                                         dateFormat: "yy-mm-dd",
@@ -911,10 +914,11 @@
             /**
              * In case the user have made the changes to the dates than we have to find the first and last payment dates and have to populate them as well...
              */
+            var dates_array = new Array();
             $('#myModal').on('click', '.confirm_payment_due_dates', function () {
                 var _first_payment_date;
                 var _last_payment_date;
-                var dates_array = new Array();
+                dates_array = new Array();
 
                 if (is_dates_edited) {
 
@@ -964,6 +968,10 @@
 
                     $('#myModal').modal('hide');
 
+                    if(dates_array.length > 0){
+                        $(".view_current_edited_dates").show();
+                    }
+
                     setTimeout(function () {
                         bootbox.alert('We have captured your input dates. Please proceed further on the form.');
                     }, 1000);
@@ -987,6 +995,72 @@
                         $('#myModal').modal('show');
                     }
                 });
+            });
+
+            /**
+             * Generate the view current payment dates whent the user comes to edit payments
+             */
+            $('.view_current_edited_dates').on('click', function () {
+               //need to generate the table view and need to show the table all from javascript...
+
+                var html = "<div class=\"modal-header\">\n" +
+                    "    <h5 class=\"modal-title\">Confirm Lease Payment Due Dates</h5>\n" +
+                    "    <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n" +
+                    "        <span aria-hidden=\"true\">&times;</span>\n" +
+                    "    </button>\n" +
+                    "</div>\n" +
+                    "<div class=\"modal-body\">\n" +
+                    "\n" +
+                    "        <div class=\"alert alert-info\">\n" +
+                    "            <strong>Note!</strong> Below is the list of the payment dates that have been saved previously. If you want to overrider these dates please click on the \"Confirm Lease Payment Due Dates\".\n" +
+                    "        </div>\n" +
+                    "\n" +
+                    "        <div class=\"row\">\n" +
+                    "            <div class=\"col-md-12\">\n" +
+                    "                <table class=\"table table-bordered\">\n" +
+                    "                    <thead>\n" +
+                    "                    <tr>\n" +
+                    "                        <th>Sr. No.</th>\n" +
+                    "                        <th>Payment Due Date</th>\n" +
+                    "                    </tr>\n" +
+                    "                    </thead>\n" +
+                    "                    <tbody>";
+
+                for(i = 0 ; i < dates_array.length; i++){
+                    var current_index = i + 1;
+                    var current_date = dates_array[i];
+
+                    var options = {
+                        weekday: "short",
+                        year: "numeric",
+                        month: "2-digit",
+                        day: "numeric"
+                    };
+
+                    current_date = current_date.toLocaleDateString("en", options)
+
+                    html += "<tr>\n" +
+                        "                            <td>"+current_index+"</td>\n" +
+                        "                            <td>\n" +
+                        "                                <strong>\n" +
+                        "                                    "+current_date+"\n" +
+                        "                                </strong>\n" +
+                        "                            </td>\n" +
+                        "                        </tr>";
+                }
+                html += "</tbody>\n" +
+                    "                </table>\n" +
+                    "            </div>\n" +
+                    "        </div>\n" +
+                    "\n" +
+                    "</div>\n" +
+                    "<div class=\"modal-footer\">\n" +
+                    "   &nbsp;\n" +
+                    "</div>";
+
+                $('.annexure_modal_body').html(html);
+                $('#myModal').modal('show');
+
             });
 
             $('#workings_doc').change(function () {
