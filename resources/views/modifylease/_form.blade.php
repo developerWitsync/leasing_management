@@ -78,7 +78,7 @@
             changeMonth: true,
             minDate: new Date('{{ \Carbon\Carbon::parse($minDate)->format("Y-m-d")  }}'),
             @if(\Carbon\Carbon::parse($asset->lease_end_date)->greaterThan(\Carbon\Carbon::today()))
-                maxDate: new Date('{{ \Carbon\Carbon::today()->format("Y-m-d") }}'),
+                //maxDate: new Date('{{ \Carbon\Carbon::today()->format("Y-m-d") }}'),
             @else
                 maxDate: new Date('{{ \Carbon\Carbon::parse($asset->lease_end_date)->format("Y-m-d") }}'),
             @endif

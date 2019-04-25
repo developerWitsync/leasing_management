@@ -9,11 +9,14 @@
 namespace App\Http\Controllers\Lease;
 
 use App\Http\Controllers\Controller;
+use App\InterestAndDepreciation;
 use App\Lease;
 use App\LeaseAssetPayments;
+use App\LeaseHistory;
 use App\LeaseSelectDiscountRate;
 use App\LeaseDurationClassified;
 use App\LeaseAssets;
+use App\ModifyLeaseApplication;
 use App\PvCalculus;
 use Carbon\Carbon;
 use DebugBar\DebugBar;
@@ -52,9 +55,60 @@ class LeaseValuationController extends Controller
 
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
         if ($lease) {
-
+            $asset_id = $lease->assets()->first()->id;
             //check if the Subsequent Valuation is applied for the lease modification
+            $existing_lease_liability_balance = $existing_value_of_lease_asset = $existing_carrying_value_of_lease_asset = null;
             $subsequent_modify_required = $lease->isSubsequentModification();
+            if($subsequent_modify_required){
+
+                $all_subsequent_effective_dates = LeaseHistory::query()->where('lease_id', '=', $lease->id);
+                if($all_subsequent_effective_dates->count() === 1){
+
+                    $previous_depreciation_data = InterestAndDepreciation::query()
+                        ->where('date', '<', $lease->modifyLeaseApplication->last()->effective_from)
+                        ->where('asset_id', '=', $asset_id)
+                        ->orderBy('date','desc')
+                        ->first();
+
+                    $existing_lease_liability_balance = (float)$previous_depreciation_data->closing_lease_liability;
+
+                    //we can take out the Existing Value of Lease Asset from the very first row...
+                    $existing_value_of_lease_asset_row = InterestAndDepreciation::query()->where('asset_id', '=', $asset_id)->orderBy('id', 'asc')->first();
+                    $existing_value_of_lease_asset = $existing_value_of_lease_asset_row->opening_lease_liability;
+
+                    //Existing Carrying Value of Lease Asset
+                    $existing_carrying_value_of_lease_asset = $previous_depreciation_data->carrying_value_of_lease_asset;
+                } else {
+
+                    $effective_date = ModifyLeaseApplication::query()
+                        ->where('lease_id', '=', $lease->id)
+                        ->where('valuation', '=', 'Subsequent Valuation')
+                        ->where('effective_from', '<', $lease->modifyLeaseApplication->last()->effective_from)
+                        ->orderBy('effective_from', 'desc')
+                        ->limit(1)
+                        ->first();
+
+                    $previous_depreciation_data = InterestAndDepreciation::query()
+                        ->where('modify_id', '=', $effective_date->id)
+                        ->where('asset_id', '=', $asset_id)
+                        ->orderBy('date','asc')
+                        ->first();
+
+                    $existing_lease_liability_balance = (float)$previous_depreciation_data->closing_lease_liability;
+
+                    $existing_value_of_lease_asset = $previous_depreciation_data->value_of_lease_asset;
+
+                    $existing_carrying_value_of_lease_asset = InterestAndDepreciation::query()
+                        ->where('date', '<', $lease->modifyLeaseApplication->last()->effective_from)
+                        ->where('asset_id', '=', $asset_id)
+                        ->orderBy('date','desc')
+                        ->first();
+
+                    //Existing Carrying Value of Lease Asset
+                    $existing_carrying_value_of_lease_asset = $existing_carrying_value_of_lease_asset->carrying_value_of_lease_asset;
+                }
+
+            }
 
             //Load the assets only which will  not in is_classify_under_low_value = Yes in NL10 (Lease Select Low Value)and will not in very short tem/short term lease in NL 8.1(lease_contract_duration table) and not in intengible under license arrangements and biological assets (lease asset categories)
 
@@ -101,7 +155,10 @@ class LeaseValuationController extends Controller
                     'current_step',
                     'payments',
                     'impairment_applicable',
-                    'subsequent_modify_required'
+                    'subsequent_modify_required',
+                    'existing_lease_liability_balance',
+                    'existing_value_of_lease_asset',
+                    'existing_carrying_value_of_lease_asset'
                 ));
             } else {
                 //redirect to the lease incentives step in case not applicable....

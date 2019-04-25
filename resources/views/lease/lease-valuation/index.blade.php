@@ -46,10 +46,14 @@
 
                 <div>
                     Lease Valuation as on Date : <span class="badge badge-primary">
-                        @if(\Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->greaterThan(\Carbon\Carbon::parse($asset->accural_period)))
-                            {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->format(config('settings.date_format')) }}
+                        @if($subsequent_modify_required)
+                            {{ \Carbon\Carbon::parse($lease->modifyLeaseApplication->last()->effective_from)->format(config('settings.date_format')) }}
                         @else
-                            {{ \Carbon\Carbon::parse($asset->lease_start_date)->format(config('settings.date_format')) }}
+                            @if(\Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->greaterThan(\Carbon\Carbon::parse($asset->accural_period)))
+                                {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->format(config('settings.date_format')) }}
+                            @else
+                                {{ \Carbon\Carbon::parse($asset->lease_start_date)->format(config('settings.date_format')) }}
+                            @endif
                         @endif
                     </span>
                 </div>
@@ -96,5 +100,10 @@
     <script src="{{ asset('js/pages/lease_valuation.js') }}"></script>
     <script>
         savePresentValueCalculus({{$asset->id}});
+        @if($subsequent_modify_required)
+            var existing_lease_liability = "{{$existing_lease_liability_balance}}";
+            var existing_value_of_lease_asset = parseFloat("{{$existing_value_of_lease_asset}}");
+            var existing_carrying_value_of_lease_asset = parseFloat("{{$existing_carrying_value_of_lease_asset}}");
+        @endif
     </script>
 @endsection

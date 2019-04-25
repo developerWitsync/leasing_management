@@ -145,19 +145,18 @@
                     var effective_date = new Date(data[i].effective_date);
                     var undisounted_lease_liability = {
                         'x' : effective_date.toDateString() + ' (' + data[i].valuation_type + ')',
-                        'y' : parseFloat(data[i].undiscounted_value),
-
+                        'y' : parseFloat(data[i].undiscounted_value.replace(/,/g, '')),
                     };
 
                     var present_value = {
                         'x' : effective_date.toDateString() + ' (' + data[i].valuation_type + ')',
-                        'y' : parseFloat(data[i].present_value),
+                        'y' : parseFloat(data[i].present_value.replace(/,/g, '')),
 
                     };
 
                     var value_of_lease_asset = {
                         'x' : effective_date.toDateString() + ' (' + data[i].valuation_type +')',
-                        'y' : parseFloat(data[i].value_of_lease_asset)
+                        'y' : parseFloat(data[i].value_of_lease_asset.replace(/,/g, ''))
                     };
 
                     final_chart_data[0].values.push(undisounted_lease_liability);

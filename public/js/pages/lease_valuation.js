@@ -187,6 +187,47 @@ $(function(){
     $(document).ready(function () {
         removeOverlayAjax();
         $('.load_lease_liability').html(total_lease_liability);
+        if(typeof existing_lease_liability != "undefined"){
+            var increase_decrease = parseFloat(total_lease_liability) - parseFloat(existing_lease_liability);
+            $(".increase_decrease_part_first").html(increase_decrease);
+
+
+            //  calculate the new value of lease asset as per the conditions in the NL15SR ==> P11
+            //  existing_carrying_value_of_lease_asset ==> P9
+            //  increase_decrease ==> P10
+            // existing_value_of_lease_asset ==> P8
+            var new_value_of_lease_asset = 0;
+            var charge_to_pl = '-';
+            increase_decrease = parseFloat(increase_decrease);
+            if(increase_decrease < 0){
+                increase_decrease = -1 * increase_decrease;
+
+                if((existing_carrying_value_of_lease_asset - increase_decrease) > 0) {
+                    //(P8 - P10)
+                    new_value_of_lease_asset = existing_value_of_lease_asset - increase_decrease;
+                    charge_to_pl = '-';
+                } else if (existing_carrying_value_of_lease_asset - increase_decrease < 0){
+                    // (P8 - P9)
+                    new_value_of_lease_asset = existing_value_of_lease_asset - existing_carrying_value_of_lease_asset;
+
+                    //(P10 - P9)
+                    charge_to_pl = increase_decrease - existing_carrying_value_of_lease_asset;
+                } else if(existing_carrying_value_of_lease_asset == 0){
+                    //P8
+                    new_value_of_lease_asset = existing_value_of_lease_asset;
+
+                    //P10
+                    charge_to_pl = increase_decrease;
+                }
+
+            } else {
+                new_value_of_lease_asset = existing_value_of_lease_asset + increase_decrease;
+                charge_to_pl = 0;
+            }
+
+            $('.new_value_of_lease_asset').html(new_value_of_lease_asset);
+            $('.charge_to_pl').html(charge_to_pl);
+        }
     });
 
 
