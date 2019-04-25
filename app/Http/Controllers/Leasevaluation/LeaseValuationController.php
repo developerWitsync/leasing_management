@@ -388,6 +388,12 @@ class LeaseValuationController extends Controller
                 return number_format($data->value_of_lease_asset, 2);
             })->addColumn('daily_discount_rate', function($data){
                 return number_format($data->daily_discount_rate, 2);
+            })->addColumn('effective_date', function($data) use ($base_date){
+                if(Carbon::parse($data->effective_date)->lessThan($base_date)){
+                    return Carbon::parse($base_date)->format('Y-m-d');
+                } else {
+                    return $data->effective_date;
+                }
             });
 
             if ($currency_settings && ($currency_settings->statutory_financial_reporting_currency != $lease->lease_contract_id)) {
@@ -459,7 +465,7 @@ class LeaseValuationController extends Controller
             $final_data = [];
             $final_data['valuation_type'] = is_null($history->modify_id) ? "Initial Valuation" : $history->leaseModification->valuation;
 
-            $base_date = getParentDetails()->accountingStandard->base_date;
+            $base_date = $account_base_date = getParentDetails()->accountingStandard->base_date;
 
             $start_date = Carbon::parse(is_null($history->modify_id) ? $json_step_data['underlying_asset']['accural_period'] : $history->leaseModification->effective_from);
 
@@ -553,7 +559,8 @@ class LeaseValuationController extends Controller
                 'final_data',
                 'show_statutory',
                 'exchange_rate',
-                'statutory_currency'
+                'statutory_currency',
+                'account_base_date'
             ));
 
 

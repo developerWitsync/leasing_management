@@ -5,7 +5,7 @@
 
 @section('content')
     <div class="panel panel-default">
-        <div class="panel-heading">Lease Balance as on 31 Dec 2018 </div>
+        <div class="panel-heading">Lease Balance as on {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->subDay(1)->format(config('settings.date_format')) }} </div>
 
         <div class="panel-body">
             @if (session('status'))

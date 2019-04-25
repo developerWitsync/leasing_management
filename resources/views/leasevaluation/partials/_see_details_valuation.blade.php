@@ -68,7 +68,7 @@
         </li>
         @if(!empty($final_data['lease_balances']))
             <li>
-                <span>Lease Balances as on Dec 31, 2018</span>
+                <span>Lease Balances as on {{ \Carbon\Carbon::parse($account_base_date)->subDay(1)->format(config('settings.date_format')) }} </span>
                 <strong>
                     {{$final_data['lease_balances']['reporting_currency_selected']}} {{ number_format($final_data['lease_balances']['accrued_lease_payment_balance'],2) }}
                 </strong>

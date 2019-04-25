@@ -209,7 +209,8 @@
         $('select[name="reporting_currency"]').on('change', function () {
             var _return_currency = '';
             var access_key = '{{ env("CURRENCY_API_ACCESS_KEY") }}';
-            var base_date = '2018-12-31';
+            //var base_date =  '2018-12-31';
+            var base_date = "{{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->subDay(1)->format('Y-m-d') }}";
             var base = '{{ $currency_settings->statutory_financial_reporting_currency }}';
             var element_selector = 'input[name="exchange_rate"]';
             switch ($(this).val()) {
