@@ -87,7 +87,9 @@ class ModifyLeaseController extends Controller
         try {
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
 
-            $lase_modification = LeaseModificationReason::query()->get();
+            $lase_modification = LeaseModificationReason::query()
+                ->whereIn('business_account_id', getDependentUserIds())
+                ->get();
             if ($lease) {
 
                 $disable_initial = false;
@@ -186,7 +188,6 @@ class ModifyLeaseController extends Controller
                 abort(404);
             }
         } catch (\Exception $e) {
-            dd($e);
             abort(404);
         }
     }

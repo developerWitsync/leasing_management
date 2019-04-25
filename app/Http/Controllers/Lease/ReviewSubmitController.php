@@ -173,7 +173,8 @@ class ReviewSubmitController extends Controller
 
             $end_date = Carbon::parse($asset->getLeaseEndDate($asset));
 
-            $start_year = $base_date->format('Y');
+            $start_year = $first_year = $base_date->format('Y');
+            $start_month = $base_date->format('m');
             $end_year = $end_date->format('Y');
 
             $discount_rate = $asset->leaseSelectDiscountRate->daily_discount_rate;
@@ -313,6 +314,10 @@ class ReviewSubmitController extends Controller
 
             while ($start_year <= $end_year) {
                 foreach ($months as $key => $month) {
+
+                    if($start_year == $first_year && $key < $start_month){
+                        continue;
+                    }
 
                     //apply condition for the lease start date
                     //condition to check the below condition should be when the start date is on or after the base date

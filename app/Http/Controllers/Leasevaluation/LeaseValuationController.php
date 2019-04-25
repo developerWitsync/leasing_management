@@ -380,6 +380,16 @@ class LeaseValuationController extends Controller
 
             $currency_settings = ReportingCurrencySettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
 
+            $datatable =  $datatable->addColumn('undiscounted_value', function($data){
+                return number_format($data->undiscounted_value, 2);
+            })->addColumn('present_value', function($data){
+                return number_format($data->present_value, 2);
+            })->addColumn('value_of_lease_asset', function($data){
+                return number_format($data->value_of_lease_asset, 2);
+            })->addColumn('daily_discount_rate', function($data){
+                return number_format($data->daily_discount_rate, 2);
+            });
+
             if ($currency_settings && ($currency_settings->statutory_financial_reporting_currency != $lease->lease_contract_id)) {
                 //add columns for the statutory currency here as well....
                 $destination = $currency_settings->statutory_financial_reporting_currency;
@@ -399,6 +409,7 @@ class LeaseValuationController extends Controller
                     $exchange_rate = fetchCurrencyExchangeRate($date, $source, $destination);
                     return $exchange_rate;
                 })
+
                     ->addColumn('statutory_undiscounted_value', function ($data) {
                         return $data->undiscounted_value;
                     })
@@ -447,11 +458,19 @@ class LeaseValuationController extends Controller
             $json_step_data = collect(json_decode($history->json_data_steps, true));
             $final_data = [];
             $final_data['valuation_type'] = is_null($history->modify_id) ? "Initial Valuation" : $history->leaseModification->valuation;
-            $final_data['effective_date'] = is_null($history->modify_id) ? $json_step_data['underlying_asset']['accural_period'] : $history->leaseModification->effective_from;
+
+            $base_date = getParentDetails()->accountingStandard->base_date;
+
+            $start_date = Carbon::parse(is_null($history->modify_id) ? $json_step_data['underlying_asset']['accural_period'] : $history->leaseModification->effective_from);
+
+            $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
+
+            $final_data['effective_date'] = $base_date;
+
             $final_data["value_of_lease_asset"] = $json_step_data['underlying_asset']['value_of_lease_asset'];
 
             $source = $json_step_data["lessor_details"]["lease_contract_id"];
-            $base_date = getParentDetails()->accountingStandard->base_date;
+
 
             $payments = $json_step_data['lease_payments'];
             foreach ($payments as $payment) {

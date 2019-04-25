@@ -676,10 +676,14 @@ function createUlaCode()
 {
 
     $current_year = date("Y");
-    $first_param = \App\Lease::query()->count();
-    $first_param = $first_param + 1;
+
+    $first_param = \App\Lease::query()
+        ->whereIn('business_account_id', getDependentUserIds())
+        ->count();
+
     $second_param = \App\Lease::query()
         ->whereRaw("YEAR(created_at) =  '$current_year'")
+        ->whereIn('business_account_id', getDependentUserIds())
         ->count();
 
     $string = "LA" . str_pad($first_param, 3, 0, STR_PAD_LEFT) . '/' . str_pad($second_param, 3, 0, STR_PAD_LEFT) . '/' . $current_year;

@@ -186,7 +186,7 @@ class LeaseAssets extends Model
      * @param string $escalation_applied
      * @return mixed
      */
-    public function fetchPVCalculus($base_date, $asset_id,$payment_id, $start_year, $escalation_applied = "yes"){
+    public function fetchPVCalculus($base_date, $asset_id,$payment_id, $start_year, $start_month, $escalation_applied = "yes"){
         if($escalation_applied == "yes"){
             $sql = "SELECT 
                         `payment_date`,
@@ -196,6 +196,7 @@ class LeaseAssets extends Model
                         `daily_discount_rate` as `discount_rate`,
                         ROUND(`total_amount_payable` / POWER( 1 + (`daily_discount_rate`) * (1 / 100), datediff(`payment_date`, '{$base_date}')), 2) as lease_liability,
                         `year` as `payment_year`,
+                        `month` as `month`,
                         DATE_FORMAT(`payment_date`, '%b') AS `payment_month`,
                         'yes' as `is_escalation_applicable`,
                         datediff(`payment_date`, '{$base_date}') as `days_diff`
@@ -203,6 +204,7 @@ class LeaseAssets extends Model
                         pv_calculus_view_when_escalation_applied
                     WHERE
                         `year` >= '{$start_year}'
+                         AND CASE WHEN `year` <= '{$start_year}' THEN `month` >= '{$start_month}' ELSE TRUE END 
                         and `asset_id` = '{$asset_id}'
                         and `payment_id` = '{$payment_id}'";
         } else {
@@ -214,6 +216,7 @@ class LeaseAssets extends Model
                         `daily_discount_rate` as `discount_rate`,
                         ROUND(`total_amount_payable` / POWER( 1 + (`daily_discount_rate`) * (1 / 100), datediff(`payment_date`, '{$base_date}')), 2) as lease_liability,
                         `year` as `payment_year`,
+                        `month` as `month`,
                         DATE_FORMAT(`payment_date`, '%b') AS `payment_month`,
                         'no' as `is_escalation_applicable`,
                         datediff(`payment_date`, '{$base_date}') as `days_diff`
@@ -221,6 +224,7 @@ class LeaseAssets extends Model
                         pv_calculus_view_when_escalation_not_applied
                     WHERE
                         `year` >= '{$start_year}'
+                        AND CASE WHEN `year` <= '{$start_year}' THEN `month` >= '{$start_month}' ELSE TRUE END 
                         and `asset_id` = '{$asset_id}'
                         and `payment_id` = '{$payment_id}'";
         }
@@ -313,7 +317,7 @@ class LeaseAssets extends Model
             if ($is_eslaction_applicable && $is_eslaction_applicable->is_escalation_applicable == "yes") {
                 //call the procedure `pv_calculus_when_escalation_is_applied`
 
-                $results = $this->fetchPVCalculus($base_date, $this->id, $payment->id,$start_year, 'yes');
+                $results = $this->fetchPVCalculus($base_date, $this->id, $payment->id,$start_year, $first_month, 'yes');
 
                 if (count($results) > 0) {
                     foreach ($results as $result) {
@@ -323,7 +327,7 @@ class LeaseAssets extends Model
                 }
             } elseif(is_null($is_eslaction_applicable) || ($is_eslaction_applicable && $is_eslaction_applicable->is_escalation_applicable == "no")) {
                 //call the procedure `pv_calculus_when_escalation_is_not_applied`
-                $results = $this->fetchPVCalculus($base_date, $this->id,$payment->id,$start_year, 'no');
+                $results = $this->fetchPVCalculus($base_date, $this->id,$payment->id,$start_year, $first_month, 'no');
 
                 if (count($results) > 0) {
                     foreach ($results as $result) {

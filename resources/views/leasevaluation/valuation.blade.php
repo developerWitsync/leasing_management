@@ -196,7 +196,8 @@
             @endif
 
             function formatNumbers(data){
-                return new Intl.NumberFormat('ja-JP', { maximumSignificantDigits: 3 }).format(data);
+                //return new Intl.NumberFormat('ja-JP', {style: 'decimal', maximumSignificantDigits: 3 }).format(parseFloat(data));
+                return data;
             }
 
             var columns = [

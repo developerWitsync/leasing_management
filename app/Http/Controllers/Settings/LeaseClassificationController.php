@@ -80,14 +80,18 @@ class LeaseClassificationController extends Controller
         $escalation_percentage_settings = EscalationPercentageSettings::query()->select('id', 'number')->where('business_account_id', '=', auth()->user()->id)->orderBy('number','asc')->get();
         $escalation_frequencies = EscalationFrequency::all();
 
-        $modication_reason = LeaseModificationReason::query()->select('id', 'title')->where('status', '=', '1')->get();
+        $modication_reason = LeaseModificationReason::query()
+            ->select('id', 'title')
+            ->whereIn('business_account_id', getDependentUserIds())
+            ->where('status', '=', '1')
+            ->get();
 
         $categories = LeaseAssetCategories::query()->select('id', 'title')->where('status', '=', '1')->get();
         
         $category_excluded = CategoriesLeaseAssetExcluded::query()
             ->whereIn('category_id',[5,8])
             ->where('status', '=', '0')
-            ->where('business_account_id',auth()->user()->id)
+            ->whereIn('business_account_id', getDependentUserIds())
             ->with('leaseassetcategories')
             ->get();
 
@@ -98,9 +102,12 @@ class LeaseClassificationController extends Controller
         
          $category_excluded_id = $category_excluded_all->pluck('category_id')->toArray();
          
-         $check_intangible_asset = LeaseAssets::query()->where('category_id',7)->get();
-         
-     
+         $check_intangible_asset = LeaseAssets::query()
+             ->whereHas('lease', function($query){
+                 $query->whereIn('business_account_id', getDependentUserIds());
+             })
+             ->where('category_id',7)->toSql();
+
         return view('settings.classification.index', compact('breadcrumbs',
             'rates',
             'contract_classifications',
@@ -720,7 +727,8 @@ class LeaseClassificationController extends Controller
                 }
 
                 $model = LeaseModificationReason::create([
-                    'title' => $request->title
+                    'title' => $request->title,
+                    'business_account_id' => getParentDetails()->id
                  ]);
 
                 if($model){
@@ -744,7 +752,10 @@ class LeaseClassificationController extends Controller
     public function editLeaseModificationReason($id, Request $request){
         try{
             if($request->ajax()){
-                $lease_reason = LeaseModificationReason::query()->where('id', $id)->first();
+                $lease_reason = LeaseModificationReason::query()
+                    ->where('id', $id)
+                    ->whereIn('business_account_id', getDependentUserIds())
+                    ->first();
                 if($request->isMethod('post')) {
                     $validator = Validator::make($request->except("_token"), [
                         'title' => ['required',]
