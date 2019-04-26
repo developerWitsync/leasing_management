@@ -238,24 +238,33 @@
                 @if($show_statutory_columns)
                     {"data": "exchange_rate", sortable: false},
                     {"data":"statutory_undiscounted_value", sortable:false, render : function(data, type, row, meta){
-                        var _return =  parseFloat(row['exchange_rate']) * parseFloat(data);
-                        return new Intl.NumberFormat('ja-JP', { maximumSignificantDigits: 3 }).format(_return);
+
+                        var _return =  parseFloat(row['exchange_rate']) * parseFloat(data.replace(/,/g, ''));
+                        //return new Intl.NumberFormat('ja-JP', { maximumSignificantDigits: 3 }).format(_return);
+                            return _return.toLocaleString('us', {minimumFractionDigits: 2, maximumFractionDigits: 2});
                     }},
                     {"data":"statutory_present_value", sortable:false , render : function(data, type, row, meta){
-                            var _return = parseFloat(row['exchange_rate']) * parseFloat(data);
-                            return new Intl.NumberFormat('ja-JP', { maximumSignificantDigits: 3 }).format(_return);
+                            var _return = parseFloat(row['exchange_rate']) * parseFloat(data.replace(/,/g, ''));
+                            //return new Intl.NumberFormat('ja-JP', { maximumSignificantDigits: 3 }).format(_return);
+                            return _return.toLocaleString('us', {minimumFractionDigits: 2, maximumFractionDigits: 2});
                         }},
                     {"data":"statutory_value_of_lease_asset", sortable:false , render : function(data, type, row, meta){
-                            var _return = parseFloat(row['exchange_rate']) * parseFloat(data);
-                            return new Intl.NumberFormat('ja-JP', { maximumSignificantDigits: 3 }).format(_return);
+                            var _return = parseFloat(row['exchange_rate']) * parseFloat(data.replace(/,/g, ''));
+                            //return new Intl.NumberFormat('ja-JP', { maximumSignificantDigits: 3 }).format(_return);
+                            return _return.toLocaleString('us', {minimumFractionDigits: 2, maximumFractionDigits: 2});
                         }},
                     {"data":"statutory_fair_market_value", sortable:false , render : function(data, type, row, meta){
-                            var _return =  parseFloat(row['exchange_rate']) * parseFloat(data);
-                            return new Intl.NumberFormat('ja-JP', { maximumSignificantDigits: 3 }).format(_return);
+                            if(data)
+                                var _return =  parseFloat(row['exchange_rate']) * parseFloat(data.replace(/,/g, ''));
+                            else
+                                var _return  = data;
+                            //return new Intl.NumberFormat('ja-JP', { maximumSignificantDigits: 3 }).format(_return);
+                            return _return.toLocaleString('us', {minimumFractionDigits: 2, maximumFractionDigits: 2});
                         }},
                     {"data":"statutory_impairment_value", sortable:false , render : function(data, type, row, meta){
-                            var _return =  parseFloat(row['exchange_rate']) * parseFloat(data);
-                            return new Intl.NumberFormat('ja-JP', { maximumSignificantDigits: 3 }).format(_return);
+                            var _return =  parseFloat(row['exchange_rate']) * parseFloat(data.replace(/,/g, ''));
+                            //return new Intl.NumberFormat('ja-JP', { maximumSignificantDigits: 3 }).format(_return);
+                            return _return.toLocaleString('us', {minimumFractionDigits: 2, maximumFractionDigits: 2});
                     }},
                 @endif
 

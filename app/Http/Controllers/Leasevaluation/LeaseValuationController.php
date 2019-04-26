@@ -310,6 +310,7 @@ class LeaseValuationController extends Controller
      */
     public function leaseValuation($id)
     {
+
         try {
             $lease = Lease::query()
                 ->where('id', '=', $id)
@@ -401,42 +402,42 @@ class LeaseValuationController extends Controller
                 $destination = $currency_settings->statutory_financial_reporting_currency;
 
                 $datatable->addColumn('exchange_rate', function ($data) use ($destination, $base_date, $asset) {
-                    $source = $data->source_currency;
-                    if (Carbon::parse($asset->accural_period)->greaterThan(Carbon::parse($base_date))) {
-                        $date = Carbon::parse($asset->accural_period)->format('Y-m-d');
-                    } else {
-                        $date = $base_date;
-                    }
-                    //check for the subsequent and fetch the exchange rate for the effective date in that case...
-                    if ($data->valuation_type == "Subsequent Valuation") {
-                        $date = $data->effective_date;
-                    }
+                        $source = $data->source_currency;
+                        if (Carbon::parse($asset->accural_period)->greaterThan(Carbon::parse($base_date))) {
+                            $date = Carbon::parse($asset->accural_period)->format('Y-m-d');
+                        } else {
+                            $date = $base_date;
+                        }
+                        //check for the subsequent and fetch the exchange rate for the effective date in that case...
+                        if ($data->valuation_type == "Subsequent Valuation") {
+                            $date = $data->effective_date;
+                        }
 
-                    $exchange_rate = fetchCurrencyExchangeRate($date, $source, $destination);
-                    return $exchange_rate;
-                })
+                        $exchange_rate = fetchCurrencyExchangeRate($date, $source, $destination);
+                        return $exchange_rate;
+                    })
 
                     ->addColumn('statutory_undiscounted_value', function ($data) {
-                        return $data->undiscounted_value;
+                        return number_format($data->undiscounted_value, 2);
                     })
                     ->addColumn('statutory_present_value', function ($data) {
-                        return $data->present_value;
+                        return number_format($data->present_value, 2);
                     })
                     ->addColumn('statutory_value_of_lease_asset', function ($data) {
-                        return $data->value_of_lease_asset;
+                        return number_format($data->value_of_lease_asset, 2);
                     })
                     ->addColumn('statutory_fair_market_value', function ($data) {
                         if ($data->fair_market_value != "null") {
-                            return $data->fair_market_value;
+                            return number_format($data->fair_market_value, 2);
                         } else {
-                            return 0;
+                            return number_format(0, 2);
                         }
                     })
                     ->addColumn('statutory_impairment_value', function ($data) {
                         if ($data->impairment_value != "null") {
-                            return $data->impairment_value;
+                            return number_format($data->impairment_value, 2);
                         } else {
-                            return 0;
+                            return number_format(0, 2);
                         }
                     });
             }

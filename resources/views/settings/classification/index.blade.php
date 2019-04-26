@@ -209,7 +209,7 @@
                     </div>
 
 
-                    <div class="panel panel-info">
+                    {{--<div class="panel panel-info">
                         <div class="panel-heading">
                             Number of Underlying Lease Assets
                             <span>
@@ -282,7 +282,7 @@
                                 </tr>
                             </table>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <div class="panel panel-info">
                         <div class="panel-heading">
@@ -591,7 +591,7 @@
                                             {{ $value->number }}
                                         </td>
                                         <td>
-
+                                            @if($value->number)
                                             <a data-href="{{ route('settings.leaseclassification.editescalationpercentagenumber', ['id' => $value->id]) }}"
                                                href="javascript:;" class="btn btn-sm btn-success edit_table_setting">
                                                 <i class="fa fa-pencil-square-o"></i>
@@ -600,6 +600,7 @@
                                             <a data-href="{{ route('settings.leaseclassification.deleteescalationpercentagenumber', ['id' => $value->id]) }}"
                                                href="javascript:;" class="btn btn-sm btn-danger delete_settings"><i
                                                         class="fa fa-trash-o"></i></a>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach

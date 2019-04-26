@@ -7,7 +7,7 @@
         <table cellpadding="0" cellspacing="0" border="0" width="100%">
             <tr>
                 <th>Lease Payment <br/> Name</th>
-                <th>Effective Lease <br/> Start Date</th>
+                    <th>Effective Lease <br/> Start Date</th>
                 <th>Lease <br/> End Date</th>
                 <th>Undiscounted <br/> Lease Liability (LC)</th>
                 <th>PV of Lease <br/> Liability (LC)</th>

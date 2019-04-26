@@ -345,7 +345,7 @@ class EscalationController extends Controller
                 $lease_end_date = $payment->asset->getLeaseEndDate($payment->asset);
                 $contract_escalation_basis = ContractEscalationBasis::query()->get();
                 $percentage_rate_types  = RateTypes::query()->get();
-                $escalation_percentage_settings = EscalationPercentageSettings::query()->whereIn('business_account_id', getDependentUserIds())->where('number', '<>', '0')->get();
+                $escalation_percentage_settings = EscalationPercentageSettings::query()->whereIn('business_account_id', getDependentUserIds())->get();
                 $escalation_frequency = EscalationFrequency::all();
                 $paymentDueDates = $payment->paymentDueDates->pluck('date')->toArray();
                 $current_step = $this->current_step;

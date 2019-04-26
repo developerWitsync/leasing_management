@@ -108,6 +108,7 @@ $(".show_escalation_chart").on("click", function(){
 });
 
 $(".compute_escalation").on("click", function(){
+    showOverlayForAjax();
     $.ajax({
         url : _compute_escalation_url,
         data : $("form").serialize(),
@@ -135,6 +136,7 @@ $(".compute_escalation").on("click", function(){
                     }
                 });
             }
+            removeOverlayAjax();
         }
     });
 });
