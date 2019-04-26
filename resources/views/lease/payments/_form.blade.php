@@ -23,7 +23,7 @@
         <div class="form-group{{ $errors->has('type') ? ' has-error' : '' }} required">
             <label for="type" class="col-md-12 control-label">Type of Lease Payment</label>
             <div class="col-md-12">
-                <select name="type" class="form-control" @if($subsequent_modify_required) disabled="disabled" @endif>
+                <select name="type" id="leaseType" class="form-control" @if($subsequent_modify_required) disabled="disabled" @endif>
                     <option value="">--Select Lease Payment Type--</option>
                     @foreach($lease_payments_types as $lease_payments_type)
                         @if($lease->lease_type_id == 1 && $lease_payments_type->id == 1)
@@ -497,6 +497,41 @@
             });
             @endif
         });
+
+        $('#leaseType').change(function(){
+            var optvalue = $(this).val();
+            if(optvalue==1){
+                bootbox.alert({
+                    message: 'Lease payments which are part of Lease Component shall be considered for Lease valuation and accordingly be capitalized.',
+                    buttons: {
+                        ok: {
+                            label: 'Confirm'
+                        }
+                    }
+                });
+            }
+            if(optvalue==2){
+                bootbox.alert({
+                    message: 'Lease payments which are part of Non-Lease Component shall be expensed and shall not be considered here for Lease Valuation.',
+                    buttons: {
+                        ok: {
+                            label: 'Confirm'
+                        }
+                    }
+                });
+            }
+            if(optvalue==3){
+                bootbox.alert({
+                    message: 'When Non-Lease Component combined with Lease Component, such Lease payments accounted as Single Lease Component and shall be considered for Lease valuation and accordingly will be Capitalized.',
+                    buttons: {
+                        ok: {
+                            label: 'Confirm'
+                        }
+                    }
+                });
+            }
+            return false;
+        })
 
 
         $("#first_payment_start_date").datepicker({

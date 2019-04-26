@@ -39,6 +39,7 @@ class UserCreateConfirmation extends Mailable
         $template_body              = $template->template_body;
         $to_bo_replaced_strings     = explode(',', $template->template_special_variables);
         $to_be_replaced_by_string   = [
+            URL::to('/'),
         	$this->user->authorised_person_name,
         	$this->user->email,
         	$this->user->authorised_person_designation,
