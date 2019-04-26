@@ -3,14 +3,12 @@
 namespace App\Mail;
 
 use App\User;
-use App\SubscriptionPlans;
-use App\UserSubscription;
-use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use App\EmailTemplates;
+use Illuminate\Support\Facades\URL;
+
 class RegistrationCredentials extends Mailable
 {
     use Queueable, SerializesModels;
@@ -41,6 +39,7 @@ class RegistrationCredentials extends Mailable
 
         $to_be_replaced_by_string   = [
             env('APP_NAME'),
+            URL::to('/'),
             ucwords($this->user->authorised_person_name),
             $this->user->email,
             $this->user->raw_password,

@@ -11,6 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use App\EmailTemplates;
 use PDF;
 use App;
+use Illuminate\Support\Facades\URL;
 
 class SubscriptionInvoice extends Mailable
 {
@@ -47,6 +48,7 @@ class SubscriptionInvoice extends Mailable
 
         $to_be_replaced_by_string   = [
             env('APP_NAME'),
+            URL::to('/'),
             ucwords($this->user->authorised_person_name),
             $this->subscription->id,
             $this->subscription->subscriptionPackage->title,

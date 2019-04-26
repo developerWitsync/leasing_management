@@ -11,7 +11,6 @@
 |
 */
 
-
 Route::get('/', 'Master\IndexController@index');
 
 Route::get('information/{slug}', ['as' => 'information.index', 'uses' => 'Master\IndexController@information']);

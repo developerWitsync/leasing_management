@@ -11,7 +11,8 @@
             <tr>
                 <th style="text-align: center">Present Value of Lease Liability</th>
                 <th style="text-align: center">Prepaid Lease Payments</th>
-                <th style="text-align: center">Accrued Lease Payments</th>
+                {{--<th style="text-align: center">Accrued Lease Payments</th>--}}
+                <th style="text-align: center">Outstanding Lease Liability</th>
                 <th style="text-align: center">Initial Direct Cost</th>
                 <th style="text-align: center">Lease Incentives</th>
                 <th style="text-align: center">Estimated Cost of Dismantling</th>
@@ -25,7 +26,7 @@
 
                 @if($asset->leaseBalanceAsOnDec)
                     <td style="border: 1px solid #ddd;text-align: center;">{{ number_format($asset->leaseBalanceAsOnDec->prepaid_lease_payment_balance *  $asset->leaseBalanceAsOnDec->exchange_rate, 2) }}</td>
-                    <td style="border: 1px solid #ddd;text-align: center;">{{ number_format($asset->leaseBalanceAsOnDec->accrued_lease_payment_balance *  $asset->leaseBalanceAsOnDec->exchange_rate, 2) }}</td>
+                    <td style="border: 1px solid #ddd;text-align: center;">{{ number_format($asset->leaseBalanceAsOnDec->outstanding_lease_payment_balance *  $asset->leaseBalanceAsOnDec->exchange_rate, 2) }}</td>
                 @else
                     <td style="border: 1px solid #ddd;text-align: center;">0</td>
                     <td style="border: 1px solid #ddd;text-align: center;">0</td>

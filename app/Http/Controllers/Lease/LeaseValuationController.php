@@ -146,6 +146,9 @@ class LeaseValuationController extends Controller
                     $impairment_applicable = true;
                 }
 
+                //No Need to include the Non Lease Component Payments
+                $payments = $asset->payments()->where('type', '<>', '2')->get();
+
                 return view('lease.lease-valuation.index', compact(
                     'lease',
                     'asset',
@@ -241,7 +244,8 @@ class LeaseValuationController extends Controller
                 $years = $data['years'];
                 $months = $data['months'];
                 $liability_caclulus_data = $data['present_value_data'];
-                $payments = $asset->payments; //need to take out the payments only where the due dates exists...
+                //no need to consider the Non Lease Component Payments...
+                $payments = $asset->payments()->where('type', '<>', '2')->get(); //need to take out the payments only where the due dates exists...
                 return view('lease.lease-valuation._present_value_calculus', compact(
                     'years',
                     'months',
@@ -422,7 +426,7 @@ class LeaseValuationController extends Controller
                 $asset->save();
 
                 $prepaid_lease_payment = isset($asset->leaseBalanceAsOnDec) ? $asset->leaseBalanceAsOnDec->prepaid_lease_payment_balance * $asset->leaseBalanceAsOnDec->exchange_rate : 0;
-                $accured_lease_payment = isset($asset->leaseBalanceAsOnDec) ? $asset->leaseBalanceAsOnDec->accrued_lease_payment_balance * $asset->leaseBalanceAsOnDec->exchange_rate : 0;
+                $accured_lease_payment = isset($asset->leaseBalanceAsOnDec) ? $asset->leaseBalanceAsOnDec->outstanding_lease_payment_balance * $asset->leaseBalanceAsOnDec->exchange_rate : 0;
                 $initial_direct_cost = isset($asset->initialDirectCost) ? ($asset->initialDirectCost->initial_direct_cost_involved == "yes" ? $asset->initialDirectCost->total_initial_direct_cost : 0) : 0;
                 $lease_incentive_cost = isset($asset->leaseIncentives) ? ($asset->leaseIncentives->is_any_lease_incentives_receivable == "yes" ? $asset->leaseIncentives->total_lease_incentives : 0) : 0;
                 $dismantling_cost  = isset($asset->dismantlingCost) ? (($asset->dismantlingCost->cost_of_dismantling_incurred == "yes" && $asset->dismantlingCost->obligation_cost_of_dismantling_incurred == "yes") ? $asset->dismantlingCost->total_estimated_cost : 0) : 0;
@@ -456,7 +460,7 @@ class LeaseValuationController extends Controller
                 if (!$request->has('lease_valuation_value')) {
                     $present_value_of_lease_liability = $asset->presentValueOfLeaseLiability(true);
                     $prepaid_lease_payment = isset($asset->leaseBalanceAsOnDec) ? $asset->leaseBalanceAsOnDec->prepaid_lease_payment_balance * $asset->leaseBalanceAsOnDec->exchange_rate : 0;
-                    $accured_lease_payment = isset($asset->leaseBalanceAsOnDec) ? $asset->leaseBalanceAsOnDec->accrued_lease_payment_balance * $asset->leaseBalanceAsOnDec->exchange_rate : 0;
+                    $accured_lease_payment = isset($asset->leaseBalanceAsOnDec) ? $asset->leaseBalanceAsOnDec->outstanding_lease_payment_balance * $asset->leaseBalanceAsOnDec->exchange_rate : 0;
                     $initial_direct_cost = isset($asset->initialDirectCost) ? ($asset->initialDirectCost->initial_direct_cost_involved == "yes" ? $asset->initialDirectCost->total_initial_direct_cost : 0) : 0;
                     $lease_incentive_cost = isset($asset->leaseIncentives) ? ($asset->leaseIncentives->is_any_lease_incentives_receivable == "yes" ? $asset->leaseIncentives->total_lease_incentives0 : 0) : 0;
                     $value_of_lease_asset = ($present_value_of_lease_liability + $prepaid_lease_payment + $initial_direct_cost) - ($accured_lease_payment + $lease_incentive_cost);

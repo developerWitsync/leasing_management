@@ -203,6 +203,7 @@ class ReviewSubmitController extends Controller
                     WHERE
                         `lease_assets_payments`.`asset_id` = {$asset->id}
                           and `lease_asset_payment_dates`.`date` >= '{$base_date->format('Y-m-d')}'
+                          and `lease_assets_payments`.`type` <> '2'
                     GROUP BY `lease_asset_payment_dates`.`date`";
 
             $lease_payments = DB::select($sql);
@@ -482,7 +483,8 @@ class ReviewSubmitController extends Controller
             //need to generate the data for the Interest and Depreciation Tab for the current valuation..
             $model = Lease::query()->where('id', '=', $id)->first();
 
-            $model->status = "1";$model->is_completed = 1;$model->save();
+            $model->status = "1";$model->is_completed = 1;
+            $model->save();
 
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first()->toArray();
 

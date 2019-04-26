@@ -480,13 +480,16 @@ class LeaseValuationController extends Controller
 
             $payments = $json_step_data['lease_payments'];
             foreach ($payments as $payment) {
-                $payment_details = [];
-                $payment_details['payment_name'] = $payment['name'];
-                $payment_details['effective_lease_start_date'] = $final_data['effective_date'];
-                $payment_details['lease_end_date'] = $json_step_data['underlying_asset']['lease_end_date'];
-                $payment_details['undiscounted_lease_liability'] = $payment['undiscounted_value'];
-                $payment_details['present_value'] = $payment['present_value'];
-                $final_data['payments'][] = $payment_details;
+                // No need to show the Non Lease Component Payments...
+                if($payment['type'] != '2'){
+                    $payment_details = [];
+                    $payment_details['payment_name'] = $payment['name'];
+                    $payment_details['effective_lease_start_date'] = $final_data['effective_date'];
+                    $payment_details['lease_end_date'] = $json_step_data['underlying_asset']['lease_end_date'];
+                    $payment_details['undiscounted_lease_liability'] = $payment['undiscounted_value'];
+                    $payment_details['present_value'] = $payment['present_value'];
+                    $final_data['payments'][] = $payment_details;
+                }
             }
 
             //termination option from the json data...

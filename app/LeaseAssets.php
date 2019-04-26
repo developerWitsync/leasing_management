@@ -284,7 +284,8 @@ class LeaseAssets extends Model
         if ($payment_id) {
             $payments = LeaseAssetPayments::query()->where('id', '=', $payment_id)->get();
         } else {
-            $payments = $this->payments;
+            // No Need to include the Non Lease Component Payments here
+            $payments = $this->payments()->where('type', '<>', '2')->get();
         }
 
 

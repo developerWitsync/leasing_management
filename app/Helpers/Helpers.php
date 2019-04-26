@@ -599,7 +599,8 @@ function getUndiscountedTotalLeasePayment($asset_id)
     if ($asset_id) {
         $asset = \App\LeaseAssets::query()->findOrFail($asset_id);
         $total = 0;
-        foreach ($asset->payments as $payment) {
+        // no need to include the Non Lease Component Payments in the calculation of Undiscounted Lease Liability.
+        foreach ($asset->payments()->where('type', '<>', '2')->get() as $payment) {
             if ((isset($payment->paymentEscalationSingle) && $payment->paymentEscalationSingle->is_escalation_applicable == 'no') || !isset($payment->paymentEscalationSingle)) {
                 //need to fetch the total of all the payments in payment annexure...
                 //$payments_total = \App\LeaseAssetPaymenetDueDate::query()->where('payment_id', '=', $payment->id)->count();
