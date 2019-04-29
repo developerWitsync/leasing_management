@@ -399,6 +399,7 @@
             }
 
             $(document.body).on('click', '.upgrade_proceed', function () {
+
                 var month = ($(this).hasClass("trial")) ? "2" : $('#months').val();
                 var plan = ($(this).hasClass("trial")) ? "1" : $('#selected_plan').val();
                 $.ajax({
@@ -413,12 +414,15 @@
                     dataType: 'json',
                     beforeSend: function () {
                         $("span.error").html('').hide();
+                        showOverlayForAjax();
                     },
                     success: function (response) {
+
                         if (response['status']) {
                             // alert(response['redirect_link']);
                             window.location.href = response['redirect_link'];
                         } else {
+                            removeOverlayAjax();
                             if (typeof (response.errors) != "undefined") {
                                 var errors = response.errors;
                                 $.each(errors, function (i, e) {
