@@ -524,7 +524,7 @@ $(document).ready(function () {
     function calculateTotalEscalationRate(){
         var current_variable_rate = $('select[name="current_variable_rate"]').val();
         var fixed_rate = $('select[name="fixed_rate"]').val();
-        var total = parseInt(((current_variable_rate!="")?current_variable_rate:0)) + parseInt(((fixed_rate !="")?fixed_rate:0));
+        var total = parseFloat(((current_variable_rate!="")?current_variable_rate:0)) + parseFloat(((fixed_rate !="") ? fixed_rate:0));
         $('input[name="total_escalation_rate"]').val(total);
     }
 });

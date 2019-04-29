@@ -588,7 +588,7 @@
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
                                         <td class="title">
-                                            {{ $value->number }}
+                                            {{ number_format((float)$value->number , 2, '.', '')}}
                                         </td>
                                         <td>
                                             @if($value->number)

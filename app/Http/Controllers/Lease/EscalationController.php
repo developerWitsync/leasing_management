@@ -403,7 +403,7 @@ class EscalationController extends Controller
 
                     if($request->is_escalation_applicable == "yes" && $request->is_escalation_applied_annually_consistently == "yes") {
                         if($request->escalation_basis == '1' && ($request->escalation_rate_type == '1' || $request->escalation_rate_type == '3')) {
-                            $rules['fixed_rate'] = 'required|numeric';
+                            $rules['fixed_rate'] = 'required';
                             $rules['total_escalation_rate'] = 'required_if:escalation_basis,1';
                         }
 

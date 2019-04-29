@@ -618,6 +618,7 @@ class LeaseValuationController extends Controller
      */
     public function interestDepreciation($id)
     {
+
         try {
             $lease = Lease::query()
                 ->where('id', '=', $id)

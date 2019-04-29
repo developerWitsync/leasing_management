@@ -207,7 +207,7 @@
                                 </div>
                             </div>
 
-                            <div class="item">
+                            {{--<div class="item">
                                 <div class="col-md-3 col-sm-3 col-xs-12 wow fadeInDown text-center">
                                     <img src="{{ asset('master/images/teem/Shahnawaz-Khan.png') }}">
                                 </div>
@@ -227,7 +227,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>--}}
 
                             <div class="item">
                                 <div class="col-md-3 col-sm-3 col-xs-12 wow fadeInDown text-center">
@@ -250,7 +250,7 @@
                                 </div>
                             </div>
 
-                            <div class="item">
+                            {{--<div class="item">
                                 <div class="col-md-3 col-sm-3 col-xs-12 wow fadeInDown text-center">
                                     <img src="{{ asset('maseter/images/teem/Sajeev-Surendran.png') }}">
                                 </div>
@@ -271,7 +271,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>--}}
 
                         </div>
                     </div>

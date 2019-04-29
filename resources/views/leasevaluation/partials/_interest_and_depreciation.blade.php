@@ -8,8 +8,8 @@
             <span style="border-bottom:2px dashed #666; padding: 3px 0; display: block;">Lease Payment Dates</span>
             <span>Month End Dates</span>
         </th>
-        <th rowspan="2">#Days</th>
-        <th rowspan="2">Discount <br/>Rate</th>
+        {{--<th rowspan="2">#Days</th>
+        <th rowspan="2">Discount <br/>Rate</th>--}}
 
         <th colspan="9" style="text-align: center">
             <span style="text-align: center; border-bottom: #cccfd9 solid 1px; display: block; padding-bottom: 5px;">Lease Currency - Specify Currency</span>
@@ -53,8 +53,8 @@
             <tr>
                 <td>{{\Carbon\Carbon::parse($detail->date)->format('Y')}}</td>
                 <td>{{\Carbon\Carbon::parse($detail->date)->format(config('settings.date_format'))}}</td>
-                <td>{{$detail->number_of_days}}</td>
-                <td>{{ round($detail->discount_rate, 3)}}</td>
+                {{--<td>{{$detail->number_of_days}}</td>
+                <td>{{ round($detail->discount_rate, 3)}}</td>--}}
 
                 <td class="blueClr" align="center" style="font-weight: 600">{{$detail->opening_lease_liability}}</td>
                 <td class="blueClr" align="center" style="font-weight: 600">{{$detail->interest_expense}}</td>
