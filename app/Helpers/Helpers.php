@@ -173,14 +173,14 @@ function calculatePaymentDueDates($first_payment_date, $last_payment_date, $paym
             $start_date = \Carbon\Carbon::parse($start_date)->format('Y-m-d');
             $month = \Carbon\Carbon::parse($start_date)->format('F');
             $current_year = \Carbon\Carbon::parse($start_date)->format('Y');
-            $final_payout_dates[$current_year][$month][$start_date] = $start_date;
+            $final_payout_dates[$current_year][$month][\Carbon\Carbon::parse($start_date)->format('Y-m')] = $start_date;
             $start_date = \Carbon\Carbon::parse($start_date)->addMonth($addMonths)->firstOfMonth()->format('Y-m-d');
 
             if (strtotime($start_date) <= strtotime($end_date)) {
                 $month = \Carbon\Carbon::parse($end_date)->format('F');
                 $current_year = \Carbon\Carbon::parse($end_date)->format('Y');
                 $date = \Carbon\Carbon::parse($end_date)->format('Y-m-d');
-                $final_payout_dates[$current_year][$month][$date] = $date;
+                $final_payout_dates[$current_year][$month][\Carbon\Carbon::parse($date)->format('Y-m')] = $date;
             }
 
         } else if ($payment_payout == 2) {
@@ -198,12 +198,12 @@ function calculatePaymentDueDates($first_payment_date, $last_payment_date, $paym
             if (strtotime($interval_date) <= strtotime($end_date)) {
                 $month = \Carbon\Carbon::parse($interval_date)->format('F');
                 $current_year = \Carbon\Carbon::parse($interval_date)->format('Y');
-                $final_payout_dates[$current_year][$month][$interval_date] = $interval_date;
+                $final_payout_dates[$current_year][$month][\Carbon\Carbon::parse($interval_date)->format('Y-m')] = $interval_date;
             } else {
                 $month = \Carbon\Carbon::parse($end_date)->format('F');
                 $current_year = \Carbon\Carbon::parse($end_date)->format('Y');
                 $date = \Carbon\Carbon::parse($end_date)->format('Y-m-d');
-                $final_payout_dates[$current_year][$month][$date] = $date;
+                $final_payout_dates[$current_year][$month][\Carbon\Carbon::parse($date)->format('Y-m')] = $date;
             }
         }
         $i++;

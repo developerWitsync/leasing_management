@@ -208,6 +208,21 @@ class ReviewSubmitController extends Controller
 
             $lease_payments = DB::select($sql);
 
+            //add the termination, residual and purchase to the last key if exists
+            if ($asset->terminationOption->lease_termination_option_available == "yes" && $asset->terminationOption->exercise_termination_option_available == "yes" && $asset->terminationOption->termination_penalty_applicable == "yes") {
+                $lease_payments[count($lease_payments) - 1]->total_amount_payable = end($lease_payments)->total_amount_payable + $asset->terminationOption->termination_penalty;
+            }
+
+            //add the residual value guarantee as well..
+            if ($asset->residualGuranteeValue->any_residual_value_gurantee == "yes") {
+                $lease_payments[count($lease_payments) - 1]->total_amount_payable = end($lease_payments)->total_amount_payable + $asset->residualGuranteeValue->residual_gurantee_value;
+            }
+
+            //add the purchase option as well as well..
+            if ($asset->purchaseOption && $asset->purchaseOption->purchase_option_clause == "yes" && $asset->purchaseOption->purchase_option_exerecisable == "yes") {
+                $lease_payments[count($lease_payments) - 1]->total_amount_payable = end($lease_payments)->total_amount_payable + $asset->purchaseOption->purchase_price;
+            }
+
             $check_date = $increase_or_decrease = null;
 
             $previous_liability = $asset->lease_liablity_value;
