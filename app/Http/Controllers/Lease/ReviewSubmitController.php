@@ -342,7 +342,7 @@ class ReviewSubmitController extends Controller
                 $previous_carrying_value_of_lease_asset = $previous_liability;
             }
 
-            $previous_liability = $asset->lease_liablity_value;
+            $previous_liability =  $asset->lease_liablity_value;
 
             while ($start_year <= $end_year) {
                 foreach ($months as $key => $month) {
@@ -447,8 +447,6 @@ class ReviewSubmitController extends Controller
                 }
                 $start_year = $start_year + 1;
             }
-
-//            echo "<pre>"; print_r($dates); die();
 
             //insert the dates data into the interest and depreciation table for the lease id
             if(is_null($modify_id)){

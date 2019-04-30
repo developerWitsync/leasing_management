@@ -309,7 +309,7 @@ class EscalationController extends Controller
                                     $data = [
                                         'payment_id' => $payment->id,
                                         'escalation_year'   => $year,
-                                        'escalation_month'  => date('m', strtotime($month)),
+                                        'escalation_month'  => str_pad(Carbon::parse('1 '.$month)->month, '2', '0', STR_PAD_LEFT),
                                         'percentage_or_amount_based'    => ($request->escalation_basis=='2')?'amount':'percentage',
                                         'value_escalated'   => $escalation['percentage'],
                                         'total_amount_payable'  => $escalation['amount']
