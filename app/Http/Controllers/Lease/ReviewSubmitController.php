@@ -203,6 +203,7 @@ class ReviewSubmitController extends Controller
                     WHERE
                         `lease_assets_payments`.`asset_id` = {$asset->id}
                           and `lease_asset_payment_dates`.`date` >= '{$base_date->format('Y-m-d')}'
+                          and `lease_asset_payment_dates`.`date` <= '{$end_date->format('Y-m-d')}'
                           and `lease_assets_payments`.`type` <> '2'
                     GROUP BY `lease_asset_payment_dates`.`date`";
 
@@ -414,13 +415,22 @@ class ReviewSubmitController extends Controller
                     }
 
                     //apply condition for the lease end date
-                    $current_month_and_year_last_day = Carbon::create($start_year, $key)->lastOfMonth();
+                    //$current_month_and_year_last_day = Carbon::create($start_year, $key, '1')->lastOfMonth();
 
-                    if($end_date->lessThan($current_month_and_year_last_day)){
+//                    if($end_date->lessThan($current_month_and_year_last_day)){
+//                        dd($current_month_and_year_last_day, $end_date);
+//                        continue;
+//                    }
+
+                    if($end_date->format('Y') > $start_year){
+
+                    } else if($end_date->format('Y') == $start_year && $end_date->format('m') >= $key) {
+
+                    } else {
                         continue;
                     }
 
-                    $current_date = Carbon::create($start_year, $key)->lastOfMonth();
+                    $current_date = Carbon::create($start_year, $key, '1')->lastOfMonth();
                     if(is_null($check_date) || !is_null($check_date) && Carbon::parse($check_date)->lessThan($current_date)){
 
                         //find from array if any payment exists on this date
@@ -462,6 +472,8 @@ class ReviewSubmitController extends Controller
                 }
                 $start_year = $start_year + 1;
             }
+
+            //echo "<pre>"; print_r($dates); die();
 
             //insert the dates data into the interest and depreciation table for the lease id
             if(is_null($modify_id)){
