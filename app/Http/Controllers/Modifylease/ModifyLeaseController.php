@@ -177,12 +177,15 @@ class ModifyLeaseController extends Controller
                     $minDate = Carbon::parse($date)->addDay(1)->format('Y-m-d');
                 }
 
+                $maxDate = $asset->getLeaseEndDate($asset);
+
                 return view('modifylease.create', compact(
                     'lease',
                     'lase_modification',
                     'disable_initial',
                     'asset',
-                    'minDate'
+                    'minDate',
+                    'maxDate'
                 ));
             } else {
                 abort(404);

@@ -227,6 +227,20 @@ $(function(){
 
             $('.new_value_of_lease_asset').html(new_value_of_lease_asset);
             $('.charge_to_pl').html(charge_to_pl);
+            var asset_id  = $('.load_lease_liability').data('asset_id');
+            //update the asset with the new lease liability value and with the new value of lease asset
+            $.ajax({
+                url : '/lease/lease-valuation/update-asset-for-subsequent/'+asset_id,
+                type : 'post',
+                dataType : 'json',
+                data : {
+                    value_of_lease_asset : new_value_of_lease_asset,
+                    lease_liability_value: total_lease_liability
+                },
+                success : function(response){
+
+                }
+            });
         }
     });
 

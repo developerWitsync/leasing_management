@@ -490,4 +490,29 @@ class LeaseValuationController extends Controller
             abort(404);
         }
     }
+
+    /**
+     * updates the lease liability value and value of lease asset in case of subsequent modifications..
+     * @param $asset_id
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateAssetForSubsequent($asset_id, Request $request){
+        try{
+            if($asset_id) {
+                $asset = LeaseAssets::query()->findOrFail($asset_id);
+                $asset->setRawAttributes([
+                    'lease_liablity_value' => $request->lease_liability_value,
+                    'value_of_lease_asset'  => $request->value_of_lease_asset
+                ]);
+                $asset->save();
+                return response()->json([
+                    'status' => true
+                ], 200);
+
+            }
+        } catch(\Exception $e){
+            dd($e);
+        }
+    }
 }

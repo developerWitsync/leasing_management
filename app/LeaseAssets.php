@@ -206,7 +206,8 @@ class LeaseAssets extends Model
                         `year` >= '{$start_year}'
                          AND CASE WHEN `year` <= '{$start_year}' THEN `month` >= '{$start_month}' ELSE TRUE END 
                         and `asset_id` = '{$asset_id}'
-                        and `payment_id` = '{$payment_id}'";
+                        and `payment_id` = '{$payment_id}'
+                    Order by `payment_date` asc";
         } else {
             $sql = "SELECT 
                         `payment_date`,
@@ -226,7 +227,8 @@ class LeaseAssets extends Model
                         `year` >= '{$start_year}'
                         AND CASE WHEN `year` <= '{$start_year}' THEN `month` >= '{$start_month}' ELSE TRUE END 
                         and `asset_id` = '{$asset_id}'
-                        and `payment_id` = '{$payment_id}'";
+                        and `payment_id` = '{$payment_id}'
+                        Order by `payment_date` asc";
         }
 
         $results = DB::select($sql);
@@ -287,25 +289,6 @@ class LeaseAssets extends Model
             // No Need to include the Non Lease Component Payments here
             $payments = $this->payments()->where('type', '<>', '2')->get();
         }
-
-
-//        while ($start_year <= $end_year) {
-//            foreach ($months as $key=>$month){
-//                $k_m = sprintf("%02d", $key);
-//                if(($first_year == $start_year && $first_month <= $k_m) || ($first_year < $start_year)){
-//                    //need to call a procedure from here that can return the value of the lease liablity for all the payments of the asset
-//                    foreach ($payments as $payment_key=>$payment){
-//                        $data = DB::select('call present_value_of_lease_liability(?, ?, ?, ?, ?)',[$start_year, $k_m, $base_date, $this->id, $payment->id]);
-//                        if(count($data) > 0){
-//                            $total_lease_liability = $total_lease_liability + $data[0]->lease_liability;
-//                            $present_value_of_lease_liability[$start_year][$month]["payment_".$payment->id] = $data;
-//                        }
-//                    }
-//                }
-//
-//            }
-//            $start_year = $start_year + 1;
-//        }
 
         //check if the escalations are applied or not and on the basis of the same fetch the data from the view..
         foreach ($payments as $payment_key => $payment) {

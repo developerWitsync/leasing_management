@@ -269,6 +269,8 @@ Route::middleware('auth')->group(function () {
 
             Route::get('save-lease-liability-calculus/{id}', ['as' => 'addlease.leasevaluation.savecalculus', 'uses' => 'LeaseValuationController@savePresentValueOfLeaseLiabilityCalculus']);
 
+            Route::post('update-asset-for-subsequent/{id}', ['as' => 'addlease.leasevaluation.updateassetforsubsequent', 'uses' => 'LeaseValuationController@updateAssetForSubsequent']);
+
         });
         /**
          * Lease Payment Invoice NL16
