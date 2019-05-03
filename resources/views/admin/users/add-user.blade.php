@@ -1,7 +1,7 @@
 @extends('layouts.admin.master')
 
 @section('title')
-    @lang('_page_titles.Admin') | Update User
+    @lang('_page_titles.Admin') | Create User
 @endsection
 
 @section('header-styles')
