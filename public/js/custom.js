@@ -1,9 +1,16 @@
 $(function(){
 
+    /*Tab section*/
+    $(".Privacy_left ul li a").on("click", function(e){
+        e.preventDefault();
+        var webend = $(this).attr("href");
+        $(".PrivacyTab").hide(0);
+        $(webend).show(0);
+        $(".Privacy_left ul li a").removeClass("active");
+        $(this).addClass("active");
+    });
+
     $('.showHelp').tooltip();
-
-
-
 
     function showHelp(){
         //$(this).tooltip('show');

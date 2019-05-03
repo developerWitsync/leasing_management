@@ -811,12 +811,19 @@
                                     @endif
                                     <td>Intangible Asset
                                         @if($is_disabled)
-                                            <a href="javascript:;"
-                                               class="btn btn-sm btn-success add_intangible_asset disabled">Include in Lease
-                                                Valuation Capitalization</a>
+                                            @if(collect($category_excluded_all)->where('status', '=', '0')->where('category_id', '=', '7')->count() > 0)
+                                                <span class="badge badge-success">Excluded
+                                                in Lease Valuation Capitalization</span>
+                                            @else
+                                                <span class="badge badge-success">Included in Lease
+                                                Valuation Capitalization</span>
+                                            @endif
+                                            {{--<a href="javascript:;"--}}
+                                               {{--class="btn btn-sm btn-success add_intangible_asset disabled">Include in Lease--}}
+                                                {{--Valuation Capitalization</a>--}}
 
-                                            <a href="javascript:;" class="btn btn-sm btn-danger delete_settings disabled">Exclude
-                                                in Lease Valuation Capitalization</a>
+                                            {{--<a href="javascript:;" class="btn btn-sm btn-danger delete_settings disabled">Exclude--}}
+                                                {{--in Lease Valuation Capitalization</a>--}}
                                         @else
                                             <a data-href="{{ route('settings.leaseclassification.addcategoriesexcluded', ['id' => 7]) }}"
                                                href="javascript:;"

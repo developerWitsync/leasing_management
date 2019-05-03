@@ -29,10 +29,8 @@ Route::namespace('Master')->prefix('pricing')->group(function () {
     Route::get('leasing-software', ['as' => 'master.pricing.index', 'uses' => 'PricingController@index']);
     Route::get('vat-e-learning', ['as' => 'master.pricing.vatelearning', 'uses' => 'PricingController@vatELearning']);
     Route::post('plan-selected', ['as' => 'master.pricing.subscribe', 'uses' => 'PricingController@planSelected']);
-
     Route::post('build-your-plan', ['as' => 'master.pricing.buildyourplan', 'uses' => 'PricingController@buildYourPlan']);
     Route::post('calc-cart', ['as' => 'master.pricing.calccart', 'uses' => 'PricingController@calculateCart']);
-
 });
 
 

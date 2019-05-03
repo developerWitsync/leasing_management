@@ -1141,3 +1141,27 @@ table.categoryTble tr td {font-size: 16px; color: #fff;}
 .leaseTotalHd {width: 140px;}
 .leaseSlide {width: calc(100% - 140px);}
 }
+
+/*--------------------*/
+.tabsOuter {padding: 20px 0;}
+.Privacy_left {width: 27%; float: left; min-height:400px; background: #f9f9f9; border: #e5e5e5 solid 1px; border-radius:3px; padding:10px;}
+.Privacy_left li {display: block;}
+.Privacy_left li a {display: block; font-size: 16px; line-height: 25px; padding: 10px; border-bottom: #e5e5e5 solid 1px;}
+.Privacy_left li a:hover, .Privacy_left li a.active{ background:#64b0f2; color:#fff;}
+.privacyRight {width: 70%; float: right; padding: 20px; background: #fafafa; border: #eee solid 1px; max-height: 500px; overflow: auto;}
+.PrivacyTab{ display:none;}
+.privacyContent h2 {font-size: 32px; font-weight: 600; line-height:40px; padding-bottom: 20px; color: #333;}
+.privacyContent p {font-size: 14px; line-height: 25px; color: #666;	padding-bottom: 25px;}
+.privacyContent h4 {font-size: 20px; font-weight: 600; padding-bottom: 5px;}
+.faqList h3 {background: #fff; padding: 10px; border: #e5e5e5 solid 1px; margin-bottom:20px; font-size: 15px; color:#000; padding-right:50px; position:relative; border-radius:3px;}
+.faqList h3.active {margin-bottom: 0px; border-radius: 3px 3px 0 0; background: #2f829c; color: #fff;}
+.faqList h3 i {background: #108faa; position: absolute; right: 0; top: 0; bottom: 0; text-align: center; width: 45px; border-radius: 0 3px 3px 0;}
+.faqList h3 i::after {content: "+"; position: absolute; right: 0; top: 0; color: #fff; bottom: 0; text-align: center; border-radius: 0 3px 3px 0; left: 0; margin: auto; line-height: 30px; height: 30px; font-style: normal; font-size: 30px; font-weight: 600;}
+.faqList h3.active i::after {content: "-"; position: absolute; right: 0; top: 0; color: #fff; bottom: 0; text-align: center; border-radius: 0 3px 3px 0; left: 0; margin: auto; line-height: 23px; height: 30px; font-style: normal; font-size: 30px; font-weight: 600;}
+.faqList .faqContent {background: #fff; display:none; padding: 10px; border: #e5e5e5 solid 1px; top: -1px; font-size: 14px; border-radius:0 0 3px 3px; line-height: 25px; color: #666; position: relative; margin-bottom: 20px;}
+
+
+.privacypopBg {
+    background: -webkit-linear-gradient(left, #3931af, #00c6ff);
+
+}

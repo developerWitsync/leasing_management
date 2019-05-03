@@ -62,22 +62,27 @@ class LeaseClassificationController extends Controller
         $lease_payment_component = LeasePaymentComponents::query()->select('id', 'title')->where('status', '=', '1')->get();
         $lease_payment_nature  = LeaseAssetPaymentsNature::query()->select('id', 'title')->where('status', '=', '1')->get();
         $lease_payment_basis  = LeasePaymentsBasis::query()->select('id', 'title')->where('status', '=', '1')->where('business_account_id', '=', auth()->user()->id)->get();
-        $number_of_underlying_assets_settings  = LeaseAssetsNumberSettings::query()->select('id', 'number')->where('status', '=', '1')->where('business_account_id', '=', auth()->user()->id)->orderBy('number','asc')->get();
 
-        $la_similar_charac_number  = LeaseAssetSimilarCharacteristicSettings::query()->select('id', 'number')->where('status', '=', '1')->where('business_account_id', '=', auth()->user()->id)->orderBy('number','asc')
+        $number_of_underlying_assets_settings  = LeaseAssetsNumberSettings::query()->select('id', 'number')->where('status', '=', '1')->whereIn('business_account_id', getDependentUserIds())->orderBy('number','asc')->get();
+
+        $la_similar_charac_number  = LeaseAssetSimilarCharacteristicSettings::query()->select('id', 'number')->where('status', '=', '1')->whereIn('business_account_id', getDependentUserIds())->orderBy('number','asc')
             ->get();
 
         $contract_escalation_basis   = ContractEscalationBasis::query()->select('id', 'title')->where('status', '=', '1')->get();
+
         $lease_contract   = LeaseContractDuration::query()->select('id', 'title', 'month_range_description')->where('status', '=', '1')->get();
+
         $lease_excluded_from_transitional_valuation = LeasesExcludedFromTransitionalValuation::query()->select('id', 'title', 'value_for')->where('status', '=', '1')->get();
+
         $lease_accounting_treatment = collect(LeaseAccountingTreatment::query()->select('id', 'title', 'upto_year')
             ->where('status', '=', '1')->get()->toArray())->groupBy('upto_year');
-        $number_of_lease_payments = LeasePaymentsNumber::query()->select('id', 'number')->where('business_account_id', '=', auth()->user()->id)->orderBy('number','asc')->get();
+
+        $number_of_lease_payments = LeasePaymentsNumber::query()->select('id', 'number')->whereIn('business_account_id', getDependentUserIds())->orderBy('number','asc')->get();
         $lease_payments_frequency = LeasePaymentsFrequency::query()->select('id', 'title')->where('status', '=', '1')->get();
         $lease_payment_interval = LeasePaymentsInterval::query()->select('id', 'title')->where('status', '=', '1')->get();
         $lease_payment_escalation_clause = LeasePaymentsEscalationClause::query()->select('id', 'title')->where('status', '=', '1')->get();
         $escalation_amount_calculated_on = EscalationAmountCalculated::query()->select('id', 'title')->where('status', '=', '1')->get();
-        $escalation_percentage_settings = EscalationPercentageSettings::query()->select('id', 'number')->where('business_account_id', '=', auth()->user()->id)->orderBy('number','asc')->get();
+        $escalation_percentage_settings = EscalationPercentageSettings::query()->select('id', 'number')->whereIn('business_account_id', getDependentUserIds())->orderBy('number','asc')->get();
         $escalation_frequencies = EscalationFrequency::all();
 
         $modication_reason = LeaseModificationReason::query()
@@ -99,14 +104,8 @@ class LeaseClassificationController extends Controller
              ->whereIn('business_account_id', getDependentUserIds())
              ->groupBy('category_id')
              ->get();
-        
+
          $category_excluded_id = $category_excluded_all->pluck('category_id')->toArray();
-         
-         $check_intangible_asset = LeaseAssets::query()
-             ->whereHas('lease', function($query){
-                 $query->whereIn('business_account_id', getDependentUserIds());
-             })
-             ->where('category_id',7)->toSql();
 
         return view('settings.classification.index', compact('breadcrumbs',
             'rates',
@@ -132,7 +131,7 @@ class LeaseClassificationController extends Controller
             'categories',
             'category_excluded',
             'category_excluded_id',
-            'check_intangible_asset'
+            'category_excluded_all'
         ));
     }
 

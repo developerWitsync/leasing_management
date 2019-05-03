@@ -294,12 +294,42 @@
         </div>
 
     </div>
+
+
+    <!-- Modal -->
+    <div id="policiesModal" class="modal fade" role="dialog">
+        <div class="modal-dialog  modal-lg">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header privacypopBg">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" style="color: #fff;">All Policies</h4>
+                </div>
+                <div class="modal-body">
+                    @include('auth._all_policies')
+                </div>
+                <div class="modal-footer privacypopBg">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
 @endsection
 @section('footer-script')
     <script src="{{ asset('js/jquery-ui.js') }}"></script>
     <script src="{{ asset('assets/plugins/bootbox/bootbox.min.js') }}"></script>
     <script>
         $(document).ready(function () {
+
+            $('#terms_and_condition').on('change', function(){
+                if($(this).is(':checked')) {
+                    $('#policiesModal').modal('show');
+                }
+            });
+
 
             $(".chb").change(function() {
                 $(".chb").prop('checked', false);
