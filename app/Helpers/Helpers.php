@@ -176,12 +176,12 @@ function calculatePaymentDueDates($first_payment_date, $last_payment_date, $paym
             $final_payout_dates[$current_year][$month][$start_date] = $start_date;
             $start_date = \Carbon\Carbon::parse($start_date)->addMonth($addMonths)->firstOfMonth()->format('Y-m-d');
 
-            if (strtotime($start_date) <= strtotime($end_date)) {
-                $month = \Carbon\Carbon::parse($end_date)->format('F');
-                $current_year = \Carbon\Carbon::parse($end_date)->format('Y');
-                $date = \Carbon\Carbon::parse($end_date)->format('Y-m-d');
-                $final_payout_dates[$current_year][$month][$date] = $date;
-            }
+//            if (strtotime($start_date) <= strtotime($end_date)) {
+//                $month = \Carbon\Carbon::parse($end_date)->format('F');
+//                $current_year = \Carbon\Carbon::parse($end_date)->format('Y');
+//                $date = \Carbon\Carbon::parse($end_date)->format('Y-m-d');
+//                $final_payout_dates[$current_year][$month][$date] = $date;
+//            }
 
         } else if ($payment_payout == 2) {
             //means that the payment is going to be made at the end of the interval

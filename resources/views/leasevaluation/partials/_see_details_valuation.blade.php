@@ -64,7 +64,7 @@
     <ul class="clearfix">
         <li>
             <span>Present Value of Lease Liability</span>
-            <strong>{{ $final_data['lease_currency'] }} {{ number_format($total_pv,2) }}</strong>
+            <strong>{{$statutory_currency}} {{  number_format((float)$exchange_rate *  $total_pv,2) }}</strong>
         </li>
         @if(!empty($final_data['lease_balances']))
             <li>

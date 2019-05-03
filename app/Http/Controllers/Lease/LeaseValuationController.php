@@ -302,15 +302,19 @@ class LeaseValuationController extends Controller
         try {
             if ($request->ajax()) {
                 $asset = LeaseAssets::query()->findOrFail($id);
+                $lease = $asset->lease;
                 $start_date =   Carbon::parse($asset->accural_period);
-                $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date);
-                $base_date = ($start_date->lessThan($base_date))?$base_date:$start_date;
+                $subsequent_modify_required = $lease->isSubsequentModification();
+                if($subsequent_modify_required) {
+                    $base_date = Carbon::parse($lease->modifyLeaseApplication->last()->effective_from);
+                    $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
+                } else {
+                    $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date);
+                    $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
+                }
+
                 $value = $asset->getLeaseLiabilityForTermination($base_date);
-
-
-
                 $value = isset($value['total_lease_liability'])?$value['total_lease_liability']:0;
-
                 $asset->terminationOption->setAttribute('present_value', $value);
                 $asset->terminationOption->save();
 
@@ -338,11 +342,18 @@ class LeaseValuationController extends Controller
 
                 $asset = LeaseAssets::query()->findOrFail($id);
 
+                $lease = $asset->lease;
+
                 $start_date =   Carbon::parse($asset->accural_period);
 
-                $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date);
-
-                $base_date = ($start_date->lessThan($base_date))?$base_date:$start_date;
+                $subsequent_modify_required = $lease->isSubsequentModification();
+                if($subsequent_modify_required) {
+                    $base_date = Carbon::parse($lease->modifyLeaseApplication->last()->effective_from);
+                    $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
+                } else {
+                    $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date);
+                    $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
+                }
 
                 $end_date = Carbon::parse($asset->getLeaseEndDate($asset));
 
@@ -377,19 +388,26 @@ class LeaseValuationController extends Controller
 
                 $asset = LeaseAssets::query()->findOrFail($id);
 
+                $lease = $asset->lease;
+
                 $start_date =   Carbon::parse($asset->accural_period);
 
-                $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date);
-
-                $base_date = ($start_date->lessThan($base_date))?$base_date:$start_date;
+                $subsequent_modify_required = $lease->isSubsequentModification();
+                if($subsequent_modify_required) {
+                    $base_date = Carbon::parse($lease->modifyLeaseApplication->last()->effective_from);
+                    $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
+                } else {
+                    $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date);
+                    $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
+                }
 
                 $value = $asset->getPresentValueOfPurchaseOption($base_date, null, null);
 
                 $value = isset($value['total_lease_liability'])?$value['total_lease_liability']:0;
 
                 $asset->purchaseOption->setAttribute('present_value', $value);
-                $asset->purchaseOption->save();
 
+                $asset->purchaseOption->save();
 
                 return response()->json([
                     'status' => true,

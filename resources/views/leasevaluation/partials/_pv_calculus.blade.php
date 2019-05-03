@@ -47,6 +47,8 @@
                         {{--continue;--}}
                         {{--}--}}
                         {{--@endphp--}}
+
+
                         <tr>
                             <th>{{ $payment['name']}}</th>
                             @php
@@ -75,7 +77,7 @@
                         @endphp
                         @foreach($months as $month)
                             @if(isset($data[$month]['termination'][0]))
-                                <td>{{ $data[$month]['termination'][0]['lease_liability ']}}</td>
+                                <td>{{ $data[$month]['termination'][0]['lease_liability']}}</td>
                                 @php
                                     $sub_total = $sub_total + $data[$month]['termination'][0]['lease_liability'];
                                 @endphp
@@ -115,7 +117,7 @@
                         @endphp
                         @foreach($months as $month)
                             @if(isset($data[$month]['purchase']))
-                                <td>{{ $data[$month]['purchase'][0]['lease_liability ']}}</td>
+                                <td>{{ $data[$month]['purchase'][0]['lease_liability']}}</td>
                                 @php
                                     $sub_total = $sub_total + $data[$month]['purchase'][0]['lease_liability'];
                                 @endphp
