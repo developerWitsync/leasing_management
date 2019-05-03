@@ -2,13 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1c290435-4779-45fe-873f-5594138f8734" name="Default Changelist" comment="Merge branch 'master' of http://100.100.7.4:8081/root/Witsync-Lease-Management&#10;&#10;# Conflicts:&#10;#&#9;app/Helpers/Helpers.php&#10;#&#9;config/settings.php&#10;#&#9;public/css/custom.css">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Helpers/Helpers.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Helpers/Helpers.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseValuationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseValuationController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/sqls/email_templates.sql" beforeDir="false" afterPath="$PROJECT_DIR$/database/sqls/email_templates.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/leasevaluation/partials/_pv_calculus.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/leasevaluation/partials/_pv_calculus.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/leasevaluation/partials/_see_details_valuation.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/leasevaluation/partials/_see_details_valuation.blade.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -78,10 +72,13 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/database/sqls/email_templates.sql">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3587">
-              <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
+            <state relative-caret-position="544">
+              <caret line="47" column="12" selection-start-line="47" selection-start-column="12" selection-end-line="47" selection-end-column="12" />
+              <folding>
+                <element signature="e#45#81#0#PHP" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -199,13 +196,13 @@
         <option value="$PROJECT_DIR$/public/js/pages/lease_valuation.js" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Modifylease/ModifyLeaseController.php" />
         <option value="$PROJECT_DIR$/resources/views/modifylease/_form.blade.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php" />
         <option value="$PROJECT_DIR$/app/Helpers/Helpers.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseValuationController.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php" />
         <option value="$PROJECT_DIR$/resources/views/leasevaluation/partials/_pv_calculus.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/leasevaluation/partials/_see_details_valuation.blade.php" />
         <option value="$PROJECT_DIR$/database/sqls/email_templates.sql" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php" />
       </list>
     </option>
   </component>
@@ -488,12 +485,12 @@
       <workItem from="1556602429669" duration="20294000" />
       <workItem from="1556635009910" duration="8841000" />
       <workItem from="1556685271311" duration="29703000" />
-      <workItem from="1556784966059" duration="16278000" />
+      <workItem from="1556784966059" duration="16395000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1422043000" />
+    <option name="totallyTimeSpent" value="1422160000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -882,16 +879,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="544">
-          <caret line="47" column="14" selection-start-line="47" selection-start-column="14" selection-end-line="47" selection-end-column="14" />
-          <folding>
-            <element signature="e#45#81#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/modifylease/_form.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="406">
@@ -977,6 +964,13 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/database/sqls/email_templates.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3587">
+          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/leasevaluation/partials/_see_details_valuation.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="484">
@@ -984,10 +978,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/database/sqls/email_templates.sql">
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3587">
-          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
+        <state relative-caret-position="544">
+          <caret line="47" column="12" selection-start-line="47" selection-start-column="12" selection-end-line="47" selection-end-column="12" />
+          <folding>
+            <element signature="e#45#81#0#PHP" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
