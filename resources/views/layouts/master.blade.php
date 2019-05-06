@@ -144,7 +144,7 @@
     <link rel="shortcut icon" href="{{ asset('master/images/favicon.png') }}">
 </head><!--/head-->
 
-<body class="homepage" oncontextmenu="return false" onkeydown="return false;" onmousedown="return false;">
+<body class="homepage">
 
 @include('layouts._header_master')
 
