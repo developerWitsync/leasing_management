@@ -196,7 +196,7 @@ class SubscriptionPlansController extends Controller
 
             if($request->isMethod('post')) {
 
-                $request->request->add(['price_plan_type' => '2']);
+                $request->request->add(['price_plan_type' => '1']);
 
                 $validator = Validator::make($request->all(), [
                     'title' => 'required|unique:subscription_plans,title',
