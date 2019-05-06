@@ -27,7 +27,7 @@
         }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false" onkeydown="return false;" onmousedown="return false;">
 <div>
     @if(request()->segment('1') != 'login' && request()->segment('1') != 'register')
         <nav class="navbar navbar-default navbar-static-top">

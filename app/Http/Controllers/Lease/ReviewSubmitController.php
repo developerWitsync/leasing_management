@@ -317,12 +317,23 @@ class ReviewSubmitController extends Controller
 
                 $new_value_of_lease_asset = $asset->value_of_lease_asset;
 
+                //calculations as per the xlsx
+                $last_closing_lease_liability  = ($interest_expense + $previous_liability - (float)$lease_payment_on_day_before_subsequent);
+
+                $increase_or_decrease =  $new_value_of_lease_asset - $last_closing_lease_liability;
+
+                $old_value_of_asset  = $previous_depreciation_data->value_of_lease_asset;
+
+                $new_value_of_lease_asset =  $old_value_of_asset + $increase_or_decrease;
+
                 $number_of_months = $this->calculateMonthsDifference($base_date->format('Y-m-d'), $asset->getLeaseEndDate($asset));
 
                 $depreciation = $new_value_of_lease_asset/$number_of_months;
 
                 $previous_depreciation = $depreciation;
+
                 $previous_accumulated_depreciation = 0;
+
                 $previous_carrying_value_of_lease_asset = $new_value_of_lease_asset;
 
                 $dates[] = [
@@ -352,11 +363,14 @@ class ReviewSubmitController extends Controller
 
                 $base_date = $base_date->addDay(1);
 
+                $value_of_lease_asset = $new_value_of_lease_asset;
+
 
             } else {
                 $previous_depreciation = $this->calculateDepreciation($subsequent_modify_required, $asset, $previous_liability);
                 $previous_accumulated_depreciation = 0;
                 $previous_carrying_value_of_lease_asset = $previous_liability;
+                $value_of_lease_asset = $previous_carrying_value_of_lease_asset;
             }
 
             while ($start_year <= $end_year) {
@@ -397,7 +411,7 @@ class ReviewSubmitController extends Controller
                             'closing_lease_liability' => ($interest_expense + $previous_liability - 0),
                             'created_at' => date('Y-m-d H:i:s'),
                             'updated_at' => date('Y-m-d H:i:s'),
-                            'value_of_lease_asset' => $previous_carrying_value_of_lease_asset,
+                            'value_of_lease_asset' => $value_of_lease_asset,
                             'depreciation' => $previous_depreciation,
                             'change' => $increase_or_decrease,
                             'accumulated_depreciation' => $previous_accumulated_depreciation,
@@ -429,7 +443,7 @@ class ReviewSubmitController extends Controller
                             'closing_lease_liability' => ($interest_expense + $previous_liability - (float)$payment_date->total_amount_payable),
                             'created_at' => date('Y-m-d H:i:s'),
                             'updated_at' => date('Y-m-d H:i:s'),
-                            'value_of_lease_asset' => $previous_carrying_value_of_lease_asset,
+                            'value_of_lease_asset' => $value_of_lease_asset,
                             'depreciation' => $previous_depreciation,
                             'change' => $increase_or_decrease,
                             'accumulated_depreciation' => (Carbon::parse($payment_date->date)->isLastOfMonth()) ?  $previous_depreciation + $previous_accumulated_depreciation: $previous_accumulated_depreciation,
@@ -478,7 +492,7 @@ class ReviewSubmitController extends Controller
                                 'closing_lease_liability' => ($interest_expense + $previous_liability - (float)$amount_payable),
                                 'created_at' => date('Y-m-d H:i:s'),
                                 'updated_at' => date('Y-m-d H:i:s'),
-                                'value_of_lease_asset' => $previous_carrying_value_of_lease_asset,
+                                'value_of_lease_asset' => $value_of_lease_asset,
                                 'depreciation' => $previous_depreciation,
                                 'change' => $increase_or_decrease,
                                 'accumulated_depreciation' => $previous_depreciation + $previous_accumulated_depreciation,
@@ -495,6 +509,8 @@ class ReviewSubmitController extends Controller
                 }
                 $start_year = $start_year + 1;
             }
+
+            //echo "<pre>"; print_r($dates); die();
 
             //insert the dates data into the interest and depreciation table for the lease id
             if(is_null($modify_id)){

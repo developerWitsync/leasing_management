@@ -14,7 +14,7 @@ class DatabaseSeeder extends Seeder
     	Eloquent::unguard();
 
     	// Truncate all tables, except migrations
-        $tables = DB::select('SHOW TABLES');
+        $tables = DB::select('SHOW FULL TABLES where Table_type <> \'VIEW\'');
         foreach ($tables as $table) {
             if ($table->{'Tables_in_'.env('DB_DATABASE')} !== 'migrations'){
 				DB::statement('SET FOREIGN_KEY_CHECKS=0;');

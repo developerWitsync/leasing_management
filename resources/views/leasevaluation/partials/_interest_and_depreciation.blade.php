@@ -30,6 +30,7 @@
     </thead>
     @php
         $i = 1;
+        $effective_date = null;
     @endphp
     @foreach($interest_depreciation as $modify_id=>$details)
         <tr bgcolor="#117bb8" class="categoryTble">
@@ -42,26 +43,30 @@
                 </td>
             @else
                 <td colspan="3" style="color: #fff;font-size: 16px;">Subsequent Lease Valuation</td>
-                <td colspan="2" style="color: #fff;font-size: 16px;">Subsequent Reference# {{$i}}</td>
+                <td colspan="2" style="color: #fff;font-size: 16px;">Subsequent Reference# {{$i - 1}}</td>
                 <td colspan="1" style="color: #fff;font-size: 16px;">Effective from</td>
-                <td colspan="1" style="color: #fff;font-size: 16px;">DD/MM/YYYY</td>
+                <td colspan="1" style="color: #fff;font-size: 16px;">{{ \Carbon\Carbon::parse($effective_date)->addDay(1)->format(config('settings.date_format')) }}</td>
                 <td colspan="5" style="color: #fff;font-size: 16px;">&nbsp;</td>
             @endif
-
+            @php
+                $show_value_of_lease_asset = true;
+            @endphp
         </tr>
         @foreach($details as $key=>$detail)
             <tr>
                 <td>{{\Carbon\Carbon::parse($detail->date)->format('Y')}}</td>
                 <td>{{\Carbon\Carbon::parse($detail->date)->format(config('settings.date_format'))}}</td>
-                {{--<td>{{$detail->number_of_days}}</td>
-                <td>{{ round($detail->discount_rate, 3)}}</td>--}}
 
                 <td class="blueClr" align="center" style="font-weight: 600">{{$detail->opening_lease_liability}}</td>
                 <td class="blueClr" align="center" style="font-weight: 600">{{$detail->interest_expense}}</td>
                 <td align="center" style="font-weight: 600">{{$detail->lease_payment}}</td>
                 <td class="blueClr" align="center" style="font-weight: 600">{{ $detail->closing_lease_liability }}</td>
-                @if(\Carbon\Carbon::parse($detail->date)->isLastOfMonth() || $key + 1 == count($details))
+                @if($show_value_of_lease_asset)
                     <td class="blueClr" align="center" style="font-weight: 600">{{ $detail->value_of_lease_asset }}</td>
+                @else
+                    <td class="blueClr" align="center" style="font-weight: 600">&nbsp;</td>
+                @endif
+                @if(\Carbon\Carbon::parse($detail->date)->isLastOfMonth())
                     <td class="blueClr" align="center" style="font-weight: 600">  {{ $detail->change }} </td>
                     <td class="blueClr" align="center" style="font-weight: 600">{{ $detail->depreciation }}</td>
                     <td class="blueClr" align="center" style="font-weight: 600">{{ $detail->accumulated_depreciation }}</td>
@@ -73,6 +78,11 @@
                     <td class="blueClr" align="center" style="font-weight: 600"> -</td>
                     <td class="blueClr" align="center" style="font-weight: 600"> -</td>
             @endif
+                @php
+                    $show_value_of_lease_asset = false;
+                    $effective_date = $detail->date;
+                @endphp
+            </tr>
         @endforeach
         @php
             $i += 1;
