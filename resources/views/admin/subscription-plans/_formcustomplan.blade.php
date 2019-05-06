@@ -21,7 +21,7 @@
 
                 <div class="form-group col-md-6">
                     <label for="price_plan_type">Select Plan Price Type(required)</label>
-                    <select class="form-control @if($errors->has('price_plan_type')) is-invalid @endif" name="price_plan_type" >
+                    <select class="form-control @if($errors->has('price_plan_type')) is-invalid @endif" name="price_plan_type" disabled="disabled">
                         <option value="">--Select Plan Price Type--</option>
                         <option value="1" selected="selected">Non-Customizable</option>
                         <option value="2">Customizable</option>
