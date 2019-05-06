@@ -16,7 +16,7 @@
 <body>
 <div style="max-width: 1000px; margin:0 auto; border: #808080 solid 1px;">
     <div class="clearfix" style="border-bottom: #808080 solid 1px;">
-        <div style="width: 30%; float: left; padding: 20px;"><img src="{{asset('master/images/logo.jpg')}}" height="70px;"></div>
+        <div style="width: 30%; float: left; padding: 20px;"><img src="{{asset('master/images/logo.png')}}" height="70px;"></div>
         <div style="width:70%; float: left; border-left: #808080 solid 1px; padding: 20px;">
             <strong style="color: #0070c0; font-size: 18px;">INVOICE CUM PAYMENT RECEIPT</strong><br/>
             <span style="color: #666666; font-size: 18px; font-weight: 600;">WITSYNC Soft Solutions Private Limited</span><br/>

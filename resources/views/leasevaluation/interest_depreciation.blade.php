@@ -14,7 +14,7 @@
                 <ul>
                     @if(request()->segment(2) == 'valuation-capitalised')
                         <li>
-                            <a href="{{ route('leasevaluation.cap.asset', ['id' => $lease->id]) }}">Overivew</a>
+                            <a href="{{ route('leasevaluation.cap.asset', ['id' => $lease->id]) }}">Overview</a>
                         </li>
 
                         <li>

@@ -711,6 +711,7 @@ function fetchCurrencyExchangeRate($date = null, $source, $target)
     $url = 'http://apilayer.net/api/' . $endpoint . '?access_key=' . $access_key . '&source=' . $source . '&currencies=' . $target;
 
     if ($date && \Carbon\Carbon::parse($date)->lessThanOrEqualTo(\Carbon\Carbon::today())) {
+        $date = \Carbon\Carbon::parse($date)->format('Y-m-d');
         $url .= '&date=' . $date;
     }
 

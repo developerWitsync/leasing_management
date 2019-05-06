@@ -97,7 +97,7 @@
                         @endphp
                         @foreach($months as $month)
                             @if(isset($data[$month]['residual']))
-                                <td>{{ $data[$month]['residual'][0]['lease_liability ']}}</td>
+                                <td>{{ $data[$month]['residual'][0]['lease_liability']}}</td>
                                 @php
                                     $sub_total = $sub_total + $data[$month]['residual'][0]['lease_liability'];
                                 @endphp

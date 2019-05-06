@@ -478,7 +478,6 @@ class LeaseValuationController extends Controller
 
             $source = $json_step_data["lessor_details"]["lease_contract_id"];
 
-
             $payments = $json_step_data['lease_payments'];
             foreach ($payments as $payment) {
                 // No need to show the Non Lease Component Payments...
@@ -544,6 +543,7 @@ class LeaseValuationController extends Controller
                 if ($final_data['valuation_type'] == "Subsequent Valuation") {
                     $date = $final_data['effective_date'];
                 }
+
                 $exchange_rate = fetchCurrencyExchangeRate($date, $source, $destination);
             }
 
