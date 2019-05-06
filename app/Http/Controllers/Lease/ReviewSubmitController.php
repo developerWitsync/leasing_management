@@ -210,8 +210,6 @@ class ReviewSubmitController extends Controller
 
             $lease_payments = DB::select($sql);
 
-            //echo "<pre>"; print_r($lease_payments); die();
-
             //add the residual value guarantee as well..
             if ($asset->residualGuranteeValue->any_residual_value_gurantee == "yes") {
 
@@ -222,6 +220,7 @@ class ReviewSubmitController extends Controller
                 $new_array['date'] = $end_date->format('Y-m-d');
                 $new_array['total_amount_payable'] = $asset->residualGuranteeValue->residual_gurantee_value;
                 if(!empty($payment_dates)){
+                    $payment_dates = array_values($payment_dates);
                     $new_array['total_amount_payable'] = $asset->residualGuranteeValue->residual_gurantee_value + $payment_dates[0]->total_amount_payable;
                 }
                 array_push($lease_payments, (object)$new_array);
@@ -239,6 +238,7 @@ class ReviewSubmitController extends Controller
                 $new_array['date'] = $asset->terminationOption->lease_end_date;
                 $new_array['total_amount_payable'] = $asset->terminationOption->termination_penalty;
                 if(!empty($payment_dates)){
+                    $payment_dates = array_values($payment_dates);
                     $new_array['total_amount_payable'] = $asset->terminationOption->termination_penalty + $payment_dates[0]->total_amount_payable;
                 }
                 array_push($lease_payments, (object)$new_array);
@@ -253,6 +253,7 @@ class ReviewSubmitController extends Controller
                 $new_array['date'] = $asset->purchaseOption->expected_purchase_date;
                 $new_array['total_amount_payable'] = $asset->purchaseOption->purchase_price;
                 if(!empty($payment_dates)){
+                    $payment_dates = array_values($payment_dates);
                     $new_array['total_amount_payable'] = $asset->purchaseOption->purchase_price + $payment_dates[0]->total_amount_payable;
                 }
                 array_push($lease_payments, (object)$new_array);
