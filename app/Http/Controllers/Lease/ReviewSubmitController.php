@@ -305,7 +305,7 @@ class ReviewSubmitController extends Controller
 
                 //check if the payment exists on the day before the subsequent modification
                 $day_before_subsequent = InterestAndDepreciation::query()
-                    ->where('date', '=', $payment_date)
+                    ->where('date', '=', Carbon::parse($payment_date))
                     ->where('asset_id', '=', $asset->id)
                     ->first();
 
@@ -329,7 +329,7 @@ class ReviewSubmitController extends Controller
 
                 $previous_accumulated_depreciation = 0;
 
-                if(!Carbon::parse($payment_date)->isLastOfMonth() && !Carbon::parse($payment_date)->firstOfMonth()){
+                if(is_null($day_before_subsequent)){
                     $dates[] = [
                         'asset_id' => $asset->id,
                         'modify_id' => $previous_depreciation_data->modify_id,

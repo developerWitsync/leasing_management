@@ -54,7 +54,7 @@
         </div>
 
         <div class="form-group {{ $errors->has('exchange_rate') ? ' has-error' : '' }} required">
-            <label for="exchange_rate" class="col-md-12 control-label">Exchange Rate (as on 31 Dec 2018)</label>
+            <label for="exchange_rate" class="col-md-12 control-label">Exchange Rate (as on {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->subDay(1)->format(config('settings.date_format')) }})</label>
             <div class="col-md-12 form-check form-check-inline">
                 <input type="text" value="{{ old('exchange_rate', $model->exchange_rate) }}" class="form-control"
                        id="exchange_rate" name="exchange_rate" @if($subsequent_modify_required) disabled="disabled" @endif>
