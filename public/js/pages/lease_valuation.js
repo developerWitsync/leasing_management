@@ -190,7 +190,7 @@ $(function(){
         if(typeof existing_lease_liability != "undefined"){
             var increase_decrease = parseFloat(total_lease_liability) - parseFloat(existing_lease_liability);
             var initial_increase_decrease;
-            $(".increase_decrease_part_first").html(increase_decrease);
+            $(".increase_decrease_part_first").html(increase_decrease.toFixed(2));
 
 
             //  calculate the new value of lease asset as per the conditions in the NL15SR ==> P11
@@ -227,7 +227,7 @@ $(function(){
                 charge_to_pl = 0;
             }
 
-            $('.new_value_of_lease_asset').html(new_value_of_lease_asset);
+            $('.new_value_of_lease_asset').html(new_value_of_lease_asset.toFixed(2));
             $('.charge_to_pl').html(charge_to_pl);
             var asset_id  = $('.load_lease_liability').data('asset_id');
             //update the asset with the new lease liability value and with the new value of lease asset
