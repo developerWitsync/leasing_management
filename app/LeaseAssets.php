@@ -36,6 +36,7 @@ class LeaseAssets extends Model
         'lease_liablity_value',
         'value_of_lease_asset',
         'impairment_test_value',
+        'increase_decrease',
         'created_at',
         'updated_at'
     ];

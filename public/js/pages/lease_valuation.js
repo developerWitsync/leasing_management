@@ -235,7 +235,8 @@ $(function(){
                 dataType : 'json',
                 data : {
                     value_of_lease_asset : new_value_of_lease_asset,
-                    lease_liability_value: total_lease_liability
+                    lease_liability_value: total_lease_liability,
+                    increase_decrease : increase_decrease
                 },
                 success : function(response){
 

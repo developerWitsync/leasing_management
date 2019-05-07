@@ -271,16 +271,16 @@
 
                                 <div class="form-group{{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }} col-md-12 col-sm-12  text-center">
 
-                                        {!! app('captcha')->display([
-                                                'data-theme' => 'light',
-                                                'id' => 'rc-imageselect'
-                                        ]) !!}
+                                    {!! app('captcha')->display([
+                                            'data-theme' => 'light',
+                                            'id' => 'rc-imageselect'
+                                    ]) !!}
 
-                                        @if ($errors->has('g-recaptcha-response'))
-                                            <span class="help-block">
-                                                <strong>{{ $errors->first('g-recaptcha-response') }}</strong>
-                                            </span>
-                                        @endif
+                                    @if ($errors->has('g-recaptcha-response'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('g-recaptcha-response') }}</strong>
+                                        </span>
+                                    @endif
                                 </div>
 
                                 <div class="form-group col-md-12 col-sm-12  text-center">
@@ -310,7 +310,7 @@
                     @include('auth._all_policies')
                 </div>
                 <div class="modal-footer privacypopBg">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">I Agree</button>
                 </div>
             </div>
 

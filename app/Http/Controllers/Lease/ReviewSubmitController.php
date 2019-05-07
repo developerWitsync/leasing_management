@@ -317,24 +317,17 @@ class ReviewSubmitController extends Controller
 
                 $new_value_of_lease_asset = $asset->value_of_lease_asset;
 
-                //calculations as per the xlsx
-                $last_closing_lease_liability  = ($interest_expense + $previous_liability - (float)$lease_payment_on_day_before_subsequent);
+                $increase_or_decrease =  $asset->increase_decrease;
 
-                $increase_or_decrease =  $new_value_of_lease_asset - $last_closing_lease_liability;
-
-                $old_value_of_asset  = $previous_depreciation_data->value_of_lease_asset;
-
-                $new_value_of_lease_asset =  $old_value_of_asset + $increase_or_decrease;
+                $previous_carrying_value_of_lease_asset =  $previous_depreciation_data->carrying_value_of_lease_asset + $increase_or_decrease;
 
                 $number_of_months = $this->calculateMonthsDifference($base_date->format('Y-m-d'), $asset->getLeaseEndDate($asset));
 
-                $depreciation = $new_value_of_lease_asset/$number_of_months;
+                $depreciation = $previous_carrying_value_of_lease_asset/$number_of_months;
 
                 $previous_depreciation = $depreciation;
 
                 $previous_accumulated_depreciation = 0;
-
-                $previous_carrying_value_of_lease_asset = $new_value_of_lease_asset;
 
                 $dates[] = [
                     'asset_id' => $asset->id,
@@ -355,7 +348,11 @@ class ReviewSubmitController extends Controller
                     'carrying_value_of_lease_asset' => $previous_depreciation_data->carrying_value_of_lease_asset
                 ];
 
-                //$previous_liability = $new_value_of_lease_asset;
+
+                if(Carbon::parse($payment_date)->isLastOfMonth()){
+                    $previous_accumulated_depreciation = $previous_depreciation + $previous_accumulated_depreciation;
+                    $previous_carrying_value_of_lease_asset = $previous_carrying_value_of_lease_asset - $previous_depreciation;
+                }
 
                 $previous_liability = $asset->lease_liablity_value;
 
