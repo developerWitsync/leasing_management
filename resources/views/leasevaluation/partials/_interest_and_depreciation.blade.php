@@ -63,11 +63,12 @@
                 <td class="blueClr" align="center" style="font-weight: 600">{{ $detail->closing_lease_liability }}</td>
                 @if($show_value_of_lease_asset)
                     <td class="blueClr" align="center" style="font-weight: 600">{{ $detail->value_of_lease_asset }}</td>
+                    <td class="blueClr" align="center" style="font-weight: 600">  {{ $detail->change }} </td>
                 @else
+                    <td class="blueClr" align="center" style="font-weight: 600">&nbsp;</td>
                     <td class="blueClr" align="center" style="font-weight: 600">&nbsp;</td>
                 @endif
                 @if(\Carbon\Carbon::parse($detail->date)->isLastOfMonth())
-                    <td class="blueClr" align="center" style="font-weight: 600">  {{ $detail->change }} </td>
                     <td class="blueClr" align="center" style="font-weight: 600">{{ $detail->depreciation }}</td>
                     <td class="blueClr" align="center" style="font-weight: 600">{{ $detail->accumulated_depreciation }}</td>
                     <td class="blueClr" align="center" style="font-weight: 600">{{ $detail->carrying_value_of_lease_asset }}</td>

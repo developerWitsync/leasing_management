@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1c290435-4779-45fe-873f-5594138f8734" name="Default Changelist" comment="Merge branch 'master' of http://100.100.7.4:8081/root/Witsync-Lease-Management&#10;&#10;# Conflicts:&#10;#&#9;app/Helpers/Helpers.php&#10;#&#9;config/settings.php&#10;#&#9;public/css/custom.css">
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/leasevaluation/partials/_interest_and_depreciation.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/leasevaluation/partials/_interest_and_depreciation.blade.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -38,14 +38,23 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="396">
-              <caret line="747" column="61" lean-forward="true" selection-start-line="747" selection-start-column="61" selection-end-line="747" selection-end-column="61" />
+              <caret line="331" column="116" lean-forward="true" selection-start-line="331" selection-start-column="116" selection-end-line="331" selection-end-column="116" />
               <folding>
                 <element signature="e#134#159#0#PHP" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/resources/views/leasevaluation/partials/_interest_and_depreciation.blade.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="697">
+              <caret line="68" column="90" lean-forward="true" selection-start-line="68" selection-start-column="90" selection-end-line="68" selection-end-column="90" />
             </state>
           </provider>
         </entry>
@@ -158,7 +167,6 @@
         <option value="$PROJECT_DIR$/app/Http/Controllers/Admin/SubscriptionPlansController.php" />
         <option value="$PROJECT_DIR$/resources/views/admin/subscription-plans/_formcustomplan.blade.php" />
         <option value="$PROJECT_DIR$/database/seeds/DatabaseSeeder.php" />
-        <option value="$PROJECT_DIR$/resources/views/leasevaluation/partials/_interest_and_depreciation.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/layouts/master.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/layouts/app.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/auth/register.blade.php" />
@@ -170,6 +178,7 @@
         <option value="$PROJECT_DIR$/public/js/pages/lease_valuation.js" />
         <option value="$PROJECT_DIR$/database/migrations/2019_05_07_091339_alter_column_change_on_interest_and_depreciation_table.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php" />
+        <option value="$PROJECT_DIR$/resources/views/leasevaluation/partials/_interest_and_depreciation.blade.php" />
       </list>
     </option>
   </component>
@@ -434,12 +443,12 @@
       <workItem from="1556784966059" duration="29463000" />
       <workItem from="1557117000347" duration="18962000" />
       <workItem from="1557207385162" duration="8763000" />
-      <workItem from="1557218504112" duration="2521000" />
+      <workItem from="1557218504112" duration="3376000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1465474000" />
+    <option name="totallyTimeSpent" value="1466329000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -814,13 +823,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/leasevaluation/partials/_interest_and_depreciation.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="646">
-          <caret line="38" selection-start-line="38" selection-end-line="38" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/leasevaluation/interest_depreciation.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="272">
@@ -904,10 +906,17 @@
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="396">
-          <caret line="747" column="61" lean-forward="true" selection-start-line="747" selection-start-column="61" selection-end-line="747" selection-end-column="61" />
+          <caret line="331" column="116" lean-forward="true" selection-start-line="331" selection-start-column="116" selection-end-line="331" selection-end-column="116" />
           <folding>
             <element signature="e#134#159#0#PHP" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/leasevaluation/partials/_interest_and_depreciation.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="697">
+          <caret line="68" column="90" lean-forward="true" selection-start-line="68" selection-start-column="90" selection-end-line="68" selection-end-column="90" />
         </state>
       </provider>
     </entry>
