@@ -189,6 +189,7 @@ $(function(){
         $('.load_lease_liability').html(total_lease_liability);
         if(typeof existing_lease_liability != "undefined"){
             var increase_decrease = parseFloat(total_lease_liability) - parseFloat(existing_lease_liability);
+            var initial_increase_decrease;
             $(".increase_decrease_part_first").html(increase_decrease);
 
 
@@ -199,6 +200,7 @@ $(function(){
             var new_value_of_lease_asset = 0;
             var charge_to_pl = '-';
             increase_decrease = parseFloat(increase_decrease);
+            initial_increase_decrease = increase_decrease;
             if(increase_decrease < 0){
                 increase_decrease = -1 * increase_decrease;
 
@@ -236,7 +238,7 @@ $(function(){
                 data : {
                     value_of_lease_asset : new_value_of_lease_asset,
                     lease_liability_value: total_lease_liability,
-                    increase_decrease : increase_decrease
+                    increase_decrease : initial_increase_decrease
                 },
                 success : function(response){
 
