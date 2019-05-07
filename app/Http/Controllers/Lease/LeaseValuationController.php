@@ -37,6 +37,7 @@ class LeaseValuationController extends Controller
 
     /**
      * renders the table to list all the lease assets.
+     * $existing_lease_liability_balance need to add the interest rate as well to this variable.
      * @param $id Primary key for the lease
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
@@ -72,6 +73,12 @@ class LeaseValuationController extends Controller
 
                     $existing_lease_liability_balance = (float)$previous_depreciation_data->closing_lease_liability;
 
+                    //calculate the interest that needs to be added to $existing_lease_liability_balance value
+                    $days_diff = Carbon::parse($lease->modifyLeaseApplication->last()->effective_from)->subDay(1)->diffInDays($previous_depreciation_data->date);
+                    $interest_expense = $this->calculateInterestExpense($existing_lease_liability_balance, $previous_depreciation_data->discount_rate, $days_diff);
+
+                    $existing_lease_liability_balance = $existing_lease_liability_balance + $interest_expense;
+
                     //we can take out the Existing Value of Lease Asset from the very first row...
                     $existing_value_of_lease_asset_row = InterestAndDepreciation::query()->where('asset_id', '=', $asset_id)->orderBy('id', 'asc')->first();
                     $existing_value_of_lease_asset = $existing_value_of_lease_asset_row->opening_lease_liability;
@@ -95,6 +102,12 @@ class LeaseValuationController extends Controller
                         ->first();
 
                     $existing_lease_liability_balance = (float)$previous_depreciation_data->closing_lease_liability;
+
+                    //calculate the interest that needs to be added to $existing_lease_liability_balance value
+                    $days_diff = Carbon::parse($lease->modifyLeaseApplication->last()->effective_from)->subDay(1)->diffInDays($previous_depreciation_data->date);
+                    $interest_expense = $this->calculateInterestExpense($existing_lease_liability_balance, $previous_depreciation_data->discount_rate, $days_diff);
+
+                    $existing_lease_liability_balance = $existing_lease_liability_balance + $interest_expense;
 
                     $existing_value_of_lease_asset = $previous_depreciation_data->value_of_lease_asset;
 
@@ -170,6 +183,19 @@ class LeaseValuationController extends Controller
         } else {
             abort(404);
         }
+    }
+
+    /**
+     * calculate the interest expense value for the interest and Depreciation Tab
+     * @param float $previous_liability
+     * @param float $discount_rate
+     * @param int $days
+     * @return float|int
+     */
+    private function calculateInterestExpense(float $previous_liability, float $discount_rate, int $days)
+    {
+        $discount_rate = $discount_rate * (1 / 100);
+        return ($previous_liability * pow(1 + $discount_rate, $days)) - $previous_liability;
     }
 
     /**

@@ -300,8 +300,6 @@ class ReviewSubmitController extends Controller
                 //need to insert a row for the one day before the subsequent to the dates array...
                 $payment_date = $base_date->subDay(1)->format('Y-m-d');
 
-                //dd($previous_depreciation_data->date);
-
                 $days_diff = Carbon::parse($payment_date)->diffInDays($previous_depreciation_data->date);
                 $interest_expense = $this->calculateInterestExpense($previous_liability, $previous_depreciation_data->discount_rate, $days_diff);
 
@@ -311,21 +309,23 @@ class ReviewSubmitController extends Controller
                     ->where('asset_id', '=', $asset->id)
                     ->first();
 
+                $increase_or_decrease =  $asset->increase_decrease;
+
                 if($day_before_subsequent) {
                     $lease_payment_on_day_before_subsequent = $day_before_subsequent->lease_payment;
-                    $previous_carrying_value_of_lease_asset =  $day_before_subsequent->carrying_value_of_lease_asset + $increase_or_decrease;
+                    $previous_carrying_value_of_lease_asset_with_change = $day_before_subsequent->carrying_value_of_lease_asset + $increase_or_decrease;
+                    $previous_carrying_value_of_lease_asset =  $day_before_subsequent->carrying_value_of_lease_asset;
                 } else {
                     $lease_payment_on_day_before_subsequent = 0;
-                    $previous_carrying_value_of_lease_asset =  $previous_depreciation_data->carrying_value_of_lease_asset + $increase_or_decrease;
+                    $previous_carrying_value_of_lease_asset_with_change =  $previous_carrying_value_of_lease_asset =  $previous_depreciation_data->carrying_value_of_lease_asset ;
                 }
+
 
                 $new_value_of_lease_asset = $asset->value_of_lease_asset;
 
-                $increase_or_decrease =  $asset->increase_decrease;
-
                 $number_of_months = $this->calculateMonthsDifference($base_date->format('Y-m-d'), $asset->getLeaseEndDate($asset));
 
-                $depreciation = $previous_carrying_value_of_lease_asset / $number_of_months;
+                $depreciation = $previous_carrying_value_of_lease_asset_with_change / $number_of_months;
 
                 $previous_depreciation = $depreciation;
 
@@ -512,8 +512,6 @@ class ReviewSubmitController extends Controller
                 }
                 $start_year = $start_year + 1;
             }
-
-            //echo "<pre>"; print_r($dates); die();
 
             //insert the dates data into the interest and depreciation table for the lease id
             if(is_null($modify_id)){
