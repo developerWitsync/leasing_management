@@ -84,7 +84,7 @@
             <tbody>
             <tr>
                 <td style="text-align: center"
-                    class="existing_lease_liability">{{$existing_lease_liability_balance}}</td>
+                    class="existing_lease_liability">{{round($existing_lease_liability_balance, 2)}}</td>
                 <td style="text-align: center" class="load_lease_liability">Loading...</td>
                 <td style="text-align: center" class="increase_decrease_part_first">Loading...</td>
             </tr>
