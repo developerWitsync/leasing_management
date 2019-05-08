@@ -42,8 +42,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="583">
-              <caret line="358" column="68" lean-forward="true" selection-start-line="358" selection-start-column="68" selection-end-line="358" selection-end-column="68" />
+            <state relative-caret-position="644">
+              <caret line="754" column="16" selection-start-line="754" selection-start-column="16" selection-end-line="754" selection-end-column="16" />
               <folding>
                 <element signature="e#134#159#0#PHP" expanded="true" />
               </folding>
@@ -499,12 +499,12 @@
       <workItem from="1557117000347" duration="18962000" />
       <workItem from="1557207385162" duration="8763000" />
       <workItem from="1557218504112" duration="14584000" />
-      <workItem from="1557289414548" duration="14576000" />
+      <workItem from="1557289414548" duration="26113000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1492113000" />
+    <option name="totallyTimeSpent" value="1503650000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -519,7 +519,7 @@
     <frame x="64" y="-11" width="1857" height="1092" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2131419" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.11209276" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -967,8 +967,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="583">
-          <caret line="358" column="68" lean-forward="true" selection-start-line="358" selection-start-column="68" selection-end-line="358" selection-end-column="68" />
+        <state relative-caret-position="644">
+          <caret line="754" column="16" selection-start-line="754" selection-start-column="16" selection-end-line="754" selection-end-column="16" />
           <folding>
             <element signature="e#134#159#0#PHP" expanded="true" />
           </folding>
