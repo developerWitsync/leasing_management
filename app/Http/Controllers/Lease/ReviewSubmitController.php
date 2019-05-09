@@ -220,10 +220,14 @@ class ReviewSubmitController extends Controller
                 $new_array['date'] = $end_date->format('Y-m-d');
                 $new_array['total_amount_payable'] = $asset->residualGuranteeValue->residual_gurantee_value;
                 if(!empty($payment_dates)){
+                    $key = key($payment_dates);
                     $payment_dates = array_values($payment_dates);
                     $new_array['total_amount_payable'] = $asset->residualGuranteeValue->residual_gurantee_value + $payment_dates[0]->total_amount_payable;
+                    $lease_payments[$key] = (object)$new_array;
+                } else {
+                    $new_array['total_amount_payable'] = $asset->residualGuranteeValue->residual_gurantee_value;
+                    array_push($lease_payments, (object)$new_array);
                 }
-                array_push($lease_payments, (object)$new_array);
 
             }
 
@@ -238,10 +242,14 @@ class ReviewSubmitController extends Controller
                 $new_array['date'] = $asset->terminationOption->lease_end_date;
                 $new_array['total_amount_payable'] = $asset->terminationOption->termination_penalty;
                 if(!empty($payment_dates)){
+                    $key = key($payment_dates);
                     $payment_dates = array_values($payment_dates);
                     $new_array['total_amount_payable'] = $asset->terminationOption->termination_penalty + $payment_dates[0]->total_amount_payable;
+                    $lease_payments[$key] = (object)$new_array;
+                } else {
+                    $new_array['total_amount_payable'] = $asset->terminationOption->termination_penalty;
+                    array_push($lease_payments, (object)$new_array);
                 }
-                array_push($lease_payments, (object)$new_array);
             }
 
             //add the purchase option as well as well..
@@ -253,10 +261,14 @@ class ReviewSubmitController extends Controller
                 $new_array['date'] = $asset->purchaseOption->expected_purchase_date;
                 $new_array['total_amount_payable'] = $asset->purchaseOption->purchase_price;
                 if(!empty($payment_dates)){
+                    $key = key($payment_dates);
                     $payment_dates = array_values($payment_dates);
                     $new_array['total_amount_payable'] = $asset->purchaseOption->purchase_price + $payment_dates[0]->total_amount_payable;
+                    $lease_payments[$key] = (object)$new_array;
+                } else {
+                    $new_array['total_amount_payable'] = $asset->purchaseOption->purchase_price;
+                    array_push($lease_payments, (object)$new_array);
                 }
-                array_push($lease_payments, (object)$new_array);
             }
 
             $check_date = $increase_or_decrease = null;
