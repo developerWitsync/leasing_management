@@ -185,7 +185,7 @@ $(function(){
     });
 
     $(document).ready(function () {
-        removeOverlayAjax();
+
         $('.load_lease_liability').html(total_lease_liability);
         if(typeof existing_lease_liability != "undefined"){
             var increase_decrease = parseFloat(total_lease_liability) - parseFloat(existing_lease_liability);
@@ -241,9 +241,11 @@ $(function(){
                     increase_decrease : initial_increase_decrease
                 },
                 success : function(response){
-
+                    removeOverlayAjax();
                 }
             });
+        } else {
+            removeOverlayAjax();
         }
     });
 
