@@ -356,9 +356,10 @@ class ReviewSubmitController extends Controller
                 }
 
             } else {
-                $previous_depreciation = $this->calculateDepreciation($subsequent_modify_required, $asset, $previous_liability);
+                $previous_carrying_value_of_lease_asset = $asset->value_of_lease_asset;
+                $previous_depreciation = $this->calculateDepreciation($subsequent_modify_required, $asset, $previous_carrying_value_of_lease_asset);
                 $previous_accumulated_depreciation = 0;
-                $previous_carrying_value_of_lease_asset = $previous_liability;
+                //$previous_carrying_value_of_lease_asset = $previous_liability;
                 $value_of_lease_asset = $previous_carrying_value_of_lease_asset;
             }
 
