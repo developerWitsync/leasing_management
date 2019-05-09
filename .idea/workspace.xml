@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1c290435-4779-45fe-873f-5594138f8734" name="Default Changelist" comment="Merge branch 'master' of http://100.100.7.4:8081/root/Witsync-Lease-Management&#10;&#10;# Conflicts:&#10;#&#9;app/Helpers/Helpers.php&#10;#&#9;config/settings.php&#10;#&#9;public/css/custom.css">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -42,8 +41,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="566">
-              <caret line="360" column="18" selection-start-line="360" selection-start-column="18" selection-end-line="360" selection-end-column="18" />
+            <state relative-caret-position="-437">
+              <caret line="361" column="80" lean-forward="true" selection-start-line="361" selection-start-column="80" selection-end-line="361" selection-end-column="80" />
               <folding>
                 <element signature="e#134#159#0#PHP" expanded="true" />
               </folding>
@@ -494,12 +493,12 @@
       <workItem from="1557207385162" duration="8763000" />
       <workItem from="1557218504112" duration="14584000" />
       <workItem from="1557289414548" duration="26713000" />
-      <workItem from="1557376605330" duration="19926000" />
+      <workItem from="1557376605330" duration="20155000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1524176000" />
+    <option name="totallyTimeSpent" value="1524405000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -962,8 +961,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="566">
-          <caret line="360" column="18" selection-start-line="360" selection-start-column="18" selection-end-line="360" selection-end-column="18" />
+        <state relative-caret-position="-437">
+          <caret line="361" column="80" lean-forward="true" selection-start-line="361" selection-start-column="80" selection-end-line="361" selection-end-column="80" />
           <folding>
             <element signature="e#134#159#0#PHP" expanded="true" />
           </folding>
