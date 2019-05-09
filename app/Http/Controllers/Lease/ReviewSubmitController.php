@@ -107,7 +107,8 @@ class ReviewSubmitController extends Controller
     private function calculateInterestExpense(float $previous_liability, float $discount_rate, int $days)
     {
         $discount_rate = $discount_rate * (1 / 100);
-        return ($previous_liability * pow(1 + $discount_rate, $days)) - $previous_liability;
+        $interest = ($previous_liability * pow(1 + $discount_rate, $days)) - $previous_liability;
+        return round($interest, 4);
     }
 
     /**
@@ -144,7 +145,7 @@ class ReviewSubmitController extends Controller
             $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
             $months = $this->calculateMonthsDifference($base_date->format('Y-m-d'), $asset->getLeaseEndDate($asset));
             $depreciation = (float)$value_of_lease_asset/$months;
-            return $depreciation;
+            return round($depreciation, 4);
         }
     }
 
@@ -406,10 +407,6 @@ class ReviewSubmitController extends Controller
                         return ($date_month == $key && $start_year == $date_year);
                     });
 
-                    if($key == 6){
-
-                    }
-
                     if($start_year == $first_year && $start_month == $key && empty($payment_dates) && !Carbon::parse($base_date)->isLastOfMonth()){
                         $days_diff = Carbon::parse($base_date)->diffInDays($base_date);
                         $interest_expense = $this->calculateInterestExpense($previous_liability, $discount_rate, $days_diff);
@@ -428,7 +425,7 @@ class ReviewSubmitController extends Controller
                             'value_of_lease_asset' => $value_of_lease_asset,
                             'depreciation' => $previous_depreciation,
                             'change' => $increase_or_decrease,
-                            'accumulated_depreciation' => $previous_accumulated_depreciation,
+                            'accumulated_depreciation' => ($base_date->isLastOfMonth())? $previous_depreciation + $previous_accumulated_depreciation : $previous_accumulated_depreciation,
                             'carrying_value_of_lease_asset' => ($base_date->isLastOfMonth())? $previous_carrying_value_of_lease_asset + $increase_or_decrease : $previous_carrying_value_of_lease_asset
 
                         ];

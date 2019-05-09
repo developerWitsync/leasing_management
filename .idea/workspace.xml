@@ -42,8 +42,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret line="766" column="16" selection-start-line="766" selection-start-column="16" selection-end-line="766" selection-end-column="16" />
+            <state relative-caret-position="408">
+              <caret line="762" column="16" selection-start-line="762" selection-start-column="16" selection-end-line="762" selection-end-column="16" />
               <folding>
                 <element signature="e#134#159#0#PHP" expanded="true" />
               </folding>
@@ -473,12 +473,12 @@
       <workItem from="1557207385162" duration="8763000" />
       <workItem from="1557218504112" duration="14584000" />
       <workItem from="1557289414548" duration="26713000" />
-      <workItem from="1557376605330" duration="1764000" />
+      <workItem from="1557376605330" duration="8645000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1506014000" />
+    <option name="totallyTimeSpent" value="1512895000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -941,8 +941,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="766" column="16" selection-start-line="766" selection-start-column="16" selection-end-line="766" selection-end-column="16" />
+        <state relative-caret-position="408">
+          <caret line="762" column="16" selection-start-line="762" selection-start-column="16" selection-end-line="762" selection-end-column="16" />
           <folding>
             <element signature="e#134#159#0#PHP" expanded="true" />
           </folding>
