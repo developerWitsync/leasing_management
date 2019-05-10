@@ -80,9 +80,8 @@ class LeaseValuationController extends Controller
                     $existing_lease_liability_balance = (float)$day_before_subsequent->closing_lease_liability;
 
                     $existing_value_of_lease_asset = $day_before_subsequent->value_of_lease_asset;
-
                     //Existing Carrying Value of Lease Asset
-                    $existing_carrying_value_of_lease_asset = $previous_depreciation_data->carrying_value_of_lease_asset;
+                    $existing_carrying_value_of_lease_asset = $day_before_subsequent->carrying_value_of_lease_asset;
                 } else {
                     $existing_lease_liability_balance = (float)$previous_depreciation_data->closing_lease_liability;
 
