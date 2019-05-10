@@ -38,7 +38,7 @@
             <td style="color: #fff;font-size: 14px;">Part {{$i}}:</td>
 
             @if($modify_id == "")
-                <td colspan="12" style="color: #fff;font-size: 16px;">
+                <td colspan="10" style="color: #fff;font-size: 16px;">
                     Initial Valuation Basis
                 </td>
             @else
@@ -46,7 +46,7 @@
                 <td colspan="2" style="color: #fff;font-size: 16px;">Subsequent Reference# {{$i - 1}}</td>
                 <td colspan="1" style="color: #fff;font-size: 16px;">Effective from</td>
                 <td colspan="1" style="color: #fff;font-size: 16px;">{{ \Carbon\Carbon::parse($effective_date)->addDay(1)->format(config('settings.date_format')) }}</td>
-                <td colspan="5" style="color: #fff;font-size: 16px;">&nbsp;</td>
+                <td colspan="3" style="color: #fff;font-size: 16px;">&nbsp;</td>
             @endif
             @php
                 $show_value_of_lease_asset = true;
@@ -73,8 +73,6 @@
                     <td class="blueClr" align="center" style="font-weight: 600">{{ $detail->accumulated_depreciation }}</td>
                     <td class="blueClr" align="center" style="font-weight: 600">{{ $detail->carrying_value_of_lease_asset }}</td>
                 @else
-                    <td class="blueClr" align="center" style="font-weight: 600"> -</td>
-                    <td class="blueClr" align="center" style="font-weight: 600"> -</td>
                     <td class="blueClr" align="center" style="font-weight: 600"> -</td>
                     <td class="blueClr" align="center" style="font-weight: 600"> -</td>
                     <td class="blueClr" align="center" style="font-weight: 600"> -</td>
