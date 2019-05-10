@@ -62,63 +62,40 @@ class LeaseValuationController extends Controller
             $subsequent_modify_required = $lease->isSubsequentModification();
             if($subsequent_modify_required){
 
-                $all_subsequent_effective_dates = LeaseHistory::query()->where('lease_id', '=', $lease->id);
-                if($all_subsequent_effective_dates->count() === 1){
+                $previous_depreciation_data = InterestAndDepreciation::query()
+                    ->where('date', '<', $lease->modifyLeaseApplication->last()->effective_from)
+                    ->where('asset_id', '=', $asset_id)
+                    ->orderBy('date','desc')
+                    ->first();
 
-                    $previous_depreciation_data = InterestAndDepreciation::query()
-                        ->where('date', '<', $lease->modifyLeaseApplication->last()->effective_from)
-                        ->where('asset_id', '=', $asset_id)
-                        ->orderBy('date','desc')
-                        ->first();
+                $one_day_before = Carbon::parse($lease->modifyLeaseApplication->last()->effective_from)->subDay(1);
 
-                    $existing_lease_liability_balance = (float)$previous_depreciation_data->closing_lease_liability;
+                //check a row exists on one day before in interest and depreciation
+                $day_before_subsequent = InterestAndDepreciation::query()
+                    ->where('date', '=', Carbon::parse($one_day_before))
+                    ->where('asset_id', '=', $asset_id)
+                    ->first();
 
-                    //calculate the interest that needs to be added to $existing_lease_liability_balance value
-                    $days_diff = Carbon::parse($lease->modifyLeaseApplication->last()->effective_from)->subDay(1)->diffInDays($previous_depreciation_data->date);
-                    $interest_expense = $this->calculateInterestExpense($existing_lease_liability_balance, $previous_depreciation_data->discount_rate, $days_diff);
+                if($day_before_subsequent) {
+                    $existing_lease_liability_balance = (float)$day_before_subsequent->closing_lease_liability;
 
-                    $existing_lease_liability_balance = $existing_lease_liability_balance + $interest_expense;
-
-                    //we can take out the Existing Value of Lease Asset from the very first row...
-                    $existing_value_of_lease_asset_row = InterestAndDepreciation::query()->where('asset_id', '=', $asset_id)->orderBy('id', 'asc')->first();
-                    $existing_value_of_lease_asset = $existing_value_of_lease_asset_row->opening_lease_liability;
+                    $existing_value_of_lease_asset = $day_before_subsequent->value_of_lease_asset;
 
                     //Existing Carrying Value of Lease Asset
                     $existing_carrying_value_of_lease_asset = $previous_depreciation_data->carrying_value_of_lease_asset;
                 } else {
-
-                    $effective_date = ModifyLeaseApplication::query()
-                        ->where('lease_id', '=', $lease->id)
-                        ->where('valuation', '=', 'Subsequent Valuation')
-                        ->where('effective_from', '<', $lease->modifyLeaseApplication->last()->effective_from)
-                        ->orderBy('effective_from', 'desc')
-                        ->limit(1)
-                        ->first();
-
-                    $previous_depreciation_data = InterestAndDepreciation::query()
-                        ->where('modify_id', '=', $effective_date->id)
-                        ->where('asset_id', '=', $asset_id)
-                        ->orderBy('date','asc')
-                        ->first();
-
                     $existing_lease_liability_balance = (float)$previous_depreciation_data->closing_lease_liability;
 
                     //calculate the interest that needs to be added to $existing_lease_liability_balance value
                     $days_diff = Carbon::parse($lease->modifyLeaseApplication->last()->effective_from)->subDay(1)->diffInDays($previous_depreciation_data->date);
-                    $interest_expense = $this->calculateInterestExpense($existing_lease_liability_balance, $previous_depreciation_data->discount_rate, $days_diff);
 
+                    $interest_expense = $this->calculateInterestExpense($existing_lease_liability_balance, $previous_depreciation_data->discount_rate, $days_diff);
                     $existing_lease_liability_balance = $existing_lease_liability_balance + $interest_expense;
 
                     $existing_value_of_lease_asset = $previous_depreciation_data->value_of_lease_asset;
 
-                    $existing_carrying_value_of_lease_asset = InterestAndDepreciation::query()
-                        ->where('date', '<', $lease->modifyLeaseApplication->last()->effective_from)
-                        ->where('asset_id', '=', $asset_id)
-                        ->orderBy('date','desc')
-                        ->first();
-
                     //Existing Carrying Value of Lease Asset
-                    $existing_carrying_value_of_lease_asset = $existing_carrying_value_of_lease_asset->carrying_value_of_lease_asset;
+                    $existing_carrying_value_of_lease_asset = $previous_depreciation_data->carrying_value_of_lease_asset;
                 }
 
             }

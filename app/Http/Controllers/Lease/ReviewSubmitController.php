@@ -286,8 +286,6 @@ class ReviewSubmitController extends Controller
                     ->orderBy('date', 'desc')
                     ->first();
 
-                //dd($previous_depreciation_data);
-
                 $one_day_before = Carbon::parse($lease->modifyLeaseApplication->last()->effective_from)->subDay(1);
                 //check a row exists on one day before in interest and depreciation
                 $day_before_subsequent = InterestAndDepreciation::query()
@@ -322,17 +320,17 @@ class ReviewSubmitController extends Controller
                     $previous_accumulated_depreciation = $day_before_subsequent->accumulated_depreciation;
                 } else {
                     $days_diff = Carbon::parse($one_day_before)->diffInDays($previous_depreciation_data->date);
-                    $interest_expense = $this->calculateInterestExpense($previous_liability, $previous_depreciation_data->discount_rate, $days_diff);
+                    $interest_expense = $this->calculateInterestExpense($previous_depreciation_data->closing_lease_liability, $previous_depreciation_data->discount_rate, $days_diff);
                     $dates[] = [
                         'asset_id' => $asset->id,
                         'modify_id' => $previous_depreciation_data->modify_id,
                         'date' => $one_day_before->format('Y-m-d'),
                         'number_of_days' => $days_diff,
                         'discount_rate' => $previous_depreciation_data->discount_rate,
-                        'opening_lease_liability' => $previous_liability,
+                        'opening_lease_liability' => $previous_depreciation_data->closing_lease_liability,
                         'interest_expense' => $interest_expense,
                         'lease_payment' => 0,
-                        'closing_lease_liability' => ($interest_expense + $previous_liability - 0),
+                        'closing_lease_liability' => ($interest_expense + $previous_depreciation_data->closing_lease_liability - 0),
                         'created_at' => date('Y-m-d H:i:s'),
                         'updated_at' => date('Y-m-d H:i:s'),
                         'value_of_lease_asset' => $previous_depreciation_data->value_of_lease_asset,
@@ -512,7 +510,7 @@ class ReviewSubmitController extends Controller
                 $start_year = $start_year + 1;
             }
 
-            //echo "<pre>"; print_r($dates); die();
+//            echo "<pre>"; print_r($dates); die();
 
             //insert the dates data into the interest and depreciation table for the lease id
             if(is_null($modify_id)){
