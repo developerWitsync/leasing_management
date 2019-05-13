@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Lease;
 
 
 use App\ContractEscalationBasis;
+use App\EscalationConsistencyGap;
 use App\EscalationFrequency;
 use App\EscalationPercentageSettings;
 use App\Http\Controllers\Controller;
@@ -233,6 +234,8 @@ class EscalationController extends Controller
                         if($request->escalation_basis == '2') {
                             $rules['escalated_amount'] = 'required|numeric|min:1';
                         }
+
+                        $rules['consistency_gap'] = 'required|numeric|min:1';
                     }
 
                     $validator = Validator::make($request->except('_token', 'method', 'uri', 'ip'), $rules);
@@ -353,6 +356,11 @@ class EscalationController extends Controller
                 $payment_dates = LeaseAssetPaymentDates::query()
                     ->where('total_payment_amount','>', 0)
                     ->where('payment_id',$payment->id)->get();
+
+                //escalation consistency gaps
+                $escalation_consistency_gap = EscalationConsistencyGap::query()
+                    ->whereIn('business_account_id', getDependentUserIds())
+                    ->get();
                 
                 return view('lease.escalation.create', compact(
                     'payment',
@@ -368,7 +376,8 @@ class EscalationController extends Controller
                     'inconsistentDataModel',
                     'subsequent_modify_required',
                     'current_step',
-                    'payment_dates'
+                    'payment_dates',
+                    'escalation_consistency_gap'
                 ));
             } else {
                 abort(404);
@@ -490,6 +499,8 @@ class EscalationController extends Controller
                         if($request->escalation_basis == '2') {
                             $rules['escalated_amount'] = 'required|numeric|min:1';
                         }
+
+                        $rules['consistency_gap'] = 'required|numeric|min:1';
                     }
 
                     $validator = Validator::make($request->except('_token', 'method', 'uri', 'ip'), $rules);

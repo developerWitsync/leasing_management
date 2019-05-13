@@ -271,17 +271,11 @@ function formatToDecimal($number){
  */
 function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \App\Lease $lease, \App\LeaseAssets $asset)
 {
+
+    $consistency_gap = (isset($data['consistency_gap']) && !is_null($data['consistency_gap']))?$data['consistency_gap']:1;
+
     $base_date = getParentDetails()->accountingStandard->base_date;
     $effective_date = \Carbon\Carbon::parse($data['effective_from']);
-    //check for the subsequent modification and change the effective date as it is..
-//    $subsequent_modify_required = false;
-//    $subsequent_modify_required = $lease->isSubsequentModification();
-//    if($subsequent_modify_required){
-//        $effective_date = \Carbon\Carbon::parse($lease->modifyLeaseApplication->last()->effective_from);
-//        $lease_history = \App\LeaseHistory::query()->where('lease_id', '=', $lease->id)->orderBy('id', 'desc')->first();
-//        $filtered_escalation_dates  = collect(json_decode($lease_history->esclation_payments, false))
-//            ->where('payment_id', '=', $payment->id);
-//    }
 
     $escalation_applicable = $data['is_escalation_applicable'];
     $escalation_basis = isset($data['escalation_basis']) ? $data['escalation_basis'] : null;
@@ -367,7 +361,7 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
                             }
 
                             $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
-                            $escalation_date->addYear(1); //applied annually
+                            $escalation_date->addYear($consistency_gap); //applied annually
                         } else {
                             //escalation is not applied however the user needs to pay for this month and year
                             if ($amount_to_consider == 0) {
@@ -375,19 +369,6 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
                                 $amount_to_consider = $payments_in_this_year_month->total_payment_amount;
                             }
 
-//                            if($subsequent_modify_required && $start_year <= $effective_date->format('Y') && $key <= $effective_date->format('m')){
-//                                //have to take out the escalation percentage that was applied in the initial valuation..
-//                                $filtered_data = $filtered_escalation_dates
-//                                    ->where('escalation_year', '=', $start_year)->where('escalation_month', '=',$key)
-//                                    ->first();
-//                                if(count($filtered_data) == 1){
-//                                    $escalation_percentage_or_amount = $filtered_data->value_escalated;
-//                                    $amount_to_consider = $filtered_data->total_amount_payable;
-//                                }
-//                                $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
-//                            } else {
-//                                $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
-//                            }
                             $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
 
                         }
@@ -461,10 +442,7 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
 
                                         $escalation_percentage_or_amount = $data['inconsistent_total_escalation_rate'][$start_year][$key];
 
-//                                        \Log::info('days_in_current_year = '.$days_in_current_year .' amount_to_consider = '. $amount_to_consider. ' escalation_percentage_or_amount = '.$escalation_percentage_or_amount .' diff_in_days = '.$diff_in_days);
-
                                         $amount_to_consider = $amount_to_consider * (1 + (($escalation_percentage_or_amount / 100) / $days_in_current_year) * $diff_in_days);
-                                        \Log::info('Final Value = '.$amount_to_consider);
 
                                     } else {
                                         $escalation_percentage_or_amount = $data['inconsistent_escalated_amount'][$start_year][$key];
@@ -496,20 +474,6 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
                                 //$amount_to_consider = $payment->payment_per_interval_per_unit;
                                 $amount_to_consider = $payments_in_this_year_month->total_payment_amount;
                             }
-
-//                            if($subsequent_modify_required && $start_year <= $effective_date->format('Y') && $key <= $effective_date->format('m')){
-//                                //have to take out the escalation percentage that was applied in the initial valuation..
-//                                $filtered_data = $filtered_escalation_dates
-//                                    ->where('escalation_year', '=', $start_year)->where('escalation_month', '=',$key)
-//                                    ->first();
-//                                if(count($filtered_data) == 1){
-//                                    $escalation_percentage_or_amount = $filtered_data->value_escalated;
-//                                    $amount_to_consider = $filtered_data->total_amount_payable;
-//                                }
-//                                $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
-//                            } else {
-//                                $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
-//                            }
 
                             $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
                         }

@@ -412,6 +412,8 @@ $(document).ready(function () {
                         $('.computed_fields').removeClass('hidden');
 
                         $('.inconsistently_applied').addClass('hidden');
+
+                        $(".consistency_gap").removeClass('hidden');
                     }
                 }
             });
@@ -471,6 +473,8 @@ $(document).ready(function () {
 
                     //show the inconsistently form fields here
                     $('.inconsistently_applied').removeClass('hidden');
+
+                    $(".consistency_gap").addClass('hidden');
 
                     refreshInconsistentEscalations();
                 } else {

@@ -180,7 +180,7 @@ class UnderlyingLeaseAssetController extends Controller
                     'accounting_treatment.required_if_prior_to_date' => 'The accounting period is required when Start Date of Lease Payment / Accrual Period is prior to '.$base_date_formatted.'.'
                 ];
 
-                if (date('Y-m-d', strtotime($request->accural_period)) < date('Y-m-d', strtotime($base_date))) {
+                if (date('Y-m-d', strtotime($request->accural_period)) < date('Y-m-d', strtotime($base_date)) && $request->accounting_treatment != 2) {
                     $rules['using_lease_payment'] = 'required';
                 }
 

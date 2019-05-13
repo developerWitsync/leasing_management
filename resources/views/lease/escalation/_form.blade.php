@@ -128,13 +128,39 @@
             </div>
         </div>
 
+
+        <!-- Consistency Gap -->
+
+        <div class="form-group{{ $errors->has('consistency_gap') ? ' has-error' : '' }} required @if(old('is_escalation_applied_annually_consistently', $model->is_escalation_applied_annually_consistently) == 'yes') @else hidden @endif consistency_gap">
+            <label for="consistency_gap" class="col-md-12 control-label">Consistency Gap</label>
+            <div class="col-md-12 form-check form-check-inline">
+                <select class="form-control" name="consistency_gap">
+                    <option value="">--Select Years--</option>
+                    @foreach($escalation_consistency_gap as $setting)
+                        <option value="{{ $setting->years }}" @if(old('consistency_gap', $model->consistency_gap) == $setting->years) selected="selected" @endif>
+                            @if($setting->years ==  1)
+                                Annual
+                            @else
+                                {{ $setting->years }}
+                            @endif
+                        </option>
+                    @endforeach
+                </select>
+                @if ($errors->has('consistency_gap'))
+                    <span class="help-block">
+                        <strong>{{ $errors->first('consistency_gap') }}</strong>
+                    </span>
+                @endif
+            </div>
+        </div>
+
         <div class="form-group{{ $errors->has('fixed_rate') ? ' has-error' : '' }} required @if(old('is_escalation_applied_annually_consistently', $model->is_escalation_applied_annually_consistently) == 'yes' && old('escalation_basis', $model->escalation_basis) == '1' && (old('escalation_rate_type', $model->escalation_rate_type) == '1' || old('escalation_rate_type', $model->escalation_rate_type) == '3'))  @else hidden @endif is_j_12_y_e_s_fixed_rate">
             <label for="fixed_rate" class="col-md-12 control-label">Specify Fixed Rate</label>
             <div class="col-md-12 form-check form-check-inline">
                 <select class="form-control" name="fixed_rate">
                     <option value="">--Select Fixed Rate Percentage--</option>
                     @foreach($escalation_percentage_settings as $setting)
-                        <option value="{{ $setting->number }}" @if(old('fixed_rate', $model->fixed_rate) == $setting->number) @endif>{{ $setting->number }}%</option>
+                        <option value="{{ $setting->number }}" @if(old('fixed_rate', $model->fixed_rate) == $setting->number) selected="selected" @endif>{{ $setting->number }}%</option>
                     @endforeach
                 </select>
                 @if ($errors->has('fixed_rate'))

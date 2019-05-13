@@ -436,6 +436,14 @@ Route::middleware('auth')->group(function () {
             Route::post('add-escalation-percentage-number', ['as' => 'settings.leaseclassification.addescalationpercentagenumber', 'uses' => 'LeaseClassificationController@addEscalationPercentageNumber']);
             Route::match(['get', 'post'], '/edit-escalation-percentage-number/{id}', ['as' => 'settings.leaseclassification.editescalationpercentagenumber', 'uses' => 'LeaseClassificationController@editEscalationPercentageNumber']);
             Route::delete('delete-escalation-percentage-number/{id}', ['as' => 'settings.leaseclassification.deleteescalationpercentagenumber', 'uses' => 'LeaseClassificationController@deleteEscalationPercentageNumber']);
+
+            /**
+             * Escalation Consistency Gap
+             */
+            Route::post('add-escalation-consistency-gap', ['as'=> 'settings.leaseclassification.addescalationconsistencygap', 'uses' => 'LeaseClassificationController@addEscalationConsistencyGap']);
+            Route::match(['get', 'post'], '/edit-escalation-consistency-gap/{id}', ['as' => 'settings.leaseclassification.editescalationconsistencygap', 'uses' => 'LeaseClassificationController@editEscalationConsistencyGap']);
+            Route::delete('delete-escalation-consistency-gap/{id}', ['as' => 'settings.leaseclassification.deleteescalationconsistencygap', 'uses' => 'LeaseClassificationController@deleteEscalationConsistencyGap']);
+
             /**
              * Lease Modification Reason
              */

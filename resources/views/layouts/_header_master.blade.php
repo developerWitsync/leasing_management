@@ -62,7 +62,6 @@
                     <li><a href="/">Home</a></li>
                     <li><a href="{{ route('information.about') }}">About Us</a></li>
                     <li><a href="{{ route('information.services') }}">Services</a></li>
-                    <li><a href="{{ route('information.services') }}">Services</a></li>
                     <li><a href="{{ route('master.leasingsoftware.index') }}">Leasing Software</a></li>
                     <li class="dropdown">
                         <a href="javascript: void(0);" class="dropdown-toggle" >Pricing <i class="fa fa-angle-down"></i></a>
