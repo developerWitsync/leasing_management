@@ -87,7 +87,7 @@
                                 }
                             @endphp
                             <div class="col-md-5th-1 col-sm-4 col-md-offset-0 col-sm-offset-2">
-                                <div class="panel  {{ $classes_array[$key] }}">
+                                <div class="panel  {{ isset($classes_array[$key])?$classes_array[$key]:$classes_array[4] }}">
 
                                     @if($plan->most_popular)
                                         <div class="cnrflash">
