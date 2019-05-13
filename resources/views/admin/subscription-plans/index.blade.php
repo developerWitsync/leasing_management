@@ -155,9 +155,9 @@
                         "className" : "text-center",
                         "render" : function(data, type, full, meta) {
                             var html = "<button  data-toggle='tooltip' data-placement='top' title='Edit Subscription Plan' type=\"button\" data-plan='"+full['id']+"' class=\"btn btn-success edit_plan\">Edit</button>";
-                            if(full['is_custom'] == '1'){
+                            // if(full['is_custom'] == '1'){
                                 html += "&nbsp;<button  data-toggle='tooltip' data-placement='top' title='Delete Custom Subscription Plan' type=\"button\" data-plan='"+full['id']+"' class=\"btn btn-danger delete_plan\">Delete</button>";
-                            }
+                            // }
                             return html;
                         }
                     }
