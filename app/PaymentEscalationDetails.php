@@ -32,4 +32,8 @@ class PaymentEscalationDetails extends Model
     public function escalationBasis(){
         return $this->hasOne('App\ContractEscalationBasis', 'id', 'escalation_basis');
     }
+
+    public function escalationInconsistentInputs(){
+        return $this->hasOne('App\PaymentEscalationInconsistentData', 'payment_id', 'payment_id');
+    }
 }

@@ -656,7 +656,7 @@ class LeaseValuationController extends Controller
 
             return Excel::download(new InterestAndDepreciationExport($asset->id), 'interest_and_depreciation.xlsx');
         } catch (\Exception $e){
-            dd($e);
+            abort(404);
         }
     }
 
@@ -674,8 +674,15 @@ class LeaseValuationController extends Controller
             $lease = $asset->lease;
             $data = PaymentEscalationDetails::query()
                 ->where('payment_id', '=', $payment->id)
-                ->first()
-                ->toArray();
+                ->first();
+
+            $inconsistentDetails = $data->escalationInconsistentInputs;
+
+            $data = $data->toArray();
+            if($inconsistentDetails) {
+                $inconsistentDetails = unserialize($inconsistentDetails->inconsistent_data);
+                $data = array_merge($data, $inconsistentDetails);
+            }
 
             $escalation = generateEsclationChart($data, $payment, $lease, $asset);
 

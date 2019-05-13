@@ -331,6 +331,7 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
                 if ($payments_in_this_year_month) {
 
                     if ($payments_in_this_year_month->total_payment_amount > 0) {
+
                         //yes the user is paying on this month of this year
                         //the condition is applying the escalations only on the escalation date
                         //however it should apply the escalation on the next year as well
@@ -339,8 +340,7 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
 
                         if ($condition) {
 
-                            if ($amount_to_consider == 0) {
-                                //$amount_to_consider = $payment->payment_per_interval_per_unit;
+                            if ($amount_to_consider == 0 || $payment->lease_payment_per_interval == 2) {
                                 $amount_to_consider = $payments_in_this_year_month->total_payment_amount;
                             }
 
@@ -361,10 +361,12 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
                             }
 
                             $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
+
                             $escalation_date->addYear($consistency_gap); //applied annually
+
                         } else {
                             //escalation is not applied however the user needs to pay for this month and year
-                            if ($amount_to_consider == 0) {
+                            if ($amount_to_consider == 0 || $payment->lease_payment_per_interval == 2) {
                                 //$amount_to_consider = $payment->payment_per_interval_per_unit;
                                 $amount_to_consider = $payments_in_this_year_month->total_payment_amount;
                             }
@@ -413,7 +415,7 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
                             foreach ($data['inconsistent_effective_date'][$start_year] as $key => $escalation_date) {
                                 $escalation_date_parsed = \Carbon\Carbon::parse($escalation_date);
                                 if ($escalation_date_parsed->between($first_date_of_month, $last_date_of_month)) {
-                                    if ($amount_to_consider == 0) {
+                                    if ($amount_to_consider == 0 || $payment->lease_payment_per_interval == 2) {
                                         //$amount_to_consider = $payment->payment_per_interval_per_unit;
                                         $amount_to_consider = $payments_in_this_year_month->total_payment_amount;
                                     }
@@ -461,7 +463,7 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
 
                                     } else {
                                     //escalation is not applied however the user needs to pay for this month and year
-                                    if ($amount_to_consider == 0) {
+                                    if ($amount_to_consider == 0 || $payment->lease_payment_per_interval == 2) {
                                         //$amount_to_consider = $payment->payment_per_interval_per_unit;
                                         $amount_to_consider = $payments_in_this_year_month->total_payment_amount;
                                     }
@@ -470,7 +472,7 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
                             }
                         } else {
                             //escalation is not applied however the user needs to pay for this month and year
-                            if ($amount_to_consider == 0) {
+                            if ($amount_to_consider == 0 || $payment->lease_payment_per_interval == 2) {
                                 //$amount_to_consider = $payment->payment_per_interval_per_unit;
                                 $amount_to_consider = $payments_in_this_year_month->total_payment_amount;
                             }
@@ -508,7 +510,7 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
 
                     if ($payments_in_this_year_month->total_payment_amount > 0) {
                         //escalation is not applied however the user needs to pay for this month and year
-                        if ($amount_to_consider == 0) {
+                        if ($amount_to_consider == 0 || $payment->lease_payment_per_interval == 2) {
                             //$amount_to_consider = $payment->payment_per_interval_per_unit;
                             $amount_to_consider = $payments_in_this_year_month->total_payment_amount;
                         }

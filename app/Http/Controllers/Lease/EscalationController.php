@@ -339,10 +339,16 @@ class EscalationController extends Controller
                 $start_year = $start_date->format('Y');
                 $end_year = $end_date->format('Y');
 
-                if($start_year == $end_year) {
-                    $years[] = $end_year;
-                } else if($end_year > $start_year) {
-                    $years = range($start_year, $end_year);
+                if($payment->lease_payment_per_interval == 2){
+                    foreach ($payment->paymentDueDates as $payment_date){
+                        $years[] = Carbon::parse($payment_date->date)->format('Y');
+                    }
+                } else {
+                    if($start_year == $end_year) {
+                        $years[] = $end_year;
+                    } else if($end_year > $start_year) {
+                        $years = range($start_year, $end_year);
+                    }
                 }
 
                 $lease_end_date = $payment->asset->getLeaseEndDate($payment->asset);
@@ -424,6 +430,8 @@ class EscalationController extends Controller
                         if($request->escalation_basis == '2') {
                             $rules['escalated_amount'] = 'required|numeric|min:1';
                         }
+
+                        $rules['consistency_gap'] = 'required|numeric|min:1';
                     }
 
                     $validator = Validator::make($request->except('_token', 'method', 'uri', 'ip'), $rules);

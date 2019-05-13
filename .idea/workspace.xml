@@ -2,24 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1c290435-4779-45fe-873f-5594138f8734" name="Default Changelist" comment="Merge branch 'master' of http://100.100.7.4:8081/root/Witsync-Lease-Management&#10;&#10;# Conflicts:&#10;#&#9;app/Helpers/Helpers.php&#10;#&#9;config/settings.php&#10;#&#9;public/css/custom.css">
-      <change afterPath="$PROJECT_DIR$/resources/views/settings/classification/_edit_escalation_consistency_gap.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/himanshur.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/himanshur.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Helpers/Helpers.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Helpers/Helpers.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/RegisterController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Auth/RegisterController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/EscalationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/EscalationController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/UnderlyingLeaseAssetController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/UnderlyingLeaseAssetController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Settings/LeaseClassificationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Settings/LeaseClassificationController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Observers/UserObserver.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Observers/UserObserver.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Leasevaluation/LeaseValuationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Leasevaluation/LeaseValuationController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/PaymentEscalationDetails.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/PaymentEscalationDetails.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/settings.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/settings.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/pages/escalations.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/pages/escalations.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/4_invoice.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/uploads/4_invoice.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/layouts/_header_master.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/_header_master.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/escalation/_form.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/escalation/_form.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-assets/indexv2.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-assets/indexv2.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/settings/classification/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/settings/classification/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -49,10 +36,9 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/web.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="190">
-              <caret line="168" column="46" selection-start-line="168" selection-start-column="46" selection-end-line="168" selection-end-column="46" />
+            <state relative-caret-position="567">
+              <caret line="376" column="153" selection-start-line="376" selection-start-column="134" selection-end-line="376" selection-end-column="153" />
               <folding>
-                <element signature="e#28321#32163#2#PHP" />
                 <element signature="e#32285#43341#2#PHP" />
                 <element signature="e#32340#33348#2#PHP" />
                 <element signature="e#33405#38061#2#PHP" />
@@ -65,14 +51,92 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/SelectLowValueController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
-              <caret line="47" column="12" selection-start-line="47" selection-start-column="12" selection-end-line="47" selection-end-column="12" />
+            <state relative-caret-position="272">
+              <caret line="62" column="85" selection-start-line="62" selection-start-column="85" selection-end-line="62" selection-end-column="85" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/Helpers/Helpers.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="158">
+              <caret line="414" column="85" selection-start-line="414" selection-start-column="74" selection-end-line="414" selection-end-column="85" />
               <folding>
-                <element signature="e#45#81#0#PHP" expanded="true" />
+                <element signature="n#uploadImage#0;n#!!top" />
+                <element signature="n#getUserProfileImageSrc#0;n#!!top" />
+                <element signature="n#getParentDetails#0;n#!!top" />
+                <element signature="n#updateCreditBalanceForParent#0;n#!!top" />
+                <element signature="n#fetchCurrenciesFromSettings#0;n#!!top" />
+                <element signature="n#calculatePaymentDueDatesByPaymentId#0;n#!!top" />
+                <element signature="n#firstEscalationDate#0;n#!!top" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Leasevaluation/LeaseValuationController.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="312">
+              <caret line="706" column="33" selection-start-line="706" selection-start-column="33" selection-end-line="706" selection-end-column="33" />
+              <folding>
+                <element signature="e#144#181#0#PHP" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/EscalationController.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="312">
+              <caret line="210" column="62" selection-start-line="210" selection-start-column="62" selection-end-line="210" selection-end-column="62" />
+              <folding>
+                <element signature="e#8507#16090#0#PHP" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/views/lease/escalation/_form.blade.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="516">
+              <caret line="379" column="101" selection-start-line="379" selection-start-column="79" selection-end-line="379" selection-end-column="101" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/js/pages/escalations.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="162">
+              <caret line="160" column="84" selection-start-line="160" selection-start-column="53" selection-end-line="160" selection-end-column="84" />
+              <folding>
+                <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/PaymentEscalationInconsistentData.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="102">
+              <caret line="6" column="39" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="39" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/PaymentEscalationDetails.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="102">
+              <caret line="6" column="6" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
             </state>
           </provider>
         </entry>
@@ -88,12 +152,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>update-asset-for-subsequent</find>
-      <find>updateAssetForSubsequent</find>
-      <find>generateDataForInterestAndDepreciationTab</find>
-      <find>Adjustom</find>
-      <find>new_value_of_lease_asset</find>
-      <find>$existing_lease_liability_balance</find>
       <find>existing_lease_liability</find>
       <find>$increase_or_decrease</find>
       <find>$check_date</find>
@@ -118,6 +176,12 @@
       <find>create</find>
       <find>create(</find>
       <find>compute</find>
+      <find>escalationChart</find>
+      <find>$years</find>
+      <find>show-escalation-chart</find>
+      <find>showEscalationChart</find>
+      <find>_inconsistent_escalation_inputs</find>
+      <find>$inconsistentDataModel</find>
     </findStrings>
     <replaceStrings>
       <replace>col-md-6 col-sm-6 btn-backnextBx</replace>
@@ -151,7 +215,6 @@
         <option value="$PROJECT_DIR$/resources/views/auth/_all_policies.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/auth/passwords/reset.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/leasevaluation/partials/_pv_calculus.blade.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Leasevaluation/LeaseValuationController.php" />
         <option value="$PROJECT_DIR$/resources/views/leasevaluation/interest_depreciation.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/leasevaluation/overview.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/leasevaluation/valuation.blade.php" />
@@ -188,15 +251,16 @@
         <option value="$PROJECT_DIR$/app/Http/Controllers/Settings/LeaseClassificationController.php" />
         <option value="$PROJECT_DIR$/resources/views/settings/classification/index.blade.php" />
         <option value="$PROJECT_DIR$/routes/web.php" />
-        <option value="$PROJECT_DIR$/app/Helpers/Helpers.php" />
-        <option value="$PROJECT_DIR$/app/PaymentEscalationDetails.php" />
         <option value="$PROJECT_DIR$/database/migrations/2019_05_13_082204_add_column_consistency_gap_to_payment_escalation.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/EscalationController.php" />
         <option value="$PROJECT_DIR$/resources/views/lease/escalation/_form.blade.php" />
         <option value="$PROJECT_DIR$/config/settings.php" />
         <option value="$PROJECT_DIR$/app/Observers/UserObserver.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Auth/RegisterController.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/EscalationController.php" />
+        <option value="$PROJECT_DIR$/app/Helpers/Helpers.php" />
+        <option value="$PROJECT_DIR$/app/PaymentEscalationDetails.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Leasevaluation/LeaseValuationController.php" />
       </list>
     </option>
   </component>
@@ -332,6 +396,27 @@
               <item name="witsync" type="b2602c69:ProjectViewProjectNode" />
               <item name="witsync" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="witsync" type="b2602c69:ProjectViewProjectNode" />
+              <item name="witsync" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="witsync" type="b2602c69:ProjectViewProjectNode" />
+              <item name="witsync" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="lease" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="witsync" type="b2602c69:ProjectViewProjectNode" />
+              <item name="witsync" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="lease" type="462c0819:PsiDirectoryNode" />
+              <item name="escalation" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -480,12 +565,12 @@
       <workItem from="1557289414548" duration="26713000" />
       <workItem from="1557376605330" duration="20986000" />
       <workItem from="1557462126294" duration="10638000" />
-      <workItem from="1557721965173" duration="12350000" />
+      <workItem from="1557721965173" duration="21072000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1548224000" />
+    <option name="totallyTimeSpent" value="1556946000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -586,27 +671,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/resources/views/admin/subscription-plans/_formcustomplan.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="29" column="57" selection-start-line="29" selection-start-column="57" selection-end-line="29" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/leasevaluation/interest_depreciation.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="16" column="100" selection-start-line="16" selection-start-column="100" selection-end-line="16" selection-end-column="108" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2019_05_07_061854_add_column_increase_decrease_to_lease_assets.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="28" column="52" lean-forward="true" selection-start-line="28" selection-start-column="52" selection-end-line="28" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/auth/register.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="389">
@@ -700,16 +764,6 @@
           <caret line="28" lean-forward="true" selection-start-line="28" selection-end-line="28" />
           <folding>
             <element signature="e#31#63#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Leasevaluation/LeaseValuationController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="516">
-          <caret line="656" column="53" selection-start-line="656" selection-start-column="53" selection-end-line="656" selection-end-column="53" />
-          <folding>
-            <element signature="e#144#181#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -837,16 +891,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/js/pages/escalations.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="295">
-          <caret line="452" column="66" selection-start-line="452" selection-start-column="66" selection-end-line="452" selection-end-column="66" />
-          <folding>
-            <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/database/migrations/2019_05_13_063322_create_table_escalation_consistency_gap.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="527">
@@ -916,13 +960,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/PaymentEscalationDetails.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="23" column="32" lean-forward="true" selection-start-line="23" selection-start-column="32" selection-end-line="23" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/config/settings.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="474">
@@ -930,10 +967,105 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/escalation/create.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="24" column="14" lean-forward="true" selection-start-line="24" selection-start-column="14" selection-end-line="24" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Auth/RegisterController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="389">
+          <caret line="82" column="11" lean-forward="true" selection-start-line="82" selection-start-column="11" selection-end-line="82" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="47" column="12" selection-start-line="47" selection-start-column="12" selection-end-line="47" selection-end-column="12" />
+          <folding>
+            <element signature="e#45#81#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/PaymentEscalationDates.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="21" lean-forward="true" selection-start-line="21" selection-end-line="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/web.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="567">
+          <caret line="376" column="153" selection-start-line="376" selection-start-column="134" selection-end-line="376" selection-end-column="153" />
+          <folding>
+            <element signature="e#32285#43341#2#PHP" />
+            <element signature="e#32340#33348#2#PHP" />
+            <element signature="e#33405#38061#2#PHP" />
+            <element signature="e#38108#39460#2#PHP" />
+            <element signature="e#39509#40990#2#PHP" />
+            <element signature="e#41063#42967#2#PHP" />
+            <element signature="e#43016#43145#2#PHP" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/SelectLowValueController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="62" column="85" selection-start-line="62" selection-start-column="85" selection-end-line="62" selection-end-column="85" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/escalation/_form.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="516">
+          <caret line="379" column="101" selection-start-line="379" selection-start-column="79" selection-end-line="379" selection-end-column="101" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/PaymentEscalationInconsistentData.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="39" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/js/pages/escalations.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="160" column="84" selection-start-line="160" selection-start-column="53" selection-end-line="160" selection-end-column="84" />
+          <folding>
+            <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/EscalationController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="312">
+          <caret line="210" column="62" selection-start-line="210" selection-start-column="62" selection-end-line="210" selection-end-column="62" />
+          <folding>
+            <element signature="e#8507#16090#0#PHP" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/PaymentEscalationDetails.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="6" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/Helpers/Helpers.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3516">
-          <caret line="283" column="75" lean-forward="true" selection-start-line="283" selection-start-column="75" selection-end-line="283" selection-end-column="75" />
+        <state relative-caret-position="158">
+          <caret line="414" column="85" selection-start-line="414" selection-start-column="74" selection-end-line="414" selection-end-column="85" />
           <folding>
             <element signature="n#uploadImage#0;n#!!top" />
             <element signature="n#getUserProfileImageSrc#0;n#!!top" />
@@ -946,60 +1078,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/lease/escalation/_form.blade.php">
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Leasevaluation/LeaseValuationController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="431">
-          <caret line="148" column="53" lean-forward="true" selection-start-line="148" selection-start-column="53" selection-end-line="148" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/lease/escalation/create.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="24" column="14" lean-forward="true" selection-start-line="24" selection-start-column="14" selection-end-line="24" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/EscalationController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="612">
-          <caret line="327" column="21" lean-forward="true" selection-start-line="327" selection-start-column="21" selection-end-line="327" selection-end-column="21" />
+        <state relative-caret-position="312">
+          <caret line="706" column="33" selection-start-line="706" selection-start-column="33" selection-end-line="706" selection-end-column="33" />
           <folding>
-            <element signature="e#12222#15959#0#PHP" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Auth/RegisterController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="389">
-          <caret line="82" column="11" lean-forward="true" selection-start-line="82" selection-start-column="11" selection-end-line="82" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/routes/web.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="168" column="46" selection-start-line="168" selection-start-column="46" selection-end-line="168" selection-end-column="46" />
-          <folding>
-            <element signature="e#28321#32163#2#PHP" />
-            <element signature="e#32285#43341#2#PHP" />
-            <element signature="e#32340#33348#2#PHP" />
-            <element signature="e#33405#38061#2#PHP" />
-            <element signature="e#38108#39460#2#PHP" />
-            <element signature="e#39509#40990#2#PHP" />
-            <element signature="e#41063#42967#2#PHP" />
-            <element signature="e#43016#43145#2#PHP" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="47" column="12" selection-start-line="47" selection-start-column="12" selection-end-line="47" selection-end-column="12" />
-          <folding>
-            <element signature="e#45#81#0#PHP" expanded="true" />
+            <element signature="e#144#181#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
