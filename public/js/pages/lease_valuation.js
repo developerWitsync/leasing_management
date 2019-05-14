@@ -1,3 +1,18 @@
+function showHistoricalAnnexure(asset_id){
+    if(asset_id) {
+        $.ajax({
+            url : '/lease/lease-valuation/show-historical-annexure-calculus/'+asset_id,
+            beforeSend : function(){
+                $('.historical_annexure_'+asset_id).show();
+            },
+            success : function (response) {
+                $('.current_modal_body').html(response);
+                $('#myModal').modal('show');
+                $('.historical_annexure_'+asset_id).hide();
+            }
+        });
+    }
+}
 
 /**
  * Show present value calculus for an asset
@@ -53,8 +68,8 @@ $(function(){
                 $(that).text('Calculating...');
             },
             success : function (response) {
-                $(that).text(response['value'].toFixed(2));
-                total_lease_liability += parseFloat(response['value'].toFixed(2));
+                $(that).text(parseFloat(response['value']).toFixed(2));
+                total_lease_liability += parseFloat(response['value']).toFixed(2);
             }
         });
     });
@@ -70,8 +85,8 @@ $(function(){
                 $(that).text('Calculating...');
             },
             success : function (response) {
-                $(that).text(response['value'].toFixed(2));
-                total_lease_liability += parseFloat(response['value'].toFixed(2));
+                $(that).text(parseFloat(response['value']).toFixed(2));
+                total_lease_liability += parseFloat(response['value']).toFixed(2);
             }
         });
     });
@@ -87,8 +102,8 @@ $(function(){
                 $(that).text('Calculating...');
             },
             success : function (response) {
-                $(that).text(response['value'].toFixed(2));
-                total_lease_liability += parseFloat(response['value'].toFixed(2));
+                $(that).text(parseFloat(response['value']).toFixed(2));
+                total_lease_liability += parseFloat(response['value']).toFixed(2);
             }
         });
     });
@@ -104,7 +119,7 @@ $(function(){
                 $(that).text('Calculating...');
             },
             success : function (response) {
-                $(that).text(response['value'].toFixed(2));
+                $(that).text(parseFloat(response['value']).toFixed(2));
                 total_lease_liability += parseFloat(response['value'].toFixed(2));
             }
         });
@@ -142,7 +157,7 @@ $(function(){
         var asset_id = $(this).data('asset_id');
 
         if(typeof (lease_valuation_array[asset_id])!="undefined"){
-            $(this).text(lease_valuation_array[asset_id].toFixed(2));
+            $(this).text(parseFloat(lease_valuation_array[asset_id]).toFixed(2));
         } else {
             var that = $(this);
             $.ajax({
@@ -156,12 +171,65 @@ $(function(){
                     $(that).text('Calculating...');
                 },
                 success : function (response) {
-                    $(that).text(response['value'].toFixed(2));
+                    $(that).text(parseFloat(response['value']).toFixed(2));
                     lease_valuation_array[asset_id] = response['value'];
                 }
             });
         }
+    });
 
+    /**
+     * Historical present value of lease liability for the aset
+     */
+    $('.historical_present_value_of_lease_liability').each(function(index, value){
+        var asset_id = $(this).data('asset_id');
+        var that = $(this);
+        $.ajax({
+            url : '/lease/lease-valuation/historical-present-value/'+asset_id,
+            dataType : 'json',
+
+            async : false,
+            beforeSend : function(){
+                $(that).text('Calculating...');
+            },
+            success : function (response) {
+                $(that).text(parseFloat(response['value']).toFixed(2));
+            }
+        });
+    });
+
+    /**
+     * carrying amount details for the second method i.e Modified Retrospective Approach by adjusting the Opening Equity
+     */
+    $('.value_of_lease_asset_under_first_method').each(function(index, value){
+        var asset_id = $(this).data('asset_id');
+
+        if(typeof (lease_valuation_array[asset_id])!="undefined"){
+            $(this).text(parseFloat(lease_valuation_array[asset_id]).toFixed(2));
+        } else {
+            var that = $(this);
+            $.ajax({
+                url : '/lease/lease-valuation/carrying-amount-calculations/'+asset_id,
+                dataType : 'json',
+                data : {
+                    lease_liability_value : lease_liability_array[asset_id],
+                    prepaid_lease_payment: $('#prepaid_lease_payment').text()
+                },
+                async : false,
+                beforeSend : function(){
+                    $(that).text('Calculating...');
+                },
+                success : function (response) {
+                    if(response['status']){
+                        $(that).text(parseFloat(response['value']).toFixed(2));
+                        $('.adjustment_to_equity').text(parseFloat(response['adjustment_to_equity']).toFixed(2));
+                        lease_valuation_array[asset_id] = response['value'];
+                    } else {
+                        alert('Something went wrong.Please try again.');
+                    }
+                }
+            });
+        }
     });
 
     //Calculate and show the impairment_if_any on the impairment test
@@ -179,7 +247,7 @@ $(function(){
                 $(that).text('Calculating...');
             },
             success : function (response) {
-                $(that).text(response['value'].toFixed(2));
+                $(that).text(parseFloat(response['value']).toFixed(2));
             }
         });
     });

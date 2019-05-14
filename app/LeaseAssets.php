@@ -38,7 +38,9 @@ class LeaseAssets extends Model
         'impairment_test_value',
         'increase_decrease',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'historical_present_value_of_lease_liability',
+        'adjustment_to_equity'
     ];
 
     public function accountingTreatment(){
@@ -238,11 +240,13 @@ class LeaseAssets extends Model
 
     /**
      * calculate the Present Value of Lease Liability
+     * calculates the historical present value of lease liability as well.
      * @param bool $return_value
      * @param null $payment_id
-     * @return array|int
+     * @param bool $historical
+     * @return array|int|mixed
      */
-    public function presentValueOfLeaseLiability($return_value = false, $payment_id = null)
+    public function presentValueOfLeaseLiability($return_value = false, $payment_id = null, $historical = false)
     {
 
         $lease = $this->lease;
@@ -260,7 +264,11 @@ class LeaseAssets extends Model
             $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
         }
 
-        $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
+        if($historical){
+            $base_date = Carbon::parse($this->lease_start_date);
+        } else {
+            $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
+        }
         $end_date = Carbon::parse($this->getLeaseEndDate($this));
 
         $start_year = $base_date->format('Y');
@@ -281,8 +289,6 @@ class LeaseAssets extends Model
         $present_value_of_lease_liability =  [];
 
         $total_lease_liability = 0;
-
-        $first_year = $start_year;
 
         if ($payment_id) {
             $payments = LeaseAssetPayments::query()->where('id', '=', $payment_id)->get();
@@ -322,9 +328,12 @@ class LeaseAssets extends Model
                 }
             }
 
-            //save the present value for the payment here....
-            $payment->setAttribute('present_value', $total_lease_liability);
-            $payment->save();
+            //save only when the historical present value is not getting calculated...
+            if(!$historical) {
+                //save the present value for the payment here....
+                $payment->setAttribute('present_value', $total_lease_liability);
+                $payment->save();
+            }
 
         }
 
@@ -452,9 +461,107 @@ class LeaseAssets extends Model
         return $total;
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function paymentsduedate()
     {
         return $this->hasMany('App\LeaseAssetPaymenetDueDate', 'asset_id', 'id');
     }
 
+    /**
+     * fetches all the payments for the asset including the escalations and including the termination, residual and purchase options as well
+     * this function will be used on review submit controller to generate the interest and depreciation annexure
+     * this function is called on the Lease Valuation to generate the annexure for the "Modified Retrospective Approach by adjusting the Opening Equity" method
+     * @param self $asset
+     * @param $start_date
+     * @param $end_date
+     * @return mixed
+     */
+    public function fetchAllPaymentsForAnnexure(self $asset, $start_date, $end_date){
+        $sql = "SELECT 
+                        `lease_asset_payment_dates`.`date`,
+                        SUM(IF(ISNULL(`payment_escalation_dates`.`id`), `lease_asset_payment_dates`.`total_payment_amount` , `payment_escalation_dates`.`total_amount_payable`)) as `total_amount_payable`
+                    FROM
+                        `lease_assets_payments`
+                            LEFT JOIN
+                        `lease_asset_payment_dates` ON `lease_assets_payments`.`id` = `lease_asset_payment_dates`.`payment_id`
+                            LEFT JOIN
+                        `payment_escalation_dates` ON (
+                            `lease_assets_payments`.`id` = `payment_escalation_dates`.`payment_id`
+                             AND year(`lease_asset_payment_dates`.`date`) = `payment_escalation_dates`.`escalation_year` 
+                             AND month(`lease_asset_payment_dates`.`date`) = `payment_escalation_dates`.`escalation_month`
+                          )
+                    WHERE
+                        `lease_assets_payments`.`asset_id` = {$asset->id}
+                          and `lease_asset_payment_dates`.`date` >= '{$start_date}'
+                          and `lease_asset_payment_dates`.`date` <= '{$end_date}'
+                          and `lease_assets_payments`.`type` <> '2'
+                    GROUP BY `lease_asset_payment_dates`.`date`";
+
+        $lease_payments = DB::select($sql);
+
+        //add the residual value guarantee as well..
+        if ($asset->residualGuranteeValue->any_residual_value_gurantee == "yes") {
+
+            $payment_dates = array_where($lease_payments, function($value) use ($end_date){
+                return $end_date->equalTo(Carbon::parse($value->date));
+            });
+
+            $new_array['date'] = $end_date->format('Y-m-d');
+            $new_array['total_amount_payable'] = $asset->residualGuranteeValue->residual_gurantee_value;
+            if(!empty($payment_dates)){
+                $key = key($payment_dates);
+                $payment_dates = array_values($payment_dates);
+                $new_array['total_amount_payable'] = $asset->residualGuranteeValue->residual_gurantee_value + $payment_dates[0]->total_amount_payable;
+                $lease_payments[$key] = (object)$new_array;
+            } else {
+                $new_array['total_amount_payable'] = $asset->residualGuranteeValue->residual_gurantee_value;
+                array_push($lease_payments, (object)$new_array);
+            }
+
+        }
+
+        //add the termination, residual and purchase to the last key if exists
+        if ($asset->terminationOption->lease_termination_option_available == "yes" && $asset->terminationOption->exercise_termination_option_available == "yes" && $asset->terminationOption->termination_penalty_applicable == "yes") {
+
+            $termination_date = $asset->terminationOption->lease_end_date;
+            $payment_dates = array_where($lease_payments, function($value) use ($termination_date){
+                return Carbon::parse($termination_date)->equalTo(Carbon::parse($value->date));
+            });
+
+            $new_array['date'] = $asset->terminationOption->lease_end_date;
+            $new_array['total_amount_payable'] = $asset->terminationOption->termination_penalty;
+            if(!empty($payment_dates)){
+                $key = key($payment_dates);
+                $payment_dates = array_values($payment_dates);
+                $new_array['total_amount_payable'] = $asset->terminationOption->termination_penalty + $payment_dates[0]->total_amount_payable;
+                $lease_payments[$key] = (object)$new_array;
+            } else {
+                $new_array['total_amount_payable'] = $asset->terminationOption->termination_penalty;
+                array_push($lease_payments, (object)$new_array);
+            }
+        }
+
+        //add the purchase option as well as well..
+        if ($asset->purchaseOption && $asset->purchaseOption->purchase_option_clause == "yes" && $asset->purchaseOption->purchase_option_exerecisable == "yes") {
+            $purchase_date = $asset->purchaseOption->expected_purchase_date;
+            $payment_dates = array_where($lease_payments, function($value) use ($purchase_date){
+                return Carbon::parse($purchase_date)->equalTo(Carbon::parse($value->date));
+            });
+            $new_array['date'] = $asset->purchaseOption->expected_purchase_date;
+            $new_array['total_amount_payable'] = $asset->purchaseOption->purchase_price;
+            if(!empty($payment_dates)){
+                $key = key($payment_dates);
+                $payment_dates = array_values($payment_dates);
+                $new_array['total_amount_payable'] = $asset->purchaseOption->purchase_price + $payment_dates[0]->total_amount_payable;
+                $lease_payments[$key] = (object)$new_array;
+            } else {
+                $new_array['total_amount_payable'] = $asset->purchaseOption->purchase_price;
+                array_push($lease_payments, (object)$new_array);
+            }
+        }
+
+        return $lease_payments;
+    }
 }

@@ -1268,7 +1268,62 @@ function getBackUrl($step, $id)
 
 }
 
-
+/**
+ * recaptcha
+ * @return \ReCaptcha\RequestMethod\Post
+ */
 function customRequestCaptcha(){
     return new \ReCaptcha\RequestMethod\Post();
+}
+
+/**
+ * calculate the interest expense value for the interest and Depreciation Tab
+ * @param float $previous_liability
+ * @param float $discount_rate
+ * @param int $days
+ * @return float|int
+ */
+function calculateInterestExpense(float $previous_liability, float $discount_rate, int $days)
+{
+    $discount_rate = $discount_rate * (1 / 100);
+    $interest = ($previous_liability * pow(1 + $discount_rate, $days)) - $previous_liability;
+    return round($interest, 4);
+}
+
+/**
+ * calculate and returns the total number of months...
+ * @param $start_date
+ * @param $end_date
+ * @return int
+ * @throws \Exception
+ */
+function calculateMonthsDifference($start_date, $end_date){
+    $start    = (new \DateTime($start_date))->modify('first day of this month');
+    $end      = (new \DateTime($end_date))->modify('first day of next month');
+    $interval = \DateInterval::createFromDateString('1 month');
+    $period   = new \DatePeriod($start, $interval, $end);
+    $months_array = [];
+    foreach ($period as $dt) {
+        $months_array[] = $dt->format("Y-m");
+    }
+    return count($months_array);
+}
+
+/**
+ * calculate the depreciation for the lease asset based upon the start date and end date and in case of subsequent from the effective date till the lease end date...
+ * @param $subsequent_modify_required
+ * @param $asset
+ * @param $value_of_lease_asset
+ * @return float|int
+ * @throws \Exception
+ */
+function calculateDepreciation($subsequent_modify_required, \App\LeaseAssets $asset, $value_of_lease_asset){
+    $start_date = \Carbon\Carbon::parse($asset->accural_period);
+    if(!$subsequent_modify_required) {
+        $base_date = \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date);
+        $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
+        $months = calculateMonthsDifference($base_date->format('Y-m-d'), $asset->getLeaseEndDate($asset));
+        $depreciation = (float)$value_of_lease_asset/$months;
+        return round($depreciation, 4);
+    }
 }

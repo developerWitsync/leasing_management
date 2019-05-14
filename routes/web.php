@@ -33,9 +33,7 @@ Route::namespace('Master')->prefix('pricing')->group(function () {
     Route::post('calc-cart', ['as' => 'master.pricing.calccart', 'uses' => 'PricingController@calculateCart']);
 });
 
-
 Auth::routes();
-
 
 Route::get('register', ['as' => 'register', 'uses' => 'RegisterController@index']);
 Route::post('create-account', ['as' => 'register.create', 'uses' => 'RegisterController@register']);
@@ -268,6 +266,12 @@ Route::middleware('auth')->group(function () {
             Route::get('save-lease-liability-calculus/{id}', ['as' => 'addlease.leasevaluation.savecalculus', 'uses' => 'LeaseValuationController@savePresentValueOfLeaseLiabilityCalculus']);
 
             Route::post('update-asset-for-subsequent/{id}', ['as' => 'addlease.leasevaluation.updateassetforsubsequent', 'uses' => 'LeaseValuationController@updateAssetForSubsequent']);
+
+            Route::get('carrying-amount-calculations/{id}', ['as' => 'addlease.leasevaluation.carryingamountdetails', 'uses' => 'LeaseValuationController@carryingAmountDetails']);
+
+            Route::get('historical-present-value/{id}', ['as' => 'addlease.leasevaluation.historicalpresentvalue', 'uses' => 'LeaseValuationController@historicalPresentValue']);
+
+            Route::get('show-historical-annexure-calculus/{id}', ['as' => 'addlease.leasevaluation.historicalcalculusannexure', 'uses' => 'LeaseValuationController@showHistoricalAnnexure']);
 
         });
         /**
