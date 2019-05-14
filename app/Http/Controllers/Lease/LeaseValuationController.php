@@ -470,7 +470,7 @@ class LeaseValuationController extends Controller
                 $asset->setAttribute('lease_liablity_value', $present_value_of_lease_liability);
                 $asset->save();
 
-                //$prepaid_lease_payment = isset($asset->leaseBalanceAsOnDec) ? $asset->leaseBalanceAsOnDec->prepaid_lease_payment_balance * $asset->leaseBalanceAsOnDec->exchange_rate : 0;
+                $prepaid_lease_payment = isset($asset->leaseBalanceAsOnDec) ? $asset->leaseBalanceAsOnDec->prepaid_lease_payment_balance * $asset->leaseBalanceAsOnDec->exchange_rate : 0;
 
                 $accured_lease_payment = isset($asset->leaseBalanceAsOnDec) ? $asset->leaseBalanceAsOnDec->outstanding_lease_payment_balance * $asset->leaseBalanceAsOnDec->exchange_rate : 0;
 
@@ -480,9 +480,7 @@ class LeaseValuationController extends Controller
 
                 $dismantling_cost  = isset($asset->dismantlingCost) ? (($asset->dismantlingCost->cost_of_dismantling_incurred == "yes" && $asset->dismantlingCost->obligation_cost_of_dismantling_incurred == "yes") ? $asset->dismantlingCost->total_estimated_cost : 0) : 0;
 
-                //$value_of_lease_asset = ($present_value_of_lease_liability + $prepaid_lease_payment + $initial_direct_cost + $dismantling_cost) - ($accured_lease_payment + $lease_incentive_cost);
-
-                $value_of_lease_asset = ($present_value_of_lease_liability + $initial_direct_cost + $dismantling_cost) - ($accured_lease_payment + $lease_incentive_cost);
+                $value_of_lease_asset = ($present_value_of_lease_liability + $prepaid_lease_payment + $initial_direct_cost + $dismantling_cost) - ($accured_lease_payment + $lease_incentive_cost);
 
                 $asset->setAttribute('value_of_lease_asset', $value_of_lease_asset);
                 $asset->setAttribute('adjustment_to_equity', null);
@@ -516,12 +514,14 @@ class LeaseValuationController extends Controller
 
                 if (!$request->has('lease_valuation_value')) {
                     $present_value_of_lease_liability = $asset->presentValueOfLeaseLiability(true);
-                    //$prepaid_lease_payment = isset($asset->leaseBalanceAsOnDec) ? $asset->leaseBalanceAsOnDec->prepaid_lease_payment_balance * $asset->leaseBalanceAsOnDec->exchange_rate : 0;
+                    $prepaid_lease_payment = isset($asset->leaseBalanceAsOnDec) ? $asset->leaseBalanceAsOnDec->prepaid_lease_payment_balance * $asset->leaseBalanceAsOnDec->exchange_rate : 0;
                     $accured_lease_payment = isset($asset->leaseBalanceAsOnDec) ? $asset->leaseBalanceAsOnDec->outstanding_lease_payment_balance * $asset->leaseBalanceAsOnDec->exchange_rate : 0;
                     $initial_direct_cost = isset($asset->initialDirectCost) ? ($asset->initialDirectCost->initial_direct_cost_involved == "yes" ? $asset->initialDirectCost->total_initial_direct_cost : 0) : 0;
                     $lease_incentive_cost = isset($asset->leaseIncentives) ? ($asset->leaseIncentives->is_any_lease_incentives_receivable == "yes" ? $asset->leaseIncentives->total_lease_incentives0 : 0) : 0;
-                    //$value_of_lease_asset = ($present_value_of_lease_liability + $prepaid_lease_payment + $initial_direct_cost) - ($accured_lease_payment + $lease_incentive_cost);
-                    $value_of_lease_asset = ($present_value_of_lease_liability + $initial_direct_cost) - ($accured_lease_payment + $lease_incentive_cost);
+
+                    $dismantling_cost  = isset($asset->dismantlingCost) ? (($asset->dismantlingCost->cost_of_dismantling_incurred == "yes" && $asset->dismantlingCost->obligation_cost_of_dismantling_incurred == "yes") ? $asset->dismantlingCost->total_estimated_cost : 0) : 0;
+
+                    $value_of_lease_asset = ($present_value_of_lease_liability + $prepaid_lease_payment + $initial_direct_cost + $dismantling_cost) - ($accured_lease_payment + $lease_incentive_cost);
 
                 } else {
                     $value_of_lease_asset = $request->lease_valuation_value;
