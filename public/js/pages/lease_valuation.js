@@ -69,7 +69,7 @@ $(function(){
             },
             success : function (response) {
                 $(that).text(parseFloat(response['value']).toFixed(2));
-                total_lease_liability += parseFloat(response['value']).toFixed(2);
+                total_lease_liability += parseFloat(parseFloat(response['value']).toFixed(2));
             }
         });
     });
@@ -86,7 +86,7 @@ $(function(){
             },
             success : function (response) {
                 $(that).text(parseFloat(response['value']).toFixed(2));
-                total_lease_liability += parseFloat(response['value']).toFixed(2);
+                total_lease_liability += parseFloat(parseFloat(response['value']).toFixed(2));
             }
         });
     });
@@ -103,7 +103,7 @@ $(function(){
             },
             success : function (response) {
                 $(that).text(parseFloat(response['value']).toFixed(2));
-                total_lease_liability += parseFloat(response['value']).toFixed(2);
+                total_lease_liability += parseFloat(parseFloat(response['value']).toFixed(2));
             }
         });
     });
@@ -120,7 +120,7 @@ $(function(){
             },
             success : function (response) {
                 $(that).text(parseFloat(response['value']).toFixed(2));
-                total_lease_liability += parseFloat(response['value'].toFixed(2));
+                total_lease_liability += parseFloat(parseFloat(response['value'].toFixed(2)));
             }
         });
     });
