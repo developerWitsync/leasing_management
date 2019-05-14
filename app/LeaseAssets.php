@@ -505,10 +505,10 @@ class LeaseAssets extends Model
         if ($asset->residualGuranteeValue->any_residual_value_gurantee == "yes") {
 
             $payment_dates = array_where($lease_payments, function($value) use ($end_date){
-                return $end_date->equalTo(Carbon::parse($value->date));
+                return Carbon::parse($end_date)->equalTo(Carbon::parse($value->date));
             });
 
-            $new_array['date'] = $end_date->format('Y-m-d');
+            $new_array['date'] = Carbon::parse($end_date)->format('Y-m-d');
             $new_array['total_amount_payable'] = $asset->residualGuranteeValue->residual_gurantee_value;
             if(!empty($payment_dates)){
                 $key = key($payment_dates);
