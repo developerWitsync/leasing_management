@@ -15,6 +15,7 @@ class LeaseHistory extends Model
         'esclation_payments',
         'payment_anxure',
         'pv_calculus',
+        'historical_annexure',
         'created_at',
         'updated_at'
     ];

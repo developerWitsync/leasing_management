@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Lease;
 
 use App\DismantlingCosts;
+use App\HistoricalCarryingAmountAnnexure;
 use App\Http\Controllers\Controller;
 use App\InterestAndDepreciation;
 use App\Lease;
@@ -596,6 +597,13 @@ class ReviewSubmitController extends Controller
                 $data['pv_calculus'] = $pvCalculus->calculus;
             } else {
                 $data['pv_calculus'] = json_encode([]);
+            }
+
+            $historical_annexure = HistoricalCarryingAmountAnnexure::query()->where('asset_id', '=', $asset_id)->get();
+            if($pvCalculus){
+                $data['historical_annexure'] = json_encode($historical_annexure, JSON_PRESERVE_ZERO_FRACTION);
+            } else {
+                $data['historical_annexure'] = json_encode([]);
             }
 
             if (count($model->modifyLeaseApplication) > 0) {
