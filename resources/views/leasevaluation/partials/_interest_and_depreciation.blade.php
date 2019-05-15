@@ -11,7 +11,7 @@
         {{--<th rowspan="2">#Days</th>
         <th rowspan="2">Discount <br/>Rate</th>--}}
 
-        <th colspan="9" style="text-align: center">
+        <th colspan="10" style="text-align: center">
             <span style="text-align: center; border-bottom: #cccfd9 solid 1px; display: block; padding-bottom: 5px;">Lease Currency - Specify Currency</span>
         </th>
     </tr>
@@ -26,6 +26,7 @@
         <th>Depreciation</th>
         <th>Accumulated <br/>Depreciation</th>
         <th>Carrying Value <br/>Of Lease Asset</th>
+        <th>Charge To PL</th>
     </tr>
     </thead>
     @php
@@ -38,7 +39,7 @@
             <td style="color: #fff;font-size: 14px;">Part {{$i}}:</td>
 
             @if($modify_id == "")
-                <td colspan="10" style="color: #fff;font-size: 16px;">
+                <td colspan="11" style="color: #fff;font-size: 16px;">
                     Initial Valuation Basis
                 </td>
             @else
@@ -46,7 +47,7 @@
                 <td colspan="2" style="color: #fff;font-size: 16px;">Subsequent Reference# {{$i - 1}}</td>
                 <td colspan="1" style="color: #fff;font-size: 16px;">Effective from</td>
                 <td colspan="1" style="color: #fff;font-size: 16px;">{{ \Carbon\Carbon::parse($effective_date)->addDay(1)->format(config('settings.date_format')) }}</td>
-                <td colspan="3" style="color: #fff;font-size: 16px;">&nbsp;</td>
+                <td colspan="4" style="color: #fff;font-size: 16px;">&nbsp;</td>
             @endif
             @php
                 $show_value_of_lease_asset = true;
@@ -76,7 +77,12 @@
                     <td class="blueClr" align="center" style="font-weight: 600"> -</td>
                     <td class="blueClr" align="center" style="font-weight: 600"> -</td>
                     <td class="blueClr" align="center" style="font-weight: 600"> -</td>
-            @endif
+                @endif
+                @if($show_value_of_lease_asset)
+                    <td class="blueClr" align="center" style="font-weight: 600">{{$detail->charge_to_pl}}</td>
+                @else
+                    <td class="blueClr" align="center" style="font-weight: 600"> -</td>
+                @endif
                 @php
                     $show_value_of_lease_asset = false;
                     $effective_date = $detail->date;

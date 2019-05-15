@@ -24,6 +24,7 @@ class InterestAndDepreciation extends Model
         'carrying_value_of_lease_asset',
         'change',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'charge_to_pl'
     ];
 }

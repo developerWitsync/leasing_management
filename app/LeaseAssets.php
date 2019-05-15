@@ -40,7 +40,8 @@ class LeaseAssets extends Model
         'created_at',
         'updated_at',
         'historical_present_value_of_lease_liability',
-        'adjustment_to_equity'
+        'adjustment_to_equity',
+        'charge_to_pl'
     ];
 
     public function accountingTreatment(){

@@ -563,7 +563,8 @@ class LeaseValuationController extends Controller
                 $asset->setRawAttributes([
                     'lease_liablity_value' => $request->lease_liability_value,
                     'value_of_lease_asset'  => $request->value_of_lease_asset,
-                    'increase_decrease' => $request->increase_decrease
+                    'increase_decrease' => $request->increase_decrease,
+                    'charge_to_pl' => ($request->charge_to_pl == '-')?null:$request->charge_to_pl
                 ]);
                 $asset->save();
                 return response()->json([

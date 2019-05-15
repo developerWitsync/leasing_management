@@ -174,7 +174,8 @@ function calculatePaymentDueDates($first_payment_date, $last_payment_date, $paym
             $month = \Carbon\Carbon::parse($start_date)->format('F');
             $current_year = \Carbon\Carbon::parse($start_date)->format('Y');
             $final_payout_dates[$current_year][$month][$start_date] = $start_date;
-            $start_date = \Carbon\Carbon::parse($start_date)->addMonth($addMonths)->firstOfMonth()->format('Y-m-d');
+            //$start_date = \Carbon\Carbon::parse($start_date)->addMonth($addMonths)->firstOfMonth()->format('Y-m-d');
+            $start_date = \Carbon\Carbon::parse($start_date)->addMonth($addMonths)->format('Y-m-d');
 
 //            if (strtotime($start_date) <= strtotime($end_date)) {
 //                $month = \Carbon\Carbon::parse($end_date)->format('F');
@@ -189,10 +190,12 @@ function calculatePaymentDueDates($first_payment_date, $last_payment_date, $paym
                 //will not increase by 1 month as the first payment date should be start_date
                 $start_date = \Carbon\Carbon::parse($start_date)->format('Y-m-d');
                 $interval_date = \Carbon\Carbon::parse($start_date)->format('Y-m-d');
-                $start_date = \Carbon\Carbon::parse($start_date)->firstOfMonth()->format('Y-m-d');
+                //$start_date = \Carbon\Carbon::parse($start_date)->firstOfMonth()->format('Y-m-d');
+                $start_date = \Carbon\Carbon::parse($start_date)->format('Y-m-d');
             } else {
                 $start_date = \Carbon\Carbon::parse($start_date)->addMonth($addMonths)->format('Y-m-d');
-                $interval_date = \Carbon\Carbon::parse($start_date)->lastOfMonth()->format('Y-m-d');
+                //$interval_date = \Carbon\Carbon::parse($start_date)->lastOfMonth()->format('Y-m-d');
+                $interval_date = \Carbon\Carbon::parse($start_date)->format('Y-m-d');
             }
 
             if (strtotime($interval_date) <= strtotime($end_date)) {

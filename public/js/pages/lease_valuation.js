@@ -266,7 +266,7 @@ $(function(){
             //  increase_decrease ==> P10
             // existing_value_of_lease_asset ==> P8
             var new_value_of_lease_asset = 0;
-            var charge_to_pl = '-';
+            var charge_to_pl = 0;
             increase_decrease = parseFloat(increase_decrease);
             initial_increase_decrease = increase_decrease;
             if(increase_decrease < 0){
@@ -306,7 +306,8 @@ $(function(){
                 data : {
                     value_of_lease_asset : new_value_of_lease_asset,
                     lease_liability_value: total_lease_liability,
-                    increase_decrease : initial_increase_decrease
+                    increase_decrease : initial_increase_decrease,
+                    charge_to_pl : charge_to_pl
                 },
                 success : function(response){
                     removeOverlayAjax();
