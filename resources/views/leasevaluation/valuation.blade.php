@@ -63,6 +63,8 @@
                 </ul>
             </div>
 
+
+
             @include('leasevaluation.partials._valuation_tab')
 
             <span id="see_details"></span>
@@ -327,6 +329,25 @@
                     success: function (response) {
                         $('#see_details').html(response);
                         removeOverlayAjax()
+                    }
+                })
+            });
+
+            /**
+             * Show the Historical Carrying amount annexure
+             */
+            $(document.body).on('click', '.carrying_amount_annexure', function(){
+                var lease_id = $(this).data('id');
+                var url = '/lease-valuation/see-carrying-amount-annexure/'+lease_id;
+                $.ajax({
+                    url : url,
+                    beforeSend: function () {
+                        showOverlayForAjax();
+                    },
+                    success: function (response) {
+                        $('.current_modal_body').html(response);
+                        removeOverlayAjax()
+                        $('#myModal').modal('show');
                     }
                 })
             });

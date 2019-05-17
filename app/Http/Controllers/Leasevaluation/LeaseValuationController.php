@@ -11,6 +11,7 @@ namespace App\Http\Controllers\Leasevaluation;
 use App\CategoriesLeaseAssetExcluded;
 use App\DiscountRateChartView;
 use App\Exports\InterestAndDepreciationExport;
+use App\HistoricalCarryingAmountAnnexure;
 use App\Http\Controllers\Controller;
 use App\InterestAndDepreciation;
 use App\LeaseAssetPayments;
@@ -312,30 +313,51 @@ class LeaseValuationController extends Controller
     {
 
         try {
+
             $lease = Lease::query()
                 ->where('id', '=', $id)
                 ->whereIn('business_account_id', getDependentUserIds())
                 ->where('status', '=', '1')->firstOrFail();
+
             $asset = $lease->assets()->first(); //there will be only one lease asset for a lease...
+
             $subsequent_modified = $lease->isSubsequentModification();
+
             $subsequent = null;
+
             if ($subsequent_modified) {
                 $subsequent = $lease->modifyLeaseApplication->last();
             }
+
             $show_statutory_columns = false;
+
             $statutory_currency = $lease->lease_contract_id;
+
             $currecy_settings = ReportingCurrencySettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
+
             if ($currecy_settings && ($currecy_settings->statutory_financial_reporting_currency != $lease->lease_contract_id)) {
                 $show_statutory_columns = true;
                 $statutory_currency = $currecy_settings->statutory_financial_reporting_currency;
             }
+
+            //take out the data for the initial from the lease history
+            $valuation_method = LeaseHistory::query()
+                ->selectRaw('json_data_steps->>"$.underlying_asset.lease_liablity_value" as initial_present_value_of_lease_liability')
+                ->selectRaw('json_data_steps->>"$.underlying_asset.value_of_lease_asset" as initial_value_of_lease_asset')
+                ->selectRaw('json_data_steps->>"$.underlying_asset.adjustment_to_equity" as adjustment_to_opening_equity')
+                ->selectRaw('json_data_steps->>"$.lease_balance.prepaid_lease_payment_balance" as initial_prepaid_lease_payments')
+                ->join('lease', 'lease.id', '=', 'lease_history.lease_id')
+                ->where('lease_history.lease_id', '=', $id)
+            ->whereRaw('lease_history.modify_id IS NULL')->first();
+
             return view('leasevaluation.valuation', compact(
                 'lease',
                 'asset',
                 'subsequent_modified',
                 'subsequent',
                 'show_statutory_columns',
-                'statutory_currency'
+                'statutory_currency',
+                'valuation_method'
             ));
         } catch (\Exception $e) {
             abort(404);
@@ -732,6 +754,31 @@ class LeaseValuationController extends Controller
                 'payments'
             ));
         } catch (\Exception $e) {
+            abort(404);
+        }
+    }
+
+    /**
+     * show historical carrying amount annexure on the lease valuation page.
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function carryingAmountAnnexure($id){
+        try{
+            $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())
+                ->where('id', '=', $id)
+                ->firstOrFail();
+            $asset = $lease->assets()->first();
+            $annexure = HistoricalCarryingAmountAnnexure::query()
+                ->where('asset_id', '=', $asset->id)
+                ->orderBy('date', 'asc')
+                ->get();
+
+            return view('lease.lease-valuation._historical_calculus_annexure', compact(
+                'annexure',
+                'asset'
+            ));
+        }catch (\Exception $e) {
             abort(404);
         }
     }

@@ -15,6 +15,44 @@
         </div>
     </div>
 
+    @if($asset->using_lease_payment)
+        <div class="locatPurposeOutBx">
+            <div class="locatpurposeTop leaseterminatHd">
+                Valuation Method Selected - <small>
+                    @if($asset->using_lease_payment == '2')
+                        Modified Retrospective Approach ( By Adjusting Opening Equity)
+                    @elseif($asset->using_lease_payment == '1')
+                        Modified Retrospective Approach (Without Adjusting Opening Equity). Value Of Asset Will Be Equal To Present Value Of Lease Liability
+                    @endif
+                </small>
+            </div>
+            @if($asset->using_lease_payment == '2')
+                <div class="leasepaymentTble">
+                    <table cellpadding="0" cellspacing="0" width="100%" style="border-collapse: initial;">
+                        <thead>
+                            <th>Initial Value of Lease Asset</th>
+                            <th>Initial Present Value of Lease Liability</th>
+                            <th>Opening Prepaid Lease Balances</th>
+                            <th>Adjustment to Opening Equity</th>
+                            <th>Historical Carrying Amount of Lease Asset</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="text-align: center">{{$valuation_method->initial_value_of_lease_asset}}</td>
+                                <td style="text-align: center">{{$valuation_method->initial_present_value_of_lease_liability}}</td>
+                                <td style="text-align: center">{{$valuation_method->initial_prepaid_lease_payments}}</td>
+                                <td style="text-align: center"> {{$valuation_method->adjustment_to_opening_equity}}</td>
+                                <td style="text-align: center">
+                                    <a href="javascript:void(0);" class="btn btn-xs btn-primary carrying_amount_annexure" data-id="{{$asset->lease->id}}">Carrying Amount Annexure</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            @endif
+        </div>
+    @endif
+
     <!--Lease Valuation-->
     <div class="locatPurposeOutBx">
         <div class="locatpurposeTop leaseterminatHd">

@@ -380,6 +380,8 @@ Route::middleware('auth')->group(function () {
 
         Route::get('show-escalation-chart/{id}', ['as' => 'lease.leasevaluation.escalationchart', 'uses' => 'LeaseValuationController@showEscalationChart']);
 
+        Route::get('see-carrying-amount-annexure/{id}', ['as' => 'lease.leasevaluation.carryingamountannexure', 'uses' => 'LeaseValuationController@carryingAmountAnnexure']);
+
     });
 
     /**
