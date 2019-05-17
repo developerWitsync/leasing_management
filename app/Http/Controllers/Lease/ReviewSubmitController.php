@@ -13,7 +13,6 @@ use App\HistoricalCarryingAmountAnnexure;
 use App\Http\Controllers\Controller;
 use App\InterestAndDepreciation;
 use App\Lease;
-use App\ModifyLeaseApplication;
 use App\PaymentEscalationDates;
 use App\PvCalculus;
 use App\ContractClassifications;
@@ -39,7 +38,6 @@ use App\CustomerDetails;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use phpDocumentor\Reflection\Types\Object_;
 use Validator;
 
 class ReviewSubmitController extends Controller
@@ -385,8 +383,6 @@ class ReviewSubmitController extends Controller
                 }
                 $start_year = $start_year + 1;
             }
-
-
 
             DB::transaction(function () use ($dates, $modify_id, $asset) {
                 //insert the dates data into the interest and depreciation table for the lease id

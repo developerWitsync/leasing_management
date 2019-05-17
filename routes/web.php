@@ -325,7 +325,7 @@ Route::middleware('auth')->group(function () {
     * Lease Valuation Routes
     */
 
-    Route::namespace('Leasevaluation')->prefix('lease-valuation','checksubscription')->group(function () {
+    Route::namespace('Leasevaluation')->prefix('lease-valuation')->middleware('checksubscription')->group(function () {
 
         Route::prefix('valuation-capitalised')->group(function(){
 
@@ -382,7 +382,19 @@ Route::middleware('auth')->group(function () {
 
     });
 
+    /**
+     * Reports Routes
+     */
+    Route::namespace('Reports')->prefix('reports')->middleware('checksubscription')->group(function(){
+        Route::get('/', ['as' => 'reports.index', 'uses' => 'ReportsController@index']);
+        Route::get('lease-liability-contractual', ['as' => 'reports.leaseliability.contractual', 'uses' => 'ReportsController@leaseLiabilityContractual']);
 
+        Route::get('fetch-liability-contractual-data',['as' => 'reports.leaseliability.fetchcontractual', 'uses' => 'ReportsController@fetchLeaseLiabilityContractual']);
+    });
+
+    /**
+     * Settings Routes
+     */
     Route::namespace('Settings')->middleware(['permission:settings','checksubscription'])->prefix('settings')->group(function () {
 
         Route::prefix('general')->group(function () {
