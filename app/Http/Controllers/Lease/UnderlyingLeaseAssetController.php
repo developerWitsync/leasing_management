@@ -149,7 +149,7 @@ class UnderlyingLeaseAssetController extends Controller
                 });
 
                 $rules = [
-                     'category_id' => 'required|exists:lease_assets_categories,id',
+                    'category_id' => 'required|exists:lease_assets_categories,id',
                     'sub_category_id'   => 'required|exists:lease_assets_sub_categories_settings,id',
                     'name'  => 'required',
                     'similar_asset_items'   =>'required|numeric',
@@ -158,10 +158,10 @@ class UnderlyingLeaseAssetController extends Controller
                     'specific_use' => 'required|exists:lease_asset_use_master,id',
                     'use_of_asset' => 'required_if:specific_use,1',
                     'expected_life' => 'required|exists:expected_useful_life_of_asset,id',
-                    'lease_start_date' => 'required|date|date_format:d-M-Y',
+                    'lease_start_date' => 'required|date_format:d-M-Y',
                     'lease_free_period' => 'numeric',
-                    'accural_period' => 'required|date|date_format:d-M-Y',
-                    'lease_end_date' => 'required|date|date_format:d-M-Y|after:accural_period',
+                    'accural_period' => 'required|date_format:d-M-Y',
+                    'lease_end_date' => 'required|date_format:d-M-Y|after:accural_period',
                     'lease_term' => 'required',
                     'accounting_treatment' => 'required_if_prior_to_date:' . $request->accural_period,
                 ];
@@ -176,7 +176,6 @@ class UnderlyingLeaseAssetController extends Controller
                     'lease_free_period.numeric' => 'The Initial Lease Free Period field must be a numeric.',
                     'accural_period.required' => 'The Start Date of Lease Payment / Accrual Period field is required.',
                     'lease_end_date.required' => 'The Lease End Date field is required.',
-                    'lease_end_date.date' => 'The Lease End Date field must be a valid date.',
                     'accounting_treatment.required_if_prior_to_date' => 'The accounting period is required when Start Date of Lease Payment / Accrual Period is prior to '.$base_date_formatted.'.'
                 ];
 
@@ -191,7 +190,7 @@ class UnderlyingLeaseAssetController extends Controller
                 }
                 $data = $request->except('_token', 'action');
                 $data['lease_id'] = $lease->id;
-                $data['lease_end_date'] = date('Y-m-d', strtotime($request->lease_end_date));
+                $data['lease_end_date'] = Carbon::parse($request->lease_end_date);
                 $data['accural_period'] = date('Y-m-d', strtotime($request->accural_period));
                 $data['lease_start_date'] = date('Y-m-d', strtotime($request->lease_start_date));
                 $data['is_details_completed'] = '1';

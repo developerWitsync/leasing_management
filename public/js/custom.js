@@ -363,7 +363,10 @@ function dateDiff(start_date, end_date) {
     return {years: years, months: months, days: days};
 }
 
-function fetchExchangeRate(base, target, base_date, access_key, element_selector, endpoint = 'live'){
+function fetchExchangeRate(base, target, base_date, access_key, element_selector, endpoint){
+    if(typeof(endpoint) == 'undefined') {
+        endpoint = 'live';
+    }
     var url = 'http://apilayer.net/api/' + endpoint + '?access_key=' + access_key + '&source='+base+'&currencies='+target;
     if(typeof (base_date) != "undefined" && base_date!='') {
         url += '&date='+base_date;
