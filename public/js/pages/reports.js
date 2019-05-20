@@ -123,8 +123,9 @@ $(document).ready(function(){
     $(document.body).on('submit', '#reports_filter', function(e){
         e.preventDefault();
         if($('#dt1').val()!="" && $('#dt2').val() != "") {
-            _ajax_url += '?start_date='+$('#dt1').val()+'&end_date='+$('#dt2').val();
-            __table_contractual.api().ajax.url(_ajax_url).load();
+             var _new_url = _initial_url;
+            _new_url += '?start_date='+$('#dt1').val()+'&end_date='+$('#dt2').val();
+            __table_contractual.api().ajax.url(_new_url).load();
         } else {
             alert('please select start and end date.');
         }

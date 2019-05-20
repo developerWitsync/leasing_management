@@ -2,16 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1c290435-4779-45fe-873f-5594138f8734" name="Default Changelist" comment="Merge branch 'master' of http://100.100.7.4:8081/root/Witsync-Lease-Management&#10;&#10;# Conflicts:&#10;#&#9;app/Helpers/Helpers.php&#10;#&#9;config/settings.php&#10;#&#9;public/css/custom.css">
-      <change afterPath="$PROJECT_DIR$/public/assets/plugins/datatables/buttons.dataTables.min.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/assets/plugins/datatables/colvis.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Reports/ReportsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Reports/ReportsController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/plugins/datatables/dataTables.buttons.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/datatables/dataTables.buttons.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/plugins/datatables/pdfmake.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/datatables/pdfmake.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/plugins/datatables/vfs_fonts.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/datatables/vfs_fonts.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/css/custom.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/custom.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/js/pages/reports.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/pages/reports.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/reports/leasereports/contractual.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/reports/leasereports/contractual.blade.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -38,7 +29,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Reports/ReportsController.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="695">
@@ -59,11 +50,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/js/pages/reports.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="867">
-              <caret line="51" column="10" selection-start-line="51" selection-start-column="10" selection-end-line="51" selection-end-column="10" />
+            <state relative-caret-position="627">
+              <caret line="127" column="55" selection-start-line="127" selection-start-column="55" selection-end-line="127" selection-end-column="55" />
             </state>
           </provider>
         </entry>
@@ -73,6 +64,49 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="780">
               <caret line="1165" column="1" selection-start-line="1165" selection-start-column="1" selection-end-line="1165" selection-end-column="1" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/routes/web.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="329">
+              <caret line="271" column="173" selection-start-line="271" selection-start-column="151" selection-end-line="271" selection-end-column="173" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseValuationController.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2250">
+              <caret line="710" column="53" lean-forward="true" selection-start-line="710" selection-start-column="53" selection-end-line="710" selection-end-column="53" />
+              <folding>
+                <element signature="e#134#175#0#PHP" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/js/pages/lease_valuation.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="661">
+              <caret line="220" column="18" lean-forward="true" selection-start-line="220" selection-start-column="18" selection-end-line="220" selection-end-column="18" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-valuation/_impairment_test.blade.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="357">
+              <caret line="20" column="81" lean-forward="true" selection-start-line="20" selection-start-column="81" selection-end-line="20" selection-end-column="81" />
+              <folding>
+                <element signature="n#style#0;n#td#0;n#tr#1;n#table#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#td#1;n#tr#1;n#table#0;n#div#0;n#!!top" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -89,13 +123,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>whereHas</find>
-      <find>presentValueOfLeaseLiability</find>
-      <find>$historical_depreciation</find>
-      <find>calculateInterestExpense</find>
-      <find>calculateMonthsDifference</find>
-      <find>calculateDepreciation</find>
-      <find>getLeaseEndDate</find>
       <find>$check_date</find>
       <find>value_of_lease_asset</find>
       <find>spinner</find>
@@ -119,6 +146,13 @@
       <find>excelHtml5</find>
       <find>Roboto-Regular.ttf.</find>
       <find>Roboto-Regular.ttf</find>
+      <find>carrying-amount-calculations</find>
+      <find>carryingAmountDetails</find>
+      <find>save-lease-liability-calculus</find>
+      <find>savePresentValueOfLeaseLiabilityCalculus</find>
+      <find>historical-present-value</find>
+      <find>historicalPresentValue</find>
+      <find>calculateHistoricalPresentValueOfLeasePayment</find>
     </findStrings>
     <replaceStrings>
       <replace>col-md-6 col-sm-6 btn-backnextBx</replace>
@@ -194,10 +228,10 @@
         <option value="$PROJECT_DIR$/public/assets/plugins/datatables/vfs_fonts.js" />
         <option value="$PROJECT_DIR$/public/assets/plugins/datatables/colvis.js" />
         <option value="$PROJECT_DIR$/public/assets/plugins/datatables/dataTables.buttons.min.js" />
-        <option value="$PROJECT_DIR$/public/js/pages/reports.js" />
         <option value="$PROJECT_DIR$/public/css/custom.css" />
         <option value="$PROJECT_DIR$/resources/views/reports/leasereports/contractual.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Reports/ReportsController.php" />
+        <option value="$PROJECT_DIR$/public/js/pages/reports.js" />
       </list>
     </option>
   </component>
@@ -333,28 +367,28 @@
             <path>
               <item name="witsync" type="b2602c69:ProjectViewProjectNode" />
               <item name="witsync" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="witsync" type="b2602c69:ProjectViewProjectNode" />
               <item name="witsync" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
-              <item name="assets" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="witsync" type="b2602c69:ProjectViewProjectNode" />
               <item name="witsync" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
-              <item name="assets" type="462c0819:PsiDirectoryNode" />
-              <item name="plugins" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="lease" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="witsync" type="b2602c69:ProjectViewProjectNode" />
               <item name="witsync" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
-              <item name="assets" type="462c0819:PsiDirectoryNode" />
-              <item name="plugins" type="462c0819:PsiDirectoryNode" />
-              <item name="datatables" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="lease" type="462c0819:PsiDirectoryNode" />
+              <item name="lease-valuation" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -509,12 +543,12 @@
       <workItem from="1557980463761" duration="27336000" />
       <workItem from="1558065886957" duration="1294000" />
       <workItem from="1558085067034" duration="4570000" />
-      <workItem from="1558326711414" duration="9374000" />
+      <workItem from="1558326711414" duration="12369000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1638553000" />
+    <option name="totallyTimeSpent" value="1641548000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -622,13 +656,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-valuation/_impairment_test.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="14" column="138" selection-start-line="14" selection-start-column="138" selection-end-line="14" selection-end-column="138" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/LeaseHistory.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
@@ -683,13 +710,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-valuation/index.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="226">
-          <caret line="41" selection-start-line="41" selection-end-line="41" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-10270">
@@ -715,13 +735,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="32">
           <caret line="28" column="26" lean-forward="true" selection-start-line="28" selection-start-column="26" selection-end-line="28" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/js/pages/lease_valuation.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3485">
-          <caret line="277" column="20" selection-start-line="277" selection-start-column="20" selection-end-line="277" selection-end-column="20" />
         </state>
       </provider>
     </entry>
@@ -843,23 +856,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="651">
           <caret line="157" column="72" selection-start-line="157" selection-start-column="72" selection-end-line="157" selection-end-column="72" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseValuationController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="423">
-          <caret line="775" column="58" lean-forward="true" selection-start-line="775" selection-start-column="58" selection-end-line="775" selection-end-column="58" />
-          <folding>
-            <element signature="e#134#175#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/routes/web.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="775">
-          <caret line="382" column="170" selection-start-line="382" selection-start-column="148" selection-end-line="382" selection-end-column="170" />
         </state>
       </provider>
     </entry>
@@ -995,13 +991,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/js/pages/reports.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="867">
-          <caret line="51" column="10" selection-start-line="51" selection-start-column="10" selection-end-line="51" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/css/custom.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="780">
@@ -1023,6 +1012,55 @@
           <folding>
             <element signature="e#134#170#0#PHP" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-valuation/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="362">
+          <caret line="66" column="64" selection-start-line="66" selection-start-column="48" selection-end-line="66" selection-end-column="64" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/js/pages/lease_valuation.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="661">
+          <caret line="220" column="18" lean-forward="true" selection-start-line="220" selection-start-column="18" selection-end-line="220" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-valuation/_impairment_test.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="20" column="81" lean-forward="true" selection-start-line="20" selection-start-column="81" selection-end-line="20" selection-end-column="81" />
+          <folding>
+            <element signature="n#style#0;n#td#0;n#tr#1;n#table#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#1;n#tr#1;n#table#0;n#div#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/web.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="329">
+          <caret line="271" column="173" selection-start-line="271" selection-start-column="151" selection-end-line="271" selection-end-column="173" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseValuationController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2250">
+          <caret line="710" column="53" lean-forward="true" selection-start-line="710" selection-start-column="53" selection-end-line="710" selection-end-column="53" />
+          <folding>
+            <element signature="e#134#175#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/js/pages/reports.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="627">
+          <caret line="127" column="55" selection-start-line="127" selection-start-column="55" selection-end-line="127" selection-end-column="55" />
         </state>
       </provider>
     </entry>
