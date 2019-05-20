@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1c290435-4779-45fe-873f-5594138f8734" name="Default Changelist" comment="Merge branch 'master' of http://100.100.7.4:8081/root/Witsync-Lease-Management&#10;&#10;# Conflicts:&#10;#&#9;app/Helpers/Helpers.php&#10;#&#9;config/settings.php&#10;#&#9;public/css/custom.css">
-      <change beforePath="$PROJECT_DIR$/public/css/custom.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/custom.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/pages/reports.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/pages/reports.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/reports/leasereports/contractual.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/reports/leasereports/contractual.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseValuationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseValuationController.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -34,26 +33,29 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/js/pages/reports.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="457">
-              <caret line="111" column="14" lean-forward="true" selection-start-line="111" selection-start-column="14" selection-end-line="111" selection-end-column="14" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/public/css/custom.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="644">
-              <caret line="1193" column="1" selection-start-line="1193" selection-start-column="1" selection-end-line="1193" selection-end-column="1" />
+            <state relative-caret-position="440">
+              <caret line="110" column="32" lean-forward="true" selection-start-line="110" selection-start-column="32" selection-end-line="110" selection-end-column="32" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/views/reports/leasereports/contractual.blade.php">
+        <entry file="file://$PROJECT_DIR$/routes/web.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="425">
-              <caret line="79" column="76" selection-start-line="79" selection-start-column="76" selection-end-line="79" selection-end-column="76" />
+            <state relative-caret-position="278">
+              <caret line="269" column="153" selection-start-line="269" selection-start-column="129" selection-end-line="269" selection-end-column="153" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseValuationController.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="476">
+              <caret line="741" column="12" selection-start-line="741" selection-start-column="12" selection-end-line="741" selection-end-column="12" />
+              <folding>
+                <element signature="e#134#175#0#PHP" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -94,12 +96,12 @@
       <find>Roboto-Regular.ttf.</find>
       <find>Roboto-Regular.ttf</find>
       <find>carrying-amount-calculations</find>
-      <find>carryingAmountDetails</find>
       <find>save-lease-liability-calculus</find>
       <find>savePresentValueOfLeaseLiabilityCalculus</find>
       <find>historical-present-value</find>
       <find>historicalPresentValue</find>
       <find>calculateHistoricalPresentValueOfLeasePayment</find>
+      <find>carryingAmountDetails</find>
     </findStrings>
     <replaceStrings>
       <replace>col-md-6 col-sm-6 btn-backnextBx</replace>
@@ -153,7 +155,6 @@
         <option value="$PROJECT_DIR$/database/migrations/2019_05_15_070101_add_column_charge_to_pl_to_interest_and_deprecition.php" />
         <option value="$PROJECT_DIR$/app/InterestAndDepreciation.php" />
         <option value="$PROJECT_DIR$/public/js/pages/lease_valuation.js" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseValuationController.php" />
         <option value="$PROJECT_DIR$/resources/views/leasevaluation/partials/_interest_and_depreciation.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php" />
         <option value="$PROJECT_DIR$/resources/views/layouts/_sidebar.blade.php" />
@@ -179,6 +180,7 @@
         <option value="$PROJECT_DIR$/public/js/pages/reports.js" />
         <option value="$PROJECT_DIR$/resources/views/reports/leasereports/contractual.blade.php" />
         <option value="$PROJECT_DIR$/public/css/custom.css" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseValuationController.php" />
       </list>
     </option>
   </component>
@@ -497,12 +499,12 @@
       <workItem from="1557980463761" duration="27336000" />
       <workItem from="1558065886957" duration="1294000" />
       <workItem from="1558085067034" duration="4570000" />
-      <workItem from="1558326711414" duration="17383000" />
+      <workItem from="1558326711414" duration="19016000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1646562000" />
+    <option name="totallyTimeSpent" value="1648195000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -925,23 +927,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseValuationController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2250">
-          <caret line="710" column="53" lean-forward="true" selection-start-line="710" selection-start-column="53" selection-end-line="710" selection-end-column="53" />
-          <folding>
-            <element signature="e#134#175#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/routes/web.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="329">
-          <caret line="271" column="173" selection-start-line="271" selection-start-column="151" selection-end-line="271" selection-end-column="173" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/js/app.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
@@ -999,13 +984,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/js/pages/reports.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="457">
-          <caret line="111" column="14" lean-forward="true" selection-start-line="111" selection-start-column="14" selection-end-line="111" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/reports/leasereports/contractual.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="425">
@@ -1015,8 +993,32 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/css/custom.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="644">
-          <caret line="1193" column="1" selection-start-line="1193" selection-start-column="1" selection-end-line="1193" selection-end-column="1" />
+        <state relative-caret-position="372">
+          <caret line="1177" column="16" lean-forward="true" selection-start-line="1177" selection-start-column="16" selection-end-line="1177" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/js/pages/reports.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="440">
+          <caret line="110" column="32" lean-forward="true" selection-start-line="110" selection-start-column="32" selection-end-line="110" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/web.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="278">
+          <caret line="269" column="153" selection-start-line="269" selection-start-column="129" selection-end-line="269" selection-end-column="153" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseValuationController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="476">
+          <caret line="741" column="12" selection-start-line="741" selection-start-column="12" selection-end-line="741" selection-end-column="12" />
+          <folding>
+            <element signature="e#134#175#0#PHP" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

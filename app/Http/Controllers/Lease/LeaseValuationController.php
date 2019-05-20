@@ -627,6 +627,7 @@ class LeaseValuationController extends Controller
             //calculate the depreciation here...
             $number_of_months = calculateMonthsDifference($start_date->format('Y-m-d'), $end_date->format('Y-m-d'));
             $historical_depreciation = round((float)$asset->historical_present_value_of_lease_liability/$number_of_months, 4);
+
             while ($start_year <= $end_year) {
                 foreach ($months as $key => $month) {
                     if($start_year == $first_year && $key < $start_month){
@@ -738,7 +739,7 @@ class LeaseValuationController extends Controller
                 }
                 $start_year = $start_year + 1;
             }
-
+            
             DB::transaction(function () use ($asset, $dates) {
                 DB::table('historical_carrying_amount_annexure')->where('asset_id', '=', $asset->id)->delete();
                 DB::table('historical_carrying_amount_annexure')->insert($dates);
