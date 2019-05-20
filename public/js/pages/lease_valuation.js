@@ -18,7 +18,7 @@ function showHistoricalAnnexure(asset_id){
  * Show present value calculus for an asset
  * @param asset_id
  */
-function showPresentValueCalculus(asset_id = null){
+function showPresentValueCalculus(asset_id){
     if(asset_id) {
         $.ajax({
             url : '/lease/lease-valuation/show-lease-liability-calculus/'+asset_id,
@@ -38,7 +38,7 @@ function showPresentValueCalculus(asset_id = null){
  * save the pv calculus to database as well
  * @param asset_id
  */
-function savePresentValueCalculus(asset_id = null){
+function savePresentValueCalculus(asset_id){
     if(asset_id) {
         $.ajax({
             url : '/lease/lease-valuation/save-lease-liability-calculus/'+asset_id
