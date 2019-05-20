@@ -1,13 +1,13 @@
 @extends('layouts.app')
 @section('header-styles')
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui.css') }}">
     <!-- BEGIN CSS for this page -->
     <link rel="stylesheet" type="text/css"
           href="{{ asset('assets/plugins/datatables/dataTables.bootstrap4.min.css') }}"/>
-    <link rel="stylesheet" href="{{ asset('css/jquery-ui.css') }}">
     <!-- END CSS for this page -->
-    @section('title')
-        Reports
-    @endsection
+@endsection
+@section('title')
+    Reports
 @endsection
 @section('content')
     <div class="panel panel-default">
@@ -33,25 +33,54 @@
                             Reports
                         </div>
                         <div class="panel-body">
-                            <div class="row">
+                            <div class="row" style="margin-left:20px; ">
                                 <div class="col-md-4">
-                                    <ul>
-                                        <li>a</li>
-                                        <li>b</li>
-                                        <li>c</li>
-                                    </ul>
-                                </div>
-                                <div class="col-md-4">
-                                    <ul>
-                                        <li>a</li>
-                                        <li>b</li>
-                                        <li>c</li>
-                                    </ul>
-                                </div>
-                                <div class="col-md-4">
+                                    <h4>Lease Overview</h4>
                                     <ul>
                                         <li>
-                                            <a href="{{route('reports.leaseliability.contractual')}}" class="btn-link">Lease Liability (Contractual Lease Payments)</a>
+                                            <a href="javascript:void(0)" class="btn-link" title="Coming Soon" data-toggle="tooltip">
+                                                Trial Balance
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0)" class="btn-link" title="Coming Soon" data-toggle="tooltip">
+                                                Balance Sheet
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0)" class="btn-link" title="Coming Soon" data-toggle="tooltip">
+                                                Profit & Loss
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0)" class="btn-link" title="Coming Soon" data-toggle="tooltip">
+                                                Cash Flow Statement
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-4">
+                                    <h4>Register</h4>
+                                    <ul>
+                                        <li>
+                                            <a href="javascript:void(0)" class="btn-link" title="Coming Soon" data-toggle="tooltip">
+                                                Lease Asset Register
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-4">
+                                    <h4>Lease Reports</h4>
+                                    <ul>
+                                        <li>
+                                            <a href="{{route('reports.leaseliability.contractual')}}" class="btn-link">
+                                                Lease Liability (Contractual Lease Payments)
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0)" class="btn-link" title="Coming Soon" data-toggle="tooltip">
+                                                Lease Liability (Actual Lease Payments)
+                                            </a>
                                         </li>
                                     </ul>
                                 </div>
@@ -68,5 +97,9 @@
 @endsection
 @section('footer-script')
     <script src="{{ asset('assets/plugins/bootbox/bootbox.min.js') }}"></script>
-    <script src="{{ asset('js/jquery-ui.js') }}"></script>
+    <script>
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
 @endsection
