@@ -70,19 +70,19 @@
                         <div class="panel-body">
                             <div class="panel-body frmOuterBx">
 
-                                <div class="row">
+                                <div class="row LibfilterBx">
                                     <div class="col-md-12">
                                         <form class="form-inline" action="" id="reports_filter">
-                                            <div class="form-group">
+                                            <div class="form-group col-md-4">
                                                 <label for="dt1">Start Date:</label>
                                                 <input type="text" class="form-control" id="dt1" readonly="readonly" style="background-color: #fff;" placeholder="Select Start Date">
                                             </div>
-                                            <div class="form-group">
+                                            <div class="form-group col-md-4">
                                                 <label for="dt2">End Date:</label>
                                                 <input type="text" class="form-control" id="dt2" readonly="readonly" style="background-color: #fff;" placeholder="Select End Date">
                                             </div>
-                                            <button type="submit" class="btn btn-success">Refresh</button>
-                                            <div class="form-group">
+                                            <div class="form-group col-md-4 ">
+                                                <button type="submit col-md-2" class="btn btn-success">Refresh</button>
                                                 <a href="javascript:void(0);" id="clear_filters" class="btn-link">Clear Filters</a>
                                             </div>
                                         </form>

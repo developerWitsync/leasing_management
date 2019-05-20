@@ -1164,3 +1164,42 @@ table.categoryTble tr td {font-size: 16px; color: #fff;}
 .privacypopBg {
     background: -webkit-linear-gradient(left, #3931af, #00c6ff);
 }
+
+.LibfilterBx {
+    margin-bottom: 20px;
+    border-bottom: #e5e5e5 solid 1px;
+    padding: 10px 0;
+    background: #f5f5f5;
+    margin-top: -15px;
+}
+
+#clear_filters {
+    background: #666;
+    color: #fff;
+    padding: 7px 10px;
+    border-radius: 3px;
+    vertical-align: middle;
+    display: inline-block;
+    margin-left: 10px;
+
+}
+
+.form-inline .form-control {
+
+    display: inline-block;
+    width: 100%;
+    vertical-align: middle;
+    max-width: 70%;
+
+}
+
+
+.dt-button.buttons-columnVisibility.active {
+    background: #2ab27b !important;
+    color: #fff;
+}
+
+/*.dt-button.buttons-columnVisibility{*/
+    /*background: #b1220d !important;*/
+    /*color: #fff;*/
+/*}*/

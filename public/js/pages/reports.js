@@ -6,7 +6,6 @@ $(document).ready(function(){
         yearRange: '-100:+100',
         onSelect: function () {
             var dt2 = $('#dt2');
-            var startDate = $(this).datepicker('getDate');
             var minDate = $(this).datepicker('getDate');
             var dt2Date = dt2.datepicker('getDate');
             //difference in days. 86400 seconds in day, 1000 ms in second
@@ -104,19 +103,13 @@ $(document).ready(function(){
         buttons: [
             $.extend( true, {}, buttonCommon, {
                 extend: 'copyHtml5'
-            } ),
+            }),
             $.extend( true, {}, buttonCommon, {
                 extend: 'excelHtml5'
-            } ),
+            }),
             $.extend(true, {}, buttonCommon, {
                 extend: 'colvis'
             })
-
-            // $.extend( true, {}, buttonCommon, {
-            //     extend: 'pdfHtml5',
-            //     orientation: 'landscape',
-            //     pageSize : 'A5'
-            // } )
         ]
     });
 
