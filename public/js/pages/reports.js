@@ -29,7 +29,27 @@ $(document).ready(function(){
         yearRange: '-100:+100',
     });
 
+    var buttonCommon = {
+        exportOptions: {
+            format: {
+                body: function ( data, row, column, node ) {
+                    // Strip $ from salary column to make it numeric
+                    return column === 5 ?
+                        data.replace( /[$,]/g, '' ) :
+                        data;
+                }
+            }
+        }
+    };
+
     var __table_contractual = $("#report_contractual").dataTable({
+        stateSave: true,
+        stateSaveCallback: function(settings,data) {
+            localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) )
+        },
+        stateLoadCallback: function(settings) {
+            return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
+        },
         "responsive": true,
         "columns": [
             {
@@ -79,7 +99,25 @@ $(document).ready(function(){
         "scrollX": true,
         "processing": true,
         "serverSide": true,
-        "ajax": _ajax_url
+        "ajax": _ajax_url,
+        dom: 'Bfrtip',
+        buttons: [
+            $.extend( true, {}, buttonCommon, {
+                extend: 'copyHtml5'
+            } ),
+            $.extend( true, {}, buttonCommon, {
+                extend: 'excelHtml5'
+            } ),
+            $.extend(true, {}, buttonCommon, {
+                extend: 'colvis'
+            })
+
+            // $.extend( true, {}, buttonCommon, {
+            //     extend: 'pdfHtml5',
+            //     orientation: 'landscape',
+            //     pageSize : 'A5'
+            // } )
+        ]
     });
 
     $(document.body).on('submit', '#reports_filter', function(e){
@@ -88,7 +126,12 @@ $(document).ready(function(){
             _ajax_url += '?start_date='+$('#dt1').val()+'&end_date='+$('#dt2').val();
             __table_contractual.api().ajax.url(_ajax_url).load();
         } else {
-            alert('please select start and end date.')
+            alert('please select start and end date.');
         }
+    });
+
+    $(document.body).on('click', '#clear_filters', function(e){
+        $('#reports_filter')[0].reset();
+        __table_contractual.api().ajax.url(_initial_url).load();
     });
 });

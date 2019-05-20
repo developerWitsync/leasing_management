@@ -38,7 +38,6 @@ class ReportsController extends Controller
 
     /**
      * returns the JSON for the datatable for the Contractual Report Generation
-     * @todo need to use the filters as well here
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
@@ -56,13 +55,11 @@ class ReportsController extends Controller
                 ->selectRaw('SUM(DISTINCT(interest_and_depreciation.charge_to_pl)) as charge_to_pl')
                 ->selectRaw('SUM(interest_and_depreciation.interest_expense) as lease_interest')
                 ->selectRaw('SUM(interest_and_depreciation.lease_payment) as contractual_lease_payment')
-                ->selectRaw('(SELECT SUM(`depreciation`) FROM `interest_and_depreciation` where last_day(`date`) = `date` and asset_id = lease_assets.id) as depreciation')
                 ->with('singleAsset')
                 ->with('singleAsset.subcategory')
                 ->with('singleAsset.country')
                 ->with('singleAsset.specificUse')
                 ->join('lease_assets', 'lease.id', 'lease_assets.lease_id')
-
                 ->join('lease_history', 'lease_history.lease_id', '=', 'lease.id')
                 ->groupBy('lease.id')
                 ->whereIn('lease.business_account_id', getDependentUserIds())
@@ -77,9 +74,12 @@ class ReportsController extends Controller
                         ->whereBetween('interest_and_depreciation.date', [$start_date, $end_date]);
                 });
                 $model->whereBetween('lease_assets.lease_start_date', [$start_date, $end_date]);
+                $model->selectRaw('(SELECT SUM(`depreciation`) FROM `interest_and_depreciation` where last_day(`date`) = `date` and asset_id = lease_assets.id AND `date` between '.$start_date.' AND '.$end_date.') as depreciation');
             } else {
                 $model->leftJoin('interest_and_depreciation', 'interest_and_depreciation.asset_id', '=', 'lease_assets.id');
+                $model->selectRaw('(SELECT SUM(`depreciation`) FROM `interest_and_depreciation` where last_day(`date`) = `date` and asset_id = lease_assets.id) as depreciation');
             }
+
 
             $datatable = datatables()->eloquent($model);
 
@@ -89,19 +89,32 @@ class ReportsController extends Controller
                 }
             });
 
-            $datatable->addColumn('closing_value_lease_liability', function ($data) {
+            $datatable->addColumn('closing_value_lease_liability', function ($data) use ($request) {
                 $row = InterestAndDepreciation::query()
-                    ->where('asset_id', '=', $data->asset_id)
-                    ->orderBy('id', 'asc')
-                    ->first();
+                    ->where('asset_id', '=', $data->asset_id);
+
+                if($request->has('start_date') && $request->has('end_date') && $request->start_date != '' && $request->end_date != '') {
+                    $end_date = Carbon::parse($request->end_date)->format('Y-m-d');
+                    $row->where('date' ,'<=' , $end_date);
+                }
+
+                $row->orderBy('id', 'desc');
+                $row = $row->first();
+
                 return ($row) ? $row->closing_lease_liability : 0;
             });
 
-            $datatable->addColumn('carrying_value_of_lease_asset', function ($data) {
+            $datatable->addColumn('carrying_value_of_lease_asset', function ($data) use ($request) {
                 $row = InterestAndDepreciation::query()
-                    ->where('asset_id', '=', $data->asset_id)
-                    ->orderBy('id', 'asc')
-                    ->first();
+                    ->where('asset_id', '=', $data->asset_id);
+
+                if($request->has('start_date') && $request->has('end_date') && $request->start_date != '' && $request->end_date != '') {
+                    $end_date = Carbon::parse($request->end_date)->format('Y-m-d');
+                    $row->where('date' ,'<=' , $end_date);
+                }
+
+                $row->orderBy('id', 'desc');
+                $row = $row->first();
                 return ($row) ? $row->carrying_value_of_lease_asset : 0;
             });
 

@@ -3,8 +3,36 @@
     <!-- BEGIN CSS for this page -->
     <link rel="stylesheet" type="text/css"
           href="{{ asset('assets/plugins/datatables/dataTables.bootstrap4.min.css') }}"/>
+
+    <link rel="stylesheet" type="text/css"
+          href="{{ asset('assets/plugins/datatables/buttons.dataTables.min.css') }}"/>
+
     <link rel="stylesheet" href="{{ asset('css/jquery-ui.css') }}">
     <!-- END CSS for this page -->
+    <style>
+        div.dt-button-collection {
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 311px !important;
+            margin-top: 3px !important;
+            padding: 8px 8px 4px 8px !important;
+            border: 1px solid #ccc !important;
+            border: 1px solid rgba(0,0,0,0.4) !important;
+            background-color: white !important;
+            overflow: hidden !important;
+            z-index: 2002 !important;
+            border-radius: 5px !important;
+            box-shadow: 3px 3px 5px rgba(0,0,0,0.3) !important;
+            -webkit-column-gap: 8px !important;
+            -moz-column-gap: 8px !important;
+            -ms-column-gap: 8px !important;
+            -o-column-gap: 8px !important;
+            column-gap: 8px !important;
+            height: 300px !important;
+            overflow-y: scroll !important;
+        }
+    </style>
 @section('title')
     Reports
 @endsection
@@ -47,13 +75,16 @@
                                         <form class="form-inline" action="" id="reports_filter">
                                             <div class="form-group">
                                                 <label for="dt1">Start Date:</label>
-                                                <input type="text" class="form-control" id="dt1" readonly="readonly" style="background-color: #fff;">
+                                                <input type="text" class="form-control" id="dt1" readonly="readonly" style="background-color: #fff;" placeholder="Select Start Date">
                                             </div>
                                             <div class="form-group">
                                                 <label for="dt2">End Date:</label>
-                                                <input type="text" class="form-control" id="dt2" readonly="readonly" style="background-color: #fff;">
+                                                <input type="text" class="form-control" id="dt2" readonly="readonly" style="background-color: #fff;" placeholder="Select End Date">
                                             </div>
-                                            <button type="submit" class="btn btn-default">Refresh</button>
+                                            <button type="submit" class="btn btn-success">Refresh</button>
+                                            <div class="form-group">
+                                                <a href="javascript:void(0);" id="clear_filters" class="btn-link">Clear Filters</a>
+                                            </div>
                                         </form>
                                     </div>
                                 </div>
@@ -100,8 +131,16 @@
     <script src="{{ asset('js/jquery-ui.js') }}"></script>
     <script src="{{ asset('assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
+
+    <script src="{{ asset('assets/plugins/datatables/jszip.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/datatables/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/datatables/vfs_fonts.js') }}"></script>
+    <script src="{{ asset('assets/plugins/datatables/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/datatables/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/datatables/colvis.js') }}"></script>
     <script>
         var _ajax_url = '{{route("reports.leaseliability.fetchcontractual")}}';
+        var _initial_url = '{{route("reports.leaseliability.fetchcontractual")}}';
     </script>
     <script src="{{ asset('js/pages/reports.js') }}"></script>
 @endsection
