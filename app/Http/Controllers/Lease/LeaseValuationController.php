@@ -739,7 +739,7 @@ class LeaseValuationController extends Controller
                 }
                 $start_year = $start_year + 1;
             }
-            
+
             DB::transaction(function () use ($asset, $dates) {
                 DB::table('historical_carrying_amount_annexure')->where('asset_id', '=', $asset->id)->delete();
                 DB::table('historical_carrying_amount_annexure')->insert($dates);
