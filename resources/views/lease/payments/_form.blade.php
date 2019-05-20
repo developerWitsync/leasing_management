@@ -806,10 +806,11 @@
             $units = $("#similar_chateristics_assets").val();
             $value.on('input', function (e) {
                 var total = 0;
-                $value.each(function (index, elem) {
-                    if (!Number.isNaN(parseInt(this.value, 10)))
-                        total = $units * parseInt(this.value, 10);
-                });
+                total = $units * parseInt($value.val(), 10);
+                // $value.each(function (index, elem) {
+                //     if (!Number.isNaN(parseInt(this.value, 10)))
+                //         total = $units * parseInt(this.value, 10);
+                // });
                 $total.val(total);
             });
 
