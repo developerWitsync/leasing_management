@@ -4,13 +4,6 @@
     <list default="true" id="1c290435-4779-45fe-873f-5594138f8734" name="Default Changelist" comment="Merge branch 'master' of http://100.100.7.4:8081/root/Witsync-Lease-Management&#10;&#10;# Conflicts:&#10;#&#9;app/Helpers/Helpers.php&#10;#&#9;config/settings.php&#10;#&#9;public/css/custom.css">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Helpers/Helpers.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Helpers/Helpers.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/UnderlyingLeaseAssetController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/UnderlyingLeaseAssetController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Reports/ReportsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Reports/ReportsController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/LeaseAssets.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/LeaseAssets.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/pages/reports.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/pages/reports.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/lease/lease-assets/indexv2.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/lease-assets/indexv2.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/reports/leasereports/contractual.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/reports/leasereports/contractual.blade.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -85,8 +78,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Helpers/Helpers.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="654">
-              <caret line="219" column="76" lean-forward="true" selection-start-line="216" selection-start-column="18" selection-end-line="219" selection-end-column="76" />
+            <state relative-caret-position="212">
+              <caret line="183" column="13" selection-start-line="183" selection-start-column="13" selection-end-line="183" selection-end-column="13" />
               <folding>
                 <element signature="e#92#147#0#PHP" expanded="true" />
                 <element signature="n#uploadImage#0;n#!!top" />
@@ -105,7 +98,19 @@
         <entry file="file://$PROJECT_DIR$/vendor/nesbot/carbon/src/Carbon/Carbon.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="464">
-              <caret line="3275" column="21" lean-forward="true" selection-start-line="3275" selection-start-column="21" selection-end-line="3275" selection-end-column="21" />
+              <caret line="3275" column="21" selection-start-line="3275" selection-start-column="21" selection-end-line="3275" selection-end-column="21" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="321">
+              <caret line="47" column="12" selection-start-line="47" selection-start-column="12" selection-end-line="47" selection-end-column="12" />
+              <folding>
+                <element signature="e#45#81#0#PHP" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -222,7 +227,6 @@
         <option value="$PROJECT_DIR$/resources/views/settings/currencies/_foreign_transaction_settings.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/auth/register.blade.php" />
         <option value="$PROJECT_DIR$/public/css/custom.css" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php" />
         <option value="$PROJECT_DIR$/resources/views/reports/leasereports/contractual.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/lease/lease-assets/indexv2.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/UnderlyingLeaseAssetController.php" />
@@ -230,6 +234,7 @@
         <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Reports/ReportsController.php" />
         <option value="$PROJECT_DIR$/public/js/pages/reports.js" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php" />
         <option value="$PROJECT_DIR$/app/Helpers/Helpers.php" />
       </list>
     </option>
@@ -543,12 +548,12 @@
       <workItem from="1558065886957" duration="1294000" />
       <workItem from="1558085067034" duration="4570000" />
       <workItem from="1558326711414" duration="20288000" />
-      <workItem from="1558414498614" duration="10731000" />
+      <workItem from="1558414498614" duration="13158000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1660198000" />
+    <option name="totallyTimeSpent" value="1662625000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -945,16 +950,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="321">
-          <caret line="47" column="12" selection-start-line="47" selection-start-column="12" selection-end-line="47" selection-end-column="12" />
-          <folding>
-            <element signature="e#45#81#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/reports/index.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1360">
@@ -1044,14 +1039,24 @@
     <entry file="file://$PROJECT_DIR$/vendor/nesbot/carbon/src/Carbon/Carbon.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="464">
-          <caret line="3275" column="21" lean-forward="true" selection-start-line="3275" selection-start-column="21" selection-end-line="3275" selection-end-column="21" />
+          <caret line="3275" column="21" selection-start-line="3275" selection-start-column="21" selection-end-line="3275" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="321">
+          <caret line="47" column="12" selection-start-line="47" selection-start-column="12" selection-end-line="47" selection-end-column="12" />
+          <folding>
+            <element signature="e#45#81#0#PHP" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Helpers/Helpers.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="654">
-          <caret line="219" column="76" lean-forward="true" selection-start-line="216" selection-start-column="18" selection-end-line="219" selection-end-column="76" />
+        <state relative-caret-position="212">
+          <caret line="183" column="13" selection-start-line="183" selection-start-column="13" selection-end-line="183" selection-end-column="13" />
           <folding>
             <element signature="e#92#147#0#PHP" expanded="true" />
             <element signature="n#uploadImage#0;n#!!top" />
