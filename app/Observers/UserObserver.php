@@ -6,6 +6,7 @@
  * Time: 10:35 AM
  */
 namespace App\Observers;
+use App\EscalationConsistencyGap;
 use App\EscalationPercentageSettings;
 use App\ExpectedLifeOfAsset;
 use App\LeasePaymentsNumber;
@@ -100,6 +101,14 @@ class UserObserver
             $expected_useful_life_of_asset = config('settings.expected_useful_life_of_asset');
             foreach ($expected_useful_life_of_asset as $year){
                 ExpectedLifeOfAsset::create([
+                    'business_account_id' => $user->id,
+                    'years' => $year
+                ]);
+            }
+
+            $escalation_consistency_gap = config('settings.escalation_consistency_gap');
+            foreach ($escalation_consistency_gap as $year){
+                EscalationConsistencyGap::create([
                     'business_account_id' => $user->id,
                     'years' => $year
                 ]);

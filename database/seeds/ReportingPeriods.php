@@ -26,7 +26,7 @@ class ReportingPeriods extends Seeder
             'title' => '01 February to 31 January'
         ],
         [
-            'title' => '01 May to 31 April'
+            'title' => '01 May to 30 April'
         ],
         [
             'title' => '01 August to 31 July'

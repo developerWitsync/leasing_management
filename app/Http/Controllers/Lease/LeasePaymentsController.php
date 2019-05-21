@@ -43,8 +43,8 @@ class LeasePaymentsController extends Controller
             'variable_amount_determinable' => 'required_if:nature,2',
             'payment_interval' => 'required',
             'payout_time' => 'required',
-            'first_payment_start_date' => 'required|date',
-            'last_payment_end_date' => 'required|date',
+            'first_payment_start_date' => 'required|date_format:d-M-Y',
+            'last_payment_end_date' => 'required|date_format:d-M-Y',
             'payment_currency' => 'required',
             'similar_chateristics_assets' => 'required|numeric',
             'payment_per_interval_per_unit' => 'numeric|required_if:lease_payment_per_interval,1|nullable',
@@ -87,17 +87,21 @@ class LeasePaymentsController extends Controller
 
                 //check if the Subsequent Valuation is applied for the lease modification
                 $subsequent_modify_required = $lease->isSubsequentModification();
+                $is_subsequent = $subsequent_modify_required;
 
                 $asset = LeaseAssets::query()->where('lease_id', '=', $id)->where('id', '=', $asset->id)->first();
                 if ($asset) {
 
-                    $show_next = false;
                     $completed_payments = 0;
                     $required_payments = 0;
                     foreach ($lease->assets as $asset) {
                         $required_payments += $asset->total_payments;
                         if ($asset->total_payments > 0 && count($asset->payments) > 0) {
-                            $completed_payments += count($asset->payments);
+                            if($subsequent_modify_required){
+                                $completed_payments += count($asset->payments()->where('subsequent_status', '=', '1')->get());
+                            } else {
+                                $completed_payments += count($asset->payments);
+                            }
                         } else {
                             $required_payments += 1; //incrementing by one to not show the next button
                             break;
@@ -128,7 +132,8 @@ class LeasePaymentsController extends Controller
                         'subsequent_modify_required',
                         'current_step',
                         'show_next',
-                        'back_url'
+                        'back_url',
+                        'is_subsequent'
                     ));
 
                 } else {
@@ -156,6 +161,7 @@ class LeasePaymentsController extends Controller
             $lease = $asset->lease;
             //check if the Subsequent Valuation is applied for the lease modification
             $subsequent_modify_required = false; //it will remain false as the users will be creating new payment here and they will provide all the details here.
+            $is_subsequent = $lease->isSubsequentModification();
 
             $breadcrumbs = [
                 [
@@ -171,7 +177,6 @@ class LeasePaymentsController extends Controller
                     'title' => 'Create Lease Asset Payment'
                 ]
             ];
-
 
             $payment = new LeaseAssetPayments();
 
@@ -211,8 +216,8 @@ class LeasePaymentsController extends Controller
                     'variable_amount_determinable' => 'required_if:nature,2',
                     'payment_interval' => 'required_when_variable_determinable:nature,variable_amount_determinable',
                     'payout_time' => 'required_when_variable_determinable:nature,variable_amount_determinable',
-                    'first_payment_start_date' => 'required_when_variable_determinable:nature,variable_amount_determinable|date|nullable',
-                    'last_payment_end_date' => 'required_when_variable_determinable:nature,variable_amount_determinable|date|nullable',
+                    'first_payment_start_date' => 'required_when_variable_determinable:nature,variable_amount_determinable|date_format:d-M-Y|nullable',
+                    'last_payment_end_date' => 'required_when_variable_determinable:nature,variable_amount_determinable|date_format:d-M-Y|nullable',
                     'payment_currency' => 'required_when_variable_determinable:nature,variable_amount_determinable',
                     'similar_chateristics_assets' => 'required_when_variable_determinable:nature,variable_amount_determinable|numeric',
                     'payment_per_interval_per_unit' => 'numeric|required_if:lease_payment_per_interval,1|nullable',
@@ -255,11 +260,17 @@ class LeasePaymentsController extends Controller
 
                 $data['attachment'] = "";
                 $data['asset_id'] = $asset->id;
+
                 if ($request->hasFile('attachment')) {
                     $file = $request->file('attachment');
                     $uniqueFileName = uniqid() . $file->getClientOriginalName();
                     $request->file('attachment')->move('uploads', $uniqueFileName);
                     $data['attachment'] = $uniqueFileName;
+                }
+
+                if($is_subsequent){
+                    //update the subsequent_status field to 1 as well..
+                    $data['subsequent_status'] = '1';
                 }
 
                 $payment->setRawAttributes($data);
@@ -332,11 +343,11 @@ class LeasePaymentsController extends Controller
                 'lease_span_time_in_days',
                 'subsequent_modify_required',
                 'current_step',
-                'variable_basis'
+                'variable_basis',
+                'is_subsequent'
             ));
 
         } catch (\Exception $e) {
-            dd($e);
             abort(404, $e->getMessage());
         }
     }
@@ -355,6 +366,7 @@ class LeasePaymentsController extends Controller
             $lease = $asset->lease;
             //check if the Subsequent Valuation is applied for the lease modification
             $subsequent_modify_required = $lease->isSubsequentModification();
+            $is_subsequent = $subsequent_modify_required;
             $payment = LeaseAssetPayments::query()->where('asset_id', '=', $id)->where('id', '=', $payment_id)->first();
             if ($payment) {
                 if ($request->isMethod('post')) {
@@ -439,6 +451,12 @@ class LeasePaymentsController extends Controller
                         $request->file('attachment')->move('uploads', $uniqueFileName);
                         $data['attachment'] = $uniqueFileName;
                     }
+
+                    if($subsequent_modify_required){
+                        //update the subsequent_status field to 1 as well..
+                        $data['subsequent_status'] = '1';
+                    }
+
                     $payment->setRawAttributes($data);
                     if ($payment->save()) {
                         //code to create the due dates for the payment
@@ -508,13 +526,13 @@ class LeasePaymentsController extends Controller
                     'lease_span_time_in_days',
                     'subsequent_modify_required',
                     'current_step',
-                    'variable_basis'
+                    'variable_basis',
+                    'is_subsequent'
                 ));
             } else {
                 abort(404);
             }
         } catch (\Exception $e) {
-            dd($e);
             abort(404);
         }
     }
@@ -677,6 +695,11 @@ class LeasePaymentsController extends Controller
         }
     }
 
+    /**
+     * load the inconsistent interval annexure.
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function inconsistentIntervalAnnexure(Request $request){
         try{
             $validator = Validator::make($request->all(), [
@@ -725,6 +748,11 @@ class LeasePaymentsController extends Controller
         }
     }
 
+    /**
+     * ajax request to load the inconsistent payment annexure for the dates..
+     * @param $payment_id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function loadInconsistentAnnexure($payment_id){
         try{
             $paymentDates = LeaseAssetPaymenetDueDate::query()->where('payment_id', $payment_id)->orderBy('date', 'asc')->get();
@@ -753,7 +781,7 @@ class LeasePaymentsController extends Controller
             ));
 
         }catch (\Exception $e){
-            dd($e);
+            abort(404);
         }
     }
 }

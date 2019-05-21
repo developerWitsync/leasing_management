@@ -46,7 +46,7 @@
                             <span>
                                 Undiscounted Lease Liability
                                 <strong>
-                                    @if($capitalized && $asset->leaseSelectLowValue)
+                                    @if(request()->segment(2) == 'valuation-capitalised' && $asset->leaseSelectLowValue)
                                         {{ number_format($asset->leaseSelectLowValue->undiscounted_lease_payment, 2) }}
                                     @else
                                         {{ number_format($asset->undiscounted_value, 2) }}

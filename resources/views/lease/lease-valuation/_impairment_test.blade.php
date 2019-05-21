@@ -9,7 +9,11 @@
         </tr>
 
         <tr>
-            <td class="value_of_lease_asset" data-asset_id="{{ $asset->id }}" style="border: 1px solid #ddd;text-align: center;"></td>
+            @if(!$subsequent_modify_required)
+            <td @if($asset->using_lease_payment == 2)  class="value_of_lease_asset_under_first_method" @else class="value_of_lease_asset" @endif data-asset_id="{{ $asset->id }}" style="border: 1px solid #ddd;text-align: center;"></td>
+            @else
+                <td class="value_of_lease_asset" data-asset_id="{{ $asset->id }}" style="border: 1px solid #ddd;text-align: center;"></td>
+            @endif
             @if($asset->fairMarketValue)
                 @if($asset->fairMarketValue->is_market_value_present == "yes")
                     <td style="border: 1px solid #ddd;text-align: center;">{{ number_format($asset->fairMarketValue->total_units, 2) }}</td>

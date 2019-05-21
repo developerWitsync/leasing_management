@@ -44,12 +44,17 @@
                                         <span class="alter_due_dates_info">
                                             {{ \Carbon\Carbon::parse($date)->format(config('settings.date_format')) }}
                                         </span>
-                                            <input type="text" data-month="{{ str_pad($key,2,'0',STR_PAD_LEFT) }}" data-year="{{ $year }}" class="form-control alter_due_dates_input hidden" name="altered_payment_due_date[]" value="{{ $date }}"/>
+                                        <input style="width: 100px;" type="text" data-month="{{ str_pad($key,2,'0',STR_PAD_LEFT) }}" data-year="{{ $year }}" class="form-control alter_due_dates_input hidden" name="altered_payment_due_date[]" value="{{ $date }}"/>
+                                        <a href="javascript:void(0)" title="Remove Payment Date" class="alter_due_dates_input hidden"><i class="fa fa-minus-square alert-danger"></i> Remove </a>
                                     @endforeach
                                 </td>
                             @else
                                 <td class="info">
-                                    <input type="text" data-month="{{ str_pad($key,2,'0',STR_PAD_LEFT) }}" data-year="{{ $year }}" class="form-control alter_due_dates_input hidden" name="altered_payment_due_date[]" value="" />
+                                    {{--<input type="text" data-month="{{ str_pad($key,2,'0',STR_PAD_LEFT) }}" data-year="{{ $year }}" class="form-control alter_due_dates_input hidden" name="altered_payment_due_date[]" value="" />--}}
+                                    <a href="javascript:void(0);" style="float: right;" title="Add Payment Date" class="hidden alter_due_dates_input add_lease_payment_date" data-month="{{ str_pad($key,2,'0',STR_PAD_LEFT) }}" data-year="{{ $year }}">
+                                        <i class="fa fa-plus-square"></i> Add Payment Date
+                                    </a>
+
                                 </td>
                             @endif
                         @endforeach

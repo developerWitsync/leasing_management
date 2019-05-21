@@ -47,9 +47,9 @@
         </li>
     @endif
 
-    <li>
-        <a href="#" class="list-group-item"><img width="28" src="{{ asset('images/icons/fair_valuation.png') }}"> <span>Fair Valuation</span></a>
-    </li>
+    {{--<li>--}}
+        {{--<a href="#" class="list-group-item"><img width="28" src="{{ asset('images/icons/fair_valuation.png') }}"> <span>Fair Valuation</span></a>--}}
+    {{--</li>--}}
 
     <li>
         <a href="#" class="list-group-item"><img width="28" src="{{ asset('images/icons/testing.png') }}"> <span>Impairment Testing</span></a>
@@ -82,7 +82,7 @@
     </li>
 
     <li>
-        <a href="#" class="list-group-item"><img width="28" src="{{ asset('images/icons/presentation.png') }}"> <span>Presentation</span>
+        <a href="{{ route('reports.index') }}" class="list-group-item @if(request()->segment('1') == 'reports') active @endif"><img width="28" src="{{ asset('images/icons/presentation.png') }}"> <span>Reports</span>
             <!-- <small class="fa fa-angle-right" aria-hidden="true"></small> -->
         </a>
     </li>

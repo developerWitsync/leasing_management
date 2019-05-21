@@ -12,6 +12,7 @@ namespace App\Http\Controllers\Settings;
 use App\ContractClassifications;
 use App\ContractEscalationBasis;
 use App\EscalationAmountCalculated;
+use App\EscalationConsistencyGap;
 use App\EscalationFrequency;
 use App\EscalationPercentageSettings;
 use App\Http\Controllers\Controller;
@@ -62,45 +63,55 @@ class LeaseClassificationController extends Controller
         $lease_payment_component = LeasePaymentComponents::query()->select('id', 'title')->where('status', '=', '1')->get();
         $lease_payment_nature  = LeaseAssetPaymentsNature::query()->select('id', 'title')->where('status', '=', '1')->get();
         $lease_payment_basis  = LeasePaymentsBasis::query()->select('id', 'title')->where('status', '=', '1')->where('business_account_id', '=', auth()->user()->id)->get();
-        $number_of_underlying_assets_settings  = LeaseAssetsNumberSettings::query()->select('id', 'number')->where('status', '=', '1')->where('business_account_id', '=', auth()->user()->id)->orderBy('number','asc')->get();
 
-        $la_similar_charac_number  = LeaseAssetSimilarCharacteristicSettings::query()->select('id', 'number')->where('status', '=', '1')->where('business_account_id', '=', auth()->user()->id)->orderBy('number','asc')
+        $number_of_underlying_assets_settings  = LeaseAssetsNumberSettings::query()->select('id', 'number')->where('status', '=', '1')->whereIn('business_account_id', getDependentUserIds())->orderBy('number','asc')->get();
+
+        $la_similar_charac_number  = LeaseAssetSimilarCharacteristicSettings::query()->select('id', 'number')->where('status', '=', '1')->whereIn('business_account_id', getDependentUserIds())->orderBy('number','asc')
             ->get();
 
         $contract_escalation_basis   = ContractEscalationBasis::query()->select('id', 'title')->where('status', '=', '1')->get();
+
         $lease_contract   = LeaseContractDuration::query()->select('id', 'title', 'month_range_description')->where('status', '=', '1')->get();
+
         $lease_excluded_from_transitional_valuation = LeasesExcludedFromTransitionalValuation::query()->select('id', 'title', 'value_for')->where('status', '=', '1')->get();
+
         $lease_accounting_treatment = collect(LeaseAccountingTreatment::query()->select('id', 'title', 'upto_year')
             ->where('status', '=', '1')->get()->toArray())->groupBy('upto_year');
-        $number_of_lease_payments = LeasePaymentsNumber::query()->select('id', 'number')->where('business_account_id', '=', auth()->user()->id)->orderBy('number','asc')->get();
+
+        $number_of_lease_payments = LeasePaymentsNumber::query()->select('id', 'number')->whereIn('business_account_id', getDependentUserIds())->orderBy('number','asc')->get();
         $lease_payments_frequency = LeasePaymentsFrequency::query()->select('id', 'title')->where('status', '=', '1')->get();
         $lease_payment_interval = LeasePaymentsInterval::query()->select('id', 'title')->where('status', '=', '1')->get();
         $lease_payment_escalation_clause = LeasePaymentsEscalationClause::query()->select('id', 'title')->where('status', '=', '1')->get();
         $escalation_amount_calculated_on = EscalationAmountCalculated::query()->select('id', 'title')->where('status', '=', '1')->get();
-        $escalation_percentage_settings = EscalationPercentageSettings::query()->select('id', 'number')->where('business_account_id', '=', auth()->user()->id)->orderBy('number','asc')->get();
+        $escalation_percentage_settings = EscalationPercentageSettings::query()->select('id', 'number')->whereIn('business_account_id', getDependentUserIds())->orderBy('number','asc')->get();
         $escalation_frequencies = EscalationFrequency::all();
 
-        $modication_reason = LeaseModificationReason::query()->select('id', 'title')->where('status', '=', '1')->get();
+        $modication_reason = LeaseModificationReason::query()
+            ->select('id', 'title')
+            ->whereIn('business_account_id', getDependentUserIds())
+            ->where('status', '=', '1')
+            ->get();
 
         $categories = LeaseAssetCategories::query()->select('id', 'title')->where('status', '=', '1')->get();
         
         $category_excluded = CategoriesLeaseAssetExcluded::query()
             ->whereIn('category_id',[5,8])
             ->where('status', '=', '0')
-            ->where('business_account_id',auth()->user()->id)
+            ->whereIn('business_account_id', getDependentUserIds())
             ->with('leaseassetcategories')
             ->get();
 
-         $category_excluded_all = CategoriesLeaseAssetExcluded::query()
+        $category_excluded_all = CategoriesLeaseAssetExcluded::query()
              ->whereIn('business_account_id', getDependentUserIds())
              ->groupBy('category_id')
              ->get();
-        
-         $category_excluded_id = $category_excluded_all->pluck('category_id')->toArray();
-         
-         $check_intangible_asset = LeaseAssets::query()->where('category_id',7)->get();
-         
-     
+
+        $category_excluded_id = $category_excluded_all->pluck('category_id')->toArray();
+
+        $escalation_consistency_gap = EscalationConsistencyGap::query()
+            ->whereIn('business_account_id', getDependentUserIds())
+            ->get();
+
         return view('settings.classification.index', compact('breadcrumbs',
             'rates',
             'contract_classifications',
@@ -125,7 +136,8 @@ class LeaseClassificationController extends Controller
             'categories',
             'category_excluded',
             'category_excluded_id',
-            'check_intangible_asset'
+            'category_excluded_all',
+            'escalation_consistency_gap'
         ));
     }
 
@@ -631,6 +643,126 @@ class LeaseClassificationController extends Controller
     }
 
     /**
+     * create escalation consistency gap for the current logged in user
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function addEscalationConsistencyGap(Request $request){
+        try{
+            if($request->isMethod('post')){
+                $validator = Validator::make($request->except("_token"), [
+                    'escalation_consistency_gap' => [
+                        'required',
+                        'numeric',
+                        Rule::unique('escalation_consistency_gap', 'years')->where(function ($query) use ($request) {
+                            return $query->where('business_account_id', '=', auth()->user()->id);
+                        })
+                    ]
+                ], [
+                    'escalation_consistency_gap.numeric' => 'The escalation consistency gap should be numeric.',
+                    'escalation_consistency_gap.unique' => 'This escalation consistency gap has already been added.'
+                ]);
+
+                if($validator->fails()){
+                    return redirect()->back()->withErrors($validator->errors())->withInput($request->except("_token"));
+                }
+
+                $model = EscalationConsistencyGap::create([
+                    'years' => $request->escalation_consistency_gap,
+                    'business_account_id' => auth()->user()->id
+                ]);
+
+                if($model){
+                    return redirect()->back()->with('status', 'Escalation Consistency Gap been added successfully.');
+                }
+
+            } else {
+                return redirect()->back();
+            }
+        } catch (\Exception $e){
+            abort(404);
+        }
+    }
+
+    /**
+     * edit the escalation consistency gap year for the current logged in business account
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
+     */
+    public function editEscalationConsistencyGap($id, Request $request){
+        try{
+            if($request->ajax()){
+
+                $escalation_consistency_gap = EscalationConsistencyGap::query()->where('id', $id)
+                    ->whereIn('business_account_id', getDependentUserIds())
+                    ->first();
+
+                if($request->isMethod('post')) {
+                    $validator = Validator::make($request->except("_token"), [
+                        'title' => [
+                            'required',
+                            'numeric',
+                            Rule::unique('escalation_consistency_gap', 'years')->where(function ($query) use ($request) {
+                                return $query->where('business_account_id', '=', auth()->user()->id);
+                            })->ignore($id,'id')
+                        ]
+                    ], [
+                        'title.numeric' => 'The number should be numeric.',
+                        'title.required' => 'The number field is required.',
+                        'title.unique' => 'This number has already been taken.'
+                    ]);
+
+                    if($validator->fails()){
+                        return response()->json([
+                            'status' => false,
+                            'errors' => $validator->errors()
+                        ]);
+                    }
+
+                    $escalation_consistency_gap->years = $request->title;
+                    $escalation_consistency_gap->save();
+                    return response()->json([
+                        'status' =>true,
+                        'message' => 'Settings has been saved successfully.'
+                    ]);
+                }
+
+                return view('settings.classification._edit_escalation_consistency_gap', compact('escalation_consistency_gap'));
+            }
+        } catch (\Exception $e){
+            abort(404);
+        }
+    }
+
+    /**
+     * delete the escalation consistency Gap for the current logged in business account
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     */
+    public function deleteEscalationConsistencyGap($id, Request $request){
+        try{
+            if($request->ajax()) {
+                $escalation_consistency_gap = EscalationConsistencyGap::query()
+                    ->where('id', $id)
+                    ->whereIn('business_account_id', getDependentUserIds());
+                if($escalation_consistency_gap) {
+                    $escalation_consistency_gap->delete();
+                    Session::flash('status', 'Setting has been deleted successfully.');
+                    return response()->json(['status' => true], 200);
+                } else {
+                    return response()->json(['status' => false, "message" => "Invalid request!"], 200);
+                }
+            } else {
+                return redirect()->back();
+            }
+        } catch (\Exception $e){
+            abort(404);
+        }
+    }
+
+    /**
      * update an Escalation Percentages Number for the current authenticated user
      * @param $id
      * @param Request $request
@@ -673,7 +805,6 @@ class LeaseClassificationController extends Controller
                 return view('settings.classification._edit_escalation_percentage_number', compact('escalation_percentage_number'));
             }
         } catch (\Exception $e){
-            dd($e);
             abort(404);
         }
     }
@@ -720,7 +851,8 @@ class LeaseClassificationController extends Controller
                 }
 
                 $model = LeaseModificationReason::create([
-                    'title' => $request->title
+                    'title' => $request->title,
+                    'business_account_id' => getParentDetails()->id
                  ]);
 
                 if($model){
@@ -744,7 +876,10 @@ class LeaseClassificationController extends Controller
     public function editLeaseModificationReason($id, Request $request){
         try{
             if($request->ajax()){
-                $lease_reason = LeaseModificationReason::query()->where('id', $id)->first();
+                $lease_reason = LeaseModificationReason::query()
+                    ->where('id', $id)
+                    ->whereIn('business_account_id', getDependentUserIds())
+                    ->first();
                 if($request->isMethod('post')) {
                     $validator = Validator::make($request->except("_token"), [
                         'title' => ['required',]

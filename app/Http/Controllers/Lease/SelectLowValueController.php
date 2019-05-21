@@ -51,13 +51,6 @@ class SelectLowValueController extends Controller
 
                 $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
 
-//                $asset = LeaseAssets::query()->where('lease_id', '=', $lease->id)
-//                    ->whereNotIn('specific_use', [2])
-//                    ->whereHas('leaseDurationClassified', function ($query) {
-//                        $query->whereNotIn('lease_contract_duration_id', [1, 2]);
-//                    })->whereNotIn('category_id', $category_excluded_id)->first();
-
-
                 $asset = LeaseAssets::query()->where('lease_id', '=', $lease->id)
                     ->whereHas('leaseDurationClassified', function ($query) {
                         $query->whereNotIn('lease_contract_duration_id', [1, 2]);

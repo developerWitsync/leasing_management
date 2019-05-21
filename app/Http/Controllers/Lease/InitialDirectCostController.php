@@ -84,7 +84,7 @@ class InitialDirectCostController extends Controller
                     ->first(); //since there can be only one lease asset per lease
 
                 if ($asset) {
-                    $currencies = Currencies::query()->where('status', '=', '1')->get();
+                    $currencies = fetchCurrenciesFromSettings();
                     if ($asset->initialDirectCost) {
                         $model = $asset->initialDirectCost;
                     } else {

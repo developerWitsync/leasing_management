@@ -27,7 +27,7 @@
             <label for="name" class="col-md-12 control-label">Effective From</label>
             <div class="col-md-12 form-check form-check-inline" required>
                 <input type="text" class="form-control lease_period" name="effective_from" id="effective_from"
-                       autocomplete="off">
+                       autocomplete="off" readonly="readonly" style="background-color: #fff;">
                 @if ($errors->has('effective_from'))
                     <span class="help-block">
                         <strong>{{ $errors->first('effective_from') }}</strong>
@@ -76,9 +76,13 @@
             dateFormat: "dd-M-yy",
             changeYear: true,
             changeMonth: true,
-            minDate: new Date('{{ \Carbon\Carbon::parse($asset->accural_period)->addDays(1)->format("Y-m-d")  }}'),
-            maxDate: new Date('{{ \Carbon\Carbon::parse($asset->lease_end_date)->format("Y-m-d") }}'),
-            yearRange: '{{\Carbon\Carbon::parse($asset->accural_period)->format("Y")}}:{{\Carbon\Carbon::parse($asset->lease_end_date)->format("Y")}}',
+            minDate: new Date('{{ \Carbon\Carbon::parse($minDate)->format("Y-m-d")  }}'),
+            @if(\Carbon\Carbon::parse($maxDate)->greaterThan(\Carbon\Carbon::today()))
+                //maxDate: new Date('{{ \Carbon\Carbon::today()->format("Y-m-d") }}'),
+            @else
+                maxDate: new Date('{{ \Carbon\Carbon::parse($maxDate)->format("Y-m-d") }}'),
+            @endif
+            yearRange: '{{\Carbon\Carbon::parse($asset->accural_period)->format("Y")}}:{{\Carbon\Carbon::parse($maxDate)->format("Y")}}',
             onSelect: function (date, instance) {
                 var _ajax_url = '{{route("lease.checklockperioddate")}}';
                 checklockperioddate(date, instance, _ajax_url);

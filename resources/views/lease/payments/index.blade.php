@@ -79,6 +79,9 @@
                         <div class="panel panel-info">
                             <div class="panel-heading clearfix">
                                 {{ $asset->name }} Payments
+                                @if($subsequent_modify_required)
+                                    | <span class="badge badge-primary" style="background-color: #f2dede;border-color: #ebccd1;color: #a94442;">Please note that you will have to update all the payments under subsequent modification.</span>
+                                @endif
                                 <span>
                                     <a href="{{ route('lease.payments.createassetpayment', ['id' => $asset->id]) }}"
                                        class="btn btn-sm btn-primary pull-right add_more">Add Lease Payments</a>

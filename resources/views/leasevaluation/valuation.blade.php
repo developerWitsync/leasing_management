@@ -43,15 +43,15 @@
                 <ul>
                     @if(request()->segment(2) == 'valuation-capitalised')
                         <li>
-                            <a href="{{ route('leasevaluation.cap.asset', ['id' => $lease->id]) }}" class="active">Overivew</a>
+                            <a href="{{ route('leasevaluation.cap.asset', ['id' => $lease->id]) }}">Overview</a>
                         </li>
 
                         <li>
-                            <a href="{{ route('leasevaluation.cap.asset.valuation', ['id' => $lease->id]) }}">Valuation</a>
+                            <a href="{{ route('leasevaluation.cap.asset.valuation', ['id' => $lease->id]) }}"  class="active">Valuation</a>
                         </li>
 
                         <li>
-                            <a href="#assetTab3">Interest &amp; Depreciation</a>
+                            <a href="{{ route('leasevaluation.cap.interestdepreciation', ['id' => $lease->id]) }}">Interest &amp; Depreciation</a>
                         </li>
                     @else
 
@@ -63,12 +63,25 @@
                 </ul>
             </div>
 
+
+
             @include('leasevaluation.partials._valuation_tab')
 
             <span id="see_details"></span>
 
         </div>
     </div>
+
+
+    <!--Lease Liability Calculus -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="dialog">
+            <div class="modal-content current_modal_body">
+
+            </div>
+        </div>
+    </div>
+    <!--Lease Liability Calculus-->
 
 @endsection
 @section('footer-script')
@@ -134,19 +147,18 @@
                     var effective_date = new Date(data[i].effective_date);
                     var undisounted_lease_liability = {
                         'x' : effective_date.toDateString() + ' (' + data[i].valuation_type + ')',
-                        'y' : parseFloat(data[i].undiscounted_value),
-
+                        'y' : parseFloat(data[i].undiscounted_value.replace(/,/g, '')),
                     };
 
                     var present_value = {
                         'x' : effective_date.toDateString() + ' (' + data[i].valuation_type + ')',
-                        'y' : parseFloat(data[i].present_value),
+                        'y' : parseFloat(data[i].present_value.replace(/,/g, '')),
 
                     };
 
                     var value_of_lease_asset = {
                         'x' : effective_date.toDateString() + ' (' + data[i].valuation_type +')',
-                        'y' : parseFloat(data[i].value_of_lease_asset)
+                        'y' : parseFloat(data[i].value_of_lease_asset.replace(/,/g, ''))
                     };
 
                     final_chart_data[0].values.push(undisounted_lease_liability);
@@ -184,15 +196,31 @@
                 var _data_table_url = '{{ route("leasevaluation.ncap.asset.fetchvaluations", ["id" => $lease->id]) }}';
             @endif
 
+            function formatNumbers(data){
+                //return new Intl.NumberFormat('ja-JP', {style: 'decimal', maximumSignificantDigits: 3 }).format(parseFloat(data));
+                return data;
+            }
+
             var columns = [
                 {"data": null, sortable:false},
                 {"data": "effective_date", sortable:false},
                 {"data": "valuation_type", sortable:false},
-                {"data": "daily_discount_rate", sortable:false},
-
-                {"data": "undiscounted_value", sortable:false},
-                {"data": "present_value", sortable:false},
-                {"data": "value_of_lease_asset", sortable:false},
+                {
+                    "data": "daily_discount_rate", sortable:false, render: function (data) {
+                        return formatNumbers(data);
+                    }
+                },
+                {
+                    "data": "undiscounted_value", sortable:false, render: function (data) {
+                        return formatNumbers(data);
+                    }
+                },
+                {"data": "present_value", sortable:false, render: function (data) {
+                        return formatNumbers(data);
+                    }},
+                {"data": "value_of_lease_asset", sortable:false, render: function (data) {
+                        return formatNumbers(data);
+                    }},
                 {"data": "fair_market_value", sortable:false, render : function (data, type, row, meta) {
                         if(data == "null"){
                             return "N/A";
@@ -212,19 +240,33 @@
                 @if($show_statutory_columns)
                     {"data": "exchange_rate", sortable: false},
                     {"data":"statutory_undiscounted_value", sortable:false, render : function(data, type, row, meta){
-                        return parseFloat(row['exchange_rate']) * parseFloat(data);
+
+                        var _return =  parseFloat(row['exchange_rate']) * parseFloat(data.replace(/,/g, ''));
+                        //return new Intl.NumberFormat('ja-JP', { maximumSignificantDigits: 3 }).format(_return);
+                            return _return.toLocaleString('us', {minimumFractionDigits: 2, maximumFractionDigits: 2});
                     }},
                     {"data":"statutory_present_value", sortable:false , render : function(data, type, row, meta){
-                            return parseFloat(row['exchange_rate']) * parseFloat(data);
+                            var _return = parseFloat(row['exchange_rate']) * parseFloat(data.replace(/,/g, ''));
+                            //return new Intl.NumberFormat('ja-JP', { maximumSignificantDigits: 3 }).format(_return);
+                            return _return.toLocaleString('us', {minimumFractionDigits: 2, maximumFractionDigits: 2});
                         }},
                     {"data":"statutory_value_of_lease_asset", sortable:false , render : function(data, type, row, meta){
-                            return parseFloat(row['exchange_rate']) * parseFloat(data);
+                            var _return = parseFloat(row['exchange_rate']) * parseFloat(data.replace(/,/g, ''));
+                            //return new Intl.NumberFormat('ja-JP', { maximumSignificantDigits: 3 }).format(_return);
+                            return _return.toLocaleString('us', {minimumFractionDigits: 2, maximumFractionDigits: 2});
                         }},
                     {"data":"statutory_fair_market_value", sortable:false , render : function(data, type, row, meta){
-                            return parseFloat(row['exchange_rate']) * parseFloat(data);
+                            if(data)
+                                var _return =  parseFloat(row['exchange_rate']) * parseFloat(data.replace(/,/g, ''));
+                            else
+                                var _return  = data;
+                            //return new Intl.NumberFormat('ja-JP', { maximumSignificantDigits: 3 }).format(_return);
+                            return _return.toLocaleString('us', {minimumFractionDigits: 2, maximumFractionDigits: 2});
                         }},
                     {"data":"statutory_impairment_value", sortable:false , render : function(data, type, row, meta){
-                            return parseFloat(row['exchange_rate']) * parseFloat(data);
+                            var _return =  parseFloat(row['exchange_rate']) * parseFloat(data.replace(/,/g, ''));
+                            //return new Intl.NumberFormat('ja-JP', { maximumSignificantDigits: 3 }).format(_return);
+                            return _return.toLocaleString('us', {minimumFractionDigits: 2, maximumFractionDigits: 2});
                     }},
                 @endif
 
@@ -287,6 +329,49 @@
                     success: function (response) {
                         $('#see_details').html(response);
                         removeOverlayAjax()
+                    }
+                })
+            });
+
+            /**
+             * Show the Historical Carrying amount annexure
+             */
+            $(document.body).on('click', '.carrying_amount_annexure', function(){
+                var lease_id = $(this).data('id');
+                var url = '/lease-valuation/see-carrying-amount-annexure/'+lease_id;
+                $.ajax({
+                    url : url,
+                    beforeSend: function () {
+                        showOverlayForAjax();
+                    },
+                    success: function (response) {
+                        $('.current_modal_body').html(response);
+                        removeOverlayAjax()
+                        $('#myModal').modal('show');
+                    }
+                })
+            });
+
+            /**
+             * Show the escalation chart from the json data here
+             */
+            $(document.body).on('click', '.pv_calculus', function(){
+                var history = $(this).data('history_id');
+                //call ajax to fetch the view for the Valuation Details.....
+                @if(request()->segment(2) == 'valuation-capitalised')
+                    var url = '/lease-valuation/valuation-capitalised/show-pv-calculus/'+history;
+                @else
+                    var url = '/lease-valuation/valuation-non-capitalised/show-pv-calculus/'+history;
+                @endif
+                $.ajax({
+                    url : url,
+                    beforeSend: function () {
+                        showOverlayForAjax();
+                    },
+                    success: function (response) {
+                        removeOverlayAjax();
+                        $('.current_modal_body').html(response);
+                        $('#myModal').modal('show');
                     }
                 })
             });

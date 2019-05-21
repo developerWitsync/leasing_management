@@ -209,7 +209,7 @@
                     </div>
 
 
-                    <div class="panel panel-info">
+                    {{--<div class="panel panel-info">
                         <div class="panel-heading">
                             Number of Underlying Lease Assets
                             <span>
@@ -282,7 +282,7 @@
                                 </tr>
                             </table>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <div class="panel panel-info">
                         <div class="panel-heading">
@@ -588,10 +588,10 @@
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
                                         <td class="title">
-                                            {{ $value->number }}
+                                            {{ number_format((float)$value->number , 2, '.', '')}}
                                         </td>
                                         <td>
-
+                                            @if($value->number)
                                             <a data-href="{{ route('settings.leaseclassification.editescalationpercentagenumber', ['id' => $value->id]) }}"
                                                href="javascript:;" class="btn btn-sm btn-success edit_table_setting">
                                                 <i class="fa fa-pencil-square-o"></i>
@@ -600,6 +600,7 @@
                                             <a data-href="{{ route('settings.leaseclassification.deleteescalationpercentagenumber', ['id' => $value->id]) }}"
                                                href="javascript:;" class="btn btn-sm btn-danger delete_settings"><i
                                                         class="fa fa-trash-o"></i></a>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
@@ -629,6 +630,82 @@
                                                     class="fa fa-check-square"></i></button>
                                         <a href="javascript:;" class="btn btn-sm btn-danger add_more"
                                            data-form="add_more_escalation_percentage" title="Cancel"><i
+                                                    class="fa fa-times"></i></a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            Escalation Consistency Gap (in years)
+                            <span>
+                                    <a href="javascript:void(0);" class="btn btn-sm btn-primary pull-right add_more"
+                                       data-form="add_more_escalation_consistency_gap">Add More</a>
+                                </span>
+                        </div>
+                        <div class="panel-body settingTble">
+                            <table class="table table-condensed">
+                                <thead>
+                                <tr>
+                                    <th width="80px">Sr No.</th>
+                                    <th>Gap (In Years)</th>
+                                    <th width="120px">Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($escalation_consistency_gap as $key => $value)
+                                    <tr>
+                                        <td>{{ $key + 1 }}</td>
+                                        <td class="title">
+                                            @if($value->years == 1)
+                                                Annual
+                                            @else
+                                                {{ number_format((float)$value->years , 2, '.', '')}}
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($value->years && $value->years != 1)
+                                                <a data-href="{{ route('settings.leaseclassification.editescalationconsistencygap', ['id' => $value->id]) }}"
+                                                   href="javascript:;" class="btn btn-sm btn-success edit_table_setting">
+                                                    <i class="fa fa-pencil-square-o"></i>
+                                                </a>
+
+                                                <a data-href="{{ route('settings.leaseclassification.deleteescalationconsistencygap', ['id' => $value->id]) }}"
+                                                   href="javascript:;" class="btn btn-sm btn-danger delete_settings"><i
+                                                            class="fa fa-trash-o"></i></a>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                <tr style=" {{ $errors->has('escalation_consistency_gap') ? ' has-error' : 'display: none' }}"
+                                    class="add_more_escalation_consistency_gap">
+                                    <td>{{ count($escalation_consistency_gap) + 1 }}</td>
+                                    <td>
+                                        <form action="{{ route('settings.leaseclassification.addescalationconsistencygap') }}"
+                                              method="POST" class="add_more_escalation_consistency_gap_form">
+                                            {{ csrf_field() }}
+                                            <div class="form-group{{ $errors->has('escalation_consistency_gap') ? ' has-error' : '' }}">
+                                                <input type="text" value="{{ old('escalation_consistency_gap') }}"
+                                                       name="escalation_consistency_gap" placeholder="Years"
+                                                       class="form-control {{ $errors->has('escalation_consistency_gap') ? ' has-error' : '' }}"/>
+                                                @if ($errors->has('escalation_consistency_gap'))
+                                                    <span class="help-block">
+                                                            <strong>{{ $errors->first('escalation_consistency_gap') }}</strong>
+                                                        </span>
+                                                @endif
+                                            </div>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <button type="button"
+                                                onclick="javascript:$('.add_more_escalation_consistency_gap_form').submit();"
+                                                class="btn btn-sm btn-success" title="Save"><i
+                                                    class="fa fa-check-square"></i></button>
+                                        <a href="javascript:;" class="btn btn-sm btn-danger add_more"
+                                           data-form="add_more_escalation_consistency_gap" title="Cancel"><i
                                                     class="fa fa-times"></i></a>
                                     </td>
                                 </tr>
@@ -810,12 +887,19 @@
                                     @endif
                                     <td>Intangible Asset
                                         @if($is_disabled)
-                                            <a href="javascript:;"
-                                               class="btn btn-sm btn-success add_intangible_asset disabled">Include in Lease
-                                                Valuation Capitalization</a>
+                                            @if(collect($category_excluded_all)->where('status', '=', '0')->where('category_id', '=', '7')->count() > 0)
+                                                <span class="badge badge-success">Excluded
+                                                in Lease Valuation Capitalization</span>
+                                            @else
+                                                <span class="badge badge-success">Included in Lease
+                                                Valuation Capitalization</span>
+                                            @endif
+                                            {{--<a href="javascript:;"--}}
+                                               {{--class="btn btn-sm btn-success add_intangible_asset disabled">Include in Lease--}}
+                                                {{--Valuation Capitalization</a>--}}
 
-                                            <a href="javascript:;" class="btn btn-sm btn-danger delete_settings disabled">Exclude
-                                                in Lease Valuation Capitalization</a>
+                                            {{--<a href="javascript:;" class="btn btn-sm btn-danger delete_settings disabled">Exclude--}}
+                                                {{--in Lease Valuation Capitalization</a>--}}
                                         @else
                                             <a data-href="{{ route('settings.leaseclassification.addcategoriesexcluded', ['id' => 7]) }}"
                                                href="javascript:;"

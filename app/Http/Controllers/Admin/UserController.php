@@ -10,9 +10,8 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Http\Controllers\Controller;
-use App\States;
 use App\User;
-use Carbon\Carbon;
+use App\AccountingStandards;
 use Illuminate\Http\Request;
 use App\Countries;
 use App\Currencies;
@@ -136,13 +135,14 @@ class UserController extends Controller
                 }
 
             }
-
+            $accounting_standards = AccountingStandards::query()->get();
             return view('admin.users.add-user',compact(
                 'countries',
                 'industry_types',
                 'currencies',
                 'user',
-                'states'
+                'states',
+                'accounting_standards'
             ));
         } catch (\Exception $e) {
             dd($e);
@@ -196,7 +196,8 @@ class UserController extends Controller
                     $user->save();
                     return redirect(route("admin.users.index"))->with('success', 'User details has been updated successfully.');
                     }
-                 return view('admin.users.update', compact('user','countries', 'industry_types', 'currencies', 'states'));
+                $accounting_standards = AccountingStandards::query()->get();
+                return view('admin.users.update', compact('user','countries', 'industry_types', 'currencies', 'states', 'accounting_standards'));
             }
     }
 

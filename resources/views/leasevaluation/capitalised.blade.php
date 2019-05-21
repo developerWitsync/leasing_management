@@ -9,10 +9,12 @@
 @section('content')
    <div class="leasingModuleOuter">
    		<!--<div class="leasingBreatcrum"><a href="">Dashboard</a>&nbsp; / &nbsp;<span>Lessee Leasing Module</span></div>-->
-   		<div class="leasingMainHd">Lessee Leasing Module</div>
-	   @foreach($categories as $category)
-   			<span id="append_here_{{$category->id}}"></span>
-	   @endforeach
+		<div class="leasingMainHd">Lessee Leasing Module</div>
+		   <span id="append_here_short_term"></span>
+	   		<span id="append_here_low_value"></span>
+		   @foreach($categories as $category)
+				<span id="append_here_{{$category->id}}"></span>
+		   @endforeach
    </div>
 @endsection
 @section('footer-script')
@@ -27,4 +29,29 @@
 			fetchCategoryAssets({{$category->id}}, _is_capitalized);
 		</script>
 	@endforeach
+	<script>
+		if(!_is_capitalized){
+			// if the valuation is non-capitalised we need to show 2 additional categories for short term and low value lease assets
+			fetchShortTermLeaseAssets();
+			fetchLowValueLeaseAssets();
+		}
+	</script>
+
+	@if (session('status'))
+		<script>
+			$(function () {
+				bootbox.dialog({
+					message: '<div class="thank-you-pop">\n' +
+							'\t\t\t\t\t\t\t<img src="{{ asset('images/round_tick.png') }}" alt="">\n' +
+							'\t\t\t\t\t\t\t<h1>Thank You!</h1>\n' +
+							'\t\t\t\t\t\t\t<p>Your Lease has been submitted successfully.</p>\n' +
+							'\t\t\t\t\t\t\t<h3 class="cupon-pop">Lease ULA CODE : <span>{{ session('status') }}</span></h3>\n' +
+							'\t\t\t\t\t\t\t\n' +
+							' \t\t\t\t\t\t</div>',
+					closeButton: true
+				});
+			});
+		</script>
+	@endif
+
 @endsection

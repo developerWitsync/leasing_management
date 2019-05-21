@@ -43,7 +43,7 @@
                 <ul>
                     @if(request()->segment(2) == 'valuation-capitalised')
                         <li>
-                            <a href="{{ route('leasevaluation.cap.asset', ['id' => $lease->id]) }}" class="active">Overivew</a>
+                            <a href="{{ route('leasevaluation.cap.asset', ['id' => $lease->id]) }}" class="active">Overview</a>
                         </li>
 
                         <li>
@@ -51,7 +51,7 @@
                         </li>
 
                         <li>
-                            <a href="#assetTab3">Interest &amp; Depreciation</a>
+                            <a href="{{ route('leasevaluation.cap.interestdepreciation', ['id' => $lease->id]) }}">Interest &amp; Depreciation</a>
                         </li>
                     @else
 
@@ -67,6 +67,17 @@
             @include('leasevaluation.partials._asset_overview_tab')
         </div>
     </div>
+
+    <!--Escalations Chart -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="dialog">
+            <div class="modal-content escalation_chart_modal_body">
+
+            </div>
+        </div>
+    </div>
+
+    <!--Escalations Chart -->
 
 @endsection
 @section('footer-script')
@@ -133,6 +144,23 @@
                 });
             }
         });
+
+        $(function () {
+            $('.show_escalation').on('click', function(){
+                var payment_id = $(this).data('payment_id');
+                $.ajax({
+                    url : '/lease-valuation/show-escalation-chart/'+payment_id,
+                    beforeSend : function(){
+                      showOverlayForAjax();
+                    },
+                    success:function(response){
+                        $(".escalation_chart_modal_body").html(response);
+                        $("#myModal").modal("show");
+                        removeOverlayAjax();
+                    }
+                })
+            });
+        })
 
     </script>
 @endsection

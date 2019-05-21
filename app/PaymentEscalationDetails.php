@@ -24,10 +24,16 @@ class PaymentEscalationDetails extends Model
         'amount_based_currency',
         'escalated_amount',
         'escalation_currency',
-        'total_undiscounted_lease_payment_amount'
+        'total_undiscounted_lease_payment_amount',
+        'subsequent_status',
+        'consistency_gap'
     ];
 
     public function escalationBasis(){
         return $this->hasOne('App\ContractEscalationBasis', 'id', 'escalation_basis');
+    }
+
+    public function escalationInconsistentInputs(){
+        return $this->hasOne('App\PaymentEscalationInconsistentData', 'payment_id', 'payment_id');
     }
 }

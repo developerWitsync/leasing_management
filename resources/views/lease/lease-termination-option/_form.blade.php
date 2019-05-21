@@ -86,7 +86,7 @@
 
                     <input type="text" placeholder="Expected Lease End Date" class="form-control lease_period"
                            id="lease_end_date"
-                           name="lease_end_date" value="{{ old('lease_end_date', $model->lease_end_date) }}"
+                           name="lease_end_date" value="{{ old('lease_end_date', \Carbon\Carbon::parse($model->lease_end_date)->format('d-M-Y')) }}"
                            autocomplete="off" readonly="readonly" style="background-color:#fff">
 
                     @if ($errors->has('lease_end_date'))

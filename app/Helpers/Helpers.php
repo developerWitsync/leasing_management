@@ -125,18 +125,45 @@ function updateCreditBalanceForParent($adjusted_amount)
 }
 
 /**
+ * returns the currencies array to be listed for the user...
+ * @return array
+ */
+function fetchCurrenciesFromSettings(){
+    $contract_currencies = [];
+
+    $reporting_currency_settings = \App\ReportingCurrencySettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
+
+    $reporting_foreign_currency_transaction_settings = \App\ForeignCurrencyTransactionSettings::query()
+        ->whereIn('business_account_id', getDependentUserIds())
+        ->get();
+
+    if(collect($reporting_currency_settings)->isNotEmpty()) {
+        $contract_currencies[$reporting_currency_settings->statutory_financial_reporting_currency] = $reporting_currency_settings->statutory_financial_reporting_currency;
+        $contract_currencies[$reporting_currency_settings->currency_for_lease_reports] = $reporting_currency_settings->currency_for_lease_reports;
+
+        if ($reporting_currency_settings->is_foreign_transaction_involved == 'yes') {
+            foreach ($reporting_foreign_currency_transaction_settings as $reporting_foreign_currency_transaction_setting) {
+                $contract_currencies[$reporting_foreign_currency_transaction_setting->foreign_exchange_currency] = $reporting_foreign_currency_transaction_setting->foreign_exchange_currency;
+            }
+        }
+    }
+
+    return $contract_currencies;
+}
+
+/**
  * calculate all the payment due dates provided the first payment due date and the last payment due date
- * @param $firt_payment_date Lease Asset First Payment Due Date
+ * @param $first_payment_date Lease Asset First Payment Due Date
  * @param $last_payment_date Lease Asset Last Payment Due Date
  * @param $payment_payout Lease Asset Payment TimeOut
  * @param int $addMonths lease Asset Payment Months interval
  * @return array
  */
-function calculatePaymentDueDates($firt_payment_date, $last_payment_date, $payment_payout, $addMonths = 1)
+function calculatePaymentDueDates($first_payment_date, $last_payment_date, $payment_payout, $addMonths = 1)
 {
     //check if the payments are going to be monthly
     //have to loop from the first payment start date till the last payment end date
-    $start_date = $firt_payment_date;
+    $start_date = $first_payment_date;
     $end_date = $last_payment_date;
     $final_payout_dates = [];
     $i = 1;
@@ -147,33 +174,50 @@ function calculatePaymentDueDates($firt_payment_date, $last_payment_date, $payme
             $month = \Carbon\Carbon::parse($start_date)->format('F');
             $current_year = \Carbon\Carbon::parse($start_date)->format('Y');
             $final_payout_dates[$current_year][$month][$start_date] = $start_date;
-            $start_date = \Carbon\Carbon::parse($start_date)->addMonth($addMonths)->format('Y-m-d');
-
-            if (strtotime($start_date) <= strtotime($end_date)) {
-                $month = \Carbon\Carbon::parse($end_date)->format('F');
-                $current_year = \Carbon\Carbon::parse($end_date)->format('Y');
-                $date = \Carbon\Carbon::parse($end_date)->format('Y-m-d');
-                $final_payout_dates[$current_year][$month][$date] = $date;
+            //$start_date = \Carbon\Carbon::parse($start_date)->addMonth($addMonths)->firstOfMonth()->format('Y-m-d');
+            //$start_date = \Carbon\Carbon::parse($start_date)->addMonth($addMonths)->format('Y-m-d');
+            if(\Carbon\Carbon::parse($start_date)->isLastOfMonth()){
+                $new_date =  \Carbon\Carbon::parse($start_date)->addMonths($addMonths);
+                $start_date = \Carbon\Carbon::create($new_date->year, $new_date->month, \Carbon\Carbon::parse($first_payment_date)->day)->format('Y-m-d');
+            } else {
+                $start_date = \Carbon\Carbon::parse($start_date)->addMonthsNoOverflow($addMonths)->format('Y-m-d');
             }
+
+//            if (strtotime($start_date) <= strtotime($end_date)) {
+//                $month = \Carbon\Carbon::parse($end_date)->format('F');
+//                $current_year = \Carbon\Carbon::parse($end_date)->format('Y');
+//                $date = \Carbon\Carbon::parse($end_date)->format('Y-m-d');
+//                $final_payout_dates[$current_year][$month][$date] = $date;
+//            }
 
         } else if ($payment_payout == 2) {
             //means that the payment is going to be made at the end of the interval
             if ($i == 1) {
                 //will not increase by 1 month as the first payment date should be start_date
                 $start_date = \Carbon\Carbon::parse($start_date)->format('Y-m-d');
+                $interval_date = \Carbon\Carbon::parse($start_date)->format('Y-m-d');
+                //$start_date = \Carbon\Carbon::parse($start_date)->firstOfMonth()->format('Y-m-d');
+                //$start_date = \Carbon\Carbon::parse($start_date)->format('Y-m-d');
             } else {
-                $start_date = \Carbon\Carbon::parse($start_date)->addMonth($addMonths)->format('Y-m-d');
+                if(\Carbon\Carbon::parse($start_date)->isLastOfMonth()){
+                    $new_date =  \Carbon\Carbon::parse($start_date)->addMonths($addMonths);
+                    $start_date = \Carbon\Carbon::create($new_date->year, $new_date->month, \Carbon\Carbon::parse($first_payment_date)->day)->format('Y-m-d');
+                } else {
+                    $start_date = \Carbon\Carbon::parse($start_date)->addMonthsNoOverflow($addMonths)->format('Y-m-d');
+                }
+                //$interval_date = \Carbon\Carbon::parse($start_date)->lastOfMonth()->format('Y-m-d');
+                $interval_date = \Carbon\Carbon::parse($start_date)->format('Y-m-d');
             }
 
-            if (strtotime($start_date) <= strtotime($end_date)) {
-                $month = \Carbon\Carbon::parse($start_date)->format('F');
-                $current_year = \Carbon\Carbon::parse($start_date)->format('Y');
-                $final_payout_dates[$current_year][$month][$start_date] = $start_date;
+            if (strtotime($interval_date) <= strtotime($end_date)) {
+                $month = \Carbon\Carbon::parse($interval_date)->format('F');
+                $current_year = \Carbon\Carbon::parse($interval_date)->format('Y');
+                $final_payout_dates[$current_year][$month][$interval_date] = $interval_date;
             } else {
-                $month = \Carbon\Carbon::parse($end_date)->format('F');
-                $current_year = \Carbon\Carbon::parse($end_date)->format('Y');
-                $date = \Carbon\Carbon::parse($end_date)->format('Y-m-d');
-                $final_payout_dates[$current_year][$month][$date] = $date;
+//                $month = \Carbon\Carbon::parse($end_date)->format('F');
+//                $current_year = \Carbon\Carbon::parse($end_date)->format('Y');
+//                $date = \Carbon\Carbon::parse($end_date)->format('Y-m-d');
+//                $final_payout_dates[$current_year][$month][$date] = $date;
             }
         }
         $i++;
@@ -241,16 +285,11 @@ function formatToDecimal($number){
  */
 function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \App\Lease $lease, \App\LeaseAssets $asset)
 {
+
+    $consistency_gap = (isset($data['consistency_gap']) && !is_null($data['consistency_gap']))?$data['consistency_gap']:1;
+
     $base_date = getParentDetails()->accountingStandard->base_date;
     $effective_date = \Carbon\Carbon::parse($data['effective_from']);
-    //check for the subsequent modification and change the effective date as it is..
-    $subsequent_modify_required = $lease->isSubsequentModification();
-    if($subsequent_modify_required){
-        $effective_date = \Carbon\Carbon::parse($lease->modifyLeaseApplication->last()->effective_from);
-        $lease_history = \App\LeaseHistory::query()->where('lease_id', '=', $lease->id)->orderBy('id', 'desc')->first();
-        $filtered_escalation_dates  = collect(json_decode($lease_history->esclation_payments, false))
-            ->where('payment_id', '=', $payment->id);
-    }
 
     $escalation_applicable = $data['is_escalation_applicable'];
     $escalation_basis = isset($data['escalation_basis']) ? $data['escalation_basis'] : null;
@@ -306,6 +345,7 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
                 if ($payments_in_this_year_month) {
 
                     if ($payments_in_this_year_month->total_payment_amount > 0) {
+
                         //yes the user is paying on this month of this year
                         //the condition is applying the escalations only on the escalation date
                         //however it should apply the escalation on the next year as well
@@ -314,8 +354,7 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
 
                         if ($condition) {
 
-                            if ($amount_to_consider == 0) {
-                                //$amount_to_consider = $payment->payment_per_interval_per_unit;
+                            if ($amount_to_consider == 0 || $payment->lease_payment_per_interval == 2) {
                                 $amount_to_consider = $payments_in_this_year_month->total_payment_amount;
                             }
 
@@ -336,27 +375,17 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
                             }
 
                             $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
-                            $escalation_date->addYear(1); //applied annually
+
+                            $escalation_date->addYear($consistency_gap); //applied annually
+
                         } else {
                             //escalation is not applied however the user needs to pay for this month and year
-                            if ($amount_to_consider == 0) {
+                            if ($amount_to_consider == 0 || $payment->lease_payment_per_interval == 2) {
                                 //$amount_to_consider = $payment->payment_per_interval_per_unit;
                                 $amount_to_consider = $payments_in_this_year_month->total_payment_amount;
                             }
 
-                            if($subsequent_modify_required && $start_year <= $effective_date->format('Y') && $key <= $effective_date->format('m')){
-                                //have to take out the escalation percentage that was applied in the initial valuation..
-                                $filtered_data = $filtered_escalation_dates
-                                    ->where('escalation_year', '=', $start_year)->where('escalation_month', '=',$key)
-                                    ->first();
-                                if(count($filtered_data) == 1){
-                                    $escalation_percentage_or_amount = $filtered_data->value_escalated;
-                                    $amount_to_consider = $filtered_data->total_amount_payable;
-                                }
-                                $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
-                            } else {
-                                $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
-                            }
+                            $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
 
                         }
 
@@ -400,7 +429,7 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
                             foreach ($data['inconsistent_effective_date'][$start_year] as $key => $escalation_date) {
                                 $escalation_date_parsed = \Carbon\Carbon::parse($escalation_date);
                                 if ($escalation_date_parsed->between($first_date_of_month, $last_date_of_month)) {
-                                    if ($amount_to_consider == 0) {
+                                    if ($amount_to_consider == 0 || $payment->lease_payment_per_interval == 2) {
                                         //$amount_to_consider = $payment->payment_per_interval_per_unit;
                                         $amount_to_consider = $payments_in_this_year_month->total_payment_amount;
                                     }
@@ -418,11 +447,14 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
                                         $diff_in_days = $next_escalation_date->diffInDays($current_escalation_date);
 
                                         if ($diff_in_days > 365) {
-                                            $next_escalation_date = \Carbon\Carbon::create($start_year, 1, 1)->lastOfYear();
-                                            $diff_in_days = $next_escalation_date->diffInDays($current_escalation_date);
+                                            //$next_escalation_date = \Carbon\Carbon::create($start_year, 1, 1)->lastOfYear();
+                                            //$diff_in_days = $next_escalation_date->diffInDays($current_escalation_date);
+                                            $diff_in_days = 365;
                                         }
 
-                                        $days_in_current_year = \Carbon\Carbon::create($start_year, 1, 1)->firstOfYear()->diffInDays(\Carbon\Carbon::create($start_year, 1, 1)->lastOfYear());
+                                        //$days_in_current_year = \Carbon\Carbon::create($start_year, 1, 1)->firstOfYear()->diffInDays(\Carbon\Carbon::create($start_year, 1, 1)->lastOfYear()) + 1;
+
+                                        $days_in_current_year = 365;
 
                                         $escalation_percentage_or_amount = $data['inconsistent_total_escalation_rate'][$start_year][$key];
 
@@ -445,7 +477,7 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
 
                                     } else {
                                     //escalation is not applied however the user needs to pay for this month and year
-                                    if ($amount_to_consider == 0) {
+                                    if ($amount_to_consider == 0 || $payment->lease_payment_per_interval == 2) {
                                         //$amount_to_consider = $payment->payment_per_interval_per_unit;
                                         $amount_to_consider = $payments_in_this_year_month->total_payment_amount;
                                     }
@@ -454,26 +486,12 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
                             }
                         } else {
                             //escalation is not applied however the user needs to pay for this month and year
-                            if ($amount_to_consider == 0) {
+                            if ($amount_to_consider == 0 || $payment->lease_payment_per_interval == 2) {
                                 //$amount_to_consider = $payment->payment_per_interval_per_unit;
                                 $amount_to_consider = $payments_in_this_year_month->total_payment_amount;
                             }
 
-                            if($subsequent_modify_required && $start_year <= $effective_date->format('Y') && $key <= $effective_date->format('m')){
-                                //have to take out the escalation percentage that was applied in the initial valuation..
-                                $filtered_data = $filtered_escalation_dates
-                                    ->where('escalation_year', '=', $start_year)->where('escalation_month', '=',$key)
-                                    ->first();
-                                if(count($filtered_data) == 1){
-                                    $escalation_percentage_or_amount = $filtered_data->value_escalated;
-                                    $amount_to_consider = $filtered_data->total_amount_payable;
-                                }
-                                $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
-                            } else {
-                                $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
-                            }
-
-                            // $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
+                            $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => formatToDecimal($amount_to_consider), 'current_class' => $current_class];
                         }
                     } else {
                         $escalations[$start_year][$month] = ['percentage' => $escalation_percentage_or_amount, 'amount' => 0, 'current_class' => $current_class];
@@ -506,7 +524,7 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
 
                     if ($payments_in_this_year_month->total_payment_amount > 0) {
                         //escalation is not applied however the user needs to pay for this month and year
-                        if ($amount_to_consider == 0) {
+                        if ($amount_to_consider == 0 || $payment->lease_payment_per_interval == 2) {
                             //$amount_to_consider = $payment->payment_per_interval_per_unit;
                             $amount_to_consider = $payments_in_this_year_month->total_payment_amount;
                         }
@@ -561,7 +579,8 @@ function getUndiscountedTotalLeasePayment($asset_id)
     if ($asset_id) {
         $asset = \App\LeaseAssets::query()->findOrFail($asset_id);
         $total = 0;
-        foreach ($asset->payments as $payment) {
+        // no need to include the Non Lease Component Payments in the calculation of Undiscounted Lease Liability.
+        foreach ($asset->payments()->where('type', '<>', '2')->get() as $payment) {
             if ((isset($payment->paymentEscalationSingle) && $payment->paymentEscalationSingle->is_escalation_applicable == 'no') || !isset($payment->paymentEscalationSingle)) {
                 //need to fetch the total of all the payments in payment annexure...
                 //$payments_total = \App\LeaseAssetPaymenetDueDate::query()->where('payment_id', '=', $payment->id)->count();
@@ -638,10 +657,14 @@ function createUlaCode()
 {
 
     $current_year = date("Y");
-    $first_param = \App\Lease::query()->count();
-    $first_param = $first_param + 1;
+
+    $first_param = \App\Lease::query()
+        ->whereIn('business_account_id', getDependentUserIds())
+        ->count();
+
     $second_param = \App\Lease::query()
         ->whereRaw("YEAR(created_at) =  '$current_year'")
+        ->whereIn('business_account_id', getDependentUserIds())
         ->count();
 
     $string = "LA" . str_pad($first_param, 3, 0, STR_PAD_LEFT) . '/' . str_pad($second_param, 3, 0, STR_PAD_LEFT) . '/' . $current_year;
@@ -658,10 +681,17 @@ function fetchCurrencyExchangeRate($date = null, $source, $target)
 {
     // set API Endpoint and access key (and any options of your choice)
     $endpoint = 'live';
+
+    if ($date && \Carbon\Carbon::parse($date)->lessThanOrEqualTo(\Carbon\Carbon::today())) {
+        $endpoint = 'historical';
+    }
+
     $access_key = env('CURRENCY_API_ACCESS_KEY');
 
     $url = 'http://apilayer.net/api/' . $endpoint . '?access_key=' . $access_key . '&source=' . $source . '&currencies=' . $target;
-    if ($date) {
+
+    if ($date && \Carbon\Carbon::parse($date)->lessThanOrEqualTo(\Carbon\Carbon::today())) {
+        $date = \Carbon\Carbon::parse($date)->format('Y-m-d');
         $url .= '&date=' . $date;
     }
 
@@ -1252,7 +1282,62 @@ function getBackUrl($step, $id)
 
 }
 
-
+/**
+ * recaptcha
+ * @return \ReCaptcha\RequestMethod\Post
+ */
 function customRequestCaptcha(){
     return new \ReCaptcha\RequestMethod\Post();
+}
+
+/**
+ * calculate the interest expense value for the interest and Depreciation Tab
+ * @param float $previous_liability
+ * @param float $discount_rate
+ * @param int $days
+ * @return float|int
+ */
+function calculateInterestExpense(float $previous_liability, float $discount_rate, int $days)
+{
+    $discount_rate = $discount_rate * (1 / 100);
+    $interest = ($previous_liability * pow(1 + $discount_rate, $days)) - $previous_liability;
+    return round($interest, 4);
+}
+
+/**
+ * calculate and returns the total number of months...
+ * @param $start_date
+ * @param $end_date
+ * @return int
+ * @throws \Exception
+ */
+function calculateMonthsDifference($start_date, $end_date){
+    $start    = (new \DateTime($start_date))->modify('first day of this month');
+    $end      = (new \DateTime($end_date))->modify('first day of next month');
+    $interval = \DateInterval::createFromDateString('1 month');
+    $period   = new \DatePeriod($start, $interval, $end);
+    $months_array = [];
+    foreach ($period as $dt) {
+        $months_array[] = $dt->format("Y-m");
+    }
+    return count($months_array);
+}
+
+/**
+ * calculate the depreciation for the lease asset based upon the start date and end date and in case of subsequent from the effective date till the lease end date...
+ * @param $subsequent_modify_required
+ * @param $asset
+ * @param $value_of_lease_asset
+ * @return float|int
+ * @throws \Exception
+ */
+function calculateDepreciation($subsequent_modify_required, \App\LeaseAssets $asset, $value_of_lease_asset){
+    $start_date = \Carbon\Carbon::parse($asset->accural_period);
+    if(!$subsequent_modify_required) {
+        $base_date = \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date);
+        $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
+        $months = calculateMonthsDifference($base_date->format('Y-m-d'), $asset->getLeaseEndDate($asset));
+        $depreciation = (float)$value_of_lease_asset/$months;
+        return round($depreciation, 4);
+    }
 }

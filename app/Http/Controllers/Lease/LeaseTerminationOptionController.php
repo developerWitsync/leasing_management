@@ -37,7 +37,7 @@ class LeaseTerminationOptionController extends Controller
         return [
             'lease_termination_option_available'   => 'required',
             'exercise_termination_option_available'   => 'required_if:lease_termination_option_available,yes',
-            'lease_end_date'  => 'required_if:exercise_termination_option_available,yes|nullable|date',
+            'lease_end_date'  => 'required_if:exercise_termination_option_available,yes|nullable|date_format:d-M-Y',
             'termination_penalty_applicable'  => 'required_if:exercise_termination_option_available,yes',
             'currency' => 'required_if:termination_penalty_applicable,yes',
             'termination_penalty'  => 'required_if:termination_penalty_applicable,yes|nullable|numeric',

@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Lease;
 
 
 use App\ContractEscalationBasis;
+use App\EscalationConsistencyGap;
 use App\EscalationFrequency;
 use App\EscalationPercentageSettings;
 use App\Http\Controllers\Controller;
@@ -85,8 +86,14 @@ class EscalationController extends Controller
                         }
 
                         $required_escalations = $required_escalations + 1;
-                        if(count($payment->paymentEscalations) > 0){
-                            $completed_escalations = $completed_escalations + 1;
+                        if($payment->paymentEscalationSingle){
+                            if($subsequent_modify_required) {
+                                if($payment->paymentEscalationSingle->subsequent_status == '1'){
+                                    $completed_escalations = $completed_escalations + 1;
+                                }
+                            } else {
+                                $completed_escalations = $completed_escalations + 1;
+                            }
                         }
 
                     }
@@ -159,7 +166,10 @@ class EscalationController extends Controller
                 if($request->escalation_clause_applicable == "no"){
                     confirmSteps($lease->id,$this->current_step);
                 } else {
-                    \App\LeaseCompletedSteps::query()->where('lease_id', '=',$lease->id)->where('completed_step', '=', 10)->delete();
+                    \App\LeaseCompletedSteps::query()
+                        ->where('lease_id', '=',$lease->id)
+                        ->where('completed_step', '=', 10)
+                        ->delete();
                 }
 
                 if($lease->save()){
@@ -224,6 +234,8 @@ class EscalationController extends Controller
                         if($request->escalation_basis == '2') {
                             $rules['escalated_amount'] = 'required|numeric|min:1';
                         }
+
+                        $rules['consistency_gap'] = 'required|numeric|min:1';
                     }
 
                     $validator = Validator::make($request->except('_token', 'method', 'uri', 'ip'), $rules);
@@ -252,6 +264,10 @@ class EscalationController extends Controller
                         $data['escalated_amount'] = null;
                         $data['escalation_currency'] = null;
                         $data['total_undiscounted_lease_payment_amount'] = null;
+                    }
+
+                    if($subsequent_modify_required) {
+                        $data['subsequent_status'] = '1';
                     }
 
                     $model->setRawAttributes($data);
@@ -296,7 +312,7 @@ class EscalationController extends Controller
                                     $data = [
                                         'payment_id' => $payment->id,
                                         'escalation_year'   => $year,
-                                        'escalation_month'  => date('m', strtotime($month)),
+                                        'escalation_month'  => str_pad(Carbon::parse('1 '.$month)->month, '2', '0', STR_PAD_LEFT),
                                         'percentage_or_amount_based'    => ($request->escalation_basis=='2')?'amount':'percentage',
                                         'value_escalated'   => $escalation['percentage'],
                                         'total_amount_payable'  => $escalation['amount']
@@ -323,23 +339,34 @@ class EscalationController extends Controller
                 $start_year = $start_date->format('Y');
                 $end_year = $end_date->format('Y');
 
-                if($start_year == $end_year) {
-                    $years[] = $end_year;
-                } else if($end_year > $start_year) {
-                    $years = range($start_year, $end_year);
+                if($payment->lease_payment_per_interval == 2){
+                    foreach ($payment->paymentDueDates as $payment_date){
+                        $years[] = Carbon::parse($payment_date->date)->format('Y');
+                    }
+                } else {
+                    if($start_year == $end_year) {
+                        $years[] = $end_year;
+                    } else if($end_year > $start_year) {
+                        $years = range($start_year, $end_year);
+                    }
                 }
 
                 $lease_end_date = $payment->asset->getLeaseEndDate($payment->asset);
                 $contract_escalation_basis = ContractEscalationBasis::query()->get();
                 $percentage_rate_types  = RateTypes::query()->get();
-                $escalation_percentage_settings = EscalationPercentageSettings::query()->whereIn('business_account_id', getDependentUserIds())->where('number', '<>', '0')->get();
+                $escalation_percentage_settings = EscalationPercentageSettings::query()->whereIn('business_account_id', getDependentUserIds())->get();
                 $escalation_frequency = EscalationFrequency::all();
                 $paymentDueDates = $payment->paymentDueDates->pluck('date')->toArray();
                 $current_step = $this->current_step;
                 //lease asset payment dates
                 $payment_dates = LeaseAssetPaymentDates::query()
                     ->where('total_payment_amount','>', 0)
-                    ->where('asset_id',$payment->asset_id)->get();
+                    ->where('payment_id',$payment->id)->get();
+
+                //escalation consistency gaps
+                $escalation_consistency_gap = EscalationConsistencyGap::query()
+                    ->whereIn('business_account_id', getDependentUserIds())
+                    ->get();
                 
                 return view('lease.escalation.create', compact(
                     'payment',
@@ -355,7 +382,8 @@ class EscalationController extends Controller
                     'inconsistentDataModel',
                     'subsequent_modify_required',
                     'current_step',
-                    'payment_dates'
+                    'payment_dates',
+                    'escalation_consistency_gap'
                 ));
             } else {
                 abort(404);
@@ -390,7 +418,7 @@ class EscalationController extends Controller
 
                     if($request->is_escalation_applicable == "yes" && $request->is_escalation_applied_annually_consistently == "yes") {
                         if($request->escalation_basis == '1' && ($request->escalation_rate_type == '1' || $request->escalation_rate_type == '3')) {
-                            $rules['fixed_rate'] = 'required|numeric';
+                            $rules['fixed_rate'] = 'required';
                             $rules['total_escalation_rate'] = 'required_if:escalation_basis,1';
                         }
 
@@ -402,6 +430,8 @@ class EscalationController extends Controller
                         if($request->escalation_basis == '2') {
                             $rules['escalated_amount'] = 'required|numeric|min:1';
                         }
+
+                        $rules['consistency_gap'] = 'required|numeric|min:1';
                     }
 
                     $validator = Validator::make($request->except('_token', 'method', 'uri', 'ip'), $rules);
@@ -477,6 +507,8 @@ class EscalationController extends Controller
                         if($request->escalation_basis == '2') {
                             $rules['escalated_amount'] = 'required|numeric|min:1';
                         }
+
+                        $rules['consistency_gap'] = 'required|numeric|min:1';
                     }
 
                     $validator = Validator::make($request->except('_token', 'method', 'uri', 'ip'), $rules);

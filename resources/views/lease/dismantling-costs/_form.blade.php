@@ -32,20 +32,24 @@
         <input type="hidden" name="id" value="{{ $model->id }}">
 
         <div class="form-group{{ $errors->has('cost_of_dismantling_incurred') ? ' has-error' : '' }} required">
-            <label for="cost_of_dismantling_incurred" class="col-md-12 control-label">Any Estimated Cost of Dismantling
-                or Removing the Lease Asset Incurred</label>
+            <label for="cost_of_dismantling_incurred" class="col-md-12 control-label">Is Obligation for such dismantling or removing the lease asset incurred?</label>
             <div class="col-md-12 form-check form-check-inline mrktavail" required>
             <span>
                 <input class="form-check-input" name="cost_of_dismantling_incurred"
                        id="cost_of_dismantling_incurred_yes" type="checkbox" value="yes"
-                       @if(old('cost_of_dismantling_incurred', $model->cost_of_dismantling_incurred) == "yes") checked="checked" @endif>
+                       @if(old('cost_of_dismantling_incurred', $model->cost_of_dismantling_incurred) == "yes") checked="checked" @endif @if($subsequent_modify_required) disabled="disabled" @endif>
                 <label class="form-check-label" for="yes" id="yes" style="vertical-align: 4px">Yes</label>
             </span>
                 <span>
                 <input class="form-check-input" name="cost_of_dismantling_incurred" id="no" type="checkbox" value="no"
-                       @if(old('cost_of_dismantling_incurred', $model->cost_of_dismantling_incurred)  == "no") checked="checked" @endif>
+                       @if(old('cost_of_dismantling_incurred', $model->cost_of_dismantling_incurred)  == "no") checked="checked" @endif @if($subsequent_modify_required) disabled="disabled" @endif>
                 <label class="form-check-label" for="no" id="no" style="vertical-align: 4px">No</label>
             </span>
+
+                @if($subsequent_modify_required)
+                    <input type="hidden" name="cost_of_dismantling_incurred" value="{{ $model->cost_of_dismantling_incurred }}" />
+                @endif
+
                 @if ($errors->has('cost_of_dismantling_incurred'))
                     <span class="help-block">
                         <strong>{{ $errors->first('cost_of_dismantling_incurred') }}</strong>
@@ -63,15 +67,20 @@
             <span>
                 <input class="form-check-input" name="obligation_cost_of_dismantling_incurred"
                        id="cost_of_dismantling_incurred_yes" type="checkbox" value="yes"
-                       @if(old('obligation_cost_of_dismantling_incurred', $model->obligation_cost_of_dismantling_incurred) == "yes") checked="checked" @endif>
+                       @if(old('obligation_cost_of_dismantling_incurred', $model->obligation_cost_of_dismantling_incurred) == "yes") checked="checked" @endif @if($subsequent_modify_required) disabled="disabled" @endif>
                 <label class="form-check-label" for="yes" id="yes" style="vertical-align: 4px">Yes</label>
             </span>
                 <span>
                 <input class="form-check-input" name="obligation_cost_of_dismantling_incurred" id="no" type="checkbox"
                        value="no"
-                       @if(old('obligation_cost_of_dismantling_incurred', $model->obligation_cost_of_dismantling_incurred)  == "no") checked="checked" @endif>
+                       @if(old('obligation_cost_of_dismantling_incurred', $model->obligation_cost_of_dismantling_incurred)  == "no") checked="checked" @endif @if($subsequent_modify_required) disabled="disabled" @endif>
                 <label class="form-check-label" for="no" id="no" style="vertical-align: 4px">No</label>
             </span>
+
+                @if($subsequent_modify_required)
+                    <input type="hidden" name="obligation_cost_of_dismantling_incurred" value="{{ $model->obligation_cost_of_dismantling_incurred }}" />
+                @endif
+
                 @if ($errors->has('obligation_cost_of_dismantling_incurred'))
                     <span class="help-block">
                         <strong>{{ $errors->first('obligation_cost_of_dismantling_incurred') }}</strong>
@@ -115,7 +124,8 @@
             <div class="form-group{{ $errors->has('details') ? ' has-error' : '' }} textareaOuter">
                 <label for="total_estimated_cost" class="col-md-12 control-label">Details</label>
                 <div class="col-md-12 form-check form-check-inline">
-                    <textarea name="details" class="form-control txtareaInp">{{ old('details', $model->details) }}</textarea>
+                    <textarea name="details"
+                              class="form-control txtareaInp">{{ old('details', $model->details) }}</textarea>
                     @if ($errors->has('details'))
                         <span class="help-block">
                         <strong>{{ $errors->first('details') }}</strong>
@@ -142,7 +152,12 @@
                                 <tr class="clonable_row supplier">
                                     <td>
                                         <input type="text" class="form-control" name="supplier_name[]"
-                                               value="{{ $supplier->supplier_name }}">
+                                               value="{{ $supplier->supplier_name }}" @if($subsequent_modify_required) disabled="disabled" @endif>
+
+                                        @if($subsequent_modify_required)
+                                            <input type="hidden" name="supplier_name[]" value="{{ $supplier->supplier_name }}" />
+                                        @endif
+
                                         @if ($errors->has('supplier_name[]'))
                                             <span class="help-block">
                                         <strong>{{ $errors->first('supplier_name[]') }}</strong>
@@ -151,34 +166,59 @@
                                     </td>
                                     <td>
                                         <input type="text" class="form-control" name="direct_cost_description[]"
-                                               value="{{ $supplier->direct_cost_description }}">
+                                               value="{{ $supplier->direct_cost_description }}" @if($subsequent_modify_required) disabled="disabled" @endif>
+
+                                        @if($subsequent_modify_required)
+                                            <input type="hidden" name="direct_cost_description[]" value="{{ $supplier->direct_cost_description }}" />
+                                        @endif
+
                                     </td>
                                     <td>
                                         <input type="text" class="form-control lease_period expense_date"
                                                name="expense_date[]"
-                                               value="{{ \Carbon\Carbon::parse($supplier->expense_date)->format(config('settings.date_format')) }}">
+                                               value="{{ \Carbon\Carbon::parse($supplier->expense_date)->format(config('settings.date_format')) }}" @if($subsequent_modify_required) disabled="disabled" @endif>
+
+                                        @if($subsequent_modify_required)
+                                            <input type="hidden" name="expense_date[]" value="{{ \Carbon\Carbon::parse($supplier->expense_date)->format(config('settings.date_format')) }}" />
+                                        @endif
+
                                     </td>
                                     <td>
-                                        <select class="form-control supplier_currency" name="supplier_currency[]">
+                                        <select class="form-control supplier_currency" name="supplier_currency[]" @if($subsequent_modify_required) disabled="disabled" @endif>
                                             <option value="">--Select Currency--</option>
                                             @foreach($currencies as $currency)
-                                                <option value="{{ $currency->code }}"
-                                                        @if($currency->code == $supplier->supplier_currency) selected="selected" @endif>{{ $currency->code }}  {{ $currency->symbol }}</option>
+                                                <option value="{{ $currency }}"
+                                                        @if($currency == $supplier->supplier_currency) selected="selected" @endif>{{ $currency }} </option>
                                             @endforeach
                                         </select>
+
+                                        @if($subsequent_modify_required)
+                                            <input type="hidden" name="supplier_currency[]" value="{{ $supplier->supplier_currency }}" />
+                                        @endif
+
                                     </td>
                                     <td>
                                         <input type="text" class="form-control" name="amount[]"
-                                               value="{{ $supplier->amount }}">
+                                               value="{{ $supplier->amount }}" @if($subsequent_modify_required) disabled="disabled" @endif>
+
+                                        @if($subsequent_modify_required)
+                                            <input type="hidden" name="amount[]" value="{{ $supplier->amount }}" />
+                                        @endif
+
                                     </td>
                                     <td>
                                         <input type="text" class="form-control rate" name="rate[]"
-                                               value="{{ $supplier->rate }}">
+                                               value="{{ $supplier->rate }}" @if($subsequent_modify_required) disabled="disabled" @endif>
+
+                                        @if($subsequent_modify_required)
+                                            <input type="hidden" name="rate[]" value="{{ $supplier->rate }}" />
+                                        @endif
+
                                     </td>
                                     <td>
                                         <a href="javascript:void(0);"
                                            class="btn btn-sm btn-danger supplier_create_details_form_delete"
-                                           onClick="javascript:removeRow(this)">Remove</a>
+                                           @if($subsequent_modify_required) onClick="javascript:void(0)" disabled="disabled" @else onClick="javascript:removeRow(this)" @endif>Remove</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -203,7 +243,7 @@
                                     <select class="form-control supplier_currency" name="supplier_currency[]">
                                         <option value="">--Select Currency--</option>
                                         @foreach($currencies as $currency)
-                                            <option value="{{ $currency->code }}">{{ $currency->code }}  {{ $currency->symbol }}</option>
+                                            <option value="{{ $currency }}">{{ $currency }}</option>
                                         @endforeach
                                     </select>
                                 </td>
@@ -214,16 +254,27 @@
                                     <input type="text" class="form-control rate" name="rate[]">
                                 </td>
                                 <td>
-                                    <a href="javascript:void(0);"
-                                       class="btn btn-sm btn-danger supplier_create_details_form_delete"
-                                       onClick="javascript:removeRow(this)">Remove</a>
+                                    @if($subsequent_modify_required)
+                                        <a href="javascript:void(0);"
+                                           class="btn btn-sm btn-danger supplier_create_details_form_delete"
+                                           onClick="javascript:void(0)" disabled="disabled">Remove</a>
+                                    @else
+                                        <a href="javascript:void(0);"
+                                           class="btn btn-sm btn-danger supplier_create_details_form_delete"
+                                           onClick="javascript:removeRow(this)">Remove</a>
+                                    @endif
                                 </td>
                             </tr>
                         @endif
                         </tbody>
                     </table>
-                    <a href="javascript:void(0)" onclick="javascript:addMore(this)"
-                       class="btn btn-sm right btn-success add_more"><i class="fa fa-plus-square"></i> Add More</a>
+                    @if($subsequent_modify_required)
+                        <a href="javascript:void(0)" onclick="javascript:void(0)"
+                           class="btn btn-sm right btn-success add_more" disabled="disabled"><i class="fa fa-plus-square"></i> Add More</a>
+                    @else
+                        <a href="javascript:void(0)" onclick="javascript:addMore(this)"
+                           class="btn btn-sm right btn-success add_more"><i class="fa fa-plus-square"></i> Add More</a>
+                    @endif
                 </div>
             </div>
 
@@ -311,7 +362,7 @@
                 '                            <select class="form-control supplier_currency" name="supplier_currency[]">\n' +
                 '                                <option value="">--Select Currency--</option>\n' +
                 '                                @foreach($currencies as $currency)\n' +
-                '                                    <option value="{{ $currency->code }}">{{ $currency->code }}  {{ $currency->symbol }}</option>\n' +
+                '                                    <option value="{{ $currency }}">{{ $currency }} </option>\n' +
                 '                                @endforeach\n' +
                 '                            </select>\n' +
                 '                        </td>\n' +

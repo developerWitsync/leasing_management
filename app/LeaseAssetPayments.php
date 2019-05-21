@@ -28,7 +28,8 @@ class LeaseAssetPayments extends Model
         'attachment',
         'created_at',
         'updated_at',
-        'lease_payment_per_interval'
+        'lease_payment_per_interval',
+        'subsequent_status'
     ];
 
     public function getUndiscountedLiabilityValueAttribute()
@@ -87,7 +88,7 @@ class LeaseAssetPayments extends Model
             return $this->calculateUndiscountedValueForPaymentDueDates();
         } else {
             //in case of yes have to check if the escalation is applicable
-            if($this->paymentEscalationSingle->is_escalation_applicable == "yes"){
+            if($this->paymentEscalationSingle && $this->paymentEscalationSingle->is_escalation_applicable == "yes"){
                 return $this->calculateUndiscountedValueForEscalations();
             } else {
                 //will have to get the total from the payment due dates only..

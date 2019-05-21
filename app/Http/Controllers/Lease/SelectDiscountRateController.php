@@ -23,7 +23,7 @@ class SelectDiscountRateController extends Controller
     protected function validationRules()
     {
         return [
-            'discount_rate_to_use' => 'required|numeric|min:2',
+            'discount_rate_to_use' => 'required|numeric|min:1',
             'daily_discount_rate' => 'required'
         ];
     }

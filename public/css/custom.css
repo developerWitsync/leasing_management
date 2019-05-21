@@ -151,12 +151,12 @@ legend.scheduler-border {
 }
 
 #myModal .modal-dialog{
-    width: 1020px !important;
+    width: 1200px !important;
     min-height: 820px !important;
 }
 
 #myModal .modal-body{
-    height: 820px !important;
+    height: 600px !important;
     overflow: scroll;
 }
 
@@ -506,7 +506,14 @@ table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td
 
 
 .register{
-    background: -webkit-linear-gradient(left, #3931af, #00c6ff);
+    /*background: -webkit-linear-gradient(left, #3931af, #00c6ff);*/
+    /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#3931af+0,00c6ff+100 */
+background: rgb(57,49,175); /* Old browsers */
+background: -moz-linear-gradient(60deg,  rgba(57,49,175,1) 0%, rgba(0,198,255,1) 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(60deg,  rgba(57,49,175,1) 0%,rgba(0,198,255,1) 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(60deg,  rgba(57,49,175,1) 0%,rgba(0,198,255,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3931af', endColorstr='#00c6ff',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+
     margin-top: 3%;
     padding: 3%;
 }
@@ -1013,7 +1020,7 @@ input[type=number]::-webkit-outer-spin-button {
     right: 0;
     bottom: 0;
     background-color: rgba(0,0,0,0.5); /* Black background with opacity */
-    z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+    z-index: 9999; /* Specify a stack order in case you're using a different order for other elements */
     cursor: pointer; /* Add a pointer on hover */
 }
 
@@ -1057,7 +1064,7 @@ input[type=number]::-webkit-outer-spin-button {
 .leaseterms a{ text-decoration: none !important;}
 .leaseSlide li:hover {box-shadow: #1b2d5b 0 0 5px 2px;}
 .leaseterms span {display: block; border-bottom: #eee solid 2px; padding: 20px 0; font-size: 15px; text-align: center; color: #000;}
-.leaseterms span strong {display: block; font-size: 16px; line-height:  font-weight: 600;}
+.leaseterms span strong {display: block; font-size: 16px; font-weight : 600;}
 .landType2 {background: #71658b; line-height: 33px; text-align: center; font-size: 20px; color: #fff; padding: 20px 0; border-radius: 4px;}
 .pagerButton {position: absolute; left: 17px; bottom: 17px;}
 .pagerButton a {display: inline-block; width: 43px; height: 43px; position: relative; background: #fff; border-radius: 3px; margin-right: 3px;}
@@ -1141,3 +1148,73 @@ table.categoryTble tr td {font-size: 16px; color: #fff;}
 .leaseTotalHd {width: 140px;}
 .leaseSlide {width: calc(100% - 140px);}
 }
+
+/*--------------------*/
+.tabsOuter {padding: 20px 0;}
+.Privacy_left {width: 27%; float: left; min-height:400px; background: #f9f9f9; border: #e5e5e5 solid 1px; border-radius:3px; padding:10px;}
+.Privacy_left li {display: block;}
+.Privacy_left li a {display: block; font-size: 16px; line-height: 25px; padding: 10px; border-bottom: #e5e5e5 solid 1px;}
+.Privacy_left li a:hover, .Privacy_left li a.active{ background:#64b0f2; color:#fff;}
+.privacyRight {width: 70%; float: right; padding: 20px; background: #fafafa; border: #eee solid 1px; max-height: 60vh; overflow: auto;}
+.PrivacyTab{ display:none;}
+.privacyContent h2 {font-size: 32px; font-weight: 600; line-height:40px; padding-bottom: 20px; color: #333;}
+.privacyContent p {font-size: 14px; line-height: 25px; color: #666;	padding-bottom: 25px;}
+.privacyContent h4 {font-size: 20px; font-weight: 600; padding-bottom: 5px;}
+.faqList h3 {background: #fff; padding: 10px; border: #e5e5e5 solid 1px; margin-bottom:20px; font-size: 15px; color:#000; padding-right:50px; position:relative; border-radius:3px;}
+.faqList h3.active {margin-bottom: 0px; border-radius: 3px 3px 0 0; background: #2f829c; color: #fff;}
+.faqList h3 i {background: #108faa; position: absolute; right: 0; top: 0; bottom: 0; text-align: center; width: 45px; border-radius: 0 3px 3px 0;}
+.faqList h3 i::after {content: "+"; position: absolute; right: 0; top: 0; color: #fff; bottom: 0; text-align: center; border-radius: 0 3px 3px 0; left: 0; margin: auto; line-height: 30px; height: 30px; font-style: normal; font-size: 30px; font-weight: 600;}
+.faqList h3.active i::after {content: "-"; position: absolute; right: 0; top: 0; color: #fff; bottom: 0; text-align: center; border-radius: 0 3px 3px 0; left: 0; margin: auto; line-height: 23px; height: 30px; font-style: normal; font-size: 30px; font-weight: 600;}
+.faqList .faqContent {background: #fff; display:none; padding: 10px; border: #e5e5e5 solid 1px; top: -1px; font-size: 14px; border-radius:0 0 3px 3px; line-height: 25px; color: #666; position: relative; margin-bottom: 20px;}
+
+
+.privacypopBg {
+   background: rgb(57,49,175); /* Old browsers */
+background: -moz-linear-gradient(60deg,  rgba(57,49,175,1) 0%, rgba(0,198,255,1) 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(60deg,  rgba(57,49,175,1) 0%,rgba(0,198,255,1) 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(60deg,  rgba(57,49,175,1) 0%,rgba(0,198,255,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3931af', endColorstr='#00c6ff',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+
+}
+
+.LibfilterBx {
+    margin-bottom: 20px;
+    border-bottom: #e5e5e5 solid 1px;
+    padding: 10px 0;
+    background: #f5f5f5;
+    margin-top: -15px;
+}
+
+#clear_filters {
+    background: #666;
+    color: #fff;
+    padding: 7px 10px;
+    border-radius: 3px;
+    vertical-align: middle;
+    display: inline-block;
+    margin-left: 10px;
+
+}
+
+.form-inline .form-control {
+
+    display: inline-block;
+    width: 100%;
+    vertical-align: middle;
+    max-width: 70%;
+
+}
+
+
+.dt-button.buttons-columnVisibility.active {
+    background: #2ab27b !important;
+    color: #fff;
+}
+
+/*.dt-button.buttons-columnVisibility{*/
+    /*background: #b1220d !important;*/
+    /*color: #fff;*/
+/*}*/
+
+
+/*-----------CSS hack--------------*/

@@ -108,6 +108,7 @@ $(".show_escalation_chart").on("click", function(){
 });
 
 $(".compute_escalation").on("click", function(){
+    showOverlayForAjax();
     $.ajax({
         url : _compute_escalation_url,
         data : $("form").serialize(),
@@ -135,6 +136,7 @@ $(".compute_escalation").on("click", function(){
                     }
                 });
             }
+            removeOverlayAjax();
         }
     });
 });
@@ -410,6 +412,8 @@ $(document).ready(function () {
                         $('.computed_fields').removeClass('hidden');
 
                         $('.inconsistently_applied').addClass('hidden');
+
+                        $(".consistency_gap").removeClass('hidden');
                     }
                 }
             });
@@ -470,6 +474,8 @@ $(document).ready(function () {
                     //show the inconsistently form fields here
                     $('.inconsistently_applied').removeClass('hidden');
 
+                    $(".consistency_gap").addClass('hidden');
+
                     refreshInconsistentEscalations();
                 } else {
                     $('input[type="checkbox"][name="is_escalation_applied_annually_consistently"]').prop('checked', false);
@@ -522,7 +528,7 @@ $(document).ready(function () {
     function calculateTotalEscalationRate(){
         var current_variable_rate = $('select[name="current_variable_rate"]').val();
         var fixed_rate = $('select[name="fixed_rate"]').val();
-        var total = parseInt(((current_variable_rate!="")?current_variable_rate:0)) + parseInt(((fixed_rate !="")?fixed_rate:0));
+        var total = parseFloat(((current_variable_rate!="")?current_variable_rate:0)) + parseFloat(((fixed_rate !="") ? fixed_rate:0));
         $('input[name="total_escalation_rate"]').val(total);
     }
 });

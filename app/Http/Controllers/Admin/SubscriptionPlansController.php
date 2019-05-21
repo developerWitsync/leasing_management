@@ -136,7 +136,8 @@ class SubscriptionPlansController extends Controller
     public function delete($id, Request $request){
         try{
             if($request->ajax()){
-                $plan = SubscriptionPlans::query()->where('id', '=', $id)->where('is_custom', '=', '1')->firstOrFail();
+                //$plan = SubscriptionPlans::query()->where('id', '=', $id)->where('is_custom', '=', '1')->firstOrFail();
+                $plan = SubscriptionPlans::query()->where('id', '=', $id)->firstOrFail();
                 $plan->delete();
                 return response()->json([
                     'status' => true
@@ -196,7 +197,7 @@ class SubscriptionPlansController extends Controller
 
             if($request->isMethod('post')) {
 
-                $request->request->add(['price_plan_type' => '2']);
+                $request->request->add(['price_plan_type' => '1']);
 
                 $validator = Validator::make($request->all(), [
                     'title' => 'required|unique:subscription_plans,title',

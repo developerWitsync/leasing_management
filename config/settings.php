@@ -36,6 +36,12 @@ return [
         10,
         25
     ],
+    'escalation_consistency_gap' => [
+        1,
+        2,
+        3,
+        5
+    ],
     'date_format' => 'd-M-Y',
     'complete_previous_steps_error_message' => "You haven't completed the previous steps for the lease, please complete the previous steps first.",
     'lease_already_submitted'   => 'This Lease has been already submitted. Please go to Modify Lease in case of any modifications if required.',

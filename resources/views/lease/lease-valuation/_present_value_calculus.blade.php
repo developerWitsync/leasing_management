@@ -56,7 +56,7 @@
                                 @if(isset($data[$month]) && isset($data[$month]["payment_".$payment->id]))
                                     <td>{{ $data[$month]["payment_".$payment->id]->lease_liability }}</td>
                                     @php
-                                        $sub_total = $sub_total + $data[$month]["payment_".$payment->id]->lease_liability;
+                                        $sub_total = (float)$sub_total + (float)$data[$month]["payment_".$payment->id]->lease_liability;
                                     @endphp
                                 @else
                                     <td>&nbsp;</td>
@@ -64,7 +64,7 @@
                             @endforeach
                             <td>{{$sub_total}}</td>
                             @php
-                                $grand_total = $grand_total + $sub_total;
+                                $grand_total = (float)$grand_total + (float)$sub_total;
                             @endphp
                         </tr>
                     @endforeach
@@ -77,7 +77,7 @@
                             @if(isset($data[$month]['termination'][0]))
                                 <td>{{ $data[$month]['termination'][0]->lease_liability }}</td>
                                 @php
-                                    $sub_total = $sub_total + $data[$month]['termination'][0]->lease_liability;
+                                    $sub_total = (float)$sub_total + (float)$data[$month]['termination'][0]->lease_liability;
                                 @endphp
                             @else
                                 <td>&nbsp;</td>
@@ -85,7 +85,7 @@
                         @endforeach
                         <td>{{$sub_total}}</td>
                         @php
-                            $grand_total = $grand_total + $sub_total;
+                            $grand_total = (float)$grand_total + (float)$sub_total;
                         @endphp
                     </tr>
                     <tr>
@@ -97,7 +97,7 @@
                             @if(isset($data[$month]['residual']))
                                 <td>{{ $data[$month]['residual'][0]->lease_liability }}</td>
                                 @php
-                                    $sub_total = $sub_total + $data[$month]['residual'][0]->lease_liability;
+                                    $sub_total = (float)$sub_total + (float)$data[$month]['residual'][0]->lease_liability;
                                 @endphp
                             @else
                                 <td>&nbsp;</td>
@@ -105,7 +105,7 @@
                         @endforeach
                         <td>{{$sub_total}}</td>
                         @php
-                            $grand_total = $grand_total + $sub_total;
+                            $grand_total = (float)$grand_total + (float)$sub_total;
                         @endphp
                     </tr>
                     <tr>
@@ -117,7 +117,7 @@
                             @if(isset($data[$month]['purchase']))
                                 <td>{{ $data[$month]['purchase'][0]->lease_liability }}</td>
                                 @php
-                                    $sub_total = $sub_total + $data[$month]['purchase'][0]->lease_liability;
+                                    $sub_total = (float)$sub_total + (float)$data[$month]['purchase'][0]->lease_liability;
                                 @endphp
                             @else
                                 <td>&nbsp;</td>
@@ -125,7 +125,7 @@
                         @endforeach
                         <td>{{$sub_total}}</td>
                         @php
-                            $grand_total = $grand_total + $sub_total;
+                            $grand_total = (float)$grand_total + (float)$sub_total;
                         @endphp
                     </tr>
                 @endforeach

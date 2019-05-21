@@ -87,7 +87,7 @@
                                 }
                             @endphp
                             <div class="col-md-5th-1 col-sm-4 col-md-offset-0 col-sm-offset-2">
-                                <div class="panel  {{ $classes_array[$key] }}">
+                                <div class="panel  {{ isset($classes_array[$key])?$classes_array[$key]:$classes_array[4] }}">
 
                                     @if($plan->most_popular)
                                         <div class="cnrflash">
@@ -185,18 +185,18 @@
                                                 Expiring on {{ \Carbon\Carbon::parse($subscription->subscription_expire_at)->format('Y-m-d') }}
                                             </span>
                                             @elseif($subscription && $current_plan_key > -1 && $current_plan_key < $key)
-                                                <a href="{{ route('plan.purchase.subscriptionselection', ['plan' => $plan->slug,'action'=> 'upgrade']) }}"
-                                                   class="btn btn-sm btn-success purchase-plan" role="button">
+                                                <a href="{{ ($plan->slug != 'trial-plan') ? route('plan.purchase.subscriptionselection', ['plan' => $plan->slug,'action'=> 'upgrade']) : 'javascript:void(0);' }}"
+                                                   class="btn btn-sm btn-success {{($plan->slug != 'trial-plan') ? 'purchase-plan' : 'trial upgrade_proceed'}}" role="button">
                                                     Upgrade
                                                 </a>
                                             @elseif($subscription)
-                                                <a href="{{ route('plan.purchase.subscriptionselection', ['plan' => $plan->slug,'action'=> 'downgrade']) }}"
-                                                   class="btn btn-sm btn-success purchase-plan" role="button">
+                                                <a href="{{ ($plan->slug != 'trial-plan') ? route('plan.purchase.subscriptionselection', ['plan' => $plan->slug,'action'=> 'downgrade']) : 'javascript:void(0);' }}"
+                                                   class="btn btn-sm btn-success {{($plan->slug != 'trial-plan') ? 'purchase-plan' : 'trial upgrade_proceed'}}" role="button">
                                                     DownGrade
                                                 </a>
                                             @else
-                                                <a href="{{ route('plan.purchase.subscriptionselection', ['plan' => $plan->slug]) }}"
-                                                   class="btn btn-sm btn-success purchase-plan" role="button">
+                                                <a href="{{ ($plan->slug != 'trial-plan') ? route('plan.purchase.subscriptionselection', ['plan' => $plan->slug]) : 'javascript:void(0);' }}"
+                                                   class="btn btn-sm btn-success {{($plan->slug != 'trial-plan') ? 'purchase-plan' : 'trial upgrade_proceed'}}" role="button">
                                                     Purchase
                                                 </a>
                                             @endif
@@ -399,24 +399,30 @@
             }
 
             $(document.body).on('click', '.upgrade_proceed', function () {
+
+                var month = ($(this).hasClass("trial")) ? "2" : $('#months').val();
+                var plan = ($(this).hasClass("trial")) ? "1" : $('#selected_plan').val();
                 $.ajax({
                     url: '{{ route("plan.purchase") }}',
                     type: 'post',
                     data: {
-                        months: $('#months').val(),
-                        plan: $('#selected_plan').val(),
+                        months: month,
+                        plan: plan,
                         coupon_code: $('input[name="coupon_code"]').val(),
                         action: $('input[name="action"]').val()
                     },
                     dataType: 'json',
                     beforeSend: function () {
                         $("span.error").html('').hide();
+                        showOverlayForAjax();
                     },
                     success: function (response) {
+
                         if (response['status']) {
                             // alert(response['redirect_link']);
                             window.location.href = response['redirect_link'];
                         } else {
+                            removeOverlayAjax();
                             if (typeof (response.errors) != "undefined") {
                                 var errors = response.errors;
                                 $.each(errors, function (i, e) {

@@ -1,6 +1,12 @@
 <form class="form-horizontal" enctype="multipart/form-data" method="post" role="form">
     {{ csrf_field() }}
     <div class="categoriesOuter clearfix">
+
+    @if($subsequent_modify_required && $model->is_escalation_applicable == "yes")
+            <span class="badge badge-primary" style="background-color: #f2dede;border-color: #ebccd1;color: #a94442;">Please re-update escalation details starting on or after subsequent modification date.</span>
+    @endif
+
+
     <div class="form-group{{ $errors->has('is_market_value_present') ? ' has-error' : '' }} required">
         <label for="is_escalation_applicable" class="col-md-12 control-label">Is Escalation Applicable</label>
         <div class="col-md-12 form-check form-check-inline mrktavail" required>
@@ -34,11 +40,16 @@
             <label for="effective_from" class="col-md-12 control-label">Escalation Effective From</label>
             <div class="col-md-12 form-check form-check-inline">
                 
-                <select name="effective_from" class="form-control lease_period" id="effective_from" @if($subsequent_modify_required && $model->is_escalation_applicable == "yes") disabled="disabled" @endif>
+                <select name="effective_from" class="form-control lease_period" id="effective_from">
                 <option value="">Please Select Date</option>
                 @foreach($payment_dates as $payments)
-
-                <option value="{{ date('d-m-Y',strtotime( $payments->date)) }}"  @if(old('effective_from', $payments->date) == $model->effective_from) selected="selected" @endif> {{ date('d-m-Y',strtotime($payments->date)) }}</option>
+                    @if($subsequent_modify_required)
+                        @if(\Carbon\Carbon::parse($lease->modifyLeaseApplication->last()->effective_from)->lessThanOrEqualTo(\Carbon\Carbon::parse($payments->date)))
+                                <option value="{{ date('d-m-Y',strtotime( $payments->date)) }}"  @if(old('effective_from', $payments->date) == $model->effective_from) selected="selected" @endif> {{ date('d-m-Y',strtotime($payments->date)) }}</option>
+                        @endif
+                    @else
+                        <option value="{{ date('d-m-Y',strtotime( $payments->date)) }}"  @if(old('effective_from', $payments->date) == $model->effective_from) selected="selected" @endif> {{ date('d-m-Y',strtotime($payments->date)) }}</option>
+                    @endif
                 @endforeach 
                 </select>
                 @if ($errors->has('effective_from'))
@@ -47,9 +58,9 @@
                     </span>
                 @endif
 
-                @if($subsequent_modify_required  && $model->is_escalation_applicable == "yes")
-                    <input type="hidden" value="{{ $model->effective_from }}" name="effective_from">
-                @endif
+                {{--@if($subsequent_modify_required  && $model->is_escalation_applicable == "yes")--}}
+                    {{--<input type="hidden" value="{{ $model->effective_from }}" name="effective_from">--}}
+                {{--@endif--}}
 
             </div>
         </div>
@@ -117,13 +128,39 @@
             </div>
         </div>
 
+
+        <!-- Consistency Gap -->
+
+        <div class="form-group{{ $errors->has('consistency_gap') ? ' has-error' : '' }} required @if(old('is_escalation_applied_annually_consistently', $model->is_escalation_applied_annually_consistently) == 'yes') @else hidden @endif consistency_gap">
+            <label for="consistency_gap" class="col-md-12 control-label">Consistency Gap</label>
+            <div class="col-md-12 form-check form-check-inline">
+                <select class="form-control" name="consistency_gap">
+                    <option value="">--Select Years--</option>
+                    @foreach($escalation_consistency_gap as $setting)
+                        <option value="{{ $setting->years }}" @if(old('consistency_gap', $model->consistency_gap) == $setting->years) selected="selected" @endif>
+                            @if($setting->years ==  1)
+                                Annual
+                            @else
+                                {{ $setting->years }}
+                            @endif
+                        </option>
+                    @endforeach
+                </select>
+                @if ($errors->has('consistency_gap'))
+                    <span class="help-block">
+                        <strong>{{ $errors->first('consistency_gap') }}</strong>
+                    </span>
+                @endif
+            </div>
+        </div>
+
         <div class="form-group{{ $errors->has('fixed_rate') ? ' has-error' : '' }} required @if(old('is_escalation_applied_annually_consistently', $model->is_escalation_applied_annually_consistently) == 'yes' && old('escalation_basis', $model->escalation_basis) == '1' && (old('escalation_rate_type', $model->escalation_rate_type) == '1' || old('escalation_rate_type', $model->escalation_rate_type) == '3'))  @else hidden @endif is_j_12_y_e_s_fixed_rate">
             <label for="fixed_rate" class="col-md-12 control-label">Specify Fixed Rate</label>
             <div class="col-md-12 form-check form-check-inline">
                 <select class="form-control" name="fixed_rate">
                     <option value="">--Select Fixed Rate Percentage--</option>
                     @foreach($escalation_percentage_settings as $setting)
-                        <option value="{{ $setting->number }}" @if(old('fixed_rate', $model->fixed_rate) == $setting->number) @endif>{{ $setting->number }}%</option>
+                        <option value="{{ $setting->number }}" @if(old('fixed_rate', $model->fixed_rate) == $setting->number) selected="selected" @endif>{{ $setting->number }}%</option>
                     @endforeach
                 </select>
                 @if ($errors->has('fixed_rate'))
@@ -154,7 +191,7 @@
         <div class="form-group{{ $errors->has('total_escalation_rate') ? ' has-error' : '' }} required total_escalation_rate @if(old('is_escalation_applied_annually_consistently', $model->is_escalation_applied_annually_consistently)  == 'yes' && old('escalation_basis', $model->escalation_basis) == '1')  @else hidden @endif">
             <label for="total_escalation_rate" class="col-md-12 control-label">Total Escalation Rate</label>
             <div class="col-md-12 form-check form-check-inline">
-                <input type="text" class="form-control" placeholder="Total Escalation Rate" name="total_escalation_rate" value="{{ old('total_escalation_rate', $model->total_escalation_rate) }}">
+                <input type="text" class="form-control" placeholder="Total Escalation Rate" name="total_escalation_rate" value="{{ old('total_escalation_rate', $model->total_escalation_rate) }}" readonly="readonly">
                 @if ($errors->has('total_escalation_rate'))
                     <span class="help-block">
                         <strong>{{ $errors->first('total_escalation_rate') }}</strong>

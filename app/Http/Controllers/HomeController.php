@@ -155,6 +155,7 @@ class HomeController extends Controller
 
                 $ids = implode(',', getDependentUserIds());
 
+                //and `json_data_steps`->'$."underlying_asset"."specific_use"' = 1
                 $sql = "SELECT 
                             SUM(`json_data_steps`->>'$.\"underlying_asset\".\"value_of_lease_asset\"') AS `value_of_lease_asset`,
                             SUM(`json_data_steps`->>'$.\"low_value\".\"undiscounted_lease_payment\"') AS `undiscounted_lease_payment`
@@ -171,7 +172,6 @@ class HomeController extends Controller
                             and lease_history.modify_id is NULL
                             and lease_assets.category_id NOT IN(5,8)
                             and lease.status = '1'
-                            and `json_data_steps`->'$.\"underlying_asset\".\"specific_use\"' = 1
                             and `json_data_steps`->'$.\"duration_classified\".\"lease_contract_duration_id\"' = 3";
 
                 $total_undiscounted_value = 0;
@@ -206,6 +206,7 @@ class HomeController extends Controller
 
                 $ids = implode(',', getDependentUserIds());
 
+                //and `json_data_steps`->'$."underlying_asset"."specific_use"' = 1
                 $sql = "SELECT 
                             SUM(`json_data_steps`->>'$.\"underlying_asset\".\"value_of_lease_asset\"') AS `value_of_lease_asset`,
                             SUM(`json_data_steps`->>'$.\"low_value\".\"undiscounted_lease_payment\"') AS `undiscounted_lease_payment`,
@@ -224,7 +225,6 @@ class HomeController extends Controller
                             and lease_history.modify_id is NULL
                             and lease_assets.category_id NOT IN(5,8)
                             and lease.status = '1'
-                            and `json_data_steps`->'$.\"underlying_asset\".\"specific_use\"' = 1
                             and `json_data_steps`->'$.\"duration_classified\".\"lease_contract_duration_id\"' = 3
                         GROUP BY lease_assets.category_id";
 

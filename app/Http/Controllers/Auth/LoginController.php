@@ -60,7 +60,7 @@ class LoginController extends Controller
     public function verifyEmail($token)
     {
         $user = User::query()->where('email_verification_code', '=',$token)->first();
-        if(isset($user) ){
+        if(isset($user)){
             if(!$user->is_verified) {
                 $user->is_verified = '1';
                 $user->save();

@@ -421,7 +421,7 @@
                         <div class="categoriesOuter using_lease_payment clearfix" style="display:none;">
                             <div class="categoriesHd">Lease Payment Basis</div>
                             <div class="form-group{{ $errors->has('using_lease_payment') ? ' has-error' : '' }} required using_lease_payment"
-                                 style="display: block">
+                                 style="display: block;width:auto">
                                 <label for="variable_amount_determinable" class="col-md-12 control-label">Using Lease
                                     Payment</label>
                                 <div class="col-md-12">
@@ -430,16 +430,22 @@
                                         <input class="form-check-input" name="using_lease_payment" type="checkbox"
                                                id="yes" value="1"
                                                @if(old('using_lease_payment' ,$asset->using_lease_payment) == "1") checked="checked" @endif @if($subsequent_modify_required) disabled="disabled" @endif>
-                                        <label for="yes" class="form-check-label" for="1" style="vertical-align: 2px">Current
-                                            Lease Payment Effective From {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->format('Y') }}</label>
+                                        <label for="yes" class="form-check-label" for="1" style="vertical-align: 2px">
+                                            Modified Retrospective Approach (Without Adjusting Opening Equity). Value Of Asset Will Be Equal To Present Value Of Lease Liability
+                                            {{--Current--}}
+                                            {{--Lease Payment Effective From {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->format('Y') }}--}}
+                                        </label>
                                     </div>
 
                                     <div class=" col-md-12 form-check form-check-inline">
                                         <input class="form-check-input" name="using_lease_payment" type="checkbox"
                                                id="no" value="2"
                                                @if(old('using_lease_payment',$asset->using_lease_payment) == "2") checked="checked" @endif @if($subsequent_modify_required) disabled="disabled" @endif>
-                                        <label for="no" class="form-check-label" for="2" style="vertical-align: 2px">Initial
-                                            Lease Payment as on First Lease Start</label>
+                                        <label for="no" class="form-check-label" for="2" style="vertical-align: 2px">
+                                            {{--Initial--}}
+                                            {{--Lease Payment as on First Lease Start--}}
+                                            Modified Retrospective Approach ( By Adjusting Opening Equity)
+                                        </label>
                                     </div>
                                     @if ($errors->has('using_lease_payment'))
                                         <span class="help-block">
@@ -521,13 +527,18 @@
                 function toggleUsinLeasePayment() {
                     var _start_date = $('#accural_period').datepicker('getDate');
 
-                    if (_start_date < new Date('{{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->format("F d Y") }}')) {
-                        $('.using_lease_payment').show();
-
+                    if (_start_date < new Date('{{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->format("F d Y") }}') ) {
+                        var lease_asset_accounting = $("#accounting_treatment").find('option:selected').text();
+                        if (lease_asset_accounting == 'Finance Lease Accounting') {
+                            $('.using_lease_payment').hide();
+                            $('input[type="checkbox"][name="using_lease_payment"]').prop('checked', false);
+                        } else {
+                            $('.using_lease_payment').show();
+                        }
                         $('#prior_accounting').show();
-
                     } else {
                         $('.using_lease_payment').hide();
+                        $('input[type="checkbox"][name="using_lease_payment"]').prop('checked', false);
 
                         $('#prior_accounting').hide();
                         $('#accounting_treatment').val('');
@@ -592,7 +603,7 @@
                     $.ajax({
                         url: "{{route('addlease.leaseasset.getdatedifference')}}",
                         data: {
-                            accural_period: $('#accural_period').val(),
+                            lease_start_date: $('#lease_start_date').val(),
                             lease_end_date: $('#lease_end_date').val()
 
                         },
@@ -643,31 +654,39 @@
                     //@todo check for the accural_period if that is prior to jan 01, 2019 than show the accounting period fields
                     toggleUsinLeasePayment();
                 }
+
+                $('select[name="accounting_treatment"]').on('change', function () {
+                    var lease_asset_accounting = $("#accounting_treatment").find('option:selected').text();
+                    if (lease_asset_accounting == 'Finance Lease Accounting') {
+
+                        //hide the Lease Payment Basis and clear the selected as well.
+                        $('.using_lease_payment').hide();
+                        $('input[type="checkbox"][name="using_lease_payment"]').prop('checked', false);
+                        var modal = bootbox.dialog({
+                            message: "Finance Lease will be revalued at present value as on {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->format('F d, Y') }}",
+                            buttons: [
+                                {
+                                    label: "OK",
+                                    className: "btn btn-success pull-left",
+                                    callback: function () {
+                                    }
+                                },
+
+                            ],
+                            show: false,
+                            onEscape: function () {
+                                modal.modal("hide");
+                            }
+                        });
+
+                        modal.modal("show");
+                    } else {
+                        toggleUsinLeasePayment();
+                    }
+                });
+
             });
 
-            $('select[name="accounting_treatment"]').on('change', function () {
-                var lease_asset_accounting = $("#accounting_treatment").find('option:selected').text();
-                if (lease_asset_accounting == 'Finance Lease Accounting') {
-                    var modal = bootbox.dialog({
-                        message: "Finance Lease will be revalued at present value as on {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->format('F d, Y') }}",
-                        buttons: [
-                            {
-                                label: "OK",
-                                className: "btn btn-success pull-left",
-                                callback: function () {
-                                }
-                            },
-
-                        ],
-                        show: false,
-                        onEscape: function () {
-                            modal.modal("hide");
-                        }
-                    });
-
-                    modal.modal("show");
-                }
-            });
         });
         $('.save_next').on('click', function (e) {
             e.preventDefault();

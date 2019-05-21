@@ -113,7 +113,7 @@
 
                     <div class="panel panel-info">
                         <div class="panel-heading">
-                            Assumpitons
+                            Assumptions
                         </div>
                         <div class="panel-body">
                             <div class="panel-body settingTble">

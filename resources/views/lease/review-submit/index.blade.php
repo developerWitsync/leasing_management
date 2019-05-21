@@ -450,7 +450,7 @@
                         <th>Sr. No.</th>
                         <th>PV of Lease Liability</th>
                         <th>Value of a Lease Asset</th>
-                        <th>Adjustment to Equity</th>
+                        {{--<th>Adjustment to Equity</th>--}}
                         <th>Action</th>
                     </tr>
                     </thead>
@@ -463,7 +463,7 @@
 
                                 <td>{{ is_null($asset->lease_liablity_value)?'-':$asset->lease_liablity_value }}</td>
                                 <td>{{ is_null($asset->value_of_lease_asset)?'-':$asset->value_of_lease_asset }}</td>
-                                <td>{{ $asset->lease_liablity_value - $asset->value_of_lease_asset }}</td>
+                                {{--<td>{{ $asset->lease_liablity_value - $asset->value_of_lease_asset }}</td>--}}
                                 <td>
                                     <a href="{{ route('addlease.leasevaluation.index', ['lease' => $lease->id]) }}">
                                         <button data-toggle='tooltip' data-placement='top' title='Edit Lease Details'

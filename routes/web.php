@@ -11,7 +11,6 @@
 |
 */
 
-
 Route::get('/', 'Master\IndexController@index');
 
 Route::get('information/{slug}', ['as' => 'information.index', 'uses' => 'Master\IndexController@information']);
@@ -30,15 +29,11 @@ Route::namespace('Master')->prefix('pricing')->group(function () {
     Route::get('leasing-software', ['as' => 'master.pricing.index', 'uses' => 'PricingController@index']);
     Route::get('vat-e-learning', ['as' => 'master.pricing.vatelearning', 'uses' => 'PricingController@vatELearning']);
     Route::post('plan-selected', ['as' => 'master.pricing.subscribe', 'uses' => 'PricingController@planSelected']);
-
     Route::post('build-your-plan', ['as' => 'master.pricing.buildyourplan', 'uses' => 'PricingController@buildYourPlan']);
     Route::post('calc-cart', ['as' => 'master.pricing.calccart', 'uses' => 'PricingController@calculateCart']);
-
 });
 
-
 Auth::routes();
-
 
 Route::get('register', ['as' => 'register', 'uses' => 'RegisterController@index']);
 Route::post('create-account', ['as' => 'register.create', 'uses' => 'RegisterController@register']);
@@ -268,6 +263,16 @@ Route::middleware('auth')->group(function () {
 
             Route::get('purchase-present-value/{id}', ['as' => 'addlease.leasevaluation.purchasepresentvalue', 'uses' => 'LeaseValuationController@purchasePresentValue']);
 
+            Route::get('save-lease-liability-calculus/{id}', ['as' => 'addlease.leasevaluation.savecalculus', 'uses' => 'LeaseValuationController@savePresentValueOfLeaseLiabilityCalculus']);
+
+            Route::post('update-asset-for-subsequent/{id}', ['as' => 'addlease.leasevaluation.updateassetforsubsequent', 'uses' => 'LeaseValuationController@updateAssetForSubsequent']);
+
+            Route::get('carrying-amount-calculations/{id}', ['as' => 'addlease.leasevaluation.carryingamountdetails', 'uses' => 'LeaseValuationController@carryingAmountDetails']);
+
+            Route::get('historical-present-value/{id}', ['as' => 'addlease.leasevaluation.historicalpresentvalue', 'uses' => 'LeaseValuationController@historicalPresentValue']);
+
+            Route::get('show-historical-annexure-calculus/{id}', ['as' => 'addlease.leasevaluation.historicalcalculusannexure', 'uses' => 'LeaseValuationController@showHistoricalAnnexure']);
+
         });
         /**
          * Lease Payment Invoice NL16
@@ -320,7 +325,7 @@ Route::middleware('auth')->group(function () {
     * Lease Valuation Routes
     */
 
-    Route::namespace('Leasevaluation')->prefix('lease-valuation','checksubscription')->group(function () {
+    Route::namespace('Leasevaluation')->prefix('lease-valuation')->middleware('checksubscription')->group(function () {
 
         Route::prefix('valuation-capitalised')->group(function(){
 
@@ -339,6 +344,12 @@ Route::middleware('auth')->group(function () {
             Route::get('fetch-complete-lease-valuations/{id}',['as' => 'leasevaluation.cap.asset.fetchvaluations', 'uses' => 'LeaseValuationController@fetchCompletedLeaseValuation']);
 
             Route::get('see-valuation-details/{history_id}', ['as' => 'addlease.cap.leasevaluation.seedetails', 'uses' => 'LeaseValuationController@seeDetails']);
+
+            Route::get('interest-depreciation/{id}', ['as' => 'leasevaluation.cap.interestdepreciation', 'uses' => 'LeaseValuationController@interestDepreciation']);
+
+            Route::get('show-pv-calculus/{id}', ['as' => 'leasevaluation.cap.pvcalculus', 'uses' => 'LeaseValuationController@pvCalculus']);
+
+            Route::get('export-interest-depreciation/{id}', ['as' => 'leasevaluation.cap.exportinterestdepreciation', 'uses' => 'LeaseValuationController@exportInterestDepreciation']);
 
         });
 
@@ -360,11 +371,32 @@ Route::middleware('auth')->group(function () {
 
             Route::get('see-valuation-details/{history_id}', ['as' => 'addlease.ncap.leasevaluation.seedetails', 'uses' => 'LeaseValuationController@seeDetails']);
 
+            Route::get('show-pv-calculus/{id}', ['as' => 'leasevaluation.ncap.pvcalculus', 'uses' => 'LeaseValuationController@pvCalculus']);
+
+            Route::get('fetch-short-term-lease-assets',['as' => 'leasevaluation.ncap.shorttermassets', 'uses' => 'LeaseValuationController@fetchShortTermLeaseAssets']);
+
+            Route::get('fetch-low-value-lease-assets',['as' => 'leasevaluation.ncap.lowvalueleaseassets', 'uses' => 'LeaseValuationController@fetchLowValueLeaseAssets']);
         });
+
+        Route::get('show-escalation-chart/{id}', ['as' => 'lease.leasevaluation.escalationchart', 'uses' => 'LeaseValuationController@showEscalationChart']);
+
+        Route::get('see-carrying-amount-annexure/{id}', ['as' => 'lease.leasevaluation.carryingamountannexure', 'uses' => 'LeaseValuationController@carryingAmountAnnexure']);
 
     });
 
+    /**
+     * Reports Routes
+     */
+    Route::namespace('Reports')->prefix('reports')->middleware('checksubscription')->group(function(){
+        Route::get('/', ['as' => 'reports.index', 'uses' => 'ReportsController@index']);
+        Route::get('lease-liability-contractual', ['as' => 'reports.leaseliability.contractual', 'uses' => 'ReportsController@leaseLiabilityContractual']);
 
+        Route::get('fetch-liability-contractual-data',['as' => 'reports.leaseliability.fetchcontractual', 'uses' => 'ReportsController@fetchLeaseLiabilityContractual']);
+    });
+
+    /**
+     * Settings Routes
+     */
     Route::namespace('Settings')->middleware(['permission:settings','checksubscription'])->prefix('settings')->group(function () {
 
         Route::prefix('general')->group(function () {
@@ -422,6 +454,14 @@ Route::middleware('auth')->group(function () {
             Route::post('add-escalation-percentage-number', ['as' => 'settings.leaseclassification.addescalationpercentagenumber', 'uses' => 'LeaseClassificationController@addEscalationPercentageNumber']);
             Route::match(['get', 'post'], '/edit-escalation-percentage-number/{id}', ['as' => 'settings.leaseclassification.editescalationpercentagenumber', 'uses' => 'LeaseClassificationController@editEscalationPercentageNumber']);
             Route::delete('delete-escalation-percentage-number/{id}', ['as' => 'settings.leaseclassification.deleteescalationpercentagenumber', 'uses' => 'LeaseClassificationController@deleteEscalationPercentageNumber']);
+
+            /**
+             * Escalation Consistency Gap
+             */
+            Route::post('add-escalation-consistency-gap', ['as'=> 'settings.leaseclassification.addescalationconsistencygap', 'uses' => 'LeaseClassificationController@addEscalationConsistencyGap']);
+            Route::match(['get', 'post'], '/edit-escalation-consistency-gap/{id}', ['as' => 'settings.leaseclassification.editescalationconsistencygap', 'uses' => 'LeaseClassificationController@editEscalationConsistencyGap']);
+            Route::delete('delete-escalation-consistency-gap/{id}', ['as' => 'settings.leaseclassification.deleteescalationconsistencygap', 'uses' => 'LeaseClassificationController@deleteEscalationConsistencyGap']);
+
             /**
              * Lease Modification Reason
              */

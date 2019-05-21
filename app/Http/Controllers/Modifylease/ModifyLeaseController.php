@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Modifylease;
 
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Lease;
 use App\ModifyLeaseApplication;
@@ -86,7 +87,9 @@ class ModifyLeaseController extends Controller
         try {
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
 
-            $lase_modification = LeaseModificationReason::query()->get();
+            $lase_modification = LeaseModificationReason::query()
+                ->whereIn('business_account_id', getDependentUserIds())
+                ->get();
             if ($lease) {
 
                 $disable_initial = false;
@@ -123,10 +126,67 @@ class ModifyLeaseController extends Controller
                     $data1['status'] = '0';
                     $model->setRawAttributes($data1);
                     $model->save();
+
+                    //need to set the subsequent status of all the payments to '0' so that we will ask the user to update the payments once again...
+
+                    $lease = Lease::query()->where('id', '=', $id)->first();
+                    $asset = $lease->assets()->first();
+                    foreach ($asset->payments as $payment){
+
+                        $escalationModel = $payment->paymentEscalationSingle;
+
+                        $payment->setRawAttributes([
+                            'subsequent_status' => '0'
+                        ]);
+
+                        $payment->save();
+
+                        //need to change the subsequent status of each escalation to 0 as well...
+                        if($escalationModel){
+
+                            $escalationModel->setRawAttributes([
+                                'subsequent_status' => '0'
+                            ]);
+
+                            $escalationModel->save();
+                        }
+                    }
+
                     return redirect(route('add-new-lease.index', ['id' => $id]))->with('status', 'Modify Lease has been Created successfully.');
                 }
+
                 $asset = $lease->assets()->first();
-                return view('modifylease.create', compact('lease', 'lase_modification', 'disable_initial', 'asset'));
+
+                // need to send the minDate
+                // minDate will be lease start date + 1 day in case there is no modification done till this step..
+                // minDate will be last effective date + 1 day in case there are some modifications made till this point
+
+                $lease_modifications_history = ModifyLeaseApplication::query()->whereIn('business_account_id', getDependentUserIds())
+                    ->where('lease_id', '=', $id)
+                    ->orderBy('created_at', 'desc')
+                    ->first();
+                if($lease_modifications_history) {
+                    $minDate = Carbon::parse($lease_modifications_history->effective_from)->addDay(1)->format('Y-m-d');
+                } else {
+                    $base_date = getParentDetails()->accountingStandard->base_date;
+                    if (Carbon::parse($asset->accural_period)->greaterThan(Carbon::parse($base_date))) {
+                        $date = Carbon::parse($asset->accural_period)->format('Y-m-d');
+                    } else {
+                        $date = $base_date;
+                    }
+                    $minDate = Carbon::parse($date)->addDay(1)->format('Y-m-d');
+                }
+
+                $maxDate = $asset->getLeaseEndDate($asset);
+
+                return view('modifylease.create', compact(
+                    'lease',
+                    'lase_modification',
+                    'disable_initial',
+                    'asset',
+                    'minDate',
+                    'maxDate'
+                ));
             } else {
                 abort(404);
             }
