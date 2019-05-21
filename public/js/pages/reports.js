@@ -42,6 +42,9 @@ $(document).ready(function(){
     };
 
     var __table_contractual = $("#report_contractual").dataTable({
+        language: {
+            searchPlaceholder: "Asset Name or Lessor Name"
+        },
         stateSave: true,
         stateSaveCallback: function(settings,data) {
             localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) )
@@ -70,7 +73,11 @@ $(document).ready(function(){
             {"data": "increase_decrease"},
             {
                 "data": null, render: function (data, type, row, meta) {
-                    return parseFloat(row.initial_present_value) + parseFloat(row.increase_decrease);
+                    if(row.increase_decrease == null) {
+                        return parseFloat(row.initial_present_value);
+                    } else {
+                        return parseFloat(row.initial_present_value) + parseFloat(row.increase_decrease);
+                    }
                 },
                 orderable: false
             },
@@ -80,7 +87,11 @@ $(document).ready(function(){
             {"data":"initial_value_of_lease_asset"},
             {
                 "data": null, render: function (data, type, row, meta) {
-                    return parseFloat(row.initial_value_of_lease_asset) + parseFloat(row.increase_decrease);
+                    if(row.increase_decrease == null) {
+                        return parseFloat(row.initial_value_of_lease_asset);
+                    } else {
+                        return parseFloat(row.initial_value_of_lease_asset) + parseFloat(row.increase_decrease);
+                    }
                 },
                 orderable: false
             },
@@ -92,7 +103,15 @@ $(document).ready(function(){
                 orderable: false
             },
             {"data":"carrying_value_of_lease_asset", orderable : false},
-            {"data":"adjustment_to_equity"},
+            {
+                "data":"adjustment_to_equity", render : function (data, type, row, meta) {
+                    if(row.adjustment_to_equity == 'null' || row.adjustment_to_equity == null) {
+                        return 0;
+                    } else {
+                        return row.adjustment_to_equity;
+                    }
+                }
+            },
             {"data": "charge_to_pl"}
         ],
         "scrollX": true,
@@ -101,15 +120,16 @@ $(document).ready(function(){
         "ajax": _ajax_url,
         dom: 'Bfrtip',
         buttons: [
+            // $.extend( true, {}, buttonCommon, {
+            //     extend: 'copyHtml5'
+            // }),
             $.extend( true, {}, buttonCommon, {
-                extend: 'copyHtml5'
-            }),
-            $.extend( true, {}, buttonCommon, {
-                extend: 'excelHtml5'
-            }),
-            $.extend(true, {}, buttonCommon, {
-                extend: 'colvis'
+                extend: 'excelHtml5',
+                text: 'Export To Excel'
             })
+            // $.extend(true, {}, buttonCommon, {
+            //     extend: 'colvis'
+            // })
         ]
     });
 

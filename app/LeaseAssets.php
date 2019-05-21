@@ -253,8 +253,8 @@ class LeaseAssets extends Model
         $lease = $this->lease;
 
 
-        $start_date = Carbon::parse($this->accural_period);
-        $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date);
+        //$start_date = Carbon::parse($this->accural_period);
+        $start_date = Carbon::parse($this->lease_start_date);
 
         $subsequent_modify_required = $lease->isSubsequentModification();
         if($subsequent_modify_required) {

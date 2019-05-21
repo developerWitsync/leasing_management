@@ -60,7 +60,7 @@
                 <div role="tabpanel" class="tab-pane active">
                     <div class="panel panel-info">
                         <div class="panel-heading">
-                            <strong>Lease Liability (Contractual Lease Payments)</strong>
+                            <strong>Lease Report (Contractual Lease Payments)</strong>
                             {{--|--}}
                             {{--<small>Drafts contains all the incomplete leases that has been created. If a lease is listed--}}
                                 {{--in the drafts this means that the lease has not been submitted till now and making--}}
@@ -82,7 +82,7 @@
                                                 <input type="text" class="form-control" id="dt2" readonly="readonly" style="background-color: #fff;" placeholder="Select End Date">
                                             </div>
                                             <div class="form-group col-md-4 ">
-                                                <button type="submit col-md-2" class="btn btn-success">Refresh</button>
+                                                <button type="submit col-md-2" class="btn btn-success">Run</button>
                                                 <a href="javascript:void(0);" id="clear_filters" class="btn-link">Clear Filters</a>
                                             </div>
                                         </form>

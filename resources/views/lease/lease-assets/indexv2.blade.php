@@ -603,7 +603,7 @@
                     $.ajax({
                         url: "{{route('addlease.leaseasset.getdatedifference')}}",
                         data: {
-                            accural_period: $('#accural_period').val(),
+                            lease_start_date: $('#lease_start_date').val(),
                             lease_end_date: $('#lease_end_date').val()
 
                         },

@@ -482,10 +482,10 @@ class UnderlyingLeaseAssetController extends Controller
     public function getDateDifference(Request $request){
         if($request->ajax()) {
 
-            $accural_period = Carbon::parse($request->accural_period);
+            $lease_start_date = Carbon::parse($request->lease_start_date);
             $lease_end_date = Carbon::parse($request->lease_end_date)->addDay(1);
            
-            $date_diff = $lease_end_date->diffForHumans($accural_period, true, false, 4); 
+            $date_diff = $lease_end_date->diffForHumans($lease_start_date, true, false, 4);
             return response()->json([
                 'html' => $date_diff
             ], 200);

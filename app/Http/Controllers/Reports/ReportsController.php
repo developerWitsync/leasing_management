@@ -50,7 +50,7 @@ class ReportsController extends Controller
                 ->selectRaw('lease_assets.id as asset_id')
                 ->selectRaw('lease_history.json_data_steps->>"$.underlying_asset.lease_liablity_value" as initial_present_value')
                 ->selectRaw('lease_history.json_data_steps->>"$.underlying_asset.value_of_lease_asset" as initial_value_of_lease_asset')
-                ->selectRaw('lease_history.json_data_steps->>"$.underlying_asset.adjustment_to_equity" as adjustment_to_equity')
+                ->selectRaw('IFNULL(lease_history.json_data_steps->>"$.underlying_asset.adjustment_to_equity", 0) as adjustment_to_equity')
                 ->selectRaw('SUM(DISTINCT(interest_and_depreciation.change)) as increase_decrease')
                 ->selectRaw('SUM(DISTINCT(interest_and_depreciation.charge_to_pl)) as charge_to_pl')
                 ->selectRaw('SUM(interest_and_depreciation.interest_expense) as lease_interest')
@@ -66,6 +66,7 @@ class ReportsController extends Controller
                 ->where('lease.status', '=', '1')
                 ->whereRaw('lease_history.modify_id IS NULL');
 
+
             if($request->has('start_date') && $request->has('end_date') && $request->start_date != '' && $request->end_date != '') {
                 $start_date = Carbon::parse($request->start_date)->format('Y-m-d');
                 $end_date = Carbon::parse($request->end_date)->format('Y-m-d');
@@ -73,19 +74,39 @@ class ReportsController extends Controller
                     $join->on('lease_assets.id', '=', 'interest_and_depreciation.asset_id')
                         ->whereBetween('interest_and_depreciation.date', [$start_date, $end_date]);
                 });
-                $model->whereBetween('lease_assets.lease_start_date', [$start_date, $end_date]);
+                /**
+                 * conditions to include the active leases
+                 */
+                $model->where(function($query) use ($start_date, $end_date){
+                    $query->whereRaw("'{$start_date}' between lease_assets.lease_start_date and lease_assets.lease_end_date");
+                    $query->whereRaw("'{$end_date}' between lease_assets.lease_start_date and lease_assets.lease_end_date");
+                });
+
+                $model->orWhere(function($query) use ($start_date, $end_date){
+                    $query->whereRaw("lease_assets.lease_start_date < '{$start_date}' AND  lease_assets.lease_end_date Between '{$start_date}' and '{$end_date}'");
+                });
+
+                $model->orWhere(function($query) use ($start_date, $end_date){
+                    $query->whereRaw("lease_assets.lease_start_date Between '{$start_date}' and '{$end_date}' AND '{$end_date}' < lease_assets.lease_end_date");
+                });
+                /**
+                 * Conditions end here
+                 */
+
                 $model->selectRaw('(SELECT SUM(`depreciation`) FROM `interest_and_depreciation` where last_day(`date`) = `date` and asset_id = lease_assets.id AND `date` between '.$start_date.' AND '.$end_date.') as depreciation');
             } else {
                 $model->leftJoin('interest_and_depreciation', 'interest_and_depreciation.asset_id', '=', 'lease_assets.id');
                 $model->selectRaw('(SELECT SUM(`depreciation`) FROM `interest_and_depreciation` where last_day(`date`) = `date` and asset_id = lease_assets.id) as depreciation');
             }
 
-
             $datatable = datatables()->eloquent($model);
 
             $datatable->filter(function ($query) use ($request){
                 if ($request->has('search') && trim($request->search["value"])!="") {
-                    $query->where('lease.lessor_name', 'like', "%" . $request->search["value"] . "%");
+                    $query->where(function($query) use ($request){
+                        $query->where('lease.lessor_name', 'like', "%" . $request->search["value"] . "%");
+                        $query->orWhere('lease_assets.name', 'like', "%" . $request->search["value"] . "%");
+                    });
                 }
             });
 

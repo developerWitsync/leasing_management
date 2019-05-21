@@ -108,7 +108,8 @@ class ReviewSubmitController extends Controller
         if ($lease) {
 
             $asset = $lease->assets()->first();
-            $start_date = Carbon::parse($asset->accural_period);
+            //$start_date = Carbon::parse($asset->accural_period);
+            $start_date = Carbon::parse($asset->lease_start_date);
 
             //check for the subsequent modification here....
             $subsequent_modify_required = $lease->isSubsequentModification();
