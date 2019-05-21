@@ -1155,7 +1155,7 @@ table.categoryTble tr td {font-size: 16px; color: #fff;}
 .Privacy_left li {display: block;}
 .Privacy_left li a {display: block; font-size: 16px; line-height: 25px; padding: 10px; border-bottom: #e5e5e5 solid 1px;}
 .Privacy_left li a:hover, .Privacy_left li a.active{ background:#64b0f2; color:#fff;}
-.privacyRight {width: 70%; float: right; padding: 20px; background: #fafafa; border: #eee solid 1px; max-height: 500px; overflow: auto;}
+.privacyRight {width: 70%; float: right; padding: 20px; background: #fafafa; border: #eee solid 1px; max-height: 60vh; overflow: auto;}
 .PrivacyTab{ display:none;}
 .privacyContent h2 {font-size: 32px; font-weight: 600; line-height:40px; padding-bottom: 20px; color: #333;}
 .privacyContent p {font-size: 14px; line-height: 25px; color: #666;	padding-bottom: 25px;}
