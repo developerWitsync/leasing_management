@@ -80,15 +80,16 @@ class ReportsController extends Controller
                 $model->where(function($query) use ($start_date, $end_date){
                     $query->whereRaw("'{$start_date}' between lease_assets.lease_start_date and lease_assets.lease_end_date");
                     $query->whereRaw("'{$end_date}' between lease_assets.lease_start_date and lease_assets.lease_end_date");
+                    $query->orWhere(function($query) use ($start_date, $end_date){
+                        $query->whereRaw("lease_assets.lease_start_date < '{$start_date}' AND  lease_assets.lease_end_date Between '{$start_date}' and '{$end_date}'");
+                    });
+
+                    $query->orWhere(function($query) use ($start_date, $end_date){
+                        $query->whereRaw("lease_assets.lease_start_date Between '{$start_date}' and '{$end_date}' AND '{$end_date}' < lease_assets.lease_end_date");
+                    });
                 });
 
-                $model->orWhere(function($query) use ($start_date, $end_date){
-                    $query->whereRaw("lease_assets.lease_start_date < '{$start_date}' AND  lease_assets.lease_end_date Between '{$start_date}' and '{$end_date}'");
-                });
 
-                $model->orWhere(function($query) use ($start_date, $end_date){
-                    $query->whereRaw("lease_assets.lease_start_date Between '{$start_date}' and '{$end_date}' AND '{$end_date}' < lease_assets.lease_end_date");
-                });
                 /**
                  * Conditions end here
                  */
