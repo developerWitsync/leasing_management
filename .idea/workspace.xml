@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="1c290435-4779-45fe-873f-5594138f8734" name="Default Changelist" comment="Merge branch 'master' of http://100.100.7.4:8081/root/Witsync-Lease-Management&#10;&#10;# Conflicts:&#10;#&#9;app/Helpers/Helpers.php&#10;#&#9;config/settings.php&#10;#&#9;public/css/custom.css">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Helpers/Helpers.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Helpers/Helpers.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Reports/ReportsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Reports/ReportsController.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -29,11 +29,11 @@
     <select />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-assets/indexv2.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="601">
+            <state relative-caret-position="10540">
               <caret line="620" selection-start-line="620" selection-end-line="620" />
             </state>
           </provider>
@@ -42,7 +42,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/LeaseAssets.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="633">
+            <state relative-caret-position="4318">
               <caret line="257" selection-start-line="257" selection-end-line="257" />
               <folding>
                 <element signature="e#23#41#0#PHP" expanded="true" />
@@ -54,7 +54,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
+            <state relative-caret-position="1292">
               <caret line="111" column="66" selection-start-line="111" selection-start-column="66" selection-end-line="111" selection-end-column="66" />
               <folding>
                 <element signature="e#134#159#0#PHP" expanded="true" />
@@ -63,32 +63,13 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Reports/ReportsController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="278">
-              <caret line="50" column="65" selection-start-line="50" selection-start-column="65" selection-end-line="50" selection-end-column="65" />
+            <state relative-caret-position="601">
+              <caret line="88" column="23" lean-forward="true" selection-start-line="88" selection-start-column="23" selection-end-line="88" selection-end-column="23" />
               <folding>
                 <element signature="e#134#170#0#PHP" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/Helpers/Helpers.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="212">
-              <caret line="183" column="13" selection-start-line="183" selection-start-column="13" selection-end-line="183" selection-end-column="13" />
-              <folding>
-                <element signature="e#92#147#0#PHP" expanded="true" />
-                <element signature="n#uploadImage#0;n#!!top" />
-                <element signature="n#getUserProfileImageSrc#0;n#!!top" />
-                <element signature="n#getParentDetails#0;n#!!top" />
-                <element signature="n#updateCreditBalanceForParent#0;n#!!top" />
-                <element signature="n#fetchCurrenciesFromSettings#0;n#!!top" />
-                <element signature="n#calculatePaymentDueDatesByPaymentId#0;n#!!top" />
-                <element signature="n#firstEscalationDate#0;n#!!top" />
               </folding>
             </state>
           </provider>
@@ -97,7 +78,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/vendor/nesbot/carbon/src/Carbon/Carbon.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="464">
+            <state relative-caret-position="55403">
               <caret line="3275" column="21" selection-start-line="3275" selection-start-column="21" selection-end-line="3275" selection-end-column="21" />
             </state>
           </provider>
@@ -232,10 +213,10 @@
         <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/UnderlyingLeaseAssetController.php" />
         <option value="$PROJECT_DIR$/app/LeaseAssets.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Reports/ReportsController.php" />
         <option value="$PROJECT_DIR$/public/js/pages/reports.js" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php" />
         <option value="$PROJECT_DIR$/app/Helpers/Helpers.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Reports/ReportsController.php" />
       </list>
     </option>
   </component>
@@ -360,7 +341,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -398,6 +378,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -548,12 +529,13 @@
       <workItem from="1558065886957" duration="1294000" />
       <workItem from="1558085067034" duration="4570000" />
       <workItem from="1558326711414" duration="20288000" />
-      <workItem from="1558414498614" duration="13158000" />
+      <workItem from="1558414498614" duration="13848000" />
+      <workItem from="1558498989091" duration="127000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1662625000" />
+    <option name="totallyTimeSpent" value="1663442000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -568,7 +550,7 @@
     <frame x="64" y="-11" width="1857" height="1092" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2716731" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.274434" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -992,23 +974,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-assets/indexv2.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="601">
-          <caret line="620" selection-start-line="620" selection-end-line="620" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/LeaseAssets.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="633">
-          <caret line="257" selection-start-line="257" selection-end-line="257" />
-          <folding>
-            <element signature="e#23#41#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/js/pages/reports.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="729">
@@ -1016,9 +981,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-assets/indexv2.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="10540">
+          <caret line="620" selection-start-line="620" selection-end-line="620" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/LeaseAssets.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4318">
+          <caret line="257" selection-start-line="257" selection-end-line="257" />
+          <folding>
+            <element signature="e#23#41#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
+        <state relative-caret-position="1292">
           <caret line="111" column="66" selection-start-line="111" selection-start-column="66" selection-end-line="111" selection-end-column="66" />
           <folding>
             <element signature="e#134#159#0#PHP" expanded="true" />
@@ -1026,20 +1008,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Reports/ReportsController.php">
+    <entry file="file://$PROJECT_DIR$/vendor/nesbot/carbon/src/Carbon/Carbon.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="278">
-          <caret line="50" column="65" selection-start-line="50" selection-start-column="65" selection-end-line="50" selection-end-column="65" />
-          <folding>
-            <element signature="e#134#170#0#PHP" expanded="true" />
-          </folding>
+        <state relative-caret-position="55403">
+          <caret line="3275" column="21" selection-start-line="3275" selection-start-column="21" selection-end-line="3275" selection-end-column="21" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/nesbot/carbon/src/Carbon/Carbon.php">
+    <entry file="file://$PROJECT_DIR$/app/Helpers/Helpers.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="464">
-          <caret line="3275" column="21" selection-start-line="3275" selection-start-column="21" selection-end-line="3275" selection-end-column="21" />
+        <state relative-caret-position="501">
+          <caret line="200" column="54" selection-start-line="200" selection-start-column="54" selection-end-line="200" selection-end-column="54" />
+          <folding>
+            <element signature="e#92#147#0#PHP" expanded="true" />
+            <element signature="n#uploadImage#0;n#!!top" />
+            <element signature="n#getUserProfileImageSrc#0;n#!!top" />
+            <element signature="n#getParentDetails#0;n#!!top" />
+            <element signature="n#updateCreditBalanceForParent#0;n#!!top" />
+            <element signature="n#fetchCurrenciesFromSettings#0;n#!!top" />
+            <element signature="n#calculatePaymentDueDatesByPaymentId#0;n#!!top" />
+            <element signature="n#firstEscalationDate#0;n#!!top" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1053,19 +1042,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Helpers/Helpers.php">
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Reports/ReportsController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="212">
-          <caret line="183" column="13" selection-start-line="183" selection-start-column="13" selection-end-line="183" selection-end-column="13" />
+        <state relative-caret-position="601">
+          <caret line="88" column="23" lean-forward="true" selection-start-line="88" selection-start-column="23" selection-end-line="88" selection-end-column="23" />
           <folding>
-            <element signature="e#92#147#0#PHP" expanded="true" />
-            <element signature="n#uploadImage#0;n#!!top" />
-            <element signature="n#getUserProfileImageSrc#0;n#!!top" />
-            <element signature="n#getParentDetails#0;n#!!top" />
-            <element signature="n#updateCreditBalanceForParent#0;n#!!top" />
-            <element signature="n#fetchCurrenciesFromSettings#0;n#!!top" />
-            <element signature="n#calculatePaymentDueDatesByPaymentId#0;n#!!top" />
-            <element signature="n#firstEscalationDate#0;n#!!top" />
+            <element signature="e#134#170#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
