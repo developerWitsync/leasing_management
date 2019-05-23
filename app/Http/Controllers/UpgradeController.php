@@ -78,7 +78,7 @@ class UpgradeController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      */
     public function cancel(){
-        return redirect(route('plan.index'))->with('error', 'Your transasction has been cancelled.');
+        return redirect(route('plan.index'))->with('error', 'Your transaction has been cancelled.');
     }
 
     /**
@@ -105,6 +105,14 @@ class UpgradeController extends Controller
                 $action = null;
                 if($request->has('action')){
                     $action = $request->action;
+                }
+
+                if($action == 'downgrade') {
+                    //fetch the already created lease assets
+                    $already_created_leases = Lease::query()->whereIn('business_account_id', getDependentUserIds())->count();
+                    if($selected_package->available_leases <= $already_created_leases) {
+                        return response()->json(['status'=> false, 'message' => 'You cannot downgrade to this plan as you have already created more than '. $selected_package->available_leases.' leases.']);
+                    }
                 }
 
                 $view = view('plan._subscription_selection', compact(

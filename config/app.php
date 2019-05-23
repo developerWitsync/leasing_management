@@ -186,6 +186,7 @@ return [
         Barryvdh\Snappy\ServiceProvider::class,
         Buzz\LaravelGoogleCaptcha\CaptchaServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
+        Sunspikes\ClamavValidator\ClamavValidatorServiceProvider::class,
     ],
 
     /*

@@ -16,6 +16,7 @@
         "laravel/tinker": "~1.0",
         "maatwebsite/excel": "^3.1",
         "srmklive/paypal": "~1.0",
+        "sunspikes/clamav-validator": "^1.6",
         "swooletw/laravel-swoole": "^2.5",
         "tymon/jwt-auth": "1.0.0-rc.2",
         "webpatser/laravel-uuid": "^3.0",
