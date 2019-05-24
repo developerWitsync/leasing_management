@@ -16,7 +16,7 @@ class ContactUsQueryFrom extends Mailable
 
     public $contactus;
     public $html = '';
-        public $email_template_code = 'CONTACT_US ';
+    public $email_template_code = 'CONTACT_US ';
 
     /**
      * Create a new message instance.
