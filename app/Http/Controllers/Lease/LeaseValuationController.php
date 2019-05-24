@@ -599,7 +599,8 @@ class LeaseValuationController extends Controller
 
             $validator = Validator::make($request->all(),[
                 'prepaid_lease_payment' => 'required|numeric',
-                'lease_liability_value' => 'required|numeric'
+                'lease_liability_value' => 'required|numeric',
+                'accrued_lease_payment' => 'required|numeric'
             ]);
 
             if($validator->fails()) {
@@ -756,7 +757,7 @@ class LeaseValuationController extends Controller
             //save the value to the lease_assets database
 
             $prepaid_lease_payment = (float)$request->prepaid_lease_payment;
-            $adjustment_to_equity   = (float)$data->carrying_value_of_lease_asset - (float)$request->lease_liability_value - (float)$prepaid_lease_payment;
+            $adjustment_to_equity   = (float)$data->carrying_value_of_lease_asset - (float)$request->lease_liability_value - (float)$prepaid_lease_payment + (float)$request->accrued_lease_payment;
             $asset->value_of_lease_asset = $data->carrying_value_of_lease_asset;
             $asset->lease_liablity_value = $request->lease_liability_value;
             $asset->adjustment_to_equity = $adjustment_to_equity;

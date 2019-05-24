@@ -138,6 +138,8 @@ Route::middleware('auth')->group(function () {
             Route::get('lease-asset-payment-due-dates-view-dates/{id}', ['as' => 'addlease.payments.showpaymentdates', 'uses' => 'LeasePaymentsController@viewExistingDates']);
             Route::post('payment-annexure-inconsistent-per-interval', ['as' => 'addlease.payments.inconsitentperintervalannexure', 'uses' => 'LeasePaymentsController@inconsistentIntervalAnnexure']);
             Route::get('load-payment-annexure-inconsistent/{payment_id}', ['as' => 'addlease.payments.loadinconsistentannexure', 'uses' => 'LeasePaymentsController@loadInconsistentAnnexure']);
+
+            Route::delete('delete-lease-asset-payment', ['as' => 'addlease.payments.delete', 'uses' => 'LeasePaymentsController@delete']);
         });
 
 
