@@ -11,6 +11,9 @@
 |
 */
 
+
+Route::get('test-mail', 'Master\IndexController@testMail');
+
 Route::get('/', 'Master\IndexController@index');
 
 Route::get('information/{slug}', ['as' => 'information.index', 'uses' => 'Master\IndexController@information']);

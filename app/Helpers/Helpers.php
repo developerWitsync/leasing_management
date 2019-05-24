@@ -176,10 +176,10 @@ function calculatePaymentDueDates($first_payment_date, $last_payment_date, $paym
             $final_payout_dates[$current_year][$month][$start_date] = $start_date;
             //$start_date = \Carbon\Carbon::parse($start_date)->addMonth($addMonths)->firstOfMonth()->format('Y-m-d');
             //$start_date = \Carbon\Carbon::parse($start_date)->addMonth($addMonths)->format('Y-m-d');
-            if(\Carbon\Carbon::parse($start_date)->isLastOfMonth()){
-                $start_date =  \Carbon\Carbon::parse($start_date)->addMonthsNoOverflow($addMonths)->lastOfMonth()->format('Y-m-d');
+            $new_date = \Carbon\Carbon::parse($start_date)->addMonthsNoOverflow($addMonths);
+            if($new_date->day < \Carbon\Carbon::parse($first_payment_date)->day && $new_date->isLastOfMonth()) {
+                $start_date = $new_date->format('Y-m-d');
             } else {
-                $new_date = \Carbon\Carbon::parse($start_date)->addMonthsNoOverflow($addMonths);
                 $start_date = \Carbon\Carbon::create($new_date->year, $new_date->month, \Carbon\Carbon::parse($first_payment_date)->day)->format('Y-m-d');
             }
 
@@ -197,10 +197,10 @@ function calculatePaymentDueDates($first_payment_date, $last_payment_date, $paym
                 $start_date = \Carbon\Carbon::parse($start_date)->format('Y-m-d');
                 $interval_date = \Carbon\Carbon::parse($start_date)->format('Y-m-d');
             } else {
-                if(\Carbon\Carbon::parse($start_date)->isLastOfMonth()){
-                    $start_date =  \Carbon\Carbon::parse($start_date)->addMonthsNoOverflow($addMonths)->lastOfMonth()->format('Y-m-d');
+                $new_date = \Carbon\Carbon::parse($start_date)->addMonthsNoOverflow($addMonths);
+                if($new_date->day < \Carbon\Carbon::parse($first_payment_date)->day && $new_date->isLastOfMonth()) {
+                    $start_date = $new_date->format('Y-m-d');
                 } else {
-                    $new_date = \Carbon\Carbon::parse($start_date)->addMonthsNoOverflow($addMonths);
                     $start_date = \Carbon\Carbon::create($new_date->year, $new_date->month, \Carbon\Carbon::parse($first_payment_date)->day)->format('Y-m-d');
                 }
                 $interval_date = \Carbon\Carbon::parse($start_date)->format('Y-m-d');

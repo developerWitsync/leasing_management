@@ -11,6 +11,7 @@ namespace App\Http\Controllers\Master;
 
 use App\Cms;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 
 class IndexController extends Controller
 {
@@ -66,5 +67,9 @@ class IndexController extends Controller
      */
     public function eLearning(){
         return view('index.e-learning');
+    }
+
+    public function testMail(){
+
     }
 }
