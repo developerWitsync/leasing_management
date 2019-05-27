@@ -869,7 +869,6 @@ function generatePaypalExpressCheckoutLink(\App\SubscriptionPlans $package, \App
     $subscription->coupon_discount = $coupon_discount;
     $subscription->save();
     $options = [
-        'EMAIL' => auth()->user()->email,
         'SOLUTIONTYPE' => 'Sole',
         'LOGOIMG'=> asset('master/images/logo.png')
     ];
