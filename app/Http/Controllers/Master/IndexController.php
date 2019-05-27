@@ -11,13 +11,15 @@ namespace App\Http\Controllers\Master;
 
 use App\Cms;
 use App\Http\Controllers\Controller;
+use App\Mail\testMail;
+use Illuminate\Support\Facades\Mail;
 
 class IndexController extends Controller
 {
 
     public function __construct()
     {
-        $this->middleware('guest')->except('logout', 'information');
+        $this->middleware('guest')->except('logout', 'information', 'testMail');
     }
 
     /**
@@ -66,5 +68,9 @@ class IndexController extends Controller
      */
     public function eLearning(){
         return view('index.e-learning');
+    }
+
+    public function testMail(){
+        \Mail::to('info@witsync.co')->queue(new testMail());
     }
 }

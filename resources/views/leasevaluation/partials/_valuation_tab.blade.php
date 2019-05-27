@@ -33,6 +33,7 @@
                             <th>Initial Value of Lease Asset</th>
                             <th>Initial Present Value of Lease Liability</th>
                             <th>Opening Prepaid Lease Balances</th>
+                            <th>Accrued Lease Liability</th>
                             <th>Adjustment to Opening Equity</th>
                             <th>Historical Carrying Amount of Lease Asset</th>
                         </thead>
@@ -41,6 +42,7 @@
                                 <td style="text-align: center">{{$valuation_method->initial_value_of_lease_asset}}</td>
                                 <td style="text-align: center">{{$valuation_method->initial_present_value_of_lease_liability}}</td>
                                 <td style="text-align: center">{{$valuation_method->initial_prepaid_lease_payments}}</td>
+                                <td style="text-align: center"> {{$valuation_method->accrued_lease_payment_balance}}</td>
                                 <td style="text-align: center"> {{$valuation_method->adjustment_to_opening_equity}}</td>
                                 <td style="text-align: center">
                                     <a href="javascript:void(0);" class="btn btn-xs btn-primary carrying_amount_annexure" data-id="{{$asset->lease->id}}">Carrying Amount Annexure</a>

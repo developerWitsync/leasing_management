@@ -213,7 +213,8 @@ $(function(){
                 dataType : 'json',
                 data : {
                     lease_liability_value : lease_liability_array[asset_id],
-                    prepaid_lease_payment: $('#prepaid_lease_payment').text()
+                    prepaid_lease_payment: $('#prepaid_lease_payment').text(),
+                    accrued_lease_payment:$('#accrued_lease_payment').text(),
                 },
                 async : false,
                 beforeSend : function(){
@@ -254,7 +255,7 @@ $(function(){
 
     $(document).ready(function () {
 
-        $('.load_lease_liability').html(total_lease_liability);
+        $('.load_lease_liability').html(total_lease_liability.toFixed(2));
         if(typeof existing_lease_liability != "undefined"){
             var increase_decrease = parseFloat(total_lease_liability) - parseFloat(existing_lease_liability);
             var initial_increase_decrease;

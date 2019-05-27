@@ -300,6 +300,7 @@ class LeaseAssets extends Model
 
         //check if the escalations are applied or not and on the basis of the same fetch the data from the view..
         foreach ($payments as $payment_key => $payment) {
+            $payment_libality = 0;
             $is_eslaction_applicable = PaymentEscalationDetails::query()
                 ->select('is_escalation_applicable')
                 ->where('asset_id', '=', $this->id)
@@ -313,6 +314,7 @@ class LeaseAssets extends Model
 
                 if (count($results) > 0) {
                     foreach ($results as $result) {
+                        $payment_libality = $payment_libality + $result->lease_liability;
                         $total_lease_liability = $total_lease_liability + $result->lease_liability;
                         $present_value_of_lease_liability[$result->payment_year][$result->payment_month]["payment_" . $result->payment_id] = $result;
                     }
@@ -323,6 +325,7 @@ class LeaseAssets extends Model
 
                 if (count($results) > 0) {
                     foreach ($results as $result) {
+                        $payment_libality = $payment_libality + $result->lease_liability;
                         $total_lease_liability = $total_lease_liability + $result->lease_liability;
                         $present_value_of_lease_liability[$result->payment_year][$result->payment_month]["payment_" . $result->payment_id] = $result;
                     }
@@ -332,7 +335,7 @@ class LeaseAssets extends Model
             //save only when the historical present value is not getting calculated...
             if(!$historical) {
                 //save the present value for the payment here....
-                $payment->setAttribute('present_value', $total_lease_liability);
+                $payment->setAttribute('present_value', $payment_libality);
                 $payment->save();
             }
 

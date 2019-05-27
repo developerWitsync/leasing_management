@@ -108,6 +108,9 @@
       <path value="$PROJECT_DIR$/vendor/markbaker/matrix" />
       <path value="$PROJECT_DIR$/vendor/markbaker/complex" />
       <path value="$PROJECT_DIR$/vendor/opis/closure" />
+      <path value="$PROJECT_DIR$/vendor/sunspikes/clamav-validator" />
+      <path value="$PROJECT_DIR$/vendor/xenolope/quahog" />
+      <path value="$PROJECT_DIR$/vendor/clue/socket-raw" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7" />

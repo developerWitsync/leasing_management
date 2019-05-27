@@ -138,6 +138,18 @@ class ReviewSubmitController extends Controller
 
             $lease_payments = $asset->fetchAllPaymentsForAnnexure($asset, $base_date->format('Y-m-d'), $end_date->format('Y-m-d'));
 
+            $is_payment_on_base_date = false;
+            $base_date_payment = array_where($lease_payments, function($value) use ($base_date){
+                if(Carbon::parse($base_date)->equalTo($value->date)){
+                    return true;
+                } else {
+                    return false;
+                }
+            }) ;
+            if(count($base_date_payment) > 0){
+                $is_payment_on_base_date = true;
+            }
+
             $check_date = $increase_or_decrease = null;
 
             $set_to_zero = false;
@@ -254,7 +266,7 @@ class ReviewSubmitController extends Controller
                         return ($date_month == $key && $start_year == $date_year);
                     });
 
-                    if($start_year == $first_year && $start_month == $key && empty($payment_dates) && !Carbon::parse($base_date)->isLastOfMonth()){
+                    if($start_year == $first_year && $start_month == $key && !$is_payment_on_base_date && !Carbon::parse($base_date)->isLastOfMonth()){
                         $days_diff = Carbon::parse($base_date)->diffInDays($base_date);
                         $interest_expense = calculateInterestExpense($previous_liability, $discount_rate, $days_diff);
                         $dates[] = [

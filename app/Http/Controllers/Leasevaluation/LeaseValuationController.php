@@ -346,6 +346,7 @@ class LeaseValuationController extends Controller
                 ->selectRaw('json_data_steps->>"$.underlying_asset.value_of_lease_asset" as initial_value_of_lease_asset')
                 ->selectRaw('json_data_steps->>"$.underlying_asset.adjustment_to_equity" as adjustment_to_opening_equity')
                 ->selectRaw('json_data_steps->>"$.lease_balance.prepaid_lease_payment_balance" as initial_prepaid_lease_payments')
+                ->selectRaw('json_data_steps->>"$.lease_balance.accrued_lease_payment_balance" as accrued_lease_payment_balance')
                 ->join('lease', 'lease.id', '=', 'lease_history.lease_id')
                 ->where('lease_history.lease_id', '=', $id)
             ->whereRaw('lease_history.modify_id IS NULL')->first();

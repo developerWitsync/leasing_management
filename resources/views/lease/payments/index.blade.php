@@ -165,7 +165,10 @@
                         "orderable": false,
                         "className": "text-center",
                         "render": function (data, type, full, meta) {
-                            var html = "<button  data-toggle='tooltip' data-placement='top' title='Edit Asset Payment' type=\"button\" data-payment_id='" + full['id'] + "' class=\"btn btn-sm  btn-success edit_asset_payment\"><i class=\"fa fa-pencil-square-o fa-lg\"></i></button>";
+                            var html = "<button  data-toggle='tooltip' data-placement='top' title='Edit Asset Payment' type=\"button\" data-payment_id='" + full['id'] + "' class=\"btn btn-sm btn-success _edit_asset_payment \"><i class=\"fa fa-pencil-square-o fa-lg\"></i></button>";
+
+                            html+="&nbsp;<button  data-toggle='tooltip' data-placement='top' title='Delete Asset Payment' type=\"button\" data-payment_id='" + full['id'] + "' class=\"btn btn-sm btn-danger delete_asset_payment\"><i class=\"fa fa-trash-o fa-lg\"></i></button>";
+
                             return html;
                         }
                     }
@@ -173,11 +176,45 @@
                 "processing": true,
                 "serverSide": true,
                 "ajax": "{{ route('lease.payments.fetchassetpayments', ['id' => $asset->id]) }}"
+            });
 
+            $(document.body).on('click', '.delete_asset_payment', function(){
+                var payment_id = $(this).data('payment_id');
+                var lease_id = {{$lease->id}};
+                bootbox.confirm({
+                    message: "Are you sure that you want to delte the lease asset payment? Once deleted this change cannot be reverted back.",
+                    buttons: {
+                        confirm: {
+                            label: 'Yes',
+                            className: 'btn-success'
+                        },
+                        cancel: {
+                            label: 'No',
+                            className: 'btn-danger'
+                        }
+                    },
+                    callback: function (result) {
+                        if (result) {
+                            $.ajax({
+                                url : '/lease/payments/delete-lease-asset-payment',
+                                data : {
+                                    lease_id : lease_id,
+                                    payment_id : payment_id
+                                },
+                                type: 'DELETE',
+                                dataType : 'json',
+                                success: function(response){
+                                    $('.save_next').remove(); //since the user have deleted the payment and they will have to add the payment back or will have to redure the number of payments.
+                                    asset_payments_table.ajax.reload();
+                                }
+                            });
+                        }
+                    }
+                });
             });
 
 
-            $(document.body).on('click', '.edit_asset_payment', function () {
+            $(document.body).on('click', '._edit_asset_payment', function () {
                 var payment_id = $(this).data('payment_id');
                 window.location.href = '/lease/payments/update-asset-payment/{{ $asset->id }}/' + payment_id;
             });

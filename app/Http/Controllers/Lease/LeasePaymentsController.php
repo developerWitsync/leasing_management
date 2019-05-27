@@ -784,4 +784,26 @@ class LeasePaymentsController extends Controller
             abort(404);
         }
     }
+
+    /**
+     * delete a particular lease asset payment
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function delete(Request $request){
+        try{
+            $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $request->lease_id)->first();
+            if($lease) {
+                $payment = LeaseAssetPayments::query()->findOrFail($request->payment_id);
+                $payment->delete();
+            }
+            return response()->json([
+                'status' => true
+            ], 200);
+        } catch (\Exception $e){
+            return response()->json([
+                'status' => false
+            ], 200);
+        }
+    }
 }

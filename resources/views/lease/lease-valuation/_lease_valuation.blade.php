@@ -20,6 +20,7 @@
                     <th style="text-align: center">Value of Lease Asset</th>
                     <th style="text-align: center">Present Value of Lease Liability</th>
                     <th style="text-align: center">Prepaid Lease Payments</th>
+                    <th style="text-align: center">Accrued Lease Payments</th>
                     <th style="text-align: center">Adjustment To Equity</th>
                     <th style="text-align: center" class="hidden">Historical Present Value of Lease Liability</th>
                     <th style="text-align: center">Action</th>
@@ -36,8 +37,10 @@
 
                     @if($asset->leaseBalanceAsOnDec)
                         <td style="border: 1px solid #ddd;text-align: center;" id="prepaid_lease_payment">{{ $asset->leaseBalanceAsOnDec->prepaid_lease_payment_balance *  $asset->leaseBalanceAsOnDec->exchange_rate }}</td>
+                        <td style="border: 1px solid #ddd;text-align: center;" id="accrued_lease_payment">{{ $asset->leaseBalanceAsOnDec->accrued_lease_payment_balance *  $asset->leaseBalanceAsOnDec->exchange_rate }}</td>
                     @else
                         <td style="border: 1px solid #ddd;text-align: center;" id="prepaid_lease_payment">0</td>
+                        <td style="border: 1px solid #ddd;text-align: center;" id="accrued_lease_payment">0</td>
                     @endif
 
                     <td style="border: 1px solid #ddd;text-align: center;" class="adjustment_to_equity">Calculating....</td>

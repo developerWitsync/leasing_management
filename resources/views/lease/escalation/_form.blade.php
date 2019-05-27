@@ -110,7 +110,7 @@
         </div>
 
         <div class="form-group{{ $errors->has('is_escalation_applied_annually_consistently') ? ' has-error' : '' }} required">
-            <label for="is_escalation_applied_annually_consistently" class="col-md-12 control-label">Escalation Consistently Annually Applied ?</label>
+            <label for="is_escalation_applied_annually_consistently" class="col-md-12 control-label">Escalation Consistently Applied ?</label>
             <div class="col-md-12 form-check form-check-inline mrktavail" required>
                 <span>
                     <input class="form-check-input" name="is_escalation_applied_annually_consistently" id="yes" type="checkbox" value="yes" @if(old('is_escalation_applied_annually_consistently', $model->is_escalation_applied_annually_consistently) == "yes") checked="checked" @endif>
