@@ -868,7 +868,10 @@ function generatePaypalExpressCheckoutLink(\App\SubscriptionPlans $package, \App
     $subscription->discounted_amount = $discounted_amount;
     $subscription->coupon_discount = $coupon_discount;
     $subscription->save();
-    $response = $provider->setExpressCheckout($data);
+    $options = [
+        'SOLUTIONTYPE' => 'Sole',
+    ];
+    $response = $provider->addOptions($options)->setExpressCheckout($data);
     return $response['paypal_link'];
 }
 
