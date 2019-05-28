@@ -1006,7 +1006,9 @@ function calculateAdjustedAmountForUpgradeDowngrade(\App\SubscriptionPlans $pack
 
             } else {
                 //need to do the calculations for calculating the price that the user might have to pay...
-                $old_amount_paid = ($existing_plan->subscriptionPackage->price * ($existing_plan->subscription_years * 12)) - $existing_plan->discounted_amount;
+                //$old_amount_paid = ($existing_plan->subscriptionPackage->price * ($existing_plan->subscription_years * 12)) - $existing_plan->discounted_amount;
+
+                $old_amount_paid = $existing_plan->paid_amount;
 
                 $old_plan_per_day_rate = $old_amount_paid / ($existing_plan->subscription_years * 365);
 
