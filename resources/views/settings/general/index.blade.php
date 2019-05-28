@@ -42,132 +42,147 @@
 
             <div class="">
                 <div role="tabpanel" class="tab-pane active">
-                    <form class="form-horizontal" method="POST" action="{{ route('settings.index.save') }}">
-                        {{ csrf_field() }}
 
+                    <form class="form-horizontal" method="POST"
+                          action="{{ route('settings.index.saveapplicationstandards') }}"
+                          id="save_date_of_initial_application">
+                        {{ csrf_field() }}
                         <div class="panel panel-info">
                             <div class="panel-heading">
                                 <span> Date of Initial Application of the New Leasing Standard</span>
                             </div>
-                            <div class="form-group{{ $errors->has('date_of_initial_application') ? ' has-error' : '' }} required">
+                            <div class="setting form-group{{ $errors->has('date_of_initial_application') ? ' has-error' : '' }} required">
 
                                 <div class="col-md-12 rightx">
                                     <div class="input-group col-md-12">
+
                                         <div class="form-check col-md-4 ">
                                             <input class="form-check-input" type="radio"
                                                    @if(old('date_of_initial_application', isset($settings->date_of_initial_application)?$settings->date_of_initial_application:"") == '1') checked="checked"
                                                    @endif name="date_of_initial_application" value="1" id="jan_1_2019"
-                                                   checked="checked">
+                                                   @if(isset($settings->is_initial_date_of_application_saved) && $settings->is_initial_date_of_application_saved == 1) disabled="disabled" @endif>
                                             <label class="form-check-label" for="jan_1_2019">
                                                 {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->format('F d, Y') }}
                                             </label>
                                         </div>
-                                        <div class="form-check col-md-6">
+
+                                        <div class="form-check col-md-4">
                                             <input class="form-check-input" type="radio"
                                                    @if(old('date_of_initial_application', isset($settings->date_of_initial_application)?$settings->date_of_initial_application:"") == '2') checked="checked"
                                                    @endif name="date_of_initial_application" value="2"
-                                                   id="earlier_jan_1_2019" disabled="disabled">
+                                                   id="earlier_jan_1_2019"
+                                                   @if(isset($settings->is_initial_date_of_application_saved) && $settings->is_initial_date_of_application_saved == 1) disabled="disabled" @endif>
                                             <label class="form-check-label" for="earlier_jan_1_2019">
                                                 Prior
                                                 to {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->format('F d, Y') }}
                                             </label>
                                         </div>
+
+                                        @if(!isset($settings->date_of_initial_application) || (isset($settings->date_of_initial_application) && $settings->is_initial_date_of_application_saved  == 0))
+                                            <div class="form-group col-md-4">
+                                                <div class="col-md-6 col-md-offset-4">
+                                                    <button type="submit" class="btn btn-success btn_confirm_submit">
+                                                        Confirm
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        @endif
+
                                     </div>
-                                    @if ($errors->has('date_of_initial_application'))
-                                        <span class="help-block">
+
+                                </div>
+
+                                <div class="col-md-12 rightx">
+                                    <div class="col-md-4">
+                                        <div class="modified_retrospective_approach  @if(old('date_of_initial_application', isset($settings->date_of_initial_application)?$settings->date_of_initial_application:"") == '1')
+                                        @else hidden @endif">Modified Retrospective Approach
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="full_retrospective_approach @if(old('date_of_initial_application', isset($settings->date_of_initial_application)?$settings->date_of_initial_application:"") == '2')
+                                        @else hidden @endif"
+                                        ">Full Retrospective Approach
+                                    </div>
+                                </div>
+                            </div>
+
+                            @if ($errors->has('date_of_initial_application'))
+                                <span class="help-block">
                                         <strong>{{ $errors->first('date_of_initial_application') }}</strong>
                                     </span>
+                            @endif
+
+                        </div>
+                    </form>
+                </div>
+
+                <form class="form-horizontal" method="POST" action="{{ route('settings.index.save') }}">
+                    {{ csrf_field() }}
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <span> Control Lease Term - Maximum & Minimum</span>
+                        </div>
+                        <div class="setting">
+                            <div class="form-group{{ $errors->has('min_previous_first_lease_start_year') ? ' has-error' : '' }} required">
+                                <label for="min_previous_first_lease_start_year" class="col-md-4 control-label">Minimum
+                                    Previous First Lease Start Year</label>
+                                <div class="col-md-6">
+                                    <div class="from-group">
+                                        <select name="min_previous_first_lease_start_year"
+                                                id="min_previous_first_lease_start_year  " type="text"
+                                                placeholder="Select Year"
+                                                class="form-control max_previous_lease_start_year">
+                                            <option value="">Please select Year</option>
+                                            {{ $earliest_year = 1990 }}
+                                            @foreach (range(date('Y') - 1, $earliest_year) as $x)
+                                                <option value="{{ $x }}"
+                                                        @if(old('min_previous_first_lease_start_year', $settings->min_previous_first_lease_start_year) == $x) selected="selected" @endif>{{ $x }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    @if ($errors->has('min_previous_first_lease_start_year'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('min_previous_first_lease_start_year') }}</strong>
+                                        </span>
                                     @endif
                                 </div>
                             </div>
 
-                            <div class="form-group{{ $errors->has('date_of_initial_application_earlier_date') ? ' has-error' : '' }} date_of_initial_application_earlier_date required"
-                                 style="display: none;">
-                                <label for="date_of_initial_application_earlier_date" class="col-md-4 control-label">Specify
-                                    Date Earlier to Jan 01, 2019</label>
+                            <div class="form-group{{ $errors->has('max_lease_end_year') ? ' has-error' : '' }} required">
+                                <label for="max_lease_end_year" class="col-md-4 control-label">Maximum Lease End
+                                    Year</label>
                                 <div class="col-md-6">
-                                    <div class="input-group">
-                                        <input id="date_of_initial_application_earlier_date" type="text"
-                                               placeholder="Date Earlier to Jan 01, 2019" class="form-control"
-                                               name="date_of_initial_application_earlier_date"
-                                               value="{{ old('date_of_initial_application_earlier_date') }}" autofocus>
-                                        <div class="btn input-group-addon"
-                                             onclick="javascript:$('#date_of_initial_application_earlier_date').focus();">
-                                            <i class="fa fa-calendar"></i>
-                                        </div>
+                                    <div class="from-group">
+
+                                        <select name="max_lease_end_year" id="max_lease_end_year  " type="text"
+                                                placeholder="Select Year" class="form-control max_lease_end_year">
+                                            <option value="">Please select Year</option>
+                                            {{ $end_year = date('Y') + 100 }}
+                                            @foreach (range(date('Y'), $end_year) as $x)
+                                                <option value="{{ $x }}"
+                                                        @if(old('max_lease_end_year', $settings->max_lease_end_year) == $x) selected="selected" @endif>{{ $x }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
-                                    @if ($errors->has('date_of_initial_application_earlier_date'))
+                                    @if ($errors->has('max_lease_end_year'))
                                         <span class="help-block">
-                                        <strong>{{ $errors->first('date_of_initial_application_earlier_date') }}</strong>
-                                    </span>
+                                            <strong>{{ $errors->first('max_lease_end_year') }}</strong>
+                                        </span>
                                     @endif
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-6 col-md-offset-4">
+                                    <button type="submit" class="btn btn-success">
+                                        Save
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                        <div class="panel panel-info">
-                            <div class="panel-heading">
-                                <span> Control Lease Term - Maximum & Minimum</span>
-                            </div>
-                            <div class="setting">
-                                <div class="form-group{{ $errors->has('min_previous_first_lease_start_year') ? ' has-error' : '' }} required">
-                                    <label for="min_previous_first_lease_start_year" class="col-md-4 control-label">Minimum
-                                        Previous First Lease Start Year</label>
-                                    <div class="col-md-6">
-                                        <div class="from-group">
-                                            <select name="min_previous_first_lease_start_year"
-                                                    id="min_previous_first_lease_start_year  " type="text"
-                                                    placeholder="Select Year"
-                                                    class="form-control max_previous_lease_start_year">
-                                                <option value="">Please select Year</option>
-                                                {{ $earliest_year = 1990 }}
-                                                @foreach (range(date('Y') - 1, $earliest_year) as $x)
-                                                    <option value="{{ $x }}"
-                                                            @if(old('min_previous_first_lease_start_year', $settings->min_previous_first_lease_start_year) == $x) selected="selected" @endif>{{ $x }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        @if ($errors->has('min_previous_first_lease_start_year'))
-                                            <span class="help-block">
-                                            <strong>{{ $errors->first('min_previous_first_lease_start_year') }}</strong>
-                                        </span>
-                                        @endif
-                                    </div>
-                                </div>
 
-                                <div class="form-group{{ $errors->has('max_lease_end_year') ? ' has-error' : '' }} required">
-                                    <label for="max_lease_end_year" class="col-md-4 control-label">Maximum Lease End
-                                        Year</label>
-                                    <div class="col-md-6">
-                                        <div class="from-group">
-
-                                            <select name="max_lease_end_year" id="max_lease_end_year  " type="text"
-                                                    placeholder="Select Year" class="form-control max_lease_end_year">
-                                                <option value="">Please select Year</option>
-                                                {{ $end_year = date('Y') + 100 }}
-                                                @foreach (range(date('Y'), $end_year) as $x)
-                                                    <option value="{{ $x }}"
-                                                            @if(old('max_lease_end_year', $settings->max_lease_end_year) == $x) selected="selected" @endif>{{ $x }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        @if ($errors->has('max_lease_end_year'))
-                                            <span class="help-block">
-                                            <strong>{{ $errors->first('max_lease_end_year') }}</strong>
-                                        </span>
-                                        @endif
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <div class="col-md-6 col-md-offset-4">
-                                        <button type="submit" class="btn btn-success">
-                                            Save
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
 
             <div class="panel panel-info">
@@ -335,7 +350,6 @@
     <script src="{{ asset('assets/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
     <script>
         $(function () {
-
             var table_countries_for_lease_assets = $('#countries_for_lease_assets').DataTable({
                 responsive: true,
                 "columns": [
@@ -356,7 +370,7 @@
                         "className": "text-center",
                         "render": function (data, type, full, meta) {
                             var html = "";
-                            html += "&nbsp;&nbsp;<button  data-toggle='tooltip' data-placement='top' title='Remove Country' type=\"button\" data-setting_id='" + full['id'] + "' class=\"btn btn-sm btn-danger delete_country_setting\">  <i class=\"fa fa-trash-o fa-lg\"></i></button>"
+                            html += "&nbsp;&nbsp;<button  data-toggle='tooltip' data-placement='top' title='Remove Country' type=\"button\" data-setting_id='" + full['id'] + "' class=\"btn btn-sm btn-danger delete_country_setting\">  <i class=\"fa fa-trash-o fa-lg\"></i></button>";
                             return html;
                         }
                     }
@@ -443,13 +457,79 @@
         });
 
         $(document).ready(function () {
+
+            $(".btn_confirm_submit").on('click', function (e) {
+                e.preventDefault();
+                bootbox.confirm({
+                    message: 'Are you sure of your selection, once selected will not be reverted.',
+                    buttons: {
+                        confirm: {
+                            label: 'Yes',
+                            className: 'btn btn-success'
+                        },
+                        cancel: {
+                            label: 'No',
+                            className: 'btn btn-danger'
+                        }
+                    },
+                    callback: function (result) {
+                        if (result) {
+                            $('#save_date_of_initial_application').submit();
+                        }
+                    }
+                });
+            });
+
+
             $('input[type="radio"]').on('change', function () {
-                if ($(this).val() == 'earlier_jan_1_2019') {
-                    $(".date_of_initial_application_earlier_date").show();
+                if ($(this).val() == '2') {
+                    bootbox.confirm({
+                        message: 'Are you sure to apply this standard for all your leases existing as on {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1)->format("F d, Y") }} by adjusting opening equity using Full Retrospective Method',
+                        buttons: {
+                            confirm: {
+                                label: 'Yes',
+                                className: 'btn btn-success'
+                            },
+                            cancel: {
+                                label: 'No',
+                                className: 'btn btn-danger'
+                            }
+                        },
+                        callback: function (result) {
+                            if (result) {
+                                $('.modified_retrospective_approach').addClass('hidden');
+                                $('.full_retrospective_approach').removeClass('hidden');
+                            } else {
+                                $("#earlier_jan_1_2019").prop('checked', false);
+                                $("#jan_1_2019").prop('checked', true);
+                            }
+                        }
+                    });
                 } else {
-                    $(".date_of_initial_application_earlier_date").hide();
+                    bootbox.confirm({
+                        message: 'Are your sure to apply this standard effective from  {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->format("F d, Y") }} using Modified Retrospective Approach',
+                        buttons: {
+                            confirm: {
+                                label: 'Yes',
+                                className: 'btn btn-success'
+                            },
+                            cancel: {
+                                label: 'No',
+                                className: 'btn btn-danger'
+                            }
+                        },
+                        callback: function (result) {
+                            if (result) {
+                                $('.modified_retrospective_approach').removeClass('hidden');
+                                $('.full_retrospective_approach').addClass('hidden');
+                            } else {
+                                $("#earlier_jan_1_2019").prop('checked', true);
+                                $("#jan_1_2019").prop('checked', false);
+                            }
+                        }
+                    });
                 }
-            })
+            });
         });
 
         $(document.body).on("click", ".status-update", function () {
@@ -458,7 +538,7 @@
             var status = $(this).data('status');
             var selected_date = $('#lock_unlock_' + year).val();
 
-            if(status == '1') {
+            if (status == '1') {
                 var message = "Your Valuations up to the selected date will be locked and you will not be allowed to enter any leases for such period";
             } else {
                 message = "Your selected year will be unlocked and you will be allowed to enter leases for the unlocked period";

@@ -410,6 +410,8 @@ Route::middleware('auth')->group(function () {
 
             Route::post('save', ['as' => 'settings.index.save', 'uses' => 'IndexController@save']);
 
+            Route::post('save-application-standards', ['as' => 'settings.index.saveapplicationstandards', 'uses' => 'IndexController@saveApplicationStandards']);
+
             Route::get('changestatus', ['as' => 'settings.leaselockyear.index', 'uses' => 'LeaseLockYearController@index']);
 
             Route::get('fetch-lease-assets-countries', ['as' => 'settings.index.fetchleaseassetcountries', 'uses' => 'LeaseAssetCountriesController@index']);

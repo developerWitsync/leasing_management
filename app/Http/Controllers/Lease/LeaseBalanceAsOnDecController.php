@@ -8,6 +8,7 @@
 
 namespace App\Http\Controllers\Lease;
 
+use App\GeneralSettings;
 use App\Http\Controllers\Controller;
 use App\Lease;
 use App\LeaseBalanceAsOnDec;
@@ -150,6 +151,8 @@ class LeaseBalanceAsOnDecController extends Controller
 
                     $currency_settings =  ReportingCurrencySettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
 
+                    $settings = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
+
                     return view('lease.lease-balnce-as-on-dec.create', compact(
                         'model',
                         'lease',
@@ -158,7 +161,8 @@ class LeaseBalanceAsOnDecController extends Controller
                         'back_url',
                         'current_step',
                         'currency_settings',
-                        'subsequent_modify_required'
+                        'subsequent_modify_required',
+                        'settings'
                     ));
                 } else {
                     return redirect(route('addlease.initialdirectcost.index', ['id' => $id]));

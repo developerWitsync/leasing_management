@@ -21,6 +21,10 @@ use Session;
 class IndexController extends Controller
 {
 
+    /**
+     * renders the general settings complete view for the different options
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function index(){
 
         $breadcrumbs = [
@@ -72,7 +76,6 @@ class IndexController extends Controller
      * validates the input from the form
      * if the validation returns true saves the settings to the database and redirects the user with a success message
      * if the general settings already exists for the logged in user than updates the existing settings
-     * @todo need to implement the functionality for the disabled option on the general settings tab
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -80,7 +83,6 @@ class IndexController extends Controller
         try{
 
             $validator = Validator::make($request->except("_token"), [
-                'date_of_initial_application'   => 'required',
                 'min_previous_first_lease_start_year' => 'required',
                 'max_lease_end_year' => 'required'
             ]);
@@ -105,6 +107,44 @@ class IndexController extends Controller
             return redirect()->back()->with('status', $status);
         } catch (\Exception $e){
              abort(404);
+        }
+    }
+
+    /**
+     * save the initial date of application from the general settings.
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function saveApplicationStandards(Request $request){
+        try{
+            $validator = Validator::make($request->except("_token"), [
+                'date_of_initial_application'   => 'required'
+            ]);
+
+            if($validator->fails()){
+                return redirect()->back()->withErrors($validator->errors())->withInput($request->except("_token"));
+            }
+
+            $request->request->add(['business_account_id' => auth()->user()->id]);
+            $settings = GeneralSettings::query()->where('business_account_id', '=', auth()->user()->id)->first();
+
+            $data = $request->except('_token');
+
+            $data['is_initial_date_of_application_saved'] = 1;
+
+            if(isset($settings)) {
+                $settings->setRawAttributes($data);
+                $settings->save();
+                $status = 'Date of Initial Application of the New Leasing Standard has been saved successfully.';
+            } else {
+                GeneralSettings::create($data);
+                $status = 'Date of Initial Application of the New Leasing Standard has been saved successfully.';
+            }
+            return redirect()->back()->with('status', $status);
+
+        } catch (\Exception $e) {
+            dd($e);
+            abort(404);
         }
     }
 

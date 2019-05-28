@@ -429,7 +429,7 @@
                                     <div class="col-md-12 form-check form-check-inline">
                                         <input class="form-check-input" name="using_lease_payment" type="checkbox"
                                                id="yes" value="1"
-                                               @if(old('using_lease_payment' ,$asset->using_lease_payment) == "1") checked="checked" @endif @if($subsequent_modify_required) disabled="disabled" @endif>
+                                               @if(old('using_lease_payment' ,$asset->using_lease_payment) == "1") checked="checked" @endif @if($subsequent_modify_required || $settings->date_of_initial_application == 2) disabled="disabled" @endif>
                                         <label for="yes" class="form-check-label" for="1" style="vertical-align: 2px">
                                             Modified Retrospective Approach (Without Adjusting Opening Equity). Value Of Asset Will Be Equal To Present Value Of Lease Liability
                                             {{--Current--}}
@@ -440,11 +440,15 @@
                                     <div class=" col-md-12 form-check form-check-inline">
                                         <input class="form-check-input" name="using_lease_payment" type="checkbox"
                                                id="no" value="2"
-                                               @if(old('using_lease_payment',$asset->using_lease_payment) == "2") checked="checked" @endif @if($subsequent_modify_required) disabled="disabled" @endif>
+                                               @if(old('using_lease_payment',$asset->using_lease_payment) == "2" || $settings->date_of_initial_application == 2) checked="checked" @endif @if($subsequent_modify_required) disabled="disabled" @endif>
                                         <label for="no" class="form-check-label" for="2" style="vertical-align: 2px">
                                             {{--Initial--}}
                                             {{--Lease Payment as on First Lease Start--}}
-                                            Modified Retrospective Approach ( By Adjusting Opening Equity)
+                                            @if($settings->date_of_initial_application == 1)
+                                                Modified Retrospective Approach ( By Adjusting Opening Equity)
+                                            @elseif($settings->date_of_initial_application == 2)
+                                                Full Retrospective Approach
+                                            @endif
                                         </label>
                                     </div>
                                     @if ($errors->has('using_lease_payment'))

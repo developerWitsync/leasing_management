@@ -5,7 +5,11 @@
 
 @section('content')
     <div class="panel panel-default">
-        <div class="panel-heading">Edit Lease Balance as on 31 Dec 2018 </div>
+        @if($settings->date_of_initial_application == 2)
+            <div class="panel-heading">Lease Balance as on {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1)->subDay(1)->format(config('settings.date_format')) }} </div>
+        @else
+            <div class="panel-heading">Lease Balance as on {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->subDay(1)->format(config('settings.date_format')) }} </div>
+        @endif
 
         <div class="panel-body">
             @if (session('status'))

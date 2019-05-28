@@ -54,7 +54,11 @@
         </div>
 
         <div class="form-group {{ $errors->has('exchange_rate') ? ' has-error' : '' }} required">
-            <label for="exchange_rate" class="col-md-12 control-label">Exchange Rate (as on {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->subDay(1)->format(config('settings.date_format')) }})</label>
+            @if($settings->date_of_initial_application == 2)
+                <label for="exchange_rate" class="col-md-12 control-label">Exchange Rate (as on {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->subDay(1)->subYear(1)->format(config('settings.date_format')) }})</label>
+            @else
+                <label for="exchange_rate" class="col-md-12 control-label">Exchange Rate (as on {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->subDay(1)->format(config('settings.date_format')) }})</label>
+            @endif
             <div class="col-md-12 form-check form-check-inline">
                 <input type="text" value="{{ old('exchange_rate', $model->exchange_rate) }}" class="form-control"
                        id="exchange_rate" name="exchange_rate" @if($subsequent_modify_required) disabled="disabled" @endif>
@@ -210,7 +214,11 @@
             var _return_currency = '';
             var access_key = '{{ env("CURRENCY_API_ACCESS_KEY") }}';
             //var base_date =  '2018-12-31';
-            var base_date = "{{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->subDay(1)->format('Y-m-d') }}";
+            @if($settings->date_of_initial_application == 2)
+                var base_date = "{{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->subDay(1)->subYear(1)->format('Y-m-d') }}";
+            @else
+                var base_date = "{{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->subDay(1)->format('Y-m-d') }}";
+            @endif
             var base = '{{ $currency_settings->statutory_financial_reporting_currency }}';
             var element_selector = 'input[name="exchange_rate"]';
             switch ($(this).val()) {
