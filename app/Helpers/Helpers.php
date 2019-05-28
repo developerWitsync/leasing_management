@@ -946,9 +946,9 @@ function calculateAdjustedAmountForUpgradeDowngrade(\App\SubscriptionPlans $pack
                 return ['status' => false, 'message' => 'You are not allowed to downgrade to a trial plan.'];
             }
 
-            if (!is_null($existing_plan->coupon_code) && $existing_plan->coupon_discount > 0) {
-                return ['status' => false, 'message' => 'You have used a coupon code with the existing plan and hence you cannot downgrade/upgrade from the existing plan.'];
-            }
+//            if (!is_null($existing_plan->coupon_code) && $existing_plan->coupon_discount > 0) {
+//                return ['status' => false, 'message' => 'You have used a coupon code with the existing plan and hence you cannot downgrade/upgrade from the existing plan.'];
+//            }
 
             //check here if the coupon code can be applied or not
             if ($coupon_code) {
@@ -1070,9 +1070,9 @@ function calculateAdjustedAmountForUpgradeDowngrade(\App\SubscriptionPlans $pack
         }
     } else {
 
-        if ($existing_plan && !is_null($existing_plan->coupon_code) && $existing_plan->coupon_discount > 0) {
-            return ['status' => false, 'message' => 'You have used a coupon code with the existing plan and hence you cannot downgrade/upgrade from the existing plan.'];
-        }
+//        if ($existing_plan && !is_null($existing_plan->coupon_code) && $existing_plan->coupon_discount > 0) {
+//            return ['status' => false, 'message' => 'You have used a coupon code with the existing plan and hence you cannot downgrade/upgrade from the existing plan.'];
+//        }
 
         //check here if the coupon code can be applied or not
         if ($coupon_code) {
