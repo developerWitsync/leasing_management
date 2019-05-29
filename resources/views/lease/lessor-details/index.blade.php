@@ -110,33 +110,33 @@
                                             </div>
 
 
-                                                <div class="form-group{{ $errors->has('lease_contract_id') ? ' has-error' : '' }} required">
-                                                    <label for="lease_contract_id" class="col-md-12 control-label">Lease
-                                                        Contract Currency</label>
-                                                    <div class="col-md-12">
-                                                        <select name="lease_contract_id" class="form-control"
-                                                                @if($subsequent_modify_required) disabled="disabled" @endif>
-                                                            <option value="">Select Lease Contract Currency</option>
+                                            <div class="form-group{{ $errors->has('lease_contract_id') ? ' has-error' : '' }} required">
+                                                <label for="lease_contract_id" class="col-md-12 control-label">Lease
+                                                    Contract Currency</label>
+                                                <div class="col-md-12">
+                                                    <select name="lease_contract_id" class="form-control"
+                                                            @if($subsequent_modify_required) disabled="disabled" @endif>
+                                                        <option value="">Select Lease Contract Currency</option>
 
-                                                            @foreach($contract_currencies as $currency)
-                                                                <option value="{{ $currency }}"
-                                                                        @if(old('lease_contract_id', $lease->lease_contract_id) == $currency) selected="selected" @endif>
-                                                                    {{ $currency }}</option>
-                                                            @endforeach
-                                                        </select>
+                                                        @foreach($contract_currencies as $currency)
+                                                            <option value="{{ $currency }}"
+                                                                    @if(old('lease_contract_id', $lease->lease_contract_id) == $currency) selected="selected" @endif>
+                                                                {{ $currency }}</option>
+                                                        @endforeach
+                                                    </select>
 
-                                                        @if($subsequent_modify_required)
-                                                            <input type="hidden" name="lease_contract_id"
-                                                                   value="{{$lease->lease_contract_id}}"/>
-                                                        @endif
+                                                    @if($subsequent_modify_required)
+                                                        <input type="hidden" name="lease_contract_id"
+                                                               value="{{$lease->lease_contract_id}}"/>
+                                                    @endif
 
-                                                        @if ($errors->has('lease_contract_id'))
-                                                            <span class="help-block">
+                                                    @if ($errors->has('lease_contract_id'))
+                                                        <span class="help-block">
                                                     <strong>{{ $errors->first('lease_contract_id') }}</strong>
                                                 </span>
-                                                        @endif
-                                                    </div>
+                                                    @endif
                                                 </div>
+                                            </div>
 
 
                                             <div class="form-group{{ $errors->has('file') ? ' has-error' : '' }} ">
@@ -172,6 +172,7 @@
                                                     {{ env('CANCEL_LABEL')}}</a>
 
                                             </div>
+
                                             <div class="col-md-4 col-sm-4 btnsubmitBx aligncenter">
 
                                                 <button type="submit" class="btn btn-success">

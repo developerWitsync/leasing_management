@@ -2,8 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use App\GeneralSettings;
 use App\Lease;
 use App\LeaseAssets;
+use Carbon\Carbon;
 use Closure;
 use Illuminate\Contracts\Logging\Log;
 
@@ -18,8 +20,13 @@ class CheckPreviousData
      */
     public function handle($request, Closure $next, $step, $param_type, $param)
     {
+        $settings = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
         //\Log::info('Checking ----- ' . $step . ' On URL ------- ' . $request->route()->getName());
-        $base_date = getParentDetails()->accountingStandard->base_date;
+        if($settings->date_of_initial_application == 2) {
+            $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1)->format('Y-m-d');
+        } else {
+            $base_date = getParentDetails()->accountingStandard->base_date;
+        }
         if ($param_type == 'asset_id') {
             $asset_id = $request->route($param);
             $asset = \App\LeaseAssets::query()->where('id', '=', $asset_id)->first();
@@ -294,6 +301,7 @@ class CheckPreviousData
                 })
                 ->count();
 
+
             if ($total_assets == 0) {
                 $step = 13;
                 $total_assets = \App\LeaseAssets::query()->where('lease_id', '=', $lease->id)
@@ -498,6 +506,7 @@ class CheckPreviousData
         }
 
         //\Log::info('Checking ----- ' . $step . ' On URL ------- ' . $request->route()->getName());
+
 
         if (!$this->verifyStep($step, $lease_id)) {
             abort(403, config('settings.complete_previous_steps_error_message'));

@@ -129,7 +129,13 @@ class UnderlyingLeaseAssetController extends Controller
             $settings = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
             if($lease) {
 
-                $base_date = getParentDetails()->accountingStandard->base_date;
+                if($settings->date_of_initial_application == 2){
+                    $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1)->format('Y-m-d');
+                } else {
+                    $base_date = getParentDetails()->accountingStandard->base_date;
+                }
+
+
                 $base_date_formatted = Carbon::parse($base_date)->format('F d, Y');
 
                 if(count($lease->assets) > 0) {

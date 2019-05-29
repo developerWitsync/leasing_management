@@ -15,6 +15,7 @@ use App\LeaseBalanceAsOnDec;
 use App\LeaseAssets;
 use App\CategoriesLeaseAssetExcluded;
 use App\ReportingCurrencySettings;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -44,6 +45,8 @@ class LeaseBalanceAsOnDecController extends Controller
      */
     public function index_V2($id, Request $request){
          try{
+
+            $settings = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
             $breadcrumbs = [
                 [
                     'link' => route('add-new-lease.index'),
@@ -58,7 +61,11 @@ class LeaseBalanceAsOnDecController extends Controller
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
 
             if ($lease) {
-                $base_date =  getParentDetails()->accountingStandard->base_date;
+                if($settings->date_of_initial_application == 2){
+                    $base_date =  Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1)->format('Y-m-d');
+                } else {
+                    $base_date =  getParentDetails()->accountingStandard->base_date;
+                }
                 //check if the Subsequent Valuation is applied for the lease modification
                 $subsequent_modify_required = $lease->isSubsequentModification();
 
@@ -87,8 +94,8 @@ class LeaseBalanceAsOnDecController extends Controller
 
                        if($model->save()) {
                             
-                            // complete Step
-                            confirmSteps($asset->lease->id, 13);
+                        // complete Step
+                        confirmSteps($asset->lease->id, 13);
                         if($request->has('action') && $request->action == "next") {
                             return redirect(route('addlease.initialdirectcost.index',['id' => $lease->id]))->with('status', 'Lease Balance as on 31 Dec 2018 has been added successfully.');
                         } else {

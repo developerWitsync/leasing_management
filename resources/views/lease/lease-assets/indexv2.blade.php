@@ -387,7 +387,9 @@
                         </div>
 
                         <div class="categoriesOuter clearfix" id="prior_accounting" style="display: none">
+
                             <div class="categoriesHd">Lease Asset Accounting Adopted Prior to 2019</div>
+
                             <div class="form-group{{ $errors->has('accounting_treatment') ? ' has-error' : '' }} required">
                                 <label for="accounting_treatment" class="col-md-12 control-label">Lease Asset Accounting
                                     Treatment Followed Upto 2018</label>
@@ -425,7 +427,7 @@
                                 <label for="variable_amount_determinable" class="col-md-12 control-label">Using Lease
                                     Payment</label>
                                 <div class="col-md-12">
-
+                                    @if($settings->date_of_initial_application != 2)
                                     <div class="col-md-12 form-check form-check-inline">
                                         <input class="form-check-input" name="using_lease_payment" type="checkbox"
                                                id="yes" value="1"
@@ -436,6 +438,7 @@
                                             {{--Lease Payment Effective From {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->format('Y') }}--}}
                                         </label>
                                     </div>
+                                    @endif
 
                                     <div class=" col-md-12 form-check form-check-inline">
                                         <input class="form-check-input" name="using_lease_payment" type="checkbox"
@@ -530,10 +533,13 @@
 
                 function toggleUsinLeasePayment() {
                     var _start_date = $('#accural_period').datepicker('getDate');
-
-                    if (_start_date < new Date('{{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->format("F d Y") }}') ) {
+                    var __base_date = '{{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->format("F d Y") }}';
+                    @if($settings->date_of_initial_application == 2)
+                        var __base_date = '{{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1)->format("F d Y") }}';
+                    @endif
+                    if (_start_date < new Date(__base_date) ) {
                         var lease_asset_accounting = $("#accounting_treatment").find('option:selected').text();
-                        if (lease_asset_accounting == 'Finance Lease Accounting') {
+                        if (lease_asset_accounting == 'Finance Lease Accounting' ||  lease_asset_accounting == 'Previously Not Identified as Lease') {
                             $('.using_lease_payment').hide();
                             $('input[type="checkbox"][name="using_lease_payment"]').prop('checked', false);
                         } else {
@@ -590,9 +596,14 @@
                     }
                 });
 
+                var __base_date = '{{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->lastOfMonth()->format('Y-m-d') }}';
+                        @if($settings->date_of_initial_application == 2)
+                var __base_date = '{{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1)->lastOfMonth()->format('Y-m-d') }}';
+                @endif
+
                 $('#lease_end_date').datepicker({
                     dateFormat: "dd-M-yy",
-                    minDate : new Date('{{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->lastOfMonth()->format('Y-m-d')}}'),
+                    minDate : new Date(__base_date),
                     {!!  getYearRanage() !!}
                     changeYear: true,
                     changeMonth: true,
@@ -633,6 +644,10 @@
                 });
 
                 function resetAllDates() {
+                    var __base_date = '{{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->lastOfMonth()->format('Y-m-d')}}';
+                            @if($settings->date_of_initial_application == 2)
+                    var __base_date = '{{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1)->lastOfMonth()->format('Y-m-d') }}';
+                            @endif
                     var startDate = $('#lease_start_date').datepicker('getDate');
                     var newdate = new Date(startDate);
                     newdate.setDate(startDate.getDate() + parseInt($('#lease_free_period').val()));
@@ -645,8 +660,8 @@
                     var dt3 = new Date($('#accural_period').datepicker('getDate'));
                     var dt4 = new Date(dt3.setDate(dt3.getDate() + 30));
 
-                    if (dt4 <= new Date('{{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->lastOfMonth()->format("Y-m-d")}}')) {
-                        dt2.datepicker('option', 'minDate', new Date('{{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->lastOfMonth()->format("Y-m-d")}}'));
+                    if (dt4 <= new Date(__base_date)) {
+                        dt2.datepicker('option', 'minDate', new Date(__base_date));
                     } else {
                         dt2.datepicker('option', 'minDate', dt4);
                     }
@@ -663,11 +678,16 @@
                     var lease_asset_accounting = $("#accounting_treatment").find('option:selected').text();
                     if (lease_asset_accounting == 'Finance Lease Accounting') {
 
+                        var __base_date = '{{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->format('F d, Y') }}';
+                                @if($settings->date_of_initial_application == 2)
+                        var __base_date = '{{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1)->format('F d, Y') }}';
+                        @endif
+
                         //hide the Lease Payment Basis and clear the selected as well.
                         $('.using_lease_payment').hide();
                         $('input[type="checkbox"][name="using_lease_payment"]').prop('checked', false);
                         var modal = bootbox.dialog({
-                            message: "Finance Lease will be revalued at present value as on {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->format('F d, Y') }}",
+                            message: "Finance Lease will be revalued at present value as on " + __base_date,
                             buttons: [
                                 {
                                     label: "OK",

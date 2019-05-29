@@ -8,7 +8,9 @@
 
 namespace App\Http\Controllers\Lease;
 
+use App\GeneralSettings;
 use App\SupplierDetails;
+use Carbon\Carbon;
 use Validator;
 use App\Currencies;
 use App\DismantlingCosts;
@@ -47,8 +49,13 @@ class DismantlingCostsController extends Controller
     public function index_V2($id, Request $request)
     {
         try {
-
-            $base_date = getParentDetails()->accountingStandard->base_date;
+            $settings = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
+            if($settings->date_of_initial_application == 2){
+                $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1)->format('Y-m-d');
+            } else {
+                $base_date = getParentDetails()->accountingStandard->base_date;
+            }
+            //$base_date = getParentDetails()->accountingStandard->base_date;
             $breadcrumbs = [
                 [
                     'link' => route('add-new-lease.index'),

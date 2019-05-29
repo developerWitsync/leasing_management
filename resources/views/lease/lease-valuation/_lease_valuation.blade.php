@@ -12,7 +12,11 @@
 
                 <tr>
                    <td colspan="6" style="border: 1px solid #ddd;text-align: center;background: #13aaa9;color: #fff;font-weight: 600;">
-                       Modified Retrospective Approach by adjusting the Opening Equity
+                       @if($settings->date_of_initial_application == 2)
+                           Full Retrospective Approach
+                       @else
+                           Modified Retrospective Approach by adjusting the Opening Equity
+                       @endif
                    </td>
                 </tr>
 
@@ -59,11 +63,13 @@
             </table>
         @else
             <table class="table table-bordered table-responsive">
-                <tr>
-                    <td colspan="7" style="border: 1px solid #ddd;text-align: center;background: #13aaa9;color: #fff;font-weight: 600;">
-                        Modified Retrospective Approach by not adjusting the Opening Equity (equivalent to Present Value of Lease Liability)
-                    </td>
-                </tr>
+                @if(!is_null($asset->using_lease_payment))
+                    <tr>
+                        <td colspan="7" style="border: 1px solid #ddd;text-align: center;background: #13aaa9;color: #fff;font-weight: 600;">
+                            Modified Retrospective Approach by not adjusting the Opening Equity (equivalent to Present Value of Lease Liability)
+                        </td>
+                    </tr>
+                @endif
                 <tr>
                     <th style="text-align: center">Present Value of Lease Liability</th>
                     {{--<th style="text-align: center">Prepaid Lease Payments</th>--}}
