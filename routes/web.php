@@ -258,10 +258,15 @@ Route::middleware('auth')->group(function () {
          */
         Route::prefix('lease-valuation')->group(function () {
             Route::get('index/{id}', ['as' => 'addlease.leasevaluation.index', 'uses' => 'LeaseValuationController@index'])->middleware('checkpreviousdata:16,lease_id,id','checksubscription:add_lease,lease_id,id');
+
             Route::get('lease-liability-asset/{id}', ['as' => 'addlease.leasevaluation.liability', 'uses' => 'LeaseValuationController@presentValueOfLeaseLiability'])->middleware('checkpreviousdata:16,asset_id,id','checksubscription:add_lease,asset_id,id');
+
             Route::get('show-lease-liability-calculus/{id}', ['as' => 'addlease.leasevaluation.showcalculus', 'uses' => 'LeaseValuationController@showPresentValueOfLeaseLiabilityCalculus'])->middleware('checkpreviousdata:16,asset_id,id','checksubscription:add_lease,asset_id,id');
+
             Route::get('lease-valuation-asset/{id}', ['as' => 'addlease.leasevaluation.valuation', 'uses' => 'LeaseValuationController@equivalentPresentValueOfLeaseLiability'])->middleware('checkpreviousdata:16,asset_id,id','checksubscription:add_lease,asset_id,id');
+
             Route::get('lease-impairment/{id}', ['as' => 'addlease.leasevaluation.impairment', 'uses' => 'LeaseValuationController@leaseAssetImpairment'])->middleware('checkpreviousdata:16,asset_id,id','checksubscription:add_lease,asset_id,id');
+
             Route::get('termination-present-value/{id}', ['as' => 'addlease.leasevaluation.terminationpresentvalue', 'uses' => 'LeaseValuationController@terminationPresentValue']);
 
             Route::get('residual-present-value/{id}', ['as' => 'addlease.leasevaluation.residualpresentvalue', 'uses' => 'LeaseValuationController@residualPresentValue']);
@@ -409,6 +414,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/', ['as' => 'settings.index', 'uses' => 'IndexController@index']);
 
             Route::post('save', ['as' => 'settings.index.save', 'uses' => 'IndexController@save']);
+
+            Route::post('save-application-standards', ['as' => 'settings.index.saveapplicationstandards', 'uses' => 'IndexController@saveApplicationStandards']);
 
             Route::get('changestatus', ['as' => 'settings.leaselockyear.index', 'uses' => 'LeaseLockYearController@index']);
 

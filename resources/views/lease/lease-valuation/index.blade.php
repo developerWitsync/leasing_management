@@ -49,11 +49,20 @@
                         @if($subsequent_modify_required)
                             {{ \Carbon\Carbon::parse($lease->modifyLeaseApplication->last()->effective_from)->format(config('settings.date_format')) }}
                         @else
-                            @if(\Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->greaterThan(\Carbon\Carbon::parse($asset->accural_period)))
-                                {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->format(config('settings.date_format')) }}
+                            @if($settings->date_of_initial_application == 2)
+                                @if(\Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1)->greaterThan(\Carbon\Carbon::parse($asset->lease_start_date)))
+                                    {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1)->format(config('settings.date_format')) }}
+                                @else
+                                    {{ \Carbon\Carbon::parse($asset->lease_start_date)->format(config('settings.date_format')) }}
+                                @endif
                             @else
-                                {{ \Carbon\Carbon::parse($asset->lease_start_date)->format(config('settings.date_format')) }}
+                                @if(\Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->greaterThan(\Carbon\Carbon::parse($asset->accural_period)))
+                                    {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->format(config('settings.date_format')) }}
+                                @else
+                                    {{ \Carbon\Carbon::parse($asset->lease_start_date)->format(config('settings.date_format')) }}
+                                @endif
                             @endif
+
                         @endif
                     </span>
                 </div>

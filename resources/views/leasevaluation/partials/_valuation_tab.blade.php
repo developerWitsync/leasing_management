@@ -20,7 +20,11 @@
             <div class="locatpurposeTop leaseterminatHd">
                 Valuation Method Selected - <small>
                     @if($asset->using_lease_payment == '2')
-                        Modified Retrospective Approach ( By Adjusting Opening Equity)
+                        @if($settings->date_of_initial_application == 2)
+                            Full Retrospective Approach
+                        @else
+                            Modified Retrospective Approach ( By Adjusting Opening Equity)
+                        @endif
                     @elseif($asset->using_lease_payment == '1')
                         Modified Retrospective Approach (Without Adjusting Opening Equity). Value Of Asset Will Be Equal To Present Value Of Lease Liability
                     @endif

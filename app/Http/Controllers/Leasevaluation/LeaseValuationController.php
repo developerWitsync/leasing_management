@@ -11,6 +11,7 @@ namespace App\Http\Controllers\Leasevaluation;
 use App\CategoriesLeaseAssetExcluded;
 use App\DiscountRateChartView;
 use App\Exports\InterestAndDepreciationExport;
+use App\GeneralSettings;
 use App\HistoricalCarryingAmountAnnexure;
 use App\Http\Controllers\Controller;
 use App\InterestAndDepreciation;
@@ -292,12 +293,19 @@ class LeaseValuationController extends Controller
             if ($subsequent_modified) {
                 $subsequent = $lease->modifyLeaseApplication->last();
             }
-
+            $settings = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
+            if($settings->date_of_initial_application == 2){
+                $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1)->format('Y-m-d');
+            } else {
+                $base_date = getParentDetails()->accountingStandard->base_date;
+            }
             return view('leasevaluation.overview', compact(
                 'lease',
                 'asset',
                 'subsequent_modified',
-                'subsequent'
+                'subsequent',
+                'settings',
+                'base_date'
             ));
         } catch (\Exception $e) {
             abort(404);
@@ -313,6 +321,8 @@ class LeaseValuationController extends Controller
     {
 
         try {
+
+            $settings = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
 
             $lease = Lease::query()
                 ->where('id', '=', $id)
@@ -358,7 +368,8 @@ class LeaseValuationController extends Controller
                 'subsequent',
                 'show_statutory_columns',
                 'statutory_currency',
-                'valuation_method'
+                'valuation_method',
+                'settings'
             ));
         } catch (\Exception $e) {
             abort(404);
@@ -481,6 +492,7 @@ class LeaseValuationController extends Controller
     public function seeDetails($id)
     {
         try {
+            $settings = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
             $history = LeaseHistory::query()->findOrFail($id);
 
             $lease = $history->lease;
@@ -489,9 +501,15 @@ class LeaseValuationController extends Controller
             $final_data = [];
             $final_data['valuation_type'] = is_null($history->modify_id) ? "Initial Valuation" : $history->leaseModification->valuation;
 
-            $base_date = $account_base_date = getParentDetails()->accountingStandard->base_date;
+            //$base_date = $account_base_date = getParentDetails()->accountingStandard->base_date;
+            if($settings->date_of_initial_application == 2){
+                $base_date = $account_base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1);
+            } else {
+                $base_date = $account_base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date);
+            }
 
-            $start_date = Carbon::parse(is_null($history->modify_id) ? $json_step_data['underlying_asset']['accural_period'] : $history->leaseModification->effective_from);
+            //$start_date = Carbon::parse(is_null($history->modify_id) ? $json_step_data['underlying_asset']['accural_period'] : $history->leaseModification->effective_from);
+            $start_date = Carbon::parse(is_null($history->modify_id) ? $json_step_data['underlying_asset']['lease_start_date'] : $history->leaseModification->effective_from);
 
             $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
 

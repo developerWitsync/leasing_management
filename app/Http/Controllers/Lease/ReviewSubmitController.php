@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Lease;
 
 use App\DismantlingCosts;
+use App\GeneralSettings;
 use App\HistoricalCarryingAmountAnnexure;
 use App\Http\Controllers\Controller;
 use App\InterestAndDepreciation;
@@ -107,6 +108,8 @@ class ReviewSubmitController extends Controller
     {
         if ($lease) {
 
+            $settings = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
+
             $asset = $lease->assets()->first();
             //$start_date = Carbon::parse($asset->accural_period);
             $start_date = Carbon::parse($asset->lease_start_date);
@@ -117,7 +120,12 @@ class ReviewSubmitController extends Controller
                 $base_date = Carbon::parse($lease->modifyLeaseApplication->last()->effective_from);
                 $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
             } else {
-                $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date);
+                if($settings->date_of_initial_application == 2){
+                    $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1);
+                } else {
+                    $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date);
+                }
+
                 $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
             }
 

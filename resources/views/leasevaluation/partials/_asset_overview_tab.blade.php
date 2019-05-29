@@ -97,7 +97,7 @@
                         @endif
                     </strong></span>
             </div>
-            @if(\Carbon\Carbon::parse($asset->accural_period)->lessThan(\Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)))
+            @if(\Carbon\Carbon::parse($asset->accural_period)->lessThan(\Carbon\Carbon::parse($base_date)))
                 <div class="leasernameBx2 leaseprior">
                     <span>Accounting Treatment:<strong>{{ $asset->accountingTreatment->title }}</strong></span>
                     <span>Lease Payment Basis:
@@ -116,17 +116,17 @@
                 </div>
             @endif
 
-                <div class="leasernameBx2 leaserLocation">
-                    <span>Lessor Invoice :
-                        <strong>
-                            @if($lease->leasePaymentInvoice)
-                                {{ strtoupper($lease->leasePaymentInvoice->lease_payment_invoice_received) }}
-                            @else
-                                N/A
-                            @endif
-                        </strong>
-                    </span>
-                </div>
+            <div class="leasernameBx2 leaserLocation">
+                <span>Lessor Invoice :
+                    <strong>
+                        @if($lease->leasePaymentInvoice)
+                            {{ strtoupper($lease->leasePaymentInvoice->lease_payment_invoice_received) }}
+                        @else
+                            N/A
+                        @endif
+                    </strong>
+                </span>
+            </div>
         </div>
     </div>
 

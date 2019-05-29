@@ -155,7 +155,7 @@
                 <div class="col-md-12">
                     <input type="text" name="total_residual_gurantee_value" for="type" class="form-control"
                            id="total_residual_gurantee_value"
-                           value="{{ old('total_residual_gurantee_value', $model->total_residual_gurantee_value) }}">
+                           value="{{ old('total_residual_gurantee_value', $model->total_residual_gurantee_value) }}" readonly="readonly">
                     @if ($errors->has('total_residual_gurantee_value'))
                         <span class="help-block">
                         <strong>{{ $errors->first('total_residual_gurantee_value') }}</strong>

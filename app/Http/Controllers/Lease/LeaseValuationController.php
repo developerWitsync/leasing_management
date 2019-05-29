@@ -8,6 +8,7 @@
 
 namespace App\Http\Controllers\Lease;
 
+use App\GeneralSettings;
 use App\HistoricalCarryingAmountAnnexure;
 use App\Http\Controllers\Controller;
 use App\InterestAndDepreciation;
@@ -50,6 +51,13 @@ class LeaseValuationController extends Controller
                 'title' => 'Lease Valuation'
             ],
         ];
+
+        $settings = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
+        if($settings->date_of_initial_application == 2){
+            $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1)->format('Y-m-d');
+        } else {
+            $base_date = getParentDetails()->accountingStandard->base_date;
+        }
 
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
         if ($lease) {
@@ -128,7 +136,7 @@ class LeaseValuationController extends Controller
                 //check if impairment is applicable or not
                 $impairment_applicable = false;
 
-                if(Carbon::parse($asset->accural_period)->lessThanOrEqualTo(getParentDetails()->accountingStandard->base_date) && !is_null($asset->accounting_treatment) && $asset->accounting_treatment !='2'){
+                if(Carbon::parse($asset->accural_period)->lessThanOrEqualTo($base_date) && !is_null($asset->accounting_treatment) && $asset->accounting_treatment !='2'){
                     $impairment_applicable = true;
                 }
 
@@ -147,7 +155,9 @@ class LeaseValuationController extends Controller
                     'subsequent_modify_required',
                     'existing_lease_liability_balance',
                     'existing_value_of_lease_asset',
-                    'existing_carrying_value_of_lease_asset'
+                    'existing_carrying_value_of_lease_asset',
+                    'settings',
+                    'base_date'
                 ));
             } else {
                 //redirect to the lease incentives step in case not applicable....
@@ -191,7 +201,7 @@ class LeaseValuationController extends Controller
 
         //save the values for residual value guarantee
         if($asset->residualGuranteeValue->any_residual_value_gurantee == "yes"){
-            $asset->residualGuranteeValue->setAttribute('undiscounted_value', $asset->residualGuranteeValue->residual_gurantee_value);
+            $asset->residualGuranteeValue->setAttribute('undiscounted_value', $asset->residualGuranteeValue->total_residual_gurantee_value);
             $asset->residualGuranteeValue->save();
         }
 
@@ -329,14 +339,21 @@ class LeaseValuationController extends Controller
         try {
             if ($request->ajax()) {
                 $asset = LeaseAssets::query()->findOrFail($id);
+                $settings = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
                 $lease = $asset->lease;
-                $start_date =   Carbon::parse($asset->accural_period);
+                //$start_date =   Carbon::parse($asset->accural_period);
+                $start_date = Carbon::parse($asset->lease_start_date);
                 $subsequent_modify_required = $lease->isSubsequentModification();
                 if($subsequent_modify_required) {
                     $base_date = Carbon::parse($lease->modifyLeaseApplication->last()->effective_from);
                     $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
                 } else {
-                    $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date);
+                    //$base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date);
+                    if($settings->date_of_initial_application == 2){
+                        $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1);
+                    } else {
+                        $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date);
+                    }
                     $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
                 }
 
@@ -367,18 +384,25 @@ class LeaseValuationController extends Controller
         try {
             if ($request->ajax()) {
 
+                $settings = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
+
                 $asset = LeaseAssets::query()->findOrFail($id);
 
                 $lease = $asset->lease;
 
-                $start_date =   Carbon::parse($asset->accural_period);
+                //$start_date =   Carbon::parse($asset->accural_period);
+                $start_date = Carbon::parse($asset->lease_start_date);
 
                 $subsequent_modify_required = $lease->isSubsequentModification();
                 if($subsequent_modify_required) {
                     $base_date = Carbon::parse($lease->modifyLeaseApplication->last()->effective_from);
                     $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
                 } else {
-                    $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date);
+                    if($settings->date_of_initial_application == 2){
+                        $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1);
+                    } else {
+                        $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date);
+                    }
                     $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
                 }
 
@@ -413,18 +437,26 @@ class LeaseValuationController extends Controller
         try {
             if ($request->ajax()) {
 
+                $settings = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
+
                 $asset = LeaseAssets::query()->findOrFail($id);
 
                 $lease = $asset->lease;
 
-                $start_date =   Carbon::parse($asset->accural_period);
+                //$start_date =   Carbon::parse($asset->accural_period);
+                $start_date = Carbon::parse($asset->lease_start_date);
 
                 $subsequent_modify_required = $lease->isSubsequentModification();
                 if($subsequent_modify_required) {
                     $base_date = Carbon::parse($lease->modifyLeaseApplication->last()->effective_from);
                     $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
                 } else {
-                    $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date);
+                    //$base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date);
+                    if($settings->date_of_initial_application == 2){
+                        $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1);
+                    } else {
+                        $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date);
+                    }
                     $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
                 }
 
@@ -751,7 +783,12 @@ class LeaseValuationController extends Controller
             });
 
             //fetch the value on the one day before the base date and return the same to the response
-            $one_day_before_base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date)->subDay(1);
+            $settings = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
+            if($settings->date_of_initial_application == 2){
+                $one_day_before_base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1)->subDay(1);
+            } else {
+                $one_day_before_base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date)->subDay(1);
+            }
             $data = HistoricalCarryingAmountAnnexure::query()
                 ->where('asset_id', '=', $asset->id)
                 ->where('date', '=', $one_day_before_base_date)

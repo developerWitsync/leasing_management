@@ -1218,3 +1218,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3931af', end
 
 
 /*-----------CSS hack--------------*/
+
+.modified_retrospective_approach{
+    background-color: #ffa615;padding: 4px;border-radius: 4px;color: #fff;text-align: center;border: 1px solid #f87508;
+}
+
+.full_retrospective_approach{
+    background-color: #158cff;padding: 4px;border-radius: 4px;color: #fff;text-align: center;border: 1px solid #1a15ff;
+}

@@ -95,7 +95,8 @@ class UnderlyingLeaseAssetController extends Controller
             $current_step = $this->current_step;
             
             $ulacode = createUlaCode();
-            
+
+
             return view('lease.lease-assets.indexv2', compact('breadcrumbs',
                 'lease',
                 'lease_assets_categories',
@@ -125,9 +126,16 @@ class UnderlyingLeaseAssetController extends Controller
     public function save($id, Request $request){
         try{
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->with('leaseType')->with('assets')->first();
+            $settings = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
             if($lease) {
 
-                $base_date = getParentDetails()->accountingStandard->base_date;
+                if($settings->date_of_initial_application == 2){
+                    $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1)->format('Y-m-d');
+                } else {
+                    $base_date = getParentDetails()->accountingStandard->base_date;
+                }
+
+
                 $base_date_formatted = Carbon::parse($base_date)->format('F d, Y');
 
                 if(count($lease->assets) > 0) {
@@ -183,12 +191,20 @@ class UnderlyingLeaseAssetController extends Controller
                     $rules['using_lease_payment'] = 'required';
                 }
 
+
                 $validator = Validator::make($request->except('_token'), $rules, $messages);
 
                 if ($validator->fails()) {
                     return redirect()->back()->withErrors($validator->errors())->withInput($request->except('_token'));
                 }
                 $data = $request->except('_token', 'action');
+
+                if($settings->date_of_initial_application == 2 && date('Y-m-d', strtotime($request->accural_period)) < date('Y-m-d', strtotime($base_date))){
+                    $data['using_lease_payment'] = 2;
+                } elseif($settings->date_of_initial_application == 2) {
+                    $data['using_lease_payment'] = null;
+                }
+
                 $data['lease_id'] = $lease->id;
                 $data['lease_end_date'] = Carbon::parse($request->lease_end_date);
                 $data['accural_period'] = date('Y-m-d', strtotime($request->accural_period));

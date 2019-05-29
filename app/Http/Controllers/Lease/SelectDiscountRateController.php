@@ -8,6 +8,7 @@
 
 namespace App\Http\Controllers\Lease;
 
+use App\GeneralSettings;
 use App\Http\Controllers\Controller;
 use App\Lease;
 use App\LeaseSelectDiscountRate;
@@ -89,6 +90,7 @@ class SelectDiscountRateController extends Controller
                         $model = new LeaseSelectDiscountRate();
                     }
 
+                    $settings = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
 
                     if ($request->isMethod('post')) {
                         $validator = Validator::make($request->except('_token'), $this->validationRules());
@@ -121,7 +123,8 @@ class SelectDiscountRateController extends Controller
                         'breadcrumbs',
                         'back_url',
                         'current_step',
-                        'subsequent_modify_required'
+                        'subsequent_modify_required',
+                        'settings'
                     ));
 
                 } else {

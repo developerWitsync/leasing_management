@@ -15,6 +15,7 @@ class GeneralSettings extends Model
         'min_previous_first_lease_start_year',
         'max_lease_end_year',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'is_initial_date_of_application_saved'
     ];
 }

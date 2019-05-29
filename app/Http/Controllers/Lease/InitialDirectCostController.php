@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Lease;
 
 
+use App\GeneralSettings;
 use App\Http\Controllers\Controller;
 use App\Lease;
 use App\LeaseAssets;
@@ -16,6 +17,7 @@ use App\InitialDirectCost;
 use App\SupplierDetails;
 use App\Currencies;
 use App\CategoriesLeaseAssetExcluded;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Validator;
@@ -61,7 +63,12 @@ class InitialDirectCostController extends Controller
             ];
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
             if ($lease) {
-                $base_date = getParentDetails()->accountingStandard->base_date;
+                $settings = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
+                if($settings->date_of_initial_application == 2){
+                    $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1)->format('Y-m-d');
+                } else {
+                    $base_date = getParentDetails()->accountingStandard->base_date;
+                }
                 //check if the Subsequent Valuation is applied for the lease modification
                 $subsequent_modify_required = $lease->isSubsequentModification();
 
@@ -73,7 +80,7 @@ class InitialDirectCostController extends Controller
                 $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
 
                 $asset = LeaseAssets::query()->where('lease_id', '=', $id)
-                    ->where('lease_start_date', '>=', $base_date)
+                    ->where('accural_period', '>=', $base_date)
                     ->whereNotIn('category_id', $category_excluded_id)
                     ->whereHas('leaseSelectLowValue', function ($query) {
                         $query->where('is_classify_under_low_value', '=', 'no');
@@ -152,7 +159,7 @@ class InitialDirectCostController extends Controller
                         }
                     }
 
-                    $asset_on_balence = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '<', $base_date)->count();
+                    $asset_on_balence = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('accural_period', '<', $base_date)->count();
                     if ($asset_on_balence > 0) {
                         $back_url = route('addlease.balanceasondec.index', ['id' => $id]);
                     } else {

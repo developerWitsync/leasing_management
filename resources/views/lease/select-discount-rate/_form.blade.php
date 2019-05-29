@@ -43,7 +43,12 @@
             </div>
         </div>
         <div class="form-group{{ $errors->has('discount_rate_to_use') ? ' has-error' : '' }} required">
-            <label for="name" class="col-md-12 control-label">Select Discount Rate to Use(in %)</label>
+            @if($settings->date_of_initial_application == 2 && !$subsequent_modify_required)
+                <label for="name" class="col-md-12 control-label">Input Historical Average Discount Rate(in %)</label>
+            @else
+                <label for="name" class="col-md-12 control-label">Select Discount Rate to Use(in %)</label>
+            @endif
+
             <div class="col-md-12 form-check form-check-inline" required>
                 <input class="form-control" name="discount_rate_to_use" id="discount_rate_to_use" type="text"
                        value="{{ old('discount_rate_to_use', $model->discount_rate_to_use) }}">

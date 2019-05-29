@@ -250,8 +250,9 @@ class LeaseAssets extends Model
     public function presentValueOfLeaseLiability($return_value = false, $payment_id = null, $historical = false)
     {
 
-        $lease = $this->lease;
+        $settings = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
 
+        $lease = $this->lease;
 
         //$start_date = Carbon::parse($this->accural_period);
         $start_date = Carbon::parse($this->lease_start_date);
@@ -261,7 +262,11 @@ class LeaseAssets extends Model
             $base_date = Carbon::parse($lease->modifyLeaseApplication->last()->effective_from);
             $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
         } else {
-            $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date);
+            if($settings->date_of_initial_application == 2){
+                $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1);
+            } else {
+                $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date);
+            }
             $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
         }
 
@@ -513,14 +518,14 @@ class LeaseAssets extends Model
             });
 
             $new_array['date'] = Carbon::parse($end_date)->format('Y-m-d');
-            $new_array['total_amount_payable'] = $asset->residualGuranteeValue->residual_gurantee_value;
+            $new_array['total_amount_payable'] = $asset->residualGuranteeValue->total_residual_gurantee_value;
             if(!empty($payment_dates)){
                 $key = key($payment_dates);
                 $payment_dates = array_values($payment_dates);
-                $new_array['total_amount_payable'] = $asset->residualGuranteeValue->residual_gurantee_value + $payment_dates[0]->total_amount_payable;
+                $new_array['total_amount_payable'] = $asset->residualGuranteeValue->total_residual_gurantee_value + $payment_dates[0]->total_amount_payable;
                 $lease_payments[$key] = (object)$new_array;
             } else {
-                $new_array['total_amount_payable'] = $asset->residualGuranteeValue->residual_gurantee_value;
+                $new_array['total_amount_payable'] = $asset->residualGuranteeValue->total_residual_gurantee_value;
                 array_push($lease_payments, (object)$new_array);
             }
 

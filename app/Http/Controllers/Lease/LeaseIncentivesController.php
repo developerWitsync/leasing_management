@@ -8,6 +8,7 @@
 
 namespace App\Http\Controllers\Lease;
 
+use App\GeneralSettings;
 use App\Http\Controllers\Controller;
 use App\Lease;
 use App\LeaseIncentives;
@@ -16,6 +17,7 @@ use App\ReportingCurrencySettings;
 use App\Currencies;
 use App\CustomerDetails;
 use App\LeaseAssets;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Validator;
@@ -48,7 +50,12 @@ class LeaseIncentivesController extends Controller
     public function index_V2($id, Request $request)
     {
         try {
-            $base_date = getParentDetails()->accountingStandard->base_date;
+            $settings = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
+            if($settings->date_of_initial_application == 2){
+                $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1)->format('Y-m-d');
+            } else {
+                $base_date = getParentDetails()->accountingStandard->base_date;
+            }
             $breadcrumbs = [
                 [
                     'link' => route('add-new-lease.index'),
@@ -72,7 +79,7 @@ class LeaseIncentivesController extends Controller
                 $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
 
                 $asset = LeaseAssets::query()->where('lease_id', '=', $lease->id)
-                    ->where('lease_start_date', '>=', $base_date)
+                    ->where('accural_period', '>=', $base_date)
                     ->whereNotIn('category_id', $category_excluded_id)
                     ->whereHas('leaseSelectLowValue', function ($query) {
                         $query->where('is_classify_under_low_value', '=', 'no');

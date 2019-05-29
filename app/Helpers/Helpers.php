@@ -1335,9 +1335,15 @@ function calculateMonthsDifference($start_date, $end_date){
  * @throws \Exception
  */
 function calculateDepreciation($subsequent_modify_required, \App\LeaseAssets $asset, $value_of_lease_asset){
-    $start_date = \Carbon\Carbon::parse($asset->accural_period);
+    $start_date = \Carbon\Carbon::parse($asset->lease_start_date);
     if(!$subsequent_modify_required) {
-        $base_date = \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date);
+        $settings = \App\GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
+        if($settings->date_of_initial_application == 2) {
+            $base_date = \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1);
+        } else {
+            $base_date = \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date);
+        }
+
         $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
         $months = calculateMonthsDifference($base_date->format('Y-m-d'), $asset->getLeaseEndDate($asset));
         $depreciation = (float)$value_of_lease_asset/$months;
