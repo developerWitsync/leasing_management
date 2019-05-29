@@ -201,7 +201,7 @@ class LeaseValuationController extends Controller
 
         //save the values for residual value guarantee
         if($asset->residualGuranteeValue->any_residual_value_gurantee == "yes"){
-            $asset->residualGuranteeValue->setAttribute('undiscounted_value', $asset->residualGuranteeValue->residual_gurantee_value);
+            $asset->residualGuranteeValue->setAttribute('undiscounted_value', $asset->residualGuranteeValue->total_residual_gurantee_value);
             $asset->residualGuranteeValue->save();
         }
 
