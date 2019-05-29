@@ -293,12 +293,19 @@ class LeaseValuationController extends Controller
             if ($subsequent_modified) {
                 $subsequent = $lease->modifyLeaseApplication->last();
             }
-
+            $settings = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
+            if($settings->date_of_initial_application == 2){
+                $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1)->format('Y-m-d');
+            } else {
+                $base_date = getParentDetails()->accountingStandard->base_date;
+            }
             return view('leasevaluation.overview', compact(
                 'lease',
                 'asset',
                 'subsequent_modified',
-                'subsequent'
+                'subsequent',
+                'settings',
+                'base_date'
             ));
         } catch (\Exception $e) {
             abort(404);

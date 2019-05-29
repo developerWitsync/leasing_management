@@ -97,7 +97,7 @@
                         @endif
                     </strong></span>
             </div>
-            @if(\Carbon\Carbon::parse($asset->accural_period)->lessThan(\Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)))
+            @if(\Carbon\Carbon::parse($asset->accural_period)->lessThan(\Carbon\Carbon::parse($base_date)))
                 <div class="leasernameBx2 leaseprior">
                     <span>Accounting Treatment:<strong>{{ $asset->accountingTreatment->title }}</strong></span>
                     <span>Lease Payment Basis:
