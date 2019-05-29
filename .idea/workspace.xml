@@ -138,8 +138,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-valuation/_lease_liability.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="680">
-              <caret line="42" column="98" selection-start-line="42" selection-start-column="98" selection-end-line="42" selection-end-column="98" />
+            <state relative-caret-position="629">
+              <caret line="39" column="134" selection-start-line="39" selection-start-column="134" selection-end-line="39" selection-end-column="134" />
             </state>
           </provider>
         </entry>
@@ -589,12 +589,12 @@
       <workItem from="1558959768807" duration="3061000" />
       <workItem from="1559016965347" duration="17265000" />
       <workItem from="1559044937327" duration="3878000" />
-      <workItem from="1559103478811" duration="16154000" />
+      <workItem from="1559103478811" duration="16276000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1732406000" />
+    <option name="totallyTimeSpent" value="1732528000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1097,8 +1097,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-valuation/_lease_liability.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="680">
-          <caret line="42" column="98" selection-start-line="42" selection-start-column="98" selection-end-line="42" selection-end-column="98" />
+        <state relative-caret-position="629">
+          <caret line="39" column="134" selection-start-line="39" selection-start-column="134" selection-end-line="39" selection-end-column="134" />
         </state>
       </provider>
     </entry>

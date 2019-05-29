@@ -37,7 +37,7 @@
         @if($asset->residualGuranteeValue->any_residual_value_gurantee == "yes")
             <tr>
                 <th style="text-align: center">Residual Value Guarantee</th>
-                <td style="border: 1px solid #ddd;text-align: center;">{{ $asset->residualGuranteeValue->residual_gurantee_value }}</td>
+                <td style="border: 1px solid #ddd;text-align: center;">{{ $asset->residualGuranteeValue->total_residual_gurantee_value }}</td>
                 <td style="border: 1px solid #ddd;text-align: center;" class="load_residual_present_value" data-asset_id="{{$asset->id}}"></td>
                 @php
                     $total = $total + $asset->residualGuranteeValue->total_residual_gurantee_value;
