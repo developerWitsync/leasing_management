@@ -40,7 +40,7 @@
                 <td style="border: 1px solid #ddd;text-align: center;">{{ $asset->residualGuranteeValue->residual_gurantee_value }}</td>
                 <td style="border: 1px solid #ddd;text-align: center;" class="load_residual_present_value" data-asset_id="{{$asset->id}}"></td>
                 @php
-                    $total = $total + $asset->residualGuranteeValue->residual_gurantee_value;
+                    $total = $total + $asset->residualGuranteeValue->total_residual_gurantee_value;
                 @endphp
             </tr>
         @endif
