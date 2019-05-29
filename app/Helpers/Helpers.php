@@ -1338,7 +1338,7 @@ function calculateDepreciation($subsequent_modify_required, \App\LeaseAssets $as
     $start_date = \Carbon\Carbon::parse($asset->accural_period);
     if(!$subsequent_modify_required) {
         $settings = \App\GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
-        if($settings->date_of_initial_application) {
+        if($settings->date_of_initial_application == 2) {
             $base_date = \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1);
         } else {
             $base_date = \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date);

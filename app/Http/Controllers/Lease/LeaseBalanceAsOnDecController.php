@@ -70,7 +70,7 @@ class LeaseBalanceAsOnDecController extends Controller
                 $subsequent_modify_required = $lease->isSubsequentModification();
 
                 $asset = LeaseAssets::query()->where('lease_id', '=', $lease->id)
-                    ->where('lease_start_date', '<', $base_date)
+                    ->where('accural_period', '<', $base_date)
                     ->first();//since there can now only be one lease asset per lease
 
                 if ($asset) {

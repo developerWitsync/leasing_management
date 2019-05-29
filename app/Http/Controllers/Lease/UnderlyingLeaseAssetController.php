@@ -201,7 +201,7 @@ class UnderlyingLeaseAssetController extends Controller
 
                 if($settings->date_of_initial_application == 2 && date('Y-m-d', strtotime($request->accural_period)) < date('Y-m-d', strtotime($base_date))){
                     $data['using_lease_payment'] = 2;
-                } else {
+                } elseif($settings->date_of_initial_application == 2) {
                     $data['using_lease_payment'] = null;
                 }
 

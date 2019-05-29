@@ -79,7 +79,7 @@ class LeaseIncentivesController extends Controller
                 $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
 
                 $asset = LeaseAssets::query()->where('lease_id', '=', $lease->id)
-                    ->where('lease_start_date', '>=', $base_date)
+                    ->where('accural_period', '>=', $base_date)
                     ->whereNotIn('category_id', $category_excluded_id)
                     ->whereHas('leaseSelectLowValue', function ($query) {
                         $query->where('is_classify_under_low_value', '=', 'no');

@@ -80,7 +80,7 @@ class InitialDirectCostController extends Controller
                 $category_excluded_id = $category_excluded->pluck('category_id')->toArray();
 
                 $asset = LeaseAssets::query()->where('lease_id', '=', $id)
-                    ->where('lease_start_date', '>=', $base_date)
+                    ->where('accural_period', '>=', $base_date)
                     ->whereNotIn('category_id', $category_excluded_id)
                     ->whereHas('leaseSelectLowValue', function ($query) {
                         $query->where('is_classify_under_low_value', '=', 'no');
@@ -159,7 +159,7 @@ class InitialDirectCostController extends Controller
                         }
                     }
 
-                    $asset_on_balence = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '<', $base_date)->count();
+                    $asset_on_balence = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('accural_period', '<', $base_date)->count();
                     if ($asset_on_balence > 0) {
                         $back_url = route('addlease.balanceasondec.index', ['id' => $id]);
                     } else {

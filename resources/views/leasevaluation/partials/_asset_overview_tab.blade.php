@@ -116,17 +116,17 @@
                 </div>
             @endif
 
-                <div class="leasernameBx2 leaserLocation">
-                    <span>Lessor Invoice :
-                        <strong>
-                            @if($lease->leasePaymentInvoice)
-                                {{ strtoupper($lease->leasePaymentInvoice->lease_payment_invoice_received) }}
-                            @else
-                                N/A
-                            @endif
-                        </strong>
-                    </span>
-                </div>
+            <div class="leasernameBx2 leaserLocation">
+                <span>Lessor Invoice :
+                    <strong>
+                        @if($lease->leasePaymentInvoice)
+                            {{ strtoupper($lease->leasePaymentInvoice->lease_payment_invoice_received) }}
+                        @else
+                            N/A
+                        @endif
+                    </strong>
+                </span>
+            </div>
         </div>
     </div>
 
