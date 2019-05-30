@@ -244,7 +244,7 @@ class LeasePaymentsController extends Controller
                     return redirect()->back()->withErrors($validator->errors())->withInput($request->except('_token'));
                 }
 
-                $data = $request->except('_token', 'similar_chateristics_assets', 'step', 'submit', 'altered_payment_due_date', 'due_dates_confirmed', 'inconsistent_date_payment');
+                $data = $request->except('_token', 'similar_chateristics_assets', 'step', 'submit', 'altered_payment_due_date', 'due_dates_confirmed', 'inconsistent_date_payment', 'file');
                 $create_payment_dates = true;
                 if($data['nature'] == '2' && $data['variable_amount_determinable'] == "no"){
                     $data['payment_interval'] = null;
@@ -351,6 +351,7 @@ class LeasePaymentsController extends Controller
             ));
 
         } catch (\Exception $e) {
+            dd($e);
             abort(404, $e->getMessage());
         }
     }
@@ -429,7 +430,7 @@ class LeasePaymentsController extends Controller
                         return redirect()->back()->withErrors($validator->errors())->withInput($request->except('_token'));
                     }
 
-                    $data = $request->except('_token', 'similar_chateristics_assets', 'step', 'submit', 'altered_payment_due_date', 'due_dates_confirmed', 'inconsistent_date_payment');
+                    $data = $request->except('_token', 'similar_chateristics_assets', 'step', 'submit', 'altered_payment_due_date', 'due_dates_confirmed', 'inconsistent_date_payment', 'file');
                     $create_payment_dates = true;
                     if($data['nature'] == '2' && $data['variable_amount_determinable'] == "no"){
                         $data['payment_interval'] = null;

@@ -584,7 +584,11 @@
                         if (result.status) {
                             $.each(result.paymentDates, function (i, e) {
                                 var input_name = "input[name='inconsistent_date_payment[" + e[0] + "]']";
-                                $(input_name).val(e[1]);
+                                var value = e[1];
+                                if(value == '' || value == null){
+                                    value = 0;
+                                }
+                                $(input_name).val(value);
                             });
                         } else {
                             if (typeof (result.message) != 'undefined') {
