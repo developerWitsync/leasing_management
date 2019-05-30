@@ -482,6 +482,7 @@
                     $('.cpi').removeClass('hidden');
                     $('.incpi').addClass('hidden');
                     $('.incpi').html('');
+                    $(".import_via_excel").hide();
                 } else if (selected_value == "2") {
                     $('.cpi').addClass('hidden');
                     $('.incpi').removeClass('hidden');
@@ -491,6 +492,7 @@
                     $('.cpi').addClass('hidden');
                     $('.incpi').addClass('hidden');
                     $('.incpi').html('');
+                    $(".import_via_excel").hide();
                 }
             });
 
