@@ -143,6 +143,10 @@ Route::middleware('auth')->group(function () {
             Route::get('load-payment-annexure-inconsistent/{payment_id}', ['as' => 'addlease.payments.loadinconsistentannexure', 'uses' => 'LeasePaymentsController@loadInconsistentAnnexure']);
 
             Route::delete('delete-lease-asset-payment', ['as' => 'addlease.payments.delete', 'uses' => 'LeasePaymentsController@delete']);
+
+            Route::post('generate-excel-format-for-import', ['as' => 'addlease.payments.inconsistent_download_excel', 'uses' => 'LeasePaymentsController@generateExcelForImport']);
+
+            Route::post('import-excel-for-inconsistent', ['as' => 'addlease.payments.inconsistent_import_excel', 'uses' => 'LeasePaymentsController@importExcelInconsistent']);
         });
 
 

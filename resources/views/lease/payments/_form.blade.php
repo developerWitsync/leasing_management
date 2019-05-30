@@ -23,7 +23,8 @@
         <div class="form-group{{ $errors->has('type') ? ' has-error' : '' }} required">
             <label for="type" class="col-md-12 control-label">Type of Lease Payment</label>
             <div class="col-md-12">
-                <select name="type" id="leaseType" class="form-control" @if($subsequent_modify_required) disabled="disabled" @endif>
+                <select name="type" id="leaseType" class="form-control"
+                        @if($subsequent_modify_required) disabled="disabled" @endif>
                     <option value="">--Select Lease Payment Type--</option>
                     @foreach($lease_payments_types as $lease_payments_type)
                         @if($lease->lease_type_id == 1 && $lease_payments_type->id == 1)
@@ -132,7 +133,8 @@
         <div class="categoriesHd">
             Lease Payment Periods
             @if($subsequent_modify_required)
-                | <span class="badge badge-primary" style="background-color: #f2dede;border-color: #ebccd1;color: #a94442;">Please re-update the lease payment dates starting on or after subsequent modification date.</span>
+                | <span class="badge badge-primary"
+                        style="background-color: #f2dede;border-color: #ebccd1;color: #a94442;">Please re-update the lease payment dates starting on or after subsequent modification date.</span>
             @endif
         </div>
         <div class="form-group{{ $errors->has('payment_interval') ? ' has-error' : '' }} required">
@@ -237,13 +239,16 @@
             </div>
         </div>
 
-        <div class="form-group{{ $errors->has('altered_payment_due_date.0') || $errors->has('due_dates_confirmed') ? ' has-error' : '' }} show_annexure" style="width: 98%">
+        <div class="form-group{{ $errors->has('altered_payment_due_date.0') || $errors->has('due_dates_confirmed') ? ' has-error' : '' }} show_annexure"
+             style="width: 98%">
             <div class="col-md-12">
                 <a href="javascript:void(0);" class="btn btn-primary confirm_lease_payment_due_dates">Confirm Lease
                     Payment Due Dates</a>
-                <a href="javascript:void(0);" class="btn btn-sm btn-warning view_current_edited_dates pull-right" style="display: none">View Selected Dates</a>
+                <a href="javascript:void(0);" class="btn btn-sm btn-warning view_current_edited_dates pull-right"
+                   style="display: none">View Selected Dates</a>
                 @if($payment->payment_interval == 6)
-                    <a href="javascript:void(0);" class="btn btn-warning view_current_lease_payment_due_dates pull-right">View
+                    <a href="javascript:void(0);"
+                       class="btn btn-warning view_current_lease_payment_due_dates pull-right">View
                         Current Dates</a>
                 @endif
                 @if(!empty($payout_due_dates) && !$subsequent_modify_required)
@@ -265,7 +270,8 @@
         <div class="categoriesHd">
             Lease Payments
             @if($subsequent_modify_required)
-                | <span class="badge badge-primary" style="background-color: #f2dede;border-color: #ebccd1;color: #a94442;">Please re-update the lease payment per interval per unit existing as on subsequent modification date.</span>
+                | <span class="badge badge-primary"
+                        style="background-color: #f2dede;border-color: #ebccd1;color: #a94442;">Please re-update the lease payment per interval per unit existing as on subsequent modification date.</span>
             @endif
         </div>
         <div class="form-group{{ $errors->has('payment_currency') ? ' has-error' : '' }} required">
@@ -339,6 +345,26 @@
             </div>
         </div>
 
+        <div class="form-group import_via_excel"
+             @if(old('lease_payment_per_interval', $payment->lease_payment_per_interval) == '1') style="display: none" @endif>
+            <label class="col-md-12 control-label">&nbsp;</label>
+            <div class="row">
+                <div class="col-md-7">
+                    <button class="btn btn-primary download_excel_for_import"><i class="fa fa-download"></i> Download
+                        Excel For Importing
+                    </button>
+                </div>
+
+                <div class="col-md-5">
+                    <div class=" frmattachFile">
+                        <input type="name" id="uploadX" name="name" class="form-control" disabled="disabled">
+                        <button type="button" class="browseBtn"><i class="fa fa-upload"></i> Browse</button>
+                        <input type="file" id="import_dates" name="file" class="fileType">
+                        <h6 class="disabled">Only Xlsx with 2MB size of files are allowed.</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="form-group{{ $errors->has('payment_per_interval_per_unit') ? ' has-error' : '' }} cpi @if(old('lease_payment_per_interval', $payment->lease_payment_per_interval) == '1') @else hidden @endif required">
             <label for="payment_per_interval_per_unit" class="col-md-12 control-label">Lease Payment Per Interval Per
@@ -411,7 +437,7 @@
         </div>
         <div class="col-md-6 btnsubmitBx">
             <button type="submit" class="btn btn-success" name="submit" value="save"
-                    onclick="javascript:showOverlayForAjax();">Save
+                    onclick="showOverlayForAjax();">Save
             </button>
         </div>
     </div>
@@ -435,6 +461,13 @@
     <script>
 
         $(function () {
+
+            $('#import_dates').change(function () {
+                $('#import_dates').show();
+                var filename = $('#import_dates').val();
+                var or_name = filename.split("\\");
+                $('#uploadX').val(or_name[or_name.length - 1]);
+            });
 
             removeOverlayAjax();
 
@@ -480,11 +513,96 @@
                         asset_id: $asset_id
                     },
                     dataType: 'text',
+                    beforeSend: function () {
+                        $(".import_via_excel").show();
+                    },
                     success: function (response) {
                         $('.incpi').html(response);
                     }
                 })
             }
+
+            /**
+             * Create and download the excel on the system...
+             */
+            $('.download_excel_for_import').on('click', function (e) {
+                e.preventDefault();
+                $paymentDates = $("input[name='altered_payment_due_date[]']")
+                    .map(function () {
+                        return $(this).val();
+                    }).get();
+                $asset_id = '{{ $asset->id }}';
+                $lease_id = '{{ $asset->lease->id }}';
+
+                $.ajax({
+                    url: "{{ route('addlease.payments.inconsistent_download_excel') }}",
+                    type: "post",
+                    data: {
+                        paymentDates: $paymentDates,
+                        lease_id: $lease_id,
+                        asset_id: $asset_id
+                    },
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.status) {
+                            window.location.href = '/uploads/' + response.file_link;
+                        } else {
+                            alert('Something went wrong please go with the manual approach.');
+                        }
+                    }
+                })
+            });
+
+            $('#import_dates').change(function () {
+                //on change event
+                formdata = new FormData();
+                if ($(this).prop('files').length > 0) {
+                    file = $(this).prop('files')[0];
+                    formdata.append("import_excel", file);
+                }
+
+                $paymentDates = $("input[name='altered_payment_due_date[]']")
+                    .map(function () {
+                        return $(this).val();
+                    }).get();
+
+                $asset_id = '{{ $asset->id }}';
+                $lease_id = '{{ $asset->lease->id }}';
+                formdata.append("paymentDates", JSON.stringify($paymentDates));
+                formdata.append("asset_id", $asset_id);
+                formdata.append("lease_id", $lease_id);
+
+                $.ajax({
+                    url: '{{ route('addlease.payments.inconsistent_import_excel') }}',
+                    type: "POST",
+                    data: formdata,
+                    processData: false,
+                    contentType: false,
+                    success: function (result) {
+                        if (result.status) {
+                            $.each(result.paymentDates, function (i, e) {
+                                var input_name = "input[name='inconsistent_date_payment[" + e[0] + "]']";
+                                $(input_name).val(e[1]);
+                            });
+                        } else {
+                            if (typeof (result.message) != 'undefined') {
+                                var message;
+                                bootbox.alert({
+                                    message: result.message,
+                                    buttons: {
+                                        ok: {
+                                            label: 'Ok'
+                                        }
+                                    }
+                                });
+                            } else {
+                                alert('Something went wrong please go with the manual approach.');
+                            }
+                        }
+                    }
+                });
+            });
+
 
             @if($payment->id)
             $.ajax({
@@ -498,9 +616,9 @@
             @endif
         });
 
-        $('#leaseType').change(function(){
+        $('#leaseType').change(function () {
             var optvalue = $(this).val();
-            if(optvalue==1){
+            if (optvalue == 1) {
                 bootbox.alert({
                     message: 'Lease payments which are part of Lease Component shall be considered for Lease valuation and accordingly be capitalized.',
                     buttons: {
@@ -510,7 +628,7 @@
                     }
                 });
             }
-            if(optvalue==2){
+            if (optvalue == 2) {
                 bootbox.alert({
                     message: 'Lease payments which are part of Non-Lease Component shall be expensed and shall not be considered here for Lease Valuation.',
                     buttons: {
@@ -520,7 +638,7 @@
                     }
                 });
             }
-            if(optvalue==3){
+            if (optvalue == 3) {
                 bootbox.alert({
                     message: 'When Non-Lease Component combined with Lease Component, such Lease payments accounted as Single Lease Component and shall be considered for Lease valuation and accordingly will be Capitalized.',
                     buttons: {
@@ -531,7 +649,7 @@
                 });
             }
             return false;
-        })
+        });
 
 
         $("#first_payment_start_date").datepicker({
@@ -540,16 +658,16 @@
             changeMonth: true,
 
             @if($subsequent_modify_required || $is_subsequent)
-                minDate: new Date('{{ $lease->modifyLeaseApplication->last()->effective_from }}'),
+            minDate: new Date('{{ $lease->modifyLeaseApplication->last()->effective_from }}'),
             @else
-                @if($asset->using_lease_payment == '1')
-                    //cannpt go before the base date...
-                    minDate: new Date('{{ getParentDetails()->accountingStandard->base_date }}'),
-                @else
-                    //cannot go before the lease start date..
-                    minDate: new Date('{{ $asset->accural_period }}'),
-                @endif
+            @if($asset->using_lease_payment == '1')
+            //cannpt go before the base date...
+            minDate: new Date('{{ getParentDetails()->accountingStandard->base_date }}'),
+            @else
+            //cannot go before the lease start date..
+            minDate: new Date('{{ $asset->accural_period }}'),
             @endif
+                    @endif
 
             maxDate: new Date('{{ $asset->getLeaseEndDate($asset) }}'),
 
@@ -687,15 +805,15 @@
             var _value = parseInt($('select[name="payout_time"]').val());
             var _selected_payment_interval = parseInt($('select[name="payment_interval"]').val());
 
-            @if($subsequent_modify_required || $is_subsequent)
-                var _start_date = new Date("{{ date('D M d Y', strtotime($lease->modifyLeaseApplication->last()->effective_from)) }}");
-            @else
-                var _start_date = new Date("{{ date('D M d Y', strtotime($asset->accural_period)) }}");
-                @if($asset->using_lease_payment == '1' && \Carbon\Carbon::parse($asset->accural_period)->lessThan(\Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)))
-                    //cannot go before the base date...
-                    var _start_date = new Date("{{ date('D M d Y', strtotime(getParentDetails()->accountingStandard->base_date)) }}");
-                @endif
-            @endif
+                    @if($subsequent_modify_required || $is_subsequent)
+            var _start_date = new Date("{{ date('D M d Y', strtotime($lease->modifyLeaseApplication->last()->effective_from)) }}");
+                    @else
+            var _start_date = new Date("{{ date('D M d Y', strtotime($asset->accural_period)) }}");
+            @if($asset->using_lease_payment == '1' && \Carbon\Carbon::parse($asset->accural_period)->lessThan(\Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)))
+            //cannot go before the base date...
+            var _start_date = new Date("{{ date('D M d Y', strtotime(getParentDetails()->accountingStandard->base_date)) }}");
+                    @endif
+                    @endif
 
 
             var _end_date = new Date("{{ date('D M d Y', strtotime($asset->getLeaseEndDate($asset))) }}");
@@ -844,11 +962,11 @@
                             $('#overlay').hide();
                             removeOverlayAjax();
                             final_payout_dates = response['final_payout_dates'];
-                            @if($subsequent_modify_required || $is_subsequent)
-                                var asset_lease_start_date = new Date('{{ \Carbon\Carbon::parse($lease->modifyLeaseApplication->last()->effective_from)->format('Y') ."-". \Carbon\Carbon::parse($lease->modifyLeaseApplication->last()->effective_from)->format('m') }}');
-                            @else
-                                var asset_lease_start_date = new Date('{{ \Carbon\Carbon::parse($asset->accural_period)->format('Y') ."-". \Carbon\Carbon::parse($asset->accural_period)->format('m') }}');
-                            @endif
+                                    @if($subsequent_modify_required || $is_subsequent)
+                            var asset_lease_start_date = new Date('{{ \Carbon\Carbon::parse($lease->modifyLeaseApplication->last()->effective_from)->format('Y') ."-". \Carbon\Carbon::parse($lease->modifyLeaseApplication->last()->effective_from)->format('m') }}');
+                                    @else
+                            var asset_lease_start_date = new Date('{{ \Carbon\Carbon::parse($asset->accural_period)->format('Y') ."-". \Carbon\Carbon::parse($asset->accural_period)->format('m') }}');
+                                    @endif
 
                             var asset_lease_end_date = new Date('{{ \Carbon\Carbon::parse($asset->getLeaseEndDate($asset))->format('Y')."-".\Carbon\Carbon::parse($asset->getLeaseEndDate($asset))->format('m') }}');
                             //setting up datepicker calendar on each input field.. taking care of lease start date and lease end date as well....
@@ -863,9 +981,9 @@
                                     $(this).datepicker({
                                         dateFormat: "yy-mm-dd",
                                         @if($subsequent_modify_required || $is_subsequent)
-                                            minDate: new Date('{{ $lease->modifyLeaseApplication->last()->effective_from }}'),
+                                        minDate: new Date('{{ $lease->modifyLeaseApplication->last()->effective_from }}'),
                                         @else
-                                            minDate: new Date('{{ $asset->accural_period }}'),
+                                        minDate: new Date('{{ $asset->accural_period }}'),
                                         @endif
 
                                         maxDate: new Date('{{ $asset->getLeaseEndDate($asset) }}'),
@@ -921,20 +1039,20 @@
                 });
             });
 
-            $(document.body).on('click', '.add_lease_payment_date', function(){
+            $(document.body).on('click', '.add_lease_payment_date', function () {
                 var year = $(this).data('year');
                 var month = $(this).data('month');
                 var temp_date = new Date(year + "-" + month);
-                var html = '<input style="width: 100px;" type="text" data-month="'+month+'" data-year="'+year+'" class="form-control alter_due_dates_input" name="altered_payment_due_date[]" value="">';
+                var html = '<input style="width: 100px;" type="text" data-month="' + month + '" data-year="' + year + '" class="form-control alter_due_dates_input" name="altered_payment_due_date[]" value="">';
 
                 $(this).after(html);
 
                 $(this).next('input').datepicker({
                     dateFormat: "yy-mm-dd",
                     @if($subsequent_modify_required || $is_subsequent)
-                        minDate: new Date('{{ $lease->modifyLeaseApplication->last()->effective_from }}'),
+                    minDate: new Date('{{ $lease->modifyLeaseApplication->last()->effective_from }}'),
                     @else
-                        minDate: new Date('{{ $asset->accural_period }}'),
+                    minDate: new Date('{{ $asset->accural_period }}'),
                     @endif
 
                     maxDate: new Date('{{ $asset->getLeaseEndDate($asset) }}'),
@@ -950,11 +1068,11 @@
             /**
              * In case the user have made the changes to the dates than we have to find the first and last payment dates and have to populate them as well...
              */
-            var dates_array = new Array();
+            var dates_array = [];
             $('#myModal').on('click', '.confirm_payment_due_dates', function () {
                 var _first_payment_date;
                 var _last_payment_date;
-                dates_array = new Array();
+                dates_array = [];
 
                 if (is_dates_edited) {
 
@@ -1004,7 +1122,7 @@
 
                     $('#myModal').modal('hide');
 
-                    if(dates_array.length > 0){
+                    if (dates_array.length > 0) {
                         $(".view_current_edited_dates").show();
                     }
 
@@ -1037,7 +1155,7 @@
              * Generate the view current payment dates whent the user comes to edit payments
              */
             $('.view_current_edited_dates').on('click', function () {
-               //need to generate the table view and need to show the table all from javascript...
+                //need to generate the table view and need to show the table all from javascript...
 
                 var html = "<div class=\"modal-header\">\n" +
                     "    <h5 class=\"modal-title\">Confirm Lease Payment Due Dates</h5>\n" +
@@ -1062,7 +1180,7 @@
                     "                    </thead>\n" +
                     "                    <tbody>";
 
-                for(i = 0 ; i < dates_array.length; i++){
+                for (i = 0; i < dates_array.length; i++) {
                     var current_index = i + 1;
                     var current_date = dates_array[i];
 
@@ -1073,13 +1191,13 @@
                         day: "numeric"
                     };
 
-                    current_date = current_date.toLocaleDateString("en", options)
+                    current_date = current_date.toLocaleDateString("en", options);
 
                     html += "<tr>\n" +
-                        "                            <td>"+current_index+"</td>\n" +
+                        "                            <td>" + current_index + "</td>\n" +
                         "                            <td>\n" +
                         "                                <strong>\n" +
-                        "                                    "+current_date+"\n" +
+                        "                                    " + current_date + "\n" +
                         "                                </strong>\n" +
                         "                            </td>\n" +
                         "                        </tr>";

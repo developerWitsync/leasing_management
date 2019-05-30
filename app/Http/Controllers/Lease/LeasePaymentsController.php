@@ -9,7 +9,9 @@
 namespace App\Http\Controllers\Lease;
 
 
+use App\Exports\InconsistentPaymentExport;
 use App\Http\Controllers\Controller;
+use App\Imports\InconsistentPaymentDatesImports;
 use App\Lease;
 use App\LeaseAssetPaymenetDueDate;
 use App\LeaseAssetPayments;
@@ -24,6 +26,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class LeasePaymentsController extends Controller
 {
@@ -745,6 +748,116 @@ class LeasePaymentsController extends Controller
 
         } catch (\Exception $e){
             dd($e);
+        }
+    }
+
+    /**
+     * saves the file for the import to the file system..
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function generateExcelForImport(Request $request){
+        try{
+            $validator = Validator::make($request->all(), [
+                'lease_id' => 'required|exists:lease,id',
+                'asset_id' => 'required|exists:lease_assets,id',
+                'paymentDates.*' => 'required'
+            ],[
+                'paymentDates.*.required' => 'Please confirm the payment dates annexure first.'
+            ]);
+
+            $errors = $months = $years = $dates = [];
+
+            if ($validator->fails()) {
+                $errors = $validator->errors();
+                return response()->json([
+                    'status' => false,
+                    'errors' => $errors
+                ]);
+            } else {
+                $paymentDates = Arr::sort($request->paymentDates);
+
+                //populate the years array here
+                foreach ($paymentDates as $paymentDate) {
+                    $dates[] = [
+                        'date' => $paymentDate,
+                        'amount' => 0
+                    ];
+                }
+
+                $file_name  = 'import_'.md5(time());
+                if(Excel::store(new InconsistentPaymentExport($dates), $file_name.".xlsx", 'custom')){
+                    return response()->json([
+                        'status' => true,
+                        'file_link' => $file_name.".xlsx"
+                    ]);
+                } else {
+                    return response()->json([
+                        'status' => false
+                    ]);
+                }
+
+            }
+        } catch (\Exception $e){
+           abort(404);
+        }
+    }
+
+    /**
+     * Read the excel via the import and send the data back to the client so that the amount can be updated with the dates...
+     * compare the dates from the excel with the dates from the post.. they should match...
+     * implemented the validations as well on the file uploads for the excel import...
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function importExcelInconsistent(Request $request){
+        try{
+            if($request->hasFile('import_excel')){
+
+                $validator = Validator::make($request->except("_token"), [
+                    'import_excel' => 'file|mimes:xlsx|max:2000|nullable|clamav'
+                ],[
+                    'import_excel.max' => 'Maximum file size can be '.config('settings.file_size_limits.max_size_in_mbs').'.',
+                    'import_excel.uploaded' => 'Maximum file size can be '.config('settings.file_size_limits.max_size_in_mbs').'.'
+                ]);
+
+                if($validator->fails()){
+                    return response()->json([
+                        'status' => false,
+                        'message' => $validator->errors()->first()
+                    ]);
+                }
+
+                $existing_dates = json_decode($request->paymentDates, true);
+                $file = $request->file('import_excel');
+                $uniqueFileName = uniqid().$file->getClientOriginalName();
+                $request->file('import_excel')->move('uploads', $uniqueFileName);
+                $data = (new InconsistentPaymentDatesImports)->toArray(public_path('uploads/'.$uniqueFileName));
+                if(!empty($data)) {
+                    $data = $data[0];
+                    if(!empty($data)) {
+                        unset($data[0]);
+                    }
+                }
+
+                unlink(public_path('uploads/'.$uniqueFileName));
+
+                foreach ($data as $datum) {
+                    if(!in_array($datum[0], $existing_dates)){
+                        return response()->json([
+                            'status' => false,
+                            'message' => 'Looks as if you have made changes to the dates in the excel, you are not allowed to change the dates in the excel.'
+                        ]);
+                    }
+                }
+
+                return response()->json([
+                    'status' => true,
+                    'paymentDates' => $data
+                ]);
+            }
+        } catch (\Exception $e) {
+            abort(404);
         }
     }
 
