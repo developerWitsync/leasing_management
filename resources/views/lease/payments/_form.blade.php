@@ -580,7 +580,11 @@
                     data: formdata,
                     processData: false,
                     contentType: false,
+                    beforeSend: function(){
+                        showOverlayForAjax();
+                    },
                     success: function (result) {
+                        removeOverlayAjax()
                         if (result.status) {
                             $.each(result.paymentDates, function (i, e) {
                                 var input_name = "input[name='inconsistent_date_payment[" + e[0] + "]']";
