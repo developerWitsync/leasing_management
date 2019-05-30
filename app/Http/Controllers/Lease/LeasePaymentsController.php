@@ -814,12 +814,20 @@ class LeasePaymentsController extends Controller
         try{
             if($request->hasFile('import_excel')){
 
-                $validator = Validator::make($request->except("_token"), [
-                    'import_excel' => 'file|mimes:xlsx,xls|max:2000|nullable|clamav'
-                ],[
-                    'import_excel.max' => 'Maximum file size can be '.config('settings.file_size_limits.max_size_in_mbs').'.',
-                    'import_excel.uploaded' => 'Maximum file size can be '.config('settings.file_size_limits.max_size_in_mbs').'.'
-                ]);
+                $validator = Validator::make(
+                    [
+                        'import_excel'      => $request->import_excel,
+                        'extension' => strtolower($request->import_excel->getClientOriginalExtension()),
+                    ],
+                    [
+                        'import_excel'          => 'file|required|max:2000|nullable|clamav',
+                        'extension'      => 'required|in:xlsx,xls',
+                    ],
+                    [
+                        'import_excel.max' => 'Maximum file size can be '.config('settings.file_size_limits.max_size_in_mbs').'.',
+                        'import_excel.uploaded' => 'Maximum file size can be '.config('settings.file_size_limits.max_size_in_mbs').'.'
+                    ]
+                );
 
                 if($validator->fails()){
                     return response()->json([
