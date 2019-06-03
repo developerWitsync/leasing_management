@@ -346,7 +346,7 @@
         </div>
 
         <div class="form-group import_via_excel"
-             @if(old('lease_payment_per_interval', $payment->lease_payment_per_interval) == '1') style="display: none" @endif>
+             @if(old('lease_payment_per_interval', $payment->lease_payment_per_interval) == '2') style="display: block" @else style="display:none;" @endif>
             <label class="col-md-12 control-label">&nbsp;</label>
             <div class="row">
                 <div class="col-md-7">
@@ -584,7 +584,7 @@
                         showOverlayForAjax();
                     },
                     success: function (result) {
-                        removeOverlayAjax()
+                        removeOverlayAjax();
                         if (result.status) {
                             $.each(result.paymentDates, function (i, e) {
                                 var input_name = "input[name='inconsistent_date_payment[" + e[0] + "]']";

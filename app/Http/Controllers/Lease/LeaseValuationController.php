@@ -833,7 +833,7 @@ class LeaseValuationController extends Controller
                 'asset'
             ));
 
-        }catch (\Exception $e){
+        } catch (\Exception $e){
             abort(404);
         }
     }
