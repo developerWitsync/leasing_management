@@ -68,6 +68,7 @@
                 </div>
 
             </div>
+
             @include('lease.lease-valuation._lease_liability')
 
             @include('lease.lease-valuation._lease_valuation')

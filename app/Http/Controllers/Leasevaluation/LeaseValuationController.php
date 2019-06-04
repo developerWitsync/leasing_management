@@ -401,7 +401,7 @@ class LeaseValuationController extends Controller
                 ->selectRaw("IF(ISNULL(lease_history.modify_id),'Initial Valuation',modify_lease_application.valuation) AS valuation_type")
                 ->selectRaw('json_data_steps->>"$.discount_rate.daily_discount_rate" as daily_discount_rate')
                 ->selectRaw("IF(ISNULL(lease_history.modify_id),json_data_steps->>\"$.underlying_asset.accural_period\",modify_lease_application.effective_from) as effective_date")
-                ->selectRaw('json_data_steps->>"$.low_value.undiscounted_lease_payment" as undiscounted_value')
+                ->selectRaw('json_data_steps->>"$.underlying_asset.undiscounted_value" as undiscounted_value')
                 ->selectRaw('json_data_steps->>"$.underlying_asset.lease_liablity_value" as present_value')
                 ->selectRaw('json_data_steps->>"$.underlying_asset.value_of_lease_asset" as value_of_lease_asset')
                 ->selectRaw('json_data_steps->>"$.fair_market.total_units" as fair_market_value')
@@ -759,20 +759,18 @@ class LeaseValuationController extends Controller
     {
         try {
             $history = LeaseHistory::query()->findOrFail($id);
-            $calculus = json_decode($history->pv_calculus, true);
-
-            $years = $calculus['years'];
-            $months = $calculus['months'];
-            $liability_caclulus_data = $calculus['present_value_data'];
+            $liability_caclulus_data = json_decode($history->pv_calculus, true);
+            //$years = $calculus['years'];
+            //$months = $calculus['months'];
+            //$liability_caclulus_data = $calculus['present_value_data'];
             $payments = json_decode($history->json_data_steps, true); //need to take out the payments only where the due dates exists...
             $payments = $payments['lease_payments'];
             return view('leasevaluation.partials._pv_calculus', compact(
-                'years',
-                'months',
                 'liability_caclulus_data',
                 'payments'
             ));
         } catch (\Exception $e) {
+            dd($e);
             abort(404);
         }
     }

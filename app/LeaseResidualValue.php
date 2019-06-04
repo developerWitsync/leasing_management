@@ -22,7 +22,8 @@ class LeaseResidualValue extends Model
         'other_desc',
         'attachment',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'present_value'
     ];
 
     public function nature(){

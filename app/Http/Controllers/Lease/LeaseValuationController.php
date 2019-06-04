@@ -128,7 +128,8 @@ class LeaseValuationController extends Controller
                 $back_url = getBackUrl($this->current_step - 1, $id);
                 //to get current step for steps form
                 $current_step = $this->current_step;
-                $payments = $asset->payments;
+                //$payments = $asset->payments;
+                $payments = $asset->payments()->where('type', '<>', '2')->get();
 
                 //call function savePvCalculus to save the undiscounted and present value for all
                 $this->saveUndiscountedValues($asset, $payments);
@@ -183,13 +184,69 @@ class LeaseValuationController extends Controller
 
     /**
      * saves the undiscounted values to the respective tables for the lease asset...
+     * Use the sql to calculate the total undiscounted value for each payment here..
      * @param LeaseAssets $asset
      * @param LeaseAssetPayments $payments
      */
     private function saveUndiscountedValues($asset, $payments){
+
+        $settings = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
+        $lease = $asset->lease;
+        //$start_date = Carbon::parse($this->accural_period);
+        $start_date = Carbon::parse($asset->lease_start_date);
+        $subsequent_modify_required = $lease->isSubsequentModification();
+        if ($subsequent_modify_required) {
+            $base_date = Carbon::parse($lease->modifyLeaseApplication->last()->effective_from);
+            $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
+        } else {
+            if ($settings->date_of_initial_application == 2) {
+                $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1);
+            } else {
+                $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date);
+            }
+            $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
+        }
+
+        $start_year = $base_date->format('Y');
+        $first_month = $base_date->format('m');
+        $total = 0;
         //loop through payments and save the values
         foreach ($payments as $payment) {
-            $payment->setAttribute('undiscounted_value', $payment->undiscounted_liability_value);
+
+            $sql = "SELECT 
+                    SUM(IF(ISNULL(`payment_escalation_dates`.`id`),
+                        `lease_asset_payment_dates`.`total_payment_amount`,
+                        `payment_escalation_dates`.`total_amount_payable`)) AS `total_amount_payable`
+                FROM
+                    `lease_assets_payments`
+                        LEFT JOIN
+                    `lease_asset_payment_dates` ON `lease_assets_payments`.`id` = `lease_asset_payment_dates`.`payment_id`
+                        LEFT JOIN
+                    `payment_escalation_dates` ON (`lease_assets_payments`.`id` = `payment_escalation_dates`.`payment_id`
+                        AND YEAR(`lease_asset_payment_dates`.`date`) = `payment_escalation_dates`.`escalation_year`
+                        AND MONTH(`lease_asset_payment_dates`.`date`) = `payment_escalation_dates`.`escalation_month`)
+                        JOIN
+                    `lease_select_discount_rate` ON `lease_select_discount_rate`.`asset_id` = `lease_asset_payment_dates`.`asset_id`
+                WHERE
+                    `lease_assets_payments`.`id` = '{$payment->id}'
+                        AND `lease_assets_payments`.`type` <> '2'
+                        AND YEAR(`lease_asset_payment_dates`.`date`) >= '{$start_year}'
+                        AND CASE
+                        WHEN YEAR(`lease_asset_payment_dates`.`date`) <= '{$start_year}' THEN MONTH(`lease_asset_payment_dates`.`date`) >= '{$first_month}'
+                        ELSE TRUE
+                    END
+                GROUP BY `lease_assets_payments`.`id`";
+
+            $total_undiscounted_value = DB::select($sql);
+            if(!empty($total_undiscounted_value)) {
+                $total_undiscounted_value = $total_undiscounted_value[0]->total_amount_payable;
+            } else {
+                $total_undiscounted_value = $payment->undiscounted_liability_value;
+            }
+
+            $total += $total_undiscounted_value;
+
+            $payment->setAttribute('undiscounted_value', $total_undiscounted_value);
             $payment->save();
         }
 
@@ -197,19 +254,28 @@ class LeaseValuationController extends Controller
         if($asset->terminationOption->lease_termination_option_available == "yes" && $asset->terminationOption->exercise_termination_option_available == "yes" && $asset->terminationOption->termination_penalty_applicable == "yes"){
             $asset->terminationOption->setAttribute('undiscounted_value', $asset->terminationOption->termination_penalty);
             $asset->terminationOption->save();
+
+            $total += $asset->terminationOption->termination_penalty;
         }
 
         //save the values for residual value guarantee
         if($asset->residualGuranteeValue->any_residual_value_gurantee == "yes"){
             $asset->residualGuranteeValue->setAttribute('undiscounted_value', $asset->residualGuranteeValue->total_residual_gurantee_value);
             $asset->residualGuranteeValue->save();
+
+            $total += $asset->residualGuranteeValue->total_residual_gurantee_value;
         }
 
         //save the values for the purchase options
         if($asset->purchaseOption && $asset->purchaseOption->purchase_option_clause == "yes" && $asset->purchaseOption->purchase_option_exerecisable == "yes"){
             $asset->purchaseOption->setAttribute('undiscounted_value', $asset->purchaseOption->purchase_price);
             $asset->purchaseOption->save();
+
+            $total += $asset->purchaseOption->purchase_price;
         }
+
+        $asset->undiscounted_value = $total;
+        $asset->save();
     }
 
 
@@ -225,7 +291,12 @@ class LeaseValuationController extends Controller
             if ($request->ajax()) {
                 $asset = LeaseAssets::query()->findOrFail($id);
                 $payment_id = $request->has('payment')?$request->payment:null;
-                $value = $asset->presentValueOfLeaseLiability(true, $payment_id);
+                if($payment_id) {
+                    $payment = $asset->payments()->where('id', '=', $payment_id)->first();
+                    $value = $payment->present_value;
+                } else {
+                    $value = $asset->lease_liablity_value;
+                }
                 return response()->json([
                     'status' => true,
                     'value' => $value
@@ -249,7 +320,8 @@ class LeaseValuationController extends Controller
         try {
             if ($request->ajax()) {
                 $asset = LeaseAssets::query()->findOrFail($id);
-                $value = $asset->presentValueOfLeaseLiability(true, null, true);
+                //$value = $asset->presentValueOfLeaseLiability(true, null, true);
+                $value = $asset->presentValueOfLeaseLiabilityNew(true, true);
 
                 $asset->historical_present_value_of_lease_liability =  $value;
                 $asset->save();
@@ -277,15 +349,11 @@ class LeaseValuationController extends Controller
         try {
             if ($request->ajax()) {
                 $asset = LeaseAssets::query()->findOrFail($id);
-                $data = $asset->presentValueOfLeaseLiability(false);
-                $years = $data['years'];
-                $months = $data['months'];
-                $liability_caclulus_data = $data['present_value_data'];
+                $data = $asset->presentValueOfLeaseLiabilityNew();
+                $liability_caclulus_data = $data;
                 //no need to consider the Non Lease Component Payments...
                 $payments = $asset->payments()->where('type', '<>', '2')->get(); //need to take out the payments only where the due dates exists...
-                return view('lease.lease-valuation._present_value_calculus', compact(
-                    'years',
-                    'months',
+                return view('lease.lease-valuation._present_value_calculus_new', compact(
                     'liability_caclulus_data',
                     'payments'
                 ));
@@ -307,7 +375,8 @@ class LeaseValuationController extends Controller
         try {
             if ($request->ajax()) {
                 $asset = LeaseAssets::query()->findOrFail($id);
-                $data = $asset->presentValueOfLeaseLiability(false);
+                //$data = $asset->presentValueOfLeaseLiability(false);
+                $data = $asset->presentValueOfLeaseLiabilityNew(false);
                 $data = json_encode($data);
                 $model = PvCalculus::query()->where('asset_id', '=', $id)->first();
                 if(is_null($model)){
@@ -339,29 +408,7 @@ class LeaseValuationController extends Controller
         try {
             if ($request->ajax()) {
                 $asset = LeaseAssets::query()->findOrFail($id);
-                $settings = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
-                $lease = $asset->lease;
-                //$start_date =   Carbon::parse($asset->accural_period);
-                $start_date = Carbon::parse($asset->lease_start_date);
-                $subsequent_modify_required = $lease->isSubsequentModification();
-                if($subsequent_modify_required) {
-                    $base_date = Carbon::parse($lease->modifyLeaseApplication->last()->effective_from);
-                    $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
-                } else {
-                    //$base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date);
-                    if($settings->date_of_initial_application == 2){
-                        $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1);
-                    } else {
-                        $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date);
-                    }
-                    $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
-                }
-
-                $value = $asset->getLeaseLiabilityForTermination($base_date);
-                $value = isset($value['total_lease_liability'])?$value['total_lease_liability']:0;
-                $asset->terminationOption->setAttribute('present_value', $value);
-                $asset->terminationOption->save();
-
+                $value = $asset->terminationOption->present_value;
                 return response()->json([
                     'status' => true,
                     'value' => $value
@@ -383,38 +430,8 @@ class LeaseValuationController extends Controller
     public function residualPresentValue($id, Request $request){
         try {
             if ($request->ajax()) {
-
-                $settings = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
-
                 $asset = LeaseAssets::query()->findOrFail($id);
-
-                $lease = $asset->lease;
-
-                //$start_date =   Carbon::parse($asset->accural_period);
-                $start_date = Carbon::parse($asset->lease_start_date);
-
-                $subsequent_modify_required = $lease->isSubsequentModification();
-                if($subsequent_modify_required) {
-                    $base_date = Carbon::parse($lease->modifyLeaseApplication->last()->effective_from);
-                    $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
-                } else {
-                    if($settings->date_of_initial_application == 2){
-                        $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1);
-                    } else {
-                        $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date);
-                    }
-                    $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
-                }
-
-                $end_date = Carbon::parse($asset->getLeaseEndDate($asset));
-
-                $value = $asset->getPresentValueOfResidualValueGuarantee($base_date, null, null, $end_date);
-
-                $value = isset($value['total_lease_liability'])?$value['total_lease_liability']:0;
-
-                $asset->residualGuranteeValue->setAttribute('present_value', $value);
-                $asset->residualGuranteeValue->save();
-
+                $value = $asset->residualGuranteeValue->present_value;
                 return response()->json([
                     'status' => true,
                     'value' => $value
@@ -437,37 +454,8 @@ class LeaseValuationController extends Controller
         try {
             if ($request->ajax()) {
 
-                $settings = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
-
                 $asset = LeaseAssets::query()->findOrFail($id);
-
-                $lease = $asset->lease;
-
-                //$start_date =   Carbon::parse($asset->accural_period);
-                $start_date = Carbon::parse($asset->lease_start_date);
-
-                $subsequent_modify_required = $lease->isSubsequentModification();
-                if($subsequent_modify_required) {
-                    $base_date = Carbon::parse($lease->modifyLeaseApplication->last()->effective_from);
-                    $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
-                } else {
-                    //$base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date);
-                    if($settings->date_of_initial_application == 2){
-                        $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1);
-                    } else {
-                        $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date);
-                    }
-                    $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
-                }
-
-                $value = $asset->getPresentValueOfPurchaseOption($base_date, null, null);
-
-                $value = isset($value['total_lease_liability'])?$value['total_lease_liability']:0;
-
-                $asset->purchaseOption->setAttribute('present_value', $value);
-
-                $asset->purchaseOption->save();
-
+                $value = $asset->purchaseOption->present_value;
                 return response()->json([
                     'status' => true,
                     'value' => $value
@@ -494,14 +482,10 @@ class LeaseValuationController extends Controller
                 $lease = $asset->lease;
 
                 if (!$request->has('lease_liability_value')) {
-                    $present_value_of_lease_liability = $asset->presentValueOfLeaseLiability(true);
+                    $present_value_of_lease_liability = $asset->lease_liablity_value;
                 } else {
                     $present_value_of_lease_liability = $request->lease_liability_value;
                 }
-
-                //save the present total value of lease liability
-                $asset->setAttribute('lease_liablity_value', $present_value_of_lease_liability);
-                $asset->save();
 
                 $prepaid_lease_payment = isset($asset->leaseBalanceAsOnDec) ? $asset->leaseBalanceAsOnDec->prepaid_lease_payment_balance * $asset->leaseBalanceAsOnDec->exchange_rate : 0;
 
@@ -549,7 +533,7 @@ class LeaseValuationController extends Controller
                 $asset = LeaseAssets::query()->findOrFail($id);
 
                 if (!$request->has('lease_valuation_value')) {
-                    $present_value_of_lease_liability = $asset->presentValueOfLeaseLiability(true);
+                    $present_value_of_lease_liability = $asset->lease_liability_value;
                     $prepaid_lease_payment = isset($asset->leaseBalanceAsOnDec) ? $asset->leaseBalanceAsOnDec->prepaid_lease_payment_balance * $asset->leaseBalanceAsOnDec->exchange_rate : 0;
                     $accured_lease_payment = isset($asset->leaseBalanceAsOnDec) ? $asset->leaseBalanceAsOnDec->accrued_lease_payment_balance * $asset->leaseBalanceAsOnDec->exchange_rate : 0;
                     $initial_direct_cost = isset($asset->initialDirectCost) ? ($asset->initialDirectCost->initial_direct_cost_involved == "yes" ? $asset->initialDirectCost->total_initial_direct_cost : 0) : 0;

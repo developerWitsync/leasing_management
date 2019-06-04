@@ -5,136 +5,129 @@
     </button>
 </div>
 <div class="modal-body">
-    {{--<div class="alert alert-danger">--}}
-        {{--<strong>Note!</strong> The below information is generated on the basis of the current inputs.--}}
-    {{--</div>--}}
+    <div class="alert alert-danger">
+        <strong>Note!</strong> The below information is generated on the basis of the current inputs.
+    </div>
 
 
 
-    <div class="row" style="width: 2000px;">
+    <div class="row">
         <div class="col-md-12">
-            <table class="table table-bordered">
+            <table class="table table-bordered table-striped table-condensed">
                 <thead>
                 <tr>
-                    <th>&nbsp;</th>
-                    <th>&nbsp;</th>
-                    @foreach($months as $month)
-                        <th>{{ $month }}</th>
+                    <th style="text-align: center"><strong>Year</strong></th>
+                    <th style="text-align: center"><strong>Lease Payment<br/> Dates</strong></th>
+                    @foreach($payments as $payment)
+                        <th style="text-align: center"><strong>{{$payment['name']}}</strong></th>
                     @endforeach
-                    <th>Total</th>
+                    <th style="text-align: center"><strong>Termination<br/> Penalty</strong></th>
+                    <th style="text-align: center"><strong>Purchase Value</strong></th>
+                    <th style="text-align: center"><strong>Residual Value</strong></th>
+                    <th style="text-align: center"><strong>Total Undiscounted<br/> Value</strong></th>
+                    <th style="text-align: center"><strong>Present Value of<br/> Lease Liability</strong></th>
                 </tr>
 
                 </thead>
                 <tbody>
                 @php
-                    $grand_total = 0;
+                    $payments_total = [];
+                    $termination_total = 0;
+                    $purchase_option_total = 0;
+                    $residual_value_total = 0;
+                    $total_undiscounted_liability = 0;
+                    $total_present_value_liability = 0;
                 @endphp
-                @foreach($liability_caclulus_data as $year=>$data)
+                @foreach(collect($liability_caclulus_data)->groupBy('date') as $key=>$data)
+                    @php
+                        $total_undiscounted_value = 0;
+                        $total_present_value = 0;
+                    @endphp
                     <tr>
+                        <td class="" align="center">{{ \Carbon\Carbon::parse($key)->format('Y') }}</td>
+                        <td class="" align="center">{{ \Carbon\Carbon::parse($key)->format('Y-m-d') }}</td>
                         @php
-                            $key = array_keys($data);
-                            $key = $key[0];
-                            $allowed_payments = count($payments) + 1 + 3;
+                            $payment_ids_array = collect($data)->pluck('payment_id')->toArray();
                         @endphp
-                        <td rowspan="{{ $allowed_payments }}">
-                            {{ $year }}
-                        </td>
-                    </tr>
+                        @foreach($payments as $payment)
+                            @if(in_array($payment['id'], $payment_ids_array))
+                                @php
+                                    $current_data = collect($data)->where('payment_id', '=', $payment['id'])->first();
+                                    $total_undiscounted_value += $current_data['total_amount_payable'];
+                                    $total_present_value += $current_data['lease_liability'];
+                                    if(isset($payments_total[$payment['id']])) {
+                                        $payments_total[$payment['id']] += $current_data['total_amount_payable'];
+                                    } else {
+                                        $payments_total[$payment['id']] = $current_data['total_amount_payable'];
+                                    }
+                                @endphp
+                                <td class="blueClr" align="center" style="font-weight: 600">{{ $current_data['total_amount_payable'] }}</td>
+                            @else
+                                <td class="blueClr" align="center" style="font-weight: 600">-</td>
+                            @endif
+                        @endforeach
 
-                    @foreach($payments as $payment)
-                        {{--@php--}}
-                        {{--if($payment->paymentDueDates->count() == 0){--}}
-                        {{--continue;--}}
-                        {{--}--}}
-                        {{--@endphp--}}
-
-
-                        <tr>
-                            <th>{{ $payment['name']}}</th>
+                        @if(collect($data)->where('payment_type', '=', 'termination_option')->isNotEmpty())
                             @php
-                                $sub_total = 0;
+                                $current_data = collect($data)->where('payment_type', '=', 'termination_option')->first();
+                                $total_undiscounted_value += $current_data['total_amount_payable'];
+                                $total_present_value += $current_data['lease_liability'];
+                                $termination_total = $current_data['total_amount_payable'];
                             @endphp
-                            @foreach($months as $month)
-                                @if(isset($data[$month]) && isset($data[$month]["payment_".$payment['id']]))
-                                    <td>{{ $data[$month]["payment_".$payment['id']]['lease_liability']}}</td>
-                                    @php
-                                        $sub_total = $sub_total + $data[$month]["payment_".$payment['id']]['lease_liability'];
-                                    @endphp
-                                @else
-                                    <td>&nbsp;</td>
-                                @endif
-                            @endforeach
-                            <td>{{$sub_total}}</td>
+                            <td class="blueClr" align="center" style="font-weight: 600">{{ $current_data['total_amount_payable'] }}</td>
+                        @else
+                            <td class="blueClr" align="center" style="font-weight: 600">-</td>
+                        @endif
+
+                        @if(collect($data)->where('payment_type', '=', 'purchase_option')->isNotEmpty())
                             @php
-                                $grand_total = $grand_total + $sub_total;
+                                $current_data = collect($data)->where('payment_type', '=', 'purchase_option')->first();
+                                $total_undiscounted_value += $current_data['total_amount_payable'];
+                                $total_present_value += $current_data['lease_liability'];
+                                $purchase_option_total = $current_data['total_amount_payable'];
                             @endphp
-                        </tr>
-                    @endforeach
-                    <tr>
-                        <th>Termination</th>
+                            <td class="blueClr" align="center" style="font-weight: 600">{{ $current_data['total_amount_payable'] }}</td>
+                        @else
+                            <td class="blueClr" align="center" style="font-weight: 600">-</td>
+                        @endif
+
+                        @if(collect($data)->where('payment_type', '=', 'residual_value')->isNotEmpty())
+                            @php
+                                $current_data = collect($data)->where('payment_type', '=', 'residual_value')->first();
+                                $total_undiscounted_value += $current_data['total_amount_payable'];
+                                $total_present_value += $current_data['lease_liability'];
+                                $residual_value_total = $current_data['total_amount_payable'];
+                            @endphp
+                            <td class="blueClr" align="center" style="font-weight: 600">{{ $current_data['total_amount_payable'] }}</td>
+                        @else
+                            <td class="blueClr" align="center" style="font-weight: 600">-</td>
+                        @endif
+
+                        <td class="blueClr" align="center" style="font-weight: 600">{{ $total_undiscounted_value }}</td>
+                        <td class="blueClr" align="center" style="font-weight: 600">{{ $total_present_value }}</td>
                         @php
-                            $sub_total = 0;
-                        @endphp
-                        @foreach($months as $month)
-                            @if(isset($data[$month]['termination'][0]))
-                                <td>{{ $data[$month]['termination'][0]['lease_liability']}}</td>
-                                @php
-                                    $sub_total = $sub_total + $data[$month]['termination'][0]['lease_liability'];
-                                @endphp
-                            @else
-                                <td>&nbsp;</td>
-                            @endif
-                        @endforeach
-                        <td>{{$sub_total}}</td>
-                        @php
-                            $grand_total = $grand_total + $sub_total;
-                        @endphp
-                    </tr>
-                    <tr>
-                        <th>Residual</th>
-                        @php
-                            $sub_total = 0;
-                        @endphp
-                        @foreach($months as $month)
-                            @if(isset($data[$month]['residual']))
-                                <td>{{ $data[$month]['residual'][0]['lease_liability']}}</td>
-                                @php
-                                    $sub_total = $sub_total + $data[$month]['residual'][0]['lease_liability'];
-                                @endphp
-                            @else
-                                <td>&nbsp;</td>
-                            @endif
-                        @endforeach
-                        <td>{{$sub_total}}</td>
-                        @php
-                            $grand_total = $grand_total + $sub_total;
-                        @endphp
-                    </tr>
-                    <tr>
-                        <th>Purchase</th>
-                        @php
-                            $sub_total = 0;
-                        @endphp
-                        @foreach($months as $month)
-                            @if(isset($data[$month]['purchase']))
-                                <td>{{ $data[$month]['purchase'][0]['lease_liability']}}</td>
-                                @php
-                                    $sub_total = $sub_total + $data[$month]['purchase'][0]['lease_liability'];
-                                @endphp
-                            @else
-                                <td>&nbsp;</td>
-                            @endif
-                        @endforeach
-                        <td>{{$sub_total}}</td>
-                        @php
-                            $grand_total = $grand_total + $sub_total;
+                            $total_undiscounted_liability += $total_undiscounted_value;
+                            $total_present_value_liability += $total_present_value;
                         @endphp
                     </tr>
                 @endforeach
+
                 <tr>
-                    <th colspan="14">Grand Total</th>
-                    <td>{{ $grand_total }}</td>
+                    <th colspan="2">Grand Total</th>
+                    @foreach($payments as $payment)
+                        @if(isset($payments_total[$payment['id']]))
+                            <td class="blueClr" align="center" style="font-weight: 600">{{ $payments_total[$payment['id']] }}</td>
+                        @else
+                            <td class="blueClr" align="center" style="font-weight: 600">-</td>
+                        @endif
+                    @endforeach
+                    <td class="blueClr" align="center" style="font-weight: 600">{{$termination_total}}</td>
+                    <td class="blueClr" align="center" style="font-weight: 600">{{$purchase_option_total}}</td>
+                    <td class="blueClr" align="center" style="font-weight: 600">{{$residual_value_total}}</td>
+                    <td class="blueClr" align="center" style="font-weight: 600">{{$total_undiscounted_liability}}</td>
+                    <td class="blueClr" align="center" style="font-weight: 600">{{$total_present_value_liability}}</td>
                 </tr>
+
                 </tbody>
             </table>
         </div>
@@ -142,5 +135,5 @@
 
 </div>
 <div class="modal-footer">
-    &nbsp;
+    <button type="button" data-dismiss="modal" class="btn btn-success">Confirm</button>
 </div>

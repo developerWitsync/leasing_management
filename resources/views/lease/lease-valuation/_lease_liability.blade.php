@@ -15,10 +15,10 @@
         @foreach($payments as $payment)
             <tr>
                 <th style="text-align: center">{{ $payment->name }}</th>
-                <td style="border: 1px solid #ddd;text-align: center;">{{ $payment->getUndiscountedValue() }}</td>
+                <td style="border: 1px solid #ddd;text-align: center;">{{ $payment->undiscounted_value }}</td>
                 <td style="border: 1px solid #ddd;text-align: center;" class="load_payment_present_value" data-payment_id="{{$payment->id}}" data-asset_id="{{$asset->id}}"></td>
                 @php
-                    $total = $total + $payment->undiscounted_liability_value;
+                    $total = $total + $payment->undiscounted_value;
                 @endphp
             </tr>
         @endforeach
