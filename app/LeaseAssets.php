@@ -681,8 +681,11 @@ class LeaseAssets extends Model
             $new_array['payment_type'] = 'residual_value';
             $new_array['total_amount_payable'] = $this->residualGuranteeValue->total_residual_gurantee_value;
             $new_array['lease_liability'] = $this->getPresentValueOfResidualValueGuarantee($base_date, 0, [], $end_date)['total_lease_liability'];
-            $this->residualGuranteeValue->setAttribute('present_value', $new_array['lease_liability']);
-            $this->residualGuranteeValue->save();
+            if(!$historical){
+                $this->residualGuranteeValue->setAttribute('present_value', $new_array['lease_liability']);
+                $this->residualGuranteeValue->save();
+            }
+
             $new_array['total_amount_payable'] = $this->residualGuranteeValue->total_residual_gurantee_value;
             array_push($lease_payments, (object)$new_array);
 
@@ -696,8 +699,10 @@ class LeaseAssets extends Model
             $new_array['payment_type'] = 'termination_option';
             $new_array['lease_liability'] = $this->getLeaseLiabilityForTermination($base_date, 0,[])['total_lease_liability'];
             //save the termination option present value to database
-            $this->terminationOption->setAttribute('present_value', $new_array['lease_liability']);
-            $this->terminationOption->save();
+            if(!$historical) {
+                $this->terminationOption->setAttribute('present_value', $new_array['lease_liability']);
+                $this->terminationOption->save();
+            }
             $new_array['total_amount_payable'] = $this->terminationOption->termination_penalty;
             array_push($lease_payments, (object)$new_array);
         }
@@ -710,16 +715,20 @@ class LeaseAssets extends Model
             $new_array['payment_type'] = 'purchase_option';
             $new_array['lease_liability'] = $this->getPresentValueOfPurchaseOption($base_date, 0, [])['total_lease_liability'];
             //save the purchase option lease liability to database
-            $this->purchaseOption->setAttribute('present_value', $new_array['lease_liability']);
-            $this->purchaseOption->save();
+            if(!$historical) {
+                $this->purchaseOption->setAttribute('present_value', $new_array['lease_liability']);
+                $this->purchaseOption->save();
+            }
             $new_array['total_amount_payable'] = $this->purchaseOption->purchase_price;
             array_push($lease_payments, (object)$new_array);
         }
 
         $total_lease_liability = collect($lease_payments)->sum('lease_liability');
         //save the total lease liability value to the lease assets as well...
-        $this->lease_liablity_value = $total_lease_liability;
-        $this->save();
+        if(!$historical) {
+            $this->lease_liablity_value = $total_lease_liability;
+            $this->save();
+        }
 
         return ['lease_liability_payments' => $lease_payments, 'total_lease_liability' => $total_lease_liability];
     }
