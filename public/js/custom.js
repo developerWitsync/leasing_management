@@ -367,7 +367,11 @@ function fetchExchangeRate(base, target, base_date, access_key, element_selector
     if(typeof(endpoint) == 'undefined') {
         endpoint = 'live';
     }
-    var url = 'http://apilayer.net/api/' + endpoint + '?access_key=' + access_key + '&source='+base+'&currencies='+target;
+    if (location.protocol != 'https:'){
+        var url = 'http://apilayer.net/api/' + endpoint + '?access_key=' + access_key + '&source='+base+'&currencies='+target;
+    } else {
+        var url = 'https://apilayer.net/api/' + endpoint + '?access_key=' + access_key + '&source='+base+'&currencies='+target;
+    }
     if(typeof (base_date) != "undefined" && base_date!='') {
         url += '&date='+base_date;
     }
