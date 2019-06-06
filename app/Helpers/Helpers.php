@@ -183,13 +183,6 @@ function calculatePaymentDueDates($first_payment_date, $last_payment_date, $paym
                 $start_date = \Carbon\Carbon::create($new_date->year, $new_date->month, \Carbon\Carbon::parse($first_payment_date)->day)->format('Y-m-d');
             }
 
-//            if (strtotime($start_date) <= strtotime($end_date)) {
-//                $month = \Carbon\Carbon::parse($end_date)->format('F');
-//                $current_year = \Carbon\Carbon::parse($end_date)->format('Y');
-//                $date = \Carbon\Carbon::parse($end_date)->format('Y-m-d');
-//                $final_payout_dates[$current_year][$month][$date] = $date;
-//            }
-
         } else if ($payment_payout == 2) {
             //means that the payment is going to be made at the end of the interval
             if ($i == 1) {
@@ -210,11 +203,6 @@ function calculatePaymentDueDates($first_payment_date, $last_payment_date, $paym
                 $month = \Carbon\Carbon::parse($interval_date)->format('F');
                 $current_year = \Carbon\Carbon::parse($interval_date)->format('Y');
                 $final_payout_dates[$current_year][$month][$interval_date] = $interval_date;
-            } else {
-//                $month = \Carbon\Carbon::parse($end_date)->format('F');
-//                $current_year = \Carbon\Carbon::parse($end_date)->format('Y');
-//                $date = \Carbon\Carbon::parse($end_date)->format('Y-m-d');
-//                $final_payout_dates[$current_year][$month][$date] = $date;
             }
         }
         $i++;

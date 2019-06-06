@@ -65,7 +65,7 @@ class LoginController extends Controller
                 $user->is_verified = '1';
                 $user->save();
                 $status = "Your e-mail is verified. You can now login.";
-            }else{
+            } else {
                 $status = "Your e-mail is already verified. You can now login.";
             }
         }else{

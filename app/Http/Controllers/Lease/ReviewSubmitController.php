@@ -675,13 +675,13 @@ class ReviewSubmitController extends Controller
                 confirmSteps($id, $this->current_step);
             }
 
-            if(!$model->isSubsequentModification()){
+            if($assets->uuid!=''){
+                $ulacode = $assets->uuid;
+            } else {
                 $ulacode = createUlaCode();
                 $uid['uuid'] = $ulacode;
                 $assets->setRawAttributes($uid);
                 $assets->save();
-            } else {
-                $ulacode = $assets->uuid;
             }
 
             //check here for the redirect based upon the category and other conditions as well

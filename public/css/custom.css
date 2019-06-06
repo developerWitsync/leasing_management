@@ -1226,3 +1226,42 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3931af', end
 .full_retrospective_approach{
     background-color: #158cff;padding: 4px;border-radius: 4px;color: #fff;text-align: center;border: 1px solid #1a15ff;
 }
+
+.import_option_first {
+    float: left;
+    width: 100%;
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+.headerImport {
+    float: left;
+    width: 180px;
+}
+
+.headerImport h1 {
+    font-size: 20px;
+    font-weight: 600;
+    background-color: #eeee;
+    padding: 10px;
+    margin: 0;
+}
+
+
+.bodyImport {
+    width: calc(100% - 200px);
+    float: right;
+}
+
+.bodyImport .first {
+    background-color: #eee;
+    padding: 10px;
+    margin: 0;
+    margin-bottom: 20px;
+}
+
+.bodyImport .second {
+    border: 1px solid #e5e5e5;
+    padding: 10px;
+    background-color: #f5f5f5;
+}

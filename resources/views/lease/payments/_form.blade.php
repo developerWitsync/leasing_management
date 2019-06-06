@@ -345,26 +345,73 @@
             </div>
         </div>
 
-        <div class="form-group import_via_excel"
-             @if(old('lease_payment_per_interval', $payment->lease_payment_per_interval) == '2') style="display: block" @else style="display:none;" @endif>
-            <label class="col-md-12 control-label">&nbsp;</label>
-            <div class="row">
-                <div class="col-md-7">
-                    <button class="btn btn-primary download_excel_for_import"><i class="fa fa-download"></i> Download
-                        Excel For Importing
-                    </button>
+
+        <div class="import_via_excel import_option_first clearfix"
+             @if(old('lease_payment_per_interval', $payment->lease_payment_per_interval) == '2') style="display: block"
+             @else style="display:none;" @endif>
+            <div class="headerImport">
+                <h1>Option 1</h1>
+            </div>
+            <div class="bodyImport">
+                <div class="first">
+                    You can download the excel template to enter the lease payments against each lease payment dates as
+                    confirmed above and upload the template with the lease payments.
+                </div>
+                <div class="second">
+                    <strong>Please Note:</strong> Do not change the lease payment dates in the excel template, any
+                    change in lease dates should be updated first under above section on Lease Payment Periods only.
+                    Further, if you have entered lease payments in this template including lease escalation then do not
+                    re-apply escalation under Step 09 else apply escalation under Step 09.
                 </div>
 
-                <div class="col-md-5">
-                    <div class=" frmattachFile">
-                        <input type="name" id="uploadX" name="name" class="form-control" disabled="disabled">
-                        <button type="button" class="browseBtn"><i class="fa fa-upload"></i> Browse</button>
-                        <input type="file" id="import_dates" name="file" class="fileType">
-                        <h6 class="disabled">Only Xlsx with 2MB size of files are allowed.</h6>
+                <div class="import_via_excel"
+                     @if(old('lease_payment_per_interval', $payment->lease_payment_per_interval) == '2') style="display: block;padding-bottom: 30px;"
+                     @else style="display:none;padding-bottom: 30px;" @endif>
+                    <label class="col-md-12 control-label">&nbsp;</label>
+                    <div class="row">
+                        <div class="col-md-7">
+                            <button class="btn btn-primary download_excel_for_import"><i class="fa fa-download"></i>
+                                Download
+                                Excel For Importing
+                            </button>
+                        </div>
+
+                        <div class="col-md-5">
+                            <div class=" frmattachFile">
+                                <input type="name" id="uploadX" name="name" class="form-control" disabled="disabled">
+                                <button type="button" class="browseBtn"><i class="fa fa-upload"></i> Browse</button>
+                                <input type="file" id="import_dates" name="file" class="fileType">
+                                <h6 class="disabled">Only Xlsx with 2MB size of files are allowed.</h6>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+
+        <div class="import_via_excel import_option_first clearfix"
+             @if(old('lease_payment_per_interval', $payment->lease_payment_per_interval) == '2') style="display: block"
+             @else style="display:none;" @endif>
+            <div class="headerImport">
+                <h1>Option 2</h1>
+            </div>
+            <div class="bodyImport">
+                <div class="first">
+                    Manually enter lease payments in the below table against each lease payment dates. Please use this
+                    option only when option 1 is not applied.
+                </div>
+
+                <div class="form-group incpi @if(old('lease_payment_per_interval', $payment->lease_payment_per_interval) == '2') @else hidden @endif"
+                     style="width: 98%;padding: 15px;">
+
+                </div>
+
+            </div>
+
+
+        </div>
+
 
         <div class="form-group{{ $errors->has('payment_per_interval_per_unit') ? ' has-error' : '' }} cpi @if(old('lease_payment_per_interval', $payment->lease_payment_per_interval) == '1') @else hidden @endif required">
             <label for="payment_per_interval_per_unit" class="col-md-12 control-label">Lease Payment Per Interval Per
@@ -412,10 +459,6 @@
             </div>
         </div>
 
-        <div class="form-group incpi @if(old('lease_payment_per_interval', $payment->lease_payment_per_interval) == '2') @else hidden @endif"
-             style="width: 98%;padding: 15px;">
-
-        </div>
 
         <span class="hidden altered_payment_due_dates">
             @if(!empty($payout_due_dates))
@@ -580,7 +623,7 @@
                     data: formdata,
                     processData: false,
                     contentType: false,
-                    beforeSend: function(){
+                    beforeSend: function () {
                         showOverlayForAjax();
                     },
                     success: function (result) {
@@ -589,7 +632,7 @@
                             $.each(result.paymentDates, function (i, e) {
                                 var input_name = "input[name='inconsistent_date_payment[" + e[0] + "]']";
                                 var value = e[1];
-                                if(value == '' || value == null){
+                                if (value == '' || value == null) {
                                     value = 0;
                                 }
                                 $(input_name).val(value);
