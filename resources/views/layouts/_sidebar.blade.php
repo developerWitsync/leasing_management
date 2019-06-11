@@ -67,25 +67,32 @@
         </ul>
     </li>
 
+    @if(Auth::user()->can('valuation_cap'))
     <li>
         <a href="{{ route('leasevaluation.cap.index') }}"
            class="@if(request()->segment('1') == 'lease-valuation' && request()->segment('2') == 'valuation-capitalised') active @endif list-group-item">
             <img width="28" src="{{ asset('images/icons/dollar.png') }}">
             <span>Valuation CAP</span></a>
     </li>
+    @endif
 
+
+    @if(Auth::user()->can('valuation_ncap'))
     <li>
         <a href="{{route('leasevaluation.ncap.index')}}"
            class="@if(request()->segment('1') == 'lease-valuation' && request()->segment('2') == 'valuation-non-capitalised') active @endif list-group-item"><img
                     width="28" src="{{ asset('images/icons/ncap.png') }}">
             <span>Valuation - NCAP</span></a>
     </li>
+    @endif
 
+    @if(Auth::user()->can('reports'))
     <li>
         <a href="{{ route('reports.index') }}" class="list-group-item @if(request()->segment('1') == 'reports') active @endif"><img width="28" src="{{ asset('images/icons/presentation.png') }}"> <span>Reports</span>
             <!-- <small class="fa fa-angle-right" aria-hidden="true"></small> -->
         </a>
     </li>
+    @endif
 
     <li>
         <a href="#" class="list-group-item"><img width="28" src="{{ asset('images/icons/disclosure.png') }}">
@@ -94,12 +101,14 @@
         </a>
     </li>
 
-    <li>
-        <a href="#" class="list-group-item"><img width="28" src="{{ asset('images/icons/documents.png') }}">
-            <span>Documents</span>
-            <!-- <small class="fa fa-angle-right" aria-hidden="true"></small> -->
-        </a>
-    </li>
+    @if(Auth::user()->can('documents'))
+        <li>
+            <a href="{{ route('documents.index') }}" class="list-group-item @if(request()->segment('1') == 'documents') active @endif"><img width="28" src="{{ asset('images/icons/documents.png') }}">
+                <span>Documents</span>
+                <!-- <small class="fa fa-angle-right" aria-hidden="true"></small> -->
+            </a>
+        </li>
+    @endif
 
     <li>
         <a href="#" class="list-group-item"><img width="28" src="{{ asset('images/icons/expired.png') }}">

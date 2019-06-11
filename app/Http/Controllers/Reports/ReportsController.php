@@ -94,7 +94,7 @@ class ReportsController extends Controller
                  * Conditions end here
                  */
 
-                $model->selectRaw('(SELECT SUM(`depreciation`) FROM `interest_and_depreciation` where last_day(`date`) = `date` and asset_id = lease_assets.id AND `date` between '.$start_date.' AND '.$end_date.') as depreciation');
+                $model->selectRaw('(SELECT SUM(`depreciation`) FROM `interest_and_depreciation` where last_day(`date`) = `date` and asset_id = lease_assets.id AND `date` between "'.$start_date.'" AND "'.$end_date.'") as depreciation');
             } else {
                 $model->leftJoin('interest_and_depreciation', 'interest_and_depreciation.asset_id', '=', 'lease_assets.id');
                 $model->selectRaw('(SELECT SUM(`depreciation`) FROM `interest_and_depreciation` where last_day(`date`) = `date` and asset_id = lease_assets.id) as depreciation');

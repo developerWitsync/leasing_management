@@ -341,7 +341,7 @@ Route::middleware('auth')->group(function () {
 
     Route::namespace('Leasevaluation')->prefix('lease-valuation')->middleware('checksubscription')->group(function () {
 
-        Route::prefix('valuation-capitalised')->group(function(){
+        Route::prefix('valuation-capitalised')->middleware('permission:valuation_cap')->group(function(){
 
             Route::get('/', ['as' => 'leasevaluation.cap.index', 'uses' => 'LeaseValuationController@capitalised']);
 
@@ -367,7 +367,7 @@ Route::middleware('auth')->group(function () {
 
         });
 
-        Route::prefix('valuation-non-capitalised')->group(function(){
+        Route::prefix('valuation-non-capitalised')->middleware('permission:valuation_ncap')->group(function(){
 
             Route::get('/', ['as' => 'leasevaluation.ncap.index', 'uses' => 'LeaseValuationController@capitalised']);
 
@@ -401,7 +401,7 @@ Route::middleware('auth')->group(function () {
     /**
      * Reports Routes
      */
-    Route::namespace('Reports')->prefix('reports')->middleware('checksubscription')->group(function(){
+    Route::namespace('Reports')->prefix('reports')->middleware(['permission:reports','checksubscription'])->group(function(){
         Route::get('/', ['as' => 'reports.index', 'uses' => 'ReportsController@index']);
         Route::get('lease-liability-contractual', ['as' => 'reports.leaseliability.contractual', 'uses' => 'ReportsController@leaseLiabilityContractual']);
 
@@ -564,6 +564,19 @@ Route::middleware('auth')->group(function () {
         Route::prefix('profile')->group(function () {
             Route::match(['get', 'post'], '/', ['as' => 'settings.profile.index', 'uses' => 'ProfileController@index']);
         });
+
+    });
+
+    Route::namespace('Documents')->middleware(['permission:documents', 'checksubscription'])->prefix('documents')->group(function(){
+
+        Route::get('/', ['as' => 'documents.index', 'uses' => 'DocumentsController@index']);
+
+        Route::get('fetch-lease-assets', ['as' => 'documents.index.fetchleaseassets', 'uses' => 'DocumentsController@fetchLeaseAssets']);
+
+        Route::get('list/{id}', ['as' => 'documents.index.listdocuments', 'uses' => 'DocumentsController@listDocuments']);
+
+        Route::get('fetch-documents/{id}', ['as' => 'documents.index.fetchdocuments', 'uses' => 'DocumentsController@fetchDocumentsList']);
+
     });
 
 });
