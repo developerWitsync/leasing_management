@@ -457,6 +457,10 @@
                     </span>
                 @endif
             </div>
+            @if($payment->attachment !='')
+                <a href="{{asset('uploads/'.$payment->attachment)}}" class="downloadIcon"
+                   target="_blank"><i class="fa fa-download"></i></a>
+            @endif
         </div>
 
 

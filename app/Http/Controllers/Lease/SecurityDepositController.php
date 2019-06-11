@@ -62,7 +62,7 @@ class SecurityDepositController extends Controller
                     if($request->any_security_applicable == "yes"){
                         $payment_date = Carbon::parse($request->payment_date_of_security_deposit)->format('Y-m-d');
 
-                        $uniqueFileName = '';
+                        $uniqueFileName = $model->doc;
 
                         if($request->hasFile('file')){
                             $file = $request->file('file');
@@ -88,6 +88,7 @@ class SecurityDepositController extends Controller
                             'total_amount' => null
                         ]);
                     }
+
 
                     $model->setRawAttributes($request->except('_token', 'action', 'file'));
 
