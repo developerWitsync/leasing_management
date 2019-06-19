@@ -266,6 +266,25 @@
         </div>
     </div>
 
+    <div class="categoriesOuter clearfix">
+        <div class="categoriesHd">
+            Immediate Previous Lease End Date
+        </div>
+        <div class="form-group{{ $errors->has('immediate_previous_lease_end_date') ? ' has-error' : '' }} required">
+            <label for="immediate_previous_lease_end_date" class="col-md-12 control-label">Immediate Previous Lease End Date</label>
+            <div class="col-md-12">
+                <input id="immediate_previous_lease_end_date" type="text" placeholder="Last Lease Payment End Date"
+                       class="form-control lease_period2" name="immediate_previous_lease_end_date"
+                       value="{{ old('immediate_previous_lease_end_date',$payment->immediate_previous_lease_end_date) }}" autocomplete="off">
+                @if ($errors->has('immediate_previous_lease_end_date'))
+                    <span class="help-block">
+                        <strong>{{ $errors->first('immediate_previous_lease_end_date') }}</strong>
+                    </span>
+                @endif
+            </div>
+        </div>
+    </div>
+
     <div class="categoriesOuter clearfix variable_basis_amount_determinable">
         <div class="categoriesHd">
             Lease Payments
@@ -734,6 +753,19 @@
                 checklockperioddate(date, instance, _ajax_url);
             }
         });
+
+        $("#immediate_previous_lease_end_date").datepicker({
+            dateFormat: "dd-M-yy",
+            changeYear: true,
+            changeMonth: true,
+            maxDate: new Date('{{ ($asset->getLeaseEndDate($asset)) }}'),
+            {!!  getYearRanage() !!}
+            onSelect: function (date, instance) {
+                var _ajax_url = '{{route("lease.checklockperioddate")}}';
+                checklockperioddate(date, instance, _ajax_url);
+            }
+        });
+
 
         $("#last_payment_end_date").datepicker({
             dateFormat: "dd-M-yy",

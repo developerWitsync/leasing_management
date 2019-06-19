@@ -56,7 +56,8 @@ class LeasePaymentsController extends Controller
             'due_dates_confirmed' => 'in:1',
             'lease_payment_per_interval' => 'required',
             'altered_payment_due_date.*' => 'required|date',
-            'inconsistent_date_payment.*' => 'required_if:lease_payment_per_interval,2|numeric'
+            'inconsistent_date_payment.*' => 'required_if:lease_payment_per_interval,2|numeric',
+            'immediate_previous_lease_end_date' => 'required|date'
         ];
 
         return $rules;
@@ -229,7 +230,8 @@ class LeasePaymentsController extends Controller
                     'due_dates_confirmed' => 'required_when_variable_determinable:nature,variable_amount_determinable',
                     'lease_payment_per_interval' => 'required_when_variable_determinable:nature,variable_amount_determinable',
                     'altered_payment_due_date.*' => 'required_when_variable_determinable:nature,variable_amount_determinable|date|nullable',
-                    'inconsistent_date_payment.*' => 'required_if:lease_payment_per_interval,2|numeric|nullable'
+                    'inconsistent_date_payment.*' => 'required_if:lease_payment_per_interval,2|numeric|nullable',
+                    'immediate_previous_lease_end_date' => 'required|date'
                 ];
 
                 $validator = Validator::make($request->except('_token'), $rules, [
@@ -274,6 +276,10 @@ class LeasePaymentsController extends Controller
                 if($is_subsequent){
                     //update the subsequent_status field to 1 as well..
                     $data['subsequent_status'] = '1';
+                }
+
+                if($request->has('immediate_previous_lease_end_date')){
+                    $data['immediate_previous_lease_end_date'] = Carbon::parse($request->immediate_previous_lease_end_date)->format('Y-m-d');
                 }
 
                 $payment->setRawAttributes($data);
@@ -415,15 +421,16 @@ class LeasePaymentsController extends Controller
                         'due_dates_confirmed' => 'required_when_variable_determinable:nature,variable_amount_determinable',
                         'lease_payment_per_interval' => 'required_when_variable_determinable:nature,variable_amount_determinable',
                         'altered_payment_due_date.*' => 'required_when_variable_determinable:nature,variable_amount_determinable|date|nullable',
-                        'inconsistent_date_payment.*' => 'required_if:lease_payment_per_interval,2|numeric|nullable'
+                        'inconsistent_date_payment.*' => 'required_if:lease_payment_per_interval,2|numeric|nullable',
+                        'immediate_previous_lease_end_date' => 'required|date'
                     ];
 
                     $validator = Validator::make($request->except('_token'), $rules, [
                         'required_when_variable_determinable' => 'The :attribute field is required.',
                         'altered_payment_due_date.*.required' => 'Please confirm the payment due dates by clicking on the Confirm Payment Due Dates.',
                         'due_dates_confirmed.required_when_variable_determinable' => 'Please confirm the payment due dates by clicking on the Confirm Payment Due Dates.',
-                    'file.max' => 'Maximum file size can be '.config('settings.file_size_limits.max_size_in_mbs').'.',
-                    'file.uploaded' => 'Maximum file size can be '.config('settings.file_size_limits.max_size_in_mbs').'.'
+                        'file.max' => 'Maximum file size can be '.config('settings.file_size_limits.max_size_in_mbs').'.',
+                        'file.uploaded' => 'Maximum file size can be '.config('settings.file_size_limits.max_size_in_mbs').'.'
                     ]);
 
                     if ($validator->fails()) {
@@ -459,6 +466,10 @@ class LeasePaymentsController extends Controller
                     if($subsequent_modify_required){
                         //update the subsequent_status field to 1 as well..
                         $data['subsequent_status'] = '1';
+                    }
+
+                    if($request->has('immediate_previous_lease_end_date')){
+                        $data['immediate_previous_lease_end_date'] = Carbon::parse($request->immediate_previous_lease_end_date)->format('Y-m-d');
                     }
 
                     $payment->setRawAttributes($data);
@@ -537,6 +548,7 @@ class LeasePaymentsController extends Controller
                 abort(404);
             }
         } catch (\Exception $e) {
+            dd($e);
             abort(404);
         }
     }

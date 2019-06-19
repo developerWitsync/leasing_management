@@ -16,6 +16,7 @@ use App\HistoricalCarryingAmountAnnexure;
 use App\Http\Controllers\Controller;
 use App\InterestAndDepreciation;
 use App\LeaseAssetPayments;
+use App\LeaseExpenseAnnexure;
 use App\LeaseHistory;
 use App\PaymentEscalationDetails;
 use App\ReportingCurrencySettings;
@@ -797,6 +798,27 @@ class LeaseValuationController extends Controller
             ));
         }catch (\Exception $e) {
             abort(404);
+        }
+    }
+
+    public function leaseExpense($id, Request $request){
+        try{
+            $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())
+                ->where('id', '=', $id)
+                ->firstOrFail();
+
+            $asset = $lease->assets()->first(); //there will only be a single lease asset for each lease...
+
+            $lease_expense_annexure = LeaseExpenseAnnexure::query()->where('asset_id', '=', $asset->id)->get();
+            $lease_payments = LeaseExpenseAnnexure::query()->where('asset_id', '=', $asset->id)->first();
+
+            return view('leasevaluation.lease_expense_annexure', compact(
+                'lease',
+                'lease_expense_annexure',
+                'lease_payments'
+            ));
+        } catch (\Exception $e) {
+            dd($e);
         }
     }
 }
