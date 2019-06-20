@@ -474,7 +474,7 @@ class ReviewSubmitController extends Controller
                 //no need to include the purchase options for this annexure and hence that will not be fetched
                 $lease_payments_initial = $asset->fetchAllPaymentsForLeaseExpenseAnnexure($asset, $base_date->format('Y-m-d'), $end_date->format('Y-m-d'));
 
-                $lease_payments = collect($lease_payments_initial)->groupBy('date')->toArray();
+                $lease_payments = collect($lease_payments_initial)->groupBy('date')->sortBy('date')->toArray();
 
                 //fetch the lease asset payments from the database as well
                 $asset_payments = $asset->payments;
@@ -491,14 +491,19 @@ class ReviewSubmitController extends Controller
                         $rows[] = $date;
                     }
                 }
-                $rows = array_unique($rows);
+                $rows = array_unique(collect($rows)->sort()->toArray());
 
                 //prepare an array containing the Immediate Previous Lease End Date for all the current payments
                 //prepare an array for the dates that will be used for the days diff from current date to the previous date
                 $immediate_previous_lease_end_date = [];
+                $last_lease_payment_interval_end_date = [];
                 $previous_date_array = [];
                 foreach ($asset_payments as $asset_payment) {
-                    $immediate_previous_lease_end_date[$asset_payment->id] = $asset_payment->immediate_previous_lease_end_date;
+                    if($asset_payment->payout_time === 1){
+                        $last_lease_payment_interval_end_date[$asset_payment->id] = $asset_payment->last_lease_payment_interval_end_date;
+                    } else if($asset_payment->payout_time === 2){
+                        $immediate_previous_lease_end_date[$asset_payment->id] = $asset_payment->immediate_previous_lease_end_date;
+                    }
                     $previous_date_array[$asset_payment->id] = $base_date->format('Y-m-d');
                 }
 
@@ -513,27 +518,26 @@ class ReviewSubmitController extends Controller
                 //at each row we loop through all the existing payments that we have for the lease asset
                 //for each payment we fetch the payment details from the array that we have for the current payment and at current row date...
                 //and prepare the annexure based upon the conditions from the sheet shared...
-                $current_date = $base_date;
-                $computed_lease_payment_expense = 0;
                 $annexure = [];
                 foreach ($rows as $key=>$row) {
                     $internal_array = [];
                     foreach ($asset_payments as $asset_payment) {
                         if(isset($lease_payments[$row])) {
+
+                            //at interval start
+                            //need to find the days diff from the current date - previous payment date
+                            $current_payment_date = Carbon::parse($row);
+
+                            //previous payment date needs to be calculated here as well..
+                            $previous_payment_date = array_values(collect($lease_payments_initial)
+                                ->where('date', '<', $row)
+                                ->where('id', '=', $asset_payment->id)
+                                ->sortByDesc('date')
+                                ->take(1)->toArray());
+
                             //payment at this date do exists..
                             $payment_details_at_this_date = collect($lease_payments[$row])->where('id', '=', $asset_payment->id)->first();
                             if($payment_details_at_this_date) {
-
-                                //at interval start
-                                //need to find the days diff from the current date - previous payment date
-                                $current_payment_date = Carbon::parse($payment_details_at_this_date->date);
-
-                                //previous payment date needs to be calculated here as well..
-                                $previous_payment_date = array_values(collect($lease_payments_initial)
-                                    ->where('date', '<', $row)
-                                    ->where('id', '=', $asset_payment->id)
-                                    ->sortByDesc('date')
-                                    ->take(1)->toArray());
 
                                 if($asset_payment->payout_time === 1){
                                     //if the above returns an empty collection this means that we will use the current date...
@@ -563,7 +567,7 @@ class ReviewSubmitController extends Controller
                                     }
 
 
-                                } elseif($asset_payment->payout_time === 2){
+                                } elseif($asset_payment->payout_time === 2) {
                                     //at interval end need to find the days diff from the
                                     //if the above returns an empty collection this means that we will use the immediate previous lease end date...
                                     if(collect($previous_payment_date)->count()) {
@@ -580,6 +584,10 @@ class ReviewSubmitController extends Controller
                                 }
 
                                 $days_diff_from_previous_date = $current_payment_date->diffInDays(Carbon::parse($previous_date_array[$asset_payment->id]));
+                                if($asset_payment->payout_time === 2 && Carbon::parse($previous_date_array[$asset_payment->id])->equalTo($base_date)){
+                                    $days_diff_from_previous_date = $days_diff_from_previous_date + 1;
+                                }
+
                                 if($days_diff == 0){
                                     $computed_lease_payment_expense = 0;
                                 } else {
@@ -591,6 +599,117 @@ class ReviewSubmitController extends Controller
                                     'payment_name' => $asset_payment->name,
                                     'date' => $row,
                                     'payment_amount' => $payment_details_at_this_date->total_amount_payable,
+                                    'computed_lease_payment_expense' => $computed_lease_payment_expense
+                                ];
+                            } else {
+
+                                $previous_payment_date = array_values(collect($lease_payments_initial)
+                                    ->where('date', '<', $row)
+                                    ->where('id', '=', $asset_payment->id)
+                                    ->sortByDesc('date')
+                                    ->take(1)->toArray());
+
+
+                                $next_payment_date = array_values(collect($lease_payments_initial)
+                                    ->where('date', '>', $row)
+                                    ->where('id', '=', $asset_payment->id)
+                                    ->sortBy('date')
+                                    ->take(1)->toArray());
+
+                                if($asset_payment->payout_time === 1){
+
+                                    //need to take out the payment at the date which is previous to $row date
+                                    //need to take out the next payment date as well..
+                                    if(collect($previous_payment_date)->count()) {
+                                        $previous_payment_date = Carbon::parse($previous_payment_date[0]->date);
+                                    } else {
+                                        $previous_payment_date = Carbon::parse($row);
+                                    }
+
+                                    //in case there is no next payment date for the current payment we use the current date as the next payment date.
+                                    if(collect($next_payment_date)->count()) {
+                                        $next_payment_date = Carbon::parse($next_payment_date[0]->date);
+                                    } else {
+                                        $next_payment_date = Carbon::parse($last_lease_payment_interval_end_date[$asset_payment->id]);
+                                    }
+
+                                    //days diff from the next payment date to the previous payment date
+                                    $days_diff = $next_payment_date->diffInDays($previous_payment_date);
+
+                                    $amount_at_previous_date = 0;
+                                    if(isset($lease_payments[$previous_payment_date->format('Y-m-d')])){
+                                        $amount_at_previous_date = array_values(collect($lease_payments[$previous_payment_date->format('Y-m-d')])
+                                            ->where('id', '=', $asset_payment->id)
+                                            ->toArray());
+                                        if(count($amount_at_previous_date) > 0) {
+                                            $amount_at_previous_date = $amount_at_previous_date[0]->total_amount_payable;
+                                        } else {
+                                            //use from the 0 as the payment in this case
+                                            $amount_at_previous_date = 0;
+                                        }
+                                    } else {
+                                        //use the current payment amount
+                                        $amount_at_previous_date = 0;
+                                    }
+
+                                } elseif ($asset_payment->payout_time === 2){
+
+                                    //need to take out the payment at the date which is previous to $row date
+                                    //need to take out the next payment date as well..
+                                    if(collect($previous_payment_date)->count()) {
+                                        $previous_payment_date = Carbon::parse($previous_payment_date[0]->date);
+                                    } else {
+                                        $previous_payment_date = Carbon::parse($immediate_previous_lease_end_date[$asset_payment->id]);
+                                    }
+
+                                    //in case there is no next payment date for the current payment we use the current date as the next payment date.
+                                    if(collect($next_payment_date)->count()) {
+                                        $next_payment_date = Carbon::parse($next_payment_date[0]->date);
+                                    } else {
+                                        $next_payment_date = Carbon::parse($row);;
+                                    }
+
+                                    //days diff from the next payment date to the previous payment date
+                                    $days_diff = $next_payment_date->diffInDays($previous_payment_date);
+
+                                    //fetch the payment at the next payment date, in case the payment doesn't exists then in that case the we will use 0 at that place.
+                                    $amount_at_previous_date = 0;
+                                    if(isset($lease_payments[$next_payment_date->format('Y-m-d')])){
+                                        $amount_at_previous_date = array_values(collect($lease_payments[$next_payment_date->format('Y-m-d')])
+                                            ->where('id', '=', $asset_payment->id)
+                                            ->toArray());
+                                        if(count($amount_at_previous_date) > 0) {
+                                            $amount_at_previous_date = $amount_at_previous_date[0]->total_amount_payable;
+                                        } else {
+                                            //use from the 0 as the payment in this case
+                                            $amount_at_previous_date = 0;
+                                        }
+                                    } else {
+                                        //use the current payment amount
+                                        $amount_at_previous_date = 0;
+                                    }
+
+                                }
+
+                                $days_diff_from_previous_date = Carbon::parse($row)->diffInDays(Carbon::parse($previous_date_array[$asset_payment->id]));
+
+                                if($asset_payment->payout_time === 2 && Carbon::parse($previous_date_array[$asset_payment->id])->equalTo($base_date)){
+                                    $days_diff_from_previous_date = $days_diff_from_previous_date + 1;
+                                }
+
+                                if($days_diff == 0){
+                                    $computed_lease_payment_expense = 0;
+                                } else {
+                                    $computed_lease_payment_expense = round(($amount_at_previous_date/$days_diff) * $days_diff_from_previous_date, 2);
+                                }
+
+
+
+                                //$annexure[$row][$asset_payment->id]
+                                $internal_array[$asset_payment->id] = [
+                                    'payment_name' => $asset_payment->name,
+                                    'date' => $row,
+                                    'payment_amount' => 0,
                                     'computed_lease_payment_expense' => $computed_lease_payment_expense
                                 ];
                             }
@@ -613,28 +732,29 @@ class ReviewSubmitController extends Controller
                                     ->sortBy('date')
                                     ->take(1)->toArray());
 
-                                //need to take out the payment at the date which is previous to $row date
-                                //need to take out the next payment date as well..
-                                if(collect($previous_payment_date)->count()) {
-                                    $previous_payment_date = Carbon::parse($previous_payment_date[0]->date);
-                                } else {
-                                    $previous_payment_date = Carbon::parse($row);
-                                }
-
-                                //in case there is no next payment date for the current payment we use the current date as the next payment date.
-                                if(collect($next_payment_date)->count()) {
-                                    $next_payment_date = Carbon::parse($next_payment_date[0]->date);
-                                } else {
-                                    $next_payment_date = Carbon::parse($row);;
-                                }
-
-                                //days diff from the next payment date to the previous payment date
-                                $days_diff = $next_payment_date->diffInDays($previous_payment_date);
 
                                 if($asset_payment->payout_time === 1) {
 
+                                    //need to take out the payment at the date which is previous to $row date
+                                    //need to take out the next payment date as well..
+                                    if(collect($previous_payment_date)->count()) {
+                                        $previous_payment_date = Carbon::parse($previous_payment_date[0]->date);
+                                    } else {
+                                        $previous_payment_date = Carbon::parse($row);
+                                    }
+
+                                    //in case there is no next payment date for the current payment we use the current date as the next payment date.
+                                    if(collect($next_payment_date)->count()) {
+                                        $next_payment_date = Carbon::parse($next_payment_date[0]->date);
+                                    } else {
+                                        $next_payment_date = Carbon::parse($last_lease_payment_interval_end_date[$asset_payment->id]);
+                                    }
+
+                                    //days diff from the next payment date to the previous payment date
+                                    $days_diff = $next_payment_date->diffInDays($previous_payment_date);
+
                                     $amount_at_previous_date = 0;
-                                    if($lease_payments[$previous_payment_date->format('Y-m-d')]){
+                                    if(isset($lease_payments[$previous_payment_date->format('Y-m-d')])){
                                         $amount_at_previous_date = array_values(collect($lease_payments[$previous_payment_date->format('Y-m-d')])
                                             ->where('id', '=', $asset_payment->id)
                                             ->toArray());
@@ -650,6 +770,25 @@ class ReviewSubmitController extends Controller
                                     }
 
                                 } elseif ($asset_payment->payout_time === 2) {
+
+                                    //need to take out the payment at the date which is previous to $row date
+                                    //need to take out the next payment date as well..
+                                    if(collect($previous_payment_date)->count()) {
+                                        $previous_payment_date = Carbon::parse($previous_payment_date[0]->date);
+                                    } else {
+                                        $previous_payment_date = Carbon::parse($immediate_previous_lease_end_date[$asset_payment->id]);
+                                    }
+
+                                    //in case there is no next payment date for the current payment we use the current date as the next payment date.
+                                    if(collect($next_payment_date)->count()) {
+                                        $next_payment_date = Carbon::parse($next_payment_date[0]->date);
+                                    } else {
+                                        $next_payment_date = Carbon::parse($row);
+                                    }
+
+                                    //days diff from the next payment date to the previous payment date
+                                    $days_diff = $next_payment_date->diffInDays($previous_payment_date);
+
                                     //fetch the payment at the next payment date, in case the payment doesn't exists then in that case the we will use 0 at that place.
                                     $amount_at_previous_date = 0;
                                     if(isset($lease_payments[$next_payment_date->format('Y-m-d')])){
@@ -669,6 +808,11 @@ class ReviewSubmitController extends Controller
                                 }
 
                                 $days_diff_from_previous_date = Carbon::parse($row)->diffInDays(Carbon::parse($previous_date_array[$asset_payment->id]));
+
+                                if($asset_payment->payout_time === 2 && Carbon::parse($previous_date_array[$asset_payment->id])->equalTo($base_date)){
+                                    $days_diff_from_previous_date = $days_diff_from_previous_date + 1;
+                                }
+
                                 if($days_diff == 0){
                                     $computed_lease_payment_expense = 0;
                                 } else {
@@ -708,8 +852,11 @@ class ReviewSubmitController extends Controller
                     $annexure[$row]['total_computed_lease_expense'] = $total_computed_lease_expense;
                     $annexure[$row]['closing_prepaid_payable_balance'] = $opening_or_payable - $total_computed_lease_expense;
                     $annexure[$row]['payments_details'] = json_encode($internal_array);
+                    //$annexure[$row]['payments_details'] = $internal_array;
                     $opening_or_payable = $opening_or_payable - $total_computed_lease_expense;
                 }
+
+               // echo "<pre>"; print_r($annexure); die();
 
                 DB::transaction(function () use ($annexure, $modify_id, $asset) {
                     //insert the dates data into the interest and depreciation table for the lease id
@@ -725,9 +872,9 @@ class ReviewSubmitController extends Controller
 
             }
         } catch (\Exception $e) {
+            //dd($e);
             return false;
         }
-
     }
 
     /**

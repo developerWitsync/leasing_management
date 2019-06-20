@@ -30,7 +30,8 @@ class LeaseAssetPayments extends Model
         'updated_at',
         'lease_payment_per_interval',
         'subsequent_status',
-        'immediate_previous_lease_end_date'
+        'immediate_previous_lease_end_date',
+        'last_lease_payment_interval_end_date'
     ];
 
     public function getUndiscountedLiabilityValueAttribute()

@@ -231,7 +231,8 @@ class LeasePaymentsController extends Controller
                     'lease_payment_per_interval' => 'required_when_variable_determinable:nature,variable_amount_determinable',
                     'altered_payment_due_date.*' => 'required_when_variable_determinable:nature,variable_amount_determinable|date|nullable',
                     'inconsistent_date_payment.*' => 'required_if:lease_payment_per_interval,2|numeric|nullable',
-                    'immediate_previous_lease_end_date' => 'required|date'
+                    'immediate_previous_lease_end_date' => 'required_if:payout_time,2|date|nullable',
+                    'last_lease_payment_interval_end_date' => 'required_if:payout_time,1|date|nullable'
                 ];
 
                 $validator = Validator::make($request->except('_token'), $rules, [
@@ -278,8 +279,12 @@ class LeasePaymentsController extends Controller
                     $data['subsequent_status'] = '1';
                 }
 
-                if($request->has('immediate_previous_lease_end_date')){
+                if($request->payout_time == 2 && $request->has('immediate_previous_lease_end_date')){
                     $data['immediate_previous_lease_end_date'] = Carbon::parse($request->immediate_previous_lease_end_date)->format('Y-m-d');
+                    $data['last_lease_payment_interval_end_date'] = null;
+                } elseif ($request->payout_time == 1 && $request->has('last_lease_payment_interval_end_date')) {
+                    $data['last_lease_payment_interval_end_date'] = Carbon::parse($request->last_lease_payment_interval_end_date)->format('Y-m-d');
+                    $data['immediate_previous_lease_end_date'] = null;
                 }
 
                 $payment->setRawAttributes($data);
@@ -422,7 +427,8 @@ class LeasePaymentsController extends Controller
                         'lease_payment_per_interval' => 'required_when_variable_determinable:nature,variable_amount_determinable',
                         'altered_payment_due_date.*' => 'required_when_variable_determinable:nature,variable_amount_determinable|date|nullable',
                         'inconsistent_date_payment.*' => 'required_if:lease_payment_per_interval,2|numeric|nullable',
-                        'immediate_previous_lease_end_date' => 'required|date'
+                        'immediate_previous_lease_end_date' => 'required_if:payout_time,2|date|nullable',
+                        'last_lease_payment_interval_end_date' => 'required_if:payout_time,1|date|nullable'
                     ];
 
                     $validator = Validator::make($request->except('_token'), $rules, [
@@ -468,8 +474,12 @@ class LeasePaymentsController extends Controller
                         $data['subsequent_status'] = '1';
                     }
 
-                    if($request->has('immediate_previous_lease_end_date')){
+                    if($request->payout_time == 2 && $request->has('immediate_previous_lease_end_date')){
                         $data['immediate_previous_lease_end_date'] = Carbon::parse($request->immediate_previous_lease_end_date)->format('Y-m-d');
+                        $data['last_lease_payment_interval_end_date'] = null;
+                    } elseif ($request->payout_time == 1 && $request->has('last_lease_payment_interval_end_date')) {
+                        $data['last_lease_payment_interval_end_date'] = Carbon::parse($request->last_lease_payment_interval_end_date)->format('Y-m-d');
+                        $data['immediate_previous_lease_end_date'] = null;
                     }
 
                     $payment->setRawAttributes($data);
