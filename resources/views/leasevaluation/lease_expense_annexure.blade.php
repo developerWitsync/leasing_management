@@ -33,7 +33,7 @@
                 <div class="locatPurposeOutBx">
                     <div class="locatpurposeTop leaseterminatHd">
                         Lease Expense
-                        <a style="float: right;" href="{{ route('leasevaluation.cap.exportinterestdepreciation', ['id' => $lease->id]) }}">Export to Excel</a>
+                        <a style="float: right;" href="{{ route('leasevaluation.cap.exportleaseexpenseannexure', ['id' => $lease->id]) }}">Export to Excel</a>
                     </div>
                     <div class="leasepaymentTble" style="overflow: auto;height: 500px;">
                         @include('leasevaluation.partials._lease_expense_annexure')

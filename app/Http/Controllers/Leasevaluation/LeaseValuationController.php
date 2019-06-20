@@ -11,6 +11,7 @@ namespace App\Http\Controllers\Leasevaluation;
 use App\CategoriesLeaseAssetExcluded;
 use App\DiscountRateChartView;
 use App\Exports\InterestAndDepreciationExport;
+use App\Exports\LeaseExpenseAnnexureExport;
 use App\GeneralSettings;
 use App\HistoricalCarryingAmountAnnexure;
 use App\Http\Controllers\Controller;
@@ -819,6 +820,20 @@ class LeaseValuationController extends Controller
             ));
         } catch (\Exception $e) {
             dd($e);
+        }
+    }
+
+    public function exportLeaseExpenseAnnexure($id){
+        try{
+            $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())
+                ->where('id', '=', $id)
+                ->firstOrFail();
+
+            $asset = $lease->assets()->first(); //there will only be a single lease asset for each lease...
+
+            return Excel::download(new LeaseExpenseAnnexureExport($asset->id), 'lease_expense_annexure.xlsx');
+        } catch (\Exception $e){
+            abort(404);
         }
     }
 }
