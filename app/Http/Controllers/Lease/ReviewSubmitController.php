@@ -173,6 +173,7 @@ class ReviewSubmitController extends Controller
                     ->where('date', '<', $base_date->format('Y-m-d'))
                     ->where('asset_id', '=', $asset->id)
                     ->orderBy('date', 'desc')
+                    ->orderBy('id', 'asc')
                     ->first();
 
                 $one_day_before = Carbon::parse($lease->modifyLeaseApplication->last()->effective_from)->subDay(1);
