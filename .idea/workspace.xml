@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="1c290435-4779-45fe-873f-5594138f8734" name="Default Changelist" comment="Merge branch 'master' of http://100.100.7.4:8081/root/Witsync-Lease-Management&#10;&#10;# Conflicts:&#10;#&#9;app/Helpers/Helpers.php&#10;#&#9;config/settings.php&#10;#&#9;public/css/custom.css">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseValuationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseValuationController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -54,13 +55,13 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="6" />
-          <entry key="php" value="18511" />
+          <entry key="php" value="19676" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="Blade" value="1589" />
-          <entry key="PHP" value="16881" />
+          <entry key="PHP" value="18046" />
           <entry key="PLAIN_TEXT" value="6" />
           <entry key="SQL" value="41" />
         </counts>
@@ -68,7 +69,7 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="js" value="1" />
-          <entry key="php" value="74" />
+          <entry key="php" value="75" />
           <entry key="sql" value="1" />
         </counts>
       </usages-collector>
@@ -76,7 +77,7 @@
         <counts>
           <entry key="Blade" value="15" />
           <entry key="JavaScript" value="1" />
-          <entry key="PHP" value="59" />
+          <entry key="PHP" value="60" />
           <entry key="Scratch" value="1" />
         </counts>
       </usages-collector>
@@ -89,14 +90,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="122">
-              <caret line="175" column="42" lean-forward="true" selection-start-line="175" selection-start-column="42" selection-end-line="175" selection-end-column="42" />
-              <folding>
-                <element signature="e#23051#51447#0#PHP" />
-              </folding>
+            <state relative-caret-position="515">
+              <caret line="199" column="43" lean-forward="true" selection-start-line="199" selection-start-column="19" selection-end-line="199" selection-end-column="43" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseValuationController.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="245">
+              <caret line="73" column="43" lean-forward="true" selection-start-line="73" selection-start-column="43" selection-end-line="73" selection-end-column="43" />
             </state>
           </provider>
         </entry>
@@ -131,7 +138,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>presentValueOfLeaseLiabilityNew</find>
       <find>isSubsequentModification</find>
       <find>incpi</find>
       <find>api</find>
@@ -161,6 +167,7 @@
       <find>last_lease_payment_interval_end_date</find>
       <find>exportinterestdepreciation</find>
       <find>export</find>
+      <find>previous_all_increase_or_decrease</find>
     </findStrings>
     <replaceStrings>
       <replace>col-md-6 col-sm-6 btn-backnextBx</replace>
@@ -226,7 +233,6 @@
         <option value="$PROJECT_DIR$/database/migrations/2019_06_10_083556_add_permission_valuation_cap_ncap_and_reports.php" />
         <option value="$PROJECT_DIR$/resources/views/leasevaluation/overview.blade.php" />
         <option value="$PROJECT_DIR$/database/migrations/2019_06_17_093016_add_column_immediate_previous_lease_end_date_to_lease_assets_payments.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseValuationController.php" />
         <option value="$PROJECT_DIR$/app/LeaseAssets.php" />
         <option value="$PROJECT_DIR$/database/migrations/2019_06_19_061243_create_table_lease_expense_annexure_table.php" />
         <option value="$PROJECT_DIR$/app/LeaseExpenseAnnexure.php" />
@@ -241,6 +247,7 @@
         <option value="$PROJECT_DIR$/app/Exports/LeaseExpenseAnnexureExport.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseValuationController.php" />
       </list>
     </option>
   </component>
@@ -597,12 +604,12 @@
       <workItem from="1560918651733" duration="12641000" />
       <workItem from="1560937499076" duration="10000" />
       <workItem from="1561005440709" duration="24597000" />
-      <workItem from="1561091206698" duration="2032000" />
+      <workItem from="1561091206698" duration="12780000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1930479000" />
+    <option name="totallyTimeSpent" value="1941227000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -826,13 +833,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseValuationController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="355" column="78" selection-start-line="355" selection-start-column="51" selection-end-line="355" selection-end-column="78" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/lease/lease-valuation/_present_value_calculus_new.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="405">
@@ -1014,13 +1014,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="222">
-          <caret line="47" column="12" selection-start-line="47" selection-start-column="12" selection-end-line="47" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Helpers/Helpers.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="283">
@@ -1028,13 +1021,24 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="222">
+          <caret line="47" column="12" selection-start-line="47" selection-start-column="12" selection-end-line="47" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="122">
-          <caret line="175" column="42" lean-forward="true" selection-start-line="175" selection-start-column="42" selection-end-line="175" selection-end-column="42" />
-          <folding>
-            <element signature="e#23051#51447#0#PHP" />
-          </folding>
+        <state relative-caret-position="515">
+          <caret line="199" column="43" lean-forward="true" selection-start-line="199" selection-start-column="19" selection-end-line="199" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseValuationController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="245">
+          <caret line="73" column="43" lean-forward="true" selection-start-line="73" selection-start-column="43" selection-end-line="73" selection-end-column="43" />
         </state>
       </provider>
     </entry>

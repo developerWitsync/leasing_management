@@ -71,6 +71,7 @@ class LeaseValuationController extends Controller
                     ->where('date', '<', $lease->modifyLeaseApplication->last()->effective_from)
                     ->where('asset_id', '=', $asset_id)
                     ->orderBy('date','desc')
+                    ->orderBy('id', 'desc')
                     ->first();
 
                 $one_day_before = Carbon::parse($lease->modifyLeaseApplication->last()->effective_from)->subDay(1);

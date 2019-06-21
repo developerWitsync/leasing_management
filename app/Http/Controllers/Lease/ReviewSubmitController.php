@@ -14,6 +14,7 @@ use App\HistoricalCarryingAmountAnnexure;
 use App\Http\Controllers\Controller;
 use App\InterestAndDepreciation;
 use App\Lease;
+use App\ModifyLeaseApplication;
 use App\PaymentEscalationDates;
 use App\PvCalculus;
 use App\ContractClassifications;
@@ -159,7 +160,9 @@ class ReviewSubmitController extends Controller
                 $is_payment_on_base_date = true;
             }
 
-            $check_date = $increase_or_decrease = null;
+            $check_date = $increase_or_decrease =  null;
+
+            $previous_all_increase_or_decrease = 0;
 
             $set_to_zero = false;
 
@@ -169,11 +172,32 @@ class ReviewSubmitController extends Controller
 
             if($subsequent_modify_required) {
 
+                //fetch the dates for all the subsequents that happened in the same month and same year...
+                $current_effective_date = Carbon::parse($lease->modifyLeaseApplication->last()->effective_from);
+                $subsequents_effective_dates_in_same_month_and_year = ModifyLeaseApplication::query()
+                    ->where('lease_id', '=', $lease->id)
+                    ->whereRaw("MONTH(`effective_from`) = {$current_effective_date->format('m')} AND YEAR(`effective_from`) = {$current_effective_date->format('Y')}")
+                    ->whereDate('effective_from', '<>', $current_effective_date)
+                    ->pluck('effective_from')->toArray();
+
+                $previous_increase_decrease = 0;
+                if(count($subsequents_effective_dates_in_same_month_and_year)) {
+                    $increase_or_decrease_from_current_month_and_current_year = InterestAndDepreciation::query()
+                        ->where('asset_id', '=', $asset->id)
+                        ->whereIn('date', $subsequents_effective_dates_in_same_month_and_year)
+                        ->groupBy('date')
+                        ->pluck('change')->toArray();
+
+                    if(count($increase_or_decrease_from_current_month_and_current_year) > 0) {
+                        $previous_increase_decrease = array_sum($increase_or_decrease_from_current_month_and_current_year);
+                    }
+                }
+
                 $previous_depreciation_data = InterestAndDepreciation::query()
                     ->where('date', '<', $base_date->format('Y-m-d'))
                     ->where('asset_id', '=', $asset->id)
                     ->orderBy('date', 'desc')
-                    ->orderBy('id', 'asc')
+                    ->orderBy('id', 'desc')
                     ->first();
 
                 $one_day_before = Carbon::parse($lease->modifyLeaseApplication->last()->effective_from)->subDay(1);
@@ -185,7 +209,11 @@ class ReviewSubmitController extends Controller
 
                 $value_of_lease_asset = $asset->value_of_lease_asset;
 
+                //should be the sum of all the previous subsequents increase and decrease from
+                //the date of the previous carrying value of lease asset till the current effective date
                 $increase_or_decrease =  $asset->increase_decrease;
+
+                $previous_all_increase_or_decrease = $previous_increase_decrease + $increase_or_decrease;
 
                 if($day_before_subsequent) {
                     $dates[] = [
@@ -237,8 +265,8 @@ class ReviewSubmitController extends Controller
 
                 //need to set the values here that will be used on the next iteration
                 $number_of_months = calculateMonthsDifference($base_date->format('Y-m-d'), $asset->getLeaseEndDate($asset));
-                if($previous_carrying_value_of_lease_asset + $increase_or_decrease > 0){
-                    $previous_depreciation = ($previous_carrying_value_of_lease_asset + $increase_or_decrease) / $number_of_months;
+                if($previous_carrying_value_of_lease_asset + $previous_all_increase_or_decrease > 0){
+                    $previous_depreciation = ($previous_carrying_value_of_lease_asset + $previous_all_increase_or_decrease) / $number_of_months;
                 } else {
                     $previous_depreciation = 0;
                     $previous_carrying_value_of_lease_asset = 0;
@@ -295,7 +323,7 @@ class ReviewSubmitController extends Controller
                             'depreciation' => $previous_depreciation,
                             'change' => $increase_or_decrease,
                             'accumulated_depreciation' => ($base_date->isLastOfMonth())? $previous_depreciation + $previous_accumulated_depreciation : $previous_accumulated_depreciation,
-                            'carrying_value_of_lease_asset' => ($base_date->isLastOfMonth())? $previous_carrying_value_of_lease_asset + ($set_to_zero ? 0 : $increase_or_decrease) : $previous_carrying_value_of_lease_asset,
+                            'carrying_value_of_lease_asset' => ($base_date->isLastOfMonth())? $previous_carrying_value_of_lease_asset + ($set_to_zero ? 0 : $previous_all_increase_or_decrease) : $previous_carrying_value_of_lease_asset,
                             'charge_to_pl' => $charge_to_pl
                         ];
                         $base_date = Carbon::parse($base_date);
@@ -304,11 +332,13 @@ class ReviewSubmitController extends Controller
                             $previous_accumulated_depreciation = $previous_depreciation + $previous_accumulated_depreciation;
                             $previous_carrying_value_of_lease_asset = $previous_carrying_value_of_lease_asset - $previous_depreciation;
                             $increase_or_decrease = 0;
+                            $previous_all_increase_or_decrease = 0;
                             $charge_to_pl = 0;
                         }
 
                         if($previous_carrying_value_of_lease_asset == 0){
                             $increase_or_decrease = 0;
+                            $previous_all_increase_or_decrease = 0;
                             $charge_to_pl = 0;
                         }
                     }
@@ -333,7 +363,7 @@ class ReviewSubmitController extends Controller
                             'depreciation' => $previous_depreciation,
                             'change' => $increase_or_decrease,
                             'accumulated_depreciation' => (Carbon::parse($payment_date->date)->isLastOfMonth()) ? $previous_accumulated_depreciation + $previous_depreciation : $previous_accumulated_depreciation,
-                            'carrying_value_of_lease_asset' => (Carbon::parse($payment_date->date)->isLastOfMonth()) ? $previous_carrying_value_of_lease_asset + ($set_to_zero ? 0 : $increase_or_decrease) - $previous_depreciation : $previous_carrying_value_of_lease_asset,
+                            'carrying_value_of_lease_asset' => (Carbon::parse($payment_date->date)->isLastOfMonth()) ? $previous_carrying_value_of_lease_asset + ($set_to_zero ? 0 : $previous_all_increase_or_decrease) - $previous_depreciation : $previous_carrying_value_of_lease_asset,
                             'charge_to_pl' => $charge_to_pl
                         ];
                         $base_date = Carbon::parse($payment_date->date);
@@ -343,11 +373,13 @@ class ReviewSubmitController extends Controller
                             $previous_accumulated_depreciation = $previous_depreciation + $previous_accumulated_depreciation;
                             $previous_carrying_value_of_lease_asset = $previous_carrying_value_of_lease_asset + ($set_to_zero ? 0 : $increase_or_decrease) - $previous_depreciation;
                             $increase_or_decrease  = 0;
+                            $previous_all_increase_or_decrease = 0;
                             $charge_to_pl = 0;
                         }
 
                         if($previous_carrying_value_of_lease_asset == 0){
                             $increase_or_decrease = 0;
+                            $previous_all_increase_or_decrease = 0;
                             $charge_to_pl = 0;
                         }
                     }
@@ -388,7 +420,7 @@ class ReviewSubmitController extends Controller
                                 'depreciation' => $previous_depreciation,
                                 'change' => $increase_or_decrease,
                                 'accumulated_depreciation' => $previous_depreciation + $previous_accumulated_depreciation,
-                                'carrying_value_of_lease_asset' => round($previous_carrying_value_of_lease_asset + ($set_to_zero ? 0 : $increase_or_decrease) - $previous_depreciation, 2),
+                                'carrying_value_of_lease_asset' => round($previous_carrying_value_of_lease_asset + ($set_to_zero ? 0 : $previous_all_increase_or_decrease) - $previous_depreciation, 2),
                                 'charge_to_pl' => $charge_to_pl
                             ];
 
@@ -396,9 +428,10 @@ class ReviewSubmitController extends Controller
                             $previous_liability = $interest_expense + $previous_liability - (float)$amount_payable;
 
                             $previous_accumulated_depreciation = $previous_depreciation + $previous_accumulated_depreciation;
-                            $previous_carrying_value_of_lease_asset = $previous_carrying_value_of_lease_asset + ($set_to_zero ? 0 : $increase_or_decrease) - $previous_depreciation;
+                            $previous_carrying_value_of_lease_asset = $previous_carrying_value_of_lease_asset + ($set_to_zero ? 0 : $previous_all_increase_or_decrease) - $previous_depreciation;
 
                             $increase_or_decrease = 0;
+                            $previous_all_increase_or_decrease = 0;
                             $charge_to_pl = 0;
 
                         }
@@ -406,6 +439,8 @@ class ReviewSubmitController extends Controller
                 }
                 $start_year = $start_year + 1;
             }
+
+            //echo "<pre>"; print_r($dates); die();
 
             DB::transaction(function () use ($dates, $modify_id, $asset) {
                 //insert the dates data into the interest and depreciation table for the lease id
