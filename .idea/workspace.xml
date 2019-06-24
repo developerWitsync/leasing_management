@@ -3,8 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="1c290435-4779-45fe-873f-5594138f8734" name="Default Changelist" comment="Merge branch 'master' of http://100.100.7.4:8081/root/Witsync-Lease-Management&#10;&#10;# Conflicts:&#10;#&#9;app/Helpers/Helpers.php&#10;#&#9;config/settings.php&#10;#&#9;public/css/custom.css">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseValuationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseValuationController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/LeasePaymentsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/LeasePaymentsController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/LeaseAssetPayments.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/LeaseAssetPayments.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/LeaseAssets.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/LeaseAssets.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/lease/payments/_form.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/payments/_form.blade.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -38,7 +41,7 @@
     <session id="1678134399">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="10" />
+          <entry key="project.closed" value="12" />
           <entry key="project.open.time.0" value="2" />
           <entry key="project.open.time.1" value="1" />
           <entry key="project.open.time.18" value="1" />
@@ -47,21 +50,23 @@
           <entry key="project.open.time.4" value="1" />
           <entry key="project.open.time.52" value="1" />
           <entry key="project.open.time.63" value="1" />
+          <entry key="project.open.time.65" value="1" />
           <entry key="project.open.time.78" value="1" />
           <entry key="project.open.time.8" value="1" />
-          <entry key="project.opened" value="11" />
+          <entry key="project.open.time.87" value="1" />
+          <entry key="project.opened" value="13" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="6" />
-          <entry key="php" value="19676" />
+          <entry key="php" value="23442" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Blade" value="1589" />
-          <entry key="PHP" value="18046" />
+          <entry key="Blade" value="1693" />
+          <entry key="PHP" value="21708" />
           <entry key="PLAIN_TEXT" value="6" />
           <entry key="SQL" value="41" />
         </counts>
@@ -69,15 +74,15 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="js" value="1" />
-          <entry key="php" value="75" />
+          <entry key="php" value="83" />
           <entry key="sql" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Blade" value="15" />
+          <entry key="Blade" value="17" />
           <entry key="JavaScript" value="1" />
-          <entry key="PHP" value="60" />
+          <entry key="PHP" value="66" />
           <entry key="Scratch" value="1" />
         </counts>
       </usages-collector>
@@ -93,35 +98,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="515">
-              <caret line="199" column="43" lean-forward="true" selection-start-line="199" selection-start-column="19" selection-end-line="199" selection-end-column="43" />
+            <state relative-caret-position="327">
+              <caret line="510" column="89" selection-start-line="510" selection-start-column="50" selection-end-line="510" selection-end-column="89" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseValuationController.php">
+        <entry file="file://$PROJECT_DIR$/app/LeaseAssets.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="245">
-              <caret line="73" column="43" lean-forward="true" selection-start-line="73" selection-start-column="43" selection-end-line="73" selection-end-column="43" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Helpers/Helpers.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="283">
-              <caret line="1290" column="9" selection-start-line="1290" selection-start-column="9" selection-end-line="1290" selection-end-column="9" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="222">
-              <caret line="47" column="12" selection-start-line="47" selection-start-column="12" selection-end-line="47" selection-end-column="12" />
+            <state relative-caret-position="605">
+              <caret line="545" column="81" selection-start-line="545" selection-start-column="81" selection-end-line="545" selection-end-column="81" />
             </state>
           </provider>
         </entry>
@@ -138,13 +125,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>isSubsequentModification</find>
-      <find>incpi</find>
-      <find>api</find>
-      <find>lease-valuation-asset</find>
-      <find>equivalentPresentValueOfLeaseLiability</find>
-      <find>Docue</find>
-      <find>Reports</find>
       <find>home</find>
       <find>documents</find>
       <find>valuation-non-capitalised</find>
@@ -152,7 +132,6 @@
       <find>Lease Payments</find>
       <find>lease_end_date</find>
       <find>end_date</find>
-      <find>last_payment_end_date</find>
       <find>fetchAllPaymentsForAnnexure</find>
       <find>assetPaymentsForPresentValueCalculus</find>
       <find>presentValueOfLeaseLiability</find>
@@ -163,11 +142,19 @@
       <find>payout_time</find>
       <find>base_date</find>
       <find>immediate_previous_lease_end_date</find>
-      <find>final_payout_dates</find>
       <find>last_lease_payment_interval_end_date</find>
       <find>exportinterestdepreciation</find>
       <find>export</find>
       <find>previous_all_increase_or_decrease</find>
+      <find>$last_lease_payment_interval_end_date</find>
+      <find>switch</find>
+      <find>lease-asset-payment-due-dates-annexure</find>
+      <find>dueDatesAnne</find>
+      <find>last_payment_end_date</find>
+      <find>--</find>
+      <find>M-</find>
+      <find>final_payout_dates</find>
+      <find>fetchAllPaymentsForLeaseExpenseAnnexure</find>
     </findStrings>
     <replaceStrings>
       <replace>col-md-6 col-sm-6 btn-backnextBx</replace>
@@ -212,7 +199,6 @@
         <option value="$PROJECT_DIR$/app/LeaseResidualValue.php" />
         <option value="$PROJECT_DIR$/app/Lease.php" />
         <option value="$PROJECT_DIR$/public/css/custom.css" />
-        <option value="$PROJECT_DIR$/app/Helpers/Helpers.php" />
         <option value="$PROJECT_DIR$/public/js/custom.js" />
         <option value="$PROJECT_DIR$/database/seeds/PermissionSeeder.php" />
         <option value="$PROJECT_DIR$/database/migrations/2019_06_07_103311_add_permissions_to_permission_table.php" />
@@ -233,21 +219,22 @@
         <option value="$PROJECT_DIR$/database/migrations/2019_06_10_083556_add_permission_valuation_cap_ncap_and_reports.php" />
         <option value="$PROJECT_DIR$/resources/views/leasevaluation/overview.blade.php" />
         <option value="$PROJECT_DIR$/database/migrations/2019_06_17_093016_add_column_immediate_previous_lease_end_date_to_lease_assets_payments.php" />
-        <option value="$PROJECT_DIR$/app/LeaseAssets.php" />
         <option value="$PROJECT_DIR$/database/migrations/2019_06_19_061243_create_table_lease_expense_annexure_table.php" />
         <option value="$PROJECT_DIR$/app/LeaseExpenseAnnexure.php" />
         <option value="$PROJECT_DIR$/resources/views/leasevaluation/partials/_lease_expense_annexure.blade.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/LeasePaymentsController.php" />
-        <option value="$PROJECT_DIR$/app/LeaseAssetPayments.php" />
-        <option value="$PROJECT_DIR$/resources/views/lease/payments/_form.blade.php" />
         <option value="$PROJECT_DIR$/database/migrations/2019_06_20_120252_add_column_immediate_previous_lease_end_date_to_lease_assets_payments.php" />
         <option value="$PROJECT_DIR$/resources/views/leasevaluation/lease_expense_annexure.blade.php" />
         <option value="$PROJECT_DIR$/routes/web.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Leasevaluation/LeaseValuationController.php" />
         <option value="$PROJECT_DIR$/app/Exports/LeaseExpenseAnnexureExport.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseValuationController.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php" />
+        <option value="$PROJECT_DIR$/app/LeaseAssetPayments.php" />
+        <option value="$PROJECT_DIR$/app/Helpers/Helpers.php" />
+        <option value="$PROJECT_DIR$/resources/views/lease/payments/_form.blade.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/LeasePaymentsController.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php" />
+        <option value="$PROJECT_DIR$/app/LeaseAssets.php" />
       </list>
     </option>
   </component>
@@ -390,7 +377,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -401,18 +387,34 @@
             <path>
               <item name="Witsync-Lease-Management" type="b2602c69:ProjectViewProjectNode" />
               <item name="Witsync-Lease-Management" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Witsync-Lease-Management" type="b2602c69:ProjectViewProjectNode" />
               <item name="Witsync-Lease-Management" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="Exports" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Witsync-Lease-Management" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Witsync-Lease-Management" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="lease" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Witsync-Lease-Management" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Witsync-Lease-Management" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="lease" type="462c0819:PsiDirectoryNode" />
+              <item name="payments" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -423,7 +425,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../findaperformer_upgraded" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="settings.editor.selected.configurable" value="preferences.editor" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -604,12 +606,14 @@
       <workItem from="1560918651733" duration="12641000" />
       <workItem from="1560937499076" duration="10000" />
       <workItem from="1561005440709" duration="24597000" />
-      <workItem from="1561091206698" duration="12780000" />
+      <workItem from="1561091206698" duration="16731000" />
+      <workItem from="1561127267756" duration="659000" />
+      <workItem from="1561350182265" duration="26663000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1941227000" />
+    <option name="totallyTimeSpent" value="1972500000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -624,7 +628,7 @@
     <frame x="64" y="-11" width="1857" height="1092" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18297403" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18739635" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -640,7 +644,7 @@
       <window_info anchor="bottom" id="Docker" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="10" weight="0.32911393" />
       <window_info anchor="bottom" id="Database Changes" order="11" />
-      <window_info anchor="bottom" id="Event Log" order="12" sideWeight="0.50082827" side_tool="true" weight="0.32805908" />
+      <window_info anchor="bottom" id="Event Log" order="12" sideWeight="0.50082827" side_tool="true" weight="0.32704404" />
       <window_info anchor="bottom" id="Terminal" order="13" sideWeight="0.49917173" weight="0.32704404" />
       <window_info active="true" anchor="bottom" id="REST Client" order="14" weight="0.3755274" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -699,13 +703,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/resources/views/lease/lessor-details/index.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="430">
-          <caret line="158" column="60" lean-forward="true" selection-start-line="158" selection-start-column="60" selection-end-line="158" selection-end-column="60" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/SecurityDeposits.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="289">
@@ -871,13 +868,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/LeaseAssets.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="365">
-          <caret line="109" column="7" lean-forward="true" selection-start-line="109" selection-start-column="7" selection-end-line="109" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/database/migrations/2019_04_17_134119_create_table_interest_and_depreciation.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="345">
@@ -930,31 +920,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/lease/payments/_form.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="575">
-          <caret line="1269" column="57" selection-start-line="1269" selection-start-column="57" selection-end-line="1269" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/LeasePaymentsController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="346" column="53" selection-start-line="346" selection-start-column="40" selection-end-line="346" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/lease/payments/createpayment.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="390">
           <caret line="26" column="52" lean-forward="true" selection-start-line="26" selection-start-column="52" selection-end-line="26" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/LeaseAssetPayments.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="495">
-          <caret line="33" column="45" selection-start-line="33" selection-start-column="45" selection-end-line="33" selection-end-column="45" />
         </state>
       </provider>
     </entry>
@@ -969,13 +938,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="450">
           <caret line="32" selection-start-line="32" selection-end-line="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/routes/web.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="770">
-          <caret line="395" column="154" selection-start-line="395" selection-start-column="130" selection-end-line="395" selection-end-column="154" />
         </state>
       </provider>
     </entry>
@@ -1014,31 +976,81 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Helpers/Helpers.php">
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseValuationController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="283">
-          <caret line="1290" column="9" selection-start-line="1290" selection-start-column="9" selection-end-line="1290" selection-end-column="9" />
+        <state relative-caret-position="-825">
+          <caret line="42" column="5" lean-forward="true" selection-start-line="42" selection-start-column="5" selection-end-line="42" selection-end-column="5" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="222">
+        <state relative-caret-position="660">
           <caret line="47" column="12" selection-start-line="47" selection-start-column="12" selection-end-line="47" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/payments/_due_dates_annexure.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-225" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/LeasePaymentsController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="500">
+          <caret line="665" column="121" selection-start-line="665" selection-start-column="121" selection-end-line="665" selection-end-column="121" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Helpers/Helpers.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="732">
+          <caret line="204" column="73" selection-start-line="204" selection-start-column="59" selection-end-line="204" selection-end-column="73" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/LeaseAssetPayments.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="477">
+          <caret line="132" column="26" lean-forward="true" selection-start-line="132" selection-start-column="26" selection-end-line="132" selection-end-column="26" />
+          <folding>
+            <element signature="e#23#41#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/web.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="320">
+          <caret line="139" column="120" lean-forward="true" selection-start-line="139" selection-start-column="120" selection-end-line="139" selection-end-column="143" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/lease/payments/_form.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="669">
+          <caret line="1254" column="29" lean-forward="true" selection-start-line="1254" selection-start-column="29" selection-end-line="1254" selection-end-column="29" />
+          <folding>
+            <element signature="e#59491#60633#0#HTML" />
+            <element signature="e#60717#61780#0#HTML" />
+            <element signature="n#style#0;n#input#0;n#!!top" expanded="true" />
+            <element signature="e#223#230#1" expanded="true" />
+            <element signature="e#115#121#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/ReviewSubmitController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="515">
-          <caret line="199" column="43" lean-forward="true" selection-start-line="199" selection-start-column="19" selection-end-line="199" selection-end-column="43" />
+        <state relative-caret-position="327">
+          <caret line="510" column="89" selection-start-line="510" selection-start-column="50" selection-end-line="510" selection-end-column="89" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseValuationController.php">
+    <entry file="file://$PROJECT_DIR$/app/LeaseAssets.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="245">
-          <caret line="73" column="43" lean-forward="true" selection-start-line="73" selection-start-column="43" selection-end-line="73" selection-end-column="43" />
+        <state relative-caret-position="605">
+          <caret line="545" column="81" selection-start-line="545" selection-start-column="81" selection-end-line="545" selection-end-column="81" />
         </state>
       </provider>
     </entry>

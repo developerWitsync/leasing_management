@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class LeaseAssetPayments extends Model
@@ -113,5 +114,50 @@ class LeaseAssetPayments extends Model
      */
     protected function calculateUndiscountedValueForPaymentDueDates(){
         return $this->paymentDueDates->sum('total_payment_amount');
+    }
+
+    /**
+     * calculates the last Payment Interval end date
+     * considering that this date cannot go after the lease end date in case the date is getting after the lease end date we have to consider the lease end date
+     * @param $last_payment_date
+     * @param $lease_end_date
+     * @return Carbon
+     */
+    public function lastPaymentIntevalEndDate($last_payment_date, $lease_end_date){
+        if($this->payout_time == 1) {
+            //at interval start we will have to add the interval to the last payment date
+            switch ($this->payment_interval){
+                case 1 :
+                    // one-time payment will return the lease end date from here..
+                    $new_date = $lease_end_date;
+                    break;
+                case 2 :
+                    //this is the monthly payment and have to add 1 month to the last payment date
+                    $new_date = Carbon::parse($last_payment_date)->addMonth(1);
+                    break;
+                case 3 :
+                    $new_date = Carbon::parse($last_payment_date)->addMonth(3);
+                    break;
+                case 4 :
+                    $new_date = Carbon::parse($last_payment_date)->addMonth(6);
+                    break;
+                case 5 :
+                    $new_date = Carbon::parse($last_payment_date)->addMonth(12);
+                    break;
+                case 6 :
+                    $new_date = $last_payment_date;
+                    break;
+            }
+
+            if($new_date->greaterThanOrEqualTo($lease_end_date)){
+                $return = $lease_end_date;
+            } else {
+                $return = $new_date;
+            }
+            return $return;
+        } else {
+            //at interval end, we will just return the last payment date
+            return $last_payment_date;
+        }
     }
 }

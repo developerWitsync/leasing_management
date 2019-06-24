@@ -888,7 +888,7 @@
                     case 2:
                         //means selected option is monthly
                         @php
-                            $lease_end_date = \Carbon\Carbon::parse($asset->getLeaseEndDate($asset))->format('D M d Y');
+                            $lease_end_date = \Carbon\Carbon::parse($asset->getLeaseEndDate($asset))->subMonths(1)->format('D M d Y');
                             $calculated_date = $lease_end_date;
                         @endphp
                             _calculated_last_payment_date = new Date("{{ $calculated_date }}");
@@ -1102,12 +1102,11 @@
                             $('#overlay').hide();
                             removeOverlayAjax();
                             final_payout_dates = response['final_payout_dates'];
-                                    @if($subsequent_modify_required || $is_subsequent)
-                            var asset_lease_start_date = new Date('{{ \Carbon\Carbon::parse($lease->modifyLeaseApplication->last()->effective_from)->format('Y') ."-". \Carbon\Carbon::parse($lease->modifyLeaseApplication->last()->effective_from)->format('m') }}');
-                                    @else
-                            var asset_lease_start_date = new Date('{{ \Carbon\Carbon::parse($asset->accural_period)->format('Y') ."-". \Carbon\Carbon::parse($asset->accural_period)->format('m') }}');
-                                    @endif
-
+                            @if($subsequent_modify_required || $is_subsequent)
+                                var asset_lease_start_date = new Date('{{ \Carbon\Carbon::parse($lease->modifyLeaseApplication->last()->effective_from)->format('Y') ."-". \Carbon\Carbon::parse($lease->modifyLeaseApplication->last()->effective_from)->format('m') }}');
+                            @else
+                                var asset_lease_start_date = new Date('{{ \Carbon\Carbon::parse($asset->accural_period)->format('Y') ."-". \Carbon\Carbon::parse($asset->accural_period)->format('m') }}');
+                            @endif
                             var asset_lease_end_date = new Date('{{ \Carbon\Carbon::parse($asset->getLeaseEndDate($asset))->format('Y')."-".\Carbon\Carbon::parse($asset->getLeaseEndDate($asset))->format('m') }}');
                             //setting up datepicker calendar on each input field.. taking care of lease start date and lease end date as well....
 
@@ -1257,8 +1256,10 @@
                         }
                     }
 
+                    console.log(final_dates_array);
                     //find the first payment date and the last payment date here and fill the inputs with the values
                     var _last_payment_date = new Date(Math.max.apply(null, final_dates_array));
+
                     var _first_payment_date = new Date(Math.min.apply(null, final_dates_array));
 
                     $('#first_payment_start_date').datepicker('setDate', _first_payment_date);

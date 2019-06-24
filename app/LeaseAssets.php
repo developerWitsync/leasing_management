@@ -544,7 +544,6 @@ class LeaseAssets extends Model
                         `lease_assets_payments`.`asset_id` = {$asset->id}
                           and `lease_asset_payment_dates`.`date` >= '{$start_date}'
                           and `lease_asset_payment_dates`.`date` <= '{$end_date}'
-                          and `lease_assets_payments`.`type` <> '2'
                     GROUP BY `lease_asset_payment_dates`.`date`,`lease_asset_payment_dates`.`id`";
 
         $lease_payments = DB::select($sql);

@@ -663,12 +663,12 @@ class LeasePaymentsController extends Controller
                         //means that the payment is going to be made at the start of the interval
                         $month = Carbon::parse($request->start_date)->format('F');
                         $current_year = Carbon::parse($request->start_date)->format('Y');
-                        $final_payout_dates[$current_year][$month][$request->start_date] = $request->start_date;
+                        $final_payout_dates[$current_year][$month][Carbon::parse($request->start_date)->format('Y-m-d')] = Carbon::parse($request->start_date)->format('Y-m-d');
                     } else if ($request->payment_payout == 2) {
                         //means that the payment is going to be made at the end of the interval
                         $month = Carbon::parse($request->end_date)->format('F');
                         $current_year = Carbon::parse($request->end_date)->format('Y');
-                        $final_payout_dates[$current_year][$month][$request->end_date] = $request->end_date;
+                        $final_payout_dates[$current_year][$month][Carbon::parse($request->end_date)->format('Y-m-d')] = Carbon::parse($request->end_date)->format('Y-m-d');
                     }
                 }
 
