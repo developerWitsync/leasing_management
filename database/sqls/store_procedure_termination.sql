@@ -13,7 +13,7 @@
 
 DROP PROCEDURE IF EXISTS `present_value_of_lease_liability_termination`;
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `present_value_of_lease_liability_termination`(
+CREATE DEFINER=`witsyncf_flexsin`@`localhost` PROCEDURE `present_value_of_lease_liability_termination`(
 IN `termination_id` INT,
 IN `asset_id` INT,
 IN `base_date` DATE)
