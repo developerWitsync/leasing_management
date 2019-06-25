@@ -465,9 +465,11 @@ class ReviewSubmitController extends Controller
     }
 
     /**
-     * @todo  need to consider the lease termination option and residual value gurantee as well
+     * generate the lease expense annexure for the initial valuation only
+     * Lease expense annexure will always be generated for the initial valuation only
      * @param $lease
      * @param $modify_id
+     * @return bool
      */
     private function generateLeaseExpense($lease, $modify_id){
         try{
@@ -876,10 +878,6 @@ class ReviewSubmitController extends Controller
                                     $computed_lease_payment_expense = round(($amount_at_previous_date/$days_diff) * $days_diff_from_previous_date, 2);
                                 }
 
-//                                if($row == '2019-06-30' && $asset_payment->id == 20) {
-//                                    dd($previous_payment_date, $computed_lease_payment_expense, $amount_at_previous_date, $days_diff, $days_diff_from_previous_date,$row, $previous_date_array[$asset_payment->id]);
-//                                }
-
                                 //$annexure[$row][$asset_payment->id]
                                 $internal_array[$asset_payment->id] = [
                                     'payment_name' => $asset_payment->name,
@@ -904,6 +902,32 @@ class ReviewSubmitController extends Controller
 
                         $previous_date_array[$asset_payment->id] = $date_for_next_iteration;
                     }
+
+                    //will have to check here for the termination and Residual Option as well
+                    if(isset($lease_payments[$row])) {
+                        //fetch the termination option payments here..
+                        $termination_option  = collect($lease_payments[$row])->where('payment_type', '=', 'termination_penalty')->first();
+                        if($termination_option){
+                            $internal_array['termination_penalty'] = [
+                                'payment_name' => $termination_option->name,
+                                'date' => $row,
+                                'payment_amount' => $termination_option->total_amount_payable,
+                                'computed_lease_payment_expense' => $termination_option->total_amount_payable //no computation is required just need to use the same amount
+                            ];
+                        }
+
+                        //fetch the residual option payments here..
+                        $residual_option  = collect($lease_payments[$row])->where('payment_type', '=', 'residual_value')->first();
+                        if($residual_option){
+                            $internal_array['residual_value'] = [
+                                'payment_name' => $residual_option->name,
+                                'date' => $row,
+                                'payment_amount' => $residual_option->total_amount_payable,
+                                'computed_lease_payment_expense' => $residual_option->total_amount_payable //no computation is required just need to use the same amount
+                            ];
+                        }
+                    }
+
                     $total_computed_lease_expense = collect($internal_array)->sum('computed_lease_payment_expense');
 
                     $annexure[$row]['date'] = $row;
@@ -914,8 +938,6 @@ class ReviewSubmitController extends Controller
                     $annexure[$row]['payments_details'] = json_encode($internal_array);
                     $opening_or_payable = $opening_or_payable - $total_computed_lease_expense;
                 }
-
-               // echo "<pre>"; print_r($annexure); die();
 
                 DB::transaction(function () use ($annexure, $modify_id, $asset) {
                     //insert the dates data into the interest and depreciation table for the lease id

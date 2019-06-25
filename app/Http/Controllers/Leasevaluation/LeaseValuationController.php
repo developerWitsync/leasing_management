@@ -802,6 +802,12 @@ class LeaseValuationController extends Controller
         }
     }
 
+    /**
+     * generate the view for the lease expense annexure
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function leaseExpense($id, Request $request){
         try{
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())
@@ -815,14 +821,20 @@ class LeaseValuationController extends Controller
 
             return view('leasevaluation.lease_expense_annexure', compact(
                 'lease',
+                'asset',
                 'lease_expense_annexure',
                 'lease_payments'
             ));
         } catch (\Exception $e) {
-            dd($e);
+            abort(404);
         }
     }
 
+    /**
+     * exports the lease expense annexure
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
     public function exportLeaseExpenseAnnexure($id){
         try{
             $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())

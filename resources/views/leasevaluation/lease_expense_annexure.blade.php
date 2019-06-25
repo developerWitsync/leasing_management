@@ -7,8 +7,8 @@
 @endsection
 @section('content')
     <div class="leasingModuleOuter">
-        {{--<div class="leasingMainHd clearfix">{{ $asset->name }} <span> {{ $asset->category->title }} </span>--}}
-        {{--</div>--}}
+        <div class="leasingMainHd clearfix">{{ $asset->name }} <span> {{ $asset->category->title }} </span>
+        </div>
         <div class="assetsNameOuter">
             <div class="assetsTabs">
                 <ul>

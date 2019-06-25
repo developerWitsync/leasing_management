@@ -529,6 +529,7 @@ class LeaseAssets extends Model
                       `lease_assets_payments`.`id`,
                       `lease_assets_payments`.`name`,
                       `lease_asset_payment_dates`.`date`,
+                      'lease_asset_payments' as `payment_type`,
                       IF(ISNULL(`payment_escalation_dates`.`id`), `lease_asset_payment_dates`.`total_payment_amount` , `payment_escalation_dates`.`total_amount_payable`) as `total_amount_payable`
                     FROM
                         `lease_assets_payments`
@@ -557,6 +558,7 @@ class LeaseAssets extends Model
             $new_array['name'] = 'Residual Value';
             $new_array['date'] = Carbon::parse($end_date)->format('Y-m-d');
             $new_array['total_amount_payable'] = $asset->residualGuranteeValue->total_residual_gurantee_value;
+            $new_array['payment_type'] = 'residual_value';
             if (!empty($payment_dates)) {
                 $key = key($payment_dates);
                 $payment_dates = array_values($payment_dates);
@@ -579,6 +581,7 @@ class LeaseAssets extends Model
             $new_array['name'] = 'Termination Penalty';
             $new_array['date'] = $asset->terminationOption->lease_end_date;
             $new_array['total_amount_payable'] = $asset->terminationOption->termination_penalty;
+            $new_array['payment_type'] = 'termination_penalty';
             if (!empty($payment_dates)) {
                 $key = key($payment_dates);
                 $payment_dates = array_values($payment_dates);
