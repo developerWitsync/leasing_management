@@ -1265,3 +1265,23 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3931af', end
     padding: 10px;
     background-color: #f5f5f5;
 }
+
+.input_info_tooltip {
+    top: -2px;
+    position: relative;
+    right: 6px;
+}
+.categoriesOuter .form-group label {
+    width: auto;
+}
+
+.tooltip-inner {
+    max-width: 400px;
+    padding: 3px 8px;
+    color: #fff;
+    text-align: center;
+    background-color: #000;
+    border-radius: 4px;
+    font-size: 15px;
+    font-weight: 600;
+}
