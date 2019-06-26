@@ -163,6 +163,7 @@ class ModifyLeaseController extends Controller
 
                 $lease_modifications_history = ModifyLeaseApplication::query()->whereIn('business_account_id', getDependentUserIds())
                     ->where('lease_id', '=', $id)
+                    ->where('valuation', '=', 'Subsequent Valuation')
                     ->orderBy('created_at', 'desc')
                     ->first();
                 if($lease_modifications_history) {
@@ -176,6 +177,7 @@ class ModifyLeaseController extends Controller
                     }
                     $minDate = Carbon::parse($date)->addDay(1)->format('Y-m-d');
                 }
+
 
                 $maxDate = $asset->getLeaseEndDate($asset);
 

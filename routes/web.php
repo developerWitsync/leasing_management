@@ -390,6 +390,10 @@ Route::middleware('auth')->group(function () {
             Route::get('fetch-short-term-lease-assets',['as' => 'leasevaluation.ncap.shorttermassets', 'uses' => 'LeaseValuationController@fetchShortTermLeaseAssets']);
 
             Route::get('fetch-low-value-lease-assets',['as' => 'leasevaluation.ncap.lowvalueleaseassets', 'uses' => 'LeaseValuationController@fetchLowValueLeaseAssets']);
+
+            Route::get('lease-interest-expense-annexure/{id}',['as' => 'leasevaluation.ncap.expensereport', 'uses' => 'LeaseValuationController@leaseExpense']);
+
+            Route::get('export-lease-expense-annexure/{id}', ['as' => 'leasevaluation.cap.exportleaseexpenseannexure', 'uses' => 'LeaseValuationController@exportLeaseExpenseAnnexure']);
         });
 
         Route::get('show-escalation-chart/{id}', ['as' => 'lease.leasevaluation.escalationchart', 'uses' => 'LeaseValuationController@showEscalationChart']);

@@ -517,17 +517,99 @@ class LeaseAssets extends Model
     }
 
     /**
+     * Fetch the lease asset payments for the lease expense annexure in case of NCAP leases
+     * The purchase options will not be included here
+     * @param self $asset
+     * @param $start_date
+     * @param $end_date
+     * @return mixed
+     */
+    public function fetchAllPaymentsForLeaseExpenseAnnexure(self $asset, $start_date, $end_date){
+        $sql = "SELECT
+                      `lease_assets_payments`.`id`,
+                      `lease_assets_payments`.`name`,
+                      `lease_asset_payment_dates`.`date`,
+                      'lease_asset_payments' as `payment_type`,
+                      IF(ISNULL(`payment_escalation_dates`.`id`), `lease_asset_payment_dates`.`total_payment_amount` , `payment_escalation_dates`.`total_amount_payable`) as `total_amount_payable`
+                    FROM
+                        `lease_assets_payments`
+                            LEFT JOIN
+                        `lease_asset_payment_dates` ON `lease_assets_payments`.`id` = `lease_asset_payment_dates`.`payment_id`
+                            LEFT JOIN
+                        `payment_escalation_dates` ON (
+                            `lease_assets_payments`.`id` = `payment_escalation_dates`.`payment_id`
+                             AND year(`lease_asset_payment_dates`.`date`) = `payment_escalation_dates`.`escalation_year` 
+                             AND month(`lease_asset_payment_dates`.`date`) = `payment_escalation_dates`.`escalation_month`
+                          )
+                    WHERE
+                        `lease_assets_payments`.`asset_id` = {$asset->id}
+                          and `lease_asset_payment_dates`.`date` >= '{$start_date}'
+                          and `lease_asset_payment_dates`.`date` <= '{$end_date}'
+                    GROUP BY `lease_asset_payment_dates`.`date`,`lease_asset_payment_dates`.`id`";
+
+        $lease_payments = DB::select($sql);
+
+        //add the residual value guarantee as well..
+        if ($asset->residualGuranteeValue->any_residual_value_gurantee == "yes") {
+
+            $payment_dates = array_where($lease_payments, function ($value) use ($end_date) {
+                return Carbon::parse($end_date)->equalTo(Carbon::parse($value->date));
+            });
+            $new_array['name'] = 'Residual Value';
+            $new_array['date'] = Carbon::parse($end_date)->format('Y-m-d');
+            $new_array['total_amount_payable'] = $asset->residualGuranteeValue->total_residual_gurantee_value;
+            $new_array['payment_type'] = 'residual_value';
+            if (!empty($payment_dates)) {
+                $key = key($payment_dates);
+                $payment_dates = array_values($payment_dates);
+                $new_array['total_amount_payable'] = $asset->residualGuranteeValue->total_residual_gurantee_value + $payment_dates[0]->total_amount_payable;
+                $lease_payments[$key] = (object)$new_array;
+            } else {
+                $new_array['total_amount_payable'] = $asset->residualGuranteeValue->total_residual_gurantee_value;
+                array_push($lease_payments, (object)$new_array);
+            }
+
+        }
+
+        //add the termination, residual and purchase to the last key if exists
+        if ($asset->terminationOption->lease_termination_option_available == "yes" && $asset->terminationOption->exercise_termination_option_available == "yes" && $asset->terminationOption->termination_penalty_applicable == "yes") {
+
+            $termination_date = $asset->terminationOption->lease_end_date;
+            $payment_dates = array_where($lease_payments, function ($value) use ($termination_date) {
+                return Carbon::parse($termination_date)->equalTo(Carbon::parse($value->date));
+            });
+            $new_array['name'] = 'Termination Penalty';
+            $new_array['date'] = $asset->terminationOption->lease_end_date;
+            $new_array['total_amount_payable'] = $asset->terminationOption->termination_penalty;
+            $new_array['payment_type'] = 'termination_penalty';
+            if (!empty($payment_dates)) {
+                $key = key($payment_dates);
+                $payment_dates = array_values($payment_dates);
+                $new_array['total_amount_payable'] = $asset->terminationOption->termination_penalty + $payment_dates[0]->total_amount_payable;
+                $lease_payments[$key] = (object)$new_array;
+            } else {
+                $new_array['total_amount_payable'] = $asset->terminationOption->termination_penalty;
+                array_push($lease_payments, (object)$new_array);
+            }
+        }
+
+        return $lease_payments;
+    }
+
+    /**
      * fetches all the payments for the asset including the escalations and including the termination, residual and purchase options as well
      * this function will be used on review submit controller to generate the interest and depreciation annexure
      * this function is called on the Lease Valuation to generate the annexure for the "Modified Retrospective Approach by adjusting the Opening Equity" method
      * @param self $asset
      * @param $start_date
      * @param $end_date
+     * @param bool $include_purchase_option
      * @return mixed
      */
     public function fetchAllPaymentsForAnnexure(self $asset, $start_date, $end_date)
     {
         $sql = "SELECT 
+                      `lease_assets_payments`.`name`,
                         `lease_asset_payment_dates`.`date`,
                         SUM(IF(ISNULL(`payment_escalation_dates`.`id`), `lease_asset_payment_dates`.`total_payment_amount` , `payment_escalation_dates`.`total_amount_payable`)) as `total_amount_payable`
                     FROM
@@ -555,7 +637,7 @@ class LeaseAssets extends Model
             $payment_dates = array_where($lease_payments, function ($value) use ($end_date) {
                 return Carbon::parse($end_date)->equalTo(Carbon::parse($value->date));
             });
-
+            $new_array['name'] = 'Residual Value';
             $new_array['date'] = Carbon::parse($end_date)->format('Y-m-d');
             $new_array['total_amount_payable'] = $asset->residualGuranteeValue->total_residual_gurantee_value;
             if (!empty($payment_dates)) {
@@ -577,7 +659,7 @@ class LeaseAssets extends Model
             $payment_dates = array_where($lease_payments, function ($value) use ($termination_date) {
                 return Carbon::parse($termination_date)->equalTo(Carbon::parse($value->date));
             });
-
+            $new_array['name'] = 'Termination Penalty';
             $new_array['date'] = $asset->terminationOption->lease_end_date;
             $new_array['total_amount_payable'] = $asset->terminationOption->termination_penalty;
             if (!empty($payment_dates)) {
@@ -591,12 +673,14 @@ class LeaseAssets extends Model
             }
         }
 
+
         //add the purchase option as well as well..
         if ($asset->purchaseOption && $asset->purchaseOption->purchase_option_clause == "yes" && $asset->purchaseOption->purchase_option_exerecisable == "yes") {
             $purchase_date = $asset->purchaseOption->expected_purchase_date;
             $payment_dates = array_where($lease_payments, function ($value) use ($purchase_date) {
                 return Carbon::parse($purchase_date)->equalTo(Carbon::parse($value->date));
             });
+            $new_array['name'] = 'Purchase Option';
             $new_array['date'] = $asset->purchaseOption->expected_purchase_date;
             $new_array['total_amount_payable'] = $asset->purchaseOption->purchase_price;
             if (!empty($payment_dates)) {

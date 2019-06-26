@@ -1,4 +1,4 @@
-CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `lease_documents`  AS
+CREATE OR REPLACE ALGORITHM=UNDEFINED DEFINER=`witsyncf_flexsin`@`localhost` SQL SECURITY DEFINER VIEW `lease_documents`  AS
 (SELECT
     `lease`.`id` AS `lease_id`,
     'Copy Of Signed Contract' as `type`,

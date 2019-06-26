@@ -59,6 +59,10 @@
                             <a href="{{ route('leasevaluation.ncap.asset', ['id' => $lease->id]) }}" class="active">Overivew</a>
                         </li>
 
+                        <li>
+                            <a href="{{ route('leasevaluation.ncap.expensereport', ['id' => $lease->id]) }}">Lease Expense</a>
+                        </li>
+
                     @endif
 
                 </ul>

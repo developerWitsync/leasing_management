@@ -11,11 +11,13 @@ namespace App\Http\Controllers\Leasevaluation;
 use App\CategoriesLeaseAssetExcluded;
 use App\DiscountRateChartView;
 use App\Exports\InterestAndDepreciationExport;
+use App\Exports\LeaseExpenseAnnexureExport;
 use App\GeneralSettings;
 use App\HistoricalCarryingAmountAnnexure;
 use App\Http\Controllers\Controller;
 use App\InterestAndDepreciation;
 use App\LeaseAssetPayments;
+use App\LeaseExpenseAnnexure;
 use App\LeaseHistory;
 use App\PaymentEscalationDetails;
 use App\ReportingCurrencySettings;
@@ -796,6 +798,53 @@ class LeaseValuationController extends Controller
                 'asset'
             ));
         }catch (\Exception $e) {
+            abort(404);
+        }
+    }
+
+    /**
+     * generate the view for the lease expense annexure
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function leaseExpense($id, Request $request){
+        try{
+            $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())
+                ->where('id', '=', $id)
+                ->firstOrFail();
+
+            $asset = $lease->assets()->first(); //there will only be a single lease asset for each lease...
+
+            $lease_expense_annexure = LeaseExpenseAnnexure::query()->where('asset_id', '=', $asset->id)->get();
+            $lease_payments = LeaseExpenseAnnexure::query()->where('asset_id', '=', $asset->id)->first();
+
+            return view('leasevaluation.lease_expense_annexure', compact(
+                'lease',
+                'asset',
+                'lease_expense_annexure',
+                'lease_payments'
+            ));
+        } catch (\Exception $e) {
+            abort(404);
+        }
+    }
+
+    /**
+     * exports the lease expense annexure
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function exportLeaseExpenseAnnexure($id){
+        try{
+            $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())
+                ->where('id', '=', $id)
+                ->firstOrFail();
+
+            $asset = $lease->assets()->first(); //there will only be a single lease asset for each lease...
+
+            return Excel::download(new LeaseExpenseAnnexureExport($asset->id), 'lease_expense_annexure.xlsx');
+        } catch (\Exception $e){
             abort(404);
         }
     }

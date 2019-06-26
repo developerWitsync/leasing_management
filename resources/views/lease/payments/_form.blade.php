@@ -266,6 +266,51 @@
         </div>
     </div>
 
+    <div class="categoriesOuter clearfix immediate_previous_lease_end_date" style="@if(old('payout_time', $payment->payout_time) == 2) @else display: none @endif">
+
+        @if(\Carbon\Carbon::parse($asset->lease_start_date)->greaterThanOrEqualTo(getParentDetails()->accountingStandard->base_date))
+        <div class="categoriesHd">
+            First Lease Interval Start Date
+        </div>
+        @else
+        <div class="categoriesHd">
+            Immediate Previous Lease End Date
+        </div>
+        @endif
+        <div class="form-group{{ $errors->has('immediate_previous_lease_end_date') ? ' has-error' : '' }} required">
+            <label for="immediate_previous_lease_end_date" class="col-md-12 control-label">Immediate Previous Lease End Date</label>
+            <div class="col-md-12">
+                <input id="immediate_previous_lease_end_date" type="text" placeholder="Last Lease Payment End Date"
+                       class="form-control lease_period2" name="immediate_previous_lease_end_date"
+                       value="{{ old('immediate_previous_lease_end_date',$payment->immediate_previous_lease_end_date) }}" autocomplete="off">
+                @if ($errors->has('immediate_previous_lease_end_date'))
+                    <span class="help-block">
+                    <strong>{{ $errors->first('immediate_previous_lease_end_date') }}</strong>
+                </span>
+                @endif
+            </div>
+        </div>
+    </div>
+
+    <div class="categoriesOuter clearfix last_lease_payment_interval_end_date" style="@if(old('payout_time', $payment->payout_time) == 2) display: none @else  @endif">
+        <div class="categoriesHd">
+            Last Lease Payment Interval End Date
+        </div>
+        <div class="form-group{{ $errors->has('last_lease_payment_interval_end_date') ? ' has-error' : '' }} required">
+            <label for="last_lease_payment_interval_end_date" class="col-md-12 control-label">Last Lease Payment Interval End Date</label>
+            <div class="col-md-12">
+                <input id="last_lease_payment_interval_end_date" type="text" placeholder="Last Lease Payment Interval End Date"
+                       class="form-control lease_period2" name="last_lease_payment_interval_end_date"
+                       value="{{ old('last_lease_payment_interval_end_date',$payment->last_lease_payment_interval_end_date) }}" autocomplete="off">
+                @if ($errors->has('last_lease_payment_interval_end_date'))
+                    <span class="help-block">
+                        <strong>{{ $errors->first('last_lease_payment_interval_end_date') }}</strong>
+                    </span>
+                @endif
+            </div>
+        </div>
+    </div>
+
     <div class="categoriesOuter clearfix variable_basis_amount_determinable">
         <div class="categoriesHd">
             Lease Payments
@@ -735,6 +780,53 @@
             }
         });
 
+        $("#immediate_previous_lease_end_date").datepicker({
+            dateFormat: "dd-M-yy",
+            changeYear: true,
+            changeMonth: true,
+            maxDate: new Date($("#first_payment_start_date").val()),
+            @if($subsequent_modify_required || $is_subsequent)
+            minDate: new Date('{{ $lease->modifyLeaseApplication->last()->effective_from }}'),
+            @else
+            @if($asset->using_lease_payment == '1')
+            //cannpt go before the base date...
+            minDate: new Date('{{ getParentDetails()->accountingStandard->base_date }}'),
+            @else
+            //cannot go before the lease start date..
+            minDate: new Date('{{ $asset->accural_period }}'),
+            @endif
+            @endif
+            {!!  getYearRanage() !!}
+            onSelect: function (date, instance) {
+                {{--var _ajax_url = '{{route("lease.checklockperioddate")}}';--}}
+                {{--checklockperioddate(date, instance, _ajax_url);--}}
+            }
+        });
+
+        $("#last_lease_payment_interval_end_date").datepicker({
+            dateFormat: "dd-M-yy",
+            changeYear: true,
+            changeMonth: true,
+            //minDate: new Date($("#last_payment_end_date").val()),
+            @if($subsequent_modify_required || $is_subsequent)
+            minDate: new Date('{{ $lease->modifyLeaseApplication->last()->effective_from }}'),
+            @else
+            @if($asset->using_lease_payment == '1')
+            //cannpt go before the base date...
+            minDate: new Date('{{ getParentDetails()->accountingStandard->base_date }}'),
+            @else
+            //cannot go before the lease start date..
+            minDate: new Date('{{ $asset->accural_period }}'),
+            @endif
+                    @endif
+            maxDate: new Date('{{ ($asset->getLeaseEndDate($asset)) }}'),
+            {!!  getYearRanage() !!}
+            onSelect: function (date, instance) {
+                {{--var _ajax_url = '{{route("lease.checklockperioddate")}}';--}}
+                {{--checklockperioddate(date, instance, _ajax_url);--}}
+            }
+        });
+
         $("#last_payment_end_date").datepicker({
             dateFormat: "dd-M-yy",
             changeYear: true,
@@ -747,7 +839,7 @@
             minDate: new Date('{{ getParentDetails()->accountingStandard->base_date }}'),
             @else
             //cannot go before the lease start date..
-            minDate: new Date('{{ $asset->lease_accural_period }}'),
+            minDate: new Date('{{ $asset->accural_period }}'),
             @endif
                     @endif
             maxDate: new Date('{{ ($asset->getLeaseEndDate($asset)) }}'),
@@ -819,7 +911,7 @@
                     case 2:
                         //means selected option is monthly
                         @php
-                            $lease_end_date = \Carbon\Carbon::parse($asset->getLeaseEndDate($asset))->format('D M d Y');
+                            $lease_end_date = \Carbon\Carbon::parse($asset->getLeaseEndDate($asset))->subMonths(1)->format('D M d Y');
                             $calculated_date = $lease_end_date;
                         @endphp
                             _calculated_last_payment_date = new Date("{{ $calculated_date }}");
@@ -860,17 +952,31 @@
         $('select[name="payout_time"] , select[name="payment_interval"]').on('change', function () {
 
             var _value = parseInt($('select[name="payout_time"]').val());
+
+            //place the conditions for the immediate_previous_lease_end_date and other fields
+            if(_value == 1) {
+                //at lease interval start date
+                $(".immediate_previous_lease_end_date").hide();
+                $(".last_lease_payment_interval_end_date").show();
+            } else if(_value == 2) {
+                //at lease interval end date
+                $(".immediate_previous_lease_end_date").show();
+                $(".last_lease_payment_interval_end_date").hide();
+            } else {
+
+            }
+
             var _selected_payment_interval = parseInt($('select[name="payment_interval"]').val());
 
-                    @if($subsequent_modify_required || $is_subsequent)
-            var _start_date = new Date("{{ date('D M d Y', strtotime($lease->modifyLeaseApplication->last()->effective_from)) }}");
-                    @else
-            var _start_date = new Date("{{ date('D M d Y', strtotime($asset->accural_period)) }}");
+            @if($subsequent_modify_required || $is_subsequent)
+                var _start_date = new Date("{{ date('D M d Y', strtotime($lease->modifyLeaseApplication->last()->effective_from)) }}");
+            @else
+                var _start_date = new Date("{{ date('D M d Y', strtotime($asset->accural_period)) }}");
             @if($asset->using_lease_payment == '1' && \Carbon\Carbon::parse($asset->accural_period)->lessThan(\Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)))
             //cannot go before the base date...
-            var _start_date = new Date("{{ date('D M d Y', strtotime(getParentDetails()->accountingStandard->base_date)) }}");
-                    @endif
-                    @endif
+                var _start_date = new Date("{{ date('D M d Y', strtotime(getParentDetails()->accountingStandard->base_date)) }}");
+            @endif
+            @endif
 
 
             var _end_date = new Date("{{ date('D M d Y', strtotime($asset->getLeaseEndDate($asset))) }}");
@@ -1019,12 +1125,11 @@
                             $('#overlay').hide();
                             removeOverlayAjax();
                             final_payout_dates = response['final_payout_dates'];
-                                    @if($subsequent_modify_required || $is_subsequent)
-                            var asset_lease_start_date = new Date('{{ \Carbon\Carbon::parse($lease->modifyLeaseApplication->last()->effective_from)->format('Y') ."-". \Carbon\Carbon::parse($lease->modifyLeaseApplication->last()->effective_from)->format('m') }}');
-                                    @else
-                            var asset_lease_start_date = new Date('{{ \Carbon\Carbon::parse($asset->accural_period)->format('Y') ."-". \Carbon\Carbon::parse($asset->accural_period)->format('m') }}');
-                                    @endif
-
+                            @if($subsequent_modify_required || $is_subsequent)
+                                var asset_lease_start_date = new Date('{{ \Carbon\Carbon::parse($lease->modifyLeaseApplication->last()->effective_from)->format('Y') ."-". \Carbon\Carbon::parse($lease->modifyLeaseApplication->last()->effective_from)->format('m') }}');
+                            @else
+                                var asset_lease_start_date = new Date('{{ \Carbon\Carbon::parse($asset->accural_period)->format('Y') ."-". \Carbon\Carbon::parse($asset->accural_period)->format('m') }}');
+                            @endif
                             var asset_lease_end_date = new Date('{{ \Carbon\Carbon::parse($asset->getLeaseEndDate($asset))->format('Y')."-".\Carbon\Carbon::parse($asset->getLeaseEndDate($asset))->format('m') }}');
                             //setting up datepicker calendar on each input field.. taking care of lease start date and lease end date as well....
 
@@ -1155,18 +1260,38 @@
 
                     $('#last_payment_end_date').datepicker('setDate', _last_payment_date);
 
+                    $("#last_lease_payment_interval_end_date").datepicker( "option", "minDate", _last_payment_date);
+
+                    $("#immediate_previous_lease_end_date").datepicker( "option", "maxDate", _first_payment_date);
+
                 } else {
                     //not edited and the user have directly clicked on the edit button
 
                     var html = '';
-                    //console.log(final_payout_dates);
+                    var final_dates_array = new Array();
+
                     for (var item in final_payout_dates) {
                         for (var month in final_payout_dates[item]) {
                             for (payout_date in final_payout_dates[item][month]) {
+                                final_dates_array.push(new Date(payout_date));
                                 html += '<input type="hidden" class="altered_payment_due_date" name="altered_payment_due_date[]" value="' + payout_date + '">';
                             }
                         }
                     }
+
+                    console.log(final_dates_array);
+                    //find the first payment date and the last payment date here and fill the inputs with the values
+                    var _last_payment_date = new Date(Math.max.apply(null, final_dates_array));
+
+                    var _first_payment_date = new Date(Math.min.apply(null, final_dates_array));
+
+                    $('#first_payment_start_date').datepicker('setDate', _first_payment_date);
+
+                    $('#last_payment_end_date').datepicker('setDate', _last_payment_date);
+
+                    $("#last_lease_payment_interval_end_date").datepicker( "option", "minDate", _last_payment_date);
+
+                    $("#immediate_previous_lease_end_date").datepicker( "option", "maxDate", _first_payment_date);
                 }
 
                 if (html != "") {

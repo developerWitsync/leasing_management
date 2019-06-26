@@ -157,8 +157,8 @@ class HomeController extends Controller
 
                 //and `json_data_steps`->'$."underlying_asset"."specific_use"' = 1
                 $sql = "SELECT 
-                            SUM(`json_data_steps`->>'$.\"underlying_asset\".\"value_of_lease_asset\"') AS `value_of_lease_asset`,
-                            SUM(`json_data_steps`->>'$.\"low_value\".\"undiscounted_lease_payment\"') AS `undiscounted_lease_payment`
+                            SUM(`json_data_steps`->>'$.\"underlying_asset\".\"lease_liablity_value\"') AS `value_of_lease_asset`,
+                            SUM(`json_data_steps`->>'$.\"underlying_asset\".\"undiscounted_value\"') AS `undiscounted_lease_payment`
                         FROM
                             lease_history
                                 JOIN
@@ -208,8 +208,8 @@ class HomeController extends Controller
 
                 //and `json_data_steps`->'$."underlying_asset"."specific_use"' = 1
                 $sql = "SELECT 
-                            SUM(`json_data_steps`->>'$.\"underlying_asset\".\"value_of_lease_asset\"') AS `value_of_lease_asset`,
-                            SUM(`json_data_steps`->>'$.\"low_value\".\"undiscounted_lease_payment\"') AS `undiscounted_lease_payment`,
+                            SUM(`json_data_steps`->>'$.\"underlying_asset\".\"lease_liablity_value\"') AS `value_of_lease_asset`,
+                            SUM(`json_data_steps`->>'$.\"underlying_asset\".\"undiscounted_value\"') AS `undiscounted_lease_payment`,
                             lease_assets.category_id,
                             lease_assets_categories.title
                         FROM

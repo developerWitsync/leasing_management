@@ -10,7 +10,7 @@
 --
 -- Procedures
 --
-CREATE DEFINER=`root`@`localhost` PROCEDURE `present_value_of_lease_liability`(
+CREATE DEFINER=`witsyncf_flexsin`@`localhost` PROCEDURE `present_value_of_lease_liability`(
 IN `payment_year` INT,
 IN `payment_month` INT,
 IN `base_date` DATE,
