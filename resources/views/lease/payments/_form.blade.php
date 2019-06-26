@@ -785,6 +785,17 @@
             changeYear: true,
             changeMonth: true,
             maxDate: new Date($("#first_payment_start_date").val()),
+            @if($subsequent_modify_required || $is_subsequent)
+            minDate: new Date('{{ $lease->modifyLeaseApplication->last()->effective_from }}'),
+            @else
+            @if($asset->using_lease_payment == '1')
+            //cannpt go before the base date...
+            minDate: new Date('{{ getParentDetails()->accountingStandard->base_date }}'),
+            @else
+            //cannot go before the lease start date..
+            minDate: new Date('{{ $asset->accural_period }}'),
+            @endif
+            @endif
             {!!  getYearRanage() !!}
             onSelect: function (date, instance) {
                 {{--var _ajax_url = '{{route("lease.checklockperioddate")}}';--}}
@@ -796,7 +807,19 @@
             dateFormat: "dd-M-yy",
             changeYear: true,
             changeMonth: true,
-            minDate: new Date($("#last_payment_end_date").val()),
+            //minDate: new Date($("#last_payment_end_date").val()),
+            @if($subsequent_modify_required || $is_subsequent)
+            minDate: new Date('{{ $lease->modifyLeaseApplication->last()->effective_from }}'),
+            @else
+            @if($asset->using_lease_payment == '1')
+            //cannpt go before the base date...
+            minDate: new Date('{{ getParentDetails()->accountingStandard->base_date }}'),
+            @else
+            //cannot go before the lease start date..
+            minDate: new Date('{{ $asset->accural_period }}'),
+            @endif
+                    @endif
+            maxDate: new Date('{{ ($asset->getLeaseEndDate($asset)) }}'),
             {!!  getYearRanage() !!}
             onSelect: function (date, instance) {
                 {{--var _ajax_url = '{{route("lease.checklockperioddate")}}';--}}
@@ -816,7 +839,7 @@
             minDate: new Date('{{ getParentDetails()->accountingStandard->base_date }}'),
             @else
             //cannot go before the lease start date..
-            minDate: new Date('{{ $asset->lease_accural_period }}'),
+            minDate: new Date('{{ $asset->accural_period }}'),
             @endif
                     @endif
             maxDate: new Date('{{ ($asset->getLeaseEndDate($asset)) }}'),

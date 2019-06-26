@@ -502,3 +502,10 @@
         </div>
     </div>
 @endsection
+@section('footer-script')
+    <script>
+        $('#submitLeaseForm').on('submit', function(){
+            showOverlayForAjax();
+        });
+    </script>
+@endsection

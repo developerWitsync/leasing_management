@@ -547,13 +547,13 @@ class ReviewSubmitController extends Controller
                         $last_lease_payment_interval_end_date[$asset_payment->id] = $asset_payment->last_lease_payment_interval_end_date;
                         //will have to sum the payment interval to the last payment date here...
                         //here will also have to add the current payment interval to the last payment date as well..
-                        $payments_last_interval_end_date[$asset_payment->id] = Carbon::parse($asset_payment->lastPaymentIntevalEndDate($last_payment_date->date, $end_date))->subDay(1);
-                        $rows[] = Carbon::parse($asset_payment->lastPaymentIntevalEndDate($last_payment_date->date, $end_date))->subDay(1)->format('Y-m-d');
+                        $payments_last_interval_end_date[$asset_payment->id] = Carbon::parse($asset_payment->last_lease_payment_interval_end_date);
+                        $rows[] = $asset_payment->last_lease_payment_interval_end_date;
                         //$payments_last_interval_end_date[$asset_payment->id] =
                     } else if($asset_payment->payout_time === 2){
                         //substracted the 1 day so that we will not exclude the date in the database...
                         $immediate_previous_lease_end_date[$asset_payment->id] = Carbon::parse($asset_payment->immediate_previous_lease_end_date)->subDay(1)->format('Y-m-d');
-                        $payments_last_interval_end_date[$asset_payment->id] = Carbon::parse($asset_payment->lastPaymentIntevalEndDate($last_payment_date->date, $end_date));
+                        $payments_last_interval_end_date[$asset_payment->id] = Carbon::parse($last_payment_date->date);
                         $rows[] = Carbon::parse($asset_payment->lastPaymentIntevalEndDate($last_payment_date->date, $end_date))->format('Y-m-d');
                     }
                     $previous_date_array[$asset_payment->id] = $base_date->format('Y-m-d');
@@ -647,7 +647,7 @@ class ReviewSubmitController extends Controller
                                     $computed_lease_payment_expense = round(($amount_at_previous_date/$days_diff) * $days_diff_from_previous_date, 2);
                                 }
 
-                                //$annexure[$row][$asset_payment->id]
+
                                 $internal_array[$asset_payment->id] = [
                                     'payment_name' => $asset_payment->name,
                                     'date' => $row,
@@ -878,7 +878,7 @@ class ReviewSubmitController extends Controller
                                     $computed_lease_payment_expense = round(($amount_at_previous_date/$days_diff) * $days_diff_from_previous_date, 2);
                                 }
 
-                                //$annexure[$row][$asset_payment->id]
+
                                 $internal_array[$asset_payment->id] = [
                                     'payment_name' => $asset_payment->name,
                                     'date' => $row,
@@ -887,6 +887,14 @@ class ReviewSubmitController extends Controller
                                 ];
 
                             } else {
+
+
+                                if($asset_payment->payout_time === 1) {
+                                    $date_for_next_iteration = $row;
+                                } elseif ($asset_payment->payout_time === 2) {
+                                    $date_for_next_iteration = $immediate_previous_lease_end_date[$asset_payment->id];
+                                }
+
 
                                 //$annexure[$row][$asset_payment->id]
                                 $internal_array[$asset_payment->id] = [
@@ -938,6 +946,8 @@ class ReviewSubmitController extends Controller
                     $annexure[$row]['payments_details'] = json_encode($internal_array);
                     $opening_or_payable = $opening_or_payable - $total_computed_lease_expense;
                 }
+
+//                echo "<pre>"; print_r($annexure); die();
 
                 DB::transaction(function () use ($annexure, $modify_id, $asset) {
                     //insert the dates data into the interest and depreciation table for the lease id
