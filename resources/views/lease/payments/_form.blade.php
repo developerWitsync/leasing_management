@@ -279,6 +279,9 @@
         @endif
         <div class="form-group{{ $errors->has('immediate_previous_lease_end_date') ? ' has-error' : '' }} required">
             <label for="immediate_previous_lease_end_date" class="col-md-12 control-label">Immediate Previous Lease End Date</label>
+            <a href="javascript:void(0);" class="btn-link" title="Please select the date at which the first lease interval starts, i.e., the date from which the lease accrual period starts.
+This date is required for auto-computation of lease expenses in cases where the lease payment not qualify for capitalization as per conditions of the New Lease Accounting Standard.
+Example: If the Lease Interval is quarterly, Lease payment made at the end of the interval and the first lease payment made on March 31, 20XX, so the first lease interval start date should be January 01, 20XX." data-toggle="tooltip"><i class="fa fa-info-circle input_info_tooltip"></i></a>
             <div class="col-md-12">
                 <input id="immediate_previous_lease_end_date" type="text" placeholder="Last Lease Payment End Date"
                        class="form-control lease_period2" name="immediate_previous_lease_end_date"
@@ -298,6 +301,7 @@
         </div>
         <div class="form-group{{ $errors->has('last_lease_payment_interval_end_date') ? ' has-error' : '' }} required">
             <label for="last_lease_payment_interval_end_date" class="col-md-12 control-label">Last Lease Payment Interval End Date</label>
+            <a href="javascript:void(0);" class="btn-link" title="Please select the date at which the last lease advance payment interval ends, i.e., the date at which the lease interval advance gets fully amortized. This date is required for auto-computation of lease expenses in cases where the lease payment not qualify for capitalization as per conditions of the New Lease Accounting Standard. Example: If the Lease Interval is quarterly, Lease payment made at the start of the interval and the last lease advance payment made on January 01, 20XX, so the last lease payment interval should end on March 31, 20XX." data-toggle="tooltip"><i class="fa fa-info-circle input_info_tooltip"></i></a>
             <div class="col-md-12">
                 <input id="last_lease_payment_interval_end_date" type="text" placeholder="Last Lease Payment Interval End Date"
                        class="form-control lease_period2" name="last_lease_payment_interval_end_date"
@@ -553,6 +557,11 @@
     <script>
 
         $(function () {
+
+            $(document).ready(function(){
+                $('[data-toggle="tooltip"]').tooltip();
+            });
+
 
             $('#import_dates').change(function () {
                 $('#import_dates').show();
