@@ -3,9 +3,14 @@
   <component name="ChangeListManager">
     <list default="true" id="1c290435-4779-45fe-873f-5594138f8734" name="Default Changelist" comment="Merge branch 'master' of http://100.100.7.4:8081/root/Witsync-Lease-Management&#10;&#10;# Conflicts:&#10;#&#9;app/Helpers/Helpers.php&#10;#&#9;config/settings.php&#10;#&#9;public/css/custom.css">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/css/custom.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/custom.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/jquery-ui.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/jquery-ui.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Helpers/Helpers.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Helpers/Helpers.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/custom.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/custom.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/lease/payments/_form.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/lease/payments/_form.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/settings/classification/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/settings/classification/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/settings/currencies/_foreign_transaction_settings.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/settings/currencies/_foreign_transaction_settings.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/settings/currencies/_reporting_currencies.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/settings/currencies/_reporting_currencies.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/settings/general/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/settings/general/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/settings/leaseassets/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/settings/leaseassets/index.blade.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -39,9 +44,10 @@
     <session id="1678134399">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="16" />
-          <entry key="project.open.time.0" value="3" />
+          <entry key="project.closed" value="18" />
+          <entry key="project.open.time.0" value="4" />
           <entry key="project.open.time.1" value="1" />
+          <entry key="project.open.time.14" value="1" />
           <entry key="project.open.time.18" value="1" />
           <entry key="project.open.time.2" value="1" />
           <entry key="project.open.time.3" value="1" />
@@ -55,23 +61,23 @@
           <entry key="project.open.time.78" value="1" />
           <entry key="project.open.time.8" value="2" />
           <entry key="project.open.time.87" value="1" />
-          <entry key="project.opened" value="18" />
+          <entry key="project.opened" value="20" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="css" value="40" />
           <entry key="dummy" value="6" />
-          <entry key="js" value="1" />
-          <entry key="php" value="25606" />
+          <entry key="js" value="42" />
+          <entry key="php" value="26349" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Blade" value="2589" />
+          <entry key="Blade" value="2994" />
           <entry key="CSS" value="40" />
-          <entry key="JavaScript" value="1" />
-          <entry key="PHP" value="22975" />
+          <entry key="JavaScript" value="42" />
+          <entry key="PHP" value="23313" />
           <entry key="PLAIN_TEXT" value="6" />
           <entry key="SQL" value="42" />
         </counts>
@@ -79,18 +85,18 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="css" value="1" />
-          <entry key="js" value="2" />
-          <entry key="php" value="110" />
-          <entry key="sql" value="17" />
+          <entry key="js" value="4" />
+          <entry key="php" value="121" />
+          <entry key="sql" value="18" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Blade" value="32" />
+          <entry key="Blade" value="40" />
           <entry key="CSS" value="1" />
-          <entry key="JavaScript" value="2" />
-          <entry key="PHP" value="78" />
-          <entry key="SQL" value="16" />
+          <entry key="JavaScript" value="4" />
+          <entry key="PHP" value="81" />
+          <entry key="SQL" value="17" />
           <entry key="Scratch" value="1" />
         </counts>
       </usages-collector>
@@ -106,10 +112,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/resources/views/lease/payments/_form.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="755">
-              <caret line="313" column="18" lean-forward="true" selection-start-line="313" selection-start-column="18" selection-end-line="313" selection-end-column="18" />
+            <state relative-caret-position="470">
+              <caret line="292" column="22" lean-forward="true" selection-start-line="292" selection-start-column="22" selection-end-line="292" selection-end-column="22" />
               <folding>
-                <element signature="e#16040#16127#0#HTML" expanded="true" />
+                <element signature="e#15220#15243#0#HTML" expanded="true" />
+                <element signature="e#17042#17065#0#HTML" expanded="true" />
                 <element signature="n#style#0;n#input#0;n#!!top" expanded="true" />
                 <element signature="e#223#230#1" expanded="true" />
                 <element signature="e#115#121#0" expanded="true" />
@@ -119,28 +126,13 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/views/layouts/app.blade.php">
+        <entry file="file://$PROJECT_DIR$/app/Helpers/Helpers.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="17" column="27" lean-forward="true" selection-start-line="17" selection-start-column="27" selection-end-line="17" selection-end-column="27" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/views/reports/index.blade.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="717">
-              <caret line="98" column="80" lean-forward="true" selection-start-line="98" selection-start-column="80" selection-end-line="98" selection-end-column="80" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/css/custom.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="537">
-              <caret line="1264" column="18" lean-forward="true" selection-start-line="1264" selection-start-column="18" selection-end-line="1264" selection-end-column="18" />
+            <state relative-caret-position="777">
+              <caret line="1348" column="81" lean-forward="true" selection-start-line="1348" selection-start-column="81" selection-end-line="1348" selection-end-column="81" />
+              <folding>
+                <element signature="n#style#0;n#a#0;n#!!top" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -157,7 +149,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>Immediate Previous Lease End Date</find>
       <find>payout_time</find>
       <find>base_date</find>
       <find>immediate_previous_lease_end_date</find>
@@ -185,8 +176,9 @@
       <find>lease_acc</find>
       <find>minDate</find>
       <find>Last Lease Payment Interval End Date</find>
-      <find>tooltip</find>
       <find>input_in</find>
+      <find>tooltip</find>
+      <find>tootltip</find>
     </findStrings>
     <replaceStrings>
       <replace>col-md-6 col-sm-6 btn-backnextBx</replace>
@@ -218,12 +210,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/resources/views/lease/lease-valuation/_lease_liability.blade.php" />
-        <option value="$PROJECT_DIR$/resources/views/lease/lease-valuation/index.blade.php" />
-        <option value="$PROJECT_DIR$/resources/views/leasevaluation/partials/_pv_calculus.blade.php" />
-        <option value="$PROJECT_DIR$/app/LeaseResidualValue.php" />
-        <option value="$PROJECT_DIR$/app/Lease.php" />
-        <option value="$PROJECT_DIR$/public/js/custom.js" />
         <option value="$PROJECT_DIR$/database/seeds/PermissionSeeder.php" />
         <option value="$PROJECT_DIR$/database/migrations/2019_06_07_103311_add_permissions_to_permission_table.php" />
         <option value="$PROJECT_DIR$/app/Console/Commands/AllowAllPermissionsToBusinessAccounts.php" />
@@ -249,7 +235,6 @@
         <option value="$PROJECT_DIR$/app/Exports/LeaseExpenseAnnexureExport.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/LeaseValuationController.php" />
         <option value="$PROJECT_DIR$/app/LeaseAssetPayments.php" />
-        <option value="$PROJECT_DIR$/app/Helpers/Helpers.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Lease/LeasePaymentsController.php" />
         <option value="$PROJECT_DIR$/app/LeaseAssets.php" />
         <option value="$PROJECT_DIR$/resources/views/leasevaluation/partials/_lease_expense_annexure.blade.php" />
@@ -268,6 +253,13 @@
         <option value="$PROJECT_DIR$/resources/views/layouts/app.blade.php" />
         <option value="$PROJECT_DIR$/public/js/jquery-ui.js" />
         <option value="$PROJECT_DIR$/public/css/custom.css" />
+        <option value="$PROJECT_DIR$/resources/views/settings/general/index.blade.php" />
+        <option value="$PROJECT_DIR$/public/js/custom.js" />
+        <option value="$PROJECT_DIR$/resources/views/settings/classification/index.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/settings/currencies/_reporting_currencies.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/settings/currencies/_foreign_transaction_settings.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/settings/leaseassets/index.blade.php" />
+        <option value="$PROJECT_DIR$/app/Helpers/Helpers.php" />
         <option value="$PROJECT_DIR$/resources/views/lease/payments/_form.blade.php" />
       </list>
     </option>
@@ -411,6 +403,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -444,18 +437,10 @@
               <item name="lease" type="462c0819:PsiDirectoryNode" />
               <item name="payments" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="Witsync-Lease-Management" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Witsync-Lease-Management" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-              <item name="reports" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -654,12 +639,14 @@
       <workItem from="1561459456632" duration="2589000" />
       <workItem from="1561465092564" duration="10000" />
       <workItem from="1561523443095" duration="12147000" />
-      <workItem from="1561543412252" duration="3428000" />
+      <workItem from="1561543412252" duration="4033000" />
+      <workItem from="1561610044081" duration="6373000" />
+      <workItem from="1561619036036" duration="815000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1998505000" />
+    <option name="totallyTimeSpent" value="2006298000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -671,10 +658,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="64" y="-11" width="1857" height="1092" extended-state="6" />
+    <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2106136" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.21227197" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -749,55 +736,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/resources/views/leasevaluation/partials/_interest_and_depreciation.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" column="52" lean-forward="true" selection-start-line="13" selection-start-column="52" selection-end-line="13" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/LeaseExpenseAnnexure.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="36" selection-start-line="11" selection-start-column="36" selection-end-line="11" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="307">
-          <caret line="116" column="20" selection-start-line="116" selection-start-column="20" selection-end-line="116" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="344">
-          <caret line="871" column="28" lean-forward="true" selection-start-line="871" selection-start-column="28" selection-end-line="871" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2019_06_17_093016_add_column_immediate_previous_lease_end_date_to_lease_assets_payments.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="32" lean-forward="true" selection-start-line="32" selection-end-line="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2019_06_20_120252_add_column_immediate_previous_lease_end_date_to_lease_assets_payments_again.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="32" selection-start-line="32" selection-end-line="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Exports/InterestAndDepreciationExport.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="26" column="5" lean-forward="true" selection-start-line="26" selection-start-column="5" selection-end-line="26" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Exports/LeaseExpenseAnnexureExport.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="315">
@@ -814,13 +752,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="500">
           <caret line="665" column="121" selection-start-line="665" selection-start-column="121" selection-end-line="665" selection-end-column="121" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Helpers/Helpers.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="732">
-          <caret line="204" column="73" selection-start-line="204" selection-start-column="59" selection-end-line="204" selection-end-column="73" />
         </state>
       </provider>
     </entry>
@@ -885,13 +816,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/database/sqls/email_templates.sql">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database/sqls/discount_rate_chart_view.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="51" selection-start-line="5" selection-start-column="47" selection-end-line="5" selection-end-column="51" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/database/sqls/currencies.sql">
       <provider selected="true" editor-type-id="text-editor" />
@@ -1041,48 +965,122 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/public/js/jquery-ui.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="552">
+          <caret line="18688" column="37" lean-forward="true" selection-start-line="18688" selection-start-column="37" selection-end-line="18688" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/layouts/app.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
-          <caret line="17" column="27" lean-forward="true" selection-start-line="17" selection-start-column="27" selection-end-line="17" selection-end-column="27" />
+          <caret line="17" column="27" selection-start-line="17" selection-start-column="27" selection-end-line="17" selection-end-column="27" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/reports/index.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="717">
-          <caret line="98" column="80" lean-forward="true" selection-start-line="98" selection-start-column="80" selection-end-line="98" selection-end-column="80" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/js/jquery-ui.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="552">
-          <caret line="18688" column="37" lean-forward="true" selection-start-line="18688" selection-start-column="37" selection-end-line="18688" selection-end-column="37" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#input#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-          </folding>
+          <caret line="98" column="80" selection-start-line="98" selection-start-column="80" selection-end-line="98" selection-end-column="80" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/public/css/custom.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="537">
-          <caret line="1264" column="18" lean-forward="true" selection-start-line="1264" selection-start-column="18" selection-end-line="1264" selection-end-column="18" />
+          <caret line="1264" column="18" selection-start-line="1264" selection-start-column="18" selection-end-line="1264" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/database/sqls/discount_rate_chart_view.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="5" column="1142" lean-forward="true" selection-start-line="5" selection-start-column="1142" selection-end-line="5" selection-end-column="1142" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/settings/classification/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="735">
+          <caret line="917" column="222" selection-start-line="917" selection-start-column="222" selection-end-line="917" selection-end-column="222" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/settings/general/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="690">
+          <caret line="264" column="135" lean-forward="true" selection-start-line="264" selection-start-column="135" selection-end-line="264" selection-end-column="135" />
+          <folding>
+            <element signature="e#0#6#0" expanded="true" />
+            <element signature="e#6#12#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/settings/currencies/_reporting_currencies.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1353">
+          <caret line="3" column="92" selection-start-line="3" selection-start-column="92" selection-end-line="3" selection-end-column="92" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/settings/currencies/_foreign_transaction_settings.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="387">
+          <caret line="31" column="94" lean-forward="true" selection-start-line="31" selection-start-column="94" selection-end-line="31" selection-end-column="94" />
+          <folding>
+            <element signature="e#2001#2026#0#HTML" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/settings/currencies/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="645">
+          <caret line="43" column="79" selection-start-line="43" selection-start-column="50" selection-end-line="43" selection-end-column="79" />
+          <folding>
+            <element signature="e#0#6#0" expanded="true" />
+            <element signature="e#6#12#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/settings/leaseassets/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="630">
+          <caret line="119" column="48" lean-forward="true" selection-start-line="119" selection-start-column="48" selection-end-line="119" selection-end-column="48" />
+          <folding>
+            <element signature="e#0#6#0" expanded="true" />
+            <element signature="e#6#12#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/js/custom.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="19" selection-start-line="3" selection-start-column="19" selection-end-line="3" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Helpers/Helpers.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="777">
+          <caret line="1348" column="81" lean-forward="true" selection-start-line="1348" selection-start-column="81" selection-end-line="1348" selection-end-column="81" />
+          <folding>
+            <element signature="n#style#0;n#a#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/lease/payments/_form.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="755">
-          <caret line="313" column="18" lean-forward="true" selection-start-line="313" selection-start-column="18" selection-end-line="313" selection-end-column="18" />
+        <state relative-caret-position="470">
+          <caret line="292" column="22" lean-forward="true" selection-start-line="292" selection-start-column="22" selection-end-line="292" selection-end-column="22" />
           <folding>
-            <element signature="e#16040#16127#0#HTML" expanded="true" />
+            <element signature="e#15220#15243#0#HTML" expanded="true" />
+            <element signature="e#17042#17065#0#HTML" expanded="true" />
             <element signature="n#style#0;n#input#0;n#!!top" expanded="true" />
             <element signature="e#223#230#1" expanded="true" />
             <element signature="e#115#121#0" expanded="true" />

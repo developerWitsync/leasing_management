@@ -1,5 +1,8 @@
 <div class="panel panel-info">
-    <div class="panel-heading">Reporting Currency</div>
+    <div class="panel-heading">
+        Reporting Currency
+        {!! renderToolTip('Select the statutory financial reporting currency.', null, 'right') !!}
+    </div>
     <div class="panel-body">
         <form class="form-horizontal" method="POST" action="{{ route('settings.currencies.save') }}">
             {{ csrf_field() }}

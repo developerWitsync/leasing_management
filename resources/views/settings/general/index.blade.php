@@ -50,6 +50,7 @@
                         <div class="panel panel-info">
                             <div class="panel-heading">
                                 <span> Date of Initial Application of the New Leasing Standard</span>
+                                {!! renderToolTip('IND AS-116 effective for annual periods beginning on or after April 01, 2019. In case of Applying Modified Retrospective Valuation Approach, please select effective date April 01, 2019 while in case of applying Full Retrospective Valuation Approach, please select Prior to April 01, 2019','', 'right') !!}
                             </div>
                             <div class="setting form-group{{ $errors->has('date_of_initial_application') ? ' has-error' : '' }} required">
 
@@ -139,6 +140,7 @@
                                                         @if(old('min_previous_first_lease_start_year', $settings->min_previous_first_lease_start_year) == $x) selected="selected" @endif>{{ $x }}</option>
                                             @endforeach
                                         </select>
+                                        {!! renderToolTip('Select minimum previous year from when the existing lease started. You can change later also.') !!}
                                     </div>
                                     @if ($errors->has('min_previous_first_lease_start_year'))
                                         <span class="help-block">
@@ -163,6 +165,9 @@
                                                         @if(old('max_lease_end_year', $settings->max_lease_end_year) == $x) selected="selected" @endif>{{ $x }}</option>
                                             @endforeach
                                         </select>
+
+                                        {!! renderToolTip('Select maximum future year until the existing lease term valid. You can change later also.') !!}
+
                                     </div>
                                     @if ($errors->has('max_lease_end_year'))
                                         <span class="help-block">
@@ -188,6 +193,7 @@
             <div class="panel panel-info">
                 <div class="panel-heading">
                     Your Annual Financial Reporting Period
+                    {!! renderToolTip('Select your applicable annual financial reporting period.') !!}
                 </div>
                 <div class="panel-body">
                     <div role="tabpanel" class="tab-pane active">
@@ -232,6 +238,7 @@
             <div class="panel panel-info">
                 <div class="panel-heading">
                     Add Countries Where Lease Assets Located
+                    {!! renderToolTip('Add countries where lease assets located including country of this company incorporated.') !!}
                     <span>
                     <a href="{{ route('settings.index.addleaseassetcountries') }}"
                        class="btn btn-sm btn-primary pull-right">Add More</a>
@@ -255,6 +262,7 @@
             <div class="panel panel-info">
                 <div class="panel-heading">
                     Lock Your Lease Valuations
+                    {!! renderToolTip('Lock the annual periods as and when the audit get completed. You can unlock later as well.') !!}
                     {{--<span>--}}
                     {{--<a href="javascript:void(0);" class="btn btn-sm btn-primary pull-right add_more"--}}
                     {{--data-form="add_more_lease_lock_year">Add More</a>--}}

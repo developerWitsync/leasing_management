@@ -1338,3 +1338,15 @@ function calculateDepreciation($subsequent_modify_required, \App\LeaseAssets $as
         return round($depreciation, 4);
     }
 }
+
+/**
+ * creates the HTML element for the tooltip and returns the HTML for the same.
+ * @param $title
+ * @param string $class
+ * @param string $placement
+ * @return string
+ */
+function renderToolTip($title, $class = '', $placement = 'top', $hrefStyle = ''){
+    $html = "<a href='javascript:void(0);' class='btn-link' style='{$hrefStyle}' title='{$title}' data-toggle='tooltip' data-placement='{$placement}' style='font-size: 16px;'><i class='fa fa-info-circle {$class}'></i></a>";
+    return $html;
+}
