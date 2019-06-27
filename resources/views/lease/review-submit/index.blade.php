@@ -487,7 +487,7 @@
                                 class="fa fa-arrow-left"></i> {{ env('BACK_LABEL')}}</a>
                 </div>
                 <div class="col-md-4 col-sm-4 btnsubmitBx aligncenter">
-                    <a href="#" class="btn btn-primary">{{ env('PRINT_LABEL') }}</a>
+                    <a href="{{ route('drafts.index') }}" class="btn btn-primary">{{ env('SAVE_LABEL') }}</a>
                 </div>
 
                 <div class="col-md-4 col-sm-4 btnsubmitBx alignright">

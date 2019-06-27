@@ -39,7 +39,8 @@
                             </div> -->
 
                             <div class="form-group{{ $errors->has('category_id') ? ' has-error' : '' }} required">
-                                <label for="category_id" class="col-md-12 control-label">Lease Asset Category</label>
+                                <label for="category_id" class="col-md-12 control-label" style="display: inline;">Lease Asset Category</label>
+                                {!! renderToolTip('Select a relevant lease asset category based on nature of lease asset.', 'input_info_tooltip', 'top' , 'display:inline;') !!}
                                 <div class="col-md-12">
                                     <select name="category_id" class="form-control asset_category"
                                             @if($subsequent_modify_required) disabled="disabled" @endif>
@@ -65,8 +66,9 @@
 
 
                             <div class="form-group{{ $errors->has('sub_category_id') ? ' has-error' : '' }} required">
-                                <label for="sub_category_id" class="col-md-12 control-label">Lease Asset
+                                <label for="sub_category_id" class="col-md-12 control-label" style="display: inline;">Lease Asset
                                     Classification</label>
+                                    {!! renderToolTip("Select a relevant lease asset sub-category as defined under settings. <br/>If relevant sub-category not appearing here, please go to settings and add first a relevant sub-category to proceed further.", 'input_info_tooltip', 'top' , 'display:inline;' ) !!}
                                 <div class="col-md-12">
 
                                     <select name="sub_category_id" class="form-control sub_category_id"
@@ -100,7 +102,8 @@
 
 
                             <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }} required">
-                                <label for="name" class="col-md-12 control-label">Lease Asset Name</label>
+                                <label for="name" class="col-md-12 control-label" style="display: inline;">Lease Asset Name</label>
+                                {!! renderToolTip('Define the appropriate name of the lease asset under possession.', 'input_info_tooltip', 'top' , 'display:inline;') !!}
                                 <div class="col-md-12">
                                     <input id="name" type="text" placeholder="Asset Name" class="form-control"
                                            name="name" value="{{ old('name', $asset->name) }}"
@@ -120,8 +123,10 @@
 
 
                             <div class="form-group{{ $errors->has('similar_asset_items') ? ' has-error' : '' }} required">
-                                <label for="similar_asset_items" class="col-md-12 control-label">Number of Units of
+                                <label for="similar_asset_items" class="col-md-12 control-label" style="display: inline;">Number of Units of
                                     Similar Characteristics</label>
+                                {!! renderToolTip('Select relevant number of units of similar characteristics as defined under settings.
+If relevant number not appearing, please first add the number under settings to proceed further.', 'input_info_tooltip', 'top' , 'display:inline;') !!}
                                 <div class="col-md-12">
 
                                     <select name="similar_asset_items" class="form-control"
