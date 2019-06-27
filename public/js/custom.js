@@ -1,5 +1,9 @@
 $(function(){
 
+    $('[data-toggle="tooltip"]').tooltip({
+        html : true
+    });
+
     /*Tab section*/
     $(".Privacy_left ul li a").on("click", function(e){
         e.preventDefault();

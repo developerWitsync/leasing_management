@@ -1,5 +1,8 @@
 <div class="panel panel-info">
-    <div class="panel-heading">Foreign Currency Transaction Settings</div>
+    <div class="panel-heading">
+        Foreign Currency Transaction Settings
+        {!! renderToolTip('Select Yes when the leases are signed in currencies other than the statutory reporting currency.') !!}
+    </div>
     <div class="panel-body">
         <div class="form-group{{ $errors->has('statutory_financial_reporting_currency') ? ' has-error' : '' }} required">
             <label for="statutory_financial_reporting_currency" class="col-md-6 control-label">Transactions in Foreign
@@ -29,6 +32,7 @@
     <div class="panel panel-info add_foreign_transasction_currency" style="margin-top: 10px;">
         <div class="panel-heading">
             Select Currencies of Transactions Dealing in
+            {!! renderToolTip('Select the relevant foreign currencies in which lease transactions are involved.') !!}
             <span>
                 <a href="{{ route('settings.currencies.addforeigntransactioncurrency') }}"
                    class="btn btn-sm btn-primary pull-right add_more" data-form="add_more_form_lease_basis">Add More</a>

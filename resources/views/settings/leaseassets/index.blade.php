@@ -33,6 +33,7 @@
                     <div class="panel panel-info">
                         <div class="panel-heading">
                             Expected Useful Life of Asset
+                            {!! renderToolTip('Add the expected useful life of the lease asset to tag to your respective lease asset.', null, 'right') !!}
                             <span>
                                     <a href="javascript:void(0);" class="btn btn-sm btn-primary pull-right add_more"
                                        data-form="add_more_expected_life_of_assets">Add More</a>
@@ -114,6 +115,7 @@
                     <div class="panel panel-info">
                         <div class="panel-heading">
                             Assumptions
+                            {!! renderToolTip('For the purpose of computation of depreciation, part of the month considered as full month.<br/><br/>Example: A lease started on Jan 12, 2019 and lease end on Dec 11, 2020 – depreciation will be provided for full 24 months.') !!}
                         </div>
                         <div class="panel-body">
                             <div class="panel-body settingTble">

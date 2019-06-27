@@ -41,8 +41,10 @@
                                         <div class="categoriesOuter leasedetOuter clearfix">
                                             <div class="categoriesHd">Lessor Details</div>
                                             <div class="form-group{{ $errors->has('lessor_name') ? ' has-error' : '' }} required">
-                                                <label for="lessor_name" class="col-md-12 control-label">Lessor
-                                                    Name</label>
+                                                <label for="lessor_name" class="col-md-12 control-label" style="display:inline;">
+                                                    Lessor Name
+                                                </label>
+                                                {!! renderToolTip('Input the name of the lessor with whom the lease contract was signed.', 'input_info_tooltip', 'top' , 'display:inline;') !!}
                                                 <div class="col-md-12">
                                                     <input id="lessor_name" type="text" placeholder="Lessor Name"
                                                            class="form-control" name="lessor_name"
@@ -60,8 +62,9 @@
                                                 </div>
                                             </div>
                                             <div class="form-group{{ $errors->has('lease_type_id') ? ' has-error' : '' }} required">
-                                                <label for="lease_type_id" class="col-md-12 control-label">Lease
+                                                <label for="lease_type_id" class="col-md-12 control-label" style="display:inline;">Lease
                                                     Type Classification</label>
+                                                {!! renderToolTip('Lease payments under the lease contract which are directly attributes to the Underlying Lease Asset, such lease payments classified as lease components.<br/><br/>Lease payments which are variable or indirectly associated to an underlying lease asset, such lease payments classified as Non-Lease Components.<br/><br/>Where lease payments cannot be classified into Non-Lease Components, those lease payments are classified as Lease & Non-Lease Components to the extent the lease payments cannot be separated.<br/><br/>Select Single Lease Contract where only Lease Components involved else select Single Lease and Non-Lease Contract where involves Non-Lease Components also.', 'input_info_tooltip', 'left' , 'display:inline;') !!}
                                                 <div class="col-md-12">
                                                     <select name="lease_type_id" class="form-control"
                                                             id="lease_type_id">
@@ -111,8 +114,9 @@
 
 
                                             <div class="form-group{{ $errors->has('lease_contract_id') ? ' has-error' : '' }} required">
-                                                <label for="lease_contract_id" class="col-md-12 control-label">Lease
+                                                <label for="lease_contract_id" class="col-md-12 control-label" style="display:inline;">Lease
                                                     Contract Currency</label>
+                                                    {!! renderToolTip('Select the relevant currency. If the currency not appearing, please first add the currency under settings to proceed further.', 'input_info_tooltip', 'top' , 'display:inline;') !!}
                                                 <div class="col-md-12">
                                                     <select name="lease_contract_id" class="form-control"
                                                             @if($subsequent_modify_required) disabled="disabled" @endif>
@@ -140,8 +144,9 @@
 
 
                                             <div class="form-group{{ $errors->has('file') ? ' has-error' : '' }} ">
-                                                <label for="file" class="col-md-12 control-label">Upload a Copy of
+                                                <label for="file" class="col-md-12 control-label" style="display:inline;">Upload a Copy of
                                                     Contract Signed</label>
+                                                {!! renderToolTip('You can upload a copy of the lease contract here or can also add later under section “Documents” after successfully submitting this lease details.', 'input_info_tooltip', 'top' , 'display:inline;') !!}
                                                 <div class="col-md-12 frmattachFile">
                                                     <input type="name" id="upload" name="name" class="form-control"
                                                            disabled="disabled">

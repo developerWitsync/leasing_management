@@ -141,6 +141,7 @@
                     <div class="panel panel-info">
                         <div class="panel-heading">
                             Basis of Variable Lease Payment
+                            {!! renderToolTip('Define basis of your existing variable lease payments if any. Define basis for only those variable lease payments whose amount is determinable.', '', 'right') !!}
                             <span>
                                     <a href="javascript:void(0);" class="btn btn-sm btn-primary pull-right add_more"
                                        data-form="add_more_form_lease_basis">Add More</a>
@@ -287,6 +288,7 @@
                     <div class="panel panel-info">
                         <div class="panel-heading">
                             Number of Lease Assets of Similar Characteristics
+                            {!! renderToolTip('Grouping of a class of underlying lease assets by creating a portfolio of lease assets with similar characteristics in terms of type of lease asset, duration, payments, escalation, and discount rate.<br/><br/>Add number of lease assets existing with similar characteristics (say 2, 5, 10 etc.).<br/><br/>If any lease variant changes or not holding similar characteristics, always use (1) one only.') !!}
                             <span>
                                     <a href="javascript:void(0);" class="btn btn-sm btn-primary pull-right add_more"
                                        data-form="add_more_no_of_lease_asset_similar_charac">Add More</a>
@@ -569,6 +571,7 @@
                     <div class="panel panel-info">
                         <div class="panel-heading">
                             Escalation Percentages (% Per Annum)
+                            {!! renderToolTip('Add multiple lease escalation percentages to be applied on lease payments as agreed with lessor.') !!}
                             <span>
                                     <a href="javascript:void(0);" class="btn btn-sm btn-primary pull-right add_more"
                                        data-form="add_more_escalation_percentage">Add More</a>
@@ -641,6 +644,7 @@
                     <div class="panel panel-info">
                         <div class="panel-heading">
                             Escalation Consistency Gap (in years)
+                            {!! renderToolTip('You can input the relevant number of years in cases where escalation is applied with the consistent gap of either 01 (annual), 02, 03, 04, 05 and so on years.<br/><br/>Example: A lease starts on Jan 01, 2019 with lease term of 10 years and lease escalation will be applied after every 2 years. So, the escalation will be applied after a gap of every 2 years. Next lease escalation date will be Jan 01, 2021.') !!}
                             <span>
                                     <a href="javascript:void(0);" class="btn btn-sm btn-primary pull-right add_more"
                                        data-form="add_more_escalation_consistency_gap">Add More</a>
@@ -782,6 +786,7 @@
                     <div class="panel panel-info">
                         <div class="panel-heading">
                             Lease Modification Reasons
+                            {!! renderToolTip('List modification reasons prior to performing lease modification.') !!}
                             <span>
                                     <a href="javascript:void(0);" class="btn btn-sm btn-primary pull-right add_more"
                                        data-form="add_more_modification_form">Add More</a>
@@ -852,6 +857,7 @@
                     <div class="panel panel-info">
                         <div class="panel-heading">
                             Categories of Lease Assets Excluded from Valuation
+                            {!! renderToolTip('This standard is not applicable to below classes of lease assets except with an option for intangible assets.') !!}
                         </div>
 
                         <div class="panel-body settingTble">
@@ -909,6 +915,7 @@
                                                href="javascript:;" class="btn btn-sm btn-danger add_intangible_asset" data-status="0">Exclude
                                                 in Lease Valuation Capitalization</a>
                                         @endif
+                                        {!! renderToolTip('You can choose to apply or not to apply this standard to intangible assets other than those covered under intangible assets under licensing arrangements.<br/><br/>This option is available for the one-time only and can never be reverted.') !!}
                                     </td>
                                 </tr>
                             </table>
