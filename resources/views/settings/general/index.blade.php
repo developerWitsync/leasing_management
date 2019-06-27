@@ -50,13 +50,16 @@
                         <div class="panel panel-info">
                             <div class="panel-heading">
                                 <span> Date of Initial Application of the New Leasing Standard</span>
-                                {!! renderToolTip('IND AS-116 effective for annual periods beginning on or after April 01, 2019. In case of Applying Modified Retrospective Valuation Approach, please select effective date April 01, 2019 while in case of applying Full Retrospective Valuation Approach, please select Prior to April 01, 2019','', 'right') !!}
+                                @php
+                                $method_title = getParentDetails()->accountingStandard->title;
+                                $base_date = \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->format('F d, Y');
+                                $string = "{$method_title} effective for annual periods beginning on or after {$base_date}. In case of Applying Modified Retrospective Valuation Approach, please select effective date {$base_date} while in case of applying Full Retrospective Valuation Approach, please select Prior to {$base_date}."
+                                @endphp
+                                {!! renderToolTip($string,'', 'right') !!}
                             </div>
                             <div class="setting form-group{{ $errors->has('date_of_initial_application') ? ' has-error' : '' }} required">
-
                                 <div class="col-md-12 rightx">
                                     <div class="input-group col-md-12">
-
                                         <div class="form-check col-md-4 ">
                                             <input class="form-check-input" type="radio"
                                                    @if(old('date_of_initial_application', isset($settings->date_of_initial_application)?$settings->date_of_initial_application:"") == '1') checked="checked"
@@ -127,7 +130,7 @@
                             <div class="form-group{{ $errors->has('min_previous_first_lease_start_year') ? ' has-error' : '' }} required">
                                 <label for="min_previous_first_lease_start_year" class="col-md-4 control-label">Minimum
                                     Previous First Lease Start Year</label>
-                                <div class="col-md-6">
+                                <div class="col-md-5">
                                     <div class="from-group">
                                         <select name="min_previous_first_lease_start_year"
                                                 id="min_previous_first_lease_start_year  " type="text"
@@ -140,7 +143,6 @@
                                                         @if(old('min_previous_first_lease_start_year', $settings->min_previous_first_lease_start_year) == $x) selected="selected" @endif>{{ $x }}</option>
                                             @endforeach
                                         </select>
-                                        {!! renderToolTip('Select minimum previous year from when the existing lease started. You can change later also.') !!}
                                     </div>
                                     @if ($errors->has('min_previous_first_lease_start_year'))
                                         <span class="help-block">
@@ -148,12 +150,15 @@
                                         </span>
                                     @endif
                                 </div>
+                                <div class="col-md-1 infoToolTipBox">
+                                    {!! renderToolTip('Select minimum previous year from when the existing lease started. You can change later also.', null, 'top') !!}
+                                </div>
                             </div>
 
                             <div class="form-group{{ $errors->has('max_lease_end_year') ? ' has-error' : '' }} required">
                                 <label for="max_lease_end_year" class="col-md-4 control-label">Maximum Lease End
                                     Year</label>
-                                <div class="col-md-6">
+                                <div class="col-md-5">
                                     <div class="from-group">
 
                                         <select name="max_lease_end_year" id="max_lease_end_year  " type="text"
@@ -166,14 +171,15 @@
                                             @endforeach
                                         </select>
 
-                                        {!! renderToolTip('Select maximum future year until the existing lease term valid. You can change later also.') !!}
-
                                     </div>
                                     @if ($errors->has('max_lease_end_year'))
                                         <span class="help-block">
                                             <strong>{{ $errors->first('max_lease_end_year') }}</strong>
                                         </span>
                                     @endif
+                                </div>
+                                <div class="col-md-1 infoToolTipBox">
+                                    {!! renderToolTip('Select maximum future year until the existing lease term valid. You can change later also.') !!}
                                 </div>
                             </div>
 

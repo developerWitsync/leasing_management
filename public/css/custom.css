@@ -1285,3 +1285,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3931af', end
     font-size: 15px;
     font-weight: 600;
 }
+
+.infoToolTipBox{
+    padding-top: 6px;
+    padding-left: 0;
+}
