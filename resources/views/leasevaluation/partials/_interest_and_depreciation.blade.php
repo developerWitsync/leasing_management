@@ -93,4 +93,30 @@
             $i += 1;
         @endphp
     @endforeach
+
+    {{--the Below Row will be generated so that we show the 0 to the user, this has been added as per the request from Client and is not from our end--}}
+
+    @if($last_item->closing_lease_liability != 0)
+        <tr style="background-color: #fff5da">
+            <td>{{\Carbon\Carbon::parse($last_item->date)->format('Y')}}</td>
+            <td>{{\Carbon\Carbon::parse($last_item->date)->format(config('settings.date_format'))}}</td>
+
+            <td class="blueClr" align="center" style="font-weight: 600">{{$last_item->closing_lease_liability}}</td>
+            <td class="blueClr" align="center" style="font-weight: 600">{{ -1 * $last_item->closing_lease_liability }}</td>
+            <td align="center" style="font-weight: 600">0</td>
+            <td class="blueClr" align="center" style="font-weight: 600">0</td>
+            <td class="blueClr" align="center" style="font-weight: 600">&nbsp;</td>
+            <td class="blueClr" align="center" style="font-weight: 600">&nbsp;</td>
+            @if(\Carbon\Carbon::parse($last_item->date)->isLastOfMonth())
+                <td class="blueClr" align="center" style="font-weight: 600">0</td>
+                <td class="blueClr" align="center" style="font-weight: 600">0</td>
+                <td class="blueClr" align="center" style="font-weight: 600">0</td>
+            @else
+                <td class="blueClr" align="center" style="font-weight: 600"> -</td>
+                <td class="blueClr" align="center" style="font-weight: 600"> -</td>
+                <td class="blueClr" align="center" style="font-weight: 600"> -</td>
+            @endif
+            <td class="blueClr" align="center" style="font-weight: 600"> -</td>
+        </tr>
+    @endif
 </table>

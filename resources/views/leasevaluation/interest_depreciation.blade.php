@@ -49,6 +49,15 @@
                         @include('leasevaluation.partials._interest_and_depreciation')
                     </div>
                 </div>
+
+                    <div class="alert alert-warning" role="alert">
+                        <h4 class="alert-heading"><i class="fa fa-info-circle"></i>&nbsp;Working Disclaimer</h4>
+                        <hr>
+                        <p>There may be a possibility a very low balance amount in the closing lease liability appearing at the end of the lease term. We placed all checks in the system but due to longer lease duration, this closing lease liability balance may not be equated to “Zero” and very low balance left due to system calculations limited to 2 decimal places. Please consider the left-out balance in the closing lease liability under lease interest in the accounting at the end of the lease term.</p>
+                        {{--<hr>--}}
+                        {{--<p class="mb-0">Whenever you need to, be sure to use margin utilities to keep things nice and tidy.</p>--}}
+                    </div>
+
             </div>
 
 
