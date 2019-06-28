@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="1c290435-4779-45fe-873f-5594138f8734" name="Default Changelist" comment="Merge branch 'master' of http://100.100.7.4:8081/root/Witsync-Lease-Management&#10;&#10;# Conflicts:&#10;#&#9;app/Helpers/Helpers.php&#10;#&#9;config/settings.php&#10;#&#9;public/css/custom.css">
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Admin/CouponCodeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Admin/CouponCodeController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/leasevaluation/partials/_interest_and_depreciation.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/leasevaluation/partials/_interest_and_depreciation.blade.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -62,7 +63,7 @@
           <entry key="css" value="103" />
           <entry key="dummy" value="6" />
           <entry key="js" value="42" />
-          <entry key="php" value="27231" />
+          <entry key="php" value="27232" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
@@ -70,7 +71,7 @@
           <entry key="Blade" value="3721" />
           <entry key="CSS" value="103" />
           <entry key="JavaScript" value="42" />
-          <entry key="PHP" value="23468" />
+          <entry key="PHP" value="23469" />
           <entry key="PLAIN_TEXT" value="6" />
           <entry key="SQL" value="42" />
         </counts>
@@ -79,13 +80,13 @@
         <counts>
           <entry key="css" value="3" />
           <entry key="js" value="4" />
-          <entry key="php" value="139" />
+          <entry key="php" value="140" />
           <entry key="sql" value="18" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Blade" value="50" />
+          <entry key="Blade" value="51" />
           <entry key="CSS" value="3" />
           <entry key="JavaScript" value="4" />
           <entry key="PHP" value="89" />
@@ -105,17 +106,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/web.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="640">
-              <caret line="689" column="115" selection-start-line="689" selection-start-column="95" selection-end-line="689" selection-end-column="115" />
+            <state relative-caret-position="657">
+              <caret line="688" column="100" lean-forward="true" selection-start-line="688" selection-start-column="100" selection-end-line="688" selection-end-column="100" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Admin/CouponCodeController.php">
+        <entry file="file://$PROJECT_DIR$/resources/views/leasevaluation/partials/_interest_and_depreciation.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="29" column="49" selection-start-line="29" selection-start-column="49" selection-end-line="29" selection-end-column="49" />
+            <state relative-caret-position="802">
+              <caret line="120" column="18" lean-forward="true" selection-start-line="120" selection-start-column="18" selection-end-line="120" selection-end-column="18" />
             </state>
           </provider>
         </entry>
@@ -242,8 +243,8 @@
         <option value="$PROJECT_DIR$/resources/views/leasevaluation/interest_depreciation.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Leasevaluation/LeaseValuationController.php" />
         <option value="$PROJECT_DIR$/app/Exports/InterestAndDepreciationExport.php" />
-        <option value="$PROJECT_DIR$/resources/views/leasevaluation/partials/_interest_and_depreciation.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Admin/CouponCodeController.php" />
+        <option value="$PROJECT_DIR$/resources/views/leasevaluation/partials/_interest_and_depreciation.blade.php" />
       </list>
     </option>
   </component>
@@ -617,12 +618,12 @@
       <workItem from="1561543412252" duration="4033000" />
       <workItem from="1561610044081" duration="6373000" />
       <workItem from="1561619036036" duration="7471000" />
-      <workItem from="1561696035358" duration="13426000" />
+      <workItem from="1561696035358" duration="14356000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2026380000" />
+    <option name="totallyTimeSpent" value="2027310000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1024,19 +1025,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/leasevaluation/partials/_interest_and_depreciation.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="717">
-          <caret line="116" column="83" lean-forward="true" selection-start-line="116" selection-start-column="83" selection-end-line="116" selection-end-column="83" />
-          <folding>
-            <element signature="n#style#0;n#table#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#tr#2;n#table#0;n#!!top" expanded="true" />
-            <element signature="e#5935#5941#1#HTML" expanded="true" />
-            <element signature="e#6027#6033#1#HTML" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/leasevaluation/interest_depreciation.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="612">
@@ -1047,17 +1035,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/web.php">
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Admin/CouponCodeController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="640">
-          <caret line="689" column="115" selection-start-line="689" selection-start-column="95" selection-end-line="689" selection-end-column="115" />
+        <state relative-caret-position="450">
+          <caret line="40" column="7" lean-forward="true" selection-start-line="40" selection-start-column="7" selection-end-line="40" selection-end-column="7" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Admin/CouponCodeController.php">
+    <entry file="file://$PROJECT_DIR$/routes/web.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="29" column="49" selection-start-line="29" selection-start-column="49" selection-end-line="29" selection-end-column="49" />
+        <state relative-caret-position="657">
+          <caret line="688" column="100" lean-forward="true" selection-start-line="688" selection-start-column="100" selection-end-line="688" selection-end-column="100" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/leasevaluation/partials/_interest_and_depreciation.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="802">
+          <caret line="120" column="18" lean-forward="true" selection-start-line="120" selection-start-column="18" selection-end-line="120" selection-end-column="18" />
         </state>
       </provider>
     </entry>
