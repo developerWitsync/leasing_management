@@ -671,12 +671,14 @@ class LeaseValuationController extends Controller
             $asset = $lease->assets()->first();
 
             $interest_depreciation = InterestAndDepreciation::query()->where('asset_id', '=', $lease->assets()->first()->id)->get();
+            $last_item = collect($interest_depreciation)->last();
             $interest_depreciation = collect($interest_depreciation)->groupBy('modify_id');
 
             return view('leasevaluation.interest_depreciation', compact(
                 'interest_depreciation',
                 'lease',
-                'asset'
+                'asset',
+                'last_item'
             ));
 
         } catch (\Exception $e) {

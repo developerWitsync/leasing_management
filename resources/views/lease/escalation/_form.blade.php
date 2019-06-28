@@ -11,10 +11,14 @@
         <label for="is_escalation_applicable" class="col-md-12 control-label">Is Escalation Applicable</label>
         <div class="col-md-12 form-check form-check-inline mrktavail" required>
             <span>
-            <input class="form-check-input" name="is_escalation_applicable" id="yes" type="checkbox" value="yes" @if(old('is_escalation_applicable', $model->is_escalation_applicable) == "yes") checked="checked" @endif @if($subsequent_modify_required && $model->is_escalation_applicable == "yes") disabled="disabled" @endif>
+            <input class="form-check-input" name="is_escalation_applicable" id="yes" type="checkbox" value="yes" @if(old('is_escalation_applicable', $model->is_escalation_applicable) == "yes") checked="checked" @endif
+            {{--@if($subsequent_modify_required && $model->is_escalation_applicable == "yes") disabled="disabled" @endif--}}
+            >
             <label class="form-check-label" for="yes" id="yes" style="vertical-align: 4px">Yes</label>
             </span>
-            <span><input class="form-check-input" name="is_escalation_applicable" id="no" type="checkbox" value="no" @if(old('is_escalation_applicable', $model->is_escalation_applicable)  == "no") checked="checked" @endif @if($subsequent_modify_required) disabled="disabled" @endif>
+            <span><input class="form-check-input" name="is_escalation_applicable" id="no" type="checkbox" value="no" @if(old('is_escalation_applicable', $model->is_escalation_applicable)  == "no") checked="checked" @endif
+                {{--@if($subsequent_modify_required) disabled="disabled" @endif--}}
+                >
             <label class="form-check-label" for="no" id="no" style="vertical-align: 4px">No</label>
             </span>
             @if ($errors->has('is_escalation_applicable'))
@@ -22,9 +26,9 @@
                         <strong>{{ $errors->first('is_escalation_applicable') }}</strong>
                     </span>
             @endif
-            @if($subsequent_modify_required && $model->is_escalation_applicable == "yes")
-                <input type="hidden" name="is_escalation_applicable" value="{{$model->is_escalation_applicable}}">
-            @endif
+            {{--@if($subsequent_modify_required && $model->is_escalation_applicable == "yes")--}}
+                {{--<input type="hidden" name="is_escalation_applicable" value="{{$model->is_escalation_applicable}}">--}}
+            {{--@endif--}}
         </div>
     </div>
 
