@@ -27,7 +27,7 @@ class CouponCodeController extends Controller
             'code' => 'required|unique:coupon_codes,code',
             'user_id' => 'numeric|exists:users,id|nullable',
             'plan_id' => 'numeric|exists:subscription_plans,id|nullable',
-            'discount' => 'required|min:1|max:20|numeric',
+            'discount' => 'required|min:1|max:100|numeric',
             'status' => 'required'
         ];
 
