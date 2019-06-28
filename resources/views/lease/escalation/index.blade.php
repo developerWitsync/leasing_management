@@ -46,14 +46,14 @@
                                 <div class="col-md-12 form-check form-check-inline">
                                     <input class="form-check-input" name="escalation_clause_applicable" id="yes"
                                            type="checkbox" value="yes"
-                                           @if(old('escalation_clause_applicable', $lease->escalation_clause_applicable) == "yes") checked="checked"
-                                           @endif @if($subsequent_modify_required && $lease->escalation_clause_applicable == "yes") disabled="disabled" @endif>
+                                           @if(old('escalation_clause_applicable', $lease->escalation_clause_applicable) == "yes") checked="checked" @endif
+                                           {{--@if($subsequent_modify_required && $lease->escalation_clause_applicable == "yes") disabled="disabled" @endif--}}>
                                     <label class="form-check-label" for="yes" id="yes"
                                            style="vertical-align: 4px">Yes</label><br>
                                     <input class="form-check-input" name="escalation_clause_applicable" id="no"
                                            type="checkbox" value="no"
-                                           @if(old('escalation_clause_applicable', $lease->escalation_clause_applicable)  == "no") checked="checked"
-                                           @endif @if($subsequent_modify_required) disabled="disabled" @endif>
+                                           @if(old('escalation_clause_applicable', $lease->escalation_clause_applicable)  == "no") checked="checked" @endif
+                                           {{--@if($subsequent_modify_required) disabled="disabled" @endif--}}>
                                     <label class="form-check-label" for="no" id="no"
                                            style="vertical-align: 4px">No</label>
                                     @if ($errors->has('escalation_clause_applicable'))
@@ -61,10 +61,10 @@
                                         <strong>{{ $errors->first('escalation_clause_applicable') }}</strong>
                                     </span>
                                     @endif
-                                    @if($subsequent_modify_required && $lease->escalation_clause_applicable == "yes")
-                                        <input type="hidden" name="escalation_clause_applicable"
-                                               value="{{ $lease->escalation_clause_applicable }}">
-                                    @endif
+                                    {{--@if($subsequent_modify_required && $lease->escalation_clause_applicable == "yes")--}}
+                                        {{--<input type="hidden" name="escalation_clause_applicable"--}}
+                                               {{--value="{{ $lease->escalation_clause_applicable }}">--}}
+                                    {{--@endif--}}
                                 </div>
                             </div>
 
