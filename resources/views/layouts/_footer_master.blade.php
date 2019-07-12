@@ -70,6 +70,7 @@
                                                 <strong>{{ $errors->first('g-recaptcha-response') }}</strong>
                                             </span>
                         @endif
+                            <span id = "captcha_error" style="color:red"></span>
                         </div>
 
                         <button type="submit" class="btn submit">SEND MESSAGE</button>

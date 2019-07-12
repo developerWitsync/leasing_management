@@ -80,7 +80,7 @@ class RegisterController extends Controller
             'terms_and_condition' => 'required',
             'company_name_certificates' => 'required',
             'certificates' => config('settings.file_size_limits.certificates'),
-//            'g-recaptcha-response' => 'required|captcha'
+            'g-recaptcha-response' => 'required|captcha'
         ], [
             'declaration.required' => 'Please accept the declaration.',
             'terms_and_condition.required' => 'Please accept Terms and Conditions.',
