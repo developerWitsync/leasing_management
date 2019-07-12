@@ -69,7 +69,7 @@
           <entry key="css" value="103" />
           <entry key="dummy" value="6" />
           <entry key="js" value="42" />
-          <entry key="php" value="27382" />
+          <entry key="php" value="27401" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
@@ -77,7 +77,7 @@
           <entry key="Blade" value="3749" />
           <entry key="CSS" value="103" />
           <entry key="JavaScript" value="42" />
-          <entry key="PHP" value="23591" />
+          <entry key="PHP" value="23610" />
           <entry key="PLAIN_TEXT" value="6" />
           <entry key="SQL" value="42" />
         </counts>
@@ -126,8 +126,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Contactus/ContactusController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-286">
-              <caret line="41" column="29" selection-start-line="41" selection-start-column="29" selection-end-line="41" selection-end-column="29" />
+            <state relative-caret-position="130">
+              <caret line="57" column="27" selection-start-line="57" selection-start-column="27" selection-end-line="57" selection-end-column="27" />
             </state>
           </provider>
         </entry>
@@ -331,8 +331,8 @@
         <option value="$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php" />
         <option value="$PROJECT_DIR$/routes/web.php" />
         <option value="$PROJECT_DIR$/resources/views/contactus.blade.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Contactus/ContactusController.php" />
         <option value="$PROJECT_DIR$/bootstrap/cache/config.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Contactus/ContactusController.php" />
       </list>
     </option>
   </component>
@@ -755,12 +755,12 @@
       <workItem from="1562844609679" duration="49000" />
       <workItem from="1562846429992" duration="5013000" />
       <workItem from="1562903757597" duration="34000" />
-      <workItem from="1562915690478" duration="4502000" />
+      <workItem from="1562915690478" duration="4739000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2038130000" />
+    <option name="totallyTimeSpent" value="2038367000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1231,8 +1231,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Contactus/ContactusController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-286">
-          <caret line="41" column="29" selection-start-line="41" selection-start-column="29" selection-end-line="41" selection-end-column="29" />
+        <state relative-caret-position="130">
+          <caret line="57" column="27" selection-start-line="57" selection-start-column="27" selection-end-line="57" selection-end-column="27" />
         </state>
       </provider>
     </entry>
