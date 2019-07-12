@@ -55,7 +55,6 @@ class ContactusController extends Controller
      * @return mixed
      */
     private function validationRules($data){
-        print_r($data);die;
         return Validator::make($data, [
             'name' => 'required',
             'email' => 'required|string|email|max:255',
