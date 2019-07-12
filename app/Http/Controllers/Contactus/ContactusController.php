@@ -33,6 +33,8 @@ class ContactusController extends Controller
      */
     public function index(Request $request)
     {
+
+
         if ($request->isMethod('post')) {
             $validator = $this->validationRules($request->all());
             if ($validator->fails()) {
@@ -45,7 +47,10 @@ class ContactusController extends Controller
                 return redirect()->route('contactus')->with('success', 'Thank you for contacting us. We will get back to you very soon.');
             }
         }
-        return view('contactus');
+
+        return view('contact_us');
+
+
     }
 
     /**
@@ -58,7 +63,11 @@ class ContactusController extends Controller
             'name' => 'required',
             'email' => 'required|string|email|max:255',
             'phone' => 'required',
-            'comments' => 'required'
+            'comments' => 'required',
+            'g-recaptcha-response' => 'required|captcha'
+        ],[
+            'g-recaptcha-response.required' => 'Please confirm the recaptcha.',
+            'g-recaptcha-response.captcha' => 'Recaptcha not confirmed.'
         ]);
     }
 

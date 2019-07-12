@@ -97,6 +97,24 @@
                                     @endif
                                 </div>
                             </div>
+
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="form-group">
+
+                                    {!! app('captcha')->display([
+                                            'data-theme' => 'light',
+                                            'id' => 'rc-imageselect'
+                                    ]) !!}
+
+                                    @if ($errors->has('g-recaptcha-response'))
+                                        <span class="help-block error">
+                                                {{ $errors->first('g-recaptcha-response') }}
+                                            </span>
+                                    @endif
+                                </div>
+                            </div>
+
+
                             <div class="col-xs-12 col-sm-6 col-md-6">
                                 <button class="btn btn1" type="submit">Send Message <i class="fa fa-paper-plane"></i>
                                 </button>

@@ -425,7 +425,14 @@
                     $('#getInTouchWithUs')[0].reset();
                 } else {
                     var errors = response.errorMessages;
+                    // console.log(errors);
                     $.each(errors, function (i, e) {
+                        console.log(e.join('1'));
+                        if(e.join('1') == 'Please confirm the recaptcha.'){
+
+                            $('#captcha_error').text('Please confirm the recaptcha.');
+
+                        }
                         $('#getInTouchWithUs input[name="' + i + '"]').after('<span class="error">' + e.join('1') + '</span>');
                     });
                 }

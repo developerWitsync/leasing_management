@@ -37,11 +37,11 @@
                         <li><a href="mailto:info@witsync.co"><i class="fa fa-envelope-o"></i> info@witsync.co</a></li>
                     </ul>
                     <br>
-                    <h3>Newsletter</h3>
-                    <form role="form">
-                        <input type="email" class="form-control" autocomplete="off" placeholder="Enter your e-mail here">
-                        <button type="submit" class="btn bt"><i class="fa fa-paper-plane-o"></i></button>
-                    </form>
+                    {{--<h3>Newsletter</h3>--}}
+                    {{--<form role="form">--}}
+                        {{--<input type="email" class="form-control" autocomplete="off" placeholder="Enter your e-mail here">--}}
+                        {{--<button type="submit" class="btn bt"><i class="fa fa-paper-plane-o"></i></button>--}}
+                    {{--</form>--}}
 
                 </div>
             </div>
@@ -59,6 +59,20 @@
                         <input type="email" name="email" class="form-control" placeholder="Business E-mail">
                         <input type="text" name="phone" class="form-control" placeholder="Mo. number">
                         <textarea class="form-control" name="comments" placeholder="Message"></textarea>
+                        <div class="{{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }}">
+                        {!! app('captcha')->display([
+                                              'data-theme' => 'light',
+                                              'id' => 'rc-imageselect'
+                                      ]) !!}
+
+                        @if ($errors->has('g-recaptcha-response'))
+                            <span class="help-block">
+                                                <strong>{{ $errors->first('g-recaptcha-response') }}</strong>
+                                            </span>
+                        @endif
+                            <span id = "captcha_error" style="color:red"></span>
+                        </div>
+
                         <button type="submit" class="btn submit">SEND MESSAGE</button>
                     </form>
                 </div>

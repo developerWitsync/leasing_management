@@ -67,7 +67,7 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'country' => 'required|exists:countries,name',
             'state' => 'required_if:country,India|exists:states,state_name|nullable',
-            'gstin' => 'required_if:country,India|min:15|nullable',
+            //'gstin' => 'required_if:country,India|min:15|nullable',
             'applicable_gaap' => 'required|exists:accounting_standards,id',
             'legal_entity_name' => 'required',
             'authorised_person_name' => 'required|string|max:255',

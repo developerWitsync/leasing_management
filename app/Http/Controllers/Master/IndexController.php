@@ -71,6 +71,10 @@ class IndexController extends Controller
     }
 
     public function testMail(){
-        \Mail::to('info@witsync.co')->queue(new testMail());
+        try {
+            $mail = \Mail::to('harry1@yopmail.com')->send(new testMail());
+        }catch (\Exception $exception){
+            dd($exception);
+        }
     }
 }
