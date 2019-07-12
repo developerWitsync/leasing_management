@@ -59,6 +59,7 @@
                         <input type="email" name="email" class="form-control" placeholder="Business E-mail">
                         <input type="text" name="phone" class="form-control" placeholder="Mo. number">
                         <textarea class="form-control" name="comments" placeholder="Message"></textarea>
+                        <div class="{{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }}">
                         {!! app('captcha')->display([
                                               'data-theme' => 'light',
                                               'id' => 'rc-imageselect'
@@ -69,6 +70,7 @@
                                                 <strong>{{ $errors->first('g-recaptcha-response') }}</strong>
                                             </span>
                         @endif
+                        </div>
 
                         <button type="submit" class="btn submit">SEND MESSAGE</button>
                     </form>
