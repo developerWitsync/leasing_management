@@ -45,6 +45,7 @@ class ContactusController extends Controller
                 return redirect()->route('contactus')->with('success', 'Thank you for contacting us. We will get back to you very soon.');
             }
         }
+//        echo "hello";die;
         return view('contactus');
     }
 
@@ -58,7 +59,11 @@ class ContactusController extends Controller
             'name' => 'required',
             'email' => 'required|string|email|max:255',
             'phone' => 'required',
-            'comments' => 'required'
+            'comments' => 'required',
+
+        ],[
+            'g-recaptcha-response.required' => 'Please confirm the recaptcha.',
+            'g-recaptcha-response.captcha' => 'Recaptcha not confirmed.'
         ]);
     }
 

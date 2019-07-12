@@ -471,7 +471,7 @@ class ReviewSubmitController extends Controller
      * @param $modify_id
      * @return bool
      */
-    private function generateLeaseExpense($lease, $modify_id){
+        private function generateLeaseExpense($lease, $modify_id){
         try{
             if($lease){
                 $asset = $lease->assets()->first();

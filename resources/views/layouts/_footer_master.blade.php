@@ -59,6 +59,17 @@
                         <input type="email" name="email" class="form-control" placeholder="Business E-mail">
                         <input type="text" name="phone" class="form-control" placeholder="Mo. number">
                         <textarea class="form-control" name="comments" placeholder="Message"></textarea>
+                        {!! app('captcha')->display([
+                                              'data-theme' => 'light',
+                                              'id' => 'rc-imageselect'
+                                      ]) !!}
+
+                        @if ($errors->has('g-recaptcha-response'))
+                            <span class="help-block">
+                                                <strong>{{ $errors->first('g-recaptcha-response') }}</strong>
+                                            </span>
+                        @endif
+
                         <button type="submit" class="btn submit">SEND MESSAGE</button>
                     </form>
                 </div>
