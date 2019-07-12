@@ -140,7 +140,7 @@ class RegisterController extends Controller
             $userData = $request->all();
 
             $userData['password'] = str_random(8);
-
+            print_r($userData);die;
             $uniqueFileName = '';
 
             if($request->hasFile('certificates')){
