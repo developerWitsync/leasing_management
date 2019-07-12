@@ -37,11 +37,11 @@
                         <li><a href="mailto:info@witsync.co"><i class="fa fa-envelope-o"></i> info@witsync.co</a></li>
                     </ul>
                     <br>
-                    <h3>Newsletter</h3>
-                    <form role="form">
-                        <input type="email" class="form-control" autocomplete="off" placeholder="Enter your e-mail here">
-                        <button type="submit" class="btn bt"><i class="fa fa-paper-plane-o"></i></button>
-                    </form>
+                    {{--<h3>Newsletter</h3>--}}
+                    {{--<form role="form">--}}
+                        {{--<input type="email" class="form-control" autocomplete="off" placeholder="Enter your e-mail here">--}}
+                        {{--<button type="submit" class="btn bt"><i class="fa fa-paper-plane-o"></i></button>--}}
+                    {{--</form>--}}
 
                 </div>
             </div>
