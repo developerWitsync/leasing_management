@@ -37,9 +37,9 @@ class UserObserver
         $user->save();
         if($user->parent_id == '0') {
             //send the confirm acount email to the user from here
-            Mail::to($user)->queue(new RegistrationConfirmation($user));
+            Mail::to($user)->send(new RegistrationConfirmation($user));
             //need to send the user credentials email to the user
-            Mail::to($user)->queue(new RegistrationCredentials($user));
+            Mail::to($user)->send(new RegistrationCredentials($user));
 
             //generate the default settings for the registered user
             $this->generateSettings($user);
