@@ -33,6 +33,8 @@ class ContactusController extends Controller
      */
     public function index(Request $request)
     {
+
+
         if ($request->isMethod('post')) {
             $validator = $this->validationRules($request->all());
             if ($validator->fails()) {
@@ -45,8 +47,10 @@ class ContactusController extends Controller
                 return redirect()->route('contactus')->with('success', 'Thank you for contacting us. We will get back to you very soon.');
             }
         }
-//        echo "hello";die;
-        return view('contactus');
+
+        return view('contact_us');
+
+
     }
 
     /**
