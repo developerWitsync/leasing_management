@@ -55,6 +55,24 @@
                                             @endif
                                         </div>
                                     </div>
+
+                                    <div class="form-group{{ $errors->has('date_of_incorporation') ? ' has-error' : '' }} required">
+                                        <label for="date_of_incorporation" class="col-md-4 control-label">Date Of
+                                            Incorporation</label>
+
+                                        <div class="col-md-6">
+                                            <input id="date_of_incorporation" type="text" class="form-control"
+                                                   name="date_of_incorporation"
+                                                   value="{{ old('date_of_incorporation', \Carbon\Carbon::parse($user->date_of_incorporation)->format(config('settings.date_format'))) }}">
+
+                                            @if ($errors->has('date_of_incorporation'))
+                                                <span class="help-block">
+                                                    <strong>{{ $errors->first('date_of_incorporation') }}</strong>
+                                                </span>
+                                            @endif
+                                        </div>
+                                    </div>
+
                                 @endif
 
                                 @if($user->parent_id == 0 && $user->country == "India")
@@ -335,6 +353,13 @@
     <script src="{{ asset('js/pages/profile.js') }}"></script>
     <script>
         $(function () {
+
+            $('#date_of_incorporation').datepicker({
+                dateFormat: "dd-M-yy",
+                changeMonth: true,
+                changeYear: true
+            });
+
             $('input[name="authorised_person_dob"]').datepicker({
                 changeMonth: true,
                 changeYear: true,

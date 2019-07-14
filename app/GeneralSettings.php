@@ -16,6 +16,9 @@ class GeneralSettings extends Model
         'max_lease_end_year',
         'created_at',
         'updated_at',
-        'is_initial_date_of_application_saved'
+        'is_initial_date_of_application_saved',
+        'effective_date_of_standard',
+        'annual_financial_reporting_year_end_date',
+        'final_base_date'
     ];
 }

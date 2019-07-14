@@ -43,82 +43,141 @@
             <div class="">
                 <div role="tabpanel" class="tab-pane active">
 
-                    <form class="form-horizontal" method="POST"
-                          action="{{ route('settings.index.saveapplicationstandards') }}"
-                          id="save_date_of_initial_application">
+                    <form class="form-horizontal" method="POST" action="{{ route('settings.index.basedatestandards') }}">
                         {{ csrf_field() }}
                         <div class="panel panel-info">
                             <div class="panel-heading">
-                                <span> Date of Initial Application of the New Leasing Standard</span>
-                                @php
-                                $method_title = getParentDetails()->accountingStandard->title;
-                                $base_date = \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->format('F d, Y');
-                                $string = "{$method_title} effective for annual periods beginning on or after {$base_date}. In case of Applying Modified Retrospective Valuation Approach, please select effective date {$base_date} while in case of applying Full Retrospective Valuation Approach, please select Prior to {$base_date}."
-                                @endphp
-                                {!! renderToolTip($string,'', 'right') !!}
+                                <span>Base Date Standards</span>
                             </div>
-                            <div class="setting form-group{{ $errors->has('date_of_initial_application') ? ' has-error' : '' }} required">
-                                <div class="col-md-12 rightx">
-                                    <div class="input-group col-md-12">
-                                        <div class="form-check col-md-4 ">
-                                            <input class="form-check-input" type="radio"
-                                                   @if(old('date_of_initial_application', isset($settings->date_of_initial_application)?$settings->date_of_initial_application:"") == '1') checked="checked"
-                                                   @endif name="date_of_initial_application" value="1" id="jan_1_2019"
-                                                   @if(isset($settings->is_initial_date_of_application_saved) && $settings->is_initial_date_of_application_saved == 1) disabled="disabled" @endif>
-                                            <label class="form-check-label" for="jan_1_2019">
-                                                {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->format('F d, Y') }}
-                                            </label>
+                            <div class="setting">
+                                <div class="form-group{{ $errors->has('effective_date_of_standard') ? ' has-error' : '' }} required">
+                                    <label for="effective_date_of_standard" class="col-md-4 control-label">Effective
+                                        Date of Standard</label>
+                                    <div class="col-md-5">
+                                        <div class="from-group">
+                                            <input type="text" name="effective_date_of_standard"
+                                                   value="{{ \Carbon\Carbon::parse($standard_base_date)->format(config('settings.date_format')) }}"
+                                                   class="form-control" readonly="readonly">
                                         </div>
-
-                                        <div class="form-check col-md-4">
-                                            <input class="form-check-input" type="radio"
-                                                   @if(old('date_of_initial_application', isset($settings->date_of_initial_application)?$settings->date_of_initial_application:"") == '2') checked="checked"
-                                                   @endif name="date_of_initial_application" value="2"
-                                                   id="earlier_jan_1_2019"
-                                                   @if(isset($settings->is_initial_date_of_application_saved) && $settings->is_initial_date_of_application_saved == 1) disabled="disabled" @endif>
-                                            <label class="form-check-label" for="earlier_jan_1_2019">
-                                                Prior
-                                                to {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->format('F d, Y') }}
-                                            </label>
-                                        </div>
-
-                                        @if(!isset($settings->date_of_initial_application) || (isset($settings->date_of_initial_application) && $settings->is_initial_date_of_application_saved  == 0))
-                                            <div class="form-group col-md-4">
-                                                <div class="col-md-6 col-md-offset-4">
-                                                    <button type="submit" class="btn btn-success btn_confirm_submit">
-                                                        Confirm
-                                                    </button>
-                                                </div>
-                                            </div>
+                                        @if ($errors->has('effective_date_of_standard'))
+                                            <span class="help-block">
+                                                <strong>{{ $errors->first('effective_date_of_standard') }}</strong>
+                                            </span>
                                         @endif
-
                                     </div>
-
                                 </div>
 
-                                <div class="col-md-12 rightx">
-                                    <div class="col-md-4">
-                                        <div class="modified_retrospective_approach  @if(old('date_of_initial_application', isset($settings->date_of_initial_application)?$settings->date_of_initial_application:"") == '1')
-                                        @else hidden @endif">Modified Retrospective Approach
+                                @if(\Carbon\Carbon::parse($date_of_incorporation)->lessThan($standard_base_date))
+                                    <div class="form-group{{ $errors->has('annual_financial_reporting_year_end_date') ? ' has-error' : '' }} required">
+                                        <label for="annual_financial_reporting_year_end_date"
+                                               class="col-md-4 control-label">Immediate Previous Annual Financial
+                                            Reporting Year End Date under Old Leasing Standard</label>
+                                        <div class="col-md-5">
+                                            <div class="from-group">
+                                                <input type="text" name="annual_financial_reporting_year_end_date"
+                                                       id="annual_financial_reporting_year_end_date"
+                                                       value="{{ old('annual_financial_reporting_year_end_date', $settings->annual_financial_reporting_year_end_date) }}"
+                                                       class="form-control" style="background-color: #fff;"
+                                                       readonly="readonly">
+                                            </div>
+                                            @if ($errors->has('annual_financial_reporting_year_end_date'))
+                                                <span class="help-block">
+                                                <strong>{{ $errors->first('annual_financial_reporting_year_end_date') }}</strong>
+                                            </span>
+                                            @endif
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <div class="full_retrospective_approach @if(old('date_of_initial_application', isset($settings->date_of_initial_application)?$settings->date_of_initial_application:"") == '2')
-                                        @else hidden @endif"
-                                        ">Full Retrospective Approach
+                                @endif
+
+                                <div class="form-group">
+                                    <div class="col-md-6 col-md-offset-4">
+                                        <button type="submit" class="btn btn-success">
+                                            Save
+                                        </button>
                                     </div>
                                 </div>
-                            </div>
 
-                            @if ($errors->has('date_of_initial_application'))
-                                <span class="help-block">
-                                        <strong>{{ $errors->first('date_of_initial_application') }}</strong>
-                                    </span>
-                            @endif
+                            </div>
 
                         </div>
                     </form>
+
+                    @if(\Carbon\Carbon::parse($date_of_incorporation)->lessThan($standard_base_date) && $show_date_of_initial_application)
+                        <form class="form-horizontal" method="POST"
+                              action="{{ route('settings.index.saveapplicationstandards') }}"
+                              id="save_date_of_initial_application">
+                            {{ csrf_field() }}
+                            <div class="panel panel-info">
+                                <div class="panel-heading">
+                                    <span> Date of Initial Application of the New Leasing Standard</span>
+                                    @php
+                                        $method_title = getParentDetails()->accountingStandard->title;
+                                        $base_date = \Carbon\Carbon::parse($calculated_base_date)->format('F d, Y');
+                                        $string = "{$method_title} effective for annual periods beginning on or after {$base_date}. In case of Applying Modified Retrospective Valuation Approach, please select effective date {$base_date} while in case of applying Full Retrospective Valuation Approach, please select Prior to {$base_date}."
+                                    @endphp
+                                    {!! renderToolTip($string,'', 'right') !!}
+                                </div>
+                                <div class="setting form-group{{ $errors->has('date_of_initial_application') ? ' has-error' : '' }} required">
+                                    <div class="col-md-12 rightx">
+                                        <div class="input-group col-md-12">
+                                            <div class="form-check col-md-4 ">
+                                                <input class="form-check-input" type="radio"
+                                                       @if(old('date_of_initial_application', isset($settings->date_of_initial_application)?$settings->date_of_initial_application:"") == '1') checked="checked"
+                                                       @endif name="date_of_initial_application" value="1"
+                                                       id="jan_1_2019"
+                                                       @if(isset($settings->is_initial_date_of_application_saved) && $settings->is_initial_date_of_application_saved == 1) disabled="disabled" @endif>
+                                                <label class="form-check-label" for="jan_1_2019">
+                                                    {{ \Carbon\Carbon::parse($calculated_base_date)->addDay(1)->format('F d, Y') }}
+                                                </label>
+                                            </div>
+
+                                            <div class="form-check col-md-4">
+                                                <input class="form-check-input" type="radio"
+                                                       @if(old('date_of_initial_application', isset($settings->date_of_initial_application)?$settings->date_of_initial_application:"") == '2') checked="checked"
+                                                       @endif name="date_of_initial_application" value="2"
+                                                       id="earlier_jan_1_2019"
+                                                       @if(isset($settings->is_initial_date_of_application_saved) && $settings->is_initial_date_of_application_saved == 1) disabled="disabled" @endif>
+                                                <label class="form-check-label" for="earlier_jan_1_2019">
+                                                    {{ \Carbon\Carbon::parse($calculated_base_date)->addDay(1)->subDay(365)->format('F d, Y') }}
+                                                </label>
+                                            </div>
+
+                                            @if(!isset($settings->date_of_initial_application) || (isset($settings->date_of_initial_application) && $settings->is_initial_date_of_application_saved  == 0))
+                                                <div class="form-group col-md-4">
+                                                    <div class="col-md-6 col-md-offset-4">
+                                                        <button type="submit"
+                                                                class="btn btn-success btn_confirm_submit">
+                                                            Confirm
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12 rightx">
+                                        <div class="col-md-4">
+                                            <div class="modified_retrospective_approach  @if(old('date_of_initial_application', isset($settings->date_of_initial_application)?$settings->date_of_initial_application:"") == '1')
+                                            @else hidden @endif">Modified Retrospective Approach
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="full_retrospective_approach @if(old('date_of_initial_application', isset($settings->date_of_initial_application)?$settings->date_of_initial_application:"") == '2')
+                                            @else hidden @endif"
+                                            ">Full Retrospective Approach
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @if ($errors->has('date_of_initial_application'))
+                                    <span class="help-block">
+                                    <strong>{{ $errors->first('date_of_initial_application') }}</strong>
+                                </span>
+                                @endif
+                            </div>
+                        </form>
                 </div>
+                @endif
 
                 <form class="form-horizontal" method="POST" action="{{ route('settings.index.save') }}">
                     {{ csrf_field() }}
@@ -161,7 +220,7 @@
                                 <div class="col-md-5">
                                     <div class="from-group">
 
-                                        <select name="max_lease_end_year" id="max_lease_end_year  " type="text"
+                                        <select name="max_lease_end_year" id="max_lease_end_year" type="text"
                                                 placeholder="Select Year" class="form-control max_lease_end_year">
                                             <option value="">Please select Year</option>
                                             {{ $end_year = date('Y') + 100 }}
@@ -437,6 +496,23 @@
                 changeYear: true,
                 maxDate: '12/31/2018'
             });
+
+            $('#annual_financial_reporting_year_end_date').datepicker({
+                changeMonth: true,
+                changeYear: true,
+                minDate: '{{ \Carbon\Carbon::parse($standard_base_date)->subDay(1)->format('m/d/Y') }}',
+                maxDate: '{{ \Carbon\Carbon::parse($standard_base_date)->subDay(1)->addYear(1)->subMonthNoOverflow(1)->lastOfMonth()->format('m/d/Y') }}',
+                beforeShowDay: function (date) {
+                    // getDate() returns the day [ 0 to 31 ]
+                    if (date.getDate() == getLastDayOfYearAndMonth(date.getFullYear(), date.getMonth())) {
+                        return [true, ''];
+                    }
+
+                    return [false, ''];
+                }
+            });
+
+
             $('.max_previous_lease_start_year').datepicker({
                 changeYear: true,
                 showButtonPanel: true,
@@ -498,7 +574,7 @@
             $('input[type="radio"]').on('change', function () {
                 if ($(this).val() == '2') {
                     bootbox.confirm({
-                        message: 'Are you sure to apply this standard for all your leases existing as on {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1)->format("F d, Y") }} by adjusting opening equity using Full Retrospective Method',
+                        message: 'Are you sure to apply this standard for all your leases existing as on {{ \Carbon\Carbon::parse($calculated_base_date)->addDay(1)->subDay(365)->format("F d, Y") }} by adjusting opening equity using Full Retrospective Method',
                         buttons: {
                             confirm: {
                                 label: 'Yes',
@@ -521,7 +597,7 @@
                     });
                 } else {
                     bootbox.confirm({
-                        message: 'Are your sure to apply this standard effective from  {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->format("F d, Y") }} using Modified Retrospective Approach',
+                        message: 'Are your sure to apply this standard effective from  {{ \Carbon\Carbon::parse($calculated_base_date)->addDay(1)->format("F d, Y") }} using Modified Retrospective Approach',
                         buttons: {
                             confirm: {
                                 label: 'Yes',

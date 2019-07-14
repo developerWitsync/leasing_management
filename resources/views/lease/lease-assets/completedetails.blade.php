@@ -307,7 +307,7 @@
 
                 function toggleUsinLeasePayment(){
                     var _start_date =  $('#accural_period').datepicker('getDate');
-                    if(_start_date < new Date('{{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->format("F d Y") }}')){
+                    if(_start_date < new Date('{{ \Carbon\Carbon::parse(getParentDetails()->baseDate->final_base_date)->format("F d Y") }}')){
                         $('.using_lease_payment').show();
 
                         $('#prior_accounting').show();
@@ -359,7 +359,7 @@
 
                 $('#lease_end_date').datepicker({
                     dateFormat: "dd-M-yy",
-                    minDate: new Date('{{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->lastOfMonth()->format("Y-m-d")}}'),
+                    minDate: new Date('{{ \Carbon\Carbon::parse(getParentDetails()->baseDate->final_base_date)->lastOfMonth()->format("Y-m-d")}}'),
                     yearRange : '{{ $settings->min_previous_first_lease_start_year }}:{{$settings->max_lease_end_year}}',
                     changeYear : true,
                     onSelect : function (){
@@ -400,8 +400,8 @@
                     var dt3 = new Date($('#accural_period').datepicker('getDate'));
                     var dt4 = new Date(dt3.setDate(dt3.getDate() + 30));
 
-                    if(dt4 <= new Date('{{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->lastOfMonth()->format("Y-m-d")}}')) {
-                        dt2.datepicker('option', 'minDate', new Date('{{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->lastOfMonth()->format("Y-m-d")}}'));
+                    if(dt4 <= new Date('{{ \Carbon\Carbon::parse(getParentDetails()->baseDate->final_base_date)->lastOfMonth()->format("Y-m-d")}}')) {
+                        dt2.datepicker('option', 'minDate', new Date('{{ \Carbon\Carbon::parse(getParentDetails()->baseDate->final_base_date)->lastOfMonth()->format("Y-m-d")}}'));
                     } else {
                         dt2.datepicker('option', 'minDate', dt4);
                     }
@@ -419,7 +419,7 @@
                  var lease_asset_accounting = $("#accounting_treatment").find('option:selected').text();
                  if(lease_asset_accounting == 'Finance Lease Accounting'){
                 var modal = bootbox.dialog({
-                    message: "Finance Lease will be revalued at present value as on {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->format('F d, Y') }}",
+                    message: "Finance Lease will be revalued at present value as on {{ \Carbon\Carbon::parse(getParentDetails()->baseDate->final_base_date)->format('F d, Y') }}",
                     buttons: [
                       {
                         label: "OK",

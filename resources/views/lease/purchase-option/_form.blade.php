@@ -173,10 +173,10 @@
 
         $(document).ready(function(){
 
-            @if(\Carbon\Carbon::parse($asset->accural_period)->greaterThan(\Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)))
+            @if(\Carbon\Carbon::parse($asset->accural_period)->greaterThan(\Carbon\Carbon::parse(getParentDetails()->baseDate->final_base_date)))
                 var minDate = new Date('{{ $asset->accural_period }}');
                     @else
-                var minDate = new Date('{{ getParentDetails()->accountingStandard->base_date }}');
+                var minDate = new Date('{{ getParentDetails()->baseDate->final_base_date }}');
             @endif
 
             $("#expected_purchase_date").datepicker({

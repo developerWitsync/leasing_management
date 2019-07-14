@@ -252,9 +252,9 @@ class LeaseAssets extends Model
             $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
         } else {
             if ($settings->date_of_initial_application == 2) {
-                $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1);
+                $base_date = Carbon::parse(getParentDetails()->baseDate->final_base_date)->subYear(1);
             } else {
-                $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date);
+                $base_date = Carbon::parse(getParentDetails()->baseDate->final_base_date);
             }
             $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
         }
@@ -300,9 +300,9 @@ class LeaseAssets extends Model
             $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
         } else {
             if ($settings->date_of_initial_application == 2) {
-                $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1);
+                $base_date = Carbon::parse(getParentDetails()->baseDate->final_base_date)->subYear(1);
             } else {
-                $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date);
+                $base_date = Carbon::parse(getParentDetails()->baseDate->final_base_date);
             }
             $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
         }

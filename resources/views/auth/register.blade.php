@@ -41,7 +41,7 @@
                                 {{ csrf_field() }}
                                 {{--<input type="hidden" name="selected_plan" value="{{ $package->id }}">--}}
                                 <div class="row">
-                                    <div class="form-group {{ $errors->has('country') ? ' has-error' : '' }} col-md-12 col-sm-12 required">
+                                    <div class="form-group {{ $errors->has('country') ? ' has-error' : '' }} col-md-6 col-sm-12 required">
                                         <select id="country" class="form-control" name="country">
                                             <option value="">--Select Country Of Incorporation--</option>
                                             @foreach($countries as $country)
@@ -51,6 +51,16 @@
                                         @if ($errors->has('country'))
                                             <span class="help-block">
                                                 <strong>{{ $errors->first('country') }}</strong>
+                                            </span>
+                                        @endif
+                                    </div>
+
+                                
+                                    <div class="form-group {{ $errors->has('date_of_incorporation') ? ' has-error' : '' }} col-md-6 col-sm-12 required">
+                                        <input type="text" class="form-control" id="date_of_incorporation" value="{{ old('date_of_incorporation') }}" name="date_of_incorporation" placeholder="Date of Incorporation*">
+                                        @if ($errors->has('date_of_incorporation'))
+                                            <span class="help-block">
+                                                <strong>{{ $errors->first('date_of_incorporation') }}</strong>
                                             </span>
                                         @endif
                                     </div>
@@ -357,6 +367,12 @@
                 changeMonth: true,
                 changeYear: true,
                 defaultDate : new Date("{{ \Carbon\Carbon::today()->subYear(100)->firstOfYear()->format('Y-m-d') }}")
+            });
+
+            $('#date_of_incorporation').datepicker({
+                dateFormat: "dd-M-yy",
+                changeMonth: true,
+                changeYear: true
             });
 
             $('#country').on('change', function(){

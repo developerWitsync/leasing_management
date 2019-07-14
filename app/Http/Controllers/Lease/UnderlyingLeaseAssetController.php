@@ -130,9 +130,9 @@ class UnderlyingLeaseAssetController extends Controller
             if($lease) {
 
                 if($settings->date_of_initial_application == 2){
-                    $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1)->format('Y-m-d');
+                    $base_date = Carbon::parse(getParentDetails()->baseDate->final_base_date)->subYear(1)->format('Y-m-d');
                 } else {
-                    $base_date = getParentDetails()->accountingStandard->base_date;
+                    $base_date = getParentDetails()->baseDate->final_base_date;
                 }
 
 
@@ -373,7 +373,7 @@ class UnderlyingLeaseAssetController extends Controller
             $asset = LeaseAssets::query()->where('lease_id', '=', $lease_id)->where('id', '=', $asset_id)->first();
             if($lease && $asset) {
 
-                $base_date =  getParentDetails()->accountingStandard->base_date;
+                $base_date =  getParentDetails()->baseDate->final_base_date;
 
                 if($request->isMethod('post')) {
 

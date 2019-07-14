@@ -182,10 +182,10 @@
             @if($subsequent_modify_required)
                 var minDate = new Date('{{ $asset->lease->modifyLeaseApplication->last()->effective_from}}');
             @else
-                @if(\Carbon\Carbon::parse($asset->accural_period)->greaterThan(\Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)))
+                @if(\Carbon\Carbon::parse($asset->accural_period)->greaterThan(\Carbon\Carbon::parse(getParentDetails()->baseDate->final_base_date)))
                     var minDate = new Date('{{ $asset->accural_period }}');
                 @else
-                    var minDate = new Date('{{ getParentDetails()->accountingStandard->base_date }}');
+                    var minDate = new Date('{{ getParentDetails()->baseDate->final_base_date }}');
                 @endif
             @endif
 

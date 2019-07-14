@@ -456,3 +456,8 @@ function currencyFormat(price) {
                 : Math.abs(Number(price));
 
 }
+
+function getLastDayOfYearAndMonth(year, month)
+{
+    return(new Date((new Date(year, month + 1, 1)) - 1)).getDate();
+}

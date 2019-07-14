@@ -14,6 +14,7 @@ use App\GeneralSettings;
 use App\LeaseLockYear;
 use App\Http\Controllers\Controller;
 use App\ReportingPeriods;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Validator;
 use Session;
@@ -39,8 +40,17 @@ class IndexController extends Controller
         ];
 
         $settings = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
+        //get the base date for the selected accounting standard by the current user and send the same to the view
+        $calculated_base_date =  $standard_base_date = getParentDetails()->accountingStandard->base_date;
+        $date_of_incorporation = getParentDetails()->date_of_incorporation;
+        $show_date_of_initial_application = false;
         if(is_null($settings)) {
             $settings = new GeneralSettings();
+        } else {
+            if($settings->annual_financial_reporting_year_end_date){
+                $show_date_of_initial_application = true;
+                $calculated_base_date = $settings->annual_financial_reporting_year_end_date;
+            }
         }
 
         $lease_lock_year = LeaseLockYear::query()
@@ -68,7 +78,11 @@ class IndexController extends Controller
             'modication_reason',
             'lease_lock_year_range',
             'reporting_periods',
-            'financial_reporting_period_setting'
+            'financial_reporting_period_setting',
+            'standard_base_date',
+            'date_of_incorporation',
+            'show_date_of_initial_application',
+            'calculated_base_date'
         ));
     }
 
@@ -126,11 +140,20 @@ class IndexController extends Controller
             }
 
             $request->request->add(['business_account_id' => auth()->user()->id]);
+
             $settings = GeneralSettings::query()->where('business_account_id', '=', auth()->user()->id)->first();
+
+            if($request->date_of_initial_application == '1') {
+                $calculated_base_date = Carbon::parse($settings->annual_financial_reporting_year_end_date)->addDay(1)->format('Y-m-d');
+            } else if($request->date_of_initial_application == '2'){
+                $calculated_base_date = Carbon::parse($settings->annual_financial_reporting_year_end_date)->addDay(1)->subDay(365)->format('Y-m-d');
+            }
 
             $data = $request->except('_token');
 
             $data['is_initial_date_of_application_saved'] = 1;
+
+            $data['final_base_date'] = $calculated_base_date;
 
             if(isset($settings)) {
                 $settings->setRawAttributes($data);
@@ -140,6 +163,48 @@ class IndexController extends Controller
                 GeneralSettings::create($data);
                 $status = 'Date of Initial Application of the New Leasing Standard has been saved successfully.';
             }
+            return redirect()->back()->with('status', $status);
+
+        } catch (\Exception $e) {
+            abort(404);
+        }
+    }
+
+    /**
+     * saves the first step base date standards so that the base date options can be calculated
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function saveBaseDateStandards(Request $request){
+        try{
+
+            $validator = Validator::make($request->except("_token"), [
+                'effective_date_of_standard'   => 'required|date',
+                'annual_financial_reporting_year_end_date'  => 'required|date'
+            ]);
+
+            if($validator->fails()){
+                return redirect()->back()->withErrors($validator->errors())->withInput($request->except("_token"));
+            }
+
+            $request->request->add(['business_account_id' => auth()->user()->id]);
+            $settings = GeneralSettings::query()->where('business_account_id', '=', auth()->user()->id)->first();
+
+            $data = $request->except('_token');
+
+            $data['effective_date_of_standard'] = Carbon::parse($request->effective_date_of_standard)->format('Y-m-d');
+
+            $data['annual_financial_reporting_year_end_date'] = Carbon::parse($request->annual_financial_reporting_year_end_date)->format('Y-m-d');
+
+            if(isset($settings)) {
+                $settings->setRawAttributes($data);
+                $settings->save();
+                $status = 'Base Date standards have been saved successfully.';
+            } else {
+                GeneralSettings::create($data);
+                $status = 'Base Date standards have been saved successfully.';
+            }
+
             return redirect()->back()->with('status', $status);
 
         } catch (\Exception $e) {

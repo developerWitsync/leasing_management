@@ -169,7 +169,7 @@ class ModifyLeaseController extends Controller
                 if($lease_modifications_history) {
                     $minDate = Carbon::parse($lease_modifications_history->effective_from)->addDay(1)->format('Y-m-d');
                 } else {
-                    $base_date = getParentDetails()->accountingStandard->base_date;
+                    $base_date = getParentDetails()->baseDate->final_base_date;
                     if (Carbon::parse($asset->accural_period)->greaterThan(Carbon::parse($base_date))) {
                         $date = Carbon::parse($asset->accural_period)->format('Y-m-d');
                     } else {

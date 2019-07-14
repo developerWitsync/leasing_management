@@ -23,9 +23,9 @@ class CheckPreviousData
         $settings = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
         //\Log::info('Checking ----- ' . $step . ' On URL ------- ' . $request->route()->getName());
         if($settings->date_of_initial_application == 2) {
-            $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1)->format('Y-m-d');
+            $base_date = Carbon::parse(getParentDetails()->baseDate->final_base_date)->subYear(1)->format('Y-m-d');
         } else {
-            $base_date = getParentDetails()->accountingStandard->base_date;
+            $base_date = getParentDetails()->baseDate->final_base_date;
         }
         if ($param_type == 'asset_id') {
             $asset_id = $request->route($param);
