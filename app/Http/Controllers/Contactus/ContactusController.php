@@ -64,7 +64,7 @@ class ContactusController extends Controller
             'email' => 'required|string|email|max:255',
             'phone' => 'required',
             'comments' => 'required',
-//            'g-recaptcha-response' => 'required|captcha'
+            'g-recaptcha-response' => 'required|captcha'
         ],[
             'g-recaptcha-response.required' => 'Please confirm the recaptcha.',
             'g-recaptcha-response.captcha' => 'Recaptcha not confirmed.'
