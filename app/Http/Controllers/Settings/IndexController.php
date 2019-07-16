@@ -143,11 +143,14 @@ class IndexController extends Controller
 
             $settings = GeneralSettings::query()->where('business_account_id', '=', auth()->user()->id)->first();
 
-            if($request->date_of_initial_application == '1') {
-                $calculated_base_date = Carbon::parse($settings->annual_financial_reporting_year_end_date)->addDay(1)->format('Y-m-d');
-            } else if($request->date_of_initial_application == '2'){
-                $calculated_base_date = Carbon::parse($settings->annual_financial_reporting_year_end_date)->addDay(1)->subDay(365)->format('Y-m-d');
-            }
+            //as in case of Full Retrospective we are already subtracting 1 year from the base date where required so we do not need to subtract here....
+//            if($request->date_of_initial_application == '1') {
+//                $calculated_base_date = Carbon::parse($settings->annual_financial_reporting_year_end_date)->addDay(1)->format('Y-m-d');
+//            } else if($request->date_of_initial_application == '2'){
+//                $calculated_base_date = Carbon::parse($settings->annual_financial_reporting_year_end_date)->addDay(1)->subDay(365)->format('Y-m-d');
+//            }
+
+            $calculated_base_date = Carbon::parse($settings->annual_financial_reporting_year_end_date)->addDay(1)->format('Y-m-d');
 
             $data = $request->except('_token');
 
