@@ -72,7 +72,7 @@ class RegisterController extends Controller
             'legal_entity_name' => 'required',
             'authorised_person_name' => 'required|string|max:255',
             'authorised_person_dob' => 'required|date|before:-18 years',
-            'date_of_incorporation' => 'required|date',
+//            'date_of_incorporation' => 'required|date',
             'gender' => 'required',
             'authorised_person_designation' => 'required',
             'email' => 'required|string|email|max:255|unique:users',
@@ -102,7 +102,7 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $data['type'] = '0';
-        $data['date_of_incorporation'] = date('Y-m-d', strtotime($data['date_of_incorporation']));
+//        $data['date_of_incorporation'] = date('Y-m-d', strtotime($data['date_of_incorporation']));
         $data['authorised_person_dob'] = date('Y-m-d', strtotime($data['authorised_person_dob']));
         $data['email_verification_code'] = md5(time());
         $data['is_verified'] = '0';

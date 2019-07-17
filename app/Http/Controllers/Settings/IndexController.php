@@ -87,6 +87,31 @@ class IndexController extends Controller
     }
 
     /**
+     * save the Date of incorporation for the current logged in business account
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function saveDateOfIncorporation(Request $request){
+        try{
+            $validator = Validator::make($request->except("_token"), [
+                'date_of_incorporation' => 'required|date'
+            ]);
+
+            if($validator->fails()){
+                return redirect()->back()->withErrors($validator->errors())->withInput($request->except("_token"));
+            }
+
+            $user = getParentDetails();
+            $user->setAttribute('date_of_incorporation', Carbon::parse($request->date_of_incorporation)->format('Y-m-d'));
+            $user->save();
+
+            return redirect()->back()->with('status', 'Date of incorporation have been saved successfully.');
+        }catch (\Exception $e) {
+            abort(404);
+        }
+    }
+
+    /**
      * validates the input from the form
      * if the validation returns true saves the settings to the database and redirects the user with a success message
      * if the general settings already exists for the logged in user than updates the existing settings

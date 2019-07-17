@@ -43,6 +43,45 @@
             <div class="">
                 <div role="tabpanel" class="tab-pane active">
 
+
+                    <form class="form-horizontal" method="POST" action="{{ route('settings.index.incorporationdate') }}" id="confirm_date_of_incorporation">
+                        {{ csrf_field() }}
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <span>Date Of Incorporation</span>
+                            </div>
+                            <div class="setting">
+                                <div class="form-group{{ $errors->has('date_of_incorporation') ? ' has-error' : '' }} required">
+                                    <label for="date_of_incorporation" class="col-md-4 control-label">Date of Incorporation</label>
+                                    <div class="col-md-5">
+                                        <div class="from-group">
+                                            <input type="text" name="date_of_incorporation" id="date_of_incorporation"
+                                                   value="{{ old('date_of_incorporation', $date_of_incorporation) }}"
+                                                   @if(!is_null($date_of_incorporation)) disabled="disabled" @endif
+                                                   class="form-control">
+                                        </div>
+                                        @if ($errors->has('date_of_incorporation'))
+                                            <span class="help-block">
+                                                <strong>{{ $errors->first('date_of_incorporation') }}</strong>
+                                            </span>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                @if(is_null($date_of_incorporation))
+                                    <div class="form-group">
+                                        <div class="col-md-6 col-md-offset-4">
+                                            <button type="submit" class="btn btn-success confirm_date_of_incorporation">
+                                                Save
+                                            </button>
+                                        </div>
+                                    </div>
+                                @endif
+
+                            </div>
+                        </div>
+                    </form>
+
                     <form class="form-horizontal" method="POST" action="{{ route('settings.index.basedatestandards') }}">
                         {{ csrf_field() }}
                         <div class="panel panel-info">
@@ -197,6 +236,12 @@
                                                 class="form-control max_previous_lease_start_year">
                                             <option value="">Please select Year</option>
                                             {{ $earliest_year = 1990 }}
+                                            @php
+                                                $earliest_year = 1990;
+                                                if(!is_null($date_of_incorporation)){
+                                                    $earliest_year = \Carbon\Carbon::parse($date_of_incorporation)->format('Y');
+                                                }
+                                            @endphp
                                             @foreach (range(date('Y') - 1, $earliest_year) as $x)
                                                 <option value="{{ $x }}"
                                                         @if(old('min_previous_first_lease_start_year', $settings->min_previous_first_lease_start_year) == $x) selected="selected" @endif>{{ $x }}</option>
@@ -255,49 +300,49 @@
                 </form>
             </div>
 
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    Your Annual Financial Reporting Period
-                    {!! renderToolTip('Select your applicable annual financial reporting period.') !!}
-                </div>
-                <div class="panel-body">
-                    <div role="tabpanel" class="tab-pane active">
-                        <form class="form-horizontal" method="POST"
-                              action="{{ route('settings.index.financialreportingperiod') }}">
-                            {{ csrf_field() }}
-                            <div class="form-group{{ $errors->has('reporting_period_id') ? ' has-error' : '' }} required">
-                                <label for="reporting_period_id" class="col-md-4 control-label">Financial Reporting
-                                    Period</label>
-                                <div class="col-md-6">
-                                    <div class="from-group">
+{{--            <div class="panel panel-info">--}}
+{{--                <div class="panel-heading">--}}
+{{--                    Your Annual Financial Reporting Period--}}
+{{--                    {!! renderToolTip('Select your applicable annual financial reporting period.') !!}--}}
+{{--                </div>--}}
+{{--                <div class="panel-body">--}}
+{{--                    <div role="tabpanel" class="tab-pane active">--}}
+{{--                        <form class="form-horizontal" method="POST"--}}
+{{--                              action="{{ route('settings.index.financialreportingperiod') }}">--}}
+{{--                            {{ csrf_field() }}--}}
+{{--                            <div class="form-group{{ $errors->has('reporting_period_id') ? ' has-error' : '' }} required">--}}
+{{--                                <label for="reporting_period_id" class="col-md-4 control-label">Financial Reporting--}}
+{{--                                    Period</label>--}}
+{{--                                <div class="col-md-6">--}}
+{{--                                    <div class="from-group">--}}
 
-                                        <select name="reporting_period_id" id="reporting_period_id"
-                                                placeholder="Select Financial Reporting Period" class="form-control">
-                                            <option value="">Please select Reporting Period</option>
-                                            @foreach ($reporting_periods as $period)
-                                                <option value="{{ $period->id }}"
-                                                        @if(old('reporting_period_id', $financial_reporting_period_setting->reporting_period_id) == $period->id) selected="selected" @endif>{{ $period->title }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    @if ($errors->has('reporting_period_id'))
-                                        <span class="help-block">
-                                            <strong>{{ $errors->first('reporting_period_id') }}</strong>
-                                        </span>
-                                    @endif
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-md-6 col-md-offset-4">
-                                        <button type="submit" class="btn btn-success">
-                                            Save
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+{{--                                        <select name="reporting_period_id" id="reporting_period_id"--}}
+{{--                                                placeholder="Select Financial Reporting Period" class="form-control">--}}
+{{--                                            <option value="">Please select Reporting Period</option>--}}
+{{--                                            @foreach ($reporting_periods as $period)--}}
+{{--                                                <option value="{{ $period->id }}"--}}
+{{--                                                        @if(old('reporting_period_id', $financial_reporting_period_setting->reporting_period_id) == $period->id) selected="selected" @endif>{{ $period->title }}</option>--}}
+{{--                                            @endforeach--}}
+{{--                                        </select>--}}
+{{--                                    </div>--}}
+{{--                                    @if ($errors->has('reporting_period_id'))--}}
+{{--                                        <span class="help-block">--}}
+{{--                                            <strong>{{ $errors->first('reporting_period_id') }}</strong>--}}
+{{--                                        </span>--}}
+{{--                                    @endif--}}
+{{--                                </div>--}}
+{{--                                <div class="form-group">--}}
+{{--                                    <div class="col-md-6 col-md-offset-4">--}}
+{{--                                        <button type="submit" class="btn btn-success">--}}
+{{--                                            Save--}}
+{{--                                        </button>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </form>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
 
 
             <div class="panel panel-info">
@@ -486,6 +531,13 @@
                 });
             });
 
+
+
+            $("#date_of_incorporation").datepicker({
+                changeMonth: true,
+                changeYear: true
+            });
+
             $("#annual_year_end_on").datepicker({
                 changeMonth: true,
                 changeYear: true
@@ -547,6 +599,29 @@
         });
 
         $(document).ready(function () {
+
+
+            $(".confirm_date_of_incorporation").on('click', function (e) {
+                e.preventDefault();
+                bootbox.confirm({
+                    message: 'Are you sure of your selection, once selected will not be reverted.',
+                    buttons: {
+                        confirm: {
+                            label: 'Yes',
+                            className: 'btn btn-success'
+                        },
+                        cancel: {
+                            label: 'No',
+                            className: 'btn btn-danger'
+                        }
+                    },
+                    callback: function (result) {
+                        if (result) {
+                            $('#confirm_date_of_incorporation').submit();
+                        }
+                    }
+                });
+            });
 
             $(".btn_confirm_submit").on('click', function (e) {
                 e.preventDefault();

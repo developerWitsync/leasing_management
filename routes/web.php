@@ -437,6 +437,8 @@ Route::middleware('auth')->group(function () {
 
             Route::post('save-base-date-standards', ['as' => 'settings.index.basedatestandards', 'uses' => 'IndexController@saveBaseDateStandards']);
 
+            Route::post('date-of-incorporation', ['as' => 'settings.index.incorporationdate', 'uses' => 'IndexController@saveDateOfIncorporation']);
+
         });
 
         Route::prefix('lease-classification')->group(function () {
