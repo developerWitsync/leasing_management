@@ -92,9 +92,6 @@
             <!-- <hr> -->
         </div>
     </div>
-		<a href="https://seal.beyondsecurity.com/vulnerability-scanner-verification/www.witsync.co" >
-<img src="https://seal.beyondsecurity.com/verification-images/www.witsync.co/vulnerability-scanner-2.gif" alt="Vulnerability Scanner" border="0" />
-</a>
 </footer><!--/#footer-->
 
 <div class="gototop" id="gototop" style=""><i class="fa fa-angle-up"></i></div>
