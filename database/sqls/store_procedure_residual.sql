@@ -1,6 +1,6 @@
 DROP PROCEDURE IF EXISTS `present_value_of_lease_liability_residual`;
 
-CREATE DEFINER=`witsyncf_flexsin`@`localhost` PROCEDURE `present_value_of_lease_liability_residual`(
+CREATE DEFINER=`witsyncu_demousr`@`localhost` PROCEDURE `present_value_of_lease_liability_residual`(
 IN `residual_id` INT,
 IN `asset_id` INT,
 IN `lease_end_date` date,
