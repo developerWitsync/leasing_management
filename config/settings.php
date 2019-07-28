@@ -50,7 +50,8 @@ return [
         'max_size_in_mbs' => '2MB',
         'file_validation' => 'Only Doc,Pdf,Docx,Zip with 2MB size of files are allowed.',
         'file_rule'       =>  'file|mimes:doc,pdf,docx,zip,txt|max:2000|nullable|clamav',
-        'certificates'       =>  'file|required|mimes:doc,pdf,docx,zip,txt|max:2000|clamav'
+        // 'certificates'       =>  'file|required|mimes:doc,pdf,docx,zip,txt|max:2000|clamav'
+        'certificates'       =>  'file|required|mimes:doc,pdf,docx,zip,txt|max:2000'
     ],
     'max_lease_asset_number_of_payments' => 10
 ];
