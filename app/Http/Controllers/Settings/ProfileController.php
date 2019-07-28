@@ -69,6 +69,7 @@ class ProfileController extends Controller
                     $rules['state'] = 'required_if:country,India|exists:states,state_name|nullable';
                     $rules['gstin'] =   'required_if:country,India|min:15|nullable';
                     $rules['legal_entity_name'] = 'required';
+//                    $rules['date_of_incorporation'] = 'required|date';
                     $rules['certificates'] = config('settings.file_size_limits.file_rule');
                 }
 
@@ -92,6 +93,9 @@ class ProfileController extends Controller
                 $userdata->type = '0';
                 $userdata->password = bcrypt($request->password);
                 $userdata->authorised_person_dob = date('Y-m-d', strtotime($request->authorised_person_dob));
+                if($user->parent_id == 0){
+//                    $userdata->date_of_incorporation = date('Y-m-d', strtotime($request->date_of_incorporation));
+                }
 
                 if($request->hasFile('certificates')){
                     $file = $request->file('certificates');

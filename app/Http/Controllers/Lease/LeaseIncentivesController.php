@@ -52,9 +52,9 @@ class LeaseIncentivesController extends Controller
         try {
             $settings = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
             if($settings->date_of_initial_application == 2){
-                $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1)->format('Y-m-d');
+                $base_date = Carbon::parse(getParentDetails()->baseDate->final_base_date)->subYear(1)->format('Y-m-d');
             } else {
-                $base_date = getParentDetails()->accountingStandard->base_date;
+                $base_date = getParentDetails()->baseDate->final_base_date;
             }
             $breadcrumbs = [
                 [
@@ -207,7 +207,7 @@ class LeaseIncentivesController extends Controller
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
         if ($lease) {
             //Load the assets only lease start on or after jan 01 2019
-            $base_date = getParentDetails()->accountingStandard->base_date;
+            $base_date = getParentDetails()->baseDate->final_base_date;
             $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '>=', $base_date)->get();
             return view('lease.lease-incentives.index', compact(
                 'lease',

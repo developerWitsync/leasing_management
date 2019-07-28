@@ -440,7 +440,7 @@ If relevant number not appearing, please first add the number under settings to 
                                         <label for="yes" class="form-check-label" for="1" style="vertical-align: 2px">
                                             Modified Retrospective Approach (Without Adjusting Opening Equity). Value Of Asset Will Be Equal To Present Value Of Lease Liability
                                             {{--Current--}}
-                                            {{--Lease Payment Effective From {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->format('Y') }}--}}
+                                            {{--Lease Payment Effective From {{ \Carbon\Carbon::parse(getParentDetails()->baseDate->final_base_date)->format('Y') }}--}}
                                         </label>
                                     </div>
                                     @endif
@@ -538,9 +538,9 @@ If relevant number not appearing, please first add the number under settings to 
 
                 function toggleUsinLeasePayment() {
                     var _start_date = $('#accural_period').datepicker('getDate');
-                    var __base_date = '{{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->format("F d Y") }}';
+                    var __base_date = '{{ \Carbon\Carbon::parse(getParentDetails()->baseDate->final_base_date)->format("F d Y") }}';
                     @if($settings->date_of_initial_application == 2)
-                        var __base_date = '{{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1)->format("F d Y") }}';
+                        var __base_date = '{{ \Carbon\Carbon::parse(getParentDetails()->baseDate->final_base_date)->subYear(1)->format("F d Y") }}';
                     @endif
                     if (_start_date < new Date(__base_date) ) {
                         var lease_asset_accounting = $("#accounting_treatment").find('option:selected').text();
@@ -601,9 +601,9 @@ If relevant number not appearing, please first add the number under settings to 
                     }
                 });
 
-                var __base_date = '{{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->lastOfMonth()->format('Y-m-d') }}';
+                var __base_date = '{{ \Carbon\Carbon::parse(getParentDetails()->baseDate->final_base_date)->lastOfMonth()->format('Y-m-d') }}';
                         @if($settings->date_of_initial_application == 2)
-                var __base_date = '{{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1)->lastOfMonth()->format('Y-m-d') }}';
+                var __base_date = '{{ \Carbon\Carbon::parse(getParentDetails()->baseDate->final_base_date)->subYear(1)->lastOfMonth()->format('Y-m-d') }}';
                 @endif
 
                 $('#lease_end_date').datepicker({
@@ -649,9 +649,9 @@ If relevant number not appearing, please first add the number under settings to 
                 });
 
                 function resetAllDates() {
-                    var __base_date = '{{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->lastOfMonth()->format('Y-m-d')}}';
+                    var __base_date = '{{ \Carbon\Carbon::parse(getParentDetails()->baseDate->final_base_date)->lastOfMonth()->format('Y-m-d')}}';
                             @if($settings->date_of_initial_application == 2)
-                    var __base_date = '{{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1)->lastOfMonth()->format('Y-m-d') }}';
+                    var __base_date = '{{ \Carbon\Carbon::parse(getParentDetails()->baseDate->final_base_date)->subYear(1)->lastOfMonth()->format('Y-m-d') }}';
                             @endif
                     var startDate = $('#lease_start_date').datepicker('getDate');
                     var newdate = new Date(startDate);
@@ -683,9 +683,9 @@ If relevant number not appearing, please first add the number under settings to 
                     var lease_asset_accounting = $("#accounting_treatment").find('option:selected').text();
                     if (lease_asset_accounting == 'Finance Lease Accounting') {
 
-                        var __base_date = '{{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->format('F d, Y') }}';
+                        var __base_date = '{{ \Carbon\Carbon::parse(getParentDetails()->baseDate->final_base_date)->format('F d, Y') }}';
                                 @if($settings->date_of_initial_application == 2)
-                        var __base_date = '{{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1)->format('F d, Y') }}';
+                        var __base_date = '{{ \Carbon\Carbon::parse(getParentDetails()->baseDate->final_base_date)->subYear(1)->format('F d, Y') }}';
                         @endif
 
                         //hide the Lease Payment Basis and clear the selected as well.

@@ -123,9 +123,9 @@ class ReviewSubmitController extends Controller
                 $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
             } else {
                 if($settings->date_of_initial_application == 2){
-                    $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1);
+                    $base_date = Carbon::parse(getParentDetails()->baseDate->final_base_date)->subYear(1);
                 } else {
-                    $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date);
+                    $base_date = Carbon::parse(getParentDetails()->baseDate->final_base_date);
                 }
 
                 $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
@@ -489,10 +489,10 @@ class ReviewSubmitController extends Controller
                 } else {
                     if($settings->date_of_initial_application == 2){
                         //this is the Full retrospective approach and we need to subtract 1 year from the base date in this case
-                        $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1);
+                        $base_date = Carbon::parse(getParentDetails()->baseDate->final_base_date)->subYear(1);
                     } else {
                         //this is Modified Retrospective approach and the base date as it is will be used as the base date
-                        $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date);
+                        $base_date = Carbon::parse(getParentDetails()->baseDate->final_base_date);
                     }
 
                     $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;

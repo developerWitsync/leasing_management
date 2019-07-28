@@ -62,9 +62,9 @@ class LeaseBalanceAsOnDecController extends Controller
 
             if ($lease) {
                 if($settings->date_of_initial_application == 2){
-                    $base_date =  Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1)->format('Y-m-d');
+                    $base_date =  Carbon::parse(getParentDetails()->baseDate->final_base_date)->subYear(1)->format('Y-m-d');
                 } else {
-                    $base_date =  getParentDetails()->accountingStandard->base_date;
+                    $base_date =  getParentDetails()->baseDate->final_base_date;
                 }
                 //check if the Subsequent Valuation is applied for the lease modification
                 $subsequent_modify_required = $lease->isSubsequentModification();
@@ -205,7 +205,7 @@ class LeaseBalanceAsOnDecController extends Controller
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
         if ($lease) {
             //Load the assets only lease start prior to Dec 31 2018
-            $base_date =  getParentDetails()->accountingStandard->base_date;
+            $base_date =  getParentDetails()->baseDate->final_base_date;
             $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '<', $base_date)->get();
 
             return view('lease.lease-balnce-as-on-dec.index', compact(

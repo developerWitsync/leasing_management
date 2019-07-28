@@ -200,7 +200,7 @@
 
         <div class="form-group{{ $errors->has('first_payment_start_date') ? ' has-error' : '' }} required">
             <label for="first_payment_start_date" class="col-md-12 control-label">
-                @if(\Carbon\Carbon::parse($asset->accural_period)->lessThan(\Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)))
+                @if(\Carbon\Carbon::parse($asset->accural_period)->lessThan(\Carbon\Carbon::parse(getParentDetails()->baseDate->final_base_date)))
                     First Lease Payment Start Date (Effective from Year 2019)
                 @else
                     First Lease Payment Start Date
@@ -268,7 +268,7 @@
 
     <div class="categoriesOuter clearfix immediate_previous_lease_end_date" style="@if(old('payout_time', $payment->payout_time) == 2) @else display: none @endif">
 
-        @if(\Carbon\Carbon::parse($asset->lease_start_date)->greaterThanOrEqualTo(getParentDetails()->accountingStandard->base_date))
+        @if(\Carbon\Carbon::parse($asset->lease_start_date)->greaterThanOrEqualTo(getParentDetails()->baseDate->final_base_date))
         <div class="categoriesHd">
             First Lease Interval Start Date
         </div>
@@ -769,7 +769,7 @@ Example: If the Lease Interval is quarterly, Lease payment made at the end of th
             @else
             @if($asset->using_lease_payment == '1')
             //cannpt go before the base date...
-            minDate: new Date('{{ getParentDetails()->accountingStandard->base_date }}'),
+            minDate: new Date('{{ getParentDetails()->baseDate->final_base_date }}'),
             @else
             //cannot go before the lease start date..
             minDate: new Date('{{ $asset->accural_period }}'),
@@ -795,7 +795,7 @@ Example: If the Lease Interval is quarterly, Lease payment made at the end of th
             @else
             @if($asset->using_lease_payment == '1')
             //cannpt go before the base date...
-            minDate: new Date('{{ getParentDetails()->accountingStandard->base_date }}'),
+            minDate: new Date('{{ getParentDetails()->baseDate->final_base_date }}'),
             @else
             //cannot go before the lease start date..
             minDate: new Date('{{ $asset->accural_period }}'),
@@ -818,7 +818,7 @@ Example: If the Lease Interval is quarterly, Lease payment made at the end of th
             @else
             @if($asset->using_lease_payment == '1')
             //cannpt go before the base date...
-            minDate: new Date('{{ getParentDetails()->accountingStandard->base_date }}'),
+            minDate: new Date('{{ getParentDetails()->baseDate->final_base_date }}'),
             @else
             //cannot go before the lease start date..
             minDate: new Date('{{ $asset->accural_period }}'),
@@ -841,7 +841,7 @@ Example: If the Lease Interval is quarterly, Lease payment made at the end of th
             @else
             @if($asset->using_lease_payment == '1')
             //cannpt go before the base date...
-            minDate: new Date('{{ getParentDetails()->accountingStandard->base_date }}'),
+            minDate: new Date('{{ getParentDetails()->baseDate->final_base_date }}'),
             @else
             //cannot go before the lease start date..
             minDate: new Date('{{ $asset->accural_period }}'),
@@ -977,9 +977,9 @@ Example: If the Lease Interval is quarterly, Lease payment made at the end of th
                 var _start_date = new Date("{{ date('D M d Y', strtotime($lease->modifyLeaseApplication->last()->effective_from)) }}");
             @else
                 var _start_date = new Date("{{ date('D M d Y', strtotime($asset->accural_period)) }}");
-            @if($asset->using_lease_payment == '1' && \Carbon\Carbon::parse($asset->accural_period)->lessThan(\Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)))
+            @if($asset->using_lease_payment == '1' && \Carbon\Carbon::parse($asset->accural_period)->lessThan(\Carbon\Carbon::parse(getParentDetails()->baseDate->final_base_date)))
             //cannot go before the base date...
-                var _start_date = new Date("{{ date('D M d Y', strtotime(getParentDetails()->accountingStandard->base_date)) }}");
+                var _start_date = new Date("{{ date('D M d Y', strtotime(getParentDetails()->baseDate->final_base_date)) }}");
             @endif
             @endif
 
@@ -1009,9 +1009,9 @@ Example: If the Lease Interval is quarterly, Lease payment made at the end of th
                                 $accural_date = \Carbon\Carbon::parse($asset->accural_period);
                                 $calculated_date = $accural_date->addMonth(1)->subDay(1)->format('D M d Y');
                                 //need to check for the current or initial payment basis
-                                if($asset->using_lease_payment == '1' && \Carbon\Carbon::parse($asset->accural_period)->lessThan(\Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date))){
+                                if($asset->using_lease_payment == '1' && \Carbon\Carbon::parse($asset->accural_period)->lessThan(\Carbon\Carbon::parse(getParentDetails()->baseDate->final_base_date))){
                                     //cannot go before the base date...
-                                    $calculated_date = \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->addMonth(1)->format('D M d Y');
+                                    $calculated_date = \Carbon\Carbon::parse(getParentDetails()->baseDate->final_base_date)->addMonth(1)->format('D M d Y');
                                 }
                             }
                         @endphp
@@ -1026,9 +1026,9 @@ Example: If the Lease Interval is quarterly, Lease payment made at the end of th
                                 $accural_date = \Carbon\Carbon::parse($asset->accural_period);
                                 $calculated_date = $accural_date->addMonth(3)->subDay(1)->format('D M d Y');
                                 //need to check for the current or initial payment basis
-                                if($asset->using_lease_payment == '1' && \Carbon\Carbon::parse($asset->accural_period)->lessThan(\Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date))){
+                                if($asset->using_lease_payment == '1' && \Carbon\Carbon::parse($asset->accural_period)->lessThan(\Carbon\Carbon::parse(getParentDetails()->baseDate->final_base_date))){
                                     //cannot go before the base date...
-                                    $calculated_date = \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->addMonth(3)->format('D M d Y');
+                                    $calculated_date = \Carbon\Carbon::parse(getParentDetails()->baseDate->final_base_date)->addMonth(3)->format('D M d Y');
                                 }
                             }
                         @endphp
@@ -1043,9 +1043,9 @@ Example: If the Lease Interval is quarterly, Lease payment made at the end of th
                                 $accural_date = \Carbon\Carbon::parse($asset->accural_period);
                                 $calculated_date = $accural_date->addMonth(6)->subDay(1)->format('D M d Y');
                                 //need to check for the current or initial payment basis
-                                if($asset->using_lease_payment == '1' && \Carbon\Carbon::parse($asset->accural_period)->lessThan(\Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date))){
+                                if($asset->using_lease_payment == '1' && \Carbon\Carbon::parse($asset->accural_period)->lessThan(\Carbon\Carbon::parse(getParentDetails()->baseDate->final_base_date))){
                                     //cannot go before the base date...
-                                    $calculated_date = \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->addMonth(6)->format('D M d Y');
+                                    $calculated_date = \Carbon\Carbon::parse(getParentDetails()->baseDate->final_base_date)->addMonth(6)->format('D M d Y');
                                 }
                             }
                         @endphp
@@ -1060,9 +1060,9 @@ Example: If the Lease Interval is quarterly, Lease payment made at the end of th
                                 $accural_date = \Carbon\Carbon::parse($asset->accural_period);
                                 $calculated_date = $accural_date->addMonth(12)->subDay(1)->format('D M d Y');
                                 //need to check for the current or initial payment basis
-                                if($asset->using_lease_payment == '1' && \Carbon\Carbon::parse($asset->accural_period)->lessThan(\Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date))){
+                                if($asset->using_lease_payment == '1' && \Carbon\Carbon::parse($asset->accural_period)->lessThan(\Carbon\Carbon::parse(getParentDetails()->baseDate->final_base_date))){
                                     //cannot go before the base date...
-                                    $calculated_date = \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->addMonth(12)->format('D M d Y');
+                                    $calculated_date = \Carbon\Carbon::parse(getParentDetails()->baseDate->final_base_date)->addMonth(12)->format('D M d Y');
                                 }
                             }
                         @endphp

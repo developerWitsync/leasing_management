@@ -435,6 +435,10 @@ Route::middleware('auth')->group(function () {
 
             Route::post('save-financial-reporting-period', ['as' => 'settings.index.financialreportingperiod', 'uses' => 'IndexController@financialReportingPeriod']);
 
+            Route::post('save-base-date-standards', ['as' => 'settings.index.basedatestandards', 'uses' => 'IndexController@saveBaseDateStandards']);
+
+            Route::post('date-of-incorporation', ['as' => 'settings.index.incorporationdate', 'uses' => 'IndexController@saveDateOfIncorporation']);
+
         });
 
         Route::prefix('lease-classification')->group(function () {

@@ -65,9 +65,9 @@ class InitialDirectCostController extends Controller
             if ($lease) {
                 $settings = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
                 if($settings->date_of_initial_application == 2){
-                    $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1)->format('Y-m-d');
+                    $base_date = Carbon::parse(getParentDetails()->baseDate->final_base_date)->subYear(1)->format('Y-m-d');
                 } else {
-                    $base_date = getParentDetails()->accountingStandard->base_date;
+                    $base_date = getParentDetails()->baseDate->final_base_date;
                 }
                 //check if the Subsequent Valuation is applied for the lease modification
                 $subsequent_modify_required = $lease->isSubsequentModification();
@@ -263,7 +263,7 @@ class InitialDirectCostController extends Controller
         ];
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->with('leaseType')->with('assets')->first();
         if ($lease) {
-            $base_date = getParentDetails()->accountingStandard->base_date;
+            $base_date = getParentDetails()->baseDate->final_base_date;
             //Load the assets only lease start on or after jan 01 2019
             $assets = LeaseAssets::query()->where('lease_id', '=', $lease->id)->where('lease_start_date', '>=', $base_date)->get();
 
@@ -296,7 +296,7 @@ class InitialDirectCostController extends Controller
             ],
         ];
         try {
-            $base_date = getParentDetails()->accountingStandard->base_date;
+            $base_date = getParentDetails()->baseDate->final_base_date;
             $asset = LeaseAssets::query()->findOrFail($id);
             $lease = $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $asset->lease->id)->first();
             $currencies = Currencies::query()->where('status', '=', '1')->get();

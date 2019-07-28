@@ -55,6 +55,16 @@
                                         @endif
                                     </div>
 
+                                
+{{--                                    <div class="form-group {{ $errors->has('date_of_incorporation') ? ' has-error' : '' }} col-md-6 col-sm-12 required">--}}
+{{--                                        <input type="text" class="form-control" id="date_of_incorporation" value="{{ old('date_of_incorporation') }}" name="date_of_incorporation" placeholder="Date of Incorporation*">--}}
+{{--                                        @if ($errors->has('date_of_incorporation'))--}}
+{{--                                            <span class="help-block">--}}
+{{--                                                <strong>{{ $errors->first('date_of_incorporation') }}</strong>--}}
+{{--                                            </span>--}}
+{{--                                        @endif--}}
+{{--                                    </div>--}}
+
                                 </div>
 
                                 <div class="row  @if(old('country') != 97) hidden @endif country_selected">
@@ -357,6 +367,12 @@
                 changeMonth: true,
                 changeYear: true,
                 defaultDate : new Date("{{ \Carbon\Carbon::today()->subYear(100)->firstOfYear()->format('Y-m-d') }}")
+            });
+
+            $('#date_of_incorporation').datepicker({
+                dateFormat: "dd-M-yy",
+                changeMonth: true,
+                changeYear: true
             });
 
             $('#country').on('change', function(){

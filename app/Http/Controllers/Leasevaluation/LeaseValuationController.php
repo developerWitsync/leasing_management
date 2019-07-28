@@ -297,9 +297,9 @@ class LeaseValuationController extends Controller
             }
             $settings = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
             if($settings->date_of_initial_application == 2){
-                $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1)->format('Y-m-d');
+                $base_date = Carbon::parse(getParentDetails()->baseDate->final_base_date)->subYear(1)->format('Y-m-d');
             } else {
-                $base_date = getParentDetails()->accountingStandard->base_date;
+                $base_date = getParentDetails()->baseDate->final_base_date;
             }
             return view('leasevaluation.overview', compact(
                 'lease',
@@ -387,7 +387,7 @@ class LeaseValuationController extends Controller
     {
         try {
 
-            $base_date = getParentDetails()->accountingStandard->base_date;
+            $base_date = getParentDetails()->baseDate->final_base_date;
 
             $lease = Lease::query()
                 ->where('id', '=', $id)
@@ -503,11 +503,11 @@ class LeaseValuationController extends Controller
             $final_data = [];
             $final_data['valuation_type'] = is_null($history->modify_id) ? "Initial Valuation" : $history->leaseModification->valuation;
 
-            //$base_date = $account_base_date = getParentDetails()->accountingStandard->base_date;
+            //$base_date = $account_base_date = getParentDetails()->baseDate->final_base_date;
             if($settings->date_of_initial_application == 2){
-                $base_date = $account_base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1);
+                $base_date = $account_base_date = Carbon::parse(getParentDetails()->baseDate->final_base_date)->subYear(1);
             } else {
-                $base_date = $account_base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date);
+                $base_date = $account_base_date = Carbon::parse(getParentDetails()->baseDate->final_base_date);
             }
 
             //$start_date = Carbon::parse(is_null($history->modify_id) ? $json_step_data['underlying_asset']['accural_period'] : $history->leaseModification->effective_from);

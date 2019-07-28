@@ -55,9 +55,9 @@
 
         <div class="form-group {{ $errors->has('exchange_rate') ? ' has-error' : '' }} required">
             @if($settings->date_of_initial_application == 2)
-                <label for="exchange_rate" class="col-md-12 control-label">Exchange Rate (as on {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->subDay(1)->subYear(1)->format(config('settings.date_format')) }})</label>
+                <label for="exchange_rate" class="col-md-12 control-label">Exchange Rate (as on {{ \Carbon\Carbon::parse(getParentDetails()->baseDate->final_base_date)->subDay(1)->subYear(1)->format(config('settings.date_format')) }})</label>
             @else
-                <label for="exchange_rate" class="col-md-12 control-label">Exchange Rate (as on {{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->subDay(1)->format(config('settings.date_format')) }})</label>
+                <label for="exchange_rate" class="col-md-12 control-label">Exchange Rate (as on {{ \Carbon\Carbon::parse(getParentDetails()->baseDate->final_base_date)->subDay(1)->format(config('settings.date_format')) }})</label>
             @endif
             <div class="col-md-12 form-check form-check-inline">
                 <input type="text" value="{{ old('exchange_rate', $model->exchange_rate) }}" class="form-control"
@@ -215,9 +215,9 @@
             var access_key = '{{ env("CURRENCY_API_ACCESS_KEY") }}';
             //var base_date =  '2018-12-31';
             @if($settings->date_of_initial_application == 2)
-                var base_date = "{{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->subDay(1)->subYear(1)->format('Y-m-d') }}";
+                var base_date = "{{ \Carbon\Carbon::parse(getParentDetails()->baseDate->final_base_date)->subDay(1)->subYear(1)->format('Y-m-d') }}";
             @else
-                var base_date = "{{ \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->subDay(1)->format('Y-m-d') }}";
+                var base_date = "{{ \Carbon\Carbon::parse(getParentDetails()->baseDate->final_base_date)->subDay(1)->format('Y-m-d') }}";
             @endif
             var base = '{{ $currency_settings->statutory_financial_reporting_currency }}';
             var element_selector = 'input[name="exchange_rate"]';

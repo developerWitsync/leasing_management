@@ -331,7 +331,7 @@ class EscalationController extends Controller
                 //code for the inconsistent escalations to be applied
                 $start_date = $asset->accural_period; //start date with the free period
                 $end_date   = $asset->getLeaseEndDate($asset); //end date based upon all the conditions
-                $base_date =  getParentDetails()->accountingStandard->base_date;
+                $base_date =  getParentDetails()->baseDate->final_base_date;
                 $start_date = ($asset->using_lease_payment == '1')?\Carbon\Carbon::parse($base_date):\Carbon\Carbon::parse($start_date);
                 $end_date   = \Carbon\Carbon::parse($end_date);
 

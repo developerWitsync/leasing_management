@@ -273,7 +273,7 @@ function generateEsclationChart($data = [], \App\LeaseAssetPayments $payment, \A
 
     $consistency_gap = (isset($data['consistency_gap']) && !is_null($data['consistency_gap']))?$data['consistency_gap']:1;
 
-    $base_date = getParentDetails()->accountingStandard->base_date;
+    $base_date = getParentDetails()->baseDate->final_base_date;
     $effective_date = \Carbon\Carbon::parse($data['effective_from']);
 
     $escalation_applicable = $data['is_escalation_applicable'];
@@ -1138,7 +1138,7 @@ function getPaidSubscriptionPlans()
  */
 function getBackUrl($step, $id)
 {
-    $base_date = getParentDetails()->accountingStandard->base_date; //fetching the dynamic base date
+    $base_date = getParentDetails()->baseDate->final_base_date; //fetching the dynamic base date
     //check if the previous step that is Lease Incentives and Lease Initial Direct Cost were applicable or not ?
     $category_excluded = \App\CategoriesLeaseAssetExcluded::query()
         ->whereIn('business_account_id', getDependentUserIds())
@@ -1327,9 +1327,9 @@ function calculateDepreciation($subsequent_modify_required, \App\LeaseAssets $as
     if(!$subsequent_modify_required) {
         $settings = \App\GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
         if($settings->date_of_initial_application == 2) {
-            $base_date = \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1);
+            $base_date = \Carbon\Carbon::parse(getParentDetails()->baseDate->final_base_date)->subYear(1);
         } else {
-            $base_date = \Carbon\Carbon::parse(getParentDetails()->accountingStandard->base_date);
+            $base_date = \Carbon\Carbon::parse(getParentDetails()->baseDate->final_base_date);
         }
 
         $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;

@@ -54,9 +54,9 @@ class LeaseValuationController extends Controller
 
         $settings = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
         if($settings->date_of_initial_application == 2){
-            $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1)->format('Y-m-d');
+            $base_date = Carbon::parse(getParentDetails()->baseDate->final_base_date)->subYear(1)->format('Y-m-d');
         } else {
-            $base_date = getParentDetails()->accountingStandard->base_date;
+            $base_date = getParentDetails()->baseDate->final_base_date;
         }
 
         $lease = Lease::query()->whereIn('business_account_id', getDependentUserIds())->where('id', '=', $id)->first();
@@ -201,9 +201,9 @@ class LeaseValuationController extends Controller
             $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
         } else {
             if ($settings->date_of_initial_application == 2) {
-                $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1);
+                $base_date = Carbon::parse(getParentDetails()->baseDate->final_base_date)->subYear(1);
             } else {
-                $base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date);
+                $base_date = Carbon::parse(getParentDetails()->baseDate->final_base_date);
             }
             $base_date = ($start_date->lessThan($base_date)) ? $base_date : $start_date;
         }
@@ -771,9 +771,9 @@ class LeaseValuationController extends Controller
             //fetch the value on the one day before the base date and return the same to the response
             $settings = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
             if($settings->date_of_initial_application == 2){
-                $one_day_before_base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date)->subYear(1)->subDay(1);
+                $one_day_before_base_date = Carbon::parse(getParentDetails()->baseDate->final_base_date)->subYear(1)->subDay(1);
             } else {
-                $one_day_before_base_date = Carbon::parse(getParentDetails()->accountingStandard->base_date)->subDay(1);
+                $one_day_before_base_date = Carbon::parse(getParentDetails()->baseDate->final_base_date)->subDay(1);
             }
             $data = HistoricalCarryingAmountAnnexure::query()
                 ->where('asset_id', '=', $asset->id)

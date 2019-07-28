@@ -22,7 +22,8 @@ class User extends Authenticatable
         'type','email','phone','username', 'password', 'remember_token','created_at', 'updated_at',
         'authorised_person_name', 'authorised_person_designation','authorised_person_dob','legal_entity_name',
         'applicable_gaap','country','state','gender',
-        'email_verification_code','is_verified','parent_id', 'account_id', 'raw_password', 'gstin', 'credit_balance', 'address', 'certificates'
+        'email_verification_code','is_verified','parent_id', 'account_id', 'raw_password', 'gstin', 'credit_balance', 'address', 'certificates',
+        'date_of_incorporation'
     ];
 
     /**
@@ -76,7 +77,19 @@ class User extends Authenticatable
         return $this->hasMany('App\UserSubscription', 'user_id', 'id');
     }
 
+    /**
+     * This function returns the actual base date from the accounting standard
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function accountingStandard(){
         return $this->hasOne('App\AccountingStandards', 'id', 'applicable_gaap');
+    }
+
+    /**
+     * this function will return the complete settings so that the base date can be fetched
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function baseDate(){
+        return $this->hasOne('App\GeneralSettings', 'business_account_id', 'id');
     }
 }
