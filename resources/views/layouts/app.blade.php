@@ -148,14 +148,23 @@
 
 </div>
 
+<div id="overlay" style="display:block">
+    <div id="text">
+        <i class="fa fa-circle-o-notch fa-spin" style="font-size:100px; text-align: center"></i><br/>
+        Processing your request please wait....
+    </div>
+</div>
+
 <!-- Scripts -->
 <script src="{{ asset('js/app.js') }}"></script>
 <script src="{{ asset('assets/js/moment.min.js') }}"></script>
 <script src="{{ asset('js/custom.js') }}"></script>
 <script src="{{ asset('assets/plugins/owlcarousel/owl.carousel.js') }}"></script>
 <script>
-    $(document).ready(function () {
 
+	
+    $(document).ready(function () {
+	$('#overlay').hide();
         $.ajaxSetup({
             headers: {'X-CSRF-Token': $('meta[name=csrf-token]').attr('content')}
         });
@@ -250,11 +259,5 @@
         });
     </script>
 @endif
-<div id="overlay">
-    <div id="text">
-        <i class="fa fa-circle-o-notch fa-spin" style="font-size:100px; text-align: center"></i><br/>
-        Processing your request please wait....
-    </div>
-</div>
 </body>
 </html>
