@@ -535,7 +535,8 @@
 
             $("#date_of_incorporation").datepicker({
                 changeMonth: true,
-                changeYear: true
+                changeYear: true,
+		yearRange: "-100:+0",
             });
 
             $("#annual_year_end_on").datepicker({
