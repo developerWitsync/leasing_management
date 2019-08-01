@@ -53,6 +53,10 @@
                         <li>
                             <a href="{{ route('leasevaluation.cap.interestdepreciation', ['id' => $lease->id]) }}">Interest &amp; Depreciation</a>
                         </li>
+
+                        <li>
+                            <a href="{{ route('leasevaluation.cap.expensereport', ['id' => $lease->id]) }}">Lease Expense</a>
+                        </li>
                     @else
 
                         <li>

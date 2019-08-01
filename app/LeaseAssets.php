@@ -516,15 +516,20 @@ class LeaseAssets extends Model
         return $this->hasMany('App\LeaseAssetPaymenetDueDate', 'asset_id', 'id');
     }
 
-    /**
-     * Fetch the lease asset payments for the lease expense annexure in case of NCAP leases
-     * The purchase options will not be included here
-     * @param self $asset
-     * @param $start_date
-     * @param $end_date
-     * @return mixed
-     */
-    public function fetchAllPaymentsForLeaseExpenseAnnexure(self $asset, $start_date, $end_date){
+  /**
+   * Fetch the lease asset payments for the lease expense annexure in case of NCAP leases
+   * The purchase options will not be included here
+   * @param self $asset
+   * @param $start_date
+   * @param $end_date
+   * @param bool $onlyNonLeaseComponent
+   * @return mixed
+   */
+    public function fetchAllPaymentsForLeaseExpenseAnnexure(self $asset, $start_date, $end_date, $onlyNonLeaseComponent = false){
+      $where_condition = '';
+      if($onlyNonLeaseComponent){
+        $where_condition = 'and `lease_assets_payments`.`type` = 2';
+      }
         $sql = "SELECT
                       `lease_assets_payments`.`id`,
                       `lease_assets_payments`.`name`,
@@ -545,6 +550,7 @@ class LeaseAssets extends Model
                         `lease_assets_payments`.`asset_id` = {$asset->id}
                           and `lease_asset_payment_dates`.`date` >= '{$start_date}'
                           and `lease_asset_payment_dates`.`date` <= '{$end_date}'
+                          {$where_condition}
                     GROUP BY `lease_asset_payment_dates`.`date`,`lease_asset_payment_dates`.`id`";
 
         $lease_payments = DB::select($sql);

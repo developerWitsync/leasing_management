@@ -464,14 +464,15 @@ class ReviewSubmitController extends Controller
         }
     }
 
-    /**
-     * generate the lease expense annexure for the initial valuation only
-     * Lease expense annexure will always be generated for the initial valuation only
-     * @param $lease
-     * @param $modify_id
-     * @return bool
-     */
-        private function generateLeaseExpense($lease, $modify_id){
+  /**
+   * generate the lease expense annexure for the initial valuation only
+   * Lease expense annexure will always be generated for the initial valuation only
+   * @param $lease
+   * @param $modify_id
+   * @param bool $onlyNonLeaseComponent
+   * @return bool
+   */
+        private function generateLeaseExpense($lease, $modify_id, $onlyNonLeaseComponent = false){
         try{
             if($lease){
                 $asset = $lease->assets()->first();
@@ -510,12 +511,16 @@ class ReviewSubmitController extends Controller
                 //fetch all the lease asset payments with the payment date including the escalated amount if exists
                 //including the residual options and Termination options as well
                 //no need to include the purchase options for this annexure and hence that will not be fetched
-                $lease_payments_initial = $asset->fetchAllPaymentsForLeaseExpenseAnnexure($asset, $base_date->format('Y-m-d'), $end_date->format('Y-m-d'));
+                $lease_payments_initial = $asset->fetchAllPaymentsForLeaseExpenseAnnexure($asset, $base_date->format('Y-m-d'), $end_date->format('Y-m-d'), $onlyNonLeaseComponent);
 
                 $lease_payments = collect($lease_payments_initial)->groupBy('date')->sortBy('date')->toArray();
 
                 //fetch the lease asset payments from the database as well
-                $asset_payments = $asset->payments;
+                if($onlyNonLeaseComponent){
+                  $asset_payments = $asset->payments()->where('type', '=', '2')->get();
+                } else {
+                  $asset_payments = $asset->payments;
+                }
 
                 //create an array with all the dates that we will have at each row...
                 $rows = [];
@@ -947,8 +952,6 @@ class ReviewSubmitController extends Controller
                     $opening_or_payable = $opening_or_payable - $total_computed_lease_expense;
                 }
 
-//                echo "<pre>"; print_r($annexure); die();
-
                 DB::transaction(function () use ($annexure, $modify_id, $asset) {
                     //insert the dates data into the interest and depreciation table for the lease id
                     if(is_null($modify_id)){
@@ -1210,12 +1213,18 @@ class ReviewSubmitController extends Controller
             if($asset) {
                 //the Lease is a CAP lease and we need to create the Lease Interest and Depreciation Annexure for the lease here..
                 $this->generateDataForInterestAndDepreciationTab($model, isset($data['modify_id'])?$data['modify_id']:null);
+                if(isset($data['modify_id'])){
+                  //will not be generated in case of modifications....
+                } else {
+                  // the lease is a CAP lease and we need to create the Lease Expense Annexure only for the Non Lease Component Payments..
+                  $this->generateLeaseExpense($model, null, true);
+                }
             } else if(is_null($asset)) {
                 if(isset($data['modify_id'])) {
                     // will not be generated in case of modification...
                 } else {
                     // the lease is a NCAP lease and we need to create the Lease Expense Annexure here for the lease here ...
-                    $this->generateLeaseExpense($model, isset($data['modify_id'])?$data['modify_id']:null);
+                    $this->generateLeaseExpense($model, null, false);
                 }
             }
 

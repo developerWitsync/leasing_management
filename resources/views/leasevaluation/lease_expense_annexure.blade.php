@@ -12,13 +12,31 @@
         <div class="assetsNameOuter">
             <div class="assetsTabs">
                 <ul>
-                    <li>
-                        <a href="{{ route('leasevaluation.ncap.asset', ['id' => $lease->id]) }}">Overivew</a>
-                    </li>
+                    @if(request()->segment(2) == 'valuation-capitalised')
+                        <li>
+                            <a href="{{ route('leasevaluation.cap.asset', ['id' => $lease->id]) }}" class="active">Overview</a>
+                        </li>
 
-                    <li>
-                        <a href="{{ route('leasevaluation.ncap.expensereport', ['id' => $lease->id]) }}" class="active">Lease Expense</a>
-                    </li>
+                        <li>
+                            <a href="{{ route('leasevaluation.cap.asset.valuation', ['id' => $lease->id]) }}">Valuation</a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('leasevaluation.cap.interestdepreciation', ['id' => $lease->id]) }}">Interest &amp; Depreciation</a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('leasevaluation.cap.expensereport', ['id' => $lease->id]) }}">Lease Expense</a>
+                        </li>
+                    @else
+                        <li>
+                            <a href="{{ route('leasevaluation.ncap.asset', ['id' => $lease->id]) }}">Overivew</a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('leasevaluation.ncap.expensereport', ['id' => $lease->id]) }}" class="active">Lease Expense</a>
+                        </li>
+                    @endif
                 </ul>
             </div>
 

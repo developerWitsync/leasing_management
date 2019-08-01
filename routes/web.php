@@ -365,6 +365,7 @@ Route::middleware('auth')->group(function () {
 
             Route::get('export-interest-depreciation/{id}', ['as' => 'leasevaluation.cap.exportinterestdepreciation', 'uses' => 'LeaseValuationController@exportInterestDepreciation']);
 
+            Route::get('lease-interest-expense-annexure/{id}',['as' => 'leasevaluation.cap.expensereport', 'uses' => 'LeaseValuationController@leaseExpense']);
         });
 
         Route::prefix('valuation-non-capitalised')->middleware('permission:valuation_ncap')->group(function(){
