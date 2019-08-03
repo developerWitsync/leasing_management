@@ -470,9 +470,10 @@ class ReviewSubmitController extends Controller
    * @param $lease
    * @param $modify_id
    * @param bool $onlyNonLeaseComponent
+   * @param bool $includeTerminationResidual - in case of CAP the termination and residual will not be included....
    * @return bool
    */
-        private function generateLeaseExpense($lease, $modify_id, $onlyNonLeaseComponent = false){
+    private function generateLeaseExpense($lease, $modify_id, $onlyNonLeaseComponent = false, $includeTerminationResidual = true){
         try{
             if($lease){
                 $asset = $lease->assets()->first();
@@ -511,7 +512,13 @@ class ReviewSubmitController extends Controller
                 //fetch all the lease asset payments with the payment date including the escalated amount if exists
                 //including the residual options and Termination options as well
                 //no need to include the purchase options for this annexure and hence that will not be fetched
-                $lease_payments_initial = $asset->fetchAllPaymentsForLeaseExpenseAnnexure($asset, $base_date->format('Y-m-d'), $end_date->format('Y-m-d'), $onlyNonLeaseComponent);
+                $lease_payments_initial = $asset->fetchAllPaymentsForLeaseExpenseAnnexure(
+                  $asset,
+                  $base_date->format('Y-m-d'),
+                  $end_date->format('Y-m-d'),
+                  $onlyNonLeaseComponent,
+                  $includeTerminationResidual
+                );
 
                 $lease_payments = collect($lease_payments_initial)->groupBy('date')->sortBy('date')->toArray();
 
@@ -1217,14 +1224,14 @@ class ReviewSubmitController extends Controller
                   //will not be generated in case of modifications....
                 } else {
                   // the lease is a CAP lease and we need to create the Lease Expense Annexure only for the Non Lease Component Payments..
-                  $this->generateLeaseExpense($model, null, true);
+                  $this->generateLeaseExpense($model, null, true, false);
                 }
             } else if(is_null($asset)) {
                 if(isset($data['modify_id'])) {
                     // will not be generated in case of modification...
                 } else {
                     // the lease is a NCAP lease and we need to create the Lease Expense Annexure here for the lease here ...
-                    $this->generateLeaseExpense($model, null, false);
+                    $this->generateLeaseExpense($model, null, false, true);
                 }
             }
 

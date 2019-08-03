@@ -523,9 +523,15 @@ class LeaseAssets extends Model
    * @param $start_date
    * @param $end_date
    * @param bool $onlyNonLeaseComponent
+   * @param bool $includeTerminationResidual
    * @return mixed
    */
-    public function fetchAllPaymentsForLeaseExpenseAnnexure(self $asset, $start_date, $end_date, $onlyNonLeaseComponent = false){
+    public function fetchAllPaymentsForLeaseExpenseAnnexure(
+      self $asset,
+      $start_date,
+      $end_date,
+      $onlyNonLeaseComponent = false,
+      $includeTerminationResidual = true){
       $where_condition = '';
       if($onlyNonLeaseComponent){
         $where_condition = 'and `lease_assets_payments`.`type` = 2';
@@ -563,15 +569,15 @@ class LeaseAssets extends Model
             });
             $new_array['name'] = 'Residual Value';
             $new_array['date'] = Carbon::parse($end_date)->format('Y-m-d');
-            $new_array['total_amount_payable'] = $asset->residualGuranteeValue->total_residual_gurantee_value;
+            $new_array['total_amount_payable'] = $includeTerminationResidual?$asset->residualGuranteeValue->total_residual_gurantee_value:0;
             $new_array['payment_type'] = 'residual_value';
             if (!empty($payment_dates)) {
                 $key = key($payment_dates);
                 $payment_dates = array_values($payment_dates);
-                $new_array['total_amount_payable'] = $asset->residualGuranteeValue->total_residual_gurantee_value + $payment_dates[0]->total_amount_payable;
+                $new_array['total_amount_payable'] = ($includeTerminationResidual)?$asset->residualGuranteeValue->total_residual_gurantee_value + $payment_dates[0]->total_amount_payable:0;
                 $lease_payments[$key] = (object)$new_array;
             } else {
-                $new_array['total_amount_payable'] = $asset->residualGuranteeValue->total_residual_gurantee_value;
+                $new_array['total_amount_payable'] = ($includeTerminationResidual)?$asset->residualGuranteeValue->total_residual_gurantee_value:0;
                 array_push($lease_payments, (object)$new_array);
             }
 
@@ -586,15 +592,15 @@ class LeaseAssets extends Model
             });
             $new_array['name'] = 'Termination Penalty';
             $new_array['date'] = $asset->terminationOption->lease_end_date;
-            $new_array['total_amount_payable'] = $asset->terminationOption->termination_penalty;
+            $new_array['total_amount_payable'] = ($includeTerminationResidual)?$asset->terminationOption->termination_penalty:0;
             $new_array['payment_type'] = 'termination_penalty';
             if (!empty($payment_dates)) {
                 $key = key($payment_dates);
                 $payment_dates = array_values($payment_dates);
-                $new_array['total_amount_payable'] = $asset->terminationOption->termination_penalty + $payment_dates[0]->total_amount_payable;
+                $new_array['total_amount_payable'] = ($includeTerminationResidual)?$asset->terminationOption->termination_penalty + $payment_dates[0]->total_amount_payable:0;
                 $lease_payments[$key] = (object)$new_array;
             } else {
-                $new_array['total_amount_payable'] = $asset->terminationOption->termination_penalty;
+                $new_array['total_amount_payable'] = ($includeTerminationResidual)?$asset->terminationOption->termination_penalty:0;
                 array_push($lease_payments, (object)$new_array);
             }
         }
