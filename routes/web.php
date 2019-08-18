@@ -50,6 +50,8 @@ Route::prefix('payment')->group(function () {
 
 Route::middleware('auth')->group(function () {
 
+    Route::get('get-exchange-rates', ['as' => 'exchangerate.get', 'uses' => 'HomeController@getExchangeRate']);
+
     Route::get('invoice/{id}', ['as' => 'invoice.index', 'uses' => 'InvoiceController@index']);
 
     Route::get('/home', 'HomeController@index')->middleware(['permission:dashboard'])->name('home');
@@ -512,6 +514,22 @@ Route::middleware('auth')->group(function () {
             Route::get('fetch-foreign-transaction-currencies', ['as' => 'settings.currencies.fetchforeigntransactioncurrencies', 'uses' => 'CurrenciesController@fetchForeignTransactionCurrency']);
             Route::match(['get', 'post'], 'edit-foreign-transaction-currencies/{id}', ['as' => 'settings.currencies.editforeigntransactioncurrency', 'uses' => 'CurrenciesController@editForeignTransactionCurrency']);
             Route::delete('delete-foreign-transaction-currencies/{id}', ['as' => 'settings.currencies.deleteforeigntransactioncurrencies', 'uses' => 'CurrenciesController@deleteForeignTransactionCurrency']);
+
+
+            Route::get('set-exchange-rate/{id}',['as' =>'settings.currencies.setexhchangerate', 'uses' => 'CurrenciesController@setExchangeRate']);
+            Route::post('save-exchange-rates/{id}', ['as' => 'settings.currencies.saveexchangerates', 'uses' => 'CurrenciesController@saveExchangeRates']);
+
+            Route::get('download-exchange-rate-excel/{id}', ['as' => 'settings.currencies.downloadexcel', 'uses' => 'CurrenciesController@downloadRatesExcel']);
+
+            Route::post('import-exchange-rates/{id}', [
+              'as' => 'settings.currencies.exchange_rates_import_excel',
+              'uses' =>  'CurrenciesController@importExchangeRates'
+            ]);
+
+            Route::get('get-exchange-rates',[
+              'as' => 'settings.currencies.getexchangerates',
+              'uses' => 'CurrenciesController@getExchangeRates'
+            ]);
         });
 
         Route::prefix('lease-assets')->group(function () {

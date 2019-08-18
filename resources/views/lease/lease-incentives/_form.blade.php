@@ -356,16 +356,20 @@
             var selected_currency = $(this).val();
             var base_currency = '{{ $lease->lease_contract_id }}';
             var that = $(this);
-            // set endpoint and your access key
-            var endpoint = 'live';
-            var access_key = '{{ env("CURRENCY_API_ACCESS_KEY") }}';
+            var expense_date = $(this).parent('td').prev('td').children('input').val();
+
             // get the most recent exchange rates via the "live" endpoint:
             $.ajax({
-                url: 'http://apilayer.net/api/' + endpoint + '?access_key=' + access_key + '&source='+base_currency+'&currencies='+selected_currency,
-                dataType: 'jsonp',
+                url: '/get-exchange-rates',
+                data : {
+                    base : base_currency,
+                    target : selected_currency,
+                    date : expense_date
+                },
+                dataType: 'json',
                 success: function(result) {
-                    if(result.success) {
-                        var rate = result['quotes'][base_currency+selected_currency];
+                    if(result.status) {
+                        var rate = result['rate'];
                         $(that).parent('td').parent('tr').find('input.rate').val(rate);
                     }
                 }

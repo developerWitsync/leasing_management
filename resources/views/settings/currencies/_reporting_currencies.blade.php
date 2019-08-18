@@ -73,7 +73,7 @@
                 <div class="col-md-6">
                     <div class="input-group reportTble">
                         <div class="form-check">
-                            <input class="form-check-input" @if(old('lease_report_same_as_statutory_reporting', $reporting_currency_settings->lease_report_same_as_statutory_reporting) == '1') checked="checked" @endif type="checkbox" name="lease_report_same_as_statutory_reporting" value="1" id="lease_report_same_as_statutory_reporting_1" disabled="disabled" checked="checked">
+                            <input class="form-check-input" @if(old('lease_report_same_as_statutory_reporting', $reporting_currency_settings->lease_report_same_as_statutory_reporting) == '1') checked="checked" @endif type="checkbox" name="lease_report_same_as_statutory_reporting" value="1" id="lease_report_same_as_statutory_reporting_1">
                             <input type="hidden" name="lease_report_same_as_statutory_reporting" value="1">
                             <label class="form-check-label" for="lease_report_same_as_statutory_reporting_1">
                                 Same as Statutory Reporting
@@ -88,7 +88,7 @@
                         {{--</div>--}}
 
                         <div class="form-check">
-                            <input class="form-check-input" @if(old('lease_report_same_as_statutory_reporting', $reporting_currency_settings->lease_report_same_as_statutory_reporting) == '3') checked="checked" @endif type="checkbox" name="lease_report_same_as_statutory_reporting" value="3" id="lease_report_same_as_statutory_reporting_3" disabled="disabled">
+                            <input class="form-check-input" @if(old('lease_report_same_as_statutory_reporting', $reporting_currency_settings->lease_report_same_as_statutory_reporting) == '3') checked="checked" @endif type="checkbox" name="lease_report_same_as_statutory_reporting" value="3" id="lease_report_same_as_statutory_reporting_3">
                             <label class="form-check-label" for="lease_report_same_as_statutory_reporting_3">
                                 Different Currency
                             </label>

@@ -1350,3 +1350,34 @@ function renderToolTip($title, $class = '', $placement = 'top', $hrefStyle = '')
     $html = "<a href='javascript:void(0);' class='btn-link' style='{$hrefStyle}' title='{$title}' data-toggle='tooltip' data-placement='{$placement}' style='font-size: 16px;'><i class='fa fa-info-circle {$class}'></i></a>";
     return $html;
 }
+
+/**
+ * Generate dates between 2 dates and return an array
+ * @param $start
+ * @param $end
+ * @param string $format
+ * @return array
+ * @throws Exception
+ */
+function getDatesFromRange($start, $end, $format = 'Y-m-d') {
+
+  // Declare an empty array
+  $array = array();
+
+  // Variable that store the date interval
+  // of period 1 day
+  $interval = new \DateInterval('P1D');
+
+  $realEnd = new DateTime($end);
+  $realEnd->add($interval);
+
+  $period = new DatePeriod(new DateTime($start), $interval, $realEnd);
+
+  // Use loop to store date into array
+  foreach($period as $date) {
+    $array[] = $date->format($format);
+  }
+
+  // Return the array elements
+  return $array;
+}

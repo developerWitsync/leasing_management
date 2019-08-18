@@ -559,13 +559,6 @@ Example: If the Lease Interval is quarterly, Lease payment made at the end of th
 
         $(function () {
 
-            $('#import_dates').change(function () {
-                $('#import_dates').show();
-                var filename = $('#import_dates').val();
-                var or_name = filename.split("\\");
-                $('#uploadX').val(or_name[or_name.length - 1]);
-            });
-
             removeOverlayAjax();
 
             // variable_basis_amount_determinable
@@ -653,6 +646,12 @@ Example: If the Lease Interval is quarterly, Lease payment made at the end of th
             });
 
             $('#import_dates').change(function () {
+
+                $('#import_dates').show();
+                var filename = $('#import_dates').val();
+                var or_name = filename.split("\\");
+                $('#uploadX').val(or_name[or_name.length - 1]);
+
                 //on change event
                 formdata = new FormData();
                 if ($(this).prop('files').length > 0) {

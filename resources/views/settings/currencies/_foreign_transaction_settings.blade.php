@@ -12,7 +12,7 @@
                 <div class="col-md-6 form-check form-check-inline">
                     <input class="form-check-input" name="is_involved"
                            @if($reporting_currency_settings->is_foreign_transaction_involved == 'yes')  checked="checked"
-                           @endif type="checkbox" id="is_involved_yes" value="yes" @if(count($foreign_currencies) > 0 && $reporting_currency_settings->is_foreign_transaction_involved == 'yes') disabled="disabled" @endif disabled="disabled">
+                           @endif type="checkbox" id="is_involved_yes" value="yes" @if(count($foreign_currencies) > 0 && $reporting_currency_settings->is_foreign_transaction_involved == 'yes') disabled="disabled" @endif>
                     <label class="form-check-label" for="is_involved_yes" style="vertical-align: 4px">Yes</label>
                 </div>
 
@@ -20,7 +20,7 @@
                     <input class="form-check-input" name="is_involved"
                            @if($reporting_currency_settings->is_foreign_transaction_involved == 'no')  checked="checked"
                            @endif @if($exsist_froegincurrency >0)
-                           disabled @endif type="checkbox" id="is_involved_no" value="no" @if(count($foreign_currencies) > 0 && $reporting_currency_settings->is_foreign_transaction_involved == 'yes') disabled="disabled" @endif disabled="disabled">
+                           disabled @endif type="checkbox" id="is_involved_no" value="no" @if(count($foreign_currencies) > 0 && $reporting_currency_settings->is_foreign_transaction_involved == 'yes') disabled="disabled" @endif>
                     <label class="form-check-label" for="is_involved_no" style="vertical-align: 4px">No</label>
                 </div>
             </div>

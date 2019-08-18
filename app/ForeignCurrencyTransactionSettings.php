@@ -18,4 +18,8 @@ class ForeignCurrencyTransactionSettings extends Model
         'created_at',
         'updated_at'
     ];
+
+    public function exchangeRates(){
+      return $this->hasMany('App\ExchangeRates', 'foreign_currency_id','id');
+    }
 }

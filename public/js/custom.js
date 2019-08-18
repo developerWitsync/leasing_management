@@ -396,6 +396,25 @@ function fetchExchangeRate(base, target, base_date, access_key, element_selector
     });
 }
 
+function getExchangeRate(base, target, base_date,element_selector){
+    $.ajax({
+        url: '/get-exchange-rates',
+        async: false,
+        data : {
+            base : base,
+            target : target,
+            date : base_date
+        },
+        dataType: 'json',
+        success: function(result) {
+            if(result.status) {
+                rate = parseFloat(result['rate']);
+                $(element_selector).val(rate);
+            }
+        }
+    });
+}
+
 function checklockperioddate(date, instance, _ajax_url) {
     $.ajax({
           type: "get",

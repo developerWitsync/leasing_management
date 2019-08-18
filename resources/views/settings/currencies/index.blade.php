@@ -192,6 +192,7 @@
                             if(full['is_used'] == 0){
                                 var html = "<button  data-toggle='tooltip' data-placement='top' title='Edit Country' type=\"button\" data-currency='"+full['id']+"' class=\"btn btn-sm btn-success edit_currency\"><i class=\"fa fa-pencil-square-o fa-lg\"></i></button>";
                                 html += "&nbsp;&nbsp;<button  data-toggle='tooltip' data-placement='top' title='Delete Currency' type=\"button\" data-currency='"+full['id']+"' class=\"btn btn-sm btn-danger delete_currency\">  <i class=\"fa fa-trash-o fa-lg\"></i></button>";
+                                html += "&nbsp;&nbsp;<button data-toggle='tooltip' data-placement='top' title='Set Exchange Rate' type='button' data-currency='"+full['id']+"' class='btn btn-sm btn-primary set_exchange_rate'>Set Exchange Rate</button>";
                             }
                             return html;
                         }
@@ -201,6 +202,14 @@
                 "serverSide": true,
                 "ajax": "{{ route('settings.currencies.fetchforeigntransactioncurrencies') }}"
 
+            });
+
+            $(document.body).on('click', '.set_exchange_rate', function(){
+                var currency_id = $(this).data('currency');
+                window.open(
+                    "/settings/currencies/set-exchange-rate/"+currency_id,
+                    '_blank'
+                );
             });
 
             $(document.body).on('click', '.edit_currency', function(){

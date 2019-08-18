@@ -227,19 +227,19 @@
                     $('.selected_currency_option').html(_return_currency).show();
                     $('input[name="reporting_currency_selected"]').val(_return_currency);
                     //call the exchange APIs from here to get the exchange rates
-                    fetchExchangeRate(base, _return_currency, base_date, access_key, element_selector, 'historical');
+                    getExchangeRate(base, _return_currency, base_date, element_selector);
                     break;
                 case '2' :
                     _return_currency = '{{ $currency_settings->internal_company_financial_reporting_currency }}';
                     $('.selected_currency_option').html(_return_currency).show();
                     $('input[name="reporting_currency_selected"]').val(_return_currency);
-                    fetchExchangeRate(base, _return_currency, base_date, access_key, element_selector, 'historical');
+                    getExchangeRate(base, _return_currency, base_date,element_selector);
                     break;
                 case '3' :
                     _return_currency = '{{ $lease->lease_contract_id }}';
                     $('.selected_currency_option').html(_return_currency).show();
                     $('input[name="reporting_currency_selected"]').val(_return_currency);
-                    fetchExchangeRate(base, _return_currency, base_date, access_key, element_selector, 'historical');
+                    getExchangeRate(base, _return_currency, base_date,element_selector);
                     break;
                 default :
                     $('.selected_currency_option').html(_return_currency).hide();

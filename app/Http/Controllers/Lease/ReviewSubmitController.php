@@ -575,7 +575,7 @@ class ReviewSubmitController extends Controller
                 //calculate the opening prepaid/payable balance here from the step 13 i.e lease balances as on dec...
                 $lease_balances = $asset->leaseBalanceAsOnDec;
                 $opening_or_payable = 0;
-                if($lease_balances) {
+                if($lease_balances && !$onlyNonLeaseComponent) {
                     $opening_or_payable = ($lease_balances->prepaid_lease_payment_balance * $lease_balances->exchange_rate) - ($lease_balances->accrued_lease_payment_balance * $lease_balances->exchange_rate);
                 }
 
