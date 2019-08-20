@@ -480,7 +480,7 @@ class CurrenciesController extends Controller
 
         DB::transaction(function () use ($final_data, $id, $data, $model) {
           DB::table('exchange_rates')->where('foreign_currency_id', '=', $id)->delete();
-          foreach (array_chunk($data, 2000) as $chunk){
+          foreach (array_chunk($data, 1000) as $chunk){
             foreach ($chunk as $datum){
               $internal = [];
               $internal['foreign_currency_id'] = $model->id;
