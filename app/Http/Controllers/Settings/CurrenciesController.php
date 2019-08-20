@@ -506,7 +506,6 @@ class CurrenciesController extends Controller
         return redirect()->back()->with('error', 'Please choose the xlsx file from which the exchange rates will be imported. You can first download the template for the same by clicking on the "Download Excel for Importing" button.');
       }
     } catch (\Exception $e) {
-      dd($e);
       abort(404);
     }
   }

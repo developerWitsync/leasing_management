@@ -236,10 +236,11 @@
                     getExchangeRate(base, _return_currency, base_date,element_selector);
                     break;
                 case '3' :
-                    _return_currency = '{{ $lease->lease_contract_id }}';
-                    $('.selected_currency_option').html(_return_currency).show();
-                    $('input[name="reporting_currency_selected"]').val(_return_currency);
-                    getExchangeRate(base, _return_currency, base_date,element_selector);
+                    //_return_currency = '{{ $lease->lease_contract_id }}';
+                    //$('.selected_currency_option').html(_return_currency).show();
+                    //$('input[name="reporting_currency_selected"]').val(_return_currency);
+                    //getExchangeRate(base, _return_currency, base_date,element_selector);
+                    $(element_selector).val(1);
                     break;
                 default :
                     $('.selected_currency_option').html(_return_currency).hide();
