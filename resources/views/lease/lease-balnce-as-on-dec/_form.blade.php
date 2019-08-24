@@ -220,6 +220,7 @@
                 var base_date = "{{ \Carbon\Carbon::parse(getParentDetails()->baseDate->final_base_date)->subDay(1)->format('Y-m-d') }}";
             @endif
             var base = '{{ $currency_settings->statutory_financial_reporting_currency }}';
+            var base = '{{ $lease->lease_contract_id}}';
             var element_selector = 'input[name="exchange_rate"]';
             switch ($(this).val()) {
                 case '1' :
@@ -236,11 +237,10 @@
                     getExchangeRate(base, _return_currency, base_date,element_selector);
                     break;
                 case '3' :
-                    //_return_currency = '{{ $lease->lease_contract_id }}';
-                    //$('.selected_currency_option').html(_return_currency).show();
-                    //$('input[name="reporting_currency_selected"]').val(_return_currency);
-                    //getExchangeRate(base, _return_currency, base_date,element_selector);
-                    $(element_selector).val(1);
+                    _return_currency = '{{ $lease->lease_contract_id }}';
+                    $('.selected_currency_option').html(_return_currency).show();
+                    $('input[name="reporting_currency_selected"]').val(_return_currency);
+                    getExchangeRate(base, _return_currency, base_date,element_selector);
                     break;
                 default :
                     $('.selected_currency_option').html(_return_currency).hide();

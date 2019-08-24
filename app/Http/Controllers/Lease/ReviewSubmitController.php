@@ -170,6 +170,9 @@ class ReviewSubmitController extends Controller
 
             $charge_to_pl = $asset->charge_to_pl;
 
+            //FETCH ALL THE EXHCNAGE RATES HERE...
+
+
             if($subsequent_modify_required) {
 
                 //fetch the dates for all the subsequents that happened in the same month and same year...
@@ -958,16 +961,17 @@ class ReviewSubmitController extends Controller
                     $annexure[$row]['payments_details'] = json_encode($internal_array);
                     $opening_or_payable = $opening_or_payable - $total_computed_lease_expense;
                 }
-
-                DB::transaction(function () use ($annexure, $modify_id, $asset) {
+                if(count($annexure) > 1) {
+                  DB::transaction(function () use ($annexure, $modify_id, $asset) {
                     //insert the dates data into the interest and depreciation table for the lease id
                     if(is_null($modify_id)){
-                        //InterestAndDepreciation::query()->where('asset_id', '=', $asset->id)->delete();
-                        DB::table('lease_expense_annexure')->where('asset_id', '=', $asset->id)->delete();
+                      //InterestAndDepreciation::query()->where('asset_id', '=', $asset->id)->delete();
+                      DB::table('lease_expense_annexure')->where('asset_id', '=', $asset->id)->delete();
                     }
 
                     DB::table('lease_expense_annexure')->insert($annexure);
-                });
+                  });
+                }
 
                 return true;
 

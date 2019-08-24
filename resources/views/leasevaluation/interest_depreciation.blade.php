@@ -41,6 +41,27 @@
             </div>
 
             <div class="tabBxOuter" style="display: block;" id="assetTab3">
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <ul class="nav nav-tabs">
+                            <li class="@if(request()->get('currency') == 'lease_currency' || request()->get('currency') == '') active @endif">
+                                @if(request()->segment(2) == 'valuation-capitalised')
+                                    <a href="{{ route('leasevaluation.cap.interestdepreciation', ['id' => $lease->id, 'currency' => 'lease_currency']) }}">Lease Currency</a>
+                                @endif
+                            </li>
+                            <li class="@if(request()->get('currency') == 'statutory_currency') active @endif">
+                                @if(request()->segment(2) == 'valuation-capitalised')
+                                    <a href="{{ route('leasevaluation.cap.interestdepreciation', ['id' => $lease->id, 'currency' => 'statutory_currency']) }}">Statutory Currency</a>
+                                @endif
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-8">
+                        &nbsp;
+                    </div>
+                </div>
+                <br>
                 {{--<div class="leaseRafBx">--}}
                     {{--<div class="initialGraphBx">--}}
                         {{--<img src="/assets/images/initialGraph2.png">--}}
