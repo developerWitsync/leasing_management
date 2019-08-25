@@ -26,6 +26,12 @@
                 </div>
             @endif
 
+                @if (session('failure'))
+                    <div class="alert alert-danger">
+                        {{ session('failure') }}
+                    </div>
+                @endif
+
             @include('settings._menubar')
 
             <div class="">
@@ -106,8 +112,10 @@
                         </div>
                     </div>
 
+                    @include('settings.leaseassets._ledger_options')
+
                     @foreach($lease_assets_categories as $category)
-                        @include('settings.leaseassets._category', ['category' => $category])
+                        @include('settings.leaseassets._category', ['category' => $category, 'general_settings' => $general_settings])
                     @endforeach
 
                     {{--Assumptions --}}
@@ -243,6 +251,27 @@
                         })
                     }
                 }
+            });
+        });
+        
+        $(function () {
+            $('input[name="ledger_level"]').on('change', function () {
+                bootbox.confirm({
+                    message: "Please note that since you are changing the Ledger Level, all your existing data for the ledger options will be removed.",
+                    buttons: {
+                        confirm: {
+                            label: 'Yes',
+                            className: 'btn btn-success'
+                        },
+                        cancel: {
+                            label: 'No',
+                            className: 'btn btn-danger'
+                        }
+                    },
+                    callback: function (result) {
+
+                    }
+                });
             });
         });
 
