@@ -304,14 +304,25 @@ class LeaseAssetsController extends Controller
                         return redirect(route('settings.leaseassets'))->with('status', 'Lease Asset Type setting has been updated successfully.');
                     }
                 }
-
                 $depreciation_method = DepreciationMethod::query()->get();
                 $initial_valuation_model = InitialValuationModels::query()->get();
+                $ledgers_data = getLedgersData($id);
+                $category_id = $id;
+                $ledger_level = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
+                $ledger_level = $ledger_level->ledger_level;
+                $ledger_disabled = false;
+                if($ledger_level == 1){
+                  $ledger_disabled = true;
+                }
                 return view('settings.leaseassets.editcategorysettings', compact(
                     'setting',
                     'depreciation_method',
                     'is_excluded',
-                    'initial_valuation_model'
+                    'initial_valuation_model',
+                    'ledger_level',
+                    'ledgers_data',
+                    'category_id',
+                    'ledger_disabled'
                 ));
             } else {
                 abort(404);

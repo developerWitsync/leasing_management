@@ -4,10 +4,14 @@ $(function(){
         e.preventDefault();
         $.ajax({
             url : $(this).attr('href'),
+            beforeSend: function(){
+              showOverlayForAjax();
+            },
             success : function (response) {
                 $('.modal-content').html(response);
 
                 $("#myModal").modal('show');
+                removeOverlayAjax();
             }
         });
     });

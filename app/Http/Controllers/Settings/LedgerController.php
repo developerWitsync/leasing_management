@@ -29,30 +29,18 @@ class LedgerController extends Controller
   {
     try{
       $category_id = $request->get('category_id');
-
-      $general_settings = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
-      if($general_settings->ledger_level == 1){
-        $category = LeaseAssetCategories::query()->find($request->category_id);
-      } elseif($general_settings->ledger_level == 2){
-        $category = LeaseAssetSubCategorySetting::query()->whereIn('business_account_id', getDependentUserIds())
-          ->where('id', '=', $request->category_id)->first();
+      $ledgers_data =  getLedgersData($category_id);
+      $ledger_level = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
+      $ledger_level = $ledger_level->ledger_level;
+      $ledger_disabled = false;
+      if($ledger_level == 2){
+        $ledger_disabled = true;
       }
-
-      $ledgers = Ledgers::query()->whereIn('business_account_id', getDependentUserIds())
-        ->where('category_id', '=', $category->id)
-        ->where('ledger_level','=', $general_settings->ledger_level)
-        ->get();
-      $ledgers_data = [];
-      if(count($ledgers) > 0) {
-        foreach ($ledgers as $ledger){
-          $ledgers_data[$ledger->type]['account_name'] = $ledger->account_name;
-          $ledgers_data[$ledger->type]['account_code'] = $ledger->account_code;
-        }
-      }
-
       return view('settings.ledger.index', compact(
         'category_id',
-        'ledgers_data'
+        'ledgers_data',
+        'ledger_level',
+        'ledger_disabled'
       ));
     } catch (\Exception $e){
       abort(404);
