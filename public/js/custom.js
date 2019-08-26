@@ -1,5 +1,20 @@
-
 $(function(){
+
+    $('.define_ledgers').on('click', function(e){
+        e.preventDefault();
+        $.ajax({
+            url : $(this).attr('href'),
+            beforeSend: function(){
+              showOverlayForAjax();
+            },
+            success : function (response) {
+                $('.modal-content').html(response);
+
+                $("#myModal").modal('show');
+                removeOverlayAjax();
+            }
+        });
+    });
 
     $('[data-toggle="tooltip"]').tooltip({
         html : true
@@ -481,3 +496,19 @@ function getLastDayOfYearAndMonth(year, month)
 {
     return(new Date((new Date(year, month + 1, 1)) - 1)).getDate();
 }
+
+$(document.body).on('submit', '#save_ledgers', function (e) {
+    e.preventDefault();
+    $.ajax({
+        url : $(this).attr('action'),
+        data : $(this).serialize(),
+        type : 'post',
+        dataType : 'json',
+        success : function (response) {
+            if(response.status){
+                $("#myModal").modal('hide');
+                window.location.reload();
+            }
+        }
+    });
+});

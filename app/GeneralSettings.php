@@ -19,6 +19,7 @@ class GeneralSettings extends Model
         'is_initial_date_of_application_saved',
         'effective_date_of_standard',
         'annual_financial_reporting_year_end_date',
-        'final_base_date'
+        'final_base_date',
+        'ledger_level'
     ];
 }

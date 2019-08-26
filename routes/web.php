@@ -532,6 +532,18 @@ Route::middleware('auth')->group(function () {
             ]);
         });
 
+        Route::prefix('ledger')->group(function (){
+          Route::get('ledgers',[
+            'as' => 'settings.ledger.index',
+            'uses' => 'LedgerController@index'
+          ]);
+
+          Route::post('save-ledger',[
+            'as' => 'settings.ledger.save',
+            'uses' => 'LedgerController@save'
+          ]);
+        });
+
         Route::prefix('lease-assets')->group(function () {
             Route::get('/', ['as' => 'settings.leaseassets', 'uses' => 'LeaseAssetsController@index']);
             /**
@@ -548,6 +560,14 @@ Route::middleware('auth')->group(function () {
             Route::match(['get', 'post'], 'add-lease-asset-category-setting/{id}', ['as' => 'settings.leaseassets.addcategorysetting', 'uses' => 'LeaseAssetsController@addCategorySettings']);
             Route::match(['get', 'post'], 'edit-lease-asset-category-setting/{id}', ['as' => 'settings.leaseassets.editcategorysetting', 'uses' => 'LeaseAssetsController@editCategorySetting']);
             Route::delete('delete-lease-asset-category-setting/{id}', ['as' => 'settings.leaseassets.editcategorysetting', 'uses' => 'LeaseAssetsController@deleteCategorySetting']);
+
+            /**
+             * Ledger Options Settings
+             */
+            Route::post('save-ledger-option', [
+              'as' => 'settings.leaseassets.saveledgeroptions',
+              'uses' => 'LeaseAssetsController@saveLedgerOptions'
+            ]);
         });
 
         Route::prefix('user-access')->namespace('UserAccess')->group(function () {

@@ -91,6 +91,14 @@
                             </form>
                         </div>
                     </div>
+
+                    <div class="panel panel-info">
+                        <div class="panel-heading">Ledgers</div>
+                        <div class="panel-body">
+                            @include('settings.ledger._form')
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
