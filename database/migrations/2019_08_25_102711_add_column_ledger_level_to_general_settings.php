@@ -16,6 +16,7 @@ class AddColumnLedgerLevelToGeneralSettings extends Migration
         Schema::table('general_settings', function (Blueprint $table) {
             $table->enum('ledger_level', [1,2])
               ->comment('1 => Ledger Level is Lease Asset Category Level, 2 => Ledger Level is Lease Asset Sub-category level')
+              ->default(1)
               ->nullable();
         });
     }
