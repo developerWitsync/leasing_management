@@ -12,10 +12,12 @@ namespace App\Http\Controllers\Settings;
 use App\CategoriesLeaseAssetExcluded;
 use App\DepreciationMethod;
 use App\ExpectedLifeOfAsset;
+use App\GeneralSettings;
 use App\Http\Controllers\Controller;
 use App\InitialValuationModels;
 use App\LeaseAssetCategories;
 use App\LeaseAssetSubCategorySetting;
+use App\Ledgers;
 use Illuminate\Http\Request;
 use Validator;
 use Illuminate\Validation\Rule;
@@ -35,11 +37,22 @@ class LeaseAssetsController extends Controller
             ]
         ];
         $expected_life_of_assets = ExpectedLifeOfAsset::query()->where('business_account_id', '=', auth()->user()->id)->get();
+
         $lease_assets_categories = LeaseAssetCategories::query()->where('status', '=', '1')->get();
+
+        $general_settings = GeneralSettings::query()
+          ->whereIn('business_account_id', getDependentUserIds())
+          ->first();
+
+        if(is_null($general_settings)){
+          return redirect('/settings/general')->with('error', 'Please complete the General Settings first.');
+        }
+
         return view('settings.leaseassets.index', compact(
             'breadcrumbs',
             'expected_life_of_assets',
-            'lease_assets_categories'
+            'lease_assets_categories',
+            'general_settings'
         ));
     }
 
@@ -291,14 +304,25 @@ class LeaseAssetsController extends Controller
                         return redirect(route('settings.leaseassets'))->with('status', 'Lease Asset Type setting has been updated successfully.');
                     }
                 }
-
                 $depreciation_method = DepreciationMethod::query()->get();
                 $initial_valuation_model = InitialValuationModels::query()->get();
+                $ledgers_data = getLedgersData($id);
+                $category_id = $id;
+                $ledger_level = GeneralSettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
+                $ledger_level = $ledger_level->ledger_level;
+                $ledger_disabled = false;
+                if($ledger_level == 1){
+                  $ledger_disabled = true;
+                }
                 return view('settings.leaseassets.editcategorysettings', compact(
                     'setting',
                     'depreciation_method',
                     'is_excluded',
-                    'initial_valuation_model'
+                    'initial_valuation_model',
+                    'ledger_level',
+                    'ledgers_data',
+                    'category_id',
+                    'ledger_disabled'
                 ));
             } else {
                 abort(404);
@@ -337,5 +361,40 @@ class LeaseAssetsController extends Controller
         } catch (\Exception $e) {
             abort(404);
         }
+    }
+
+  /**
+   * Updates the Ledger level options for the users.
+   * @param Request $request
+   * @return \Illuminate\Http\RedirectResponse
+   */
+    public function saveLedgerOptions(Request $request)
+    {
+      try{
+        $validator = Validator::make($request->except('_token'), [
+          'ledger_level' => 'required|numeric'
+        ],[
+          'ledger_level.required' => 'Please select any one option as your ledger level.'
+        ]);
+
+        if($validator->fails()){
+          return redirect()->back()->withErrors($validator->errors());
+        }
+
+        $general_settings = GeneralSettings::query()->whereIn('business_account_id',getDependentUserIds())
+          ->first();
+
+        if($general_settings){
+          Ledgers::query()->whereIn('business_account_id', getDependentUserIds())->delete();
+          $general_settings->setAttribute('ledger_level', $request->get('ledger_level'));
+          $general_settings->save();
+          return redirect()->back()->with('status', 'Ledger Level has been updated successfully.');
+        } else {
+          return redirect()->back()->with('failure', 'Please complete the General Settings first.');
+        }
+
+      } catch (\Exception $e){
+        abort(404);
+      }
     }
 }
