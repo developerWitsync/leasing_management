@@ -11,16 +11,28 @@
         {{--<th rowspan="2">#Days</th>
         <th rowspan="2">Discount <br/>Rate</th>--}}
 
-        <th colspan="10" style="text-align: center">
-            <span style="text-align: center; border-bottom: #cccfd9 solid 1px; display: block; padding-bottom: 5px;">Lease Currency - Specify Currency</span>
+        <th colspan="@if($is_statutory) 13 @else 10 @endif" style="text-align: center">
+            <span style="text-align: center; border-bottom: #cccfd9 solid 1px; display: block; padding-bottom: 5px;">
+                @if($is_statutory)
+                    Statutory Currency - Specify Currency
+                @else
+                    Lease Currency - Specify Currency
+                @endif
+            </span>
         </th>
     </tr>
     <tr>
+        @if($is_statutory)
+            <th>Exchange Rate</th>
+        @endif
         <th>Opening <br/> Lease Liability</th>
         <th>Monthly <br/> Interest Expense</th>
         <th>Lease <br/> Payments</th>
         <th>Closing <br/> Lease Liability</th>
-
+        @if($is_statutory)
+            <th>Realized Forex Gain/(Loss)</th>
+            <th>Unrealized Forex Gain/(Loss)</th>
+        @endif
         <th>Value <br/> Of Lease Asset</th>
         <th>Subsequent <br/>Increase/Decrease</th>
         <th>Depreciation</th>
@@ -39,7 +51,7 @@
             <td style="color: #fff;font-size: 14px;">Part {{$i}}:</td>
 
             @if($modify_id == "")
-                <td colspan="11" style="color: #fff;font-size: 16px;">
+                <td colspan="@if($is_statutory) 14 @else 11 @endif" style="color: #fff;font-size: 16px;">
                     Initial Valuation Basis
                 </td>
             @else
@@ -55,13 +67,21 @@
         </tr>
         @foreach($details as $key=>$detail)
             <tr>
+
                 <td>{{\Carbon\Carbon::parse($detail->date)->format('Y')}}</td>
                 <td>{{\Carbon\Carbon::parse($detail->date)->format(config('settings.date_format'))}}</td>
-
+                @if($is_statutory)
+                    <td>{{ $detail->exchange_rate }}</td>
+                @endif
                 <td class="blueClr" align="center" style="font-weight: 600">{{$detail->opening_lease_liability}}</td>
                 <td class="blueClr" align="center" style="font-weight: 600">{{$detail->interest_expense}}</td>
                 <td align="center" style="font-weight: 600">{{$detail->lease_payment}}</td>
+
                 <td class="blueClr" align="center" style="font-weight: 600">{{ $detail->closing_lease_liability }}</td>
+                @if($is_statutory)
+                    <td>{{ $detail->realized_forex }}</td>
+                    <td>{{ $detail->unrealized_forex }}</td>
+                @endif
                 @if($show_value_of_lease_asset)
                     <td class="blueClr" align="center" style="font-weight: 600">{{ $detail->value_of_lease_asset }}</td>
                     <td class="blueClr" align="center" style="font-weight: 600">  {{ $detail->change }} </td>
