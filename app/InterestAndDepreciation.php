@@ -8,6 +8,12 @@ class InterestAndDepreciation extends Model
 {
     protected $table = 'interest_and_depreciation';
 
+    protected $appends = [
+      'realized_forex',
+      'unrealized_forex',
+      'exchange_rate'
+    ];
+
     protected $fillable = [
         'asset_id',
         'modify_id',

@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Leasevaluation;
 
 use App\CategoriesLeaseAssetExcluded;
 use App\DiscountRateChartView;
+use App\ExchangeRates;
 use App\Exports\InterestAndDepreciationExport;
 use App\Exports\LeaseExpenseAnnexureExport;
 use App\GeneralSettings;
@@ -654,12 +655,13 @@ class LeaseValuationController extends Controller
         return response()->json($data, 200);
     }
 
-    /**
-     * interest and depreciation Tab on the Lease Valuation...
-     * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function interestDepreciation($id)
+  /**
+   * interest and depreciation Tab on the Lease Valuation...
+   * @param $id
+   * @param Request $request
+   * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+   */
+    public function interestDepreciation($id, Request $request)
     {
 
         try {
@@ -670,7 +672,17 @@ class LeaseValuationController extends Controller
 
             $asset = $lease->assets()->first();
 
-            $interest_depreciation = InterestAndDepreciation::query()->where('asset_id', '=', $lease->assets()->first()->id)->get();
+            $interest_depreciation = InterestAndDepreciation::query()
+              ->where('asset_id', '=', $lease->assets()->first()->id)
+              ->get();
+            $is_statutory = false;
+            $currency = 'lease_currency';
+            if($request->has('currency') && $request->get('currency') == 'statutory_currency'){
+              $currency = 'statutory_currency';
+              $is_statutory = true;
+              $interest_depreciation = ExchangeRates::convertInterestDepreciation($interest_depreciation, $lease);
+            }
+
             $last_item = collect($interest_depreciation)->last();
             $interest_depreciation = collect($interest_depreciation)->groupBy('modify_id');
 
@@ -678,7 +690,9 @@ class LeaseValuationController extends Controller
                 'interest_depreciation',
                 'lease',
                 'asset',
-                'last_item'
+                'last_item',
+                'is_statutory',
+                'currency'
             ));
 
         } catch (\Exception $e) {
@@ -690,17 +704,24 @@ class LeaseValuationController extends Controller
      * exports the interest and depreciation for a particular lease asset..
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function exportInterestDepreciation($id){
+    public function exportInterestDepreciation($id, Request $request){
         try{
             $lease = Lease::query()
                 ->where('id', '=', $id)
                 ->whereIn('business_account_id', getDependentUserIds())
                 ->where('status', '=', '1')->firstOrFail();
 
-            $asset = $lease->assets()->first();
+          $currency = 'lease_currency';
 
-            return Excel::download(new InterestAndDepreciationExport($asset->id), 'interest_and_depreciation.xlsx');
+          if($request->has('currency') && $request->get('currency') == 'statutory_currency'){
+            $currency = 'statutory_currency';
+          }
+
+          $asset = $lease->assets()->first();
+
+          return Excel::download(new InterestAndDepreciationExport($asset->id, $currency, $lease), 'interest_and_depreciation.xlsx');
         } catch (\Exception $e){
+            dd($e);
             abort(404);
         }
     }
