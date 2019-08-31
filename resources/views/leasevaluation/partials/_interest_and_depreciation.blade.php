@@ -11,7 +11,12 @@
         {{--<th rowspan="2">#Days</th>
         <th rowspan="2">Discount <br/>Rate</th>--}}
 
-        <th colspan="@if($is_statutory) 13 @else 10 @endif" style="text-align: center">
+        @if($is_statutory)
+            <th colspan="13" style="text-align: center">
+        @else
+            <th colspan="10" style="text-align: center">
+        @endif
+
             <span style="text-align: center; border-bottom: #cccfd9 solid 1px; display: block; padding-bottom: 5px;">
                 @if($is_statutory)
                     Statutory Currency - Specify Currency
@@ -51,15 +56,27 @@
             <td style="color: #fff;font-size: 14px;">Part {{$i}}:</td>
 
             @if($modify_id == "")
-                <td colspan="@if($is_statutory) 14 @else 11 @endif" style="color: #fff;font-size: 16px;">
-                    Initial Valuation Basis
-                </td>
+                @if($is_statutory)
+                    <td colspan="14" style="color: #fff;font-size: 16px;">
+                        Initial Valuation Basis
+                    </td>
+                @else
+                    <td colspan="11" style="color: #fff;font-size: 16px;">
+                        Initial Valuation Basis
+                    </td>
+                @endif
             @else
                 <td colspan="3" style="color: #fff;font-size: 16px;">Subsequent Lease Valuation</td>
                 <td colspan="2" style="color: #fff;font-size: 16px;">Subsequent Reference# {{$i - 1}}</td>
                 <td colspan="1" style="color: #fff;font-size: 16px;">Effective from</td>
                 <td colspan="1" style="color: #fff;font-size: 16px;">{{ \Carbon\Carbon::parse($effective_date)->addDay(1)->format(config('settings.date_format')) }}</td>
+              
+              @if($is_statutory)
+                <td colspan="7" style="color: #fff;font-size: 16px;">&nbsp;</td>
+              @else
                 <td colspan="4" style="color: #fff;font-size: 16px;">&nbsp;</td>
+              @endif
+            
             @endif
             @php
                 $show_value_of_lease_asset = true;
