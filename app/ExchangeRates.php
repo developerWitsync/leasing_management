@@ -10,19 +10,20 @@ class ExchangeRates extends Model
   protected $table = 'exchange_rates';
 
   protected $fillable = ['foreign_currency_id', 'date', 'rate', 'created_at', 'updated_at'];
-
   /**
    * modifies the interest and depreciation data for the statutory currency based upon the exchange rates...
    * @param $interest_depreciation
    * @param $lease
    * @return mixed
+   * @throws \Exception
    */
-  public static function convertInterestDepreciation($interest_depreciation, $lease)
+  public static function convertInterestDepreciation($interest_depreciation, Lease $lease)
   {
     if (!empty($interest_depreciation)) {
+      $asset = $lease->assets()->first();
       $first_date = collect($interest_depreciation)->first();
       $last_date = collect($interest_depreciation)->last();
-      $months = calculateMonthsDifference($first_date->date, $last_date->date);
+      $months = calculateMonthsDifference($first_date->date, $asset->getLeaseEndDate($asset));
       $currencies = ReportingCurrencySettings::query()->whereIn('business_account_id', getDependentUserIds())->first();
       $statutory_currency = $currencies->statutory_financial_reporting_currency;
       $lease_contract_currency = $lease->lease_contract_id;
@@ -52,7 +53,15 @@ class ExchangeRates extends Model
         $previous_closing_liability = 0;
         $previous_rate = 1;
         $depreciation = $previous_accumulated_depreciation =  $previous_carrying_value_of_lease_asset = 0;
+        $previous_modify_id = null;
+        $initial_value_of_lease_asset = null;
+        $add_change = false;
         foreach ($interest_depreciation as $item => $value) {
+          $new_subsequent = false;
+          if($previous_modify_id != $value->modify_id) {
+            $new_subsequent = true;
+          }
+
           $rate = collect($rates)->where('date', '=', $value->date)->first();
           $rate = (!is_null($rate)) ? (float)$rate['rate'] : 1;
           $value->exchange_rate = $rate;
@@ -70,19 +79,36 @@ class ExchangeRates extends Model
           $value->unrealized_forex = (float)$value->opening_lease_liability + (float)$value->interest_expense - (float)$value->lease_payment - (float)$value->closing_lease_liability - (float)$value->realized_forex;
           $value->unrealized_forex = round($value->unrealized_forex, 2);
           $value->unrealized_forex = ($value->unrealized_forex == 0)?0:$value->unrealized_forex;
-          $value->value_of_lease_asset = $rate * $value->value_of_lease_asset;
           $value->change = $rate * $value->change;
+          if($new_subsequent) {
+            $value->value_of_lease_asset = $initial_value_of_lease_asset + $value->change;
+            //have to calculate the depreciation here again for the subsequent modification....
+            $new_value_of_lease_asset = $previous_accumulated_depreciation + $initial_value_of_lease_asset + $value->change ;
+            $months = calculateMonthsDifference($value->date, $asset->getLeaseEndDate($asset));
+            $depreciation = $new_value_of_lease_asset / $months;
+            $add_change = true;
+            $initial_value_of_lease_asset = $value->value_of_lease_asset;
+          } else {
+            $value->value_of_lease_asset = $rate * $value->value_of_lease_asset;
+          }
 
           //depreciation calculations need to be done here....
           if($i == 1) {
             $depreciation = round($value->opening_lease_liability / $months, 2);
             $previous_carrying_value_of_lease_asset  = $value->value_of_lease_asset;
+            $initial_value_of_lease_asset = $value->value_of_lease_asset;
           }
 
           if(Carbon::parse($value->date)->isLastOfMonth()) {
             $value->depreciation = $depreciation;
             $value->accumulated_depreciation = $depreciation + $previous_accumulated_depreciation;
-            $value->carrying_value_of_lease_asset = $previous_carrying_value_of_lease_asset - $depreciation;
+            if($add_change){
+              $value->carrying_value_of_lease_asset = $previous_carrying_value_of_lease_asset + $value->change - $depreciation;
+              $add_change = false;
+            } else {
+              $value->carrying_value_of_lease_asset = $previous_carrying_value_of_lease_asset - $depreciation;
+            }
+
             $previous_accumulated_depreciation = $value->accumulated_depreciation;
             $previous_carrying_value_of_lease_asset = $value->carrying_value_of_lease_asset;
           }
@@ -90,6 +116,7 @@ class ExchangeRates extends Model
           $i = $i + 1;
           $previous_closing_liability = $value->closing_lease_liability;
           $previous_rate = $rate;
+          $previous_modify_id =  $value->modify_id;
         }
       }
       return $interest_depreciation;
