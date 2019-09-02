@@ -454,7 +454,10 @@ class ReviewSubmitController extends Controller
                     //need to delete the interest and depreciations after the first date in $dates array..
                     if(!empty($dates)){
                         //InterestAndDepreciation::query()->where('date', '>=', $dates[0]['date'])->delete();
-                        DB::table('interest_and_depreciation')->where('date', '>=', $dates[0]['date'])->delete();
+                        DB::table('interest_and_depreciation')
+                          ->where('asset_id', '=', $asset->id)
+                          ->where('date', '>=', $dates[0]['date'])
+                          ->delete();
                     }
                 }
 
