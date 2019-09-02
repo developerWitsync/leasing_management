@@ -66,55 +66,55 @@ class ExchangeRates extends Model
           $rate = (!is_null($rate)) ? (float)$rate['rate'] : 1;
           $value->exchange_rate = $rate;
           if ($i == 1) {
-            $value->opening_lease_liability = $rate * $value->opening_lease_liability;
+            $value->opening_lease_liability = round($rate * $value->opening_lease_liability, 2);
             $value->realized_forex = 0;
           } else {
             $value->realized_forex = ($previous_rate - $rate) * $value->lease_payment;
             $value->realized_forex = round($value->realized_forex, 2);
-            $value->opening_lease_liability = $previous_closing_liability;
+            $value->opening_lease_liability = round($previous_closing_liability, 2);
           }
-          $value->closing_lease_liability = $rate * $value->closing_lease_liability;
-          $value->interest_expense = $rate * $value->interest_expense;
-          $value->lease_payment = $rate * $value->lease_payment;
+          $value->closing_lease_liability = round($rate * $value->closing_lease_liability, 2);
+          $value->interest_expense = round($rate * $value->interest_expense, 2);
+          $value->lease_payment = round($rate * $value->lease_payment, 2);
           $value->unrealized_forex = (float)$value->opening_lease_liability + (float)$value->interest_expense - (float)$value->lease_payment - (float)$value->closing_lease_liability - (float)$value->realized_forex;
           $value->unrealized_forex = round($value->unrealized_forex, 2);
           $value->unrealized_forex = ($value->unrealized_forex == 0)?0:$value->unrealized_forex;
           $value->change = $rate * $value->change;
           if($new_subsequent) {
-            $value->value_of_lease_asset = $initial_value_of_lease_asset + $value->change;
+            $value->value_of_lease_asset = round($initial_value_of_lease_asset + $value->change, 2);
             //have to calculate the depreciation here again for the subsequent modification....
-            $new_value_of_lease_asset = $previous_accumulated_depreciation + $initial_value_of_lease_asset + $value->change ;
+            $new_value_of_lease_asset = $value->value_of_lease_asset - $previous_accumulated_depreciation;
             $months = calculateMonthsDifference($value->date, $asset->getLeaseEndDate($asset));
-            $depreciation = $new_value_of_lease_asset / $months;
+            $depreciation = round($new_value_of_lease_asset / $months, 2);
             $add_change = true;
-            $initial_value_of_lease_asset = $value->value_of_lease_asset;
+            $initial_value_of_lease_asset = round($value->value_of_lease_asset, 2);
           } else {
-            $value->value_of_lease_asset = $rate * $value->value_of_lease_asset;
+            $value->value_of_lease_asset = round($rate * $value->value_of_lease_asset, 2);
           }
 
           //depreciation calculations need to be done here....
           if($i == 1) {
             $depreciation = round($value->opening_lease_liability / $months, 2);
-            $previous_carrying_value_of_lease_asset  = $value->value_of_lease_asset;
-            $initial_value_of_lease_asset = $value->value_of_lease_asset;
+            $previous_carrying_value_of_lease_asset  = round($value->value_of_lease_asset, 2);
+            $initial_value_of_lease_asset = round($value->value_of_lease_asset, 2);
           }
 
           if(Carbon::parse($value->date)->isLastOfMonth()) {
             $value->depreciation = $depreciation;
-            $value->accumulated_depreciation = $depreciation + $previous_accumulated_depreciation;
+            $value->accumulated_depreciation = round($depreciation + $previous_accumulated_depreciation, 2);
             if($add_change){
-              $value->carrying_value_of_lease_asset = $previous_carrying_value_of_lease_asset + $value->change - $depreciation;
+              $value->carrying_value_of_lease_asset = round($previous_carrying_value_of_lease_asset + $value->change - $depreciation, 2);
               $add_change = false;
             } else {
-              $value->carrying_value_of_lease_asset = $previous_carrying_value_of_lease_asset - $depreciation;
+              $value->carrying_value_of_lease_asset = round($previous_carrying_value_of_lease_asset - $depreciation, 2);
             }
 
-            $previous_accumulated_depreciation = $value->accumulated_depreciation;
-            $previous_carrying_value_of_lease_asset = $value->carrying_value_of_lease_asset;
+            $previous_accumulated_depreciation = round($value->accumulated_depreciation, 2);
+            $previous_carrying_value_of_lease_asset = round($value->carrying_value_of_lease_asset, 2);
           }
 
           $i = $i + 1;
-          $previous_closing_liability = $value->closing_lease_liability;
+          $previous_closing_liability = round($value->closing_lease_liability, 2);
           $previous_rate = $rate;
           $previous_modify_id =  $value->modify_id;
         }
