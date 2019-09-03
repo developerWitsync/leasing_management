@@ -94,7 +94,7 @@ class ExchangeRates extends Model
 
           //depreciation calculations need to be done here....
           if($i == 1) {
-            $depreciation = round($value->opening_lease_liability / $months, 2);
+            $depreciation = round($value->value_of_lease_asset / $months, 2);
             $previous_carrying_value_of_lease_asset  = round($value->value_of_lease_asset, 2);
             $initial_value_of_lease_asset = round($value->value_of_lease_asset, 2);
           }
